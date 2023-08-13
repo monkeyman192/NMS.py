@@ -1,0 +1,34 @@
+[project]
+name = "nms.py"
+description = "NMS python hooking API"
+requires-python = ">=3.9"
+# TODO: Add
+license = {file = "LICENSE.txt"}
+keywords = ["hooking", "games", "hacking"]
+authors = [
+  {name = "monkeyman192"}
+]
+maintainers = [
+  {name = "monkeyman192"}
+]
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
+  "Environment :: Win32 (MS Windows)",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: Microsoft",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3 :: Only",
+]
+dependencies = [
+  "cyminhook~=0.1.2", "psutil~=5.9.5",
+]
+
+[project.urls]
+Homepage = "https://github.com/monkeyman192/NMS.py"
+Repository = "https://github.com/monkeyman192/NMS.py"
+
+[build-system]
+requires = ["setuptools>=43.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
