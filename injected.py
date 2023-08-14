@@ -154,20 +154,20 @@ try:
     #         logging.info(f"Looked up: {data.name}")
 
 
-    @hook_function("cTkMetaData::GetLookup")
-    class LookupMetadata(NMSHook):
-        @before
-        def detour(self, luiNameHash):
-            logging.info(f"Hook 1, namehash: 0x{luiNameHash:X}")
+    # @hook_function("cTkMetaData::GetLookup")
+    # class LookupMetadata(NMSHook):
+    #     @before
+    #     def detour(self, luiNameHash):
+    #         logging.info(f"Hook 1, namehash: 0x{luiNameHash:X}")
 
 
-    @hook_function("cTkMetaData::GetLookup")
-    class LookupMetadata2(NMSHook):
-        @after
-        def detour(self, luiNameHash, result):
-            if result:
-                data = map_struct(result, nms_structs.cTkMetaDataFunctionLookup)
-                logging.info(f"Hook 2: Looked up: {data.classMetadata}")
+    # @hook_function("cTkMetaData::GetLookup")
+    # class LookupMetadata2(NMSHook):
+    #     @after
+    #     def detour(self, luiNameHash, result):
+    #         if result:
+    #             data = map_struct(result, nms_structs.cTkMetaDataFunctionLookup)
+    #             logging.info(f"Hook 2: Looked up: {data.classMetadata}")
 
 
     @hook_function("cTkMetaData::Register")
@@ -255,15 +255,13 @@ try:
             except:
                 logging.info("Something went wrong!!!")
 
-    logging.info(cyminhook.__version__)
-
     hook_manager = HookManager()
     hook_manager.register(cGcGameState__LoadSpecificSave_Hook)
     hook_manager.register(cTkMetaData__ReadGlobalFromFile_cGcWaterGlobals)
     hook_manager.register(cGcApplicationGameModeSelectorState__UpdateStartUI)
     hook_manager.register(cGcApplication__Construct)
-    hook_manager.register(LookupMetadata, enable=False)
-    hook_manager.register(LookupMetadata2)
+    # hook_manager.register(LookupMetadata, enable=False)
+    # hook_manager.register(RegisterMetadata)
     hook_manager.register(cTkDynamicGravityControl__Construct)
     hook_manager.register(GenerateSolarSystem)
     hook_manager.register(GetInput_Hook)

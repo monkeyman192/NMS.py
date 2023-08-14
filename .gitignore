@@ -3,3 +3,6 @@ node_modules
 CRITICAL_ERROR.txt
 
 **/__pycache__/**
+stuff/
+extractors/
+logs/

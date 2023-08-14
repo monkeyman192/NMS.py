@@ -16,8 +16,9 @@ class stdoutSocket():
 
 
 def open_log_console(log_script: str) -> int:
-    """ Openthe logging console and return the pid of it."""
-    with subprocess.Popen(["cmd.exe", "/c", "start", "", "python", log_script]) as proc:
+    """ Open the logging console and return the pid of it."""
+    cmd = 'cmd.exe /c start "NMS.py" python ' + log_script
+    with subprocess.Popen(cmd, shell=True) as proc:
         log_ppid = proc.pid
     for proc in psutil.process_iter(["pid", "name", "ppid"]):
         if proc.info["ppid"] == log_ppid:

@@ -1,3 +1,4 @@
+import ast
 from collections.abc import Callable
 from ctypes import CFUNCTYPE
 from functools import wraps
@@ -14,6 +15,18 @@ from nmspy.data.func_call_sigs import FUNC_CALL_SIGS
 from nmspy.errors import UnknownFunctionError
 
 hook_logger = logging.getLogger("HookManager")
+
+
+# Currently unused, but can maybe figure out how to utilise it.
+# It currently doesn't work I think because we subclass from the cyminhook class
+# which is cdef'd, and I guess ast falls over trying to get the actual source...
+def _detour_is_valid(f):
+    for node in ast.walk(ast.parse(inspect.getsource(f))):
+        hook_logger.info(node)
+        if isinstance(node, ast.Return):
+            return True
+    return False
+
 
 
 def before(func):
@@ -241,6 +254,7 @@ class HookManager():
         # Try and instance the hook object. This may fail so we want to raise
         # a more helpful message than cyminhook raises if this happens.
         func_name = getattr(hook, "_name", func_name)
+        hook_name = hook.__name__
         try:
             _hook: NMSHook = hook()
         except cyminhook._cyminhook.Error as e:
@@ -260,14 +274,14 @@ class HookManager():
                 )
                 self._add_cls_to_compound_hook(_hook, compound_class)
                 self.compound_hooks[func_name] = compound_class
-                hook_logger.info(f"Added hook {hook.__name__} as a compound hook")
+                hook_logger.info(f"Added hook {hook_name} as a compound hook")
                 _hook = compound_class
             else:
                 self._add_cls_to_compound_hook(_hook, self.compound_hooks[func_name])
-                hook_logger.info(f"Added hook {hook.__name__} to an existing compound hook")
+                hook_logger.info(f"Added hook {hook_name} to an existing compound hook")
                 _hook = self.compound_hooks[func_name]
         else:
-            hook_logger.info(f"Registered hook {hook.__name__} for function {func_name}")
+            hook_logger.info(f"Registered hook {hook_name} for function {func_name}")
             self.hooks[func_name] = _hook
         if enable:
             try:

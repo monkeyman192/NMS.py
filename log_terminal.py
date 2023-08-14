@@ -1,9 +1,12 @@
 import pickle
 import logging
 import logging.handlers
+import os
+import os.path as op
 import select
 import socketserver
 import struct
+import time
 
 import nmspy
 
@@ -18,6 +21,12 @@ LOGO = """
 |_____|\____| |_____||_____|  \______.' (_) |_____|      |______|   
 """
 
+
+CWD = op.dirname(__file__)
+LOGDIR = op.join(CWD, "logs")
+os.makedirs(LOGDIR, exist_ok=True)
+
+# NB: This code is mostly taken from the python stdlib docs.
 
 class LogRecordStreamHandler(socketserver.StreamRequestHandler):
     """Handler for a streaming logging request.
@@ -51,7 +60,7 @@ class LogRecordStreamHandler(socketserver.StreamRequestHandler):
         return pickle.loads(data)
 
     def handleLogRecord(self, record):
-        # if a name is specified, we use the named logger rather than the one
+        # If a name is specified, we use the named logger rather than the one
         # implied by the record.
         if self.server.logname is not None:
             name = self.server.logname
@@ -94,8 +103,14 @@ class LogRecordSocketReceiver(socketserver.ThreadingTCPServer):
             print("Ending logging server...")
 
 def main():
-    logging.basicConfig(
-        format='%(asctime)s %(name)-15s %(levelname)-6s %(message)s')
+    formatter = logging.Formatter("%(asctime)s %(name)-15s %(levelname)-6s %(message)s")
+    file_handler = logging.FileHandler(op.join(LOGDIR, f"nmspy-{time.strftime('%Y%m%dT%H%M%S')}.log"))
+    file_handler.setFormatter(formatter)
+    stream_handler = logging.StreamHandler()
+    stream_handler.setFormatter(formatter)
+    root_logger = logging.getLogger()
+    root_logger.addHandler(file_handler)
+    root_logger.addHandler(stream_handler)
     tcpserver = LogRecordSocketReceiver()
     print(LOGO)
     print(f"Version: {nmspy.__version__}")
