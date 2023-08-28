@@ -1,6 +1,8 @@
 from ctypes import CFUNCTYPE
-from ctypes import c_char, c_longlong, c_uint32, c_char_p, c_ulonglong, c_int32
+from ctypes import c_char, c_longlong, c_uint32, c_char_p, c_ulonglong, POINTER, c_int32
 import ctypes.wintypes as wintypes
+
+from nmspy.data.structs import cGcWaterGlobals, cTkMetaDataClass
 
 
 FUNC_CALL_SIGS = {
@@ -9,6 +11,10 @@ FUNC_CALL_SIGS = {
         c_longlong,
     ),
     "cGcApplication::Update": CFUNCTYPE(
+        None,
+        c_longlong,
+    ),
+    "cGcApplication::cGcApplication": CFUNCTYPE(
         None,
         c_longlong,
     ),
@@ -31,7 +37,7 @@ FUNC_CALL_SIGS = {
     ),
     "cTkMetaData::Register": CFUNCTYPE(
         None,
-        c_longlong,
+        POINTER(cTkMetaDataClass),
         c_longlong,
         c_longlong,
         c_longlong,
@@ -42,9 +48,54 @@ FUNC_CALL_SIGS = {
         c_longlong,
         c_longlong,
     ),
+    "nvgBeginFrame": CFUNCTYPE(
+        None,
+        c_longlong,
+        c_int32,
+        c_int32,
+        wintypes.FLOAT,
+    ),
+    "nvgBeginPath": CFUNCTYPE(
+        None,
+        c_longlong,
+    ),
+    "nvgRect": CFUNCTYPE(
+        None,
+        c_longlong,
+        wintypes.FLOAT,
+        wintypes.FLOAT,
+        wintypes.FLOAT,
+        wintypes.FLOAT,
+    ),
+    "nvgFillColor": CFUNCTYPE(
+        None,
+        c_longlong,
+        c_longlong,
+    ),
+    "nvgFill": CFUNCTYPE(
+        None,
+        c_longlong,
+    ),
+    "nvgEndFrame": CFUNCTYPE(
+        None,
+        c_longlong,
+    ),
+    "nvgText": CFUNCTYPE(
+        wintypes.FLOAT,
+        c_longlong,
+        wintypes.FLOAT,
+        wintypes.FLOAT,
+        c_char_p,
+        c_char_p,
+    ),
+    "cGcApplicationDeathState::Update": CFUNCTYPE(
+        None,
+        c_longlong,
+        wintypes.DOUBLE,
+    ),
     "cTkMetaData::ReadGlobalFromFile<cGcWaterGlobals>": CFUNCTYPE(
         c_longlong,
-        c_longlong,
+        POINTER(cGcWaterGlobals),
         c_char_p,
     ),
     "cTkDynamicGravityControl::Construct": CFUNCTYPE(

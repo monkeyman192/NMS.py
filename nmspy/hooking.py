@@ -13,6 +13,7 @@ import nmspy.common as nms
 from nmspy.data.func_offsets import FUNC_OFFSETS
 from nmspy.data.func_call_sigs import FUNC_CALL_SIGS
 from nmspy.errors import UnknownFunctionError
+from nmspy._types import NMSHook
 
 hook_logger = logging.getLogger("HookManager")
 
@@ -20,6 +21,8 @@ hook_logger = logging.getLogger("HookManager")
 # Currently unused, but can maybe figure out how to utilise it.
 # It currently doesn't work I think because we subclass from the cyminhook class
 # which is cdef'd, and I guess ast falls over trying to get the actual source...
+# Can possible use annotations and inspect the return type (return `None`
+# explictly eg.) to give some hints. Maybe just raise warnings etc.
 def _detour_is_valid(f):
     for node in ast.walk(ast.parse(inspect.getsource(f))):
         hook_logger.info(node)
@@ -30,13 +33,16 @@ def _detour_is_valid(f):
 
 
 def before(func):
+    """ Mark the hook to be only run before the original function.
+    Currently these cannot mutate the arguments passed into the original
+    function, but this will likely change in the future.
+    """
     func._before = True
     return func
 
 
 def after(func):
-    """ Mark the decorated function as one which will only be run after the
-    original function has been run.
+    """ Mark the hook to be only run after the original function.
     This function may have the keyword argument `__result`. If it does, then
     this value will be the result of the call of the original function
     """
@@ -65,11 +71,13 @@ def hook_function(
     offset:
         The offset relative to the base address of the exe where the function
         starts.
+        NOTE: Currently doesn't work.
     pattern:
         A byte pattern in the form `"AB CD ?? EF ..."`
         This will be the same pattern as used by IDA and cheat engine.
+        NOTE: Currently doesn't work.
     """
-    def _hook_function(klass):
+    def _hook_function(klass: NMSHook):
         if function_name in FUNC_OFFSETS:
             target = nms.BASE_ADDRESS + FUNC_OFFSETS[function_name]
         else:
@@ -87,8 +95,8 @@ def hook_function(
 
 def conditionally_enabled_hook(conditional: bool):
     """ Conditionally enable a hook.
-    This conditional is check at function definition time and will determine if
-    the hook should actually be enabled when told to enable.
+    This conditional is checked at function definition time and will determine
+    if the hook should actually be enabled when told to enable.
 
     Parameters
     ----------
@@ -96,7 +104,7 @@ def conditionally_enabled_hook(conditional: bool):
         A statement which must resolve to True or False
         Eg. `some_variable == 42`
     """
-    def _conditional_hook(klass):
+    def _conditional_hook(klass: NMSHook):
         klass._should_enable = conditional
         return klass
     return _conditional_hook
@@ -114,7 +122,7 @@ def conditional_hook(conditional: str):
         String containing a statement which, when evaluated to be True, will
         cause the detour to be run.
     """
-    def _conditional_hook(klass):
+    def _conditional_hook(klass: NMSHook):
         orig_detour = klass.detour
         @wraps(klass.detour)
         def conditional_detour(self: NMSHook, *args, **kwargs):
@@ -130,7 +138,7 @@ def conditional_hook(conditional: str):
     return _conditional_hook
 
 
-def one_shot(klass):
+def one_shot(klass: NMSHook):
     """ A decorator to make a hook a one-shot hook. """
     orig_detour = klass.detour
     @wraps(klass.detour)
@@ -143,46 +151,6 @@ def one_shot(klass):
     # Assign the decorated method to the `detour` attribute.
     klass.detour = oneshot_detour
     return klass
-
-
-class NMSHook(cyminhook.MinHook):
-    original: Callable[..., Any]
-
-    def __init__(self,
-        *,
-        signature: Optional[CFUNCTYPE] = None,
-        target: Optional[int] = None
-    ):
-        # Normally defined classes will not be "compound compatible".
-        # This means that they will be the only function to hook a given game
-        # function.
-        self._is_compound_compatible = False
-        for _, obj in inspect.getmembers(self):
-            if hasattr(obj, "_before"):
-                self._before_hook = obj
-                self._is_compound_compatible = True
-            elif hasattr(obj, "_after"):
-                self._after_hook = obj
-                self._is_compound_compatible = True
-        # Only initialize the cyminhook subclass if we are not a compound-compatible hook.
-        # If it's a compound hook then initializing it will cause and error to
-        # occur. We will initialize the hook properly when we create the actual
-        # compound hook.
-        if not self._is_compound_compatible:
-            super().__init__(signature=signature, target=target)
-        self.state = "initialized"
-
-    def close(self):
-        super().close()
-        self.state = "closed"
-
-    def enable(self):
-        super().enable()
-        self.state = "enabled"
-
-    def disable(self):
-        super().disable()
-        self.state = "disabled"
 
 
 class CompoundHook(NMSHook):
@@ -207,11 +175,19 @@ class CompoundHook(NMSHook):
             self.after_funcs.append(func)
 
     def detour(self, *args, **kwargs):
+        """ Detour function consisting of multiple sub-functions. """
+        # First, run each of the 'before' detours.
         for func in self.before_funcs:
             func(*args, **kwargs)
+        # Then, run the original function.
         return_value = self.original(*args, **kwargs)
+        # Then run each of the 'after' detours.
         for func in self.after_funcs:
             return_value = func(*args, **kwargs) or return_value
+        # Finally, run reach of the 'after' functions which takes the return
+        # value.
+        # We run these last so that they may have the most recent return value
+        # possible.
         for func in self.after_funcs_with_result:
             return_value = func(*args, result=return_value, **kwargs) or return_value
         return return_value
@@ -225,21 +201,29 @@ class HookManager():
         # These hooks will not be instances of classes, but the class type.
         self.failed_hooks: dict[str, Type[NMSHook]] = {}
 
-    def add_hook(self, detour: Callable[..., Any], *, function_name: str, one_shot: bool):
+    def add_hook(
+        self,
+        detour: Callable[..., Any],
+        signature: CFUNCTYPE,
+        target: int,
+        func_name: str,
+        enable: bool = True
+    ):
         # In-line creation of hooks.
-        if function_name in FUNC_OFFSETS:
-            target = nms.BASE_ADDRESS + FUNC_OFFSETS[function_name]
-        else:
-            raise UnknownFunctionError(f"{function_name} has no known address")
-        if function_name in FUNC_CALL_SIGS:
-            signature = FUNC_CALL_SIGS[function_name]
-        else:
-            raise UnknownFunctionError(f"{function_name} has no known call signature")
-        # TODO: sort out adding `self` to the func so it's bound to the class instance.
         hook = NMSHook(signature=signature, target=target, detour=detour)
-        hook._name = function_name
+        hook._name = func_name
+        self.hooks[func_name] = hook
+        if enable:
+            try:
+                hook.enable()
+            except:
+                hook_logger.info(traceback.format_exc())
 
-    def _add_cls_to_compound_hook(self, cls, compound_cls):
+    def _add_cls_to_compound_hook(
+        self,
+        cls: NMSHook,
+        compound_cls: CompoundHook
+    ):
         if before_hook := getattr(cls, "_before_hook", None):
             compound_cls.add_before(before_hook)
         if after_hook := getattr(cls, "_after_hook", None):
@@ -274,14 +258,14 @@ class HookManager():
                 )
                 self._add_cls_to_compound_hook(_hook, compound_class)
                 self.compound_hooks[func_name] = compound_class
-                hook_logger.info(f"Added hook {hook_name} as a compound hook")
+                hook_logger.info(f"Added hook '{hook_name}' as a compound hook")
                 _hook = compound_class
             else:
                 self._add_cls_to_compound_hook(_hook, self.compound_hooks[func_name])
-                hook_logger.info(f"Added hook {hook_name} to an existing compound hook")
+                hook_logger.info(f"Added hook '{hook_name}' to an existing compound hook")
                 _hook = self.compound_hooks[func_name]
         else:
-            hook_logger.info(f"Registered hook {hook_name} for function {func_name}")
+            hook_logger.info(f"Registered hook '{hook_name}' for function '{func_name}'")
             self.hooks[func_name] = _hook
         if enable:
             try:
@@ -290,18 +274,24 @@ class HookManager():
                 hook_logger.info(traceback.format_exc())
 
     def enable(self, func_name: str):
+        """ Enable the hook for the provided function name. """
         if hook := self.hooks.get(func_name):
             hook.enable()
         elif hook := self.compound_hooks.get(func_name):
             hook.enable()
-        hook_logger.info(f"Enabled hook for function {func_name}")
+        else:
+            return
+        hook_logger.info(f"Enabled hook for function '{func_name}'")
 
     def disable(self, func_name: str):
+        """ Disable the hook for the provided function name. """
         if hook := self.hooks.get(func_name):
             hook.disable()
         elif hook := self.compound_hooks.get(func_name):
             hook.disable()
-        hook_logger.info(f"Disabled hook for function {func_name}")
+        else:
+            return
+        hook_logger.info(f"Disabled hook for function '{func_name}'")
 
     @property
     def states(self):

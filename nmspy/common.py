@@ -1,7 +1,7 @@
-from typing import Union
-from nmspy._internal import _undefined
+from typing import Optional
 
-BASE_ADDRESS: Union[int, _undefined] = _undefined()
+BASE_ADDRESS: Optional[int] = None
+SIZE_OF_IMAGE: Optional[int] = None
 
 # Store all the globals here like this so that we may access them easily and
 # from anywhere.
@@ -37,3 +37,5 @@ GcTerrainGlobals = None
 GcUIGlobals = None
 GcVehicleGlobals = None
 GcWaterGlobals = None
+
+GcApplication = None

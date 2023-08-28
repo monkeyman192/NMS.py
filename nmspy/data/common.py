@@ -1,5 +1,5 @@
 from ctypes import Structure, c_longlong
-from ctypes.wintypes import FLOAT, BOOLEAN
+from ctypes.wintypes import FLOAT, BOOLEAN, INT
 
 
 class Colour(Structure):
@@ -36,6 +36,16 @@ class Vector4f(Structure):
         ("y", FLOAT),
         ("z", FLOAT),
         ("w", FLOAT),
+    ]
+
+
+class Vector4i(Structure):
+    _pack = 0x10
+    _fields_ = [
+        ("x", INT),
+        ("y", INT),
+        ("z", INT),
+        ("w", INT),
     ]
 
 

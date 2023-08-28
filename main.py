@@ -19,6 +19,7 @@ from nmspy.logging import open_log_console
 # binary_path = "C:/Program Files (x86)/Steam/steamapps/common/No Man's Sky/Binaries/NMS.exe"
 # GOG 4.13, aka, "the good shit":
 binary_path = "C:/Games/No Man's Sky/Binaries/NMS.exe"
+# steam_url = "steam://rungameid/275850"
 cwd = op.dirname(__file__)
 executor = None
 futures = []
@@ -60,10 +61,12 @@ try:
     nms = pymem.Pymem('NMS.exe')
     print(f"proc id from pymem: {nms.process_id}")
     nms.inject_python_interpreter()
-    nms_base = nms.base_address
+    pb = nms.process_base
+    binary_base = pb.lpBaseOfDll
+    binary_size = pb.SizeOfImage
     # Inject the base address as a "global" variable into the python interpreter
     # of NMS.exe
-    print(f"The NMS handle: {nms.process_handle}, base: 0x{nms_base:X}")
+    print(f"The NMS handle: {nms.process_handle}, base: 0x{binary_base:X}")
 
     cwd = cwd.replace("\\", "\\\\")
     nms.inject_python_shellcode(f"CWD = '{cwd}'")
@@ -76,7 +79,8 @@ try:
         _preinject_shellcode = f.read()
     nms.inject_python_shellcode(_preinject_shellcode)
     # Inject the common NMS variables which are required for general use.
-    nms.inject_python_shellcode(f"nmspy.common.BASE_ADDRESS = {nms_base}")
+    nms.inject_python_shellcode(f"nmspy.common.BASE_ADDRESS = {binary_base}")
+    nms.inject_python_shellcode(f"nmspy.common.SIZE_OF_IMAGE = {binary_size}")
     nms.inject_python_shellcode(f"nmspy._internal.CWD = '{cwd}'")
     nms.inject_python_shellcode(f"nmspy._internal.HANDLE = {nms.process_handle}")
     # Inject the script

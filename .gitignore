@@ -4,5 +4,6 @@ CRITICAL_ERROR.txt
 
 **/__pycache__/**
 stuff/
-extractors/
+extractors/**
 logs/
+nmspy/data/functions/
