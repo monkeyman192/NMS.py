@@ -1,8 +1,6 @@
 from ctypes import CFUNCTYPE
-from ctypes import c_char, c_longlong, c_uint32, c_char_p, c_ulonglong, POINTER, c_int32
+from ctypes import c_char, c_longlong, c_uint32, c_char_p, c_ulonglong, c_int32
 import ctypes.wintypes as wintypes
-
-from nmspy.data.structs import cGcWaterGlobals, cTkMetaDataClass
 
 
 FUNC_CALL_SIGS = {
@@ -37,7 +35,7 @@ FUNC_CALL_SIGS = {
     ),
     "cTkMetaData::Register": CFUNCTYPE(
         None,
-        POINTER(cTkMetaDataClass),
+        c_longlong,
         c_longlong,
         c_longlong,
         c_longlong,
@@ -95,7 +93,7 @@ FUNC_CALL_SIGS = {
     ),
     "cTkMetaData::ReadGlobalFromFile<cGcWaterGlobals>": CFUNCTYPE(
         c_longlong,
-        POINTER(cGcWaterGlobals),
+        c_longlong,
         c_char_p,
     ),
     "cTkDynamicGravityControl::Construct": CFUNCTYPE(

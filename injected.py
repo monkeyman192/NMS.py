@@ -7,12 +7,24 @@ try:
     import json
     import logging
     import logging.handlers
+    import os
     import os.path as op
     import time
     import traceback
+    import sys
 
     import nmspy.common as nms
     import nmspy._internal as _internal
+
+    # Before any nmspy.data imports occur, set the os.environ value for the
+    # binary hash:
+    if _internal.BINARY_HASH:
+        os.environ["NMS_BINARY_HASH"] = _internal.BINARY_HASH
+    else:
+        # If there is no binary hash, something has gone wrong. Exit now since
+        # we can't continue.
+        sys.exit(-1)
+
     import nmspy.data.structs as nms_structs
     import nmspy.data.functions as nms_funcs
     import nmspy.extractors.metaclasses as metaclass_extractor
@@ -28,6 +40,7 @@ try:
     )
     from nmspy.memutils import map_struct, pprint_mem, get_addressof
     from nmspy.mod_loader import ModManager
+    from nmspy.caching import globals_cache, load_caches
 
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
@@ -47,9 +60,11 @@ try:
     # Note that depending on the game version one or more of these may never be
     # set.
     metadata_registry = {}
-    nms_globals = {}
     gravity_singleton = None
     nvg_context = None
+
+    # Before any hooks are registered, load the caches.
+    load_caches(_internal.BINARY_HASH)
 
     # Since we are running inside a thread, `asyncio.get_event_loop` will
     # generally fail.
@@ -64,10 +79,6 @@ try:
 
     # Set the custom exception handler on the loop
     loop.set_exception_handler(custom_exception_handler)
-
-    def dump_resource(res, fname):
-        with open(op.join(_internal.CWD, fname), "w") as f:
-            f.write(json.dumps(res, indent=2))
 
     # NOTE: This class MUST be defined here. If it's defined in a separate file
     # then the hack done to persist data to the current global context will not
@@ -119,15 +130,14 @@ try:
 
 
     # Load any globals based on any cached offsets.
-    # TODO: Make work.
-    for global_name, relative_offset in _internal._global_cache.items():
+    for global_name, relative_offset in globals_cache.items():
         # For each global, construct the object and then assign it to the
         # nms.<global_name>
         setattr(
             nms,
             global_name,
             map_struct(
-                relative_offset,
+                nms.BASE_ADDRESS + relative_offset,
                 getattr(nms_structs, "c" + global_name)
             )
         )
@@ -135,16 +145,12 @@ try:
     @conditionally_enabled_hook(nms.GcWaterGlobals is None)
     @hook_function("cTkMetaData::ReadGlobalFromFile<cGcWaterGlobals>")
     class cTkMetaData__ReadGlobalFromFile_cGcWaterGlobals(NMSHook):
-        def detour(self, lpData, lpacFilename):
+        def detour(self, lpData: int, lpacFilename: bytes):
             try:
-                logging.info(lpData)
-                logging.info(lpData._type_)
-                addr = get_addressof(lpData)
-                logging.info(f"cGcWaterGlobals*: 0x{addr:X}, filename: {lpacFilename}")
-                _internal._global_cache["GcWaterGlobals"] = addr - nms.BASE_ADDRESS
+                logging.info(f"cGcWaterGlobals*: 0x{lpData:X}, filename: {lpacFilename}")
+                globals_cache.set("GcWaterGlobals", lpData - nms.BASE_ADDRESS)
                 ret = self.original(lpData, lpacFilename)
-                data = lpData.contents
-                nms_globals["cGcWaterGlobals"] = data
+                data = map_struct(lpData, nms_structs.cGcWaterGlobals)
                 nms.GcWaterGlobals = data
                 for field in data._fields_:
                     logging.info(f"{field[0]}: {getattr(data, field[0])}")
@@ -213,7 +219,7 @@ try:
             return ret
 
 
-    @hook_function("cTkInputPort::SetButton")
+    @hook_function("cTkInputPort::SetButton", pattern="40 57 48 83 EC 40 48 83")
     class GetInput_Hook(NMSHook):
         def detour(self, this, leIndex):
             logging.info(f"cTkInputPort*: {this}")
@@ -299,7 +305,7 @@ try:
     hook_manager.register(DeathStateUpdate)
     hook_manager.register(cTkDynamicGravityControl__Construct)
     hook_manager.register(GenerateSolarSystem)
-    # hook_manager.register(GetInput_Hook)
+    hook_manager.register(GetInput_Hook)
     hook_manager.register(cGcApplication__cGcApplication)
     logging.info("NMS.py injection complete!")
     logging.info("Current hook states:")

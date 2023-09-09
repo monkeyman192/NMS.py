@@ -32,3 +32,8 @@ Repository = "https://github.com/monkeyman192/NMS.py"
 [build-system]
 requires = ["setuptools>=43.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests",
+]

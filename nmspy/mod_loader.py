@@ -23,7 +23,11 @@ mod_logger = logging.getLogger("ModManager")
 
 VALID_CHARS = string.ascii_letters + string.digits + "_"
 
-fpath = op.join(CWD, "mods")
+# This will fail when not injected. Just have some dummy fallback for now.
+try:
+    fpath = op.join(CWD, "mods")
+except TypeError:
+    fpath = "mods"
 
 
 def _clean_name(name: str) -> str:

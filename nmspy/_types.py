@@ -35,6 +35,8 @@ class NMSHook(cyminhook.MinHook):
     signature: CFUNCTYPE
     _name: str
     _should_enable: bool
+    _invalid: bool
+    _pattern: Optional[str]
     mod: NMSMod
 
     def __init__(self,
@@ -51,6 +53,8 @@ class NMSHook(cyminhook.MinHook):
             # ourself.
             setattr(self, "detour", MethodType(detour, self))
         self._is_compound_compatible = False
+        if not hasattr(self, "_should_enable"):
+            self._should_enable = True
         for _, obj in inspect.getmembers(self):
             if hasattr(obj, "_before"):
                 self._before_hook = obj
@@ -71,7 +75,7 @@ class NMSHook(cyminhook.MinHook):
         self.state = "closed"
 
     def enable(self):
-        if getattr(self, "_should_enable", True):
+        if self._should_enable:
             super().enable()
             self.state = "enabled"
 

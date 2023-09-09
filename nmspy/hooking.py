@@ -10,10 +10,12 @@ import traceback
 import cyminhook
 
 import nmspy.common as nms
-from nmspy.data.func_offsets import FUNC_OFFSETS
+from nmspy.data import FUNC_OFFSETS
 from nmspy.data.func_call_sigs import FUNC_CALL_SIGS
 from nmspy.errors import UnknownFunctionError
+from nmspy.memutils import find_bytes
 from nmspy._types import NMSHook
+from nmspy.caching import function_cache, pattern_cache
 
 hook_logger = logging.getLogger("HookManager")
 
@@ -56,7 +58,7 @@ def after(func):
 
 
 def hook_function(
-    function_name: Optional[str] = None,
+    function_name: str,
     *,
     offset: Optional[int] = None,
     pattern: Optional[str] = None
@@ -78,15 +80,20 @@ def hook_function(
         NOTE: Currently doesn't work.
     """
     def _hook_function(klass: NMSHook):
-        if function_name in FUNC_OFFSETS:
-            target = nms.BASE_ADDRESS + FUNC_OFFSETS[function_name]
+        klass._pattern = None
+        klass.target = 0
+        if not offset and not pattern:
+            if function_name in FUNC_OFFSETS:
+                klass.target = nms.BASE_ADDRESS + FUNC_OFFSETS[function_name]
+            else:
+                raise UnknownFunctionError(f"{function_name} has no known address")
         else:
-            raise UnknownFunctionError(f"{function_name} has no known address")
+            if pattern:
+                klass._pattern = pattern
         if function_name in FUNC_CALL_SIGS:
             signature = FUNC_CALL_SIGS[function_name]
         else:
             raise UnknownFunctionError(f"{function_name} has no known call signature")
-        klass.target = target
         klass.signature = signature
         klass._name = function_name
         return klass
@@ -239,6 +246,39 @@ class HookManager():
         # a more helpful message than cyminhook raises if this happens.
         func_name = getattr(hook, "_name", func_name)
         hook_name = hook.__name__
+
+        # Do some initial checks to see if the hook has a pattern defined for
+        # it.
+        # We need to do pattern scanning now since we can't do it when the
+        # decorator runs.
+
+        if hook._pattern is not None:
+            # If we get a pattern, look up by name to see if we have already got
+            # it cached, otherwise look it up by pattern.
+            # If that also fails, then it means we don't have it cached and we
+            # need to search memory for it.
+            target = function_cache.get(hook._name)
+            if not target:
+                target = pattern_cache.get(hook._pattern)
+            if target is None:
+                hook_logger.info(f"Finding {func_name} by pattern")
+                abs_offset = find_bytes(hook._pattern, alignment=0x10)
+                if abs_offset:
+                    target = abs_offset - nms.BASE_ADDRESS
+                    hook_logger.info(f"Pattern found at +0x{target:X}. Saving to cache")
+                    function_cache.set(func_name, target)
+                    pattern_cache.set(hook._pattern, target)
+                    hook.target = nms.BASE_ADDRESS + target
+                else:
+                    # Signature not found. We can't register this hook.
+                    self.failed_hooks[func_name] = hook
+                    hook_logger.info(f"Unable to register {func_name}. "
+                                     f"Cannot find pattern: {hook._pattern}")
+                    return
+            else:
+                hook_logger.info(f"Found {func_name} in offset cache")
+                hook.target = nms.BASE_ADDRESS + target
+
         try:
             _hook: NMSHook = hook()
         except cyminhook._cyminhook.Error as e:

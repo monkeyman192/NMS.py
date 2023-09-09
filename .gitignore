@@ -7,3 +7,4 @@ stuff/
 extractors/**
 logs/
 nmspy/data/functions/
+.cache/*

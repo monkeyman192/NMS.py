@@ -1,6 +1,6 @@
 import nmspy.common as nms
 from nmspy.data.func_call_sigs import FUNC_CALL_SIGS
-from nmspy.data.func_offsets import FUNC_OFFSETS
+from nmspy.data import FUNC_OFFSETS
 
 
 def call_function(name: str, *args, **kwargs):

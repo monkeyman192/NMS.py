@@ -1,9 +1,14 @@
 import ctypes
+import array
 import logging
 from io import BytesIO
+import time
 from typing import Type, TypeVar, Optional, Iterable, Union
 
 from nmspy.common import BASE_ADDRESS, SIZE_OF_IMAGE
+
+
+mem_logger = logging.getLogger("MemUtils")
 
 
 MEM_ACCESS_R = 0x100   # Read only.
@@ -132,9 +137,23 @@ def map_struct(offset: int, type_: Type[Struct]) -> Struct:
     return instance
 
 
-# NOTE: Doesn't work yet...
+def pattern_to_bytes(patt: str) -> array.array:
+    arr = array.array("H")
+    for char in patt.split(" "):
+        try:
+            num = int(char, 0x10)
+        except ValueError:
+            num = -1
+        if num > 0xFF:
+            raise ValueError
+        elif num == -1:
+            num = 0x100
+        arr.append(num)
+    return arr
+
+
 def find_bytes(
-    pattern: bytes,
+    pattern: str,
     start: Optional[int] = None,
     end: Optional[int] = None,
     alignment: int = 0x4,
@@ -152,26 +171,38 @@ def find_bytes(
     # we continue to loop over the rest of the memory to see if it also matches.
     # If not, then return back to the first part of the data and continue
     # searching through memory.
-    # TODO: Try use a memory map of, let's say 256 kb, and go over these,
-    # looping over this data instead of this as it's slowwww.
+    start_time = time.time()
     offsets = []
     _addr = start
+    patt = pattern_to_bytes(pattern)
+    # Loop over the whole region.
     while _addr < end:
+        # Determine how much data we should read, and then read it into a
+        # memoryview.
         _size = min(end - _addr, BLOB_SIZE)
         mv = _get_memview_with_size(_addr, _size)
-        bytes_io = BytesIO(mv)
-        for i in range(_size // alignment + 1):
-            for j, char in enumerate(pattern):
-                if not bytes_io[alignment * i + j] == char:
-                    break
-        else:
-            # In this case we matched. Check to see if we want all or just one.
-            if find_all:
-                offsets.append(_addr)
+        for i in range(_size // alignment):
+            for j, char in enumerate(patt):
+                # 0x100 is used as the "wildcard" since every byte will be from
+                # 0 -> 0xFF, but we will store each in 2 bytes.
+                if char == 0x100:
+                    continue
+                try:
+                    if not mv[alignment * i + j] == char:
+                        break
+                except IndexError:
+                    mem_logger.info(f"i: {i}, alignment: {alignment}, len: {len(mv)}, {alignment * i + j}")
+                    raise
             else:
-                return _addr
+                # In this case we matched. Check to see if we want all or just
+                # one.
+                if find_all:
+                    offsets.append(_addr + alignment * i)
+                else:
+                    mem_logger.info(f"Time to find pattern: {time.time() - start_time:.3f}s")
+                    return _addr + alignment * i
         # Move forward by the alignment amount.
-        _addr += alignment
+        _addr += BLOB_SIZE
     if find_all:
         return offsets
     else:

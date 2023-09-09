@@ -8,6 +8,7 @@ import time
 
 
 import pymem
+import pymem.process
 
 from nmspy.caching import hash_bytes
 from nmspy.process import start_process
@@ -68,6 +69,9 @@ try:
     # of NMS.exe
     print(f"The NMS handle: {nms.process_handle}, base: 0x{binary_base:X}")
 
+    # Inject some other dlls:
+    # pymem.process.inject_dll(nms.process_handle, b"path")
+
     cwd = cwd.replace("\\", "\\\\")
     nms.inject_python_shellcode(f"CWD = '{cwd}'")
     nms.inject_python_shellcode("import sys")
@@ -83,6 +87,7 @@ try:
     nms.inject_python_shellcode(f"nmspy.common.SIZE_OF_IMAGE = {binary_size}")
     nms.inject_python_shellcode(f"nmspy._internal.CWD = '{cwd}'")
     nms.inject_python_shellcode(f"nmspy._internal.HANDLE = {nms.process_handle}")
+    nms.inject_python_shellcode(f"nmspy._internal.BINARY_HASH = '{binary_hash}'")
     # Inject the script
     with open(op.join(cwd, "injected.py"), "r") as f:
         shellcode = f.read()
