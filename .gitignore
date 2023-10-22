@@ -8,3 +8,5 @@ extractors/**
 logs/
 nmspy/data/functions/
 .cache/*
+
+extractors_v2/extracted/**

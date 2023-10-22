@@ -9,13 +9,14 @@ import logging
 import os.path as op
 import os
 from types import ModuleType
+from typing import Any
 import string
 import sys
 from functools import partial
 
-from nmspy._types import NMSMod
+from nmspy._types import NMSHook
 from nmspy._internal import CWD
-from nmspy.hooking import HookManager
+from nmspy.hooking import HookManager, _NMSHook
 
 
 mod_logger = logging.getLogger("ModManager")
@@ -47,6 +48,21 @@ def _is_mod_predicate(obj, ref_module):
         return issubclass(obj, NMSMod)
 
 
+def _hook_predicate(value: Any) -> bool:
+    """ Filter function to only return classes which subclass NMSHook"""
+    try:
+        return issubclass(value, NMSHook)
+    except TypeError:
+        return False
+
+
+def _partial_predicate(value: Any) -> bool:
+    try:
+        return isinstance(value, partial) and isinstance(value.func.__self__, _NMSHook)
+    except TypeError:
+        return False
+
+
 def _import_file(fpath: str) -> ModuleType:
     module_name = _clean_name(op.splitext(op.basename(fpath))[0])
     spec = importlib.util.spec_from_file_location(module_name, fpath)
@@ -54,6 +70,21 @@ def _import_file(fpath: str) -> ModuleType:
     sys.modules[module_name] = module
     spec.loader.exec_module(module)
     return module
+
+
+class NMSMod():
+    def __init__(self):
+        # Find all the hooks defined for the mod.
+        self.hooks: list[NMSHook] = [
+            x[1] for x in inspect.getmembers(self, _hook_predicate)
+        ]
+        # For each hook, associate the mod with it so that it can reference it.
+        for hook in self.hooks:
+            hook.mod = self
+        # Get members which are functional hooks
+        self.func_hooks: list[NMSHook] = [
+            x[1].func.__self__ for x in inspect.getmembers(self, _partial_predicate)
+        ]
 
 
 class ModManager():
@@ -77,10 +108,12 @@ class ModManager():
             mod_logger.info(f"Loading hooks for {name}")
             # Instantiate the mod, and then overwrite the object in the mods
             # attribute with the instance.
-            mod = mod()
+            mod: NMSMod = mod()
             self.mods[name] = mod
             for hook in mod.hooks:
                 self.hook_manager.register(hook)
+            for hook in mod.func_hooks:
+                self.hook_manager.register_function(hook, True, mod)
 
     def reload(self):
         # TODO

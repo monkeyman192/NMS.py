@@ -54,3 +54,13 @@ class GcSeed(Structure):
         ("Seed", c_longlong),
         ("UseSeedValue", BOOLEAN),
     ]
+
+
+class Quaternion(Structure):
+    _pack = 0x10
+    _fields_ = [
+        ("x", FLOAT),
+        ("y", FLOAT),
+        ("z", FLOAT),
+        ("w", FLOAT),
+    ]

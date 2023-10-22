@@ -1,7 +1,8 @@
 import ast
 from collections.abc import Callable
 from ctypes import CFUNCTYPE
-from functools import wraps
+from enum import Enum
+from functools import wraps, update_wrapper, partial
 import inspect
 import logging
 from typing import Any, Optional, Type
@@ -33,6 +34,181 @@ def _detour_is_valid(f):
     return False
 
 
+class DetourTime(Enum):
+    NONE = 0
+    BEFORE = 1
+    AFTER = 2
+
+
+ORIGINAL_MAPPING = dict()
+
+
+class _NMSHook(cyminhook.MinHook):
+    original: Callable[..., Any]
+    target: int
+    detour: Callable[..., Any]
+    signature: CFUNCTYPE
+    _name: str
+    _should_enable: bool
+    _invalid: bool
+    _pattern: Optional[str]
+    _whatever = "whatever"
+
+    # TODO: need to move the instantiation of the cyminhook until registration
+    # so that we may get the instance of the mod the method is bound to.
+    # This isn't an issue for floating function hooks, but for ones bound to a
+    # mod it's a big issue.
+
+    def __init__(
+        self,
+        detour: Callable[..., Any],
+        *,
+        name: Optional[str] = None,
+        offset: Optional[int] = None,
+        pattern: Optional[str] = None,
+        detour_time: DetourTime = DetourTime.NONE,
+    ):
+        self._original_detour = detour
+        self.detour_time = detour_time
+        if not offset and not pattern:
+            if name in FUNC_OFFSETS:
+                self.target = nms.BASE_ADDRESS + FUNC_OFFSETS[name]
+            else:
+                raise UnknownFunctionError(f"{name} has no known address")
+        else:
+            if pattern:
+                self._pattern = pattern
+        if name in FUNC_CALL_SIGS:
+            self.signature = FUNC_CALL_SIGS[name]
+        else:
+            raise UnknownFunctionError(f"{name} has no known call signature")
+        self._name = name
+
+    def bind(self, cls = None):
+        """ Actually initialise the base class. """
+
+        if cls is not None:
+            self._detour_func = partial(self._original_detour, cls)
+        else:
+            self._detour_func = self._original_detour
+
+        # Check the detour time and create an approriately "wrapped" function
+        # which will run instead of the original function.
+        if self.detour_time == DetourTime.BEFORE:
+            self.detour = self._before_detour
+        elif self.detour_time == DetourTime.AFTER:
+            # For an "after" hook, we need to determine if "__result" is in the
+            # function arguments.
+            func_sig = inspect.signature(self._original_detour)
+            if "__result" in func_sig.parameters.keys():
+                self.detour = self._after_detour_with_return
+            else:
+                self.detour = self._after_detour
+        else:
+            self.detour = self._normal_detour
+
+        super().__init__(signature=self.signature, target=self.target)
+        ORIGINAL_MAPPING[self._name] = self.original
+        self.state = "initialized"
+        if not hasattr(self, "_should_enable"):
+            self._should_enable = True
+
+    def __call__(self, *args, **kwargs):
+        return self.detour(*args, **kwargs)
+
+    def __get__(self, instance, owner=None):
+        # Pass the instance through to the __call__ function so that we can use
+        # this decorator on a method of a class.
+        return partial(self.__call__, instance)
+
+    def _normal_detour(self, *args):
+        # Run a detour as provided by the user.
+        return self._detour_func(*args)
+
+    def _before_detour(self, *args):
+        # A detour to be run instead of the normal one when we are registered as
+        # a "before" hook.
+        ret = self._detour_func(*args)
+        # If we get a return value that is not None, then pass it through.
+        if ret is not None:
+            return self.original(*ret)
+        else:
+            return self.original(*args)
+
+    def _after_detour(self, *args):
+        # Detour which will be run instead of the normal one.
+        # The original function will be run before.
+        ret = self.original(*args)
+        self._detour_func(*args)
+        return ret
+
+    def _after_detour_with_return(self, *args):
+        # Detour which will be run instead of the normal one.
+        # The original function will be run before.
+        # The return value of the original function will be passed in.
+        ret = self.original(*args)
+        new_ret = self._detour_func(*args, __result=ret)
+        if new_ret is not None:
+            return new_ret
+        return ret
+
+    def close(self):
+        super().close()
+        self.state = "closed"
+
+    def enable(self):
+        if self._should_enable:
+            super().enable()
+            self.state = "enabled"
+
+    def disable(self):
+        super().disable()
+        self.state = "disabled"
+
+
+class HookFactory:
+    _name = None
+    def __init__(self, func):
+        self.func = func
+        self._after = False
+        self._before = False
+        update_wrapper(self, func)
+
+    def __new__(cls, detour, detour_time: DetourTime = DetourTime.NONE):
+        return _NMSHook(detour, name=cls._name, detour_time=detour_time)
+
+    @classmethod
+    def original(cls, *args) -> CFUNCTYPE:
+        """ Call the orgiginal function with the given arguments. """
+        return ORIGINAL_MAPPING[cls.__name__](*args)
+
+    @classmethod
+    def before(cls, func):
+        """ Run the decorated function before the original function is run. """
+        obj = cls(func, detour_time=DetourTime.BEFORE)
+        return obj
+
+    @classmethod
+    def after(cls, func):
+        """ Run the decorated function after the original function is run. """
+        obj = cls(func, detour_time=DetourTime.AFTER)
+        return obj
+
+
+#TODO: Move these and generate them automatically
+
+class cGcPlanet:
+    class SetupRegionMap(HookFactory):
+        _name = "cGcPlanet::SetupRegionMap"
+
+class cTkMetaData:
+    class GetLookup(HookFactory):
+        _name = "cTkMetaData::GetLookup"
+
+
+class nvgText(HookFactory):
+    _name = "nvgText"
+
 
 def before(func):
     """ Mark the hook to be only run before the original function.
@@ -54,6 +230,11 @@ def after(func):
         func._has_return_arg = True
     else:
         func._has_return_arg = False
+    return func
+
+
+def main_loop(func):
+    func._update_loop = True
     return func
 
 
@@ -310,6 +491,17 @@ class HookManager():
         if enable:
             try:
                 _hook.enable()
+            except:
+                hook_logger.info(traceback.format_exc())
+
+    def register_function(self, hook: _NMSHook, enable: bool = True, mod = None):
+        hook_logger.info(hook)
+        hook.bind(mod)
+        hook_logger.info(f"Registered hook '{hook._name}' for function '{hook}'")
+        self.hooks[hook._name] = hook
+        if enable:
+            try:
+                hook.enable()
             except:
                 hook_logger.info(traceback.format_exc())
 

@@ -10,6 +10,7 @@ import ctypes
 import ctypes.wintypes
 
 from nmspy.data import common
+# from nmspy.data.types import core, simple
 from nmspy.memutils import map_struct
 
 
@@ -313,3 +314,280 @@ class cGcPlanet(ctypes.Structure):
     start: bytes
     planetIndex: int
     planetData: cGcPlanetData
+
+
+# class cGcHUDTrackArrow(ctypes.Structure):
+#     class eReticuleState(IntEnum):
+#         EReticule_Inactive = 0x0
+#         EReticule_Active = 0x1
+#         EReticule_Deactivating = 0x2
+
+#     def cGcHUDTrackArrow(): pass
+
+#     def Construct(): pass
+
+#     def Update(): pass
+
+#     def UpdateRender(): pass
+
+#     def Render(): pass
+
+#     def CalculateTargetSizeAndPos(): pass
+
+#     def GetBorderPos(): pass
+
+#     def SetTarget(): pass
+
+#     def SetFixedTarget(): pass
+
+#     _fields_ = [
+#         ("mSize", common.Vector2f),
+#         ("mColour", common.Colour),
+#         ("mfArrowScale", ctypes.c_float),
+#         ("mfFadeTime", ctypes.c_float),
+#         ("mbFade", ctypes.c_ubyte),
+#         ("maReticules", core.cTkSmartResHandle * 0x18),
+#         ("maReticuleGlows", core.cTkSmartResHandle * 0x18),
+#         ("maArrows", core.cTkSmartResHandle * 0x18),
+#         ("maArrowGlows", core.cTkSmartResHandle * 0x18),
+#         ("maIcons", core.cTkSmartResHandle * 0x18),
+#         ("maAudioPings", simple.TkAudioID * 0x18),
+#         ("mCriticalIcon", core.cTkSmartResHandle),
+#         ("mCriticalGlowIcon", core.cTkSmartResHandle),
+#         ("mDamageGlow", core.cTkSmartResHandle),
+#         ("mEnergyShieldGlow", core.cTkSmartResHandle),
+#         ("mTypeIcon", core.cTkSmartResHandle),
+#         ("mfTypeIconPulse", ctypes.c_float),
+#         ("mfTypeIconFade", ctypes.c_float),
+#         ("mafBaseSizes", ctypes.c_float * 0x18),
+#         ("mafBaseDotSizes", ctypes.c_float * 0x18),
+#         ("meType", eGcTrackArrowTypes),
+#         ("mExternalIcon", core.cTkSmartResHandle),
+#         ("mpTarget", ctypes.c_uint64),
+#         ("mFixedTarget", cTkPhysRelVec3),
+#         ("mWorldPos", cTkPhysRelVec3),
+#         ("mProjWorldPos", cTkPhysRelVec3),
+#         ("mScreenPos", common.Vector2f),
+#         ("mReticulePos", common.Vector2f),
+#         ("mfAngle", ctypes.c_float),
+#         ("mfBorderFactor", ctypes.c_float),
+#         ("mfCentreOffsetMultiplier", ctypes.c_float),
+#         ("mHealthColour", common.Colour),
+#         ("mHealthCriticalHitColour", common.Colour),
+#         ("mfHealthBar", ctypes.c_float),
+#         ("mfIconFade", ctypes.c_float),
+#         ("mbUseLabelOffset", ctypes.c_ubyte),
+#         ("mEnergyShieldColour", common.Colour),
+#         ("mfEnergyShieldBar", ctypes.c_float),
+#         ("mbFixedTarget", ctypes.c_ubyte),
+#         ("mbOnScreen", ctypes.c_ubyte),
+#         ("mbUsingSmallIcon", ctypes.c_ubyte),
+#         ("_meReticuleState", ctypes.c_uint32),
+#         ("mfReticuleActiveTime", ctypes.c_float),
+#         ("mfReticuleDeactiveTime", ctypes.c_float),
+#         ("mfReticuleScale", ctypes.c_float),
+#         ("mGlowColour", common.Colour),
+#         ("mDamageGlowColour", common.Colour),
+#         ("mEnergyShieldGlowColour", common.Colour),
+#         ("mText", ctypes.c_char * 0x80),
+#         ("mTrackArrowHandle", ctypes.c_uint64),
+#         ("mHealthHandle", ctypes.c_uint64),
+#     ]
+#     mSize: common.Vector2f
+#     mColour: common.Colour
+#     mfArrowScale: float
+#     mfFadeTime: float
+#     mbFade: bool
+#     maReticules: list[core.cTkSmartResHandle]
+#     maReticuleGlows: list[core.cTkSmartResHandle]
+#     maArrows: list[core.cTkSmartResHandle]
+#     maArrowGlows: list[core.cTkSmartResHandle]
+#     maIcons: list[core.cTkSmartResHandle]
+#     maAudioPings: list[simple.TkAudioID]
+#     mCriticalIcon: core.cTkSmartResHandle
+#     mCriticalGlowIcon: core.cTkSmartResHandle
+#     mDamageGlow: core.cTkSmartResHandle
+#     mEnergyShieldGlow: core.cTkSmartResHandle
+#     mTypeIcon: core.cTkSmartResHandle
+#     mfTypeIconPulse: float
+#     mfTypeIconFade: float
+#     mafBaseSizes: list[ctypes.c_float]
+#     mafBaseDotSizes: list[ctypes.c_float]
+#     meType: local_types.eGcTrackArrowTypes
+#     mExternalIcon: core.cTkSmartResHandle
+#     mpTarget: int
+#     mFixedTarget: cTkPhysRelVec3
+#     mWorldPos: cTkPhysRelVec3
+#     mProjWorldPos: cTkPhysRelVec3
+#     mScreenPos: common.Vector2f
+#     mReticulePos: common.Vector2f
+#     mfAngle: float
+#     mfBorderFactor: float
+#     mfCentreOffsetMultiplier: float
+#     mHealthColour: common.Colour
+#     mHealthCriticalHitColour: common.Colour
+#     mfHealthBar: float
+#     mfIconFade: float
+#     mbUseLabelOffset: bool
+#     mEnergyShieldColour: common.Colour
+#     mfEnergyShieldBar: float
+#     mbFixedTarget: bool
+#     mbOnScreen: bool
+#     mbUsingSmallIcon: bool
+#     _meReticuleState: int
+#     mfReticuleActiveTime: float
+#     mfReticuleDeactiveTime: float
+#     mfReticuleScale: float
+#     mGlowColour: common.Colour
+#     mDamageGlowColour: common.Colour
+#     mEnergyShieldGlowColour: common.Colour
+#     mText: bytes
+#     mTrackArrowHandle: int
+#     mHealthHandle: int
+
+#     @property
+#     def meReticuleState(self):
+#         return cGcHUDTrackArrow.eReticuleState(self._meReticuleState)
+
+
+# class cGcShipHUD(ctypes.Structure):
+#     class eReticules(IntEnum):
+#         EReticule_ShipLaser = 0x0
+#         EReticule_ShipProjectile = 0x1
+#         EReticule_ShipMissile = 0x2
+#         EReticule_NumTypes = 0x3
+
+#     class cGcVehicleScreen(ctypes.Structure):
+#         _fields_ = [
+#             ("mScreenTexture", cTkDynamicTexture),
+#             ("mScreenGUI", cGcNGui),
+#             ("mbValid", ctypes.c_ubyte),
+#         ]
+#         mScreenTexture: cTkDynamicTexture
+#         mScreenGUI: cGcNGui
+#         mbValid: bool
+
+#     def cGcShipHUD(): pass
+
+#     def RenderNGuiCallback(): pass
+
+#     def LoadData(): pass
+
+#     def Construct(): pass
+
+#     def Update(): pass
+
+#     def UpdateTrackArrows(): pass
+
+#     def UpdateMarkerLockOn(): pass
+
+#     def UpdateRender(): pass
+
+#     def ReadPlanetStats(): pass
+
+#     def RenderOffscreen2D(): pass
+
+#     def Render2D(): pass
+
+#     def RenderHeadsUp(): pass
+
+#     _fields_ = [
+#         ("baseclass_0", cGcHUD),
+#         ("mHUDLayer", cTk2dLayer),
+#         ("mCrosshairOuterCircleLarge", cTk2dImageEx),
+#         ("mCrosshairOuterCircleLargeLayer", cTk3dLayer),
+#         ("mCrosshairOuterCircleSmall", cTk2dImageEx),
+#         ("mCrosshairOuterCircleSmallLayer", cTk3dLayer),
+#         ("mMouseArrowLayer", cTk2dLayer),
+#         ("mMouseArrowIcon", cTk2dImageEx),
+#         ("mShipForwardScreenPos", common.Vector3f),
+#         ("mfShipAngle", ctypes.c_float),
+#         ("mfShipPitch", ctypes.c_float),
+#         ("mLandingEffect", EffectInstance),
+#         ("maTrackArrows", cGcHUDTrackArrow * 0x8),
+#         ("maShootList", ctypes.c_char * 0x18),  # std::vector<cTkAttachmentPtr,TkSTLAllocatorShim<cTkAttachmentPtr,8,-1> >
+#         ("miSelectedPlanet", ctypes.c_int32),
+#         ("_meSelectedPlanetLabelState", ctypes.c_uint32),
+#         ("mfSelectedPlanetPanelTime", ctypes.c_float),
+#         ("mfSelectedPlanetPanelFadeTime", ctypes.c_float),
+#         ("mbSelectedPlanetPanelVisible", ctypes.c_ubyte),
+#         ("mbSelectedPlanetIsTargeted", ctypes.c_ubyte),
+#         ("mfLastKnownScanTime", ctypes.c_float),
+#         ("mfScanRevealTimer", ctypes.c_float),
+#         ("meMiniJumpState", ePulseDriveState),
+#         ("mbHasPulseEncounterOnHUD", ctypes.c_ubyte),
+#         ("mapScreens", ctypes.c_ulonglong * 0x2),  # cGcRenderableScreen *[2]
+#         ("miCurrentScreen", ctypes.c_int32),
+#         ("maSideScreenTextures", cTkDynamicTexture * 0x4),  # cTkDynamicTexture[4]
+#         ("maSideScreenGUI", cGcNGui * 0x4),  # cGcNGui[4]
+#         ("maSideScreenCursor", common.Vector2f * 0x4),  # cTkVector2[4]
+#         ("mbSideScreenActive", ctypes.c_ubyte),
+#         ("maSideScreenMeshes", core.TkHandle * 0x4),
+#         ("mCurrentCockpit", ctypes.c_uint32),
+#         ("maVehicleScreens", cGcShipHUD.cGcVehicleScreen * 0x7),  # cGcShipHUD::cGcVehicleScreen[7]
+#         ("mSpeedoReverseMesh", ctypes.c_uint32),
+#         ("mSpeedoPulseMesh", ctypes.c_uint32),
+#         ("maSpeedoBarsMeshes", core.TkHandle * 0x5),
+#         ("miCurrentSpeedoBar", ctypes.c_int32),
+#         ("miFinalSpeedReadout", ctypes.c_int32),
+#         ("mMainScreenTexture", cTkDynamicTexture),
+#         ("mMainScreenGUI", cGcNGui),
+#         ("mTargetProcName", ctypes.c_char * 0x7F),  # cTkFixedString<127,char>
+#         ("maPlanetWorldPositions", common.Vector3f * 0x6),  # cTkVector3[6]
+#         ("maPlanetScreenPositions", common.Vector3f * 0x6),  # cTkVector3[6]
+#         ("mHeadsUpGUI", cGcNGui),
+#         ("mHeadsUpScreenHandle", ctypes.c_uint64),
+#         ("mEnemyTargetSceneRes", core.cTkSmartResHandle),
+#         ("mfBoostMultiplier", ctypes.c_float),
+#     ]
+#     baseclass_0: cGcHUD
+#     mHUDLayer: cTk2dLayer
+#     mCrosshairOuterCircleLarge: cTk2dImageEx
+#     mCrosshairOuterCircleLargeLayer: cTk3dLayer
+#     mCrosshairOuterCircleSmall: cTk2dImageEx
+#     mCrosshairOuterCircleSmallLayer: cTk3dLayer
+#     mMouseArrowLayer: cTk2dLayer
+#     mMouseArrowIcon: cTk2dImageEx
+#     mShipForwardScreenPos: common.Vector3f
+#     mfShipAngle: float
+#     mfShipPitch: float
+#     mLandingEffect: EffectInstance
+#     maTrackArrows: bytes
+#     maShootList: bytes
+#     miSelectedPlanet: int
+#     _meSelectedPlanetLabelState: int
+#     mfSelectedPlanetPanelTime: float
+#     mfSelectedPlanetPanelFadeTime: float
+#     mbSelectedPlanetPanelVisible: bool
+#     mbSelectedPlanetIsTargeted: bool
+#     mfLastKnownScanTime: float
+#     mfScanRevealTimer: float
+#     meMiniJumpState: ePulseDriveState
+#     mbHasPulseEncounterOnHUD: bool
+#     mapScreens: list[ctypes.c_ulonglong]
+#     miCurrentScreen: int
+#     maSideScreenTextures: list[cTkDynamicTexture]
+#     maSideScreenGUI: list[cGcNGui]
+#     maSideScreenCursor: list[common.Vector2f]
+#     mbSideScreenActive: bool
+#     maSideScreenMeshes: list[core.TkHandle]
+#     mCurrentCockpit: int
+#     maVehicleScreens: list[cGcShipHUD.cGcVehicleScreen]
+#     mSpeedoReverseMesh: int
+#     mSpeedoPulseMesh: int
+#     maSpeedoBarsMeshes: list[core.TkHandle]
+#     miCurrentSpeedoBar: int
+#     miFinalSpeedReadout: int
+#     mMainScreenTexture: cTkDynamicTexture
+#     mMainScreenGUI: cGcNGui
+#     mTargetProcName: bytes
+#     maPlanetWorldPositions: list[common.Vector3f]
+#     maPlanetScreenPositions: list[common.Vector3f]
+#     mHeadsUpGUI: cGcNGui
+#     mHeadsUpScreenHandle: int
+#     mEnemyTargetSceneRes: core.cTkSmartResHandle
+#     mfBoostMultiplier: float
+
+#     @property
+#     def meSelectedPlanetLabelState(self):
+#         return ePlanetLabelState(self._meSelectedPlanetLabelState)

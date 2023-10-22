@@ -1,7 +1,7 @@
 from typing import Optional
 
-BASE_ADDRESS: Optional[int] = None
-SIZE_OF_IMAGE: Optional[int] = None
+BASE_ADDRESS: int = -1
+SIZE_OF_IMAGE: int = -1
 
 # Store all the globals here like this so that we may access them easily and
 # from anywhere.
@@ -39,3 +39,4 @@ GcVehicleGlobals = None
 GcWaterGlobals = None
 
 GcApplication = None
+gravity_singleton = None

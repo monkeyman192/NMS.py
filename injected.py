@@ -1,3 +1,5 @@
+socket_logger_loaded = False
+
 try:
     import asyncio
     import builtins
@@ -12,6 +14,16 @@ try:
     import time
     import traceback
     import sys
+
+    rootLogger = logging.getLogger('')
+    rootLogger.setLevel(logging.INFO)
+    socketHandler = logging.handlers.SocketHandler(
+        "localhost",
+        logging.handlers.DEFAULT_TCP_LOGGING_PORT
+    )
+    rootLogger.addHandler(socketHandler)
+    logging.info("Loading NMS.py...")
+    socket_logger_loaded = True
 
     import nmspy.common as nms
     import nmspy._internal as _internal
@@ -28,10 +40,10 @@ try:
     import nmspy.data.structs as nms_structs
     import nmspy.data.functions as nms_funcs
     import nmspy.extractors.metaclasses as metaclass_extractor
-    import nmspy.data.enums as enums
+    from nmspy.data import local_types
     from nmspy.hooking import (
         one_shot, HookManager, hook_function, conditionally_enabled_hook,
-        NMSHook, after, before
+        NMSHook, before, after, cTkMetaData
     )
     from nmspy.protocols import (
         ExecutionEndedException,
@@ -44,14 +56,6 @@ try:
 
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
-    rootLogger = logging.getLogger('')
-    rootLogger.setLevel(logging.INFO)
-    socketHandler = logging.handlers.SocketHandler(
-        "localhost",
-        logging.handlers.DEFAULT_TCP_LOGGING_PORT
-    )
-    rootLogger.addHandler(socketHandler)
-    logging.info("Loading NMS.py...")
     logging.info(nms.BASE_ADDRESS)
 
     hook_logger = logging.getLogger("HookManager")
@@ -60,7 +64,6 @@ try:
     # Note that depending on the game version one or more of these may never be
     # set.
     metadata_registry = {}
-    gravity_singleton = None
     nvg_context = None
 
     # Before any hooks are registered, load the caches.
@@ -176,6 +179,10 @@ try:
     #         logging.info(f"Looked up: {data.name}")
 
 
+    # @cTkMetaData.GetLookup.after
+    # def lookup_metadata(luiNameHash, __result):
+    #     logging.info(f"Hook 1, namehash: 0x{luiNameHash:X}, return val: {__result}")
+
     # @hook_function("cTkMetaData::GetLookup")
     # class LookupMetadata(NMSHook):
     #     @before
@@ -219,15 +226,15 @@ try:
             return ret
 
 
-    @hook_function("cTkInputPort::SetButton", pattern="40 57 48 83 EC 40 48 83")
-    class GetInput_Hook(NMSHook):
-        def detour(self, this, leIndex):
-            logging.info(f"cTkInputPort*: {this}")
-            IP = map_struct(this, nms_funcs.cTkInputPort)
-            if leIndex == enums.eInputButton.EInputButton_Space:
-                IP.SetButton(enums.eInputButton.EInputButton_Mouse1)
-            else:
-                return self.original(this, leIndex)
+    # @hook_function("cTkInputPort::SetButton", pattern="40 57 48 83 EC 40 48 83")
+    # class GetInput_Hook(NMSHook):
+    #     def detour(self, this, leIndex):
+    #         logging.info(f"cTkInputPort*: {this}")
+    #         IP = map_struct(this, nms_funcs.cTkInputPort)
+    #         if leIndex == local_types.eInputButton.EInputButton_Space:
+    #             IP.SetButton(local_types.eInputButton.EInputButton_Mouse1)
+    #         else:
+    #             return self.original(this, leIndex)
 
     @one_shot
     @hook_function("cGcGameState::LoadSpecificSave")
@@ -280,7 +287,7 @@ try:
     class cTkDynamicGravityControl__Construct(NMSHook):
         def detour(self, this):
             logging.info("Loaded grav singleton")
-            globals()["gravity_singleton"] = this
+            nms.gravity_singleton = map_struct(this, local_types.cTkDynamicGravityControl)
             return self.original(this)
 
 
@@ -305,8 +312,9 @@ try:
     hook_manager.register(DeathStateUpdate)
     hook_manager.register(cTkDynamicGravityControl__Construct)
     hook_manager.register(GenerateSolarSystem)
-    hook_manager.register(GetInput_Hook)
+    # hook_manager.register(GetInput_Hook)
     hook_manager.register(cGcApplication__cGcApplication)
+    # hook_manager.register_function(lookup_metadata)
     logging.info("NMS.py injection complete!")
     logging.info("Current hook states:")
     for state in hook_manager.states:
@@ -354,6 +362,9 @@ except Exception as e:
 
         with open(op.join(_internal.CWD, "CRITICAL_ERROR.txt"), "w") as f:
             traceback.print_exc(file=f)
+            if socket_logger_loaded:
+                logging.error("An error occurred while loading NMS.py:")
+                logging.exception(traceback.format_exc())
     except:
         with open(op.join(op.expanduser("~"), "CRITICAL_ERROR.txt"), "w") as f:
             traceback.print_exc(file=f)

@@ -5,27 +5,10 @@ from ctypes import CFUNCTYPE
 from typing import Callable, Any, Optional
 import inspect
 from types import MethodType
+import logging
 
 import cyminhook
 
-
-def _hook_predicate(value: Any) -> bool:
-    """ Filter function to only return classes which subclass NMSHook"""
-    try:
-        return issubclass(value, NMSHook)
-    except TypeError:
-        return False
-
-
-class NMSMod():
-    def __init__(self):
-        # Find all the hooks defined for the mod.
-        self.hooks: list[NMSHook] = [
-            x[1] for x in inspect.getmembers(self, _hook_predicate)
-        ]
-        # For each hook, associate the mod with it so that it can reference it.
-        for hook in self.hooks:
-            hook.mod = self
 
 
 class NMSHook(cyminhook.MinHook):
@@ -37,7 +20,7 @@ class NMSHook(cyminhook.MinHook):
     _should_enable: bool
     _invalid: bool
     _pattern: Optional[str]
-    mod: NMSMod
+    mod: Any
 
     def __init__(self,
         *,
