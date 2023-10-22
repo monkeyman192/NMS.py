@@ -52,7 +52,7 @@ class _NMSHook(cyminhook.MinHook):
     _should_enable: bool
     _invalid: bool
     _pattern: Optional[str]
-    _whatever = "whatever"
+    _is_one_shot: bool = False
 
     # TODO: need to move the instantiation of the cyminhook until registration
     # so that we may get the instance of the mod the method is bound to.
@@ -107,6 +107,14 @@ class _NMSHook(cyminhook.MinHook):
         else:
             self.detour = self._normal_detour
 
+        # Check to see if it's a one shot and wrap this detour one more to be
+        # one-shot.
+        hook_logger.info(self._name)
+        hook_logger.info(self._is_one_shot)
+        if self._is_one_shot:
+            self._non_oneshot_detour = self.detour
+            self.detour = self._oneshot_detour
+
         super().__init__(signature=self.signature, target=self.target)
         ORIGINAL_MAPPING[self._name] = self.original
         self.state = "initialized"
@@ -120,6 +128,12 @@ class _NMSHook(cyminhook.MinHook):
         # Pass the instance through to the __call__ function so that we can use
         # this decorator on a method of a class.
         return partial(self.__call__, instance)
+
+    def _oneshot_detour(self, *args):
+        ret = self._non_oneshot_detour(*args)
+        self.disable()
+        hook_logger.info("Disabling a one-shot hook")
+        return ret
 
     def _normal_detour(self, *args):
         # Run a detour as provided by the user.
@@ -180,7 +194,7 @@ class HookFactory:
     @classmethod
     def original(cls, *args) -> CFUNCTYPE:
         """ Call the orgiginal function with the given arguments. """
-        return ORIGINAL_MAPPING[cls.__name__](*args)
+        return ORIGINAL_MAPPING[cls._name](*args)
 
     @classmethod
     def before(cls, func):
@@ -204,6 +218,20 @@ class cGcPlanet:
 class cTkMetaData:
     class GetLookup(HookFactory):
         _name = "cTkMetaData::GetLookup"
+
+
+class cGcApplicationGameModeSelectorState:
+    class RenderWarning(HookFactory):
+        _name = "cGcApplicationGameModeSelectorState::RenderWarning"
+    class RenderWarningMessages(HookFactory):
+        _name = "cGcApplicationGameModeSelectorState::RenderWarningMessages"
+
+
+class cTkFileSystem:
+    class IsModded(HookFactory):
+        _name = "cTkFileSystem::IsModded"
+    class Construct(HookFactory):
+        _name = "cTkFileSystem::Construct"
 
 
 class nvgText(HookFactory):
@@ -338,6 +366,14 @@ def one_shot(klass: NMSHook):
         return ret
     # Assign the decorated method to the `detour` attribute.
     klass.detour = oneshot_detour
+    return klass
+
+
+# TODO: Rename to `one_shot` when we deprecate class hooks.
+
+def one_shot_func(klass: _NMSHook):
+    hook_logger.info(f"ONE SHOT: {klass}")
+    klass._is_one_shot = True
     return klass
 
 

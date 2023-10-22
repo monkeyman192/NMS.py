@@ -1,5 +1,5 @@
 from ctypes import CFUNCTYPE
-from ctypes import c_char, c_longlong, c_uint32, c_char_p, c_ulonglong, c_int32
+from ctypes import c_char, c_longlong, c_uint32, c_char_p, c_ulonglong, c_int32, c_float
 import ctypes.wintypes as wintypes
 
 
@@ -138,5 +138,27 @@ FUNC_CALL_SIGS = {
         c_longlong,
         c_longlong,
         c_longlong,
+    ),
+    "cGcApplicationGameModeSelectorState::RenderWarning": CFUNCTYPE(
+        None,
+        c_longlong,
+        c_char_p,
+        c_char_p,
+        c_char_p,
+        c_char_p,
+        wintypes.FLOAT,
+    ),
+    "cGcApplicationGameModeSelectorState::RenderWarningMessages": CFUNCTYPE(
+        None,
+        c_longlong,
+    ),
+    "cTkFileSystem::IsModded": CFUNCTYPE(
+        wintypes.BOOLEAN,
+        c_longlong,
+    ),
+    "cTkFileSystem::Construct": CFUNCTYPE(
+        None,
+        c_longlong,
+        c_int32,
     ),
 }

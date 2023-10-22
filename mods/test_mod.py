@@ -3,7 +3,7 @@ import ctypes
 import traceback
 
 from nmspy.hooking import NMSHook, hook_function, main_loop, cGcPlanet, nvgText
-from nmspy.memutils import map_struct, get_addressof
+from nmspy.memutils import map_struct
 import nmspy.data.structs as nms_structs
 from nmspy.mod_loader import NMSMod
 from nmspy.calling import call_function
@@ -23,16 +23,6 @@ class TestMod(NMSMod):
     @property
     def _text(self):
         return self.text.encode()
-
-    # @hook_function("nvgText")
-    # class nvgHook(NMSHook):
-    #     mod: "TestMod"
-
-    #     def detour(self, ctx, x: float, y: float, string, end):
-    #         if string == b"Options":
-    #             string = ctypes.c_char_p(b"Hi")
-    #             call_function("nvgText", ctx, x + 30, y, ctypes.c_char_p(self.mod._text), end)
-    #         return self.original(ctx, x, y, string, end)
 
     @nvgText
     def change_test(self, ctx, x: float, y: float, string, end):

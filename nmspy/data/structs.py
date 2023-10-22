@@ -150,7 +150,7 @@ class cTkMetaDataClass(ctypes.Structure):
         return self._name.decode()
 
     @property
-    def members(self) -> Generator[cTkMetaDataMember]:
+    def members(self) -> Generator[cTkMetaDataMember, None, None]:
         for i in range(self.numMembers):
             yield map_struct(self._members + i * 0x60, cTkMetaDataMember)
 
@@ -315,6 +315,18 @@ class cGcPlanet(ctypes.Structure):
     planetIndex: int
     planetData: cGcPlanetData
 
+
+class cTkFileSystem(ctypes.Structure):
+    class Data(ctypes.Structure):
+        _fields_ = [
+            ("stuff", ctypes.c_char * 0x2692),
+            ("isModded", ctypes.wintypes.BOOLEAN),
+        ]
+        isModded: bool
+    _fields_ = [
+        ("data", ctypes.POINTER(Data)),
+    ]
+    data: _Pointer[Data]
 
 # class cGcHUDTrackArrow(ctypes.Structure):
 #     class eReticuleState(IntEnum):
