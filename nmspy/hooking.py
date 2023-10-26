@@ -28,7 +28,6 @@ hook_logger = logging.getLogger("HookManager")
 # explictly eg.) to give some hints. Maybe just raise warnings etc.
 def _detour_is_valid(f):
     for node in ast.walk(ast.parse(inspect.getsource(f))):
-        hook_logger.info(node)
         if isinstance(node, ast.Return):
             return True
     return False
@@ -109,8 +108,6 @@ class _NMSHook(cyminhook.MinHook):
 
         # Check to see if it's a one shot and wrap this detour one more to be
         # one-shot.
-        hook_logger.info(self._name)
-        hook_logger.info(self._is_one_shot)
         if self._is_one_shot:
             self._non_oneshot_detour = self.detour
             self.detour = self._oneshot_detour
@@ -132,7 +129,7 @@ class _NMSHook(cyminhook.MinHook):
     def _oneshot_detour(self, *args):
         ret = self._non_oneshot_detour(*args)
         self.disable()
-        hook_logger.info("Disabling a one-shot hook")
+        hook_logger.info(f"Disabling a one-shot hook ({self._name})")
         return ret
 
     def _normal_detour(self, *args):
@@ -192,7 +189,7 @@ class HookFactory:
         return _NMSHook(detour, name=cls._name, detour_time=detour_time)
 
     @classmethod
-    def original(cls, *args) -> CFUNCTYPE:
+    def original(cls, *args):
         """ Call the orgiginal function with the given arguments. """
         return ORIGINAL_MAPPING[cls._name](*args)
 
@@ -207,35 +204,6 @@ class HookFactory:
         """ Run the decorated function after the original function is run. """
         obj = cls(func, detour_time=DetourTime.AFTER)
         return obj
-
-
-#TODO: Move these and generate them automatically
-
-class cGcPlanet:
-    class SetupRegionMap(HookFactory):
-        _name = "cGcPlanet::SetupRegionMap"
-
-class cTkMetaData:
-    class GetLookup(HookFactory):
-        _name = "cTkMetaData::GetLookup"
-
-
-class cGcApplicationGameModeSelectorState:
-    class RenderWarning(HookFactory):
-        _name = "cGcApplicationGameModeSelectorState::RenderWarning"
-    class RenderWarningMessages(HookFactory):
-        _name = "cGcApplicationGameModeSelectorState::RenderWarningMessages"
-
-
-class cTkFileSystem:
-    class IsModded(HookFactory):
-        _name = "cTkFileSystem::IsModded"
-    class Construct(HookFactory):
-        _name = "cTkFileSystem::Construct"
-
-
-class nvgText(HookFactory):
-    _name = "nvgText"
 
 
 def before(func):
@@ -262,6 +230,7 @@ def after(func):
 
 
 def main_loop(func):
+    # TODO: Make work...
     func._update_loop = True
     return func
 
@@ -372,7 +341,6 @@ def one_shot(klass: NMSHook):
 # TODO: Rename to `one_shot` when we deprecate class hooks.
 
 def one_shot_func(klass: _NMSHook):
-    hook_logger.info(f"ONE SHOT: {klass}")
     klass._is_one_shot = True
     return klass
 
@@ -531,7 +499,6 @@ class HookManager():
                 hook_logger.info(traceback.format_exc())
 
     def register_function(self, hook: _NMSHook, enable: bool = True, mod = None):
-        hook_logger.info(hook)
         hook.bind(mod)
         hook_logger.info(f"Registered hook '{hook._name}' for function '{hook}'")
         self.hooks[hook._name] = hook

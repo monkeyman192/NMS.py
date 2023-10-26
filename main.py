@@ -1,5 +1,6 @@
 import asyncio
 import concurrent.futures
+import configparser
 from functools import partial
 import os
 import os.path as op
@@ -16,12 +17,22 @@ from nmspy.protocols import ESCAPE_SEQUENCE, TerminalProtocol
 from nmspy.logging import open_log_console
 
 
+CWD = op.dirname(__file__)
+
+
+# Parse the config file first so we can load anything we need to know.
+config = configparser.ConfigParser()
+# Currently it's in the same directory as this file...
+cfg_file = op.join(CWD, "NMS.py.cfg")
+read = config.read(cfg_file)
+binary_path = config["NMS"]["path"]
+
+
+
 # Steam:
 # binary_path = "C:/Program Files (x86)/Steam/steamapps/common/No Man's Sky/Binaries/NMS.exe"
 # GOG 4.13, aka, "the good shit":
-binary_path = "C:/Games/No Man's Sky/Binaries/NMS.exe"
-# steam_url = "steam://rungameid/275850"
-cwd = op.dirname(__file__)
+# binary_path = "C:/Games/No Man's Sky/Binaries/NMS.exe"
 executor = None
 futures = []
 loop = asyncio.get_event_loop()
@@ -45,7 +56,7 @@ def kill_injected_code(loop):
 
 
 try:
-    log_pid = open_log_console(op.join(cwd, "log_terminal.py"))
+    log_pid = open_log_console(op.join(CWD, "log_terminal.py"))
     # Have a small nap just to give it some time.
     time.sleep(0.5)
     print(f"Opened the console log with PID: {log_pid}")
@@ -72,14 +83,14 @@ try:
     # Inject some other dlls:
     # pymem.process.inject_dll(nms.process_handle, b"path")
 
-    cwd = cwd.replace("\\", "\\\\")
+    cwd = CWD.replace("\\", "\\\\")
     nms.inject_python_shellcode(f"CWD = '{cwd}'")
     nms.inject_python_shellcode("import sys")
     nms.inject_python_shellcode(f"sys.path.append(CWD)")
 
     # Inject _preinject AFTER modifying the sys.path for now until we have
     # nmspy installed via pip.
-    with open(op.join(cwd, "nmspy", "_scripts", "_preinject.py"), "r") as f:
+    with open(op.join(CWD, "nmspy", "_scripts", "_preinject.py"), "r") as f:
         _preinject_shellcode = f.read()
     nms.inject_python_shellcode(_preinject_shellcode)
     # Inject the common NMS variables which are required for general use.
@@ -89,7 +100,7 @@ try:
     nms.inject_python_shellcode(f"nmspy._internal.HANDLE = {nms.process_handle}")
     nms.inject_python_shellcode(f"nmspy._internal.BINARY_HASH = '{binary_hash}'")
     # Inject the script
-    with open(op.join(cwd, "injected.py"), "r") as f:
+    with open(op.join(CWD, "injected.py"), "r") as f:
         shellcode = f.read()
     executor = concurrent.futures.ThreadPoolExecutor(max_workers=1)
     print("Injecting hooking code")
@@ -146,7 +157,7 @@ finally:
     if executor is not None:
         executor.shutdown(wait=False)
     try:
-        with open(op.join(cwd, "end.py"), "r") as f:
+        with open(op.join(CWD, "end.py"), "r") as f:
             close_shellcode = f.read()
         nms.inject_python_shellcode(close_shellcode)
         print("Just injected the close command?")

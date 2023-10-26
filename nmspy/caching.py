@@ -41,7 +41,7 @@ class OffsetCache():
             f"{self._binary_hash}_{self._path}.json"
         )
 
-    def load(self, binary_hash: int):
+    def load(self, binary_hash: str):
         """ Load the data. """
         self._binary_hash = binary_hash
         if op.exists(self.path):
@@ -74,7 +74,7 @@ globals_cache = OffsetCache("globals_cache")
 builtins_cache = OffsetCache("builtins_cache")
 
 
-def load_caches(binary_hash: int):
+def load_caches(binary_hash: str):
     if not op.exists(op.join(_internal.CWD, CACHE_DIR)):
         os.makedirs(op.join(_internal.CWD, CACHE_DIR))
     function_cache.load(binary_hash)

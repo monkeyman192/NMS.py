@@ -1,8 +1,8 @@
 import logging
 import ctypes
-import traceback
 
-from nmspy.hooking import NMSHook, hook_function, main_loop, cGcPlanet, nvgText
+import nmspy.data.function_hooks as hooks
+from nmspy.hooking import NMSHook, hook_function, main_loop
 from nmspy.memutils import map_struct
 import nmspy.data.structs as nms_structs
 from nmspy.mod_loader import NMSMod
@@ -24,12 +24,12 @@ class TestMod(NMSMod):
     def _text(self):
         return self.text.encode()
 
-    @nvgText
+    @hooks.nvgText
     def change_test(self, ctx, x: float, y: float, string, end):
         if string == b"Options":
             string = ctypes.c_char_p(b"Hi")
             call_function("nvgText", ctx, x + 30, y, ctypes.c_char_p(self._text), end)
-        return nvgText.original(ctx, x, y, string, end)
+        return hooks.nvgText.original(ctx, x, y, string, end)
 
     # @nvgText.before
     # def change_test_after(self, ctx, x: float, y: float, string, end):

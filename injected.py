@@ -6,7 +6,6 @@ try:
     import ctypes
     import ctypes.wintypes
     from functools import partial
-    import json
     import logging
     import logging.handlers
     import os
@@ -43,14 +42,14 @@ try:
     from nmspy.data import local_types
     from nmspy.hooking import (
         one_shot, HookManager, hook_function, conditionally_enabled_hook,
-        NMSHook, before, after, cTkMetaData
+        NMSHook
     )
     from nmspy.protocols import (
         ExecutionEndedException,
         custom_exception_handler,
         ESCAPE_SEQUENCE
     )
-    from nmspy.memutils import map_struct, pprint_mem, get_addressof
+    from nmspy.memutils import map_struct
     from nmspy.mod_loader import ModManager
     from nmspy.caching import globals_cache, load_caches
 
@@ -287,7 +286,9 @@ try:
     class cTkDynamicGravityControl__Construct(NMSHook):
         def detour(self, this):
             logging.info("Loaded grav singleton")
-            nms.gravity_singleton = map_struct(this, local_types.cTkDynamicGravityControl)
+            nms.gravity_singleton = this
+            # TODO: map to the struct.
+            # nms.gravity_singleton = map_struct(this, local_types.cTkDynamicGravityControl)
             return self.original(this)
 
 
