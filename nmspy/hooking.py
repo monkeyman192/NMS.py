@@ -5,7 +5,7 @@ from enum import Enum
 from functools import wraps, update_wrapper, partial
 import inspect
 import logging
-from typing import Any, Optional, Type
+from typing import Any, Optional, Type, Union, Generic
 import traceback
 
 import cyminhook
@@ -49,14 +49,9 @@ class _NMSHook(cyminhook.MinHook):
     signature: CFUNCTYPE
     _name: str
     _should_enable: bool
-    _invalid: bool
+    _invalid: bool = False
     _pattern: Optional[str]
     _is_one_shot: bool = False
-
-    # TODO: need to move the instantiation of the cyminhook until registration
-    # so that we may get the instance of the mod the method is bound to.
-    # This isn't an issue for floating function hooks, but for ones bound to a
-    # mod it's a big issue.
 
     def __init__(
         self,
@@ -67,24 +62,33 @@ class _NMSHook(cyminhook.MinHook):
         pattern: Optional[str] = None,
         detour_time: DetourTime = DetourTime.NONE,
     ):
+        self._mod = None
+        self._should_enable = True
         self._original_detour = detour
         self.detour_time = detour_time
         if not offset and not pattern:
             if name in FUNC_OFFSETS:
                 self.target = nms.BASE_ADDRESS + FUNC_OFFSETS[name]
             else:
-                raise UnknownFunctionError(f"{name} has no known address")
+                hook_logger.error(f"{name} has no known address")
+                self._invalid = True
         else:
             if pattern:
                 self._pattern = pattern
         if name in FUNC_CALL_SIGS:
             self.signature = FUNC_CALL_SIGS[name]
         else:
-            raise UnknownFunctionError(f"{name} has no known call signature")
+            hook_logger.error(f"{name} has no known call signature")
+            self._invalid = True
         self._name = name
 
-    def bind(self, cls = None):
-        """ Actually initialise the base class. """
+    def bind(self, cls = None) -> bool:
+        """ Actually initialise the base class. Returns whether the hook is bound. """
+        # Associate the mod now whether or not we get one. This way if the
+        # function is actually disabled, we may enable it later with no issues.
+        self._mod = cls
+        if not self._should_enable:
+            return False
 
         if cls is not None:
             self._detour_func = partial(self._original_detour, cls)
@@ -117,6 +121,7 @@ class _NMSHook(cyminhook.MinHook):
         self.state = "initialized"
         if not hasattr(self, "_should_enable"):
             self._should_enable = True
+        return True
 
     def __call__(self, *args, **kwargs):
         return self.detour(*args, **kwargs)
@@ -168,9 +173,9 @@ class _NMSHook(cyminhook.MinHook):
         self.state = "closed"
 
     def enable(self):
-        if self._should_enable:
-            super().enable()
-            self.state = "enabled"
+        super().enable()
+        self.state = "enabled"
+        self._should_enable = True
 
     def disable(self):
         super().disable()
@@ -178,15 +183,26 @@ class _NMSHook(cyminhook.MinHook):
 
 
 class HookFactory:
-    _name = None
+    _name: Optional[str] = None
+    _templates: Optional[tuple[str]] = None
     def __init__(self, func):
         self.func = func
         self._after = False
         self._before = False
         update_wrapper(self, func)
 
-    def __new__(cls, detour, detour_time: DetourTime = DetourTime.NONE):
+    def __new__(cls, detour, detour_time: DetourTime = DetourTime.NONE) -> _NMSHook:
         return _NMSHook(detour, name=cls._name, detour_time=detour_time)
+
+    def __class_getitem__(cls: type["HookFactory"], key: Union[tuple[Any], Any]):
+        if cls._templates is not None and cls._name is not None:
+            if isinstance(key, tuple):
+                fmt_key = dict(zip(cls._templates, [x.__name__ for x in key]))
+            else:
+                fmt_key = {cls._templates[0]: key.__name__}
+            hook_logger.info(cls._name.format(**fmt_key))
+            cls._name = cls._name.format(**fmt_key)
+        return cls
 
     @classmethod
     def original(cls, *args):
@@ -194,16 +210,27 @@ class HookFactory:
         return ORIGINAL_MAPPING[cls._name](*args)
 
     @classmethod
-    def before(cls, func):
-        """ Run the decorated function before the original function is run. """
-        obj = cls(func, detour_time=DetourTime.BEFORE)
-        return obj
+    def before(cls, func: Callable[..., Any]) -> _NMSHook:
+        """
+        Run the decorated function before the original function is run.
+        This function in general should not call the original function, and does
+        not need to return anything.
+        If you wish to modify the values being passed into the original
+        function, return a tuple which has values in the same order as the
+        original function.
+        """
+        return _NMSHook(func, name=cls._name, detour_time=DetourTime.BEFORE)
 
     @classmethod
-    def after(cls, func):
+    def after(cls, func: Callable[..., Any]) -> _NMSHook:
         """ Run the decorated function after the original function is run. """
-        obj = cls(func, detour_time=DetourTime.AFTER)
-        return obj
+        return _NMSHook(func, name=cls._name, detour_time=DetourTime.AFTER)
+
+
+def disable(klass: _NMSHook):
+    """ Disable the current hook. This must be the outermost decorator is applied. """
+    klass._should_enable = False
+    return klass
 
 
 def before(func):
@@ -323,24 +350,7 @@ def conditional_hook(conditional: str):
     return _conditional_hook
 
 
-def one_shot(klass: NMSHook):
-    """ A decorator to make a hook a one-shot hook. """
-    orig_detour = klass.detour
-    @wraps(klass.detour)
-    def oneshot_detour(self: NMSHook, *args, **kwargs):
-        # Run the original function
-        ret = orig_detour(self, *args, **kwargs)
-        # Then disable the hook.
-        self.disable()
-        return ret
-    # Assign the decorated method to the `detour` attribute.
-    klass.detour = oneshot_detour
-    return klass
-
-
-# TODO: Rename to `one_shot` when we deprecate class hooks.
-
-def one_shot_func(klass: _NMSHook):
+def one_shot(klass: _NMSHook):
     klass._is_one_shot = True
     return klass
 
@@ -421,92 +431,108 @@ class HookManager():
         if after_hook := getattr(cls, "_after_hook", None):
             compound_cls.add_after(after_hook)
 
-    def register(
-        self,
-        hook: Type[NMSHook],
-        func_name: Optional[str] = None,
-        enable: bool = True
-    ):
-        # Try and instance the hook object. This may fail so we want to raise
-        # a more helpful message than cyminhook raises if this happens.
-        func_name = getattr(hook, "_name", func_name)
-        hook_name = hook.__name__
+    # Deprecated
+    # def register(
+    #     self,
+    #     hook: Type[NMSHook],
+    #     func_name: Optional[str] = None,
+    #     enable: bool = True
+    # ):
+    #     # Try and instance the hook object. This may fail so we want to raise
+    #     # a more helpful message than cyminhook raises if this happens.
+    #     func_name = getattr(hook, "_name", func_name)
+    #     hook_name = hook.__name__
 
-        # Do some initial checks to see if the hook has a pattern defined for
-        # it.
-        # We need to do pattern scanning now since we can't do it when the
-        # decorator runs.
+    #     # Do some initial checks to see if the hook has a pattern defined for
+    #     # it.
+    #     # We need to do pattern scanning now since we can't do it when the
+    #     # decorator runs.
 
-        if hook._pattern is not None:
-            # If we get a pattern, look up by name to see if we have already got
-            # it cached, otherwise look it up by pattern.
-            # If that also fails, then it means we don't have it cached and we
-            # need to search memory for it.
-            target = function_cache.get(hook._name)
-            if not target:
-                target = pattern_cache.get(hook._pattern)
-            if target is None:
-                hook_logger.info(f"Finding {func_name} by pattern")
-                abs_offset = find_bytes(hook._pattern, alignment=0x10)
-                if abs_offset:
-                    target = abs_offset - nms.BASE_ADDRESS
-                    hook_logger.info(f"Pattern found at +0x{target:X}. Saving to cache")
-                    function_cache.set(func_name, target)
-                    pattern_cache.set(hook._pattern, target)
-                    hook.target = nms.BASE_ADDRESS + target
-                else:
-                    # Signature not found. We can't register this hook.
-                    self.failed_hooks[func_name] = hook
-                    hook_logger.info(f"Unable to register {func_name}. "
-                                     f"Cannot find pattern: {hook._pattern}")
-                    return
-            else:
-                hook_logger.info(f"Found {func_name} in offset cache")
-                hook.target = nms.BASE_ADDRESS + target
+    #     if hook._pattern is not None:
+    #         # If we get a pattern, look up by name to see if we have already got
+    #         # it cached, otherwise look it up by pattern.
+    #         # If that also fails, then it means we don't have it cached and we
+    #         # need to search memory for it.
+    #         target = function_cache.get(hook._name)
+    #         if not target:
+    #             target = pattern_cache.get(hook._pattern)
+    #         if target is None:
+    #             hook_logger.info(f"Finding {func_name} by pattern")
+    #             abs_offset = find_bytes(hook._pattern, alignment=0x10)
+    #             if abs_offset:
+    #                 target = abs_offset - nms.BASE_ADDRESS
+    #                 hook_logger.info(f"Pattern found at +0x{target:X}. Saving to cache")
+    #                 function_cache.set(func_name, target)
+    #                 pattern_cache.set(hook._pattern, target)
+    #                 hook.target = nms.BASE_ADDRESS + target
+    #             else:
+    #                 # Signature not found. We can't register this hook.
+    #                 self.failed_hooks[func_name] = hook
+    #                 hook_logger.info(f"Unable to register {func_name}. "
+    #                                  f"Cannot find pattern: {hook._pattern}")
+    #                 return
+    #         else:
+    #             hook_logger.info(f"Found {func_name} in offset cache")
+    #             hook.target = nms.BASE_ADDRESS + target
 
-        try:
-            _hook: NMSHook = hook()
-        except cyminhook._cyminhook.Error as e:
-            hook_logger.error(e)
-            hook_logger.error(e.status.name[3:].replace("_", " "))
-            # Log some info about the target region.
-            hook_logger.error(f"The target function was expected at 0x{hook.target}")
-            self.failed_hooks[func_name] = hook
-            return
-        # Check to see if the provided class implement the compound hook
-        # functionality. If so, handle it.
-        if _hook._is_compound_compatible:
-            if func_name not in self.compound_hooks:
-                compound_class = CompoundHook(
-                    target=_hook.target,
-                    signature=_hook.signature
-                )
-                self._add_cls_to_compound_hook(_hook, compound_class)
-                self.compound_hooks[func_name] = compound_class
-                hook_logger.info(f"Added hook '{hook_name}' as a compound hook")
-                _hook = compound_class
-            else:
-                self._add_cls_to_compound_hook(_hook, self.compound_hooks[func_name])
-                hook_logger.info(f"Added hook '{hook_name}' to an existing compound hook")
-                _hook = self.compound_hooks[func_name]
-        else:
-            hook_logger.info(f"Registered hook '{hook_name}' for function '{func_name}'")
-            self.hooks[func_name] = _hook
-        if enable:
-            try:
-                _hook.enable()
-            except:
-                hook_logger.info(traceback.format_exc())
+    #     try:
+    #         _hook: NMSHook = hook()
+    #     except cyminhook._cyminhook.Error as e:
+    #         hook_logger.error(e)
+    #         hook_logger.error(e.status.name[3:].replace("_", " "))
+    #         # Log some info about the target region.
+    #         hook_logger.error(f"The target function was expected at 0x{hook.target}")
+    #         self.failed_hooks[func_name] = hook
+    #         return
+    #     # Check to see if the provided class implement the compound hook
+    #     # functionality. If so, handle it.
+    #     if _hook._is_compound_compatible:
+    #         if func_name not in self.compound_hooks:
+    #             compound_class = CompoundHook(
+    #                 target=_hook.target,
+    #                 signature=_hook.signature
+    #             )
+    #             self._add_cls_to_compound_hook(_hook, compound_class)
+    #             self.compound_hooks[func_name] = compound_class
+    #             hook_logger.info(f"Added hook '{hook_name}' as a compound hook")
+    #             _hook = compound_class
+    #         else:
+    #             self._add_cls_to_compound_hook(_hook, self.compound_hooks[func_name])
+    #             hook_logger.info(f"Added hook '{hook_name}' to an existing compound hook")
+    #             _hook = self.compound_hooks[func_name]
+    #     else:
+    #         hook_logger.info(f"Registered hook '{hook_name}' for function '{func_name}'")
+    #         self.hooks[func_name] = _hook
+    #     if enable:
+    #         try:
+    #             _hook.enable()
+    #         except:
+    #             hook_logger.info(traceback.format_exc())
+
+    def resolve_dependencies(self):
+        """ Resolve dependencies of hooks.
+        This will get all the functions which are to be hooked and construct
+        compound hooks as required."""
+        # TODO: Make work.
+        pass
 
     def register_function(self, hook: _NMSHook, enable: bool = True, mod = None):
-        hook.bind(mod)
-        hook_logger.info(f"Registered hook '{hook._name}' for function '{hook}'")
-        self.hooks[hook._name] = hook
-        if enable:
-            try:
-                hook.enable()
-            except:
-                hook_logger.info(traceback.format_exc())
+        """ Register the provided function as a callback. """
+        if hook._invalid:
+            # If the hook is invalid for any reason, then just return (for now...)
+            return
+        bound_ok = hook.bind(mod)
+        if bound_ok:
+            hook_logger.info(
+                f"Registered hook '{hook._name}' for function "
+                f"'{hook._original_detour.__name__}'"
+            )
+            self.hooks[hook._name] = hook
+            if enable and hook._should_enable:
+                try:
+                    hook.enable()
+                except:
+                    hook_logger.info(traceback.format_exc())
 
     def enable(self, func_name: str):
         """ Enable the hook for the provided function name. """

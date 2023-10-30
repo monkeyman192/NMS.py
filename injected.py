@@ -1,19 +1,20 @@
+import asyncio
+import builtins
+import ctypes
+import ctypes.wintypes
+from functools import partial
+import logging
+import logging.handlers
+import os
+import os.path as op
+import time
+import traceback
+import sys
+
+
 socket_logger_loaded = False
 
 try:
-    import asyncio
-    import builtins
-    import ctypes
-    import ctypes.wintypes
-    from functools import partial
-    import logging
-    import logging.handlers
-    import os
-    import os.path as op
-    import time
-    import traceback
-    import sys
-
     rootLogger = logging.getLogger('')
     rootLogger.setLevel(logging.INFO)
     socketHandler = logging.handlers.SocketHandler(
@@ -37,13 +38,7 @@ try:
         sys.exit(-1)
 
     import nmspy.data.structs as nms_structs
-    import nmspy.data.functions as nms_funcs
-    import nmspy.extractors.metaclasses as metaclass_extractor
-    from nmspy.data import local_types
-    from nmspy.hooking import (
-        one_shot, HookManager, hook_function, conditionally_enabled_hook,
-        NMSHook
-    )
+    from nmspy.hooking import HookManager
     from nmspy.protocols import (
         ExecutionEndedException,
         custom_exception_handler,
@@ -89,9 +84,9 @@ try:
         """ A protocol factory to be passed to a asyncio loop.create_server call
         which will accept requests, execute them and persist any variables to
         globals()."""
-        def connection_made(self, transport):
+        def connection_made(self, transport: asyncio.transports.WriteTransport):
             peername = transport.get_extra_info('peername')
-            self.transport = transport
+            self.transport: asyncio.transports.WriteTransport = transport
             builtins.print('Connection from {}'.format(peername))
             # Overwrite print so that any `print` statements called in the commands
             # to be executed will be written back out of the socket they came in.
@@ -144,184 +139,17 @@ try:
             )
         )
 
-    @conditionally_enabled_hook(nms.GcWaterGlobals is None)
-    @hook_function("cTkMetaData::ReadGlobalFromFile<cGcWaterGlobals>")
-    class cTkMetaData__ReadGlobalFromFile_cGcWaterGlobals(NMSHook):
-        def detour(self, lpData: int, lpacFilename: bytes):
-            try:
-                logging.info(f"cGcWaterGlobals*: 0x{lpData:X}, filename: {lpacFilename}")
-                globals_cache.set("GcWaterGlobals", lpData - nms.BASE_ADDRESS)
-                ret = self.original(lpData, lpacFilename)
-                data = map_struct(lpData, nms_structs.cGcWaterGlobals)
-                nms.GcWaterGlobals = data
-                for field in data._fields_:
-                    logging.info(f"{field[0]}: {getattr(data, field[0])}")
-                nms.GcWaterGlobals.UseNewWater = 0
-            except:
-                logging.error(traceback.format_exc())
-            finally:
-                return ret
-
-
-    # @hook_function("AK::SoundEngine::PostEvent")
-    # class PlaySound_Hook(NMSHook):
-    #     def detour(self, *args):
-    #         logging.info(f"Played sound with params: {args}")
-    #         return self.original(*args)
-
-    # @hook_function("cTkMetaData::GetLookup")
-    # class LookupMetadata(NMSHook):
-    #     @after
-    #     def detour(self, lpacName, result):
-    #         logging.info(f"Looking: {lpacName}, {result}")
-    #         data = map_struct(result, nms_structs.cTkMetaDataXMLFunctionLookup)
-    #         logging.info(f"Looked up: {data.name}")
-
-
-    # @cTkMetaData.GetLookup.after
-    # def lookup_metadata(luiNameHash, __result):
-    #     logging.info(f"Hook 1, namehash: 0x{luiNameHash:X}, return val: {__result}")
-
-    # @hook_function("cTkMetaData::GetLookup")
-    # class LookupMetadata(NMSHook):
-    #     @before
-    #     def detour(self, luiNameHash):
-    #         logging.info(f"Hook 1, namehash: 0x{luiNameHash:X}")
-
-
-    # @hook_function("cTkMetaData::GetLookup")
-    # class LookupMetadata(NMSHook):
-    #     @after
-    #     def detour(self, luiNameHash, result):
-    #         if result:
-    #             data = map_struct(result, nms_structs.cTkMetaDataFunctionLookup)
-    #             logging.info(f"Looked up: {data.classMetadata}")
-
-
-    @hook_function("cGcApplicationDeathState::Update")
-    class DeathStateUpdate(NMSHook):
-        def detour(self, this, lfTimeStep: float):
-            logging.info(f"Called cGcApplicationDeathState::Update: {this}, {lfTimeStep}")
-            self.original(this, lfTimeStep)
-
-
-    @hook_function("cTkMetaData::Register")
-    class RegisterMetadata(NMSHook):
-        def detour(self, lpClassMetadata, *args):
-            result = self.original(lpClassMetadata, *args)
-            if lpClassMetadata:
-                meta: nms_structs.cTkMetaDataClass = lpClassMetadata.contents
-                metaclass_extractor.extract_members(meta, metadata_registry)
-                logging.info(f"Added {meta.name} to metadata registry")
-            return result
-
-
-    @hook_function("cGcSolarSystem::Generate")
-    class GenerateSolarSystem(NMSHook):
-        def detour(self, this, lbUseSettingsFile, lSeed):
-            ret = self.original(this, lbUseSettingsFile, lSeed)
-            data = map_struct(this, nms_structs.cGcSolarSystem)
-            logging.info(f"Number of planets: {data.solarSystemData.planets} in system {data.solarSystemData.name}")
-            return ret
-
-
-    # @hook_function("cTkInputPort::SetButton", pattern="40 57 48 83 EC 40 48 83")
-    # class GetInput_Hook(NMSHook):
-    #     def detour(self, this, leIndex):
-    #         logging.info(f"cTkInputPort*: {this}")
-    #         IP = map_struct(this, nms_funcs.cTkInputPort)
-    #         if leIndex == local_types.eInputButton.EInputButton_Space:
-    #             IP.SetButton(local_types.eInputButton.EInputButton_Mouse1)
-    #         else:
-    #             return self.original(this, leIndex)
-
-    @one_shot
-    @hook_function("cGcGameState::LoadSpecificSave")
-    class cGcGameState__LoadSpecificSave_Hook(NMSHook):
-        def detour(self, this, leSpecificSave):
-            logging.info(f"cGcGameState*: {this}, save type: {leSpecificSave}")
-            ret = self.original(this, leSpecificSave)
-            logging.info(str(ret))
-            return ret
-
-    @one_shot
-    @hook_function("cGcApplication::cGcApplication")
-    class cGcApplication__cGcApplication(NMSHook):
-        def detour(self, this):
-            logging.info(f"cGcApplication constructor: 0x{this:X}")
-            logging.info(f"Diff: 0x{this - nms.BASE_ADDRESS:X}")
-            nms.GcApplication = this + 0x50  # WHY??
-            return self.original(this)
-
-
-    @one_shot
-    @hook_function("cGcApplication::Construct")
-    class cGcApplication__Construct(NMSHook):
-        def detour(self, this):
-            logging.info(f"cGcApplication* construct: 0x{this:X}")
-            logging.info(f"Diff: 0x{this - nms.BASE_ADDRESS:X}")
-            return self.original(this)
-            # try:
-            #     logging.info(pprint_mem(nms.GcApplication, 0x100, 0x10))
-            #     gcapp = map_struct(nms.GcApplication, nms_structs.cGcApplication)
-            #     logging.info(gcapp.data)
-            #     logging.info(f"{get_addressof(gcapp.data):X}")
-            #     logging.info(dir(gcapp.data))
-            #     logging.info(gcapp.data.contents)
-            #     logging.info(gcapp.data.contents.firstBootContext.state)
-            # except:
-            #     logging.error(traceback.format_exc())
-            # finally:
-            #     return ret
-
-
-    @hook_function("cGcApplication::Update")
-    class cGcApplication__Update(NMSHook):
-        def detour(self, this):
-            return self.original(this)
-
-
-    @one_shot
-    @hook_function("cTkDynamicGravityControl::Construct")
-    class cTkDynamicGravityControl__Construct(NMSHook):
-        def detour(self, this):
-            logging.info("Loaded grav singleton")
-            nms.gravity_singleton = this
-            # TODO: map to the struct.
-            # nms.gravity_singleton = map_struct(this, local_types.cTkDynamicGravityControl)
-            return self.original(this)
-
-
-    @hook_function("cGcApplicationGameModeSelectorState::UpdateStartUI")
-    class cGcApplicationGameModeSelectorState__UpdateStartUI(NMSHook):
-        def detour(self, this):
-            try:
-                logging.info(f"cGcApplicationGameModeSelectorState*: {this}")
-                ret = self.original(this)
-                logging.info(str(ret))
-                return ret
-            except:
-                logging.info("Something went wrong!!!")
-
     hook_manager = HookManager()
-    hook_manager.register(cGcGameState__LoadSpecificSave_Hook)
-    hook_manager.register(cTkMetaData__ReadGlobalFromFile_cGcWaterGlobals)
-    hook_manager.register(cGcApplicationGameModeSelectorState__UpdateStartUI)
-    hook_manager.register(cGcApplication__Construct)
-    # hook_manager.register(LookupMetadata)
-    # hook_manager.register(RegisterMetadata)
-    hook_manager.register(DeathStateUpdate)
-    hook_manager.register(cTkDynamicGravityControl__Construct)
-    hook_manager.register(GenerateSolarSystem)
-    # hook_manager.register(GetInput_Hook)
-    hook_manager.register(cGcApplication__cGcApplication)
-    # hook_manager.register_function(lookup_metadata)
+
+    mod_manager = ModManager(hook_manager)
+
+    # First, load our internal mod before anything else.
+    mod_manager.load_mod_folder(op.join(_internal.CWD, "nmspy/_internals/mods"))
+
     logging.info("NMS.py injection complete!")
     logging.info("Current hook states:")
     for state in hook_manager.states:
         logging.info(state)
-
-    mod_manager = ModManager(hook_manager)
 
     # Also load any mods after all the internal hooks:
     start_time = time.time()
@@ -350,8 +178,6 @@ try:
 
 except Exception as e:
     # If we hit this, something has gone wrong. Log to the current directory.
-    import traceback
-    import os.path as op
 
     try:
         # Try and log to the current working directory.

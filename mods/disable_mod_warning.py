@@ -1,4 +1,4 @@
-from nmspy.hooking import one_shot_func
+from nmspy.hooking import one_shot
 from nmspy.memutils import map_struct
 import nmspy.data.structs as nms_structs
 import nmspy.data.function_hooks as hooks
@@ -10,7 +10,7 @@ class DisableModWarning(NMSMod):
     __description__ = "Disable mod warning screen"
     __version__ = "1.0"
 
-    @one_shot_func
+    @one_shot
     @hooks.cTkFileSystem.Construct.after
     def isModded(self, this, flags: int):
         fs = map_struct(this, nms_structs.cTkFileSystem)
