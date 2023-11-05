@@ -1,6 +1,6 @@
 import logging
 
-from nmspy.hooking import one_shot, disable
+from nmspy.hooking import one_shot, disable, main_loop
 import nmspy.extractors.metaclasses as metaclass_extractor
 import nmspy.common as nms
 from nmspy.memutils import map_struct
@@ -14,6 +14,10 @@ class MiscMod(NMSMod):
     __description__ = "Misc stuff..."
     __version__ = "1.0"
 
+    def __init__(self):
+        self.counter = 0
+        super().__init__()
+
     @disable
     @hooks.AK.SoundEngine.PostEvent.before
     def before_sound_event(self, *args):
@@ -26,21 +30,21 @@ class MiscMod(NMSMod):
 
     @disable
     @hooks.cTkMetaData.GetLookup.after
-    def after_lookup_metadata(self, lpacName, __result):
-        logging.info(f"Looking: {lpacName}, {__result}")
-        data = map_struct(__result, nms_structs.cTkMetaDataXMLFunctionLookup)
+    def after_lookup_metadata(self, lpacName, _result_):
+        logging.info(f"Looking: {lpacName}, {_result_}")
+        data = map_struct(_result_, nms_structs.cTkMetaDataXMLFunctionLookup)
         logging.info(f"Looked up: {data.name}")
 
     @disable
     @hooks.cTkMetaData.GetLookup.after
-    def after_lookup_metadata2(luiNameHash, __result):
-        logging.info(f"Hook 1, namehash: 0x{luiNameHash:X}, return val: {__result}")
+    def after_lookup_metadata2(luiNameHash, _result_):
+        logging.info(f"Hook 1, namehash: 0x{luiNameHash:X}, return val: {_result_}")
 
     @disable
     @hooks.cTkMetaData.GetLookup.after
-    def after_lookup_metadata3(self, luiNameHash, __result):
-        if __result:
-            data = map_struct(__result, nms_structs.cTkMetaDataFunctionLookup)
+    def after_lookup_metadata3(self, luiNameHash, _result_):
+        if _result_:
+            data = map_struct(_result_, nms_structs.cTkMetaDataFunctionLookup)
             logging.info(f"Looked up: {data.classMetadata}")
 
     @hooks.cGcApplicationDeathState.Update.before
@@ -49,7 +53,7 @@ class MiscMod(NMSMod):
 
     @disable
     @hooks.cTkMetaData.Register.after
-    def detour(self, lpClassMetadata, *args, __result):
+    def detour(self, lpClassMetadata, *args, _result_):
         if lpClassMetadata:
             meta: nms_structs.cTkMetaDataClass = lpClassMetadata.contents
             # metaclass_extractor.extract_members(meta, metadata_registry)
@@ -97,9 +101,16 @@ class MiscMod(NMSMod):
         #     return ret
 
     @hooks.cGcApplicationGameModeSelectorState.UpdateStartUI.after
-    def start_updating_UI(self, this, __result):
+    def start_updating_UI(self, this, _result_):
         try:
             logging.info(f"cGcApplicationGameModeSelectorState*: {this}")
-            logging.info(str(__result))
+            logging.info(str(_result_))
         except:
             logging.info("Something went wrong!!!")
+
+    # TODO: Re-add the functionality for conditionally applied hooks?
+    # @main_loop.after
+    # def lala(self):
+    #     if self.counter < 100:
+    #         logging.info(self.counter)
+    #     self.counter += 1

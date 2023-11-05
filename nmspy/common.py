@@ -1,4 +1,4 @@
-from typing import Optional
+from concurrent.futures import ThreadPoolExecutor
 
 BASE_ADDRESS: int = -1
 SIZE_OF_IMAGE: int = -1
@@ -40,3 +40,6 @@ GcWaterGlobals = None
 
 GcApplication = None
 gravity_singleton = None
+
+# TODO: Move somewhere else? Not sure where but this doesn't really fit here...
+executor: ThreadPoolExecutor = None  # type: ignore

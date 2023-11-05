@@ -1,3 +1,4 @@
 cyminhook
 pymem
 psutil
+keyboard

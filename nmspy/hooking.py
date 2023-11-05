@@ -5,7 +5,7 @@ from enum import Enum
 from functools import wraps, update_wrapper, partial
 import inspect
 import logging
-from typing import Any, Optional, Type, Union, Generic
+from typing import Any, Optional, Type, Union
 import traceback
 
 import cyminhook
@@ -100,10 +100,10 @@ class _NMSHook(cyminhook.MinHook):
         if self.detour_time == DetourTime.BEFORE:
             self.detour = self._before_detour
         elif self.detour_time == DetourTime.AFTER:
-            # For an "after" hook, we need to determine if "__result" is in the
+            # For an "after" hook, we need to determine if "_result_" is in the
             # function arguments.
             func_sig = inspect.signature(self._original_detour)
-            if "__result" in func_sig.parameters.keys():
+            if "_result_" in func_sig.parameters.keys():
                 self.detour = self._after_detour_with_return
             else:
                 self.detour = self._after_detour
@@ -163,7 +163,7 @@ class _NMSHook(cyminhook.MinHook):
         # The original function will be run before.
         # The return value of the original function will be passed in.
         ret = self.original(*args)
-        new_ret = self._detour_func(*args, __result=ret)
+        new_ret = self._detour_func(*args, _result_=ret)
         if new_ret is not None:
             return new_ret
         return ret
@@ -200,7 +200,6 @@ class HookFactory:
                 fmt_key = dict(zip(cls._templates, [x.__name__ for x in key]))
             else:
                 fmt_key = {cls._templates[0]: key.__name__}
-            hook_logger.info(cls._name.format(**fmt_key))
             cls._name = cls._name.format(**fmt_key)
         return cls
 
@@ -223,7 +222,10 @@ class HookFactory:
 
     @classmethod
     def after(cls, func: Callable[..., Any]) -> _NMSHook:
-        """ Run the decorated function after the original function is run. """
+        """ Mark the hook to be only run after the original function.
+        This function may have the keyword argument `_result_`. If it does, then
+        this value will be the result of the call of the original function
+        """
         return _NMSHook(func, name=cls._name, detour_time=DetourTime.AFTER)
 
 
@@ -233,33 +235,42 @@ def disable(klass: _NMSHook):
     return klass
 
 
-def before(func):
-    """ Mark the hook to be only run before the original function.
-    Currently these cannot mutate the arguments passed into the original
-    function, but this will likely change in the future.
-    """
-    func._before = True
-    return func
+# TODO: See if we can make this work so that we may have a main loop decorator
+# which doesn't require a .before or .after...
+class _main_loop:
+    def __init__(self, func, detour_time=DetourTime.BEFORE):
+        self.func = func
+        self.func._main_loop = True
+        self.func._main_loop_detour_time = detour_time
+
+    def __call__(self, *args, **kwargs):
+        return self.func(*args, **kwargs)
+
+    @staticmethod
+    def before(func):
+        func._main_loop = True
+        func._main_loop_detour_time = DetourTime.BEFORE
+        return func
+
+    @staticmethod
+    def after(func):
+        func._main_loop = True
+        func._main_loop_detour_time = DetourTime.AFTER
+        return func
 
 
-def after(func):
-    """ Mark the hook to be only run after the original function.
-    This function may have the keyword argument `__result`. If it does, then
-    this value will be the result of the call of the original function
-    """
-    func._after = True
-    func_sig = inspect.signature(func)
-    if "result" in func_sig.parameters.keys():
-        func._has_return_arg = True
-    else:
-        func._has_return_arg = False
-    return func
+class main_loop:
+    @staticmethod
+    def before(func):
+        func._is_main_loop_func = True
+        func._main_loop_detour_time = DetourTime.BEFORE
+        return func
 
-
-def main_loop(func):
-    # TODO: Make work...
-    func._update_loop = True
-    return func
+    @staticmethod
+    def after(func):
+        func._is_main_loop_func = True
+        func._main_loop_detour_time = DetourTime.AFTER
+        return func
 
 
 def hook_function(
@@ -402,6 +413,10 @@ class HookManager():
         # Keep a mapping of any hooks that try to be registered but fail.
         # These hooks will not be instances of classes, but the class type.
         self.failed_hooks: dict[str, Type[NMSHook]] = {}
+        # Keep a list of main loop functions which will be run either before or
+        # after the main update loop each update cycle.
+        self.main_loop_before_funcs: list = []
+        self.main_loop_after_funcs: list = []
 
     def add_hook(
         self,
@@ -516,6 +531,12 @@ class HookManager():
         # TODO: Make work.
         pass
 
+    def add_main_loop_func(self, func):
+        if func._main_loop_detour_time == DetourTime.BEFORE:
+            self.main_loop_before_funcs.append(func)
+        else:
+            self.main_loop_after_funcs.append(func)
+
     def register_function(self, hook: _NMSHook, enable: bool = True, mod = None):
         """ Register the provided function as a callback. """
         if hook._invalid:
@@ -559,3 +580,6 @@ class HookManager():
         # Return the states of all the registered hooks
         for func_name, hook in self.hooks.items():
             yield f"{func_name}: {hook.state}"
+
+
+hook_manager = HookManager()

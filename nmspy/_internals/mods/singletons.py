@@ -1,9 +1,11 @@
 import logging
+import time
+# import asyncio
 
 import nmspy.common as nms
 import nmspy.data.structs as structs
 import nmspy.data.function_hooks as hooks
-from nmspy.hooking import one_shot, disable
+from nmspy.hooking import one_shot, disable, hook_manager
 from nmspy.memutils import map_struct
 from nmspy.mod_loader import NMSMod
 
@@ -13,11 +15,25 @@ class _INTERNAL_LoadSingletons(NMSMod):
     __description__ = "Load singletons and other important objects"
     __version__ = "0.1"
 
+    def __init__(self):
+        super().__init__()
+
+    def slow_thing(self):
+        logging.info("starting to sleep!")
+        time.sleep(10)
+        logging.info("I'm awake!")
+
     @one_shot
     @hooks.cTkDynamicGravityControl.Construct.before
     def load_gravity_singleton(self, this):
         logging.info("Loaded grav singleton")
         nms.gravity_singleton = this
+        nms.executor.submit(self.slow_thing)
+        # try:
+        #     loop = asyncio.get_event_loop()
+        #     logging.info(loop)
+        # except (RuntimeError, ValueError) as e:
+        #     logging.info("bad loop!")
         # TODO: map to the struct.
         # nms.gravity_singleton = map_struct(this, local_types.cTkDynamicGravityControl)
 
@@ -28,11 +44,11 @@ class _INTERNAL_LoadSingletons(NMSMod):
         logging.info(f"Diff: 0x{this - nms.BASE_ADDRESS:X}")
         nms.GcApplication = this + 0x50  # WHY??
 
-    @disable
-    @hooks.cGcApplication.Update.before
-    def _main_loop_pre(self, _):
-        logging.info("before update")
-
-    # @hooks.cGcApplication.Update.after
-    # def _main_loop_post(self, _):
-    #     logging.info("after update")
+    @hooks.cGcApplication.Update
+    def _main_loop(self, *args):
+        """ The main application loop. Run any before or after functions here. """
+        for func in hook_manager.main_loop_before_funcs:
+            func()
+        hooks.cGcApplication.Update.original(*args)
+        for func in hook_manager.main_loop_after_funcs:
+            func()

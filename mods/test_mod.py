@@ -75,7 +75,7 @@ class TestMod(NMSMod):
     #     logging.info(f"Planet {planet.planetIndex} name: {planet.planetData.name}")
     #     return ret
 
-    @main_loop
+    @main_loop.before
     def do_something(self):
         if self.should_print:
             logging.info(self.text)

@@ -44,18 +44,9 @@ def _clean_name(name: str) -> str:
 
 
 def _is_mod_predicate(obj, ref_module) -> bool:
-    # mod_logger.info(obj)
     if inspect.getmodule(obj) == ref_module and inspect.isclass(obj):
         return issubclass(obj, NMSMod)
     return False
-
-
-def _hook_predicate(value: Any) -> bool:
-    """ Filter function to only return classes which subclass NMSHook"""
-    try:
-        return issubclass(value, NMSHook)
-    except TypeError:
-        return False
 
 
 def _partial_predicate(value: Any) -> bool:
@@ -63,6 +54,14 @@ def _partial_predicate(value: Any) -> bool:
         return isinstance(value, partial) and isinstance(value.func.__self__, _NMSHook)
     except TypeError:
         return False
+
+
+def _main_loop_predicate(value: Any) -> bool:
+    """ Determine if the objecy has the _is_main_loop_func property.
+    This will only be methods on NMSMod classes which are decorated with either
+    @main_loop.before or @main_loop.after
+    """
+    return getattr(value, "_is_main_loop_func", False)
 
 
 def _import_file(fpath: str) -> ModuleType:
@@ -81,6 +80,10 @@ class NMSMod():
             x[1].func.__self__ for x in inspect.getmembers(self, _partial_predicate)
         ]
 
+        self._main_funcs = [
+            x[1] for x in inspect.getmembers(self, _main_loop_predicate)
+        ]
+
 
 class ModManager():
     def __init__(self, hook_manager: HookManager):
@@ -92,7 +95,6 @@ class ModManager():
 
     def load_mod(self, fpath) -> bool:
         mod = _import_file(fpath)
-        mod_logger.info(f"mod: {mod} has disabled? {getattr(mod, '__disabled__', False)}")
         d: dict[str, type[NMSMod]] = dict(
             inspect.getmembers(
                 mod,
@@ -115,8 +117,14 @@ class ModManager():
             # attribute with the instance.
             mod = _mod()
             self.mods[name] = mod
+            if not hasattr(mod, "hooks"):
+                mod_logger.error(f"The mod {mod.__class__.__name__} is not initialised properly. Please ensure that `super().__init__()` is included in the `__init__` method of this mod!")
+                mod_logger.warning(f"Could not enable {mod.__class__.__name__}")
+                continue
             for hook in mod.hooks:
                 self.hook_manager.register_function(hook, True, mod)
+            for main_loop_func in mod._main_funcs:
+                self.hook_manager.add_main_loop_func(main_loop_func)
 
     def reload(self):
         # TODO

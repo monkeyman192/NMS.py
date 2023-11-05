@@ -1,5 +1,6 @@
 import asyncio
 import builtins
+from concurrent.futures import ThreadPoolExecutor
 import ctypes
 import ctypes.wintypes
 from functools import partial
@@ -13,6 +14,7 @@ import sys
 
 
 socket_logger_loaded = False
+nms = None
 
 try:
     rootLogger = logging.getLogger('')
@@ -38,7 +40,7 @@ try:
         sys.exit(-1)
 
     import nmspy.data.structs as nms_structs
-    from nmspy.hooking import HookManager
+    from nmspy.hooking import hook_manager
     from nmspy.protocols import (
         ExecutionEndedException,
         custom_exception_handler,
@@ -139,7 +141,7 @@ try:
             )
         )
 
-    hook_manager = HookManager()
+    nms.executor = ThreadPoolExecutor(10, thread_name_prefix="NMS_Executor")
 
     mod_manager = ModManager(hook_manager)
 
@@ -195,3 +197,7 @@ except Exception as e:
     except:
         with open(op.join(op.expanduser("~"), "CRITICAL_ERROR.txt"), "w") as f:
             traceback.print_exc(file=f)
+finally:
+    if nms and nms.executor is not None:
+        nms.executor.shutdown(wait=False, cancel_futures=True)
+
