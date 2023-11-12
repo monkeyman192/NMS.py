@@ -1,164 +1,205 @@
-from ctypes import CFUNCTYPE
 from ctypes import c_char, c_longlong, c_uint32, c_char_p, c_ulonglong, c_int32, c_float
 import ctypes.wintypes as wintypes
+from typing import Union
+
+from collections import namedtuple
+
+FUNCTION_DEF = namedtuple("FUNCTION_DEF", ["restype", "argtypes"])
 
 
-FUNC_CALL_SIGS = {
-    "cGcApplication::Construct": CFUNCTYPE(
-        None,
-        c_longlong,
+FUNC_CALL_SIGS: dict[str, Union[FUNCTION_DEF, dict[str, FUNCTION_DEF]]] = {
+    "cGcApplication::Construct": FUNCTION_DEF(
+        restype=None,
+        argtypes=[c_longlong],
     ),
-    "cGcApplication::Update": CFUNCTYPE(
-        None,
-        c_longlong,
+    "cGcApplication::Update": FUNCTION_DEF(
+        restype=None,
+        argtypes=[c_longlong],
     ),
-    "cGcApplication::cGcApplication": CFUNCTYPE(
-        None,
-        c_longlong,
+    "cGcApplication::cGcApplication": FUNCTION_DEF(
+        restype=None,
+        argtypes=[c_longlong],
     ),
-    "cGcApplicationGameModeSelectorState::UpdateStartUI": CFUNCTYPE(
-        None,
-        c_longlong,
+    "cGcApplicationGameModeSelectorState::UpdateStartUI": FUNCTION_DEF(
+        restype=None,
+        argtypes=[c_longlong],
     ),
-    "cGcGameState::LoadSpecificSave": CFUNCTYPE(
-        c_char,
-        c_longlong,
-        c_uint32,
+    "cGcGameState::LoadSpecificSave": FUNCTION_DEF(
+        restype=c_char,
+        argtypes=[
+            c_longlong,
+            c_uint32,
+        ]
     ),
-    "cTkMetaDataXML::GetLookup": CFUNCTYPE(
-        c_longlong,
-        c_char_p,
+    "cGcGameState::LoadSpecificSave": FUNCTION_DEF(
+        restype=c_char,
+        argtypes=[
+            c_longlong,
+            c_uint32,
+        ]
     ),
-    "cTkMetaData::GetLookup": CFUNCTYPE(
-        c_longlong,
-        c_ulonglong,
+    "cTkMetaDataXML::GetLookup": FUNCTION_DEF(
+        restype=c_longlong,
+        argtypes=[c_char_p]
     ),
-    "cTkMetaData::Register": CFUNCTYPE(
-        None,
-        c_longlong,
-        c_longlong,
-        c_longlong,
-        c_longlong,
-        c_longlong,
-        c_longlong,
-        c_longlong,
-        c_longlong,
-        c_longlong,
-        c_longlong,
+    "cTkMetaData::GetLookup": FUNCTION_DEF(
+        restype=c_longlong,
+        argtypes=[c_ulonglong]
     ),
-    "nvgBeginFrame": CFUNCTYPE(
-        None,
-        c_longlong,
-        c_int32,
-        c_int32,
-        wintypes.FLOAT,
+    "cTkMetaData::Register": FUNCTION_DEF(
+        restype=None,
+        argtypes=[
+            c_longlong,
+            c_longlong,
+            c_longlong,
+            c_longlong,
+            c_longlong,
+            c_longlong,
+            c_longlong,
+            c_longlong,
+            c_longlong,
+            c_longlong,
+        ]
     ),
-    "nvgBeginPath": CFUNCTYPE(
-        None,
-        c_longlong,
+    "nvgBeginFrame": FUNCTION_DEF(
+        restype=None,
+        argtypes=[
+            c_longlong,
+            c_int32,
+            c_int32,
+            wintypes.FLOAT,
+        ]
     ),
-    "nvgRect": CFUNCTYPE(
-        None,
-        c_longlong,
-        wintypes.FLOAT,
-        wintypes.FLOAT,
-        wintypes.FLOAT,
-        wintypes.FLOAT,
+    "nvgBeginPath": FUNCTION_DEF(
+        restype=None,
+        argtypes=[c_longlong]
     ),
-    "nvgFillColor": CFUNCTYPE(
-        None,
-        c_longlong,
-        c_longlong,
+    "nvgRect": FUNCTION_DEF(
+        restype=None,
+        argtypes=[
+            c_longlong,
+            wintypes.FLOAT,
+            wintypes.FLOAT,
+            wintypes.FLOAT,
+            wintypes.FLOAT,
+        ]
     ),
-    "nvgFill": CFUNCTYPE(
-        None,
-        c_longlong,
+    "nvgFillColor": FUNCTION_DEF(
+        restype=None,
+        argtypes=[
+            c_longlong,
+            c_longlong,
+        ]
     ),
-    "nvgEndFrame": CFUNCTYPE(
-        None,
-        c_longlong,
+    "nvgFill": FUNCTION_DEF(
+        restype=None,
+        argtypes=[c_longlong]
     ),
-    "nvgText": CFUNCTYPE(
-        wintypes.FLOAT,
-        c_longlong,
-        wintypes.FLOAT,
-        wintypes.FLOAT,
-        c_char_p,
-        c_char_p,
+    "nvgEndFrame": FUNCTION_DEF(
+        restype=None,
+        argtypes=[c_longlong]
     ),
-    "cGcApplicationDeathState::Update": CFUNCTYPE(
-        None,
-        c_longlong,
-        wintypes.DOUBLE,
+    "nvgText": FUNCTION_DEF(
+        restype=wintypes.FLOAT,
+        argtypes=[
+            c_longlong,
+            wintypes.FLOAT,
+            wintypes.FLOAT,
+            c_char_p,
+            c_char_p,
+        ]
     ),
-    "cTkMetaData::ReadGlobalFromFile<cGcWaterGlobals>": CFUNCTYPE(
-        c_longlong,
-        c_longlong,
-        c_char_p,
+    "cGcApplicationDeathState::Update": FUNCTION_DEF(
+        restype=None,
+        argtypes=[
+            c_longlong,
+            wintypes.DOUBLE,
+        ]
     ),
-    "cTkDynamicGravityControl::Construct": CFUNCTYPE(
-        None,
-        c_longlong,
+    "cTkMetaData::ReadGlobalFromFile<cGcWaterGlobals>": FUNCTION_DEF(
+        restype=c_longlong,
+        argtypes=[
+            c_longlong,
+            c_char_p,
+        ]
     ),
-    "AK::SoundEngine::PostEvent": CFUNCTYPE(
-        c_longlong,
-        c_uint32,
-        c_ulonglong,
-        c_uint32,
-        c_ulonglong,
-        c_ulonglong,
-        c_uint32,
-        c_longlong,
-        c_uint32,
+    "cTkDynamicGravityControl::Construct": FUNCTION_DEF(
+        restype=None,
+        argtypes=[c_longlong]
     ),
-    "cTkAudioManager::Play": CFUNCTYPE(
-        wintypes.BOOLEAN,
-        c_longlong,  # cTkAudioManager *
-        c_longlong,
-        c_longlong,
+    "AK::SoundEngine::PostEvent": FUNCTION_DEF(
+        restype=c_longlong,
+        argtypes=[
+            c_uint32,
+            c_ulonglong,
+            c_uint32,
+            c_ulonglong,
+            c_ulonglong,
+            c_uint32,
+            c_longlong,
+            c_uint32,
+        ]
     ),
-    "cTkInputPort::SetButton": CFUNCTYPE(
-        None,
-        c_longlong,
-        c_uint32,
+    "cTkAudioManager::Play": FUNCTION_DEF(
+        restype=wintypes.BOOLEAN,
+        argtypes=[
+            c_longlong,  # cTkAudioManager *
+            c_longlong,
+            c_longlong,
+        ]
     ),
-    "cGcSolarSystem::Generate": CFUNCTYPE(
-        None,
-        c_longlong,
-        wintypes.BOOLEAN,
-        c_longlong,
+    "cTkInputPort::SetButton": FUNCTION_DEF(
+        restype=None,
+        argtypes=[
+            c_longlong,
+            c_uint32,
+        ]
     ),
-    "cGcPlanet::SetupRegionMap": CFUNCTYPE(
-        None,
-        c_longlong,
+    "cGcSolarSystem::Generate": FUNCTION_DEF(
+        restype=None,
+        argtypes=[
+            c_longlong,
+            wintypes.BOOLEAN,
+            c_longlong,
+        ]
     ),
-    "cTkMetaDataXML::Register": CFUNCTYPE(
-        None,
-        c_char_p,
-        c_longlong,
-        c_longlong,
-        c_longlong,
+    "cGcPlanet::SetupRegionMap": FUNCTION_DEF(
+        restype=None,
+        argtypes=[c_longlong]
     ),
-    "cGcApplicationGameModeSelectorState::RenderWarning": CFUNCTYPE(
-        None,
-        c_longlong,
-        c_char_p,
-        c_char_p,
-        c_char_p,
-        c_char_p,
-        wintypes.FLOAT,
+    "cTkMetaDataXML::Register": FUNCTION_DEF(
+        restype=None,
+        argtypes=[
+            c_char_p,
+            c_longlong,
+            c_longlong,
+            c_longlong,
+        ]
     ),
-    "cGcApplicationGameModeSelectorState::RenderWarningMessages": CFUNCTYPE(
-        None,
-        c_longlong,
+    "cGcApplicationGameModeSelectorState::RenderWarning": FUNCTION_DEF(
+        restype=None,
+        argtypes=[
+            c_longlong,
+            c_char_p,
+            c_char_p,
+            c_char_p,
+            c_char_p,
+            wintypes.FLOAT,
+        ]
     ),
-    "cTkFileSystem::IsModded": CFUNCTYPE(
-        wintypes.BOOLEAN,
-        c_longlong,
+    "cGcApplicationGameModeSelectorState::RenderWarningMessages": FUNCTION_DEF(
+        restype=None,
+        argtypes=[c_longlong]
     ),
-    "cTkFileSystem::Construct": CFUNCTYPE(
-        None,
-        c_longlong,
-        c_int32,
+    "cTkFileSystem::IsModded": FUNCTION_DEF(
+        restype=wintypes.BOOLEAN,
+        argtypes=[c_longlong]
+    ),
+    "cTkFileSystem::Construct": FUNCTION_DEF(
+        restype=None,
+        argtypes=[
+            c_longlong,
+            c_int32,
+        ]
     ),
 }

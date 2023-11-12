@@ -18,30 +18,30 @@ class MiscMod(NMSMod):
         self.counter = 0
         super().__init__()
 
-    @disable
     @hooks.AK.SoundEngine.PostEvent.before
+    @disable
     def before_sound_event(self, *args):
         logging.info(f"Played sound with params: {args}")
 
-    @disable
     @hooks.cTkMetaData.GetLookup.before
+    @disable
     def before_lookup_metadata(self, luiNameHash):
         logging.info(f"Hook 1, namehash: 0x{luiNameHash:X}")
 
-    @disable
     @hooks.cTkMetaData.GetLookup.after
+    @disable
     def after_lookup_metadata(self, lpacName, _result_):
         logging.info(f"Looking: {lpacName}, {_result_}")
         data = map_struct(_result_, nms_structs.cTkMetaDataXMLFunctionLookup)
         logging.info(f"Looked up: {data.name}")
 
-    @disable
     @hooks.cTkMetaData.GetLookup.after
+    @disable
     def after_lookup_metadata2(luiNameHash, _result_):
         logging.info(f"Hook 1, namehash: 0x{luiNameHash:X}, return val: {_result_}")
 
-    @disable
     @hooks.cTkMetaData.GetLookup.after
+    @disable
     def after_lookup_metadata3(self, luiNameHash, _result_):
         if _result_:
             data = map_struct(_result_, nms_structs.cTkMetaDataFunctionLookup)
@@ -51,8 +51,8 @@ class MiscMod(NMSMod):
     def update_application_deathstate(self, this, lfTimeStep: float):
         logging.info(f"Called cGcApplicationDeathState::Update: {this}, {lfTimeStep}")
 
-    @disable
     @hooks.cTkMetaData.Register.after
+    @disable
     def detour(self, lpClassMetadata, *args, _result_):
         if lpClassMetadata:
             meta: nms_structs.cTkMetaDataClass = lpClassMetadata.contents
@@ -82,11 +82,18 @@ class MiscMod(NMSMod):
         logging.info(str(ret))
         return ret
 
+    def slow_thing(self):
+        import time
+        logging.info("starting to sleep!")
+        time.sleep(10)
+        logging.info("I'm awake!")
+
     @one_shot
     @hooks.cGcApplication.Construct.before
     def construct_gcapp(self, this):
         logging.info(f"cGcApplication* construct: 0x{this:X}")
         logging.info(f"Diff: 0x{this - nms.BASE_ADDRESS:X}")
+        nms.executor.submit(self.slow_thing)
         # try:
         #     logging.info(pprint_mem(nms.GcApplication, 0x100, 0x10))
         #     gcapp = map_struct(nms.GcApplication, nms_structs.cGcApplication)

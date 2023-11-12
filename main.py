@@ -28,7 +28,6 @@ read = config.read(cfg_file)
 binary_path = config["NMS"]["path"]
 
 
-
 # Steam:
 # binary_path = "C:/Program Files (x86)/Steam/steamapps/common/No Man's Sky/Binaries/NMS.exe"
 # GOG 4.13, aka, "the good shit":

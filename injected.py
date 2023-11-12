@@ -1,6 +1,7 @@
 import asyncio
 import builtins
 from concurrent.futures import ThreadPoolExecutor
+import configparser
 import ctypes
 import ctypes.wintypes
 from functools import partial
@@ -38,6 +39,15 @@ try:
         # If there is no binary hash, something has gone wrong. Exit now since
         # we can't continue.
         sys.exit(-1)
+
+    config = configparser.ConfigParser()
+    # Currently it's in the same directory as this file...
+    cfg_file = op.join(_internal.CWD, "NMS.py.cfg")
+    read = config.read(cfg_file)
+    log_level = config.get("NMS.py", "log_level", fallback="info")
+    debug_mode = log_level.lower() == "debug"
+    if debug_mode:
+        rootLogger.setLevel(logging.DEBUG)
 
     import nmspy.data.structs as nms_structs
     from nmspy.hooking import hook_manager
@@ -147,19 +157,18 @@ try:
 
     # First, load our internal mod before anything else.
     mod_manager.load_mod_folder(op.join(_internal.CWD, "nmspy/_internals/mods"))
+    mod_manager.enable_all(quiet=not debug_mode)
 
     logging.info("NMS.py injection complete!")
-    logging.info("Current hook states:")
-    for state in hook_manager.states:
-        logging.info(state)
 
     # Also load any mods after all the internal hooks:
     start_time = time.time()
+    bold = "\u001b[4m"
+    reset = "\u001b[0m"
+    logging.info(bold + "Loading mods" + reset)
     mod_manager.load_mod_folder(op.join(_internal.CWD, "mods"))
-    end_time = time.time()
-    logging.info(f"Found {len(mod_manager.mods)} in {end_time - start_time:.3f}s")
-    mod_manager.enable_all()
-    logging.info(f"Loaded {len(mod_manager.mods)} in {time.time() - end_time:.3f}s")
+    _loaded = mod_manager.enable_all()
+    logging.info(f"Loaded {_loaded} mods in {time.time() - start_time:.3f}s")
 
     for func_name, hook_class in hook_manager.failed_hooks.items():
         offset = hook_class.target

@@ -1,18 +1,19 @@
 import ast
 from collections.abc import Callable
 from ctypes import CFUNCTYPE
+from _ctypes import CFuncPtr
 from enum import Enum
 from functools import wraps, update_wrapper, partial
 import inspect
 import logging
-from typing import Any, Optional, Type, Union
+from typing import Any, Optional, Type, Union, Literal
 import traceback
 
 import cyminhook
 
 import nmspy.common as nms
 from nmspy.data import FUNC_OFFSETS
-from nmspy.data.func_call_sigs import FUNC_CALL_SIGS
+from nmspy.data.func_call_sigs import FUNC_CALL_SIGS, FUNCTION_DEF
 from nmspy.errors import UnknownFunctionError
 from nmspy.memutils import find_bytes
 from nmspy._types import NMSHook
@@ -46,7 +47,7 @@ class _NMSHook(cyminhook.MinHook):
     original: Callable[..., Any]
     target: int
     detour: Callable[..., Any]
-    signature: CFUNCTYPE
+    signature: CFuncPtr
     _name: str
     _should_enable: bool
     _invalid: bool = False
@@ -61,26 +62,86 @@ class _NMSHook(cyminhook.MinHook):
         offset: Optional[int] = None,
         pattern: Optional[str] = None,
         detour_time: DetourTime = DetourTime.NONE,
+        overload: Optional[str] = None,
+        should_enable: bool = True,
     ):
         self._mod = None
-        self._should_enable = True
+        self._should_enable = should_enable
+        self._offset = offset
+        self._pattern = pattern
         self._original_detour = detour
         self.detour_time = detour_time
-        if not offset and not pattern:
-            if name in FUNC_OFFSETS:
-                self.target = nms.BASE_ADDRESS + FUNC_OFFSETS[name]
+        self.overload = overload
+        if name is not None:
+            self._name = name
+        else:
+            raise ValueError(
+                "name cannot be none. This should only happen if this class was"
+                " instantiated manually which you should NOT be doing."
+            )
+        self._initialised = False
+        if self._should_enable:
+            self._init()
+
+    def _init(self):
+        """ Actually initialise all the data. This is defined separately so that
+        any function which is marked with @disable doesn't get initialised. """
+        if not self._offset and not self._pattern:
+            _offset = FUNC_OFFSETS.get(self._name)
+            if _offset is not None:
+                if isinstance(_offset, int):
+                    self.target = nms.BASE_ADDRESS + _offset
+                else:
+                    # This is an overload
+                    if self.overload is not None:
+                        self.target = nms.BASE_ADDRESS + _offset[self.overload]
+                    else:
+                        # Need to fallback on something. Raise a warning that no
+                        # overload was defined and that it will fallback to the
+                        # first entry in the dict.
+                        first = list(_offset.items())[0]
+                        hook_logger.warning(
+                            f"No overload was provided for {self._name}. "
+                        )
+                        hook_logger.warning(
+                            f"Falling back to the first overload ({first[0]})")
+                        self.target = nms.BASE_ADDRESS + first[1]
             else:
-                hook_logger.error(f"{name} has no known address")
+                hook_logger.error(f"{self._name} has no known address")
                 self._invalid = True
         else:
-            if pattern:
-                self._pattern = pattern
-        if name in FUNC_CALL_SIGS:
-            self.signature = FUNC_CALL_SIGS[name]
+            if self._pattern:
+                self._pattern = self._pattern
+        if self._name in FUNC_CALL_SIGS:
+            sig = FUNC_CALL_SIGS[self._name]
+            if isinstance(sig, FUNCTION_DEF):
+                self.signature = CFUNCTYPE(sig.restype, *sig.argtypes)
+                hook_logger.debug(f"Function {self._name} return type: {sig.restype} args: {sig.argtypes}")
+                if self.overload is not None:
+                    hook_logger.warning(
+                        f"An overload was provided for {self._name} but no overloaded"
+                         " function definitions exist. This function may fail."
+                    )
+            else:
+                # Look up the overload:
+                if (osig := sig.get(self.overload)) is not None:  # type: ignore
+                    self.signature = CFUNCTYPE(osig.restype, *osig.argtypes)
+                    hook_logger.debug(f"Function {self._name} return type: {osig.restype} args: {osig.argtypes}")
+                else:
+                    # Need to fallback on something. Raise a warning that no
+                    # overload was defined and that it will fallback to the
+                    # first entry in the dict.
+                    first = list(sig.items())[0]
+                    hook_logger.warning(
+                        f"No function arguments overload was provided for {self._name}. "
+                    )
+                    hook_logger.warning(
+                        f"Falling back to the first overload ({first[0]})")
+                    self.signature = CFUNCTYPE(first[1].restype, *first[1].argtypes)
         else:
-            hook_logger.error(f"{name} has no known call signature")
+            hook_logger.error(f"{self._name} has no known call signature")
             self._invalid = True
-        self._name = name
+        self._initialised = True
 
     def bind(self, cls = None) -> bool:
         """ Actually initialise the base class. Returns whether the hook is bound. """
@@ -181,18 +242,35 @@ class _NMSHook(cyminhook.MinHook):
         super().disable()
         self.state = "disabled"
 
+    @property
+    def offset(self):
+        return self.target - nms.BASE_ADDRESS
+
 
 class HookFactory:
-    _name: Optional[str] = None
+    _name: str
     _templates: Optional[tuple[str]] = None
+    _overload: Optional[str] = None
+
     def __init__(self, func):
         self.func = func
         self._after = False
         self._before = False
         update_wrapper(self, func)
 
-    def __new__(cls, detour, detour_time: DetourTime = DetourTime.NONE) -> _NMSHook:
-        return _NMSHook(detour, name=cls._name, detour_time=detour_time)
+    def __new__(
+            cls,
+            detour: Callable[..., Any],
+            detour_time: DetourTime = DetourTime.NONE
+    ) -> _NMSHook:
+        should_enable = getattr(detour, "_should_enable", True)
+        return _NMSHook(
+            detour,
+            name=cls._name,
+            detour_time=detour_time,
+            overload=cls._overload,
+            should_enable=should_enable,
+        )
 
     def __class_getitem__(cls: type["HookFactory"], key: Union[tuple[Any], Any]):
         if cls._templates is not None and cls._name is not None:
@@ -204,12 +282,18 @@ class HookFactory:
         return cls
 
     @classmethod
+    def overload(cls, overload_args):
+        # TODO: Improve type hinting and possible make this have a generic arg
+        # arg type to simplify the logic...
+        raise NotImplementedError
+
+    @classmethod
     def original(cls, *args):
         """ Call the orgiginal function with the given arguments. """
         return ORIGINAL_MAPPING[cls._name](*args)
 
     @classmethod
-    def before(cls, func: Callable[..., Any]) -> _NMSHook:
+    def before(cls, detour: Callable[..., Any]) -> _NMSHook:
         """
         Run the decorated function before the original function is run.
         This function in general should not call the original function, and does
@@ -218,21 +302,37 @@ class HookFactory:
         function, return a tuple which has values in the same order as the
         original function.
         """
-        return _NMSHook(func, name=cls._name, detour_time=DetourTime.BEFORE)
+        should_enable = getattr(detour, "_should_enable", True)
+        return _NMSHook(
+            detour,
+            name=cls._name,
+            detour_time=DetourTime.BEFORE,
+            overload=cls._overload,
+            should_enable=should_enable,
+        )
 
     @classmethod
-    def after(cls, func: Callable[..., Any]) -> _NMSHook:
+    def after(cls, detour: Callable[..., Any]) -> _NMSHook:
         """ Mark the hook to be only run after the original function.
         This function may have the keyword argument `_result_`. If it does, then
         this value will be the result of the call of the original function
         """
-        return _NMSHook(func, name=cls._name, detour_time=DetourTime.AFTER)
+        should_enable = getattr(detour, "_should_enable", True)
+        return _NMSHook(
+            detour,
+            name=cls._name,
+            detour_time=DetourTime.AFTER,
+            overload=cls._overload,
+            should_enable=should_enable,
+        )
 
 
-def disable(klass: _NMSHook):
-    """ Disable the current hook. This must be the outermost decorator is applied. """
-    klass._should_enable = False
-    return klass
+def disable(func):
+    """ Disable the current function. This decorator MUST be the innermost
+    function decorator for it to work correctly. """
+    hook_logger.debug(f"Disabling {func}")
+    func._should_enable = False
+    return func
 
 
 # TODO: See if we can make this work so that we may have a main loop decorator
@@ -537,17 +637,24 @@ class HookManager():
         else:
             self.main_loop_after_funcs.append(func)
 
-    def register_function(self, hook: _NMSHook, enable: bool = True, mod = None):
+    def register_function(
+            self,
+            hook: _NMSHook,
+            enable: bool = True,
+            mod = None,
+            quiet: bool = False
+    ):
         """ Register the provided function as a callback. """
         if hook._invalid:
             # If the hook is invalid for any reason, then just return (for now...)
             return
         bound_ok = hook.bind(mod)
         if bound_ok:
-            hook_logger.info(
-                f"Registered hook '{hook._name}' for function "
-                f"'{hook._original_detour.__name__}'"
-            )
+            if not quiet:
+                hook_logger.info(
+                    f"Registered hook '{hook._name}' for function "
+                    f"'{hook._original_detour.__name__}'"
+                )
             self.hooks[hook._name] = hook
             if enable and hook._should_enable:
                 try:

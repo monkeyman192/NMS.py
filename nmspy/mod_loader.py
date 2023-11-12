@@ -88,7 +88,7 @@ class NMSMod():
 class ModManager():
     def __init__(self, hook_manager: HookManager):
         # Internal mapping of mods.
-        self._mods: dict[str, type[NMSMod]] = {}
+        self._preloaded_mods: dict[str, type[NMSMod]] = {}
         # Actual mapping of mods.
         self.mods: dict[str, NMSMod] = {}
         self.hook_manager = hook_manager
@@ -101,7 +101,7 @@ class ModManager():
                 partial(_is_mod_predicate, ref_module=mod)
             )
         )
-        self._mods.update(d)
+        self._preloaded_mods.update(d)
         return True
 
     def load_mod_folder(self, folder: str):
@@ -109,22 +109,36 @@ class ModManager():
             if file.endswith(".py"):
                 self.load_mod(op.join(folder, file))
 
-    def enable_all(self):
-        """ Enable all mods loaded by the manager. """
-        for name, _mod in self._mods.items():
-            mod_logger.info(f"Loading hooks for {name}")
+    def enable_all(self, quiet: bool = False) -> int:
+        """ Enable all mods loaded by the manager that haven't been enabled yet.
+        Returns the number of mods enabled. """
+        _loaded_mod_names = set()
+        for name, _mod in self._preloaded_mods.items():
+            if not quiet:
+                mod_logger.info(f"Loading hooks for {name}")
             # Instantiate the mod, and then overwrite the object in the mods
             # attribute with the instance.
             mod = _mod()
             self.mods[name] = mod
             if not hasattr(mod, "hooks"):
-                mod_logger.error(f"The mod {mod.__class__.__name__} is not initialised properly. Please ensure that `super().__init__()` is included in the `__init__` method of this mod!")
+                mod_logger.error(
+                    f"The mod {mod.__class__.__name__} is not initialised "
+                    "properly. Please ensure that `super().__init__()` is "
+                    "included in the `__init__` method of this mod!"
+                )
                 mod_logger.warning(f"Could not enable {mod.__class__.__name__}")
                 continue
             for hook in mod.hooks:
-                self.hook_manager.register_function(hook, True, mod)
+                self.hook_manager.register_function(hook, True, mod, quiet)
             for main_loop_func in mod._main_funcs:
                 self.hook_manager.add_main_loop_func(main_loop_func)
+            # If we get here, then the mod has been loaded successfully.
+            # Add the name to the loaded mod names set so we can then remove the
+            # mod from the preloaded mods dict.
+            _loaded_mod_names.add(name)
+        for name in _loaded_mod_names:
+            self._preloaded_mods.pop(name)
+        return len(_loaded_mod_names)
 
     def reload(self):
         # TODO

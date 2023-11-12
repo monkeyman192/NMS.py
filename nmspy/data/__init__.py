@@ -1,7 +1,8 @@
 import importlib
 import os
+from typing import Union
 
-FUNC_OFFSETS: dict[str, int]
+FUNC_OFFSETS: dict[str, Union[int, dict[str, int]]]
 
 # Get the binary hash
 binary_hash = os.environ.get("NMS_BINARY_HASH")

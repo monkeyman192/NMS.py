@@ -1,7 +1,6 @@
 import ctypes
 import array
 import logging
-from io import BytesIO
 import time
 from typing import Type, TypeVar, Optional, Iterable, Union
 

@@ -1,11 +1,10 @@
 import logging
-import time
 # import asyncio
 
 import nmspy.common as nms
 import nmspy.data.structs as structs
 import nmspy.data.function_hooks as hooks
-from nmspy.hooking import one_shot, disable, hook_manager
+from nmspy.hooking import one_shot, hook_manager
 from nmspy.memutils import map_struct
 from nmspy.mod_loader import NMSMod
 
@@ -15,20 +14,11 @@ class _INTERNAL_LoadSingletons(NMSMod):
     __description__ = "Load singletons and other important objects"
     __version__ = "0.1"
 
-    def __init__(self):
-        super().__init__()
-
-    def slow_thing(self):
-        logging.info("starting to sleep!")
-        time.sleep(10)
-        logging.info("I'm awake!")
-
     @one_shot
     @hooks.cTkDynamicGravityControl.Construct.before
     def load_gravity_singleton(self, this):
         logging.info("Loaded grav singleton")
         nms.gravity_singleton = this
-        nms.executor.submit(self.slow_thing)
         # try:
         #     loop = asyncio.get_event_loop()
         #     logging.info(loop)
