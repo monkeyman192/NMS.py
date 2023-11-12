@@ -104,7 +104,8 @@ class LogRecordSocketReceiver(socketserver.ThreadingTCPServer):
 
 def main():
     formatter = logging.Formatter("%(asctime)s %(name)-15s %(levelname)-6s %(message)s")
-    file_handler = logging.FileHandler(op.join(LOGDIR, f"nmspy-{time.strftime('%Y%m%dT%H%M%S')}.log"))
+    # TODO: Need to make this strip the ANSI escape chars from the written log
+    file_handler = logging.FileHandler(op.join(LOGDIR, f"nmspy-{time.strftime('%Y%m%dT%H%M%S')}.log"), encoding="utf-8")
     file_handler.setFormatter(formatter)
     stream_handler = logging.StreamHandler()
     stream_handler.setFormatter(formatter)

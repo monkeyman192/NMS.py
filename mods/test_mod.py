@@ -14,6 +14,7 @@ class TestMod(NMSMod):
     __author__ = "monkeyman192"
     __description__ = "A simple test mod"
     __version__ = "0.1"
+    __NMSPY_required_version__ = "0.6.0"
 
     def __init__(self):
         super().__init__()

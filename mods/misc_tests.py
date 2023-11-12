@@ -13,6 +13,7 @@ class MiscMod(NMSMod):
     __author__ = "monkeyman192"
     __description__ = "Misc stuff..."
     __version__ = "1.0"
+    __NMSPY_required_version__ = "0.6.0"
 
     def __init__(self):
         self.counter = 0

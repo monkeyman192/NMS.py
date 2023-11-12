@@ -3,20 +3,23 @@
 # Mods will consist of a single file which will generally contain a number of
 # hooks.
 
+from functools import partial
 import inspect
 import importlib.util
 import logging
 import os.path as op
 import os
 from types import ModuleType
-from typing import Any
+from typing import Any, Optional
 import string
 import sys
-from functools import partial
 
+from nmspy import __version__ as _nmspy_version
 from nmspy._types import NMSHook
 from nmspy._internal import CWD
 from nmspy.hooking import HookManager, _NMSHook
+
+import semver
 
 
 mod_logger = logging.getLogger("ModManager")
@@ -29,6 +32,9 @@ try:
     fpath = op.join(CWD, "mods")
 except TypeError:
     fpath = "mods"
+
+
+nmspy_version = semver.Version.parse(_nmspy_version)
 
 
 def _clean_name(name: str) -> str:
@@ -74,6 +80,12 @@ def _import_file(fpath: str) -> ModuleType:
 
 
 class NMSMod():
+    __author__: str = "Name(s) of the mod author(s)"
+    __description__: str = "Short description of the mod"
+    __version__: str = "Mod version"
+    # Minimum required NMS.py version for this mod.
+    __NMSPY_required_version__: Optional[str] = None
+
     def __init__(self):
         # Find all the hooks defined for the mod.
         self.hooks: list[NMSHook] = [
@@ -101,7 +113,27 @@ class ModManager():
                 partial(_is_mod_predicate, ref_module=mod)
             )
         )
-        self._preloaded_mods.update(d)
+        for mod_name, mod in d.items():
+            if mod.__NMSPY_required_version__ is not None:
+                try:
+                    mod_version = semver.Version.parse(mod.__NMSPY_required_version__)
+                except ValueError:
+                    mod_logger.warning(
+                        "__NMSPY_required_version__ defined on mod "
+                        f"{mod.__name__} is not a valid version string"
+                    )
+                    mod_version = None
+                if mod_version is None or mod_version <= nmspy_version:
+                    self._preloaded_mods[mod_name] = mod
+                else:
+                    mod_logger.error(
+                        f"Mod {mod.__name__} requires a newer verison of "
+                        f"NMS.py ({mod_version} ≥ {nmspy_version})! "
+                        "Please update"
+                    )
+            else:
+                self._preloaded_mods[mod_name] = mod
+            
         return True
 
     def load_mod_folder(self, folder: str):
@@ -115,7 +147,7 @@ class ModManager():
         _loaded_mod_names = set()
         for name, _mod in self._preloaded_mods.items():
             if not quiet:
-                mod_logger.info(f"Loading hooks for {name}")
+                mod_logger.info(f"- Loading hooks for {name}")
             # Instantiate the mod, and then overwrite the object in the mods
             # attribute with the instance.
             mod = _mod()

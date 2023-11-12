@@ -9,6 +9,7 @@ class DisableModWarning(NMSMod):
     __author__ = "monkeyman192"
     __description__ = "Disable mod warning screen"
     __version__ = "1.0"
+    __NMSPY_required_version__ = "0.6.0"
 
     @one_shot
     @hooks.cTkFileSystem.Construct.after

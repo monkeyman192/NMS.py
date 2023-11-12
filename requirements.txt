@@ -2,3 +2,4 @@ cyminhook
 pymem
 psutil
 keyboard
+semver
