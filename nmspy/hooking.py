@@ -13,7 +13,7 @@ import cyminhook
 
 import nmspy.common as nms
 from nmspy.data import FUNC_OFFSETS
-from nmspy.data.func_call_sigs import FUNC_CALL_SIGS, FUNCTION_DEF
+from nmspy.data.function_call_sigs import FUNC_CALL_SIGS, FUNCDEF
 from nmspy.errors import UnknownFunctionError
 from nmspy.memutils import find_bytes
 from nmspy._types import NMSHook
@@ -114,7 +114,7 @@ class _NMSHook(cyminhook.MinHook):
                 self._pattern = self._pattern
         if self._name in FUNC_CALL_SIGS:
             sig = FUNC_CALL_SIGS[self._name]
-            if isinstance(sig, FUNCTION_DEF):
+            if isinstance(sig, FUNCDEF):
                 self.signature = CFUNCTYPE(sig.restype, *sig.argtypes)
                 hook_logger.debug(f"Function {self._name} return type: {sig.restype} args: {sig.argtypes}")
                 if self.overload is not None:
@@ -177,7 +177,14 @@ class _NMSHook(cyminhook.MinHook):
             self._non_oneshot_detour = self.detour
             self.detour = self._oneshot_detour
 
-        super().__init__(signature=self.signature, target=self.target)
+        try:
+            super().__init__(signature=self.signature, target=self.target)
+        except cyminhook._cyminhook.Error as e:  # type: ignore
+            hook_logger.error(f"Failed to initialize hook {self._name}")
+            hook_logger.error(e)
+            hook_logger.error(e.status.name[3:].replace("_", " "))
+            self.state = "failed"
+            return False
         ORIGINAL_MAPPING[self._name] = self.original
         self.state = "initialized"
         if not hasattr(self, "_should_enable"):
@@ -273,6 +280,9 @@ class HookFactory:
         )
 
     def __class_getitem__(cls: type["HookFactory"], key: Union[tuple[Any], Any]):
+        """ Create a new instance of the class with the data in the _templates
+        field used to generate the correct _name property based on the type
+        pass in to the __getitem__ lookup."""
         if cls._templates is not None and cls._name is not None:
             if isinstance(key, tuple):
                 fmt_key = dict(zip(cls._templates, [x.__name__ for x in key]))

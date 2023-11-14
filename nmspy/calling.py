@@ -1,5 +1,5 @@
 import nmspy.common as nms
-from nmspy.data.func_call_sigs import FUNC_CALL_SIGS
+from nmspy.data.function_call_sigs import FUNC_CALL_SIGS
 from nmspy.data import FUNC_OFFSETS
 
 

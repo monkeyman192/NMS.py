@@ -7,7 +7,7 @@ FUNC_OFFSETS: dict[str, Union[int, dict[str, int]]]
 # Get the binary hash
 binary_hash = os.environ.get("NMS_BINARY_HASH")
 if binary_hash:
-    offsets = importlib.import_module(f"nmspy.data.{binary_hash}.func_offsets")
+    offsets = importlib.import_module(f"nmspy.data.{binary_hash}.function_offsets")
     if offsets.__binary_hash__ != binary_hash:
         raise ImportError(
             f"Binary hash in offsets file ({offsets.__binaryhash__}) doesn't "
