@@ -299,7 +299,7 @@ class HookFactory:
 
     @classmethod
     def original(cls, *args):
-        """ Call the orgiginal function with the given arguments. """
+        """ Call the original function with the given arguments. """
         return ORIGINAL_MAPPING[cls._name](*args)
 
     @classmethod

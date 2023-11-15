@@ -48,7 +48,8 @@ def match(patt: bytes, input: bytes):
     return True
 
 
-def pprint_mem(offset: int, size: int, stride: Optional[int]) -> str:
+def pprint_mem(offset: int, size: int, stride: Optional[int] = None) -> str:
+    # TODO: Make this print a much nicer output... It sucks right now...
     if not offset:
         # If we are passed in an offset of 0, don't even try.
         return ""
@@ -72,7 +73,7 @@ def get_addressof(obj) -> int:
         return ctypes.addressof(obj)
 
 
-def get_memview(offset: int, type_: Type[ctypes.Structure]) -> Optional[memoryview]:
+def _get_memview(offset: int, type_: Type[ctypes.Structure]) -> memoryview:
     """ Return a memoryview which covers the region of memory specified by the
     struct provided.
 
@@ -83,8 +84,6 @@ def get_memview(offset: int, type_: Type[ctypes.Structure]) -> Optional[memoryvi
     type_:
         The type of the ctypes.Structure to be loaded at this location.
     """
-    if not offset:
-        return None
     return ctypes.pythonapi.PyMemoryView_FromMemory(
         ctypes.cast(offset, ctypes.c_char_p),
         ctypes.sizeof(type_),
@@ -131,7 +130,7 @@ def map_struct(offset: int, type_: Type[Struct]) -> Struct:
     """
     if not offset:
         raise ValueError("Offset is 0. This would result in a segfault or similar")
-    instance = type_.from_buffer(get_memview(offset, type_))
+    instance = type_.from_buffer(_get_memview(offset, type_))
     instance._offset = offset
     return instance
 
