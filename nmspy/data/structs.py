@@ -207,6 +207,10 @@ class cGcFirstBootContext(ctypes.Structure):
     ]
 
 
+class cGcProductTable(ctypes.Structure):
+    _fields_ = []
+
+
 class cGcRealityManagerData(ctypes.Structure):
     _fields_ = []
 
@@ -225,6 +229,11 @@ class cGcRealityManager(ctypes.Structure):
         ("SubstanceTable", ctypes.POINTER(cGcSubstanceTable)),
         ("TechnologyTable", ctypes.POINTER(cGcTechnologyTable)),
     ]
+
+    def GenerateProceduralProduct(self, lProcProdID: bytes) -> int:
+        this = ctypes.addressof(self)
+        return call_function("cGcRealityManager::GenerateProceduralProduct", this, lProcProdID)
+
 
     def GenerateProceduralTechnology(self, lProcTechID: bytes, lbExampleForWiki: bool) -> int:
         this = ctypes.addressof(self)
@@ -648,6 +657,118 @@ class cTkFileSystem(ctypes.Structure):
 #     def meSelectedPlanetLabelState(self):
 #         return ePlanetLabelState(self._meSelectedPlanetLabelState)
 
+class cTkLanguageManagerBase(ctypes.Structure):
+    _fields_ = [
+        ("_dummy0x0", ctypes.c_ubyte * 0x8),
+        ("meRegion", ctypes.c_int32),
+        ("_dummy0xC", ctypes.c_ubyte * 0x221C),
+    ]
+
+    meRegion: int
+
+
+class cTkModelResource(ctypes.Structure):
+    _fields_ = [
+        ("macFilename", common.cTkFixedString[0x80]),
+        ("mResHandle", ctypes.c_uint32),  # TODO cTkSmartResHandle
+    ]
+
+    macFilename: bytes
+
+    def __str__(self) -> str:
+        return self.macFilename.decode("utf-8")
+
+
+class cGcAlienRace(ctypes.Structure):
+    _fields_ = [
+        ("_meAlienRace", ctypes.c_uint32),
+    ]
+
+    _meAlienRace: int
+
+    @property
+    def meAlienRace(self):
+        return safe_assign_enum(nms_enums.eAlienRace, self._meAlienRace)
+
+    def __str__(self) -> str:
+        return str(self.meAlienRace)
+
+
+class cGcInventoryType(ctypes.Structure):
+    _fields_ = [
+        ("_meInventoryType", ctypes.c_uint32),
+    ]
+
+    _meInventoryType: int
+
+    @property
+    def meInventoryType(self):
+        return safe_assign_enum(nms_enums.eInventoryType, self._meInventoryType)
+
+    def __str__(self) -> str:
+        return str(self.meInventoryType)
+
+
+class cGcItemPriceModifiers(ctypes.Structure):
+    _fields_ = [
+        ("mfSpaceStationMarkup", ctypes.c_float),
+        ("mfLowPriceMod", ctypes.c_float),
+        ("mfHighPriceMod", ctypes.c_float),
+        ("mfBuyBaseMarkup", ctypes.c_float),
+        ("mfBuyMarkupMod", ctypes.c_float),
+    ]
+
+    mfSpaceStationMarkup: float
+    mfLowPriceMod: float
+    mfHighPriceMod: float
+    mfBuyBaseMarkup: float
+    mfBuyMarkupMod: float
+
+
+class cGcLegality(ctypes.Structure):
+    _fields_ = [
+        ("_meLegality", ctypes.c_uint32),
+    ]
+
+    _meLegality: int
+
+    @property
+    def meLegality(self):
+        return safe_assign_enum(nms_enums.eLegality, self._meLegality)
+
+    def __str__(self) -> str:
+        return str(self.meLegality)
+
+
+class cGcProductCategory(ctypes.Structure):
+    _fields_ = [
+        ("_meProductCategory", ctypes.c_uint32),
+    ]
+
+    _meProductCategory: int
+
+    @property
+    def meProductCategory(self):
+        return safe_assign_enum(nms_enums.eProductCategory, self._meProductCategory)
+
+    def __str__(self) -> str:
+        return str(self.meProductCategory)
+
+
+class cGcRarity(ctypes.Structure):
+    _fields_ = [
+        ("_meRarity", ctypes.c_uint32),
+    ]
+
+    _meRarity: int
+
+    @property
+    def meRarity(self):
+        return safe_assign_enum(nms_enums.eRarity, self._meRarity)
+
+    def __str__(self) -> str:
+        return str(self.meRarity)
+
 
 class cGcRealitySubstanceCategory(ctypes.Structure):
     _fields_ = [
@@ -677,6 +798,21 @@ class cGcStatsTypes(ctypes.Structure):
 
     def __str__(self) -> str:
         return str(self.meStatsType)
+
+
+class cGcStatsBonus(ctypes.Structure):
+    _fields_ = [
+        ("mStat", cGcStatsTypes),
+        ("mfBonus", ctypes.c_float),
+        ("miLevel", ctypes.c_int32),
+    ]
+
+    mStat: cGcStatsTypes
+    mfBonus: float
+    miLevel: int
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}({self.mStat}, {self.mfBonus})"
 
 
 class cGcTechnologyCategory(ctypes.Structure):
@@ -710,9 +846,8 @@ class cGcTechnologyRarity(ctypes.Structure):
 
 
 class cTkTextureResource(ctypes.Structure):
-    _pack_ = 0x84
     _fields_ = [
-        ("macFilename", ctypes.c_char * 0x80),
+        ("macFilename", common.cTkFixedString[0x80]),
         ("mResHandle", ctypes.c_uint32),  # TODO cTkSmartResHandle
     ]
 
@@ -720,6 +855,94 @@ class cTkTextureResource(ctypes.Structure):
 
     def __str__(self) -> str:
         return self.macFilename.decode()
+
+
+class cGcTechnologyRequirement(ctypes.Structure):
+    _fields_ = [
+        ("mID", common.TkID[0x10]),
+        ("mType", cGcInventoryType),
+        ("miAmount", ctypes.c_int32),
+    ]
+
+    mID: bytes
+    mType: cGcInventoryType
+    miAmount: int
+
+
+class cGcTradeCategory(ctypes.Structure):
+    _fields_ = [
+        ("_meTradeCategory", ctypes.c_uint32),
+    ]
+
+    _meTradeCategory: int
+
+    @property
+    def meTradeCategory(self):
+        return safe_assign_enum(nms_enums.eTradeCategory, self._meTradeCategory)
+
+    def __str__(self) -> str:
+        return str(self.meTradeCategory)
+
+
+class cGcProductData(ctypes.Structure):
+    _fields_ = [
+        ("mID", common.TkID[0x10]),
+        ("macName", common.cTkFixedString[0x80]),
+        ("macNameLower", common.cTkFixedString[0x80]),
+        ("macSubtitle", common.cTkDynamicString),
+        ("macDescription", common.cTkDynamicString),
+        ("mHint", common.TkID[0x20]),
+        ("mGroupID", common.TkID[0x10]),
+        ("mDebrisFile", cTkModelResource),
+        ("miBaseValue", ctypes.c_int32),
+        ("miLevel", ctypes.c_int32),
+        ("mIcon", cTkTextureResource),
+        ("mHeroIcon", cTkTextureResource),
+        ("_padding0x2F4", ctypes.c_ubyte * 0xC),
+        ("mColour", common.Colour),
+        ("mCategory", cGcTechnologyCategory),
+        ("mType", cGcProductCategory),
+        ("mRarity", cGcRarity),
+        ("mLegality", cGcLegality),
+        ("mbConsumable", ctypes.c_ubyte),
+        ("_padding0x321", ctypes.c_ubyte * 0x3),
+        ("miChargeValue", ctypes.c_int32),
+        ("miStackMultiplier", ctypes.c_int32),
+        ("miDefaultCraftAmount", ctypes.c_int32),
+        ("miCraftAmountStepSize", ctypes.c_int32),
+        ("miCraftAmountMultiplier", ctypes.c_int32),
+        ("maRequirements", common.cTkDynamicArray[cGcTechnologyRequirement]),
+        ("maAltRequirements", common.cTkDynamicArray[cGcTechnologyRequirement]),
+        ("mCost", cGcItemPriceModifiers),
+        ("miRecipeCost", ctypes.c_int32),
+        ("mbSpecificChargeOnly", ctypes.c_ubyte),
+        ("_padding0x371", ctypes.c_ubyte * 0x3),
+        ("mfNormalisedValueOnWorld", ctypes.c_float),
+        ("mfNormalisedValueOffWorld", ctypes.c_float),
+        ("mTradeCategory", cGcTradeCategory),
+        ("_meWikiCategory", ctypes.c_uint32),
+        ("mbIsCraftable", ctypes.c_ubyte),
+        ("_padding0x385", ctypes.c_ubyte * 0x3),
+        ("mDeploysInto", common.TkID[0x10]),
+        ("mfEconomyInfluenceMultiplier", ctypes.c_float),
+        ("_padding0x39C", ctypes.c_ubyte * 0x4),
+        ("mPinObjective", common.TkID[0x20]),
+        ("mPinObjectiveTip", common.TkID[0x20]),
+        ("mbCookingIngredient", ctypes.c_ubyte),
+        ("_padding0x3E1", ctypes.c_ubyte * 0x3),
+        ("mfCookingValue", ctypes.c_float),
+        ("mbGoodForSelling", ctypes.c_ubyte),
+        ("_padding0x3E9", ctypes.c_ubyte * 0x7),
+        ("mGiveRewardOnSpecialPurchase", common.TkID[0x10]),
+        ("mbEggModifierIngredient", ctypes.c_ubyte),
+        ("mbIsTechbox", ctypes.c_ubyte),
+        ("mbCanSendToOtherPlayers", ctypes.c_ubyte),
+        ("_padding0x403", ctypes.c_ubyte * 0xD),
+    ]
+
+    @property
+    def meWikiCategory(self):
+        return safe_assign_enum(nms_enums.eWikiCategory, self._meWikiCategory)
 
 
 class cGcTechnology(ctypes.Structure):
@@ -739,19 +962,46 @@ class cGcTechnology(ctypes.Structure):
         ("mColour", common.Colour),
         ("miLevel", ctypes.c_int32),
         ("mbChargeable", ctypes.c_ubyte),
+        ("_padding0x235", ctypes.c_ubyte * 0x3),
         ("miChargeAmount", ctypes.c_int32),
         ("mChargeType", cGcRealitySubstanceCategory),
-        ("maChargeBy", common.cTkDynamicArray[ctypes.c_char * 0x10]),
+        ("maChargeBy", common.TkID[0x10]),
         ("mfChargeMultiplier", ctypes.c_float),
         ("mbBuildFullyCharged", ctypes.c_ubyte),
         ("mbUsesAmmo", ctypes.c_ubyte),
-        ("mAmmoId", ctypes.c_char * 0x10),
+        ("_padding0x256", ctypes.c_ubyte * 0x2),
+        ("mAmmoId", common.TkID[0x10]),
         ("mbPrimaryItem", ctypes.c_ubyte),
         ("mbUpgrade", ctypes.c_ubyte),
         ("mbCore", ctypes.c_ubyte),
         ("mbRepairTech", ctypes.c_ubyte),
         ("mbProcedural", ctypes.c_ubyte),
+        ("_padding0x26B", ctypes.c_ubyte * 0x3),
         ("mCategory", cGcTechnologyCategory),
         ("mRarity", cGcTechnologyRarity),
         ("mfValue", ctypes.c_float),
+        ("_padding0x27A", ctypes.c_ubyte * 0x4),
+        ("maRequirements", common.cTkDynamicArray[cGcTechnologyRequirement]),
+        ("mBaseStat", cGcStatsTypes),
+        ("_padding0x28E", ctypes.c_ubyte * 0x4),
+        ("maStatBonuses", common.cTkDynamicArray[cGcStatsBonus]),
+        ("mRequiredTech", common.TkID[0x10]),
+        ("miRequiredLevel", ctypes.c_int32),
+        ("_padding0x2B6", ctypes.c_ubyte * 0x4),
+        ("mFocusLocator", common.TkID[0x20]),
+        ("mUpgradeColour", common.Colour),
+        ("mLinkColour", common.Colour),
+        ("mRewardGroup", common.TkID[0x10]),
+        ("miBaseValue", ctypes.c_int32),
+        ("mCost", cGcItemPriceModifiers),
+        ("miRequiredRank", ctypes.c_int32),
+        ("mDispensingRace", cGcAlienRace),
+        ("miFragmentCost", ctypes.c_int32),
+        ("mTechShopRarity", cGcTechnologyRarity),
+        ("mbWikiEnabled", ctypes.c_ubyte),
+        ("_padding0x333", ctypes.c_ubyte * 0x7),
+        ("macDamagedDescription", common.cTkDynamicString),
+        ("mParentTechId", common.TkID[0x10]),
+        ("mbIsTemplate", ctypes.c_ubyte),
+        ("_padding0x354", ctypes.c_ubyte * 0xF),
     ]
