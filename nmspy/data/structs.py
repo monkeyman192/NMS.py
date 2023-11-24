@@ -207,10 +207,6 @@ class cGcFirstBootContext(ctypes.Structure):
     ]
 
 
-class cGcProductTable(ctypes.Structure):
-    _fields_ = []
-
-
 class cGcRealityManagerData(ctypes.Structure):
     _fields_ = []
 
@@ -233,7 +229,6 @@ class cGcRealityManager(ctypes.Structure):
     def GenerateProceduralProduct(self, lProcProdID: bytes) -> int:
         this = ctypes.addressof(self)
         return call_function("cGcRealityManager::GenerateProceduralProduct", this, lProcProdID)
-
 
     def GenerateProceduralTechnology(self, lProcTechID: bytes, lbExampleForWiki: bool) -> int:
         this = ctypes.addressof(self)
