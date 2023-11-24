@@ -1,7 +1,6 @@
 from concurrent.futures import ThreadPoolExecutor
 
-BASE_ADDRESS: int = -1
-SIZE_OF_IMAGE: int = -1
+import nmspy.data.structs as nms_structs
 
 # Store all the globals here like this so that we may access them easily and
 # from anywhere.
@@ -38,8 +37,9 @@ GcUIGlobals = None
 GcVehicleGlobals = None
 GcWaterGlobals = None
 
-GcApplication = None
+GcApplication: nms_structs.cGcApplication = None  # type: ignore
 gravity_singleton = None
+memory_manager: int = 0
 
 # TODO: Move somewhere else? Not sure where but this doesn't really fit here...
 executor: ThreadPoolExecutor = None  # type: ignore

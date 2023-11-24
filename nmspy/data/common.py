@@ -1,11 +1,9 @@
 import ctypes
+import types
 from typing import Any, Union
-
-from nmspy.memutils import map_struct
 
 
 class Colour(ctypes.Structure):
-    _pack_ = 0x10
     _fields_ = [
         ("r", ctypes.c_float),
         ("g", ctypes.c_float),
@@ -15,7 +13,6 @@ class Colour(ctypes.Structure):
 
 
 class Vector2f(ctypes.Structure):
-    _pack = 0x8
     _fields_ = [
         ("x", ctypes.c_float),
         ("y", ctypes.c_float),
@@ -23,7 +20,6 @@ class Vector2f(ctypes.Structure):
 
 
 class Vector3f(ctypes.Structure):
-    _pack = 0x10
     _fields_ = [
         ("x", ctypes.c_float),
         ("y", ctypes.c_float),
@@ -32,7 +28,6 @@ class Vector3f(ctypes.Structure):
 
 
 class Vector4f(ctypes.Structure):
-    _pack = 0x10
     _fields_ = [
         ("x", ctypes.c_float),
         ("y", ctypes.c_float),
@@ -42,7 +37,6 @@ class Vector4f(ctypes.Structure):
 
 
 class Vector4i(ctypes.Structure):
-    _pack = 0x10
     _fields_ = [
         ("x", ctypes.c_int32),
         ("y", ctypes.c_int32),
@@ -59,7 +53,6 @@ class GcSeed(ctypes.Structure):
 
 
 class Quaternion(ctypes.Structure):
-    _pack = 0x10
     _fields_ = [
         ("x", ctypes.c_float),
         ("y", ctypes.c_float),
@@ -83,6 +76,8 @@ class cTkDynamicArray(ctypes.Structure):
 
     @property
     def value(self) -> Any:
+        from nmspy.memutils import map_struct
+
         if self.mArray == 0 or self.miSize == 0:
             # Empty lists are store with an empty pointer in mem.
             return []
@@ -93,8 +88,9 @@ class cTkDynamicArray(ctypes.Structure):
         return f"cTkDynamicArray(value: {str_val}, size: 0x{self.miSize:X})"
 
     def __class_getitem__(cls: type["cTkDynamicArray"], key: Union[tuple[Any], Any]):
-        cls._template_type = key
-        return cls
+        _cls: type["cTkDynamicArray"] = types.new_class(f"cTkDynamicArray<{key}>", (cls,))
+        _cls._template_type = key
+        return _cls
 
 
 class cTkDynamicString(ctypes.Structure):
@@ -116,3 +112,42 @@ class cTkDynamicString(ctypes.Structure):
     def __str__(self):
         val = self.value.decode()
         return f"cTkDynamicString(value: {val}, size: 0x{self.miSize:X})"
+
+
+class TkID(ctypes.Structure):
+    _align_ = 0x10  # One day this will work...
+    _size = 0x10
+    value: bytes
+
+    def __class_getitem__(cls: type["TkID"], key: int):
+        _cls: type["TkID"] = types.new_class(f"TkID<0x{key:X}>", (cls,))
+        _cls._size = key
+        _cls._fields_ = [
+            ("value", ctypes.c_char * _cls._size)
+        ]
+        return _cls
+
+    def __str__(self) -> str:
+        return self.value.decode()
+
+    def __repr__(self) -> str:
+        return str(self)
+
+
+class cTkFixedString(ctypes.Structure):
+    _size = 0x10
+    value: bytes
+
+    def __class_getitem__(cls: type["cTkFixedString"], key: int):
+        _cls: type["cTkFixedString"] = types.new_class(f"cTkFixedString<0x{key:X}>", (cls,))
+        _cls._size = key
+        _cls._fields_ = [
+            ("value", ctypes.c_char * _cls._size)
+        ]
+        return _cls
+
+    def __str__(self) -> str:
+        return self.value.decode()
+
+    def __repr__(self) -> str:
+        return str(self)

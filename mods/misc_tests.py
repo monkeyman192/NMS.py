@@ -89,26 +89,8 @@ class MiscMod(NMSMod):
         time.sleep(10)
         logging.info("I'm awake!")
 
-    @one_shot
-    @hooks.cGcApplication.Construct.before
-    def construct_gcapp(self, this):
-        logging.info(f"cGcApplication* construct: 0x{this:X}")
-        logging.info(f"Diff: 0x{this - nms.BASE_ADDRESS:X}")
-        nms.executor.submit(self.slow_thing)
-        # try:
-        #     logging.info(pprint_mem(nms.GcApplication, 0x100, 0x10))
-        #     gcapp = map_struct(nms.GcApplication, nms_structs.cGcApplication)
-        #     logging.info(gcapp.data)
-        #     logging.info(f"{get_addressof(gcapp.data):X}")
-        #     logging.info(dir(gcapp.data))
-        #     logging.info(gcapp.data.contents)
-        #     logging.info(gcapp.data.contents.firstBootContext.state)
-        # except:
-        #     logging.error(traceback.format_exc())
-        # finally:
-        #     return ret
-
     @hooks.cGcApplicationGameModeSelectorState.UpdateStartUI.after
+    @disable
     def start_updating_UI(self, this, _result_):
         try:
             logging.info(f"cGcApplicationGameModeSelectorState*: {this}")

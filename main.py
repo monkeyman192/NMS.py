@@ -93,8 +93,8 @@ try:
         _preinject_shellcode = f.read()
     nms.inject_python_shellcode(_preinject_shellcode)
     # Inject the common NMS variables which are required for general use.
-    nms.inject_python_shellcode(f"nmspy.common.BASE_ADDRESS = {binary_base}")
-    nms.inject_python_shellcode(f"nmspy.common.SIZE_OF_IMAGE = {binary_size}")
+    nms.inject_python_shellcode(f"nmspy._internal.BASE_ADDRESS = {binary_base}")
+    nms.inject_python_shellcode(f"nmspy._internal.SIZE_OF_IMAGE = {binary_size}")
     nms.inject_python_shellcode(f"nmspy._internal.CWD = '{cwd}'")
     nms.inject_python_shellcode(f"nmspy._internal.HANDLE = {nms.process_handle}")
     nms.inject_python_shellcode(f"nmspy._internal.BINARY_HASH = '{binary_hash}'")

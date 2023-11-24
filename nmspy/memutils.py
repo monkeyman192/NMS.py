@@ -1,10 +1,21 @@
-import ctypes
 import array
+from contextlib import contextmanager
+import ctypes
+from gc import get_referents
 import logging
+import sys
 import time
-from typing import Type, TypeVar, Optional, Iterable, Union
+from types import ModuleType, FunctionType
+from typing import Any, Type, TypeVar, Optional, Iterable, Union, Generator
 
-from nmspy.common import BASE_ADDRESS, SIZE_OF_IMAGE
+from nmspy._internal import BASE_ADDRESS, SIZE_OF_IMAGE
+from nmspy.calling import call_function
+
+
+# Custom objects know their class.
+# Function objects seem to know way too much, including modules.
+# Exclude modules as well.
+BLACKLIST = type, ModuleType, FunctionType
 
 
 mem_logger = logging.getLogger("MemUtils")
@@ -32,6 +43,29 @@ class NMSStruct(ctypes.Structure):
 # TypeVar for the map_struct so that we can correctly get the returned type to
 # be the same as the input type.
 Struct = TypeVar("Struct", bound=ctypes.Structure)
+
+
+def getsize(obj):
+    """sum size of object & members."""
+    if isinstance(obj, BLACKLIST):
+        raise TypeError('getsize() does not take argument of type: ' + str(type(obj)))
+    seen_ids = set()
+    size = 0
+    objects = [obj]
+    while objects:
+        need_referents = []
+        for _obj in objects:
+            if not isinstance(_obj, BLACKLIST) and id(_obj) not in seen_ids:
+                seen_ids.add(id(_obj))
+                size += sys.getsizeof(_obj)
+                need_referents.append(_obj)
+        objects = get_referents(*need_referents)
+    try:
+        _len = len(obj)
+    except TypeError:
+        _len = None
+    return size, _len
+
 
 
 def chunks(lst: Iterable, n: int):
@@ -109,6 +143,43 @@ def _get_memview_with_size(offset: int, size: int) -> Optional[memoryview]:
         size,
         MEM_ACCESS_RW,
     )
+
+
+@contextmanager
+def map_struct_temp(offset: int, type_: Type[Struct]) -> Generator[Struct, Any, Any]:
+    """ Return an instance of the `type_` struct provided which shares memory
+    with the provided offset.
+    Note that the amount of memory to read is automatically determined by the
+    size of the struct provided.
+    IMPORTANT: The data at the offset specified will be de-allocated by NMS
+    itself after this context manager exits. This means you should only use the
+    object returned inside the context manager as using it outside will likely
+    cause the game or NMS.py to crash.
+
+    Parameters
+    ----------
+    offset:
+        The memory address to start reading the struct from.
+    type_:
+        The type of the ctypes.Structure to be loaded at this location.
+
+    Returns
+    -------
+    An instance of the input type.
+    """
+    # Import here to save a circular dependency...
+    import nmspy.common as nms  # noqa
+
+    if not offset:
+        raise ValueError("Offset is 0. This would result in a segfault or similar")
+    instance = type_.from_buffer(_get_memview(offset, type_))
+    instance._offset = offset
+    yield instance
+    instance = None
+    del instance
+    if nms.memory_manager != 0:
+        # TODO: Use the function bound to the class, rather than this...
+        call_function("cTkMemoryManager::Free", nms.memory_manager, offset, -1)
 
 
 def map_struct(offset: int, type_: Type[Struct]) -> Struct:

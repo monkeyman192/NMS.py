@@ -1,21 +1,24 @@
 # Have the NMS* class definitions here since there is a circular dependency
 # otherwise.
 
+from collections import namedtuple
 from ctypes import CFUNCTYPE
+from _ctypes import CFuncPtr
 from typing import Callable, Any, Optional
 import inspect
 from types import MethodType
-import logging
 
 import cyminhook
 
+
+FUNCDEF = namedtuple("FUNCDEF", ["restype", "argtypes"])
 
 
 class NMSHook(cyminhook.MinHook):
     original: Callable[..., Any]
     target: int
     detour: Callable[..., Any]
-    signature: CFUNCTYPE
+    signature: CFuncPtr
     _name: str
     _should_enable: bool
     _invalid: bool
@@ -25,7 +28,7 @@ class NMSHook(cyminhook.MinHook):
     def __init__(self,
         *,
         detour: Optional[Callable[..., Any]] = None,
-        signature: Optional[CFUNCTYPE] = None,
+        signature: Optional[CFuncPtr] = None,
         target: Optional[int] = None
     ):
         # Normally defined classes will not be "compound compatible".

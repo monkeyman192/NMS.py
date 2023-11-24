@@ -9,9 +9,11 @@ if TYPE_CHECKING:
 import ctypes
 import ctypes.wintypes
 
-from nmspy.data import common
+from nmspy.data import common, enums as nms_enums
+from nmspy.calling import call_function
 # from nmspy.data.types import core, simple
 from nmspy.memutils import map_struct
+from nmspy.utils import safe_assign_enum
 
 
 class cTkMetaDataXMLFunctionLookup(ctypes.Structure):
@@ -200,7 +202,33 @@ class cTkFSM(ctypes.Structure):
 class cGcFirstBootContext(ctypes.Structure):
     _fields_ = [
         ("state", ctypes.c_uint32),
+        # TODO: map out...
+        ("_rest", ctypes.c_ubyte * 0x3C)
     ]
+
+
+class cGcRealityManagerData(ctypes.Structure):
+    _fields_ = []
+
+
+class cGcSubstanceTable(ctypes.Structure):
+    _fields_ = []
+
+
+class cGcTechnologyTable(ctypes.Structure):
+    _fields_ = []
+
+
+class cGcRealityManager(ctypes.Structure):
+    _fields_ = [
+        ("Data", ctypes.POINTER(cGcRealityManagerData)),
+        ("SubstanceTable", ctypes.POINTER(cGcSubstanceTable)),
+        ("TechnologyTable", ctypes.POINTER(cGcTechnologyTable)),
+    ]
+
+    def GenerateProceduralTechnology(self, lProcTechID: bytes, lbExampleForWiki: bool) -> int:
+        this = ctypes.addressof(self)
+        return call_function("cGcRealityManager::GenerateProceduralTechnology", this, lProcTechID, lbExampleForWiki)
 
 
 class cGcApplication(ctypes.Structure):
@@ -208,16 +236,32 @@ class cGcApplication(ctypes.Structure):
     class Data(ctypes.Structure):
         """Much of the associated application data"""
         _fields_ = [
-            ("firstBootContext", cGcFirstBootContext)
+            ("FirstBootContext", cGcFirstBootContext),
+            ("TkMcQmcLFSRStore", ctypes.c_ubyte * 0x18),
+            ("RealityManager", cGcRealityManager),
         ]
+
+        FirstBootContext: cGcFirstBootContext
+        TkMcQmcLFSRStore: bytes
+        RealityManager: cGcRealityManager
 
     _fields_ = [
         ("baseclass_0", cTkFSM),
         ("data", ctypes.POINTER(Data)),
+        ("playerSaveSlot", ctypes.c_uint32),
+        ("gameMode", ctypes.c_uint32),
+        ("seasonalGameMode", ctypes.c_uint32),
+        ("savingEnabled", ctypes.c_ubyte),
+        ("fullyBooted", ctypes.c_ubyte),
     ]
 
     baseclass_0: cTkFSM
     data: _Pointer[Data]
+    playerSaveSlot: int
+    gameMode: int
+    seasonalGameMode: int
+    savingEnabled: bool
+    fullyBooted: bool
 
 
 class cGcWaterGlobals(ctypes.Structure):
@@ -603,3 +647,111 @@ class cTkFileSystem(ctypes.Structure):
 #     @property
 #     def meSelectedPlanetLabelState(self):
 #         return ePlanetLabelState(self._meSelectedPlanetLabelState)
+
+
+class cGcRealitySubstanceCategory(ctypes.Structure):
+    _fields_ = [
+        ("_meSubstanceCategory", ctypes.c_uint32),
+    ]
+
+    _meSubstanceCategory: int
+
+    @property
+    def meSubstanceCategory(self):
+        return safe_assign_enum(nms_enums.eSubstanceCategory, self._meSubstanceCategory)
+
+    def __str__(self) -> str:
+        return str(self.meSubstanceCategory)
+
+
+class cGcStatsTypes(ctypes.Structure):
+    _fields_ = [
+        ("_meStatsType", ctypes.c_uint32),
+    ]
+
+    _meStatsType: int
+
+    @property
+    def meStatsType(self):
+        return safe_assign_enum(nms_enums.eStatsType, self._meStatsType)
+
+    def __str__(self) -> str:
+        return str(self.meStatsType)
+
+
+class cGcTechnologyCategory(ctypes.Structure):
+    _fields_ = [
+        ("_meTechnologyCategory", ctypes.c_uint32),
+    ]
+
+    _meTechnologyCategory: int
+
+    @property
+    def meTechnologyCategory(self):
+        return safe_assign_enum(nms_enums.eTechnologyCategory, self._meTechnologyCategory)
+
+    def __str__(self) -> str:
+        return str(self.meTechnologyCategory)
+
+
+class cGcTechnologyRarity(ctypes.Structure):
+    _fields_ = [
+        ("_meTechnologyRarity", ctypes.c_uint32),
+    ]
+
+    _meTechnologyRarity: int
+
+    @property
+    def meTechnologyRarity(self):
+        return safe_assign_enum(nms_enums.eTechnologyRarity, self._meTechnologyRarity)
+
+    def __str__(self) -> str:
+        return str(self.meTechnologyRarity)
+
+
+class cTkTextureResource(ctypes.Structure):
+    _pack_ = 0x84
+    _fields_ = [
+        ("macFilename", ctypes.c_char * 0x80),
+        ("mResHandle", ctypes.c_uint32),  # TODO cTkSmartResHandle
+    ]
+
+    macFilename: bytes
+
+    def __str__(self) -> str:
+        return self.macFilename.decode()
+
+
+class cGcTechnology(ctypes.Structure):
+    _fields_ = [
+        ("mID", common.TkID[0x10]),
+        ("mGroup", common.TkID[0x20]),
+        ("macName", common.cTkFixedString[0x80]),
+        ("macNameLower", common.cTkFixedString[0x80]),
+        ("macSubtitle", common.cTkDynamicString),
+        ("macDescription", common.cTkDynamicString),
+        ("mbTeach", ctypes.c_ubyte),
+        ("_padding0x151", ctypes.c_ubyte * 0x7),
+        ("mHintStart", common.TkID[0x20]),
+        ("mHintEnd", common.TkID[0x20]),
+        ("mIcon", cTkTextureResource),
+        ("_padding0x21C", ctypes.c_ubyte * 0x4),
+        ("mColour", common.Colour),
+        ("miLevel", ctypes.c_int32),
+        ("mbChargeable", ctypes.c_ubyte),
+        ("miChargeAmount", ctypes.c_int32),
+        ("mChargeType", cGcRealitySubstanceCategory),
+        ("maChargeBy", common.cTkDynamicArray[ctypes.c_char * 0x10]),
+        ("mfChargeMultiplier", ctypes.c_float),
+        ("mbBuildFullyCharged", ctypes.c_ubyte),
+        ("mbUsesAmmo", ctypes.c_ubyte),
+        ("mAmmoId", ctypes.c_char * 0x10),
+        ("mbPrimaryItem", ctypes.c_ubyte),
+        ("mbUpgrade", ctypes.c_ubyte),
+        ("mbCore", ctypes.c_ubyte),
+        ("mbRepairTech", ctypes.c_ubyte),
+        ("mbProcedural", ctypes.c_ubyte),
+        ("mCategory", cGcTechnologyCategory),
+        ("mRarity", cGcTechnologyRarity),
+        ("mfValue", ctypes.c_float),
+    ]

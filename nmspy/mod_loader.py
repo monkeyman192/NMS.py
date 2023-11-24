@@ -70,6 +70,14 @@ def _main_loop_predicate(value: Any) -> bool:
     return getattr(value, "_is_main_loop_func", False)
 
 
+def _fully_booted_ready_predicate(value: Any) -> bool:
+    """ Determine if the objecy has the _run_on_fully_booted property.
+    This will only be methods on NMSMod classes which are decorated with
+    @on_fully_booted
+    """
+    return getattr(value, "_run_on_fully_booted", False)
+
+
 def _import_file(fpath: str) -> ModuleType:
     module_name = _clean_name(op.splitext(op.basename(fpath))[0])
     spec = importlib.util.spec_from_file_location(module_name, fpath)
@@ -94,6 +102,12 @@ class NMSMod():
 
         self._main_funcs = [
             x[1] for x in inspect.getmembers(self, _main_loop_predicate)
+        ]
+
+        # TODO: Add an inspect to make sure the method has no arguments other
+        # than `self`.
+        self._on_fully_booted_funcs = [
+            x[1] for x in inspect.getmembers(self, _fully_booted_ready_predicate)
         ]
 
 
@@ -164,6 +178,8 @@ class ModManager():
                 self.hook_manager.register_function(hook, True, mod, quiet)
             for main_loop_func in mod._main_funcs:
                 self.hook_manager.add_main_loop_func(main_loop_func)
+            for on_ready_func in mod._on_fully_booted_funcs:
+                self.hook_manager.add_on_fully_booted_func(on_ready_func)
             # If we get here, then the mod has been loaded successfully.
             # Add the name to the loaded mod names set so we can then remove the
             # mod from the preloaded mods dict.

@@ -2,7 +2,7 @@ import logging
 import ctypes
 
 import nmspy.data.function_hooks as hooks
-from nmspy.hooking import NMSHook, hook_function, main_loop
+from nmspy.hooking import NMSHook, main_loop
 from nmspy.memutils import map_struct
 import nmspy.data.structs as nms_structs
 from nmspy.mod_loader import NMSMod
@@ -59,14 +59,11 @@ class TestMod(NMSMod):
     #         logging.info(f"nvgEnd: ctx: {ctx}")
     #         return ret
 
-    @hook_function("cGcPlanet::SetupRegionMap")
-    class PlanetSetup(NMSHook):
-        def detour(self, this):
-            logging.info(f"cGcPlanet*: {this}")
-            ret = self.original(this)
-            planet = map_struct(this, nms_structs.cGcPlanet)
-            logging.info(f"Planet {planet.planetIndex} name: {planet.planetData.name}")
-            return ret
+    @hooks.cGcPlanet.SetupRegionMap.after
+    def detour(self, this):
+        logging.info(f"cGcPlanet*: {this}")
+        planet = map_struct(this, nms_structs.cGcPlanet)
+        logging.info(f"Planet {planet.planetIndex} name: {planet.planetData.name}")
 
     # @cGcPlanet.SetupRegionMap
     # def setup_regions(self, this):

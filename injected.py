@@ -11,6 +11,7 @@ import os
 import os.path as op
 import time
 import traceback
+from typing import Optional
 import sys
 
 
@@ -28,7 +29,6 @@ try:
     logging.info("Loading NMS.py...")
     socket_logger_loaded = True
 
-    import nmspy.common as nms
     import nmspy._internal as _internal
 
     # Before any nmspy.data imports occur, set the os.environ value for the
@@ -56,13 +56,12 @@ try:
         custom_exception_handler,
         ESCAPE_SEQUENCE
     )
-    from nmspy.memutils import map_struct
+    from nmspy.memutils import map_struct, getsize
     from nmspy.mod_loader import ModManager
     from nmspy.caching import globals_cache, load_caches
+    import nmspy.common as nms
 
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-
-    logging.info(nms.BASE_ADDRESS)
 
     hook_logger = logging.getLogger("HookManager")
 
@@ -138,6 +137,23 @@ try:
             globals()['print'] = builtins.print
 
 
+    def top_globals(limit: Optional[int] = 10):
+        """ Return the top N objects in globals() by size (in bytes). """
+        globs = globals()
+        data = []
+        for key, value in globs.items():
+            if not key.startswith("__"):
+                try:
+                    data.append((key, *getsize(value)))
+                except TypeError:
+                    pass
+        data.sort(key=lambda x: x[1], reverse=True)
+        if limit is not None:
+            return data[:limit]
+        else:
+            return data
+
+
     # Load any globals based on any cached offsets.
     for global_name, relative_offset in globals_cache.items():
         # For each global, construct the object and then assign it to the
@@ -146,12 +162,13 @@ try:
             nms,
             global_name,
             map_struct(
-                nms.BASE_ADDRESS + relative_offset,
+                _internal.BASE_ADDRESS + relative_offset,
                 getattr(nms_structs, "c" + global_name)
             )
         )
 
-    nms.executor = ThreadPoolExecutor(10, thread_name_prefix="NMS_Executor")
+    nms.executor = ThreadPoolExecutor(1, thread_name_prefix="NMS_Executor")
+    _internal._executor = ThreadPoolExecutor(1, thread_name_prefix="NMS.py_Internal_Executor")
 
     mod_manager = ModManager(hook_manager)
 

@@ -11,12 +11,12 @@ import traceback
 
 import cyminhook
 
-import nmspy.common as nms
+import nmspy._internal as _internal
 from nmspy.data import FUNC_OFFSETS
-from nmspy.data.function_call_sigs import FUNC_CALL_SIGS, FUNCDEF
+from nmspy.data.function_call_sigs import FUNC_CALL_SIGS
 from nmspy.errors import UnknownFunctionError
 from nmspy.memutils import find_bytes
-from nmspy._types import NMSHook
+from nmspy._types import NMSHook, FUNCDEF
 from nmspy.caching import function_cache, pattern_cache
 
 hook_logger = logging.getLogger("HookManager")
@@ -90,11 +90,11 @@ class _NMSHook(cyminhook.MinHook):
             _offset = FUNC_OFFSETS.get(self._name)
             if _offset is not None:
                 if isinstance(_offset, int):
-                    self.target = nms.BASE_ADDRESS + _offset
+                    self.target = _internal.BASE_ADDRESS + _offset
                 else:
                     # This is an overload
                     if self.overload is not None:
-                        self.target = nms.BASE_ADDRESS + _offset[self.overload]
+                        self.target = _internal.BASE_ADDRESS + _offset[self.overload]
                     else:
                         # Need to fallback on something. Raise a warning that no
                         # overload was defined and that it will fallback to the
@@ -105,9 +105,9 @@ class _NMSHook(cyminhook.MinHook):
                         )
                         hook_logger.warning(
                             f"Falling back to the first overload ({first[0]})")
-                        self.target = nms.BASE_ADDRESS + first[1]
+                        self.target = _internal.BASE_ADDRESS + first[1]
             else:
-                hook_logger.error(f"{self._name} has no known address")
+                hook_logger.error(f"{self._name} has no known address (base: 0x{_internal.BASE_ADDRESS:X})")
                 self._invalid = True
         else:
             if self._pattern:
@@ -202,7 +202,7 @@ class _NMSHook(cyminhook.MinHook):
     def _oneshot_detour(self, *args):
         ret = self._non_oneshot_detour(*args)
         self.disable()
-        hook_logger.info(f"Disabling a one-shot hook ({self._name})")
+        hook_logger.debug(f"Disabling a one-shot hook ({self._name})")
         return ret
 
     def _normal_detour(self, *args):
@@ -251,7 +251,7 @@ class _NMSHook(cyminhook.MinHook):
 
     @property
     def offset(self):
-        return self.target - nms.BASE_ADDRESS
+        return self.target - _internal.BASE_ADDRESS
 
 
 class HookFactory:
@@ -369,6 +369,17 @@ class _main_loop:
         return func
 
 
+def on_fully_booted(func):
+    """
+    Configure the decorated function to be run once the game is considered
+    "fully booted".
+    This occurs when the games' internal state first changes to "mode selector"
+    (ie. just before the game mode selection screen appears).
+    """
+    func._run_on_fully_booted = True
+    return func
+
+
 class main_loop:
     @staticmethod
     def before(func):
@@ -410,7 +421,7 @@ def hook_function(
         klass.target = 0
         if not offset and not pattern:
             if function_name in FUNC_OFFSETS:
-                klass.target = nms.BASE_ADDRESS + FUNC_OFFSETS[function_name]
+                klass.target = _internal.BASE_ADDRESS + FUNC_OFFSETS[function_name]
             else:
                 raise UnknownFunctionError(f"{function_name} has no known address")
         else:
@@ -480,7 +491,7 @@ class CompoundHook(NMSHook):
     def __init__(
         self,
         *,
-        signature: Optional[CFUNCTYPE] = None,
+        signature: Optional[CFuncPtr] = None,
         target: Optional[int] = None
     ):
         super().__init__(target=target, signature=signature)
@@ -527,11 +538,12 @@ class HookManager():
         # after the main update loop each update cycle.
         self.main_loop_before_funcs: list = []
         self.main_loop_after_funcs: list = []
+        self.on_fully_booted_funcs: list = []
 
     def add_hook(
         self,
         detour: Callable[..., Any],
-        signature: CFUNCTYPE,
+        signature: CFuncPtr,
         target: int,
         func_name: str,
         enable: bool = True
@@ -556,6 +568,7 @@ class HookManager():
         if after_hook := getattr(cls, "_after_hook", None):
             compound_cls.add_after(after_hook)
 
+    # TODO: Re-implement compound hooks.
     # Deprecated
     # def register(
     #     self,
@@ -585,11 +598,11 @@ class HookManager():
     #             hook_logger.info(f"Finding {func_name} by pattern")
     #             abs_offset = find_bytes(hook._pattern, alignment=0x10)
     #             if abs_offset:
-    #                 target = abs_offset - nms.BASE_ADDRESS
+    #                 target = abs_offset - _internal.BASE_ADDRESS
     #                 hook_logger.info(f"Pattern found at +0x{target:X}. Saving to cache")
     #                 function_cache.set(func_name, target)
     #                 pattern_cache.set(hook._pattern, target)
-    #                 hook.target = nms.BASE_ADDRESS + target
+    #                 hook.target = _internal.BASE_ADDRESS + target
     #             else:
     #                 # Signature not found. We can't register this hook.
     #                 self.failed_hooks[func_name] = hook
@@ -598,7 +611,7 @@ class HookManager():
     #                 return
     #         else:
     #             hook_logger.info(f"Found {func_name} in offset cache")
-    #             hook.target = nms.BASE_ADDRESS + target
+    #             hook.target = _internal.BASE_ADDRESS + target
 
     #     try:
     #         _hook: NMSHook = hook()
@@ -646,6 +659,9 @@ class HookManager():
             self.main_loop_before_funcs.append(func)
         else:
             self.main_loop_after_funcs.append(func)
+
+    def add_on_fully_booted_func(self, func):
+        self.on_fully_booted_funcs.append(func)
 
     def register_function(
             self,
