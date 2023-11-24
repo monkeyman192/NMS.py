@@ -83,14 +83,16 @@ class cTkDynamicArray(ctypes.Structure):
             return []
         return map_struct(self.mArray, self._template_type * self.miSize)
 
-    def __str__(self):
-        str_val = [x.value for x in self.value]
-        return f"cTkDynamicArray(value: {str_val}, size: 0x{self.miSize:X})"
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}({self.miSize})"
 
     def __class_getitem__(cls: type["cTkDynamicArray"], key: Union[tuple[Any], Any]):
         _cls: type["cTkDynamicArray"] = types.new_class(f"cTkDynamicArray<{key}>", (cls,))
         _cls._template_type = key
         return _cls
+
+    def __len__(self) -> int:
+        return self.miSize
 
 
 class cTkDynamicString(ctypes.Structure):
@@ -109,9 +111,14 @@ class cTkDynamicString(ctypes.Structure):
     def value(self) -> bytes:
         return self.mArray
 
-    def __str__(self):
-        val = self.value.decode()
-        return f"cTkDynamicString(value: {val}, size: 0x{self.miSize:X})"
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}({self.miSize})"
+
+    def __str__(self) -> str:
+        return self.value.decode()
+
+    def __len__(self) -> int:
+        return self.miSize
 
 
 class TkID(ctypes.Structure):
