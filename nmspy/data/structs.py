@@ -671,7 +671,7 @@ class cTkModelResource(ctypes.Structure):
     macFilename: bytes
 
     def __str__(self) -> str:
-        return self.macFilename.decode("utf-8")
+        return str(self.macFilename)
 
 
 class cGcAlienRace(ctypes.Structure):
@@ -849,7 +849,7 @@ class cTkTextureResource(ctypes.Structure):
     macFilename: bytes
 
     def __str__(self) -> str:
-        return self.macFilename.decode()
+        return str(self.macFilename)
 
 
 class cGcTechnologyRequirement(ctypes.Structure):
@@ -960,7 +960,7 @@ class cGcTechnology(ctypes.Structure):
         ("_padding0x235", ctypes.c_ubyte * 0x3),
         ("miChargeAmount", ctypes.c_int32),
         ("mChargeType", cGcRealitySubstanceCategory),
-        ("maChargeBy", common.TkID[0x10]),
+        ("maChargeBy", common.cTkDynamicArray[common.TkID[0x10]]),
         ("mfChargeMultiplier", ctypes.c_float),
         ("mbBuildFullyCharged", ctypes.c_ubyte),
         ("mbUsesAmmo", ctypes.c_ubyte),
