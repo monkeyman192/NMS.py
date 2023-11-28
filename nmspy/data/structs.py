@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Generator
 
 if TYPE_CHECKING:
     from ctypes import _Pointer
-#     import nmspy.data.struct_types as stypes
+    import nmspy.data.struct_types as stypes
 
 import ctypes
 import ctypes.wintypes
@@ -964,7 +964,7 @@ class cGcRealityManager(ctypes.Structure):
 
     def __init__(self):
         super().__init__()
-        self.GenerateProceduralTechnologyID = {
+        self.GenerateProceduralTechnologyID: stypes.cGcRealityManager.GenerateProceduralTechnologyID = {
             "cGcRealityManager *, TkID<128> *, eProceduralTechnologyCategory, const cTkSeed *": self._GenerateProceduralTechnologyID_1,
             "cGcRealityManager *, TkID<128> *, const TkID<128> *, const cTkSeed *": self._GenerateProceduralTechnologyID_2,
         }
@@ -973,7 +973,7 @@ class cGcRealityManager(ctypes.Structure):
         this = ctypes.addressof(self)
         return call_function("cGcRealityManager::GenerateProceduralTechnology", this, lProcTechID, lbExampleForWiki)
 
-    def _GenerateProceduralTechnologyID_1(self, this, result, lBaseTechID, lSeed):
+    def _GenerateProceduralTechnologyID_1(self, result, lBaseTechID, lSeed):
         this = ctypes.addressof(self)
         return call_function(
             "cGcRealityManager::GenerateProceduralTechnology",
@@ -984,7 +984,7 @@ class cGcRealityManager(ctypes.Structure):
             overload="cGcRealityManager *, TkID<128> *, eProceduralTechnologyCategory, const cTkSeed *",
         )
 
-    def _GenerateProceduralTechnologyID_2(self, this, result, leProcTechCategory, lSeed):
+    def _GenerateProceduralTechnologyID_2(self, result, leProcTechCategory, lSeed):
         this = ctypes.addressof(self)
         return call_function(
             "cGcRealityManager::GenerateProceduralTechnology",
