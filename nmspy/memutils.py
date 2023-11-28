@@ -172,11 +172,13 @@ def map_struct_temp(offset: int, type_: Type[Struct]) -> Generator[Struct, Any, 
 
     if not offset:
         raise ValueError("Offset is 0. This would result in a segfault or similar")
-    instance = type_.from_buffer(_get_memview(offset, type_))
+    mv = _get_memview(offset, type_)
+    instance = type_.from_buffer(mv)
     instance._offset = offset
     yield instance
     instance = None
     del instance
+    mv.release()
     if nms.memory_manager != 0:
         # TODO: Use the function bound to the class, rather than this...
         call_function("cTkMemoryManager::Free", nms.memory_manager, offset, -1)

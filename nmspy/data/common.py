@@ -1,6 +1,11 @@
 import ctypes
 import types
-from typing import Any, Union
+from typing import Any, Union, TYPE_CHECKING
+
+from nmspy.hashing import fnv_1a
+
+if TYPE_CHECKING:
+    from ctypes import _Pointer
 
 
 class Colour(ctypes.Structure):
@@ -123,7 +128,7 @@ class cTkDynamicString(ctypes.Structure):
 
 class TkID(ctypes.Structure):
     _align_ = 0x10  # One day this will work...
-    _size = 0x10
+    _size = 0x10  # This should only ever be 0x10 or 0x20...
     value: bytes
 
     def __class_getitem__(cls: type["TkID"], key: int):
@@ -139,6 +144,9 @@ class TkID(ctypes.Structure):
 
     def __repr__(self) -> str:
         return str(self)
+
+    def __hash__(self) -> int:
+        return fnv_1a(str(self), self._size)
 
 
 class cTkFixedString(ctypes.Structure):
@@ -158,3 +166,40 @@ class cTkFixedString(ctypes.Structure):
 
     def __repr__(self) -> str:
         return str(self)
+
+
+class std__vector(ctypes.Structure):
+    _template_type = ctypes.c_char
+    if TYPE_CHECKING:
+        _first: _Pointer[Any]
+        _last: _Pointer[Any]
+        _end: _Pointer[Any]
+
+    def __class_getitem__(cls: type["std__vector"], key: int):
+        _cls: type["cTkFixedString"] = types.new_class(f"std::vector<{key}>", (cls,))
+        _cls._template_type = key
+        _cls._fields_ = [
+            ("_first", ctypes.POINTER(_cls._template_type)),
+            ("_last", ctypes.POINTER(_cls._template_type)),
+            ("_end", ctypes.POINTER(_cls._template_type)),
+        ]
+        return _cls
+
+    def __len__(self) -> int:
+        return (
+            ctypes.addressof(self._last.contents) -
+            ctypes.addressof(self._first.contents)
+        ) // 0x8  # Assuming 64 bit architecture
+
+    def __getitem__(self, i: int):
+        return self._first[i]
+
+    def __iter__(self):
+        for i in range(len(self)):
+            yield self[i]
+
+    def clear(self):
+        nullptr = ctypes.POINTER(self._template_type)
+        self._first = nullptr()
+        self._last = nullptr()
+        self._end = nullptr()

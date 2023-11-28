@@ -183,8 +183,11 @@ try:
     bold = "\u001b[4m"
     reset = "\u001b[0m"
     logging.info(bold + "Loading mods" + reset)
-    mod_manager.load_mod_folder(op.join(_internal.CWD, "mods"))
-    _loaded = mod_manager.enable_all()
+    try:
+        mod_manager.load_mod_folder(op.join(_internal.CWD, "mods"))
+        _loaded = mod_manager.enable_all()
+    except:
+        logging.exception(traceback.format_exc())
     logging.info(f"Loaded {_loaded} mods in {time.time() - start_time:.3f}s")
 
     for func_name, hook_class in hook_manager.failed_hooks.items():

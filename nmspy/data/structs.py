@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING, Generator
 
 if TYPE_CHECKING:
     from ctypes import _Pointer
+#     import nmspy.data.struct_types as stypes
 
 import ctypes
 import ctypes.wintypes
@@ -217,55 +218,6 @@ class cGcSubstanceTable(ctypes.Structure):
 
 class cGcTechnologyTable(ctypes.Structure):
     _fields_ = []
-
-
-class cGcRealityManager(ctypes.Structure):
-    _fields_ = [
-        ("Data", ctypes.POINTER(cGcRealityManagerData)),
-        ("SubstanceTable", ctypes.POINTER(cGcSubstanceTable)),
-        ("TechnologyTable", ctypes.POINTER(cGcTechnologyTable)),
-    ]
-
-    def GenerateProceduralProduct(self, lProcProdID: bytes) -> int:
-        this = ctypes.addressof(self)
-        return call_function("cGcRealityManager::GenerateProceduralProduct", this, lProcProdID)
-
-    def GenerateProceduralTechnology(self, lProcTechID: bytes, lbExampleForWiki: bool) -> int:
-        this = ctypes.addressof(self)
-        return call_function("cGcRealityManager::GenerateProceduralTechnology", this, lProcTechID, lbExampleForWiki)
-
-
-class cGcApplication(ctypes.Structure):
-    """The Main Application structure"""
-    class Data(ctypes.Structure):
-        """Much of the associated application data"""
-        _fields_ = [
-            ("FirstBootContext", cGcFirstBootContext),
-            ("TkMcQmcLFSRStore", ctypes.c_ubyte * 0x18),
-            ("RealityManager", cGcRealityManager),
-        ]
-
-        FirstBootContext: cGcFirstBootContext
-        TkMcQmcLFSRStore: bytes
-        RealityManager: cGcRealityManager
-
-    _fields_ = [
-        ("baseclass_0", cTkFSM),
-        ("data", ctypes.POINTER(Data)),
-        ("playerSaveSlot", ctypes.c_uint32),
-        ("gameMode", ctypes.c_uint32),
-        ("seasonalGameMode", ctypes.c_uint32),
-        ("savingEnabled", ctypes.c_ubyte),
-        ("fullyBooted", ctypes.c_ubyte),
-    ]
-
-    baseclass_0: cTkFSM
-    data: _Pointer[Data]
-    playerSaveSlot: int
-    gameMode: int
-    seasonalGameMode: int
-    savingEnabled: bool
-    fullyBooted: bool
 
 
 class cGcWaterGlobals(ctypes.Structure):
@@ -1000,3 +952,77 @@ class cGcTechnology(ctypes.Structure):
         ("mbIsTemplate", ctypes.c_ubyte),
         ("_padding0x354", ctypes.c_ubyte * 0xF),
     ]
+
+class cGcRealityManager(ctypes.Structure):
+    _fields_ = [
+        ("Data", ctypes.POINTER(cGcRealityManagerData)),
+        ("SubstanceTable", ctypes.POINTER(cGcSubstanceTable)),
+        ("TechnologyTable", ctypes.POINTER(cGcTechnologyTable)),
+        ("_padding", ctypes.c_ubyte * 0x220),
+        ("PendingNewTechnologies", common.std__vector[ctypes.POINTER(cGcTechnology)]),
+    ]
+
+    def __init__(self):
+        super().__init__()
+        self.GenerateProceduralTechnologyID = {
+            "cGcRealityManager *, TkID<128> *, eProceduralTechnologyCategory, const cTkSeed *": self._GenerateProceduralTechnologyID_1,
+            "cGcRealityManager *, TkID<128> *, const TkID<128> *, const cTkSeed *": self._GenerateProceduralTechnologyID_2,
+        }
+
+    def GenerateProceduralTechnology(self, lProcTechID: bytes, lbExampleForWiki: bool) -> int:
+        this = ctypes.addressof(self)
+        return call_function("cGcRealityManager::GenerateProceduralTechnology", this, lProcTechID, lbExampleForWiki)
+
+    def _GenerateProceduralTechnologyID_1(self, this, result, lBaseTechID, lSeed):
+        this = ctypes.addressof(self)
+        return call_function(
+            "cGcRealityManager::GenerateProceduralTechnology",
+            this,
+            result,
+            lBaseTechID,
+            lSeed,
+            overload="cGcRealityManager *, TkID<128> *, eProceduralTechnologyCategory, const cTkSeed *",
+        )
+
+    def _GenerateProceduralTechnologyID_2(self, this, result, leProcTechCategory, lSeed):
+        this = ctypes.addressof(self)
+        return call_function(
+            "cGcRealityManager::GenerateProceduralTechnology",
+            this,
+            result,
+            leProcTechCategory,
+            lSeed,
+            overload="cGcRealityManager *, TkID<128> *, const TkID<128> *, const cTkSeed *",
+        )
+
+class cGcApplication(ctypes.Structure):
+    """The Main Application structure"""
+    class Data(ctypes.Structure):
+        """Much of the associated application data"""
+        _fields_ = [
+            ("FirstBootContext", cGcFirstBootContext),
+            ("TkMcQmcLFSRStore", ctypes.c_ubyte * 0x18),
+            ("RealityManager", cGcRealityManager),
+        ]
+
+        FirstBootContext: cGcFirstBootContext
+        TkMcQmcLFSRStore: bytes
+        RealityManager: cGcRealityManager
+
+    _fields_ = [
+        ("baseclass_0", cTkFSM),
+        ("data", ctypes.POINTER(Data)),
+        ("playerSaveSlot", ctypes.c_uint32),
+        ("gameMode", ctypes.c_uint32),
+        ("seasonalGameMode", ctypes.c_uint32),
+        ("savingEnabled", ctypes.c_ubyte),
+        ("fullyBooted", ctypes.c_ubyte),
+    ]
+
+    baseclass_0: cTkFSM
+    data: _Pointer[Data]
+    playerSaveSlot: int
+    gameMode: int
+    seasonalGameMode: int
+    savingEnabled: bool
+    fullyBooted: bool

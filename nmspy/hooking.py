@@ -6,7 +6,7 @@ from enum import Enum
 from functools import wraps, update_wrapper, partial
 import inspect
 import logging
-from typing import Any, Optional, Type, Union, Literal
+from typing import Any, Optional, Type, Union
 import traceback
 
 import cyminhook
@@ -51,7 +51,7 @@ class _NMSHook(cyminhook.MinHook):
     _name: str
     _should_enable: bool
     _invalid: bool = False
-    _pattern: Optional[str]
+    _call_func: Optional[FUNCDEF]
     _is_one_shot: bool = False
 
     def __init__(
@@ -60,7 +60,7 @@ class _NMSHook(cyminhook.MinHook):
         *,
         name: Optional[str] = None,
         offset: Optional[int] = None,
-        pattern: Optional[str] = None,
+        call_func: Optional[FUNCDEF] = None,
         detour_time: DetourTime = DetourTime.NONE,
         overload: Optional[str] = None,
         should_enable: bool = True,
@@ -68,7 +68,7 @@ class _NMSHook(cyminhook.MinHook):
         self._mod = None
         self._should_enable = should_enable
         self._offset = offset
-        self._pattern = pattern
+        self._call_func = call_func
         self._original_detour = detour
         self.detour_time = detour_time
         self.overload = overload
@@ -86,7 +86,7 @@ class _NMSHook(cyminhook.MinHook):
     def _init(self):
         """ Actually initialise all the data. This is defined separately so that
         any function which is marked with @disable doesn't get initialised. """
-        if not self._offset and not self._pattern:
+        if not self._offset and not self._call_func:
             _offset = FUNC_OFFSETS.get(self._name)
             if _offset is not None:
                 if isinstance(_offset, int):
@@ -110,8 +110,14 @@ class _NMSHook(cyminhook.MinHook):
                 hook_logger.error(f"{self._name} has no known address (base: 0x{_internal.BASE_ADDRESS:X})")
                 self._invalid = True
         else:
-            if self._pattern:
-                self._pattern = self._pattern
+            # This is a "manual" hook, insofar as the offset and function
+            # argument info is all provided manually.
+            if not self._offset and self._call_func:
+                raise ValueError("Both offset and call_func MUST be provided if defining hooks manually")
+            self.target = _internal.BASE_ADDRESS + self._offset
+            self.signature = CFUNCTYPE(self._call_func.restype, *self._call_func.argtypes)
+            self._initialised = True
+            return
         if self._name in FUNC_CALL_SIGS:
             sig = FUNC_CALL_SIGS[self._name]
             if isinstance(sig, FUNCDEF):
@@ -392,6 +398,24 @@ class main_loop:
         func._is_main_loop_func = True
         func._main_loop_detour_time = DetourTime.AFTER
         return func
+
+
+def manual_hook(
+    name: str,
+    offset: int,
+    func_def: FUNCDEF,
+):
+    def _hook_function(detour):
+        should_enable = getattr(detour, "_should_enable", True)
+        return _NMSHook(
+            detour,
+            name=name,
+            detour_time=DetourTime.AFTER,
+            should_enable=should_enable,
+            offset=offset,
+            call_func=func_def,
+        )
+    return _hook_function
 
 
 def hook_function(
