@@ -9,6 +9,7 @@ import importlib.util
 import logging
 import os.path as op
 import os
+import traceback
 from types import ModuleType
 from typing import Any, Optional
 import string
@@ -78,13 +79,17 @@ def _fully_booted_ready_predicate(value: Any) -> bool:
     return getattr(value, "_run_on_fully_booted", False)
 
 
-def _import_file(fpath: str) -> ModuleType:
-    module_name = _clean_name(op.splitext(op.basename(fpath))[0])
-    spec = importlib.util.spec_from_file_location(module_name, fpath)
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[module_name] = module
-    spec.loader.exec_module(module)
-    return module
+def _import_file(fpath: str) -> Optional[ModuleType]:
+    try:
+        module_name = _clean_name(op.splitext(op.basename(fpath))[0])
+        spec = importlib.util.spec_from_file_location(module_name, fpath)
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[module_name] = module
+        spec.loader.exec_module(module)
+        return module
+    except Exception:
+        mod_logger.error(f"Error loading {fpath}")
+        mod_logger.exception(traceback.format_exc())
 
 
 class NMSMod():
@@ -121,6 +126,8 @@ class ModManager():
 
     def load_mod(self, fpath) -> bool:
         mod = _import_file(fpath)
+        if mod is None:
+            return False
         d: dict[str, type[NMSMod]] = dict(
             inspect.getmembers(
                 mod,
@@ -147,7 +154,7 @@ class ModManager():
                     )
             else:
                 self._preloaded_mods[mod_name] = mod
-            
+
         return True
 
     def load_mod_folder(self, folder: str):

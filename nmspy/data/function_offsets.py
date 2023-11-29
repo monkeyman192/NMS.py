@@ -1,6 +1,9 @@
 __binary_hash__ = "014f5fd1837e2bd8356669b92109fd3add116137"
 
-FUNC_OFFSETS = {
+from typing import Union
+
+
+FUNC_OFFSETS: dict[str, Union[int, dict[str, int]]] = {
     "packed_store_active___un_3C_unf_3E_vyf": 0x1000,
     "dot___vyf_3C_3_3E_vyf_3C_3_3E_": 0x6FF0,
     "length___vyf_3C_3_3E_": 0x7020,

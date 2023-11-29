@@ -1,23 +1,39 @@
+# import ctypes
 import logging
 
-from nmspy.hooking import one_shot, disable, main_loop
-import nmspy.extractors.metaclasses as metaclass_extractor
+from nmspy.hooking import one_shot, disable, manual_hook
 import nmspy.common as nms
 from nmspy.memutils import map_struct
 import nmspy.data.structs as nms_structs
 import nmspy.data.function_hooks as hooks
 from nmspy.mod_loader import NMSMod
+# from nmspy._types import FUNCDEF
+
+
+# funcdef = FUNCDEF(
+#     restype=ctypes.c_uint64,  # unsigned __int64
+#     argtypes=[
+#         ctypes.c_ulonglong,  # TkID<128> *this
+#     ]
+# )
 
 
 class MiscMod(NMSMod):
     __author__ = "monkeyman192"
     __description__ = "Misc stuff..."
     __version__ = "1.0"
-    __NMSPY_required_version__ = "0.6.0"
+    __NMSPY_required_version__ = "0.6.5"
 
     def __init__(self):
         self.counter = 0
         super().__init__()
+
+
+    # @manual_hook("TkID<128>_hook", 0xC726C0, funcdef)
+    # def thing(self, this, _result_):
+    #     logging.info("TkID<128> hash thing...")
+    #     logging.info(this)
+    #     logging.info(_result_)
 
     @hooks.AK.SoundEngine.PostEvent.before
     @disable
