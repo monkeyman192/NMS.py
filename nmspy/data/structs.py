@@ -1001,21 +1001,23 @@ class cGcRealityManager(ctypes.Structure):
             overload="cGcRealityManager *, const TkID<128> *",
         )
 
-    def _GenerateProceduralTechnologyID_1(self, leProcTechCategory: int, lSeed: int):
+    def _GenerateProceduralTechnologyID_1(self, result: int, leProcTechCategory: int, lSeed: int):
         this = ctypes.addressof(self)
         return call_function(
             "cGcRealityManager::GenerateProceduralTechnologyID",
             this,
+            result,
             leProcTechCategory,
             lSeed,
             overload="cGcRealityManager *, TkID<128> *, eProceduralTechnologyCategory, const cTkSeed *",
         )
 
-    def _GenerateProceduralTechnologyID_2(self, lBaseTechID: bytes, lSeed: int):
+    def _GenerateProceduralTechnologyID_2(self, result: int, lBaseTechID: bytes, lSeed: int):
         this = ctypes.addressof(self)
         return call_function(
             "cGcRealityManager::GenerateProceduralTechnologyID",
             this,
+            result,
             lBaseTechID,
             lSeed,
             overload="cGcRealityManager *, TkID<128> *, const TkID<128> *, const cTkSeed *",
