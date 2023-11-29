@@ -13,6 +13,7 @@ calling_logger = getLogger("CallingManager")
 
 def call_function(name: str, *args, overload: Optional[str] = None):
     _sig = FUNC_CALL_SIGS[name]
+    offset = FUNC_OFFSETS[name]
     if isinstance(_sig, FUNCDEF):
         sig = CFUNCTYPE(_sig.restype, *_sig.argtypes)
     else:
@@ -30,6 +31,18 @@ def call_function(name: str, *args, overload: Optional[str] = None):
             calling_logger.warning(
                 f"Falling back to the first overload ({first[0]})")
             sig = CFUNCTYPE(first[1].restype, *first[1].argtypes)
+    if isinstance(offset, dict):
+        # Handle overloads
+        if (_offset := offset.get(overload)) is not None:  # type: ignore
+            offset = _offset
+        else:
+            _offset = list(offset.items())[0]
+            calling_logger.warning(
+                f"No function arguments overload was provided for {name}. "
+            )
+            calling_logger.warning(
+                f"Falling back to the first overload ({_offset[0]})")
+            offset = _offset[1]
 
-    cfunc = sig(_internal.BASE_ADDRESS + FUNC_OFFSETS[name])
+    cfunc = sig(_internal.BASE_ADDRESS + offset)
     return cfunc(*args)

@@ -962,9 +962,9 @@ class cGcRealityManager(ctypes.Structure):
         ("PendingNewTechnologies", common.std__vector[ctypes.POINTER(cGcTechnology)]),
     ]
 
-    def __init__(self):
-        super().__init__()
-        self.GenerateProceduralTechnologyID: stypes.cGcRealityManager.GenerateProceduralTechnologyID = {
+    @property
+    def GenerateProceduralTechnologyID(self) -> stypes.cGcRealityManager.GenerateProceduralTechnologyID:
+        return {
             "cGcRealityManager *, TkID<128> *, eProceduralTechnologyCategory, const cTkSeed *": self._GenerateProceduralTechnologyID_1,
             "cGcRealityManager *, TkID<128> *, const TkID<128> *, const cTkSeed *": self._GenerateProceduralTechnologyID_2,
         }
@@ -973,24 +973,24 @@ class cGcRealityManager(ctypes.Structure):
         this = ctypes.addressof(self)
         return call_function("cGcRealityManager::GenerateProceduralTechnology", this, lProcTechID, lbExampleForWiki)
 
-    def _GenerateProceduralTechnologyID_1(self, result, lBaseTechID, lSeed):
+    def _GenerateProceduralTechnologyID_1(self, result: int, leProcTechCategory: int, lSeed: int):
         this = ctypes.addressof(self)
         return call_function(
-            "cGcRealityManager::GenerateProceduralTechnology",
+            "cGcRealityManager::GenerateProceduralTechnologyID",
             this,
             result,
-            lBaseTechID,
+            leProcTechCategory,
             lSeed,
             overload="cGcRealityManager *, TkID<128> *, eProceduralTechnologyCategory, const cTkSeed *",
         )
 
-    def _GenerateProceduralTechnologyID_2(self, result, leProcTechCategory, lSeed):
+    def _GenerateProceduralTechnologyID_2(self, result: int, lBaseTechID: bytes, lSeed: int):
         this = ctypes.addressof(self)
         return call_function(
-            "cGcRealityManager::GenerateProceduralTechnology",
+            "cGcRealityManager::GenerateProceduralTechnologyID",
             this,
             result,
-            leProcTechCategory,
+            lBaseTechID,
             lSeed,
             overload="cGcRealityManager *, TkID<128> *, const TkID<128> *, const cTkSeed *",
         )
