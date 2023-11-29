@@ -963,6 +963,13 @@ class cGcRealityManager(ctypes.Structure):
     ]
 
     @property
+    def GenerateProceduralProduct(self) -> stypes.cGcRealityManager.GenerateProceduralProduct:
+        return {
+            "cGcRealityManager *, int, const cTkSeed *, eRarity, eQuality": self._GenerateProceduralProduct_1,
+            "cGcRealityManager *, const TkID<128> *": self._GenerateProceduralProduct_2,
+        }
+
+    @property
     def GenerateProceduralTechnologyID(self) -> stypes.cGcRealityManager.GenerateProceduralTechnologyID:
         return {
             "cGcRealityManager *, TkID<128> *, eProceduralTechnologyCategory, const cTkSeed *": self._GenerateProceduralTechnologyID_1,
@@ -973,23 +980,42 @@ class cGcRealityManager(ctypes.Structure):
         this = ctypes.addressof(self)
         return call_function("cGcRealityManager::GenerateProceduralTechnology", this, lProcTechID, lbExampleForWiki)
 
-    def _GenerateProceduralTechnologyID_1(self, result: int, leProcTechCategory: int, lSeed: int):
+    def _GenerateProceduralProduct_1(self, leProcProdCategory: int, lSeed: int, leRarityOverride: int, leQualityOverride: int):
+        this = ctypes.addressof(self)
+        return call_function(
+            "cGcRealityManager::GenerateProceduralProduct",
+            this,
+            leProcProdCategory,
+            lSeed,
+            leRarityOverride,
+            leQualityOverride,
+            overload="cGcRealityManager *, int, const cTkSeed *, eRarity, eQuality",
+        )
+
+    def _GenerateProceduralProduct_2(self, lProcProdID: bytes):
+        this = ctypes.addressof(self)
+        return call_function(
+            "cGcRealityManager::GenerateProceduralProduct",
+            this,
+            lProcProdID,
+            overload="cGcRealityManager *, const TkID<128> *",
+        )
+
+    def _GenerateProceduralTechnologyID_1(self, leProcTechCategory: int, lSeed: int):
         this = ctypes.addressof(self)
         return call_function(
             "cGcRealityManager::GenerateProceduralTechnologyID",
             this,
-            result,
             leProcTechCategory,
             lSeed,
             overload="cGcRealityManager *, TkID<128> *, eProceduralTechnologyCategory, const cTkSeed *",
         )
 
-    def _GenerateProceduralTechnologyID_2(self, result: int, lBaseTechID: bytes, lSeed: int):
+    def _GenerateProceduralTechnologyID_2(self, lBaseTechID: bytes, lSeed: int):
         this = ctypes.addressof(self)
         return call_function(
             "cGcRealityManager::GenerateProceduralTechnologyID",
             this,
-            result,
             lBaseTechID,
             lSeed,
             overload="cGcRealityManager *, TkID<128> *, const TkID<128> *, const cTkSeed *",
