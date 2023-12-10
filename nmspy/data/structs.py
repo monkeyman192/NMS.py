@@ -5,7 +5,8 @@ from typing import TYPE_CHECKING, Generator
 
 if TYPE_CHECKING:
     from ctypes import _Pointer
-    import nmspy.data.struct_types as stypes
+
+import nmspy.data.struct_types as stypes
 
 import ctypes
 import ctypes.wintypes
@@ -13,6 +14,7 @@ import ctypes.wintypes
 from nmspy.data import common, enums as nms_enums
 from nmspy.calling import call_function
 # from nmspy.data.types import core, simple
+from nmspy.data.cpptypes import std
 from nmspy.memutils import map_struct
 from nmspy.utils import safe_assign_enum
 
@@ -952,15 +954,14 @@ class cGcTechnology(ctypes.Structure):
         ("mbIsTemplate", ctypes.c_ubyte),
         ("_padding0x354", ctypes.c_ubyte * 0xF),
     ]
+    mID: bytes
+
 
 class cGcRealityManager(ctypes.Structure):
-    _fields_ = [
-        ("Data", ctypes.POINTER(cGcRealityManagerData)),
-        ("SubstanceTable", ctypes.POINTER(cGcSubstanceTable)),
-        ("TechnologyTable", ctypes.POINTER(cGcTechnologyTable)),
-        ("_padding", ctypes.c_ubyte * 0x220),
-        ("PendingNewTechnologies", common.std__vector[ctypes.POINTER(cGcTechnology)]),
-    ]
+    Data: _Pointer["cGcRealityManagerData"]
+    SubstanceTable: _Pointer["cGcSubstanceTable"]
+    TechnologyTable: _Pointer["cGcTechnologyTable"]
+    PendingNewTechnologies: std.vector[_Pointer["cGcTechnology"]]
 
     @property
     def GenerateProceduralProduct(self) -> stypes.cGcRealityManager.GenerateProceduralProduct:
@@ -1023,29 +1024,330 @@ class cGcRealityManager(ctypes.Structure):
             overload="cGcRealityManager *, TkID<128> *, const TkID<128> *, const cTkSeed *",
         )
 
+
+cGcRealityManager._fields_ = [
+    ("Data", ctypes.POINTER(cGcRealityManagerData)),
+    ("SubstanceTable", ctypes.POINTER(cGcSubstanceTable)),
+    ("TechnologyTable", ctypes.POINTER(cGcTechnologyTable)),
+    ("_padding", ctypes.c_ubyte * 0x220),
+    ("PendingNewTechnologies", std.vector[ctypes.POINTER(cGcTechnology)]),
+    ("_rest", ctypes.c_ubyte * 0xD20),
+]
+
+
+class cGcPlayerEnvironment(ctypes.Structure):
+    mPlayerTM: common.cTkMatrix34
+    mUp: common.Vector3f
+    mu64UA: int
+    miNearestPlanetIndex: int
+    mfDistanceFromPlanet: float
+    mfNearestPlanetSealevel: float
+    mNearestPlanetPos: common.Vector3f
+    miNearestPlanetCreatureRoles: int
+    _meStarAnomaly: int
+    mfDistanceFromAnomaly: float
+    mbInsidePlanetAtmosphere: bool
+    _meBiome: int
+    _meBiomeSubType: int
+    mbIsRaining: bool
+    mfStormLevel: float
+    _meWeather: int
+    mfTimeOfDay: float
+    mfLightFactor: float
+    mfNightFactor: float
+    mbIsNight: bool
+    mfLightShaftFactor: float
+    meLocation: int  # EnvironmentLocation::Enum
+    mfTimeInLocation: float
+    mbUndergroundIsCave: bool
+    meCameraLocation: int  # EnvironmentLocation::Enum
+    mfTimeInCameraLocation: float
+    meCameraLocationStable: int  # EnvironmentLocation::Enum
+    mInsideBuildingNode: int
+    _meInterest: int
+    mfTimeInInterest: float
+    meLocationStable: int  # EnvironmentLocation::Enum
+    _meInterestStable: int
+    mbInAsteroidFieldStable: bool
+    meVehicleLocation: int  # EnvironmentLocation::Enum
+    _meNearestBuildingClass: int
+    mfNearestBuildingDistance: float
+    mbNearestBuildingValid: bool
+    _meBasePartAudioLocation: int
+    mbPilotingShip: bool
+    mbPilotingVehicle: bool
+    mbFullControlOfShip: bool
+    mbIsWarping: bool
+    mbIsWanted: bool
+    mbSpaceCombatActive: bool
+    mfSpaceCombatActiveTime: float
+    mbIsInPlayerFreighter: bool
+    mbIsInFreighterBase: bool
+    mbForceFreighterShipHidingUpdate: bool
+    mOccupiedFreighterOwner: bytes
+    mbBlockedFromCraftingBySeasonalBaseRequirements: bool
+    mPlanetRegionQueryValid: bool
+    # mPlanetRegionQuery : cTkRegionHeightResult
+    # mPlanetRegionQueryDistance : float
+    # mfUnderwaterDepth : float
+    # mfExteriorExposure : float
+    # mfTemperature : float
+    # mfTemperatureSmoothed : float
+    # mfTemperatureExternal : float
+    # mfToxicity : float
+    # mfToxicitySmoothed : float
+    # mfToxicityExternal : float
+    # mfRadiation : float
+    # mfRadiationSmoothed : float
+    # mfRadiationExternal : float
+    # mfLifeSupportDrain : float
+    # mafHazardFactors : float[6]
+    # mafTargetHazardFactors : float[6]
+    # mafNormalisedHazardFactors : float[6]
+    # mePrimaryHazardControl : eHazardValue
+    # maObscuredAroundNear : float[2]
+    # maObscuredAroundNearSlow : float[2]
+    # maObscuredAroundFar : float[2]
+    # maObscuredAroundFarSlow : float[2]
+    # maObscuredOverhead : float[2]
+    # maObscuredTowardsSun : float[2]
+    # mfGlassSurfacesNearby : float
+    # mfNearestSurface : float
+    # mfNearestSurfaceOverhead : float
+    # meCollisionGroupOverhead : eCollisionGroup
+    # meCollisionGroupDirectUnder : eCollisionGroup
+    # mfDistanceDirectUnder : float
+    # meCollisionGroupDirectUnderNA : eCollisionGroup
+    # mfDistanceDirectUnderNA : float
+    # maGroundCoverage : float[2]
+    # mfIndoorLightingFactor : float
+    # mfIndoorLightingFactorRate : float
+    # mfIndoorLightTransitionFactor : float
+    # mbFlyingTowardsPlanet : bool
+    # miFlyingTowardsPlanetIndex : int
+    # mbSpaceStateValid : bool
+    # mSpaceState : cGcPlayerEnvironment::SpaceState
+    # mCurrentlyActiveTriggers : cTkStackVector<cGcPlayerEnvironment::ActiveTriggerVolume,16,-1>
+    # mbInteriorTriggerTypeActive : bool
+    # mbCoveredExteriorTriggerTypeActive : bool
+    # mbInsideHazardProtectionVolume : bool
+    # mbInsideHazardProtectionColdVolume : bool
+    # mbInsideSpaceStorm : bool
+    # mfTemperatureSpringRate : float
+    # mfToxicitySpringRate : float
+    # mfRadiationSpringRate : float
+    # maObscuredAroundNearRate : float[2]
+    # maObscuredAroundNearRateSlow : float[2]
+    # maObscuredAroundFarRate : float[2]
+    # maObscuredAroundFarRateSlow : float[2]
+    # maObscuredOverheadRate : float[2]
+    # maObscuredTowardsSunRate : float[2]
+    # maGroundCoverageRate : float[2]
+    # mfNearestSurfaceRate : float
+    # mfNearestSurfaceOverheadRate : float
+    # mfGlassSurfacesNearbyRate : float
+    # mbInAsteroidField : bool
+    # mfAsteroidFieldStateTime : float
+
+    @property
+    def meStarAnomaly(self):
+        return safe_assign_enum(nms_enums.eGalaxyStarAnomaly, self._meStarAnomaly)
+
+    @property
+    def meBiome(self):
+        return safe_assign_enum(nms_enums.eBiome, self._meBiome)
+
+    @property
+    def meBiomeSubType(self):
+        return safe_assign_enum(nms_enums.eBiomeSubType, self._meBiomeSubType)
+
+    @property
+    def meWeather(self):
+        return safe_assign_enum(nms_enums.eWeather, self._meWeather)
+
+    @property
+    def meInterest(self):
+        return safe_assign_enum(nms_enums.eRegionKnowledgeInterest, self._meInterest)
+
+    @property
+    def meInterestStable(self):
+        return safe_assign_enum(nms_enums.eRegionKnowledgeInterest, self._meInterestStable)
+
+    @property
+    def meNearestBuildingClass(self):
+        return safe_assign_enum(nms_enums.eBuildingClass, self._meNearestBuildingClass)
+
+    @property
+    def meBasePartAudioLocation(self):
+        return safe_assign_enum(nms_enums.eBasePartAudioLocation, self._meBasePartAudioLocation)
+
+
+cGcPlayerEnvironment._fields_ = [
+    ("mPlayerTM", common.cTkMatrix34),
+    ("mUp", common.Vector3f),
+    ("_dummy0x4C", ctypes.c_ubyte * 0x4),
+    ("mu64UA",  ctypes.c_ulonglong),
+    ("miNearestPlanetIndex", ctypes.c_int32),
+    ("mfDistanceFromPlanet", ctypes.c_float),
+    ("mfNearestPlanetSealevel", ctypes.c_float),
+    ("_dummy0x64", ctypes.c_ubyte * 0xC),
+    ("mNearestPlanetPos", common.Vector3f),
+    ("_dummy0x7C", ctypes.c_ubyte * 0x4),
+    ("miNearestPlanetCreatureRoles", ctypes.c_int32),
+    ("meStarAnomaly", ctypes.c_uint32),  # eGalaxyStarAnomaly
+    ("mfDistanceFromAnomaly", ctypes.c_float),
+    ("mbInsidePlanetAtmosphere", ctypes.c_byte),
+    ("meBiome", ctypes.c_uint32),  # eBiome
+    ("meBiomeSubType", ctypes.c_uint32),  # eBiomeSubType
+    ("mbIsRaining", ctypes.c_byte),
+    ("mfStormLevel", ctypes.c_float),
+    ("meWeather",  ctypes.c_uint32),  # eWeather
+    ("mfTimeOfDay", ctypes.c_float),
+    ("mfLightFactor", ctypes.c_float),
+    ("mfNightFactor", ctypes.c_float),
+    ("mbIsNight", ctypes.c_byte),
+    ("mfLightShaftFactor", ctypes.c_float),
+    ("meLocation", ctypes.c_uint32),  # EnvironmentLocation::Enum
+    ("mfTimeInLocation", ctypes.c_float),
+    ("mbUndergroundIsCave", ctypes.c_byte),
+    ("meCameraLocation", ctypes.c_uint32),  # EnvironmentLocation::Enum
+    ("mfTimeInCameraLocation", ctypes.c_float),
+    ("meCameraLocationStable", ctypes.c_uint32),  # EnvironmentLocation::Enum
+    ("mInsideBuildingNode", ctypes.c_uint32),  # TkHandle
+    ("meInterest", ctypes.c_uint32),  # eRegionKnowledgeInterest
+    ("mfTimeInInterest", ctypes.c_float),
+    ("meLocationStable", ctypes.c_uint32),  # EnvironmentLocation::Enum
+    ("meInterestStable", ctypes.c_uint32),  # eRegionKnowledgeInterest
+    ("mbInAsteroidFieldStable", ctypes.c_byte),
+    ("meVehicleLocation", ctypes.c_uint32),  # EnvironmentLocation::Enum
+    ("meNearestBuildingClass", ctypes.c_uint32),  # eBuildingClass
+    ("mfNearestBuildingDistance", ctypes.c_float),
+    ("mbNearestBuildingValid", ctypes.c_byte),
+    ("meBasePartAudioLocation", ctypes.c_uint32),  # eBasePartAudioLocation
+    ("mbPilotingShip", ctypes.c_byte),
+    ("mbPilotingVehicle", ctypes.c_byte),
+    ("mbFullControlOfShip", ctypes.c_byte),
+    ("mbIsWarping", ctypes.c_byte),
+    ("mbIsWanted", ctypes.c_byte),
+    ("mbSpaceCombatActive", ctypes.c_byte),
+    ("mfSpaceCombatActiveTime", ctypes.c_float),
+    ("mbIsInPlayerFreighter", ctypes.c_byte),
+    ("mbIsInFreighterBase", ctypes.c_byte),
+    ("mbForceFreighterShipHidingUpdate", ctypes.c_byte),
+    ("mOccupiedFreighterOwner", ctypes.c_char * 0x40),  # cTkUserIdBase<cTkFixedString<64,char> >
+    ("mbBlockedFromCraftingBySeasonalBaseRequirements", ctypes.c_byte),
+    ("mPlanetRegionQueryValid", ctypes.c_byte),
+    # ("mPlanetRegionQuery",  cTkRegionHeightResult), 336 48
+    # ("mPlanetRegionQueryDistance", ctypes.c_float), 384 4
+    # ("mfUnderwaterDepth", ctypes.c_float), 388 4
+    # ("mfExteriorExposure", ctypes.c_float), 392 4
+    # ("mfTemperature", ctypes.c_float), 396 4
+    # ("mfTemperatureSmoothed", ctypes.c_float), 400 4
+    # ("mfTemperatureExternal", ctypes.c_float), 404 4
+    # ("mfToxicity", ctypes.c_float), 408 4
+    # ("mfToxicitySmoothed", ctypes.c_float), 412 4
+    # ("mfToxicityExternal", ctypes.c_float), 416 4
+    # ("mfRadiation", ctypes.c_float), 420 4
+    # ("mfRadiationSmoothed", ctypes.c_float), 424 4
+    # ("mfRadiationExternal", ctypes.c_float), 428 4
+    # ("mfLifeSupportDrain", ctypes.c_float), 432 4
+    # ("mafHazardFactors",  float[6]), 436 24
+    # ("mafTargetHazardFactors",  float[6]), 460 24
+    # ("mafNormalisedHazardFactors",  float[6]), 484 24
+    # ("mePrimaryHazardControl",  eHazardValue), 508 4
+    # ("maObscuredAroundNear",  float[2]), 512 8
+    # ("maObscuredAroundNearSlow",  float[2]), 520 8
+    # ("maObscuredAroundFar",  float[2]), 528 8
+    # ("maObscuredAroundFarSlow",  float[2]), 536 8
+    # ("maObscuredOverhead",  float[2]), 544 8
+    # ("maObscuredTowardsSun",  float[2]), 552 8
+    # ("mfGlassSurfacesNearby", ctypes.c_float), 560 4
+    # ("mfNearestSurface", ctypes.c_float), 564 4
+    # ("mfNearestSurfaceOverhead", ctypes.c_float), 568 4
+    # ("meCollisionGroupOverhead",  eCollisionGroup), 572 4
+    # ("meCollisionGroupDirectUnder",  eCollisionGroup), 576 4
+    # ("mfDistanceDirectUnder", ctypes.c_float), 580 4
+    # ("meCollisionGroupDirectUnderNA",  eCollisionGroup), 584 4
+    # ("mfDistanceDirectUnderNA", ctypes.c_float), 588 4
+    # ("maGroundCoverage",  float[2]), 592 8
+    # ("mfIndoorLightingFactor", ctypes.c_float), 600 4
+    # ("mfIndoorLightingFactorRate", ctypes.c_float), 604 4
+    # ("mfIndoorLightTransitionFactor", ctypes.c_float), 608 4
+    # ("mbFlyingTowardsPlanet", ctypes.c_byte), 612 1
+    # ("miFlyingTowardsPlanetIndex", ctypes.c_int32), 616 4
+    # ("mbSpaceStateValid", ctypes.c_byte), 620 1
+    # ("mSpaceState",  cGcPlayerEnvironment::SpaceState), 624 16
+    # ("mCurrentlyActiveTriggers",  cTkStackVector<cGcPlayerEnvironment::ActiveTriggerVolume,16,-1>), 640 176
+    # ("mbInteriorTriggerTypeActive", ctypes.c_byte), 816 1
+    # ("mbCoveredExteriorTriggerTypeActive", ctypes.c_byte), 817 1
+    # ("mbInsideHazardProtectionVolume", ctypes.c_byte), 818 1
+    # ("mbInsideHazardProtectionColdVolume", ctypes.c_byte), 819 1
+    # ("mbInsideSpaceStorm", ctypes.c_byte), 820 1
+    # ("mfTemperatureSpringRate", ctypes.c_float), 824 4
+    # ("mfToxicitySpringRate", ctypes.c_float), 828 4
+    # ("mfRadiationSpringRate", ctypes.c_float), 832 4
+    # ("maObscuredAroundNearRate",  float[2]), 836 8
+    # ("maObscuredAroundNearRateSlow",  float[2]), 844 8
+    # ("maObscuredAroundFarRate",  float[2]), 852 8
+    # ("maObscuredAroundFarRateSlow",  float[2]), 860 8
+    # ("maObscuredOverheadRate",  float[2]), 868 8
+    # ("maObscuredTowardsSunRate",  float[2]), 876 8
+    # ("maGroundCoverageRate",  float[2]), 884 8
+    # ("mfNearestSurfaceRate", ctypes.c_float), 892 4
+    # ("mfNearestSurfaceOverheadRate", ctypes.c_float), 896 4
+    # ("mfGlassSurfacesNearbyRate", ctypes.c_float), 900 4
+    # ("mbInAsteroidField", ctypes.c_byte), 904 1
+    # ("mfAsteroidFieldStateTime", ctypes.c_float), 908 4
+]
+
+
+class cGcEnvironment(ctypes.Structure):
+    playerEnvironment: cGcPlayerEnvironment
+
+
+cGcEnvironment._fields_ = [
+    ("dummy", ctypes.c_ubyte * 0x6D0),
+    ("playerEnvironment", cGcPlayerEnvironment)
+]
+
+
+class cGcSimulation(ctypes.Structure):
+    environment: cGcEnvironment
+
+
+cGcSimulation._fields_ = [
+    ("dummy", ctypes.c_ubyte * 0x997F0),
+    ("environment", cGcEnvironment)
+]
+
+
+class cTkInputPort(ctypes.Structure):
+    _fields_ = [
+        ("inputManager", ctypes.c_longlong),
+        # TODO: Add more...
+    ]
+
+    inputManager: int
+
+    def SetButton(self, leIndex: nms_enums.eInputButton) -> None:
+        """ Set the provided button as pressed. """
+        this = ctypes.addressof(self)
+        return call_function("cTkInputPort::SetButton", this, leIndex)
+
+    @staticmethod
+    def SetButton_(this: int, leIndex: nms_enums.eInputButton) -> None:
+        """ Set the provided button as pressed for the provided instance. """
+        return call_function("cTkInputPort::SetButton", this, leIndex)
+
+
 class cGcApplication(ctypes.Structure):
     """The Main Application structure"""
     class Data(ctypes.Structure):
         """Much of the associated application data"""
-        _fields_ = [
-            ("FirstBootContext", cGcFirstBootContext),
-            ("TkMcQmcLFSRStore", ctypes.c_ubyte * 0x18),
-            ("RealityManager", cGcRealityManager),
-        ]
-
         FirstBootContext: cGcFirstBootContext
         TkMcQmcLFSRStore: bytes
         RealityManager: cGcRealityManager
-
-    _fields_ = [
-        ("baseclass_0", cTkFSM),
-        ("data", ctypes.POINTER(Data)),
-        ("playerSaveSlot", ctypes.c_uint32),
-        ("gameMode", ctypes.c_uint32),
-        ("seasonalGameMode", ctypes.c_uint32),
-        ("savingEnabled", ctypes.c_ubyte),
-        ("fullyBooted", ctypes.c_ubyte),
-    ]
+        Simulation: cGcSimulation
 
     baseclass_0: cTkFSM
     data: _Pointer[Data]
@@ -1054,3 +1356,25 @@ class cGcApplication(ctypes.Structure):
     seasonalGameMode: int
     savingEnabled: bool
     fullyBooted: bool
+
+
+cGcApplication.Data._fields_ = [
+    ("FirstBootContext", cGcFirstBootContext),
+    ("TkMcQmcLFSRStore", ctypes.c_ubyte * 0x18),
+    ("RealityManager", cGcRealityManager),
+    ("_padding_0xFC8", ctypes.c_ubyte * 0x8),
+    ("GameState", ctypes.c_ubyte * 0x43c560),  # +0xFD0
+    ("SeasonalData", ctypes.c_ubyte * 0x69F0),  # +0x43D530'
+    ("Simulation", cGcSimulation),  # +0x443F20
+]
+
+
+cGcApplication._fields_ = [
+    ("baseclass_0", cTkFSM),
+    ("data", ctypes.POINTER(cGcApplication.Data)),
+    ("playerSaveSlot", ctypes.c_uint32),
+    ("gameMode", ctypes.c_uint32),
+    ("seasonalGameMode", ctypes.c_uint32),
+    ("savingEnabled", ctypes.c_ubyte),
+    ("fullyBooted", ctypes.c_ubyte),
+]

@@ -35,14 +35,10 @@ ctypes.pythonapi.PyMemoryView_FromMemory.argtypes = (
 ctypes.pythonapi.PyMemoryView_FromMemory.restype = ctypes.py_object
 
 
-# TODO: Move
-class NMSStruct(ctypes.Structure):
-    _offset: int
-
-
 # TypeVar for the map_struct so that we can correctly get the returned type to
 # be the same as the input type.
-Struct = TypeVar("Struct", bound=ctypes.Structure)
+CTYPES = Union[ctypes._SimpleCData, ctypes.Structure, ctypes._Pointer]
+Struct = TypeVar("Struct", bound=CTYPES)
 
 
 def getsize(obj):
@@ -172,13 +168,10 @@ def map_struct_temp(offset: int, type_: Type[Struct]) -> Generator[Struct, Any, 
 
     if not offset:
         raise ValueError("Offset is 0. This would result in a segfault or similar")
-    mv = _get_memview(offset, type_)
-    instance = type_.from_buffer(mv)
-    instance._offset = offset
-    yield instance
+    instance = ctypes.cast(offset, ctypes.POINTER(type_))
+    yield instance.contents
     instance = None
     del instance
-    mv.release()
     if nms.memory_manager != 0:
         # TODO: Use the function bound to the class, rather than this...
         call_function("cTkMemoryManager::Free", nms.memory_manager, offset, -1)
@@ -203,9 +196,8 @@ def map_struct(offset: int, type_: Type[Struct]) -> Struct:
     """
     if not offset:
         raise ValueError("Offset is 0. This would result in a segfault or similar")
-    instance = type_.from_buffer(_get_memview(offset, type_))
-    instance._offset = offset
-    return instance
+    instance = ctypes.cast(offset, ctypes.POINTER(type_))
+    return instance.contents
 
 
 def pattern_to_bytes(patt: str) -> array.array:

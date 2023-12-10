@@ -72,9 +72,9 @@ def _main_loop_predicate(value: Any) -> bool:
 
 
 def _fully_booted_ready_predicate(value: Any) -> bool:
-    """ Determine if the objecy has the _run_on_fully_booted property.
+    """ Determine if the object has the _run_on_fully_booted property.
     This will only be methods on NMSMod classes which are decorated with
-    @on_fully_booted
+    @on_fully_booted.
     """
     return getattr(value, "_run_on_fully_booted", False)
 

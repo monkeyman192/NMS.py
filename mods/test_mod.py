@@ -2,7 +2,7 @@ import logging
 import ctypes
 
 import nmspy.data.function_hooks as hooks
-from nmspy.hooking import NMSHook, main_loop
+from nmspy.hooking import disable, main_loop
 from nmspy.memutils import map_struct
 import nmspy.data.structs as nms_structs
 from nmspy.mod_loader import NMSMod
@@ -60,6 +60,7 @@ class TestMod(NMSMod):
     #         return ret
 
     @hooks.cGcPlanet.SetupRegionMap.after
+    @disable
     def detour(self, this):
         logging.info(f"cGcPlanet*: {this}")
         planet = map_struct(this, nms_structs.cGcPlanet)
