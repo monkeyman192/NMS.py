@@ -153,6 +153,19 @@ try:
         else:
             return data
 
+    # Patch the locale to make towupper work.
+    # Python must change this so we change it back otherwise calls to `towupper`
+    # in the various functions to set and get keypresses don't work correctly.
+    crt_dll = ctypes.WinDLL("api-ms-win-crt-string-l1-1-0")
+
+    _wsetlocale = crt_dll._wsetlocale
+    _wsetlocale.restype = ctypes.c_wchar_p
+    _wsetlocale.argtypes = [
+        ctypes.c_int32,
+        ctypes.c_wchar_p,
+    ]
+    # 2 -> LC_CTYPE I guess...
+    _wsetlocale(2, "C")
 
     # Load any globals based on any cached offsets.
     for global_name, relative_offset in globals_cache.items():

@@ -511,6 +511,22 @@ def one_shot(klass: _NMSHook):
     return klass
 
 
+def on_key_pressed(event: str):
+    def wrapped(func):
+        func._hotkey = event
+        func._hotkey_press = "down"
+        return func
+    return wrapped
+
+
+def on_key_release(event: str):
+    def wrapped(func):
+        func._hotkey = event
+        func._hotkey_press = "up"
+        return func
+    return wrapped
+
+
 class CompoundHook(NMSHook):
     def __init__(
         self,

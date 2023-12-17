@@ -1321,13 +1321,81 @@ cGcSimulation._fields_ = [
 ]
 
 
+class cTkNGuiInput(ctypes.Structure):
+    _fields_ = [
+        ("_dummy", ctypes.c_ubyte * 0x30),
+        ("mouseButtonState", ctypes.c_uint32),
+        ("mouse2ButtonState", ctypes.c_uint32),
+    ]
+
+    mouseButtonState: int
+    mouse2ButtonState: int
+
+
+class sTkInputBinding(ctypes.Structure):
+    _fields_ = [
+        ("actionId", ctypes.c_int32),
+        ("digitalBinding", ctypes.c_int32),
+        ("analogueBinding", ctypes.c_int32),
+    ]
+    actionId: int
+    digitalBinding: int
+    analogueBinding: int
+
+
+class sTkInputBindingsActionSet(ctypes.Structure):
+    _fields_ = [
+        ("actionSetId", ctypes.c_int32),
+        ("_padding0x4", ctypes.c_ubyte * 0x4),
+        ("bindings", std.vector[sTkInputBinding])
+    ]
+    actionSetId: int
+    bindings: std.vector[sTkInputBinding]
+
+
+class sTkInputBindings(ctypes.Structure):
+    _fields_ = [
+        ("actionSetBindings", std.vector[ctypes.POINTER(sTkInputBindingsActionSet)])
+    ]
+    actionSetBindings: std.vector[_Pointer[sTkInputBindingsActionSet]]
+
+
+class sTkActionState(ctypes.Structure):
+    _fields_ = [
+        ("miDigitalFirstSet", ctypes.c_int32),
+        ("miDigitalLastSet", ctypes.c_int32),
+        ("miAnalogueLastSet", ctypes.c_int32),
+        ("mfAnalogueValue", ctypes.c_float),
+        ("mbAnalogueSource", ctypes.c_ubyte),
+        ("miActionSetContinuity", ctypes.c_int32),
+    ]
+    miDigitalFirstSet: int
+    miDigitalLastSet: int
+    miAnalogueLastSet: int
+    mfAnalogueValue: float
+    mbAnalogueSource: bool
+    miActionSetContinuity: int
+
+
 class cTkInputPort(ctypes.Structure):
     _fields_ = [
         ("inputManager", ctypes.c_longlong),
+        ("port", ctypes.c_int32),
+        ("_padding0xC", ctypes.c_ubyte * 0x4),
+        ("actionStates", common.cTkDynamicArray[sTkActionState]),
+        ("now", ctypes.c_int32),
+        ("_padding0x24", ctypes.c_ubyte * 0xC4),
+        ("buttons", common.cTkBitArray[ctypes.c_uint64, 512]),
+        ("buttonsPrev", common.cTkBitArray[ctypes.c_uint64, 512]),
         # TODO: Add more...
+        ("rest", ctypes.c_ubyte * 0x278),
     ]
 
     inputManager: int
+    port: int
+    actionStates: common.cTkDynamicArray[sTkActionState]
+    buttons: common.cTkBitArray[ctypes.c_uint64, 512]
+    buttonsPrev: common.cTkBitArray[ctypes.c_uint64, 512]
 
     def SetButton(self, leIndex: nms_enums.eInputButton) -> None:
         """ Set the provided button as pressed. """
@@ -1340,7 +1408,18 @@ class cTkInputPort(ctypes.Structure):
         return call_function("cTkInputPort::SetButton", this, leIndex)
 
 
-class cGcApplication(ctypes.Structure):
+class cTkInputManager(ctypes.Structure):
+    _fields_ = [
+        ("_padding", ctypes.c_ubyte * 0x2F0),
+        ("bindings", std.vector[ctypes.POINTER(sTkInputBindings)]),
+        ("_padding0x308", ctypes.c_ubyte * 0x18),
+        ("portArray", std.array[cTkInputPort, 6])
+    ]
+    bindings: std.vector[_Pointer[sTkInputBindings]]
+    portArray: std.array[cTkInputPort, 6]
+
+
+class cGcApplication(cTkFSM, ctypes.Structure):
     """The Main Application structure"""
     class Data(ctypes.Structure):
         """Much of the associated application data"""
@@ -1349,7 +1428,6 @@ class cGcApplication(ctypes.Structure):
         RealityManager: cGcRealityManager
         Simulation: cGcSimulation
 
-    baseclass_0: cTkFSM
     data: _Pointer[Data]
     playerSaveSlot: int
     gameMode: int
@@ -1370,7 +1448,6 @@ cGcApplication.Data._fields_ = [
 
 
 cGcApplication._fields_ = [
-    ("baseclass_0", cTkFSM),
     ("data", ctypes.POINTER(cGcApplication.Data)),
     ("playerSaveSlot", ctypes.c_uint32),
     ("gameMode", ctypes.c_uint32),

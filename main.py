@@ -152,6 +152,7 @@ finally:
             print(future)
     except TimeoutError:
         # Don't really care.
+        print("Got a time out error...")
         pass
     if executor is not None:
         executor.shutdown(wait=False)

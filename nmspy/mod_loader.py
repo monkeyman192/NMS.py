@@ -20,6 +20,7 @@ from nmspy._types import NMSHook
 from nmspy._internal import CWD
 from nmspy.hooking import HookManager, _NMSHook
 
+import keyboard
 import semver
 
 
@@ -79,6 +80,14 @@ def _fully_booted_ready_predicate(value: Any) -> bool:
     return getattr(value, "_run_on_fully_booted", False)
 
 
+def _has_hotkey_predicate(value: Any) -> bool:
+    """ Determine if the objecy has the _is_main_loop_func property.
+    This will only be methods on NMSMod classes which are decorated with either
+    @main_loop.before or @main_loop.after
+    """
+    return getattr(value, "_hotkey", False)
+
+
 def _import_file(fpath: str) -> Optional[ModuleType]:
     try:
         module_name = _clean_name(op.splitext(op.basename(fpath))[0])
@@ -113,6 +122,10 @@ class NMSMod():
         # than `self`.
         self._on_fully_booted_funcs = [
             x[1] for x in inspect.getmembers(self, _fully_booted_ready_predicate)
+        ]
+
+        self._hotkey_funcs = [
+            x[1] for x in inspect.getmembers(self, _has_hotkey_predicate)
         ]
 
 
@@ -187,6 +200,13 @@ class ModManager():
                 self.hook_manager.add_main_loop_func(main_loop_func)
             for on_ready_func in mod._on_fully_booted_funcs:
                 self.hook_manager.add_on_fully_booted_func(on_ready_func)
+            for hotkey_func in mod._hotkey_funcs:
+                # Don't need to tell the hook manager, register the keyboard
+                # hotkey here...
+                if hotkey_func._hotkey_press == "down":
+                    keyboard.on_press_key(hotkey_func._hotkey, lambda e, func=hotkey_func: func(e))
+                else:
+                    keyboard.on_release_key(hotkey_func._hotkey, lambda e, func=hotkey_func: func(e))
             # If we get here, then the mod has been loaded successfully.
             # Add the name to the loaded mod names set so we can then remove the
             # mod from the preloaded mods dict.

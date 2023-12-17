@@ -1,8 +1,13 @@
 import ctypes
 import types
-from typing import Any, Union
+from typing import Any, Union, TypeVar, Generic, Type
 
-from nmspy.hashing import fnv_1a
+# from nmspy.hashing import fnv_1a
+
+CTYPES = Union[ctypes._SimpleCData, ctypes.Structure, ctypes._Pointer]
+
+T = TypeVar("T", bound=CTYPES)
+N = TypeVar("N", bound=int)
 
 
 class Colour(ctypes.Structure):
@@ -35,6 +40,13 @@ class Vector3f(ctypes.Structure):
 
     def __str__(self) -> str:
         return f"<{self.x, self.y, self.z}>"
+
+
+class cTkPhysRelVec3(ctypes.Structure):
+    _fields_ = [
+        ("local", Vector3f),
+        ("offset", Vector3f),
+    ]
 
 
 class cTkMatrix34(ctypes.Structure):
@@ -97,69 +109,77 @@ class Quaternion(ctypes.Structure):
     ]
 
 
-class cTkDynamicArray(ctypes.Structure):
-    _template_type = ctypes.c_char
+class cTkDynamicArray(ctypes.Structure, Generic[T]):
+    _template_type: T
     _fields_ = [
-        ("mArray", ctypes.c_ulonglong),
-        ("miSize", ctypes.c_uint32),
-        ("mbAllocatedFromData", ctypes.c_ubyte),
-        ("_macMagicPad", ctypes.c_char * 0x3)
+        ("array", ctypes.c_ulonglong),
+        ("size", ctypes.c_uint32),
+        ("allocatedFromData", ctypes.c_ubyte),
+        ("_magicPad", ctypes.c_char * 0x3)
     ]
 
-    mArray: int
-    miSize: int
-    mbAllocatedFromData: bool
+    Array: int
+    Size: int
+    allocatedFromData: bool
 
     @property
     def value(self) -> Any:
         from nmspy.memutils import map_struct
 
-        if self.mArray == 0 or self.miSize == 0:
+        if self.array == 0 or self.size == 0:
             # Empty lists are store with an empty pointer in mem.
             return []
-        return map_struct(self.mArray, self._template_type * self.miSize)
+        return map_struct(self.array, self._template_type * self.size)
+
+    def __iter__(self):
+        # TODO: Improve to generate as we go.
+        for obj in self.value:
+            yield obj
+
+    def __getitem__(self, i: int) -> T:
+        return self.value[i]
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__}({self.miSize})"
+        return f"{self.__class__.__name__}({self.size})"
 
-    def __class_getitem__(cls: type["cTkDynamicArray"], key: Union[tuple[Any], Any]):
+    def __class_getitem__(cls: type["cTkDynamicArray"], key: Union[tuple[T], Any]):
         _cls: type["cTkDynamicArray"] = types.new_class(f"cTkDynamicArray<{key}>", (cls,))
         _cls._template_type = key
         return _cls
 
     def __len__(self) -> int:
-        return self.miSize
+        return self.size
 
 
 class cTkDynamicString(ctypes.Structure):
     _fields_ = [
-        ("mArray", ctypes.c_char_p),
-        ("miSize", ctypes.c_uint32),
-        ("mbAllocatedFromData", ctypes.c_ubyte),
-        ("_macMagicPad", ctypes.c_char * 0x3)
+        ("array", ctypes.c_char_p),
+        ("size", ctypes.c_uint32),
+        ("allocatedFromData", ctypes.c_ubyte),
+        ("_magicPad", ctypes.c_char * 0x3)
     ]
 
-    mArray: bytes
-    miSize: int
-    mbAllocatedFromData: bool
+    array: bytes
+    size: int
+    allocatedFromData: bool
 
     @property
     def value(self) -> bytes:
-        return self.mArray
+        return self.array
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__}({self.miSize})"
+        return f"{self.__class__.__name__}({self.size})"
 
     def __str__(self) -> str:
         return self.value.decode()
 
     def __len__(self) -> int:
-        return self.miSize
+        return self.size
 
 
 class TkID(ctypes.Structure):
     _align_ = 0x10  # One day this will work...
-    _size = 0x10  # This should only ever be 0x10 or 0x20...
+    _size: int  # This should only ever be 0x10 or 0x20...
     value: bytes
 
     def __class_getitem__(cls: type["TkID"], key: int):
@@ -181,7 +201,7 @@ class TkID(ctypes.Structure):
 
 
 class cTkFixedString(ctypes.Structure):
-    _size = 0x10
+    _size: int
     value: bytes
 
     def __class_getitem__(cls: type["cTkFixedString"], key: int):
@@ -197,3 +217,92 @@ class cTkFixedString(ctypes.Structure):
 
     def __repr__(self) -> str:
         return str(self)
+
+
+class cTkClassPool(ctypes.Structure, Generic[T, N]):
+    _size: int
+    _template_type: T
+    pool: list[T]
+    uniqueIds: list[int]
+    roster: list[int]
+    rosterPartition: int
+    uniqueIDGenerator: int
+
+    def __class_getitem__(cls: Type["cTkClassPool"], key: tuple[Type[T], int]):
+        _type, _size = key
+        _cls: Type[cTkClassPool[T, N]] = types.new_class(
+            f"cTkClassPool<{_type}, {_size}>", (cls,)
+        )
+        _cls._fields_ = [  # type: ignore
+            ("pool", _type * _size),
+            ("uniqueIds", ctypes.c_int32 * _size),
+            ("roster", ctypes.c_int32 * _size),
+            ("rosterPartition", ctypes.c_int32),
+            ("uniqueIDGenerator", ctypes.c_int32),
+        ]
+        return _cls
+
+
+class cTkBitArray(ctypes.Structure, Generic[T, N]):
+    _size: int
+    _template_type: T
+    _type_size: int
+    array: list[T]
+
+    def __class_getitem__(cls: Type["cTkBitArray"], key: tuple[Type[T], int]):
+        _type, _size = key
+        _cls: type[cTkBitArray] = types.new_class(f"cTkBitArray<{_type}, {_size}>", (cls,))
+        _cls._size = _size
+        _cls._template_type = _type
+        _cls._type_size = 8 * ctypes.sizeof(_type)
+        _cls._fields_ = [
+            ("array", _type * (_size // _cls._type_size))
+        ]
+        return _cls
+
+    def __getitem__(self, key: int) -> bool:
+        """ Determine if the particular value is in the bitarray."""
+        # Get the chunk the value lies in.
+        if key >= self._size:
+            raise ValueError(f"key is too large for this datatype")
+        idx = key // self._type_size
+        subval = key & (self._type_size - 1)
+        return (int(self.array[idx]) & (1 << subval)) != 0
+
+    def __setitem__(self, key: int, value: bool):
+        idx = idx = key // self._type_size
+        subval = key & (self._type_size - 1)
+        cval = int(self.array[idx])
+        if value:
+            # Set the bit
+            cval = cval | (1 << subval)
+        else:
+            # Remove the bit
+            cval = cval & (~(1 << subval))
+        self.array[idx] = cval
+
+    def ones(self) -> list[int]:
+        return [i for i in range(self._size) if self[i]]
+
+    def __str__(self):
+        """ A string representation.
+        This will be an "unwrapped" version of how it's actually represented in
+        memory so that the bits can be read from right to left instead of in
+        strides like how they are in memory.
+        """
+        res = ""
+        for val in self.array:
+            res = bin(int(val))[2:].zfill(self._type_size) + " " + res
+        return res
+
+
+if __name__ == "__main__":
+    data = bytearray(b"\xFF\x10")
+    m = cTkBitArray[ctypes.c_uint8, 16].from_buffer(data)
+    print(m[3])
+    print(str(m))
+    m[3] = False
+    print(str(m))
+    m[8] = True
+    print(str(m))
+    print(m.ones())
