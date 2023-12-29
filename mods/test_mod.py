@@ -2,7 +2,7 @@ import logging
 import ctypes
 
 import nmspy.data.function_hooks as hooks
-from nmspy.hooking import disable, main_loop
+from nmspy.hooking import disable, main_loop, on_key_pressed, on_key_release
 from nmspy.memutils import map_struct
 import nmspy.data.structs as nms_structs
 from nmspy.mod_loader import NMSMod
@@ -18,12 +18,20 @@ class TestMod(NMSMod):
 
     def __init__(self):
         super().__init__()
-        self.text: str = "mm"
+        self.text: str = "NO"
         self.should_print = False
 
     @property
     def _text(self):
         return self.text.encode()
+
+    @on_key_pressed("space")
+    def press(self):
+        self.text = "YES"
+
+    @on_key_release("space")
+    def release(self):
+        self.text = "NO"
 
     @hooks.nvgText
     def change_test(self, ctx, x: float, y: float, string, end):

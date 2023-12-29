@@ -2,6 +2,8 @@ import ctypes
 import types
 from typing import Any, Union, TypeVar, Generic, Type
 
+from nmspy.data.cpptypes import std
+
 # from nmspy.hashing import fnv_1a
 
 CTYPES = Union[ctypes._SimpleCData, ctypes.Structure, ctypes._Pointer]
@@ -46,6 +48,63 @@ class cTkPhysRelVec3(ctypes.Structure):
     _fields_ = [
         ("local", Vector3f),
         ("offset", Vector3f),
+    ]
+
+# class VmaAllocation_T__BlockAllocation(ctypes.Structure):
+#     pass
+
+
+# class VmaAllocation_T__DedicatedAllocation(ctypes.Structure):
+#     pass
+
+
+# class VmaAllocation_T(ctypes.Structure):
+#     class _sub(ctypes.Union):
+#         _fields_ = [
+#             ("m_BlockAllocation", VmaAllocation_T__BlockAllocation),
+#             ("m_DedicatedAllocation", VmaAllocation_T__DedicatedAllocation),
+#         ]
+#     _anonymous_ = ("_sub",)
+#     _fields_ = [
+#         ("m_Alignment", ctypes.c_uint64),
+#         ("m_Size", ctypes.c_uint64),
+#         ("m_pUserData", ctypes.c_void_p),
+#         ("m_LastUseFrameIndex", ctypes.c_uint32),
+#         ("m_Type", ctypes.c_uint8),
+#         ("m_SuballocationType", ctypes.c_uint8),
+#         ("m_MapCount", ctypes.c_uint8),
+#         ("m_Flags", ctypes.c_uint8),
+#         ("_sub", _sub),
+#         ("m_CreationFrameIndex", ctypes.c_uint32),
+#         ("m_BufferImageUsage", ctypes.c_uint32),
+#     ]
+
+
+class cTkMatrix44(ctypes.Union):
+    _fields_ = [
+        ("c", (ctypes.c_float * 4) * 4),
+        ("x", (ctypes.c_float * 16)),
+    ]
+
+
+class TkShaderConstHandle(ctypes.Structure):
+    class _sub(ctypes.Union):
+        class _sub_sub(ctypes.Structure):
+            _fields_ = [
+                ("vertexSlot", ctypes.c_char),
+                ("fragmentSlot", ctypes.c_char),
+            ]
+        _anonymous_ = ("_sub_sub",)
+        _fields_ = [
+            ("_sub_sub", _sub_sub),
+            ("valid", ctypes.c_uint32),
+        ]
+    _anonymous_ = ("_sub",)
+    _fields_ = [
+        ("_sub", _sub),
+        ("offset", ctypes.c_uint16),
+        ("isCustomPerMaterial", ctypes.c_ubyte),
+        ("uniformBufferMask", ctypes.c_uint8),
     ]
 
 
@@ -106,6 +165,19 @@ class Quaternion(ctypes.Structure):
         ("y", ctypes.c_float),
         ("z", ctypes.c_float),
         ("w", ctypes.c_float),
+    ]
+
+
+class TkHandle(ctypes.Union):
+    class TkHandleSub(ctypes.Structure):
+        _fields_ = [
+            ("lookup", ctypes.c_uint32, 18),
+            ("incrementor", ctypes.c_uint32, 14),
+        ]
+    _anonymous_ = ("_sub",)
+    _fields_ = [
+        ("_sub", TkHandleSub),
+        ("lookupInt", ctypes.c_uint32)
     ]
 
 
@@ -175,6 +247,85 @@ class cTkDynamicString(ctypes.Structure):
 
     def __len__(self) -> int:
         return self.size
+
+
+class TkSmoothCD(ctypes.Structure, Generic[T]):
+    _template_type: T
+    velocity: T
+    value: T
+
+    def __class_getitem__(cls: type["TkSmoothCD"], key: T):
+        _cls: type["TkSmoothCD"] = types.new_class(f"TkSmoothCD<{key}>", (cls,))
+        _cls._template_type = key
+        _cls._fields_ = [
+            ("velocity", cls._template_type),
+            ("value", cls._template_type)
+        ]
+        return _cls
+
+
+class cTkNGuiElementID(ctypes.Structure):
+    counter: int
+    base: int
+    frameRenderTracker: int
+    perFrameUseCount: int
+
+class cTkClassPointer:
+    class cTkClassPointerData(ctypes.Union):
+        _fields_ = [
+            ("class_", ctypes.c_void_p),
+            ("offset", ctypes.c_longlong)
+        ]
+
+
+class cTkFrameData(ctypes.Structure, Generic[T]):
+    _template_type: T
+    set: bool
+    value: T
+
+    def __class_getitem__(cls: type["cTkUiDataMap"], key: T):
+        _cls: type["cTkUiDataMap"] = types.new_class(f"cTkUiDataMap<{key}>", (cls,))
+        _cls._template_type = key
+        _cls._fields_ = [
+            ("velocity", std.vector[cls._template_type]),
+            ("elementIndices", std.vector[cTkNGuiElementID])
+        ]
+        return _cls
+
+# cTkStackVector<bool,1,-1>
+# StackContainer<
+#    std::vector<bool,StackAllocator<bool,1,-1> >
+#    ,1,-1>
+
+
+class cTkStackVector(ctypes.Structure, Generic[T]):
+    _template_type: T
+    set: bool
+    value: T
+
+    def __class_getitem__(cls: type["cTkStackVector"], key: T):
+        _cls: type["cTkStackVector"] = types.new_class(f"cTkStackVector<{key}>", (cls,))
+        _cls._template_type = key
+        _cls._fields_ = [
+            ("velocity", std.vector[cls._template_type]),
+            ("elementIndices", std.vector[cTkNGuiElementID])
+        ]
+        return _cls
+
+
+class cTkUiDataMap(ctypes.Structure, Generic[T]):
+    _template_type: T
+    uiData: std.vector
+    elementIndices: std.vector[cTkNGuiElementID]
+
+    def __class_getitem__(cls: type["cTkUiDataMap"], key: Type[T]):
+        _cls: type["cTkUiDataMap"] = types.new_class(f"cTkUiDataMap<{key}>", (cls,))
+        _cls._template_type = key
+        _cls._fields_ = [
+            ("velocity", std.vector[cls._template_type]),
+            ("elementIndices", std.vector[cTkNGuiElementID])
+        ]
+        return _cls
 
 
 class TkID(ctypes.Structure):

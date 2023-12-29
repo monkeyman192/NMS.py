@@ -43,6 +43,12 @@ class _array(ctypes.Structure, Generic[T, N]):
         for i in range(len(self)):
             yield self[i]
 
+class _vb_val(ctypes.Structure, Generic[T]):
+    #   std::vector<unsigned int,StackAllocator<unsigned int,1,-1> > _Myvec;
+    # unsigned __int64 _Mysize;
+    pass
+
+
 class _vector(ctypes.Structure, Generic[T]):
     _template_type: T
     if TYPE_CHECKING:

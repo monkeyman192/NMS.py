@@ -91,11 +91,13 @@ def _has_hotkey_predicate(value: Any) -> bool:
 def _import_file(fpath: str) -> Optional[ModuleType]:
     try:
         module_name = _clean_name(op.splitext(op.basename(fpath))[0])
-        spec = importlib.util.spec_from_file_location(module_name, fpath)
-        module = importlib.util.module_from_spec(spec)
-        sys.modules[module_name] = module
-        spec.loader.exec_module(module)
-        return module
+        if spec := importlib.util.spec_from_file_location(module_name, fpath):
+            module = importlib.util.module_from_spec(spec)
+            module.__name__ = module_name
+            module.__spec__ = spec
+            sys.modules[module_name] = module
+            spec.loader.exec_module(module)
+            return module
     except Exception:
         mod_logger.error(f"Error loading {fpath}")
         mod_logger.exception(traceback.format_exc())
@@ -135,16 +137,20 @@ class ModManager():
         self._preloaded_mods: dict[str, type[NMSMod]] = {}
         # Actual mapping of mods.
         self.mods: dict[str, NMSMod] = {}
+        self._mod_paths: dict[str, ModuleType] = {}
         self.hook_manager = hook_manager
+        # Keep a mapping of the hotkey callbacks
+        self.hotkey_callbacks: dict[tuple[str, str], Any] = {}
 
-    def load_mod(self, fpath) -> bool:
-        mod = _import_file(fpath)
-        if mod is None:
-            return False
+    def _load_module(self, module: ModuleType) -> bool:
+        """ Load a mod from the provided module.
+        This will be called when initially loading the mods, and also when we
+        wish to reload a mod.
+        """
         d: dict[str, type[NMSMod]] = dict(
             inspect.getmembers(
-                mod,
-                partial(_is_mod_predicate, ref_module=mod)
+                module,
+                partial(_is_mod_predicate, ref_module=module)
             )
         )
         for mod_name, mod in d.items():
@@ -167,13 +173,48 @@ class ModManager():
                     )
             else:
                 self._preloaded_mods[mod_name] = mod
+            if not mod_name.startswith("_INTERNAL_"):
+                self._mod_paths[mod_name] = module
 
         return True
+
+    def load_mod(self, fpath) -> bool:
+        """ Load a mod from the given filepath. """
+        module = _import_file(fpath)
+        if module is None:
+            return False
+        return self._load_module(module)
+
 
     def load_mod_folder(self, folder: str):
         for file in os.listdir(folder):
             if file.endswith(".py"):
                 self.load_mod(op.join(folder, file))
+
+    def _register_funcs(self, mod: NMSMod, quiet: bool):
+        for hook in mod.hooks:
+            self.hook_manager.register_function(hook, True, mod, quiet)
+        for main_loop_func in mod._main_funcs:
+            self.hook_manager.add_main_loop_func(main_loop_func)
+        for on_ready_func in mod._on_fully_booted_funcs:
+            self.hook_manager.add_on_fully_booted_func(on_ready_func)
+        for hotkey_func in mod._hotkey_funcs:
+            # Don't need to tell the hook manager, register the keyboard
+            # hotkey here...
+            # NOTE: The below is a "hack"/"solution" to an issue that the
+            # keyboard library has.
+            # cf. https://github.com/boppreh/keyboard/issues/584
+            cb = keyboard.hook(
+                lambda e, func=hotkey_func, name=hotkey_func._hotkey, event_type=hotkey_func._hotkey_press: (
+                    e.name == name and
+                    e.event_type == event_type and
+                    func()
+                )
+            )
+            mod_logger.info(cb)
+            self.hotkey_callbacks[
+                (hotkey_func._hotkey, hotkey_func._hotkey_press)
+            ] = cb
 
     def enable_all(self, quiet: bool = False) -> int:
         """ Enable all mods loaded by the manager that haven't been enabled yet.
@@ -194,19 +235,7 @@ class ModManager():
                 )
                 mod_logger.warning(f"Could not enable {mod.__class__.__name__}")
                 continue
-            for hook in mod.hooks:
-                self.hook_manager.register_function(hook, True, mod, quiet)
-            for main_loop_func in mod._main_funcs:
-                self.hook_manager.add_main_loop_func(main_loop_func)
-            for on_ready_func in mod._on_fully_booted_funcs:
-                self.hook_manager.add_on_fully_booted_func(on_ready_func)
-            for hotkey_func in mod._hotkey_funcs:
-                # Don't need to tell the hook manager, register the keyboard
-                # hotkey here...
-                if hotkey_func._hotkey_press == "down":
-                    keyboard.on_press_key(hotkey_func._hotkey, lambda e, func=hotkey_func: func(e))
-                else:
-                    keyboard.on_release_key(hotkey_func._hotkey, lambda e, func=hotkey_func: func(e))
+            self._register_funcs(mod, quiet)
             # If we get here, then the mod has been loaded successfully.
             # Add the name to the loaded mod names set so we can then remove the
             # mod from the preloaded mods dict.
@@ -215,6 +244,43 @@ class ModManager():
             self._preloaded_mods.pop(name)
         return len(_loaded_mod_names)
 
-    def reload(self):
-        # TODO
-        pass
+    def reload(self, name):
+        if (mod := self.mods.get(name)) is not None:
+            # First, remove everything.
+            for hook in mod.hooks:
+                mod_logger.info(f"Disabling hook {hook}: {hook._name}")
+                hook.disable()
+                hook.close()
+                del hook
+            for main_loop_func in mod._main_funcs:
+                self.hook_manager.remove_main_loop_func(main_loop_func)
+            for on_ready_func in mod._on_fully_booted_funcs:
+                self.hook_manager.remove_on_fully_booted_func(on_ready_func)
+            for hotkey_func in mod._hotkey_funcs:
+                cb = self.hotkey_callbacks.pop(
+                    (hotkey_func._hotkey, hotkey_func._hotkey_press)
+                )
+                keyboard.unhook(cb)
+
+            # Then, reload the module
+            module = self._mod_paths[name]
+            del sys.modules[module.__name__]
+            # Then, add everything back.
+            self.load_mod(module.__file__)
+            _loaded_mod_names = set()
+            for name, _mod in self._preloaded_mods.items():
+                mod = _mod()
+                self.mods[name] = mod
+                if not hasattr(mod, "hooks"):
+                    mod_logger.error(
+                        f"The mod {mod.__class__.__name__} is not initialised "
+                        "properly. Please ensure that `super().__init__()` is "
+                        "included in the `__init__` method of this mod!"
+                    )
+                    mod_logger.warning(f"Could not enable {mod.__class__.__name__}")
+                    continue
+                self._register_funcs(mod, False)
+                _loaded_mod_names.add(name)
+            for name in _loaded_mod_names:
+                self._preloaded_mods.pop(name)
+            mod_logger.info(f"Finished reloading {name}")

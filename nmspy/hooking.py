@@ -72,6 +72,7 @@ class _NMSHook(cyminhook.MinHook):
         self._original_detour = detour
         self.detour_time = detour_time
         self.overload = overload
+        self.state = None
         if name is not None:
             self._name = name
         else:
@@ -252,8 +253,9 @@ class _NMSHook(cyminhook.MinHook):
         self._should_enable = True
 
     def disable(self):
-        super().disable()
-        self.state = "disabled"
+        if self.state == "enabled":
+            super().disable()
+            self.state = "disabled"
 
     @property
     def offset(self):
@@ -700,8 +702,17 @@ class HookManager():
         else:
             self.main_loop_after_funcs.append(func)
 
+    def remove_main_loop_func(self, func):
+        if func._main_loop_detour_time == DetourTime.BEFORE:
+            self.main_loop_before_funcs.remove(func)
+        else:
+            self.main_loop_after_funcs.remove(func)
+
     def add_on_fully_booted_func(self, func):
         self.on_fully_booted_funcs.append(func)
+
+    def remove_on_fully_booted_func(self, func):
+        self.on_fully_booted_funcs.remove(func)
 
     def register_function(
             self,
