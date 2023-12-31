@@ -3,6 +3,7 @@
 # Mods will consist of a single file which will generally contain a number of
 # hooks.
 
+from abc import ABC
 from functools import partial
 import inspect
 import importlib.util
@@ -53,8 +54,12 @@ def _clean_name(name: str) -> str:
 
 def _is_mod_predicate(obj, ref_module) -> bool:
     if inspect.getmodule(obj) == ref_module and inspect.isclass(obj):
-        return issubclass(obj, NMSMod)
+        return issubclass(obj, NMSMod) and getattr(obj, "_should_enable", True)
     return False
+
+
+def _is_mod_state_predicate(obj) -> bool:
+    return isinstance(obj, ModState)
 
 
 def _partial_predicate(value: Any) -> bool:
@@ -103,6 +108,15 @@ def _import_file(fpath: str) -> Optional[ModuleType]:
         mod_logger.exception(traceback.format_exc())
 
 
+class ModState(ABC):
+    """A class which is used as a base class to indicate that the class is to be
+    used as a mod state.
+    Mod State classes will persist across mod reloads so any variables set in it
+    will have the same value after the mod has been reloaded.
+    """
+    pass
+
+
 class NMSMod():
     __author__: str = "Name(s) of the mod author(s)"
     __description__: str = "Short description of the mod"
@@ -137,6 +151,7 @@ class ModManager():
         self._preloaded_mods: dict[str, type[NMSMod]] = {}
         # Actual mapping of mods.
         self.mods: dict[str, NMSMod] = {}
+        self.mod_states: dict[str, list[tuple[str, ModState]]] = {}
         self._mod_paths: dict[str, ModuleType] = {}
         self.hook_manager = hook_manager
         # Keep a mapping of the hotkey callbacks
@@ -153,28 +168,47 @@ class ModManager():
                 partial(_is_mod_predicate, ref_module=module)
             )
         )
-        for mod_name, mod in d.items():
-            if mod.__NMSPY_required_version__ is not None:
-                try:
-                    mod_version = semver.Version.parse(mod.__NMSPY_required_version__)
-                except ValueError:
-                    mod_logger.warning(
-                        "__NMSPY_required_version__ defined on mod "
-                        f"{mod.__name__} is not a valid version string"
-                    )
-                    mod_version = None
-                if mod_version is None or mod_version <= nmspy_version:
-                    self._preloaded_mods[mod_name] = mod
-                else:
-                    mod_logger.error(
-                        f"Mod {mod.__name__} requires a newer verison of "
-                        f"NMS.py ({mod_version} ≥ {nmspy_version})! "
-                        "Please update"
-                    )
-            else:
+        if not len(d) >= 1:
+            mod_logger.error(
+                f"The file {module.__file__} has more than one mod defined in it. "
+                "Only define one mod per file."
+            )
+        if len(d) == 0:
+            # No mod in the file. Just return
+            return False
+        mod_name = list(d.keys())[0]
+        mod = d[mod_name]
+        if mod.__NMSPY_required_version__ is not None:
+            try:
+                mod_version = semver.Version.parse(mod.__NMSPY_required_version__)
+            except ValueError:
+                mod_logger.warning(
+                    "__NMSPY_required_version__ defined on mod "
+                    f"{mod.__name__} is not a valid version string"
+                )
+                mod_version = None
+            if mod_version is None or mod_version <= nmspy_version:
                 self._preloaded_mods[mod_name] = mod
-            if not mod_name.startswith("_INTERNAL_"):
-                self._mod_paths[mod_name] = module
+            else:
+                mod_logger.error(
+                    f"Mod {mod.__name__} requires a newer verison of "
+                    f"NMS.py ({mod_version} ≥ {nmspy_version})! "
+                    "Please update"
+                )
+        else:
+            self._preloaded_mods[mod_name] = mod
+        # Only get mod states if the mod name doesn't already have a cached
+        # state, otherwise it will override it.
+        if mod_name not in self.mod_states:
+            mod_states = list(
+                inspect.getmembers(
+                    mod,
+                    _is_mod_state_predicate
+                )
+            )
+            self.mod_states[mod_name] = mod_states
+        if not mod_name.startswith("_INTERNAL_"):
+            self._mod_paths[mod_name] = module
 
         return True
 
@@ -211,7 +245,6 @@ class ModManager():
                     func()
                 )
             )
-            mod_logger.info(cb)
             self.hotkey_callbacks[
                 (hotkey_func._hotkey, hotkey_func._hotkey_press)
             ] = cb
@@ -280,6 +313,10 @@ class ModManager():
                     mod_logger.warning(f"Could not enable {mod.__class__.__name__}")
                     continue
                 self._register_funcs(mod, False)
+                if mod_state := self.mod_states.get(name):
+                    for ms in mod_state:
+                        field, state = ms
+                        setattr(mod, field, state)
                 _loaded_mod_names.add(name)
             for name in _loaded_mod_names:
                 self._preloaded_mods.pop(name)

@@ -345,12 +345,13 @@ class HookFactory:
         )
 
 
-def disable(func):
-    """ Disable the current function. This decorator MUST be the innermost
-    function decorator for it to work correctly. """
-    hook_logger.debug(f"Disabling {func}")
-    func._should_enable = False
-    return func
+def disable(obj):
+    """
+    Disable the current function or class.
+    This decorator MUST be the innermost decorator for it to work correctly.
+    """
+    obj._should_enable = False
+    return obj
 
 
 # TODO: See if we can make this work so that we may have a main loop decorator

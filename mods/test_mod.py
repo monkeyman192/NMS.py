@@ -5,16 +5,23 @@ import nmspy.data.function_hooks as hooks
 from nmspy.hooking import disable, main_loop, on_key_pressed, on_key_release
 from nmspy.memutils import map_struct
 import nmspy.data.structs as nms_structs
-from nmspy.mod_loader import NMSMod
+from nmspy.mod_loader import NMSMod, ModState
 from nmspy.calling import call_function
 
 
-class TestMod(NMSMod):
+class TestModState(ModState):
+    def __init__(self):
+        self.value: int = 1
 
+
+@disable
+class TestMod(NMSMod):
     __author__ = "monkeyman192"
     __description__ = "A simple test mod"
     __version__ = "0.1"
     __NMSPY_required_version__ = "0.6.0"
+
+    state = TestModState()
 
     def __init__(self):
         super().__init__()
@@ -27,11 +34,12 @@ class TestMod(NMSMod):
 
     @on_key_pressed("space")
     def press(self):
-        self.text = "YES"
+        self.text = f"BBB {self.state.value}"
 
     @on_key_release("space")
     def release(self):
         self.text = "NO"
+        self.state.value += 1
 
     @hooks.nvgText
     def change_test(self, ctx, x: float, y: float, string, end):
