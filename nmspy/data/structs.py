@@ -1434,6 +1434,8 @@ class cGcApplication(cTkFSM, ctypes.Structure):
     seasonalGameMode: int
     savingEnabled: bool
     fullyBooted: bool
+    windowFocused: bool
+    hasFocus: bool
 
 
 cGcApplication.Data._fields_ = [
@@ -1454,4 +1456,7 @@ cGcApplication._fields_ = [
     ("seasonalGameMode", ctypes.c_uint32),
     ("savingEnabled", ctypes.c_ubyte),
     ("fullyBooted", ctypes.c_ubyte),
+    ("_padding0x78", ctypes.c_ubyte * 0x8AFA),
+    ("windowFocused", ctypes.c_ubyte),  # + 0x8B48
+    ("hasFocus", ctypes.c_ubyte),
 ]

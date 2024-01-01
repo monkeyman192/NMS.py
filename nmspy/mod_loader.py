@@ -20,6 +20,7 @@ from nmspy import __version__ as _nmspy_version
 from nmspy._types import NMSHook
 from nmspy._internal import CWD
 from nmspy.hooking import HookManager, _NMSHook
+import nmspy.common as nms
 
 import keyboard
 import semver
@@ -117,7 +118,7 @@ class ModState(ABC):
     pass
 
 
-class NMSMod():
+class NMSMod(ABC):
     __author__: str = "Name(s) of the mod author(s)"
     __description__: str = "Short description of the mod"
     __version__: str = "Mod version"
@@ -242,6 +243,8 @@ class ModManager():
                 lambda e, func=hotkey_func, name=hotkey_func._hotkey, event_type=hotkey_func._hotkey_press: (
                     e.name == name and
                     e.event_type == event_type and
+                    nms.GcApplication is not None and
+                    nms.GcApplication.hasFocus and
                     func()
                 )
             )
