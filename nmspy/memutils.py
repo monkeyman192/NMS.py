@@ -95,7 +95,7 @@ def pprint_mem(offset: int, size: int, stride: Optional[int] = None) -> str:
 
 def get_addressof(obj) -> int:
     try:
-        # If it's a pointer, this is the branc that is used.
+        # If it's a pointer, this is the branch that is used.
         return ctypes.cast(obj, ctypes.c_void_p).value
     except:
         # TODO: Get correct error type.

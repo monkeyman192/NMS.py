@@ -1,7 +1,3 @@
-import ctypes
-import logging
-import traceback
-
 import nmspy.common as nms
 import nmspy._internal as _internal
 import nmspy._internals.staging as staging
@@ -27,9 +23,7 @@ class _INTERNAL_LoadSingletons(NMSMod):
     @one_shot
     @hooks.cTkDynamicGravityControl.Construct.before
     def load_gravity_singleton(self, this):
-        nms.gravity_singleton = this
-        # TODO: map to the struct.
-        # nms.gravity_singleton = map_struct(this, local_types.cTkDynamicGravityControl)
+        nms.gravity_singleton = map_struct(this, structs.cTkDynamicGravityControl)
 
     @one_shot
     @hooks.cTkMemoryManager.Construct.after

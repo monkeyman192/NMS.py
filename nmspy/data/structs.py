@@ -282,14 +282,172 @@ class cGcGameState(ctypes.Structure):
         ("playerState", cGcPlayerState)
     ]
 
+
+class cGcSolarSystemClass(ctypes.Structure):
+    _meSolarSystemClass: ctypes.c_int32
+
+cGcSolarSystemClass._fields_ = [
+    ("_meSolarSystemClass", ctypes.c_int32),
+]
+
+
+class cGcGalaxyStarTypes(ctypes.Structure):
+    _meGalaxyStarType: ctypes.c_int32
+
+cGcGalaxyStarTypes._fields_ = [
+    ("_meGalaxyStarType", ctypes.c_int32),
+]
+
+
+class cGcPlanetClass(ctypes.Structure):
+    _mePlanetClass: ctypes.c_int32
+
+cGcPlanetClass._fields_ = [
+    ("_mePlanetClass", ctypes.c_int32),
+]
+
+
+class cGcPlanetSize(ctypes.Structure):
+    _mePlanetSize: ctypes.c_int32
+
+cGcPlanetSize._fields_ = [
+    ("_mePlanetSize", ctypes.c_int32),
+]
+
+
+class cGcBiomeType(ctypes.Structure):
+    _meBiome: ctypes.c_int32
+
+cGcBiomeType._fields_ = [
+    ("_meBiome", ctypes.c_int32),
+]
+
+
+class cGcBiomeSubType(ctypes.Structure):
+    _meBiomeSubType: ctypes.c_int32
+
+cGcBiomeSubType._fields_ = [
+    ("_meBiomeSubType", ctypes.c_int32),
+]
+
+
+class cGcPlanetGenerationInputData(ctypes.Structure):
+    seed: common.GcSeed
+    star: "cGcGalaxyStarTypes"
+    class_: "cGcPlanetClass"
+    commonSubstance: common.TkID[0x10]
+    rareSubstance: common.TkID[0x10]
+    planetSize: "cGcPlanetSize"
+    biome: "cGcBiomeType"
+    biomeSubType: "cGcBiomeSubType"
+    hasRings: bool
+    forceContinents: bool
+    inEmptySystem: bool
+    inAbandonedSystem: bool
+    inPirateSystem: bool
+    prime: bool
+    realityIndex: int
+
+cGcPlanetGenerationInputData._fields_ = [
+    ("seed", common.GcSeed),
+    ("star", cGcGalaxyStarTypes),
+    ("class_", cGcPlanetClass),
+    ("commonSubstance", common.TkID[0x10]),
+    ("rareSubstance", common.TkID[0x10]),
+    ("planetSize", cGcPlanetSize),
+    ("biome", cGcBiomeType),
+    ("biomeSubType", cGcBiomeSubType),
+    ("hasRings", ctypes.c_ubyte),
+    ("forceContinents", ctypes.c_ubyte),
+    ("inEmptySystem", ctypes.c_ubyte),
+    ("inAbandonedSystem", ctypes.c_ubyte),
+    ("inPirateSystem", ctypes.c_ubyte),
+    ("prime", ctypes.c_ubyte),
+    ("padding0x4A", ctypes.c_ubyte * 0x2),
+    ("realityIndex", ctypes.c_int32),
+]
+
+
 class cGcSolarSystemData(ctypes.Structure):
-    _fields_ = [
-        ("seed", common.GcSeed),
-        ("name", ctypes.c_char * 0x80),
-        ("class", ctypes.c_uint32),
-        ("starType", ctypes.c_uint32),
-        ("planets", ctypes.c_uint32),
-    ]
+    seed: common.GcSeed
+    name: common.cTkFixedString[0x80]
+    class_: "cGcSolarSystemClass"
+    starType: "cGcGalaxyStarTypes"
+    planets: int
+    planetPositions: list[common.Vector3f]
+    planetGenerationInputs: list[cGcPlanetGenerationInputData]
+    planetOrbits: list[int]
+    primePlanets: int
+    sunPosition: common.Vector3f
+    asteroidSubstanceID: common.TkID[0x10]
+    numTradeRoutes: int
+    numVisibleTradeRoutes: int
+    maxNumFreighters: int
+    startWithFreighters: bool
+    freighterTimer: common.Vector2f
+    spacePirateTimer: common.Vector2f
+    planetPirateTimer: common.Vector2f
+    flybyTimer: common.Vector2f
+    policeTimer: common.Vector2f
+    # spaceStationSpawn: "cGcSpaceStationSpawnData"
+    # traderSpawnOnOutposts: "cGcSolarSystemTraderSpawnData"
+    # traderSpawnInStations: "cGcSolarSystemTraderSpawnData"
+    # locators: common.cTkDynamicArray[cGcSolarSystemLocator]
+    # asteroidGenerators: common.cTkDynamicArray[common.cTkClassPointer]
+    # _meAsteroidLevel: ctypes.c_int32
+    # colours: "cGcPlanetColourData"
+    # light: "cGcLightProperties"
+    # sky: "cGcSpaceSkyProperties"
+    # screenFilter: "cGcScreenFilters"
+    # heavyAir: common.cTkFixedString[0x80]
+    # systemShips: common.cTkDynamicArray[cGcAISpaceshipPreloadCacheData]
+    # inhabitingRace: "cGcAlienRace"
+    # tradingData: "cGcPlanetTradingData"
+    # conflictData: "cGcPlayerConflictData"
+
+cGcSolarSystemData._fields_ = [
+    ("seed", common.GcSeed),
+    ("name", common.cTkFixedString[0x80]),
+    ("class_", cGcSolarSystemClass),
+    ("starType", cGcGalaxyStarTypes),
+    ("planets", ctypes.c_int32),
+    ("padding0x9C", ctypes.c_ubyte * 0x4),
+    ("planetPositions", common.Vector3f * 0x8),
+    ("planetGenerationInputs", cGcPlanetGenerationInputData * 0x8),
+    ("planetOrbits", ctypes.c_int32 * 0x8),
+    ("primePlanets", ctypes.c_int32),
+    ("padding0x3C4", ctypes.c_ubyte * 0xC),
+    ("sunPosition", common.Vector3f),
+    ("asteroidSubstanceID", common.TkID[0x10]),
+    ("numTradeRoutes", ctypes.c_int32),
+    ("numVisibleTradeRoutes", ctypes.c_int32),
+    ("maxNumFreighters", ctypes.c_int32),
+    ("startWithFreighters", ctypes.c_ubyte),
+    ("padding0x3FD", ctypes.c_ubyte * 0x3),
+    ("freighterTimer", common.Vector2f),
+    ("spacePirateTimer", common.Vector2f),
+    ("planetPirateTimer", common.Vector2f),
+    ("flybyTimer", common.Vector2f),
+    ("policeTimer", common.Vector2f),
+    ("padding0x428", ctypes.c_ubyte * 0x8),
+    # ("spaceStationSpawn", cGcSpaceStationSpawnData),
+    # ("traderSpawnOnOutposts", cGcSolarSystemTraderSpawnData),
+    # ("traderSpawnInStations", cGcSolarSystemTraderSpawnData),
+    # ("locators", common.cTkDynamicArray[cGcSolarSystemLocator]),
+    # ("asteroidGenerators", common.cTkDynamicArray[common.cTkClassPointer]),
+    # ("_meAsteroidLevel", ctypes.c_int32),
+    # ("padding0x5BC", ctypes.c_ubyte * 0x4),
+    # ("colours", cGcPlanetColourData),
+    # ("light", cGcLightProperties),
+    # ("sky", cGcSpaceSkyProperties),
+    # ("screenFilter", cGcScreenFilters),
+    # ("heavyAir", common.cTkFixedString[0x80]),
+    # ("padding0x2084", ctypes.c_ubyte * 0x4),
+    # ("systemShips", common.cTkDynamicArray[cGcAISpaceshipPreloadCacheData]),
+    # ("inhabitingRace", cGcAlienRace),
+    # ("tradingData", cGcPlanetTradingData),
+    # ("conflictData", cGcPlayerConflictData),
+]
 
 class cGcSolarSystem(ctypes.Structure):
     _fields_ = [
@@ -298,24 +456,909 @@ class cGcSolarSystem(ctypes.Structure):
     solarSystemData: cGcSolarSystemData
 
 
+class cTkPersonalRNG(ctypes.Structure):
+    state0: int
+    state1: int
+
+cTkPersonalRNG._fields_ = [
+    ("state0", ctypes.c_uint32),
+    ("state1", ctypes.c_uint32),
+]
+
+
+class cGcSolarSystemGeometry(ctypes.Structure):
+    planetSpheres: bytes
+    planetExclusion: bytes
+
+cGcSolarSystemGeometry._fields_ = [
+    ("planetSpheres", ctypes.c_ubyte * 0x100),
+    ("planetExclusion", ctypes.c_ubyte * 0x100),
+]
+
+
+class cGcSolarSystemGenerator(ctypes.Structure):
+    class GenerationData(ctypes.Structure):
+        solarSystem: _Pointer["cGcSolarSystem"]
+        metaData: _Pointer["cGcSolarSystemData"]
+        # infomap: _Pointer["cGcSolarSystemAsteroidFields"]
+
+    GenerationData._fields_ = [
+        ("solarSystem", ctypes.POINTER(cGcSolarSystem)),
+        ("metaData", ctypes.POINTER(cGcSolarSystemData)),
+        # ("infomap", ctypes.POINTER(cGcSolarSystemAsteroidFields)),
+    ]
+
+
+    generatedLocators: bytes
+    RNG: "cTkPersonalRNG"
+    geometry: "cGcSolarSystemGeometry"
+    skyColours: bytes
+    loggingActive: bool
+
+cGcSolarSystemGenerator._fields_ = [
+    ("generatedLocators", ctypes.c_ubyte * 0x640),
+    ("RNG", cTkPersonalRNG),
+    ("padding0x648", ctypes.c_ubyte * 0x8),
+    ("geometry", cGcSolarSystemGeometry),
+    ("skyColours", ctypes.c_ubyte * 0x10),
+    ("loggingActive", ctypes.c_ubyte),
+]
+
+
 class cGcPlanetData(ctypes.Structure):
     _fields_ = [
         ("name", ctypes.c_char * 0x80),
-        ("dummy", ctypes.c_longlong),
+        ("padding", ctypes.c_ubyte * 15904),
     ]
     name: bytes
-    dummy: int
+
+
+class cGcTerrainRegionMapOcttree(ctypes.Structure):
+    class sTableEntry(ctypes.Structure):
+        _bf_0: int
+
+    sTableEntry._fields_ = [
+        ("_bf_0", ctypes.c_int16),
+    ]
+
+
+    class sNode(ctypes.Structure):
+        region: bytes
+
+    sNode._fields_ = [
+        ("region", ctypes.c_ubyte * 0x8),
+    ]
+
+
+    class sNodePos(ctypes.Structure):
+        X: int
+        Y: int
+        Z: int
+
+    sNodePos._fields_ = [
+        ("X", ctypes.c_uint16),
+        ("Y", ctypes.c_uint16),
+        ("Z", ctypes.c_uint16),
+    ]
+
+
+    rootTable: bytes
+    rootNodeIndices: bytes
+    rootNodeHashes: bytes
+    nodes: bytes
+    positions: bytes
+    depths: bytes
+    parents: bytes
+    children: bytes
+    numNodes: int
+    numRootNodes: int
+    numLODs: int
+    rootMask: int
+    mapScale: float
+    mapOffset: float
+    addingRoots: bool
+
+cGcTerrainRegionMapOcttree._fields_ = [
+    ("rootTable", ctypes.c_ubyte * 0x1000),
+    ("rootNodeIndices", ctypes.c_ubyte * 0x800),
+    ("rootNodeHashes", ctypes.c_ubyte * 0x4E20),
+    ("nodes", ctypes.c_ubyte * 0x13880),
+    ("positions", ctypes.c_ubyte * 0xEA60),
+    ("depths", ctypes.c_ubyte * 0x2710),
+    ("parents", ctypes.c_ubyte * 0x4E20),
+    ("children", ctypes.c_ubyte * 0x4E20),
+    ("numNodes", ctypes.c_uint16),
+    ("numRootNodes", ctypes.c_uint16),
+    ("numLODs", ctypes.c_uint16),
+    ("rootMask", ctypes.c_uint16),
+    ("mapScale", ctypes.c_double),
+    ("mapOffset", ctypes.c_double),
+    ("addingRoots", ctypes.c_ubyte),
+]
+
+
+class cTkTerrainVertex(ctypes.Structure):
+    position: "common.cTkHalfVector4"
+    tile: "common.cTkHalfVector4"
+    texCoords_Normal: "common.cTkHalfVector4"
+    texCenter_DPDU: "common.cTkHalfVector4"
+
+cTkTerrainVertex._fields_ = [
+    ("position", common.cTkHalfVector4),
+    ("tile", common.cTkHalfVector4),
+    ("texCoords_Normal", common.cTkHalfVector4),
+    ("texCenter_DPDU", common.cTkHalfVector4),
+]
+
+
+class cTkTerrainVertexData(ctypes.Structure):
+    vertexArray: _Pointer["cTkTerrainVertex"]
+    numVertices: int
+    maxNumVertices: int
+
+cTkTerrainVertexData._fields_ = [
+    ("vertexArray", ctypes.POINTER(cTkTerrainVertex)),
+    ("numVertices", ctypes.c_int32),
+    ("maxNumVertices", ctypes.c_int32),
+]
+
+
+class cTkRegionMapBase_vtbl(ctypes.Structure):
+    GetScaleX: bytes
+    GetScaleY: bytes
+    GetScaleZ: bytes
+    GetCentre: bytes
+
+cTkRegionMapBase_vtbl._fields_ = [
+    ("GetScaleX", ctypes.c_ubyte * 0x8),
+    ("GetScaleY", ctypes.c_ubyte * 0x8),
+    ("GetScaleZ", ctypes.c_ubyte * 0x8),
+    ("GetCentre", ctypes.c_ubyte * 0x8),
+]
+
+
+class cTkVoxel(ctypes.Structure):
+    pack_Edit1_Mat4_Secmat4_Tex6: int
+    pack_Density16: int
+    pack_TileBlend16: int
+
+cTkVoxel._fields_ = [
+    ("pack_Edit1_Mat4_Secmat4_Tex6", ctypes.c_uint16),
+    ("pack_Density16", ctypes.c_uint16),
+    ("pack_TileBlend16", ctypes.c_uint16),
+]
+
+
+class cTkVoxelArray(ctypes.Structure):
+    voxels: _Pointer["cTkVoxel"]
+    sizeX: int
+    sizeY: int
+    sizeZ: int
+    sizeZY: int
+    voxelMaterialMask: int
+
+cTkVoxelArray._fields_ = [
+    ("voxels", ctypes.POINTER(cTkVoxel)),
+    ("sizeX", ctypes.c_int32),
+    ("sizeY", ctypes.c_int32),
+    ("sizeZ", ctypes.c_int32),
+    ("sizeZY", ctypes.c_int32),
+    ("voxelMaterialMask", ctypes.c_uint32),
+]
+
+
+class cTkRegionMapBase(ctypes.Structure):
+    __vftable: _Pointer["cTkRegionMapBase_vtbl"]
+
+cTkRegionMapBase._fields_ = [
+    ("__vftable", ctypes.POINTER(cTkRegionMapBase_vtbl)),
+]
+
+
+class cTkRegion_vtbl(ctypes.Structure):
+    cTkRegion_dtor_0: bytes
+    Construct: bytes
+    Destruct: bytes
+    UpdateMatrix: bytes
+    Assign: bytes
+    PostPolygonise: bytes
+    PostPolygonisePopulate: bytes
+    KnowledgeBuilt: bytes
+    PollToUnmapStreams: bytes
+    TryToClear: bytes
+    Invalidate: bytes
+    Clear: bytes
+    RefreshKnowledge: bytes
+    RefreshFoliage: bytes
+    GetResource: bytes
+    GetStatusColour: bytes
+    GenerateVoxels: bytes
+    Polygonise: bytes
+    BuildKnowledge: bytes
+    InvalidateKnowledge: bytes
+    AreResourcesLoaded: bytes
+
+cTkRegion_vtbl._fields_ = [
+    ("cTkRegion_dtor_0", ctypes.c_ubyte * 0x8),
+    ("Construct", ctypes.c_ubyte * 0x8),
+    ("Destruct", ctypes.c_ubyte * 0x8),
+    ("UpdateMatrix", ctypes.c_ubyte * 0x8),
+    ("Assign", ctypes.c_ubyte * 0x8),
+    ("PostPolygonise", ctypes.c_ubyte * 0x8),
+    ("PostPolygonisePopulate", ctypes.c_ubyte * 0x8),
+    ("KnowledgeBuilt", ctypes.c_ubyte * 0x8),
+    ("PollToUnmapStreams", ctypes.c_ubyte * 0x8),
+    ("TryToClear", ctypes.c_ubyte * 0x8),
+    ("Invalidate", ctypes.c_ubyte * 0x8),
+    ("Clear", ctypes.c_ubyte * 0x8),
+    ("RefreshKnowledge", ctypes.c_ubyte * 0x8),
+    ("RefreshFoliage", ctypes.c_ubyte * 0x8),
+    ("GetResource", ctypes.c_ubyte * 0x8),
+    ("GetStatusColour", ctypes.c_ubyte * 0x8),
+    ("GenerateVoxels", ctypes.c_ubyte * 0x8),
+    ("Polygonise", ctypes.c_ubyte * 0x8),
+    ("BuildKnowledge", ctypes.c_ubyte * 0x8),
+    ("InvalidateKnowledge", ctypes.c_ubyte * 0x8),
+    ("AreResourcesLoaded", ctypes.c_ubyte * 0x8),
+]
+
+
+class cTkRegion(ctypes.Structure):
+    __vftable: _Pointer["cTkRegion_vtbl"]
+    regionMap: _Pointer["cTkRegionMapBase"]
+    regionData: _Pointer["cTkVoxelArray"]
+    node: common.TkHandle
+    parentNode: common.TkHandle
+    resource: common.cTkSmartResHandle
+    _meStatus: ctypes.c_int32
+    edited: bool
+    clearRequested: bool
+    empty: bool
+    pendingEditUpdate: bool
+    pendingRefresh: bool
+    pendingKnowledgeRefresh: bool
+    scaleX: int
+    scaleY: int
+    scaleZ: int
+    offsetX: int
+    offsetY: int
+    offsetZ: int
+    sizeX: int
+    sizeY: int
+    sizeZ: int
+    voxelsX: int
+    voxelsY: int
+    voxelsZ: int
+    diameter: int
+    border: int
+    normal: common.Vector3f
+    cubeMatrix: "common.cTkMatrix34"
+    tileFlags: int
+
+cTkRegion._fields_ = [
+    ("__vftable", ctypes.POINTER(cTkRegion_vtbl)),
+    ("padding0x8", ctypes.c_ubyte * 0x8),
+    ("regionMap", ctypes.POINTER(cTkRegionMapBase)),
+    ("regionData", ctypes.POINTER(cTkVoxelArray)),
+    ("node", common.TkHandle),
+    ("parentNode", common.TkHandle),
+    ("resource", common.cTkSmartResHandle),
+    ("_meStatus", ctypes.c_int32),
+    ("edited", ctypes.c_ubyte),
+    ("clearRequested", ctypes.c_ubyte),
+    ("empty", ctypes.c_ubyte),
+    ("pendingEditUpdate", ctypes.c_ubyte),
+    ("pendingRefresh", ctypes.c_ubyte),
+    ("pendingKnowledgeRefresh", ctypes.c_ubyte),
+    ("padding0x33", ctypes.c_ubyte * 0x1),
+    ("scaleX", ctypes.c_int32),
+    ("scaleY", ctypes.c_int32),
+    ("scaleZ", ctypes.c_int32),
+    ("offsetX", ctypes.c_int32),
+    ("offsetY", ctypes.c_int32),
+    ("offsetZ", ctypes.c_int32),
+    ("sizeX", ctypes.c_int32),
+    ("sizeY", ctypes.c_int32),
+    ("sizeZ", ctypes.c_int32),
+    ("voxelsX", ctypes.c_int32),
+    ("voxelsY", ctypes.c_int32),
+    ("voxelsZ", ctypes.c_int32),
+    ("diameter", ctypes.c_int32),
+    ("border", ctypes.c_int32),
+    ("padding0x6C", ctypes.c_ubyte * 0x4),
+    ("normal", common.Vector3f),
+    ("cubeMatrix", common.cTkMatrix34),
+    ("tileFlags", ctypes.c_int32),
+]
+
+
+class cGcFadeNodeBase_vtbl(ctypes.Structure):
+    SetNodeActivation: bytes
+    CheckNodeActivation: bytes
+    SetNodeParamF: bytes
+    Update: bytes
+
+cGcFadeNodeBase_vtbl._fields_ = [
+    ("SetNodeActivation", ctypes.c_ubyte * 0x8),
+    ("CheckNodeActivation", ctypes.c_ubyte * 0x8),
+    ("SetNodeParamF", ctypes.c_ubyte * 0x8),
+    ("Update", ctypes.c_ubyte * 0x8),
+]
+
+
+class cGcFadeNodeBase(ctypes.Structure):
+    __vftable: _Pointer["cGcFadeNodeBase_vtbl"]
+    timer: float
+    totalTime: float
+    nodeParam: int
+    nodeSetIndex: int
+    _meFadeState: ctypes.c_int32
+    _meFadeType: ctypes.c_int32
+
+cGcFadeNodeBase._fields_ = [
+    ("__vftable", ctypes.POINTER(cGcFadeNodeBase_vtbl)),
+    ("timer", ctypes.c_float),
+    ("totalTime", ctypes.c_float),
+    ("nodeParam", ctypes.c_int32),
+    ("nodeSetIndex", ctypes.c_int32),
+    ("_meFadeState", ctypes.c_int32),
+    ("_meFadeType", ctypes.c_int32),
+]
+
+
+class cGcFadeNode(cGcFadeNodeBase, ctypes.Structure):
+    node: common.TkHandle
+
+cGcFadeNode._fields_ = [
+    ("node", common.TkHandle),
+]
+
+
+class TkJobHandle(ctypes.Structure):
+    queue: int
+    index: int
+    count: int
+
+TkJobHandle._fields_ = [
+    ("queue", ctypes.c_int32),
+    ("index", ctypes.c_int32),
+    ("count", ctypes.c_uint64),
+]
+
+
+class cGcRegionBase(cTkRegion, ctypes.Structure):
+    class cGcUnmapStreamData(ctypes.Structure):
+        token: "TkJobHandle"
+        node: common.TkHandle
+        resource: common.cTkSmartResHandle
+        tileBlendStart: int
+        valid: bool
+
+    cGcUnmapStreamData._fields_ = [
+        ("token", TkJobHandle),
+        ("node", common.TkHandle),
+        ("resource", common.cTkSmartResHandle),
+        ("tileBlendStart", ctypes.c_int32),
+        ("valid", ctypes.c_ubyte),
+    ]
+
+
+    unmapStreamData: bytes
+
+cGcRegionBase._fields_ = [
+    ("unmapStreamData", ctypes.c_ubyte * 0xA0),
+]
+
+
+class cTkBasicNoiseHelper(ctypes.Structure):
+    class NoisePositionData(ctypes.Structure):
+        position: common.Vector3f
+        normal: common.Vector3f
+        _mVoxelType: ctypes.c_int32
+
+    NoisePositionData._fields_ = [
+        ("position", common.Vector3f),
+        ("normal", common.Vector3f),
+        ("_mVoxelType", ctypes.c_int32),
+    ]
+
+
+    class NoisePositionOutput(ctypes.Structure):
+        _meCurrentType: ctypes.c_int32
+        resources: std.vector[cTkBasicNoiseHelper.NoisePositionData]
+
+    NoisePositionOutput._fields_ = [
+        ("_meCurrentType", ctypes.c_int32),
+        ("padding0x4", ctypes.c_ubyte * 0x4),
+        ("resources", std.vector[NoisePositionData]),
+    ]
+
+
+
+cTkBasicNoiseHelper._fields_ = []
+
+
+class cGcRegionTerrain(cGcRegionBase, ctypes.Structure):
+    _mePolygoniser: ctypes.c_int32
+    mappedStreamTerrain: _Pointer["cTkTerrainVertexData"]
+    needsOverflowStream: bool
+    deferEditsGeneration: bool
+    numTerrainVerts: int
+    distance: int
+    parentDistance: int
+    angle: float
+    terrainMaterial: common.cTkSmartResHandle
+    waterMaterial: common.cTkSmartResHandle
+    boundingBox: "common.cTkAABB"
+    parent: _Pointer["cGcRegionTerrain"]
+    children: bytes
+    maxHeights: None
+    elevation: None
+    fade: "cGcFadeNode"
+    lod: int
+    tileBlendStart: int
+    resourcePositions: std.vector[cTkBasicNoiseHelper.NoisePositionData]
+    absolutePosition: common.Vector3f
+
+cGcRegionTerrain._fields_ = [
+    ("_mePolygoniser", ctypes.c_int32),
+    ("padding0x174", ctypes.c_ubyte * 0x4),
+    ("mappedStreamTerrain", ctypes.POINTER(cTkTerrainVertexData)),
+    ("needsOverflowStream", ctypes.c_ubyte),
+    ("deferEditsGeneration", ctypes.c_ubyte),
+    ("padding0x182", ctypes.c_ubyte * 0x2),
+    ("numTerrainVerts", ctypes.c_int32),
+    ("distance", ctypes.c_int32),
+    ("parentDistance", ctypes.c_int32),
+    ("angle", ctypes.c_float),
+    ("terrainMaterial", common.cTkSmartResHandle),
+    ("waterMaterial", common.cTkSmartResHandle),
+    ("padding0x19C", ctypes.c_ubyte * 0x4),
+    ("boundingBox", common.cTkAABB),
+    ("parent", ctypes.POINTER(cGcRegionTerrain)),
+    ("children", ctypes.c_ubyte * 0x40),
+    ("maxHeights", ctypes.POINTER(ctypes.c_float)),
+    ("elevation", ctypes.POINTER(ctypes.c_float)),
+    ("fade", cGcFadeNode),
+    ("lod", ctypes.c_int32),
+    ("tileBlendStart", ctypes.c_int32),
+    ("resourcePositions", std.vector[cTkBasicNoiseHelper.NoisePositionData]),
+    ("absolutePosition", common.Vector3f),
+]
+
+
+class cGcTerrainRegionMap(cTkRegionMapBase, ctypes.Structure):
+    class cTkRegionStub(ctypes.Structure):
+        position: common.Vector3f
+        parentPosition: common.Vector3f
+        region: bytes
+        active: bool
+        fastTreeIdx: int
+        parentFastTreeIdx: int
+
+    cTkRegionStub._fields_ = [
+        ("position", common.Vector3f),
+        ("parentPosition", common.Vector3f),
+        ("region", ctypes.c_ubyte * 0x8),
+        ("active", ctypes.c_ubyte),
+        ("padding0x29", ctypes.c_ubyte * 0x3),
+        ("fastTreeIdx", ctypes.c_uint32),
+        ("parentFastTreeIdx", ctypes.c_uint32),
+    ]
+
+
+    class AreChildrenRenderableJob(ctypes.Structure):
+        regionMap: _Pointer["cGcTerrainRegionMap"]
+        lod: int
+        startIndex: int
+        endIndex: int
+        outResults: None
+        complete: ctypes.c_int32
+        kicked: bool
+
+    AreChildrenRenderableJob._fields_ = [
+        ("regionMap", ctypes.c_ubyte * 0x8),
+        ("lod", ctypes.c_int32),
+        ("startIndex", ctypes.c_int32),
+        ("endIndex", ctypes.c_int32),
+        ("padding0x14", ctypes.c_ubyte * 0x4),
+        ("outResults", ctypes.POINTER(ctypes.c_uint8)),
+        ("complete", ctypes.c_int32),
+        ("kicked", ctypes.c_ubyte),
+    ]
+
+
+    class AreSiblingsRenderableJob(ctypes.Structure):
+        regionMap: _Pointer["cGcTerrainRegionMap"]
+        lod: int
+        startIndex: int
+        endIndex: int
+        furthestActiveLod: int
+        outResults: None
+        complete: ctypes.c_int32
+        kicked: bool
+
+    AreSiblingsRenderableJob._fields_ = [
+        ("regionMap", ctypes.c_ubyte * 0x8),
+        ("lod", ctypes.c_int32),
+        ("startIndex", ctypes.c_int32),
+        ("endIndex", ctypes.c_int32),
+        ("furthestActiveLod", ctypes.c_int32),
+        ("outResults", ctypes.POINTER(ctypes.c_uint8)),
+        ("complete", ctypes.c_int32),
+        ("kicked", ctypes.c_ubyte),
+    ]
+
+
+    borderRegions: int
+    octreeDiameter: int
+    centrePosX: int
+    centrePosY: int
+    centrePosZ: int
+    exactCentre: common.Vector3f
+    cachedRadius: float
+    minDistance: int
+    totalSize: int
+    regionListDirty: bool
+    numGeneratorCallsPerFrame: None
+    numPolygoniseCallsPerFrame: None
+    numPostPolygoniseCallsPerFrame: None
+    regionPools: bytes
+    prevStubs: bytes
+    activeRegions: bytes
+    rootNode: common.TkHandle
+    fastRegionTree: "cGcTerrainRegionMapOcttree"
+    generatorData: bytes
+    buildingData: bytes
+    matrix: common.cTkMatrix34
+    toCamera: common.Vector3f
+    lODGroups: bytes
+    isLodVisible: bytes
+    isLodAABBVisible: bytes
+    isLodActive: bytes
+    numRegions: bytes
+    regionArrays: bytes
+    lodOrder: bytes
+    numVoxelsX: bytes
+    numVoxelsY: bytes
+    numVoxelsZ: bytes
+    childrenRenderableJobs: bytes
+    siblingsRenderableJobs: bytes
+    objectsUpgradeList: bytes
+    rigidBodyRefreshList: bytes
+    buildingsUpgradeList: bytes
+    hide: bool
+    name: common.cTkFixedString[0x40]
+    regionGeneratesInFlight: int
+    regionStreamsMapped: int
+    regionsWaitingToPostPolygonise: int
+    regionsWaitingToPopulate: int
+    regionsPostPolygonisedThisFrame: int
+    regionsPopulatedThisFrame: int
+    regionBuildsInFlight: int
+    timeSpentPostPolygonisingThisFrame: float
+    timeSpentPopulatingThisFrame: float
+
+cGcTerrainRegionMap._fields_ = [
+    ("borderRegions", ctypes.c_int32),
+    ("octreeDiameter", ctypes.c_int32),
+    ("centrePosX", ctypes.c_int32),
+    ("centrePosY", ctypes.c_int32),
+    ("centrePosZ", ctypes.c_int32),
+    ("padding0x1C", ctypes.c_ubyte * 0x4),
+    ("exactCentre", common.Vector3f),
+    ("cachedRadius", ctypes.c_float),
+    ("minDistance", ctypes.c_int32),
+    ("totalSize", ctypes.c_int32),
+    ("regionListDirty", ctypes.c_ubyte),
+    ("padding0x3D", ctypes.c_ubyte * 0x3),
+    ("numGeneratorCallsPerFrame", ctypes.POINTER(ctypes.c_int32)),
+    ("numPolygoniseCallsPerFrame", ctypes.POINTER(ctypes.c_int32)),
+    ("numPostPolygoniseCallsPerFrame", ctypes.POINTER(ctypes.c_int32)),
+    ("regionPools", std.array[std.array[ctypes.POINTER(cGcRegionTerrain), 1500], 6]),
+    ("padding0x11998", ctypes.c_ubyte * 0x8),
+    ("prevStubs", ctypes.c_ubyte * 0x8CA00),
+    ("activeRegions", ctypes.c_ubyte * 0x468),
+    ("rootNode", common.TkHandle),
+    ("padding0x9E80C", ctypes.c_ubyte * 0x4),
+    ("fastRegionTree", cGcTerrainRegionMapOcttree),
+    ("generatorData", ctypes.c_ubyte * 0x8),
+    ("buildingData", ctypes.c_ubyte * 0x8),
+    ("matrix", common.cTkMatrix34),
+    ("toCamera", common.Vector3f),
+    ("lODGroups", ctypes.c_ubyte * 0x18),
+    ("isLodVisible", ctypes.c_ubyte * 0x6),
+    ("isLodAABBVisible", ctypes.c_ubyte * 0x6),
+    ("isLodActive", ctypes.c_ubyte * 0x6),
+    ("padding0xD350A", ctypes.c_ubyte * 0x2),
+    ("numRegions", ctypes.c_ubyte * 0x18),
+    ("padding0xD3524", ctypes.c_ubyte * 0x4),
+    ("regionArrays", ctypes.c_ubyte * 0x30),
+    ("lodOrder", ctypes.c_ubyte * 0x18),
+    ("numVoxelsX", ctypes.c_ubyte * 0x18),
+    ("numVoxelsY", ctypes.c_ubyte * 0x18),
+    ("numVoxelsZ", ctypes.c_ubyte * 0x18),
+    ("childrenRenderableJobs", ctypes.c_ubyte * 0xF0),
+    ("siblingsRenderableJobs", ctypes.c_ubyte * 0xF0),
+    ("objectsUpgradeList", ctypes.c_ubyte * 0x18),
+    ("rigidBodyRefreshList", ctypes.c_ubyte * 0x18),
+    ("buildingsUpgradeList", ctypes.c_ubyte * 0x18),
+    ("hide", ctypes.c_ubyte),
+    ("name", common.cTkFixedString[0x40]),
+    ("padding0xD3821", ctypes.c_ubyte * 0x3),
+    ("regionGeneratesInFlight", ctypes.c_int32),
+    ("regionStreamsMapped", ctypes.c_int32),
+    ("regionsWaitingToPostPolygonise", ctypes.c_int32),
+    ("regionsWaitingToPopulate", ctypes.c_int32),
+    ("regionsPostPolygonisedThisFrame", ctypes.c_int32),
+    ("regionsPopulatedThisFrame", ctypes.c_int32),
+    ("regionBuildsInFlight", ctypes.c_int32),
+    ("timeSpentPostPolygonisingThisFrame", ctypes.c_double),
+    ("timeSpentPopulatingThisFrame", ctypes.c_double),
+]
+
+
+class cGcEnvironmentProperties(ctypes.Structure):
+    flightFogHeight: float
+    flightFogBlend: float
+    cloudHeightMin: float
+    cloudHeightMax: float
+    heavyAirHeightMin: float
+    heavyAirHeightMax: float
+    planetObjectSwitch: float
+    planetLodSwitch0: float
+    planetLodSwitch0Elevation: float
+    planetLodSwitch1: float
+    planetLodSwitch2: float
+    planetLodSwitch3: float
+    asteroidFadeHeightMin: float
+    asteroidFadeHeightMax: float
+    skyHeight: list[float]
+    skyAtmosphereHeight: float
+    horizonBlendHeight: float
+    horizonBlendLength: float
+    skyColourHeight: float
+    skyColourBlendLength: float
+    skyPositionHeight: float
+    skyPositionBlendLength: float
+    solarSystemLUTHeight: float
+    solarSystemLUTBlendLength: float
+    atmosphereStartHeight: float
+    atmosphereEndHeight: float
+    stratosphereHeight: float
+
+cGcEnvironmentProperties._fields_ = [
+    ("flightFogHeight", ctypes.c_float),
+    ("flightFogBlend", ctypes.c_float),
+    ("cloudHeightMin", ctypes.c_float),
+    ("cloudHeightMax", ctypes.c_float),
+    ("heavyAirHeightMin", ctypes.c_float),
+    ("heavyAirHeightMax", ctypes.c_float),
+    ("planetObjectSwitch", ctypes.c_float),
+    ("planetLodSwitch0", ctypes.c_float),
+    ("planetLodSwitch0Elevation", ctypes.c_float),
+    ("planetLodSwitch1", ctypes.c_float),
+    ("planetLodSwitch2", ctypes.c_float),
+    ("planetLodSwitch3", ctypes.c_float),
+    ("asteroidFadeHeightMin", ctypes.c_float),
+    ("asteroidFadeHeightMax", ctypes.c_float),
+    ("skyHeight", ctypes.c_float * 0x4),
+    ("skyAtmosphereHeight", ctypes.c_float),
+    ("horizonBlendHeight", ctypes.c_float),
+    ("horizonBlendLength", ctypes.c_float),
+    ("skyColourHeight", ctypes.c_float),
+    ("skyColourBlendLength", ctypes.c_float),
+    ("skyPositionHeight", ctypes.c_float),
+    ("skyPositionBlendLength", ctypes.c_float),
+    ("solarSystemLUTHeight", ctypes.c_float),
+    ("solarSystemLUTBlendLength", ctypes.c_float),
+    ("atmosphereStartHeight", ctypes.c_float),
+    ("atmosphereEndHeight", ctypes.c_float),
+    ("stratosphereHeight", ctypes.c_float),
+]
 
 
 class cGcPlanet(ctypes.Structure):
-    _fields_ = [
-        ("start", ctypes.c_char * 0x58),
-        ("planetIndex", ctypes.c_uint32),
-        ("planetData", cGcPlanetData),
+    class sSentinelCrimeResponse(ctypes.Structure):
+        _meCrimeResponse: ctypes.c_int32
+        crimeResponseResetTime: float
+        sentinelIgnoreCrimeStartTime: float
+
+    sSentinelCrimeResponse._fields_ = [
+        ("_meCrimeResponse", ctypes.c_int32),
+        ("crimeResponseResetTime", ctypes.c_float),
+        ("sentinelIgnoreCrimeStartTime", ctypes.c_float),
     ]
-    start: bytes
+
+
+    class sStorm(ctypes.Structure):
+        stormStartTime: int
+        stormSeed: int
+        gravityMultiplier: common.TkSmoothCD[ctypes.c_float]
+        targetGravityMultiplier: float
+        stormStrength: common.TkSmoothCD[ctypes.c_float]
+        stormIndex: int
+
+    sStorm._fields_ = [
+        ("stormStartTime", ctypes.c_uint64),
+        ("stormSeed", ctypes.c_uint64),
+        ("gravityMultiplier", common.TkSmoothCD[ctypes.c_float]),
+        ("targetGravityMultiplier", ctypes.c_float),
+        ("stormStrength", common.TkSmoothCD[ctypes.c_float]),
+        ("stormIndex", ctypes.c_int32),
+    ]
+
+
+    class sClouds(ctypes.Structure):
+        cloudCover: common.TkSmoothCD[ctypes.c_float]
+        cloudRatio: common.TkSmoothCD[ctypes.c_float]
+        stormCloudStrength: common.TkSmoothCD[ctypes.c_float]
+        instantCloudsUpdate: bool
+
+    sClouds._fields_ = [
+        ("cloudCover", common.TkSmoothCD[ctypes.c_float]),
+        ("cloudRatio", common.TkSmoothCD[ctypes.c_float]),
+        ("stormCloudStrength", common.TkSmoothCD[ctypes.c_float]),
+        ("instantCloudsUpdate", ctypes.c_ubyte),
+    ]
+
+
+    class cGcLocalPaletteTexture(ctypes.Structure):
+        _mePalette: ctypes.c_int32
+        _meColourAlt: ctypes.c_int32
+
+    cGcLocalPaletteTexture._fields_ = [
+        ("_mePalette", ctypes.c_int32),
+        ("_meColourAlt", ctypes.c_int32),
+    ]
+
+
+    activePrimaryRegionStates: bytes
+    planetDiscoveryData: bytes
+    beaconUpdateIndex: int
     planetIndex: int
-    planetData: cGcPlanetData
+    planetData: "cGcPlanetData"
+    planetGenerationInputData: cGcPlanetGenerationInputData
+    planetControls: bytes
+    buildings: bytes
+    spawnData: bytes
+    shipStartBuildingSeed: common.GcSeed
+    survivalStartBuildingSeed: common.GcSeed
+    isPrimary: bool
+    primarySwitched: bool
+    finishedGenerating: bool
+    isScanned: bool
+    sentinelCrimeResponse: "cGcPlanet.sSentinelCrimeResponse"
+    regionMap: cGcTerrainRegionMap
+    regionNode: common.TkHandle
+    regionRadiusSet: int
+    node: common.TkHandle
+    atmosphereNode: common.TkHandle
+    planetMeshNode: common.TkHandle
+    ringNode: common.TkHandle
+    position: common.Vector3f
+    lodSphere: bytes
+    waterCollision: bytes
+    waterRigidBody: bytes
+    terrainMaterial: common.cTkSmartResHandle
+    waterMaterial: common.cTkSmartResHandle
+    atmosphereMaterial: common.cTkSmartResHandle
+    terrainDiffuseRes: common.cTkSmartResHandle
+    terrainNormalMapRes: common.cTkSmartResHandle
+    overlayDiffuseRes: common.cTkSmartResHandle
+    overlayNormalRes: common.cTkSmartResHandle
+    overlayMasksRes: common.cTkSmartResHandle
+    waterHeavyAirRes: common.cTkSmartResHandle
+    weatherHeavyAirRes: common.cTkSmartResHandle
+    ringMaterial: common.cTkSmartResHandle
+    vertexNodePropertyIndex: int
+    useSpaceAtmosphere: bool
+    indoorLightingBlend: float
+    indoorFogStrength: float
+    ringAvoidanceSphereInterpolate: float
+    ringAvoidanceSphereRadius: float
+    ringAvoidanceSpherePosition: common.Vector3f
+    averageColour: bytes
+    specularValue: bytes
+    filename: common.cTkFixedString[0x100]
+    metadataRegistered: bool
+    hasRegionData: bool
+    pendingCopyRegionVoxelData: bool
+    paused: bool
+    planetSceneNode: common.TkHandle
+    _meTransitionState: ctypes.c_int32
+    isGeneratingDuringLoad: bool
+    cachedTerrainMaterialPtr: int
+    cachedWaterMaterialPtr: int
+    cachedAtmosphereMaterial: int
+    cachedRingMaterial: int
+    storm: "cGcPlanet.sStorm"
+    clouds: "cGcPlanet.sClouds"
+    portalStartSeed: common.GcSeed
+    resourceLoadingRequests: bytes
+    loadBalancingTimer: bytes
+    planetUniformsJobHandle: bytes
+    envProperties: _Pointer["cGcEnvironmentProperties"]
+    skyProperties: bytes
+
+cGcPlanet._fields_ = [
+    ("activePrimaryRegionStates", ctypes.c_ubyte * 0x7),
+    ("padding0x7", ctypes.c_ubyte * 0x1),
+    ("planetDiscoveryData", ctypes.c_ubyte * 72),
+    ("beaconUpdateIndex", ctypes.c_uint64),
+    ("planetIndex", ctypes.c_int32),
+    ("padding0x5C", ctypes.c_ubyte * 0x4),
+    ("planetData", cGcPlanetData),
+    ("planetGenerationInputData", cGcPlanetGenerationInputData),
+    ("planetControls", ctypes.c_ubyte * 0x8),
+    ("padding0x3F58", ctypes.c_ubyte * 0x8),
+    ("buildings", ctypes.c_ubyte * 96),
+    ("spawnData", ctypes.c_ubyte * 104),
+    ("shipStartBuildingSeed", common.GcSeed),
+    ("survivalStartBuildingSeed", common.GcSeed),
+    ("isPrimary", ctypes.c_ubyte),
+    ("primarySwitched", ctypes.c_ubyte),
+    ("finishedGenerating", ctypes.c_ubyte),
+    ("isScanned", ctypes.c_ubyte),
+    ("sentinelCrimeResponse", cGcPlanet.sSentinelCrimeResponse),
+    ("padding0x4058", ctypes.c_ubyte * 0x8),
+    ("regionMap", cGcTerrainRegionMap),
+    ("regionNode", common.TkHandle),
+    ("regionRadiusSet", ctypes.c_int32),
+    ("node", common.TkHandle),
+    ("atmosphereNode", common.TkHandle),
+    ("planetMeshNode", common.TkHandle),
+    ("ringNode", common.TkHandle),
+    ("padding0xD78C8", ctypes.c_ubyte * 0x8),
+    ("position", common.Vector3f),
+    ("lodSphere", ctypes.c_ubyte * 6256),
+    ("waterCollision", ctypes.c_ubyte * 0x8),
+    ("waterRigidBody", ctypes.c_ubyte * 0x8),
+    ("terrainMaterial", common.cTkSmartResHandle),
+    ("waterMaterial", common.cTkSmartResHandle),
+    ("atmosphereMaterial", common.cTkSmartResHandle),
+    ("terrainDiffuseRes", common.cTkSmartResHandle),
+    ("terrainNormalMapRes", common.cTkSmartResHandle),
+    ("overlayDiffuseRes", common.cTkSmartResHandle),
+    ("overlayNormalRes", common.cTkSmartResHandle),
+    ("overlayMasksRes", common.cTkSmartResHandle),
+    ("waterHeavyAirRes", common.cTkSmartResHandle),
+    ("weatherHeavyAirRes", common.cTkSmartResHandle),
+    ("ringMaterial", common.cTkSmartResHandle),
+    ("vertexNodePropertyIndex", ctypes.c_int32),
+    ("useSpaceAtmosphere", ctypes.c_ubyte),
+    ("padding0xD9191", ctypes.c_ubyte * 0x3),
+    ("indoorLightingBlend", ctypes.c_float),
+    ("indoorFogStrength", ctypes.c_float),
+    ("ringAvoidanceSphereInterpolate", ctypes.c_float),
+    ("ringAvoidanceSphereRadius", ctypes.c_float),
+    ("padding0xD91A4", ctypes.c_ubyte * 0xC),
+    ("ringAvoidanceSpherePosition", common.Vector3f),
+    ("averageColour", ctypes.c_ubyte * 0x170),
+    ("specularValue", ctypes.c_ubyte * 0x68),
+    ("filename", common.cTkFixedString[0x100]),
+    ("metadataRegistered", ctypes.c_ubyte),
+    ("hasRegionData", ctypes.c_ubyte),
+    ("pendingCopyRegionVoxelData", ctypes.c_ubyte),
+    ("paused", ctypes.c_ubyte),
+    ("planetSceneNode", common.TkHandle),
+    ("_meTransitionState", ctypes.c_int32),
+    ("isGeneratingDuringLoad", ctypes.c_ubyte),
+    ("padding0xD94A5", ctypes.c_ubyte * 0x3),
+    ("cachedTerrainMaterialPtr", ctypes.c_void_p),
+    ("cachedWaterMaterialPtr", ctypes.c_void_p),
+    ("cachedAtmosphereMaterial", ctypes.c_void_p),
+    ("cachedRingMaterial", ctypes.c_void_p),
+    ("storm", cGcPlanet.sStorm),
+    ("clouds", cGcPlanet.sClouds),
+    ("padding0xD950C", ctypes.c_ubyte * 0x4),
+    ("portalStartSeed", common.GcSeed),
+    ("resourceLoadingRequests", ctypes.c_ubyte * 0x8),
+    ("loadBalancingTimer", ctypes.c_ubyte * 0x8),
+    ("planetUniformsJobHandle", ctypes.c_ubyte * 0x10),
+    ("envProperties", ctypes.POINTER(cGcEnvironmentProperties)),
+    ("skyProperties", ctypes.c_ubyte * 0x8),
+]
 
 
 class cTkFileSystem(ctypes.Structure):
@@ -464,147 +1507,969 @@ class cTkFileSystem(ctypes.Structure):
 #         return cGcHUDTrackArrow.eReticuleState(self._meReticuleState)
 
 
-# class cGcShipHUD(ctypes.Structure):
-#     class eReticules(IntEnum):
-#         EReticule_ShipLaser = 0x0
-#         EReticule_ShipProjectile = 0x1
-#         EReticule_ShipMissile = 0x2
-#         EReticule_NumTypes = 0x3
+class cTkCurveType(ctypes.Structure):
+    _meCurve: int
+    @property
+    def curve(self):
+        return safe_assign_enum(nms_enums.eCurve, self._meCurve)
 
-#     class cGcVehicleScreen(ctypes.Structure):
-#         _fields_ = [
-#             ("mScreenTexture", cTkDynamicTexture),
-#             ("mScreenGUI", cGcNGui),
-#             ("mbValid", ctypes.c_ubyte),
-#         ]
-#         mScreenTexture: cTkDynamicTexture
-#         mScreenGUI: cGcNGui
-#         mbValid: bool
+cTkCurveType._fields_ = [
+    ("_meCurve", ctypes.c_int8),
+]
 
-#     def cGcShipHUD(): pass
 
-#     def RenderNGuiCallback(): pass
+class cGcHUD(ctypes.Structure):
+    uIMaterial: common.cTkSmartResHandle
+    layers: bytes
+    numLayers: int
+    images: bytes
+    numImages: int
+    texts: bytes
+    numTexts: int
 
-#     def LoadData(): pass
+cGcHUD._fields_ = [
+    ("uIMaterial", common.cTkSmartResHandle),
+    ("padding0x4", ctypes.c_ubyte * 0xC),
+    ("layers", ctypes.c_ubyte * 0x5800),
+    ("numLayers", ctypes.c_int32),
+    ("padding0x5814", ctypes.c_ubyte * 0xC),
+    ("images", ctypes.c_ubyte * 0x6800),
+    ("numImages", ctypes.c_int32),
+    ("padding0xC024", ctypes.c_ubyte * 0xC),
+    ("texts", ctypes.c_ubyte * 0x14000),
+    ("numTexts", ctypes.c_int32),
+    ("padding0x20030", ctypes.c_ubyte * 0xC),
+]
 
-#     def Construct(): pass
 
-#     def Update(): pass
+class ITkNGuiDraggable_vtbl(ctypes.Structure):
+    Render: bytes
+    GetType: bytes
 
-#     def UpdateTrackArrows(): pass
+ITkNGuiDraggable_vtbl._fields_ = [
+    ("Render", ctypes.c_ubyte * 0x8),
+    ("GetType", ctypes.c_ubyte * 0x8),
+]
 
-#     def UpdateMarkerLockOn(): pass
 
-#     def UpdateRender(): pass
+class ITkNGuiDraggable(ctypes.Structure):
+    __vftable: _Pointer["ITkNGuiDraggable_vtbl"]
 
-#     def ReadPlanetStats(): pass
+ITkNGuiDraggable._fields_ = [
+    ("__vftable", ctypes.POINTER(ITkNGuiDraggable_vtbl)),
+]
 
-#     def RenderOffscreen2D(): pass
 
-#     def Render2D(): pass
+class cGcVROverride_Layout(ctypes.Structure):
+    _meVROverride_Layout: ctypes.c_int32
+    floatValue: float
 
-#     def RenderHeadsUp(): pass
+cGcVROverride_Layout._fields_ = [
+    ("_meVROverride_Layout", ctypes.c_int32),
+    ("floatValue", ctypes.c_float),
+]
 
-#     _fields_ = [
-#         ("baseclass_0", cGcHUD),
-#         ("mHUDLayer", cTk2dLayer),
-#         ("mCrosshairOuterCircleLarge", cTk2dImageEx),
-#         ("mCrosshairOuterCircleLargeLayer", cTk3dLayer),
-#         ("mCrosshairOuterCircleSmall", cTk2dImageEx),
-#         ("mCrosshairOuterCircleSmallLayer", cTk3dLayer),
-#         ("mMouseArrowLayer", cTk2dLayer),
-#         ("mMouseArrowIcon", cTk2dImageEx),
-#         ("mShipForwardScreenPos", common.Vector3f),
-#         ("mfShipAngle", ctypes.c_float),
-#         ("mfShipPitch", ctypes.c_float),
-#         ("mLandingEffect", EffectInstance),
-#         ("maTrackArrows", cGcHUDTrackArrow * 0x8),
-#         ("maShootList", ctypes.c_char * 0x18),  # std::vector<cTkAttachmentPtr,TkSTLAllocatorShim<cTkAttachmentPtr,8,-1> >
-#         ("miSelectedPlanet", ctypes.c_int32),
-#         ("_meSelectedPlanetLabelState", ctypes.c_uint32),
-#         ("mfSelectedPlanetPanelTime", ctypes.c_float),
-#         ("mfSelectedPlanetPanelFadeTime", ctypes.c_float),
-#         ("mbSelectedPlanetPanelVisible", ctypes.c_ubyte),
-#         ("mbSelectedPlanetIsTargeted", ctypes.c_ubyte),
-#         ("mfLastKnownScanTime", ctypes.c_float),
-#         ("mfScanRevealTimer", ctypes.c_float),
-#         ("meMiniJumpState", ePulseDriveState),
-#         ("mbHasPulseEncounterOnHUD", ctypes.c_ubyte),
-#         ("mapScreens", ctypes.c_ulonglong * 0x2),  # cGcRenderableScreen *[2]
-#         ("miCurrentScreen", ctypes.c_int32),
-#         ("maSideScreenTextures", cTkDynamicTexture * 0x4),  # cTkDynamicTexture[4]
-#         ("maSideScreenGUI", cGcNGui * 0x4),  # cGcNGui[4]
-#         ("maSideScreenCursor", common.Vector2f * 0x4),  # cTkVector2[4]
-#         ("mbSideScreenActive", ctypes.c_ubyte),
-#         ("maSideScreenMeshes", core.TkHandle * 0x4),
-#         ("mCurrentCockpit", ctypes.c_uint32),
-#         ("maVehicleScreens", cGcShipHUD.cGcVehicleScreen * 0x7),  # cGcShipHUD::cGcVehicleScreen[7]
-#         ("mSpeedoReverseMesh", ctypes.c_uint32),
-#         ("mSpeedoPulseMesh", ctypes.c_uint32),
-#         ("maSpeedoBarsMeshes", core.TkHandle * 0x5),
-#         ("miCurrentSpeedoBar", ctypes.c_int32),
-#         ("miFinalSpeedReadout", ctypes.c_int32),
-#         ("mMainScreenTexture", cTkDynamicTexture),
-#         ("mMainScreenGUI", cGcNGui),
-#         ("mTargetProcName", ctypes.c_char * 0x7F),  # cTkFixedString<127,char>
-#         ("maPlanetWorldPositions", common.Vector3f * 0x6),  # cTkVector3[6]
-#         ("maPlanetScreenPositions", common.Vector3f * 0x6),  # cTkVector3[6]
-#         ("mHeadsUpGUI", cGcNGui),
-#         ("mHeadsUpScreenHandle", ctypes.c_uint64),
-#         ("mEnemyTargetSceneRes", core.cTkSmartResHandle),
-#         ("mfBoostMultiplier", ctypes.c_float),
-#     ]
-#     baseclass_0: cGcHUD
-#     mHUDLayer: cTk2dLayer
-#     mCrosshairOuterCircleLarge: cTk2dImageEx
-#     mCrosshairOuterCircleLargeLayer: cTk3dLayer
-#     mCrosshairOuterCircleSmall: cTk2dImageEx
-#     mCrosshairOuterCircleSmallLayer: cTk3dLayer
-#     mMouseArrowLayer: cTk2dLayer
-#     mMouseArrowIcon: cTk2dImageEx
-#     mShipForwardScreenPos: common.Vector3f
-#     mfShipAngle: float
-#     mfShipPitch: float
-#     mLandingEffect: EffectInstance
-#     maTrackArrows: bytes
-#     maShootList: bytes
-#     miSelectedPlanet: int
-#     _meSelectedPlanetLabelState: int
-#     mfSelectedPlanetPanelTime: float
-#     mfSelectedPlanetPanelFadeTime: float
-#     mbSelectedPlanetPanelVisible: bool
-#     mbSelectedPlanetIsTargeted: bool
-#     mfLastKnownScanTime: float
-#     mfScanRevealTimer: float
-#     meMiniJumpState: ePulseDriveState
-#     mbHasPulseEncounterOnHUD: bool
-#     mapScreens: list[ctypes.c_ulonglong]
-#     miCurrentScreen: int
-#     maSideScreenTextures: list[cTkDynamicTexture]
-#     maSideScreenGUI: list[cGcNGui]
-#     maSideScreenCursor: list[common.Vector2f]
-#     mbSideScreenActive: bool
-#     maSideScreenMeshes: list[core.TkHandle]
-#     mCurrentCockpit: int
-#     maVehicleScreens: list[cGcShipHUD.cGcVehicleScreen]
-#     mSpeedoReverseMesh: int
-#     mSpeedoPulseMesh: int
-#     maSpeedoBarsMeshes: list[core.TkHandle]
-#     miCurrentSpeedoBar: int
-#     miFinalSpeedReadout: int
-#     mMainScreenTexture: cTkDynamicTexture
-#     mMainScreenGUI: cGcNGui
-#     mTargetProcName: bytes
-#     maPlanetWorldPositions: list[common.Vector3f]
-#     maPlanetScreenPositions: list[common.Vector3f]
-#     mHeadsUpGUI: cGcNGui
-#     mHeadsUpScreenHandle: int
-#     mEnemyTargetSceneRes: core.cTkSmartResHandle
-#     mfBoostMultiplier: float
 
-#     @property
-#     def meSelectedPlanetLabelState(self):
-#         return ePlanetLabelState(self._meSelectedPlanetLabelState)
+class cGcAccessibleOverride_Layout(ctypes.Structure):
+    _meAccessibleOverride_Layout: ctypes.c_int32
+    floatValue: float
+
+cGcAccessibleOverride_Layout._fields_ = [
+    ("_meAccessibleOverride_Layout", ctypes.c_int32),
+    ("floatValue", ctypes.c_float),
+]
+
+
+class cTkNGuiAlignment(ctypes.Structure):
+    _meVertical: int
+    _meHorizontal: int
+
+cTkNGuiAlignment._fields_ = [
+    ("_meVertical", ctypes.c_int8),
+    ("_meHorizontal", ctypes.c_int8),
+]
+
+
+class cGcNGuiLayoutData(ctypes.Structure):
+    vROverrides: common.cTkDynamicArray[cGcVROverride_Layout]
+    accessibleOverrides: common.cTkDynamicArray[cGcAccessibleOverride_Layout]
+    positionX: float
+    positionY: float
+    width: float
+    height: float
+    constrainAspect: float
+    maxWidth: float
+    align: "cTkNGuiAlignment"
+    widthPercentage: bool
+    heightPercentage: bool
+    constrainProportions: bool
+    forceAspect: bool
+    anchor: bool
+    anchorPercent: bool
+    sameLine: bool
+    slowCursorOnHover: bool
+
+cGcNGuiLayoutData._fields_ = [
+    ("vROverrides", common.cTkDynamicArray[cGcVROverride_Layout]),
+    ("accessibleOverrides", common.cTkDynamicArray[cGcAccessibleOverride_Layout]),
+    ("positionX", ctypes.c_float),
+    ("positionY", ctypes.c_float),
+    ("width", ctypes.c_float),
+    ("height", ctypes.c_float),
+    ("constrainAspect", ctypes.c_float),
+    ("maxWidth", ctypes.c_float),
+    ("align", cTkNGuiAlignment),
+    ("widthPercentage", ctypes.c_ubyte),
+    ("heightPercentage", ctypes.c_ubyte),
+    ("constrainProportions", ctypes.c_ubyte),
+    ("forceAspect", ctypes.c_ubyte),
+    ("anchor", ctypes.c_ubyte),
+    ("anchorPercent", ctypes.c_ubyte),
+    ("sameLine", ctypes.c_ubyte),
+    ("slowCursorOnHover", ctypes.c_ubyte),
+]
+
+
+class cTkNGuiForcedStyle(ctypes.Structure):
+    _meNGuiForcedStyle: int
+    @property
+    def nGuiForcedStyle(self):
+        return safe_assign_enum(nms_enums.eNGuiForcedStyle, self._meNGuiForcedStyle)
+
+cTkNGuiForcedStyle._fields_ = [
+    ("_meNGuiForcedStyle", ctypes.c_int32),
+]
+
+
+class cGcNGuiElementData(ctypes.Structure):
+    ID: common.TkID[0x10]
+    presetID: common.TkID[0x10]
+    isHidden: bool
+    forcedStyle: "cTkNGuiForcedStyle"
+    layout: "cGcNGuiLayoutData"
+
+cGcNGuiElementData._fields_ = [
+    ("ID", common.TkID[0x10]),
+    ("presetID", common.TkID[0x10]),
+    ("isHidden", ctypes.c_ubyte),
+    ("padding0x21", ctypes.c_ubyte * 0x3),
+    ("forcedStyle", cTkNGuiForcedStyle),
+    ("layout", cGcNGuiLayoutData),
+]
+
+
+class cGcNGuiElement(ITkNGuiDraggable, ctypes.Structure):
+    class sGcNGuiElementAnimSettings(ctypes.Structure):
+        _bf_0: int
+
+    sGcNGuiElementAnimSettings._fields_ = [
+        ("_bf_0", ctypes.c_int8),
+    ]
+
+    contentBBox: "common.cTkBBox2d"
+    parallaxOffset: common.Vector2f
+    undoMoveEvent: bytes
+    undoResizeEvent: bytes
+    undoLayoutEvent: bytes
+    parent: _Pointer["cGcNGuiLayer"]
+    elementData: _Pointer["cGcNGuiElementData"]
+    _meInputThisFrame: int
+    _meLayoutChangeEvent: int
+    _meRequestAnim: int
+    anim: "sGcNGuiElementAnimSettings"
+
+
+class cTkNGuiGraphicStyleData(ctypes.Structure):
+    colour: common.Colour
+    iconColour: common.Colour
+    strokeColour: common.Colour
+    gradientColour: common.Colour
+    strokeGradientColour: common.Colour
+    paddingX: float
+    paddingY: float
+    marginX: float
+    marginY: float
+    gradientStartOffset: float
+    gradientEndOffset: float
+    cornerRadius: float
+    strokeSize: float
+    image: int
+    icon: int
+    desaturation: float
+    strokeGradientOffset: float
+    strokeGradientFeather: float
+    _meShape: int
+    _meGradient: int
+    solidColour: bool
+    hasDropShadow: bool
+    hasOuterGradient: bool
+    hasInnerGradient: bool
+    gradientOffsetPercent: bool
+    strokeGradient: bool
+
+cTkNGuiGraphicStyleData._fields_ = [
+    ("colour", common.Colour),
+    ("iconColour", common.Colour),
+    ("strokeColour", common.Colour),
+    ("gradientColour", common.Colour),
+    ("strokeGradientColour", common.Colour),
+    ("paddingX", ctypes.c_float),
+    ("paddingY", ctypes.c_float),
+    ("marginX", ctypes.c_float),
+    ("marginY", ctypes.c_float),
+    ("gradientStartOffset", ctypes.c_float),
+    ("gradientEndOffset", ctypes.c_float),
+    ("cornerRadius", ctypes.c_float),
+    ("strokeSize", ctypes.c_float),
+    ("image", ctypes.c_int32),
+    ("icon", ctypes.c_int32),
+    ("desaturation", ctypes.c_float),
+    ("strokeGradientOffset", ctypes.c_float),
+    ("strokeGradientFeather", ctypes.c_float),
+    ("_meShape", ctypes.c_int8),
+    ("_meGradient", ctypes.c_int8),
+    ("solidColour", ctypes.c_ubyte),
+    ("hasDropShadow", ctypes.c_ubyte),
+    ("hasOuterGradient", ctypes.c_ubyte),
+    ("hasInnerGradient", ctypes.c_ubyte),
+    ("gradientOffsetPercent", ctypes.c_ubyte),
+    ("strokeGradient", ctypes.c_ubyte),
+    ("padding0x8C", ctypes.c_ubyte * 0x4),
+]
+
+
+class cTkNGuiGraphicStyle(ctypes.Structure):
+    default: "cTkNGuiGraphicStyleData"
+    highlight: "cTkNGuiGraphicStyleData"
+    active: "cTkNGuiGraphicStyleData"
+    customMinStart: common.Vector2f
+    customMaxStart: common.Vector2f
+    highlightTime: float
+    highlightScale: float
+    globalFade: float
+    animTime: float
+    animSplit: float
+    animCurve1: "cTkCurveType"
+    animCurve2: "cTkCurveType"
+    _meAnimate: int
+    inheritStyleFromParentLayer: bool
+
+cTkNGuiGraphicStyle._fields_ = [
+    ("default", cTkNGuiGraphicStyleData),
+    ("highlight", cTkNGuiGraphicStyleData),
+    ("active", cTkNGuiGraphicStyleData),
+    ("customMinStart", common.Vector2f),
+    ("customMaxStart", common.Vector2f),
+    ("highlightTime", ctypes.c_float),
+    ("highlightScale", ctypes.c_float),
+    ("globalFade", ctypes.c_float),
+    ("animTime", ctypes.c_float),
+    ("animSplit", ctypes.c_float),
+    ("animCurve1", cTkCurveType),
+    ("animCurve2", cTkCurveType),
+    ("_meAnimate", ctypes.c_int8),
+    ("inheritStyleFromParentLayer", ctypes.c_ubyte),
+    ("padding0x1D8", ctypes.c_ubyte * 0x8),
+]
+
+
+class cTkNGuiTextStyleData(ctypes.Structure):
+    colour: common.Colour
+    shadowColour: common.Colour
+    outlineColour: common.Colour
+    fontHeight: float
+    fontSpacing: float
+    dropShadowAngle: float
+    dropShadowOffset: float
+    outlineSize: float
+    fontIndex: int
+    align: "cTkNGuiAlignment"
+    isIndented: bool
+    hasDropShadow: bool
+    hasOutline: bool
+    isParagraph: bool
+    allowScroll: bool
+    forceUpperCase: bool
+    autoAdjustHeight: bool
+    autoAdjustFontHeight: bool
+    blockAudio: bool
+
+cTkNGuiTextStyleData._fields_ = [
+    ("colour", common.Colour),
+    ("shadowColour", common.Colour),
+    ("outlineColour", common.Colour),
+    ("fontHeight", ctypes.c_float),
+    ("fontSpacing", ctypes.c_float),
+    ("dropShadowAngle", ctypes.c_float),
+    ("dropShadowOffset", ctypes.c_float),
+    ("outlineSize", ctypes.c_float),
+    ("fontIndex", ctypes.c_int32),
+    ("align", cTkNGuiAlignment),
+    ("isIndented", ctypes.c_ubyte),
+    ("hasDropShadow", ctypes.c_ubyte),
+    ("hasOutline", ctypes.c_ubyte),
+    ("isParagraph", ctypes.c_ubyte),
+    ("allowScroll", ctypes.c_ubyte),
+    ("forceUpperCase", ctypes.c_ubyte),
+    ("autoAdjustHeight", ctypes.c_ubyte),
+    ("autoAdjustFontHeight", ctypes.c_ubyte),
+    ("blockAudio", ctypes.c_ubyte),
+    ("padding0x53", ctypes.c_ubyte * 0xD),
+]
+
+
+class cTkNGuiTextStyle(ctypes.Structure):
+    default: "cTkNGuiTextStyleData"
+    highlight: "cTkNGuiTextStyleData"
+    active: "cTkNGuiTextStyleData"
+
+cTkNGuiTextStyle._fields_ = [
+    ("default", cTkNGuiTextStyleData),
+    ("highlight", cTkNGuiTextStyleData),
+    ("active", cTkNGuiTextStyleData),
+]
+
+
+class cGcVROverride_Text(ctypes.Structure):
+    _meVROverride_Text: ctypes.c_int32
+    intValue: int
+    floatValue: float
+
+cGcVROverride_Text._fields_ = [
+    ("_meVROverride_Text", ctypes.c_int32),
+    ("intValue", ctypes.c_int32),
+    ("floatValue", ctypes.c_float),
+]
+
+
+class cGcAccessibleOverride_Text(ctypes.Structure):
+    _meAccessibleOverride_Text: ctypes.c_int32
+    floatValue: float
+
+cGcAccessibleOverride_Text._fields_ = [
+    ("_meAccessibleOverride_Text", ctypes.c_int32),
+    ("floatValue", ctypes.c_float),
+]
+
+
+
+class cGcNGuiTextData(ctypes.Structure):
+    elementData: "cGcNGuiElementData"
+    style: "cTkNGuiTextStyle"
+    graphicStyle: "cTkNGuiGraphicStyle"
+    text: common.cTkFixedString[0x200]
+    image: common.cTkFixedString[0x80]
+    forcedOffset: float
+    vROverrides: common.cTkDynamicArray[cGcVROverride_Text]
+    accessibleOverrides: common.cTkDynamicArray[cGcAccessibleOverride_Text]
+    special: bool
+    forcedAllowScroll: bool
+
+cGcNGuiTextData._fields_ = [
+    ("elementData", cGcNGuiElementData),
+    ("style", cTkNGuiTextStyle),
+    ("graphicStyle", cTkNGuiGraphicStyle),
+    ("text", common.cTkFixedString[0x200]),
+    ("image", common.cTkFixedString[0x80]),
+    ("forcedOffset", ctypes.c_float),
+    ("padding0x5F4", ctypes.c_ubyte * 0x4),
+    ("vROverrides", common.cTkDynamicArray[cGcVROverride_Text]),
+    ("accessibleOverrides", common.cTkDynamicArray[cGcAccessibleOverride_Text]),
+    ("special", ctypes.c_ubyte),
+    ("forcedAllowScroll", ctypes.c_ubyte),
+]
+
+
+class cGcNGuiLayerData(ctypes.Structure):
+    elementData: "cGcNGuiElementData"
+    style: "cTkNGuiGraphicStyle"
+    image: common.cTkFixedString[0x80]
+    children: common.cTkDynamicArray[common.cTkClassPointer]
+    dataFilename: common.cTkFixedString[0x80]
+    _meAltMode: ctypes.c_int32
+
+cGcNGuiLayerData._fields_ = [
+    ("elementData", cGcNGuiElementData),
+    ("style", cTkNGuiGraphicStyle),
+    ("image", common.cTkFixedString[0x80]),
+    ("children", common.cTkDynamicArray[common.cTkClassPointer]),
+    ("dataFilename", common.cTkFixedString[0x80]),
+    ("_meAltMode", ctypes.c_int32),
+]
+
+
+class cTkHashedNGuiElement(ctypes.Structure):
+    ID: common.TkID[0x10]
+    hash: int
+
+cTkHashedNGuiElement._fields_ = [
+    ("ID", common.TkID[0x10]),
+    ("hash", ctypes.c_uint64),
+]
+
+
+class cGcNGuiText(ctypes.Structure):
+    baseclass_0: cGcNGuiElement
+    locBlinkText: common.cTkFixedString[0x80]
+    previousTextStyle: "cTkNGuiTextStyleData"
+    previousGraphicStyle: "cTkNGuiGraphicStyleData"
+    textData: _Pointer["cGcNGuiTextData"]
+    locTextBlinkBaseTime: int
+    _anonymous_ = ("baseclass_0", )
+
+
+class cGcNGuiLayer(ctypes.Structure):
+    baseclass_0: cGcNGuiElement
+    elements: std.vector[_Pointer["cGcNGuiElement"]]
+    layerElements: std.vector[_Pointer["cGcNGuiLayer"]]
+    pinnedPositions: std.vector[common.Vector2f]
+    previousGraphicsStyle: "cTkNGuiGraphicStyleData"
+    renderFunction: bytes
+    renderFunctionData: int
+    layerData: _Pointer["cGcNGuiLayerData"]
+    elementHashTable: _Pointer[common.cTkLinearHashTable[cTkHashedNGuiElement, _Pointer["cGcNGuiElement"]]]
+    uniqueID: int
+    expanded: bool
+    _anonymous_ = ("baseclass_0", )
+
+
+cGcNGuiElement._fields_ = [
+    ("contentBBox", common.cTkBBox2d),
+    ("parallaxOffset", common.Vector2f),
+    ("undoMoveEvent", ctypes.c_ubyte * 0x8),
+    ("undoResizeEvent", ctypes.c_ubyte * 0x8),
+    ("undoLayoutEvent", ctypes.c_ubyte * 0x8),
+    ("parent", ctypes.POINTER(cGcNGuiLayer)),
+    ("elementData", ctypes.POINTER(cGcNGuiElementData)),
+    ("_meInputThisFrame", ctypes.c_int8),
+    ("_meLayoutChangeEvent", ctypes.c_int8),
+    ("_meRequestAnim", ctypes.c_int8),
+    ("anim", cGcNGuiElement.sGcNGuiElementAnimSettings),
+    ("padding0x4C", ctypes.c_ubyte * 0x4),
+]
+
+
+cGcNGuiLayer._fields_ = [
+    ("baseclass_0", cGcNGuiElement),
+    ("elements", std.vector[ctypes.POINTER(cGcNGuiElement)]),
+    ("layerElements", std.vector[ctypes.POINTER(cGcNGuiLayer)]),
+    ("pinnedPositions", std.vector[common.Vector2f]),
+    ("padding0x98", ctypes.c_ubyte * 0x8),
+    ("previousGraphicsStyle", cTkNGuiGraphicStyleData),
+    ("renderFunction", ctypes.c_ubyte * 0x8),
+    ("renderFunctionData", ctypes.c_void_p),
+    ("layerData", ctypes.POINTER(cGcNGuiLayerData)),
+    ("elementHashTable", ctypes.POINTER(common.cTkLinearHashTable[cTkHashedNGuiElement, ctypes.POINTER(cGcNGuiElement)])),
+    ("uniqueID", ctypes.c_uint64),
+    ("expanded", ctypes.c_ubyte),
+]
+
+
+cGcNGuiText._fields_ = [
+    ("baseclass_0", cGcNGuiElement),
+    ("locBlinkText", common.cTkFixedString[0x80]),
+    ("previousTextStyle", cTkNGuiTextStyleData),
+    ("previousGraphicStyle", cTkNGuiGraphicStyleData),
+    ("textData", ctypes.POINTER(cGcNGuiTextData)),
+    ("locTextBlinkBaseTime", ctypes.c_uint64),
+]
+
+
+class cTk2dObject_vtbl(ctypes.Structure):
+    Construct: bytes
+    Prepare: bytes
+    Update: bytes
+    Render: bytes
+    Release: bytes
+    Destruct: bytes
+    SetPosition: bytes
+    GetPosition: bytes
+    GetPosition_40: bytes
+    GetWorldTopLeft: bytes
+    SetSize: bytes
+    GetSize: bytes
+    SetColour: bytes
+    GetColour: bytes
+    SetAlignment: bytes
+    GetAlignment: bytes
+    RemoveAllObjects: bytes
+
+cTk2dObject_vtbl._fields_ = [
+    ("Construct", ctypes.c_ubyte * 0x8),
+    ("Prepare", ctypes.c_ubyte * 0x8),
+    ("Update", ctypes.c_ubyte * 0x8),
+    ("Render", ctypes.c_ubyte * 0x8),
+    ("Release", ctypes.c_ubyte * 0x8),
+    ("Destruct", ctypes.c_ubyte * 0x8),
+    ("SetPosition", ctypes.c_ubyte * 0x8),
+    ("GetPosition", ctypes.c_ubyte * 0x8),
+    ("GetPosition_40", ctypes.c_ubyte * 0x8),
+    ("GetWorldTopLeft", ctypes.c_ubyte * 0x8),
+    ("SetSize", ctypes.c_ubyte * 0x8),
+    ("GetSize", ctypes.c_ubyte * 0x8),
+    ("SetColour", ctypes.c_ubyte * 0x8),
+    ("GetColour", ctypes.c_ubyte * 0x8),
+    ("SetAlignment", ctypes.c_ubyte * 0x8),
+    ("GetAlignment", ctypes.c_ubyte * 0x8),
+    ("RemoveAllObjects", ctypes.c_ubyte * 0x8),
+]
+
+
+class cTk2dObject(ctypes.Structure):
+    __vftable: _Pointer["cTk2dObject_vtbl"]
+    colour: common.Colour
+    position: common.Vector2f
+    size: common.Vector2f
+    alignment: common.Vector2f
+    nextSibling: _Pointer["cTk2dObject"]
+
+cTk2dObject._fields_ = [
+    ("__vftable", ctypes.POINTER(cTk2dObject_vtbl)),
+    ("padding0x8", ctypes.c_ubyte * 0x8),
+    ("colour", common.Colour),
+    ("position", common.Vector2f),
+    ("size", common.Vector2f),
+    ("alignment", common.Vector2f),
+    ("nextSibling", ctypes.POINTER(cTk2dObject)),
+]
+
+
+class cTk2dLayer(cTk2dObject, ctypes.Structure):
+    bitArray: common.cTkBitArray[ctypes.c_uint64, 512]
+    _meBlendMode: int
+    firstChild: _Pointer["cTk2dObject"]
+    isVisible: bool
+    dynamicSize: bool
+    scale: common.Vector2f
+    angle: float
+
+cTk2dLayer._fields_ = [
+    ("bitArray", common.cTkBitArray[ctypes.c_uint64, 512]),
+    ("_meBlendMode", ctypes.c_int8),
+    ("padding0x84", ctypes.c_ubyte * 0x4),
+    ("firstChild", ctypes.POINTER(cTk2dObject)),
+    ("isVisible", ctypes.c_ubyte),
+    ("dynamicSize", ctypes.c_ubyte),
+    ("padding0x92", ctypes.c_ubyte * 0x2),
+    ("scale", common.Vector2f),
+    ("angle", ctypes.c_float),
+]
+
+
+class cTk3dLayer(cTk2dLayer, ctypes.Structure):
+    worldPosition: common.Vector3f
+    screenPosition: common.Vector4f
+    screenPositionLeft: common.Vector4f
+    screenPositionRight: common.Vector4f
+    screenDepth: float
+    defaultDistToCamera: float
+    minScale: float
+    maxScale: float
+    _meTestZ: ctypes.c_int32
+    enable3d: bool
+    scale3d: bool
+
+cTk3dLayer._fields_ = [
+    ("worldPosition", common.Vector3f),
+    ("screenPosition", common.Vector4f),
+    ("screenPositionLeft", common.Vector4f),
+    ("screenPositionRight", common.Vector4f),
+    ("screenDepth", ctypes.c_float),
+    ("defaultDistToCamera", ctypes.c_float),
+    ("minScale", ctypes.c_float),
+    ("maxScale", ctypes.c_float),
+    ("_meTestZ", ctypes.c_int32),
+    ("enable3d", ctypes.c_ubyte),
+    ("scale3d", ctypes.c_ubyte),
+    ("padding0xF6", ctypes.c_ubyte * 0xA)
+]
+
+
+class cTkNGuiInput(ctypes.Structure):
+    controlHeld: bool
+    shiftHeld: bool
+    altHeld: bool
+    rightStickX: float
+    rightStickY: float
+    cursorX: float
+    cursorY: float
+    cursorDeltaX: float
+    cursorDeltaY: float
+    cursorSpeedModifierX: float
+    cursorSpeedModifierY: float
+    mousePosX: float
+    mousePosY: float
+    mouseScroll: float
+    _meMouseButtonState: ctypes.c_int32
+    _meMouse2ButtonState: ctypes.c_int32
+    _meRightThumbState: ctypes.c_int32
+    _meTransferButtonState: ctypes.c_int32
+    _meUploadButtonState: ctypes.c_int32
+    _meDiscoveryUploadButtonState: ctypes.c_int32
+    cursorIsMouse: bool
+    padOnly: bool
+    elementsPressed: bytes
+    elementsPressed2: bytes
+    KeyMap: bytes
+    KeyCtrl: bool
+    KeyShift: bool
+    KeyAlt: bool
+    keysDown: bytes
+    inputCharacters: bytes
+    padActive: bool
+    dragObject: _Pointer["ITkNGuiDraggable"]
+
+cTkNGuiInput._fields_ = [
+    ("controlHeld", ctypes.c_ubyte),
+    ("shiftHeld", ctypes.c_ubyte),
+    ("altHeld", ctypes.c_ubyte),
+    ("padding0x3", ctypes.c_ubyte * 0x1),
+    ("rightStickX", ctypes.c_float),
+    ("rightStickY", ctypes.c_float),
+    ("cursorX", ctypes.c_float),
+    ("cursorY", ctypes.c_float),
+    ("cursorDeltaX", ctypes.c_float),
+    ("cursorDeltaY", ctypes.c_float),
+    ("cursorSpeedModifierX", ctypes.c_float),
+    ("cursorSpeedModifierY", ctypes.c_float),
+    ("mousePosX", ctypes.c_float),
+    ("mousePosY", ctypes.c_float),
+    ("mouseScroll", ctypes.c_float),
+    ("_meMouseButtonState", ctypes.c_int32),
+    ("_meMouse2ButtonState", ctypes.c_int32),
+    ("_meRightThumbState", ctypes.c_int32),
+    ("_meTransferButtonState", ctypes.c_int32),
+    ("_meUploadButtonState", ctypes.c_int32),
+    ("_meDiscoveryUploadButtonState", ctypes.c_int32),
+    ("cursorIsMouse", ctypes.c_ubyte),
+    ("padOnly", ctypes.c_ubyte),
+    ("padding0x4A", ctypes.c_ubyte * 0x6),
+    ("elementsPressed", ctypes.c_ubyte * 0x18),
+    ("elementsPressed2", ctypes.c_ubyte * 0x18),
+    ("KeyMap", ctypes.c_ubyte * 0x4C),
+    ("KeyCtrl", ctypes.c_ubyte),
+    ("KeyShift", ctypes.c_ubyte),
+    ("KeyAlt", ctypes.c_ubyte),
+    ("keysDown", ctypes.c_ubyte * 0x200),
+    ("inputCharacters", ctypes.c_ubyte * 0x11),
+    ("padActive", ctypes.c_ubyte),
+    ("padding0x2E1", ctypes.c_ubyte * 0x7),
+    ("dragObject", ctypes.POINTER(ITkNGuiDraggable)),
+]
+
+
+class cTkTextureBase(ctypes.Structure):
+    _meType: int
+    format: bytes
+    _meTextureAddressMode: int
+    _meTextureFilterMode: int
+    _meTextureReductionMode: int
+    isSRGB: bool
+    isShadowMap: bool
+    width: int
+    height: int
+    depth: int
+    numMips: int
+    anisotropy: int
+    dataSize: int
+    memorySize: int
+    mipStatsCounterIndex: bytes
+    finestResidentPixelCount: int
+    finestMipVisible: int
+    numClampedPixels: int
+    lastFetchedFrame: int
+    fileStartOffset: int
+    streamFuncs: bytes
+    streamFuncContext: int
+    mipZeroSize: int
+    evictedSize: int
+    evictableMips: int
+    evictedMips: int
+    allocatedFromStreamingStore: bool
+    allocatedWithMipBias: bool
+    evictionCountdown: int
+
+cTkTextureBase._fields_ = [
+    ("_meType", ctypes.c_int8),
+    ("format", ctypes.c_ubyte * 0x1),
+    ("padding0x2", ctypes.c_ubyte * 0x2),
+    ("_meTextureAddressMode", ctypes.c_int32),
+    ("_meTextureFilterMode", ctypes.c_int32),
+    ("_meTextureReductionMode", ctypes.c_int8),
+    ("isSRGB", ctypes.c_ubyte),
+    ("isShadowMap", ctypes.c_ubyte),
+    ("padding0xF", ctypes.c_ubyte * 0x1),
+    ("width", ctypes.c_int32),
+    ("height", ctypes.c_int32),
+    ("depth", ctypes.c_int32),
+    ("numMips", ctypes.c_int16),
+    ("anisotropy", ctypes.c_int16),
+    ("dataSize", ctypes.c_int32),
+    ("memorySize", ctypes.c_int32),
+    ("mipStatsCounterIndex", ctypes.c_ubyte * 0x8),
+    ("finestResidentPixelCount", ctypes.c_int32),
+    ("finestMipVisible", ctypes.c_int32),
+    ("numClampedPixels", ctypes.c_int32),
+    ("lastFetchedFrame", ctypes.c_int32),
+    ("fileStartOffset", ctypes.c_int32),
+    ("padding0x44", ctypes.c_ubyte * 0x4),
+    ("streamFuncs", ctypes.c_ubyte * 0x8),
+    ("streamFuncContext", ctypes.c_void_p),
+    ("mipZeroSize", ctypes.c_int32),
+    ("evictedSize", ctypes.c_int32),
+    ("evictableMips", ctypes.c_int16),
+    ("evictedMips", ctypes.c_int16),
+    ("allocatedFromStreamingStore", ctypes.c_ubyte),
+    ("allocatedWithMipBias", ctypes.c_ubyte),
+    ("evictionCountdown", ctypes.c_uint8),
+]
+
+
+class cTkTexture(cTkTextureBase, ctypes.Structure):
+    textureData: int
+    texture: bytes
+    imageDesc: bytes
+    textureMemory: bytes
+    textureSrvMips: bytes
+    resourceState: bytes
+    depthOnly: bool
+    textureSrv: bytes
+    textureUav: bytes
+    sampler: bytes
+    lodClamp: float
+    mapping: None
+    evictableMipPageCount: bytes
+    mipStartPage: bytes
+    tailOffset: int
+    tailArrayStride: int
+    ultraMips: int
+    detailableMips: int
+    lodBias: float
+    numPages: int
+    evictedPages: int
+    mipZeroPages: int
+    mipZeroUnusedPages: int
+    isPartiallyResident: bool
+
+cTkTexture._fields_ = [
+    ("textureData", ctypes.c_void_p),
+    ("texture", ctypes.c_ubyte * 0x8),
+    ("imageDesc", ctypes.c_ubyte * 88),
+    ("textureMemory", ctypes.c_ubyte * 24),
+    ("textureSrvMips", ctypes.c_ubyte * 0x70),
+    ("resourceState", ctypes.c_ubyte * 0x38),
+    ("depthOnly", ctypes.c_ubyte),
+    ("padding0x191", ctypes.c_ubyte * 0x7),
+    ("textureSrv", ctypes.c_ubyte * 0x8),
+    ("textureUav", ctypes.c_ubyte * 0x8),
+    ("sampler", ctypes.c_ubyte * 0x8),
+    ("lodClamp", ctypes.c_float),
+    ("padding0x1B4", ctypes.c_ubyte * 0x4),
+    ("mapping", ctypes.POINTER(ctypes.c_uint16)),
+    ("evictableMipPageCount", ctypes.c_ubyte * 0x20),
+    ("mipStartPage", ctypes.c_ubyte * 0x20),
+    ("tailOffset", ctypes.c_uint64),
+    ("tailArrayStride", ctypes.c_uint64),
+    ("ultraMips", ctypes.c_uint16),
+    ("detailableMips", ctypes.c_uint16),
+    ("lodBias", ctypes.c_float),
+    ("numPages", ctypes.c_int32),
+    ("evictedPages", ctypes.c_int32),
+    ("mipZeroPages", ctypes.c_int16),
+    ("mipZeroUnusedPages", ctypes.c_int16),
+    ("isPartiallyResident", ctypes.c_ubyte),
+]
+
+
+class cTkDynamicTexture(ctypes.Structure):
+    renderTarget: common.cTkSmartResHandle
+    width: int
+    height: int
+
+cTkDynamicTexture._fields_ = [
+    ("renderTarget", common.cTkSmartResHandle),
+    ("width", ctypes.c_int32),
+    ("height", ctypes.c_int32),
+]
+
+
+class cTk2dImage(cTk2dObject, ctypes.Structure):
+    uVs: list[common.Vector2f]
+    texture: _Pointer["cTkTexture"]
+    dynamicTexture: _Pointer["cTkDynamicTexture"]
+    textureMipLevel: float
+    visible: bool
+    tiledUV: bool
+    isRenderTarget: bool
+
+cTk2dImage._fields_ = [
+    ("uVs", common.Vector2f * 0x4),
+    ("texture", ctypes.POINTER(cTkTexture)),
+    ("dynamicTexture", ctypes.POINTER(cTkDynamicTexture)),
+    ("textureMipLevel", ctypes.c_float),
+    ("visible", ctypes.c_ubyte),
+    ("tiledUV", ctypes.c_ubyte),
+    ("isRenderTarget", ctypes.c_ubyte),
+    ("padding0x77", ctypes.c_ubyte * 0x9)
+]
+
+
+class cGcNGui(ctypes.Structure):
+    root: "cGcNGuiLayer"
+    input: "cTkNGuiInput"
+    useInput: bool
+    pixelRatio: float
+    fullscreen: bool
+    customSize: common.Vector2f
+    hasCustomSize: bool
+    isInWorld: bool
+    tk3dLayer: "cTk3dLayer"
+    tk2dImage: "cTk2dImage"
+
+cGcNGui._fields_ = [
+    ("root", cGcNGuiLayer),
+    ("input", cTkNGuiInput),
+    ("useInput", ctypes.c_ubyte),
+    ("padding0x451", ctypes.c_ubyte * 0x3),
+    ("pixelRatio", ctypes.c_float),
+    ("fullscreen", ctypes.c_ubyte),
+    ("padding0x459", ctypes.c_ubyte * 0x3),
+    ("customSize", common.Vector2f),
+    ("hasCustomSize", ctypes.c_ubyte),
+    ("isInWorld", ctypes.c_ubyte),
+    ("padding0x466", ctypes.c_ubyte * 0xA),
+    ("tk3dLayer", cTk3dLayer),
+    ("tk2dImage", cTk2dImage),
+]
+
+
+class cTk2dImageEx(cTk2dImage, ctypes.Structure):
+    resource: common.cTkSmartResHandle
+
+cTk2dImageEx._fields_ = [
+    ("resource", common.cTkSmartResHandle),
+    ("padding0x84", ctypes.c_ubyte * 0xC)
+]
+
+
+class cGcShipHUD(cGcHUD, ctypes.Structure):
+    class cGcVehicleScreen(ctypes.Structure):
+        screenTexture: "cTkDynamicTexture"
+        screenGUI: "cGcNGui"
+        valid: bool
+
+    cGcVehicleScreen._fields_ = [
+        ("screenTexture", cTkDynamicTexture),
+        ("padding0xC", ctypes.c_ubyte * 0x4),
+        ("screenGUI", cGcNGui),
+        ("valid", ctypes.c_ubyte),
+        ("padding0x601", ctypes.c_ubyte * 0xF),
+    ]
+
+    hUDLayer: "cTk2dLayer"
+    crosshairOuterCircleLarge: "cTk2dImageEx"
+    crosshairOuterCircleLargeLayer: "cTk3dLayer"
+    crosshairOuterCircleSmall: "cTk2dImageEx"
+    crosshairOuterCircleSmallLayer: "cTk3dLayer"
+    mouseArrowLayer: "cTk2dLayer"
+    mouseArrowIcon: "cTk2dImageEx"
+    shipForwardScreenPos: common.Vector3f
+    shipAngle: float
+    shipPitch: float
+    landingEffect: bytes
+    trackArrows: bytes
+    shootList: std.vector[ctypes.c_uint64]
+    selectedPlanet: int
+    _meSelectedPlanetLabelState: int
+    selectedPlanetPanelTime: float
+    selectedPlanetPanelFadeTime: float
+    selectedPlanetPanelVisible: bool
+    selectedPlanetIsTargeted: bool
+    lastKnownScanTime: float
+    scanRevealTimer: float
+    _meMiniJumpState: ctypes.c_int32
+    hasPulseEncounterOnHUD: bool
+    screens: bytes
+    currentScreen: int
+    sideScreenTextures: bytes
+    sideScreenGUI: bytes
+    sideScreenCursor: bytes
+    sideScreenActive: bool
+    sideScreenMeshes: bytes
+    currentCockpit: common.TkHandle
+    vehicleScreens: list[cGcVehicleScreen]
+    speedoReverseMesh: common.TkHandle
+    speedoPulseMesh: common.TkHandle
+    speedoBarsMeshes: bytes
+    currentSpeedoBar: int
+    finalSpeedReadout: int
+    mainScreenTexture: "cTkDynamicTexture"
+    mainScreenGUI: "cGcNGui"
+    targetProcName: common.cTkFixedString[0x7F]
+    planetWorldPositions: bytes
+    planetScreenPositions: bytes
+    headsUpGUI: "cGcNGui"
+    headsUpScreenHandle: int
+    enemyTargetSceneRes: common.cTkSmartResHandle
+    boostMultiplier: float
+    @property
+    def selectedPlanetLabelState(self):
+        return safe_assign_enum(nms_enums.ePlanetLabelState, self._meSelectedPlanetLabelState)
+
+cGcShipHUD._fields_ = [
+    ("hUDLayer", cTk2dLayer),
+    ("crosshairOuterCircleLarge", cTk2dImageEx),
+    ("crosshairOuterCircleLargeLayer", cTk3dLayer),
+    ("crosshairOuterCircleSmall", cTk2dImageEx),
+    ("crosshairOuterCircleSmallLayer", cTk3dLayer),
+    ("mouseArrowLayer", cTk2dLayer),
+    ("mouseArrowIcon", cTk2dImageEx),
+    ("shipForwardScreenPos", common.Vector3f),
+    ("shipAngle", ctypes.c_float),
+    ("shipPitch", ctypes.c_float),
+    ("landingEffect", ctypes.c_ubyte * 24),
+    ("trackArrows", ctypes.c_ubyte * 0x3100),
+    ("shootList", std.vector[ctypes.c_uint64]),
+    ("selectedPlanet", ctypes.c_int32),
+    ("_meSelectedPlanetLabelState", ctypes.c_int32),
+    ("selectedPlanetPanelTime", ctypes.c_float),
+    ("selectedPlanetPanelFadeTime", ctypes.c_float),
+    ("selectedPlanetPanelVisible", ctypes.c_ubyte),
+    ("selectedPlanetIsTargeted", ctypes.c_ubyte),
+    ("padding0x2368A", ctypes.c_ubyte * 0x2),
+    ("lastKnownScanTime", ctypes.c_float),
+    ("scanRevealTimer", ctypes.c_float),
+    ("_meMiniJumpState", ctypes.c_int32),
+    ("hasPulseEncounterOnHUD", ctypes.c_ubyte),
+    ("padding0x23699", ctypes.c_ubyte * 0x7),
+    ("screens", ctypes.c_ubyte * 0x10),
+    ("currentScreen", ctypes.c_int32),
+    ("sideScreenTextures", ctypes.c_ubyte * 0x30),
+    ("padding0x236E4", ctypes.c_ubyte * 0xC),
+    ("sideScreenGUI", ctypes.c_ubyte * 0x17C0),
+    ("sideScreenCursor", ctypes.c_ubyte * 0x20),
+    ("sideScreenActive", ctypes.c_ubyte),
+    ("padding0x24ED1", ctypes.c_ubyte * 0x3),
+    ("sideScreenMeshes", ctypes.c_ubyte * 0x10),
+    ("currentCockpit", common.TkHandle),
+    ("padding0x24EE8", ctypes.c_ubyte * 0x8),
+    ("vehicleScreens", cGcShipHUD.cGcVehicleScreen * 0x7),
+    ("speedoReverseMesh", common.TkHandle),
+    ("speedoPulseMesh", common.TkHandle),
+    ("speedoBarsMeshes", ctypes.c_ubyte * 0x14),
+    ("currentSpeedoBar", ctypes.c_int32),
+    ("finalSpeedReadout", ctypes.c_int32),
+    ("mainScreenTexture", cTkDynamicTexture),
+    ("mainScreenGUI", cGcNGui),
+    ("targetProcName", common.cTkFixedString[0x7F]),
+    ("padding0x27FFF", ctypes.c_ubyte * 0x1),
+    ("planetWorldPositions", common.Vector3f * 0x6),
+    ("planetScreenPositions", common.Vector3f * 0x6),
+    ("headsUpGUI", cGcNGui),
+    ("headsUpScreenHandle", ctypes.c_uint64),
+    ("enemyTargetSceneRes", common.cTkSmartResHandle),
+    ("boostMultiplier", ctypes.c_float),
+]
 
 class cTkLanguageManagerBase(ctypes.Structure):
     _fields_ = [
@@ -1185,14 +3050,12 @@ class cGcPlayerEnvironment(ctypes.Structure):
 cGcPlayerEnvironment._fields_ = [
     ("mPlayerTM", common.cTkMatrix34),
     ("mUp", common.Vector3f),
-    ("_dummy0x4C", ctypes.c_ubyte * 0x4),
     ("mu64UA",  ctypes.c_ulonglong),
     ("miNearestPlanetIndex", ctypes.c_int32),
     ("mfDistanceFromPlanet", ctypes.c_float),
     ("mfNearestPlanetSealevel", ctypes.c_float),
     ("_dummy0x64", ctypes.c_ubyte * 0xC),
     ("mNearestPlanetPos", common.Vector3f),
-    ("_dummy0x7C", ctypes.c_ubyte * 0x4),
     ("miNearestPlanetCreatureRoles", ctypes.c_int32),
     ("meStarAnomaly", ctypes.c_uint32),  # eGalaxyStarAnomaly
     ("mfDistanceFromAnomaly", ctypes.c_float),
@@ -1321,17 +3184,6 @@ cGcSimulation._fields_ = [
 ]
 
 
-class cTkNGuiInput(ctypes.Structure):
-    _fields_ = [
-        ("_dummy", ctypes.c_ubyte * 0x30),
-        ("mouseButtonState", ctypes.c_uint32),
-        ("mouse2ButtonState", ctypes.c_uint32),
-    ]
-
-    mouseButtonState: int
-    mouse2ButtonState: int
-
-
 class sTkInputBinding(ctypes.Structure):
     _fields_ = [
         ("actionId", ctypes.c_int32),
@@ -1419,6 +3271,52 @@ class cTkInputManager(ctypes.Structure):
     portArray: std.array[cTkInputPort, 6]
 
 
+class cTkDynamicGravityControl(ctypes.Structure):
+    class cTkGravityPoint(ctypes.Structure):
+        centre: common.Vector3f
+        strength: float
+        falloffRadiusSqr: float
+        maxStrength: float
+
+    cTkGravityPoint._fields_ = [
+        ("centre", common.Vector3f),
+        ("strength", ctypes.c_float),
+        ("falloffRadiusSqr", ctypes.c_float),
+        ("maxStrength", ctypes.c_float),
+        ("padding0x1C", ctypes.c_ubyte * 0x4),
+    ]
+
+    class cTkGravityOBB(ctypes.Structure):
+        up: common.Vector3f
+        constantStrength: float
+        falloffStrength: float
+        transformInverse: common.cTkMatrix34
+        untransformedCentre: common.Vector3f
+        OBB: common.cTkAABB
+        falloffRadiusSqr: float
+
+    cTkGravityOBB._fields_ = [
+        ("up", common.Vector3f),
+        ("constantStrength", ctypes.c_float),
+        ("falloffStrength", ctypes.c_float),
+        # TODO: Add padding
+        ("transformInverse", common.cTkMatrix34),
+        ("untransformedCentre", common.Vector3f),
+        ("OBB", common.cTkAABB),
+        ("falloffRadiusSqr", ctypes.c_float),
+    ]
+
+    gravityPoints: list[cTkDynamicGravityControl.cTkGravityPoint]
+    numGravityPoints: int
+    gravityOBBs: bytes
+
+cTkDynamicGravityControl._fields_ = [
+    ("gravityPoints", cTkDynamicGravityControl.cTkGravityPoint * 0x9),
+    ("numGravityPoints", ctypes.c_int32),
+    ("gravityOBBs", common.cTkClassPool[cTkDynamicGravityControl.cTkGravityOBB, 0x40]),
+]
+
+
 class cGcApplication(cTkFSM, ctypes.Structure):
     """The Main Application structure"""
     class Data(ctypes.Structure):
@@ -1434,6 +3332,11 @@ class cGcApplication(cTkFSM, ctypes.Structure):
     seasonalGameMode: int
     savingEnabled: bool
     fullyBooted: bool
+    lastRenderTimeMS: float
+    paused: bool
+    tkPaused: bool
+    stepOneFrame: bool
+    multiplayerActive: bool
     windowFocused: bool
     hasFocus: bool
 
@@ -1456,7 +3359,13 @@ cGcApplication._fields_ = [
     ("seasonalGameMode", ctypes.c_uint32),
     ("savingEnabled", ctypes.c_ubyte),
     ("fullyBooted", ctypes.c_ubyte),
-    ("_padding0x78", ctypes.c_ubyte * 0x8AFA),
+    ("_padding0x4E", ctypes.c_ubyte * 0x6A),
+    ("lastRenderTimeMS", ctypes.c_longdouble),
+    ("_padding0xC0", ctypes.c_ubyte * 0x8A84),
+    ("paused", ctypes.c_ubyte),
+    ("tkPaused", ctypes.c_ubyte),
+    ("stepOneFrame", ctypes.c_ubyte),
+    ("multiplayerActive", ctypes.c_ubyte),
     ("windowFocused", ctypes.c_ubyte),  # + 0x8B48
     ("hasFocus", ctypes.c_ubyte),
 ]

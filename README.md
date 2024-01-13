@@ -20,3 +20,14 @@ Once you see this message you are fine to press anything in the other window whe
 Any exceptions will be logged to a file named `CRITICAL_ERROR.txt`, and logs will be placed in a `logs` directory.
 
 - If you want to stop NMS, you can press `ctrl + C` in the window you started the process in to kill it.
+
+
+### Credits
+
+Thanks to the developers of minhook, cyminhook and pymem, all of which are instrumental in making this framework possible.
+
+Big thanks to [vitalised](https://github.com/VITALISED) for their constant RE discussions. and [gurren3](https://github.com/gurrenm3) for the same as well as the initial work done on NMS.API which heavily inspired the creation of this.
+
+Thanks also to the many people I have discussed various NMS details with, both big and small.
+
+Thanks to rayrod for initially discovering the pdb.

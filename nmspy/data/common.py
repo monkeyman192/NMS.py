@@ -1,6 +1,8 @@
+import logging
+
 import ctypes
 import types
-from typing import Any, Union, TypeVar, Generic, Type
+from typing import Any, Union, TypeVar, Generic, Type, Annotated
 
 from nmspy.data.cpptypes import std
 
@@ -9,6 +11,8 @@ from nmspy.data.cpptypes import std
 CTYPES = Union[ctypes._SimpleCData, ctypes.Structure, ctypes._Pointer]
 
 T = TypeVar("T", bound=CTYPES)
+T1 = TypeVar("T1", bound=CTYPES)
+T2 = TypeVar("T2", bound=CTYPES)
 N = TypeVar("N", bound=int)
 
 
@@ -39,6 +43,36 @@ class Vector3f(ctypes.Structure):
         ("z", ctypes.c_float),
         ("_padding", ctypes.c_byte * 0x4),
     ]
+
+    def __iadd__(self, other: "Vector3f"):
+        self.x += other.x
+        self.y += other.y
+        self.z += other.z
+        return self
+
+    def __add__(self, other: "Vector3f"):
+        return Vector3f(self.x + other.x, self.y + other.y, self.z + other.z)
+
+    def __sub__(self, other: "Vector3f"):
+        return Vector3f(self.x - other.x, self.y - other.y, self.z - other.z)
+
+    def __mul__(self, other: Union[float, int]):
+        if isinstance(other, Vector3f):
+            raise NotImplementedError("To multiply two vectors, use a @ b to compute the dot product")
+        return Vector3f(other * self.x, other * self.y, other * self.z)
+
+    def __rmul__(self, other: Union[float, int]):
+        return self * other
+
+    def __matmul__(self, other: "Vector3f") -> float:
+        """ Dot product """
+        return self.x * other.x + self.y * other.y + self.z * other.z
+
+    def __neg__(self):
+        return Vector3f(-self.x, -self.y, -self.z)
+
+    def __repr__(self):
+        return f"Vector3f({self.x}, {self.y}, {self.z})"
 
     def __str__(self) -> str:
         return f"<{self.x, self.y, self.z}>"
@@ -152,10 +186,27 @@ class Vector4i(ctypes.Structure):
     ]
 
 
+class cTkHalfVector4(ctypes.Structure):
+    x: int
+    y: int
+    z: int
+    w: int
+
+cTkHalfVector4._fields_ = [
+    ("x", ctypes.c_uint16),
+    ("y", ctypes.c_uint16),
+    ("z", ctypes.c_uint16),
+    ("w", ctypes.c_uint16),
+]
+
+
 class GcSeed(ctypes.Structure):
+    Seed: int
+    UseSeedValue: bool
     _fields_ = [
         ("Seed", ctypes.c_longlong),
         ("UseSeedValue", ctypes.c_ubyte),
+        ("padding0x9", ctypes.c_ubyte * 0x7)
     ]
 
 
@@ -178,6 +229,40 @@ class TkHandle(ctypes.Union):
     _fields_ = [
         ("_sub", TkHandleSub),
         ("lookupInt", ctypes.c_uint32)
+    ]
+    lookupInt: int
+
+class cTkSmartResHandle(ctypes.Structure):
+    _fields_ = [
+        ("value", ctypes.c_int32)
+    ]
+    value: int
+
+
+class cTkBBox2d(ctypes.Structure):
+    min: Vector2f
+    max: Vector2f
+    _fields_ = [
+        ("min", Vector2f),
+        ("max", Vector2f),
+    ]
+
+
+class cTkAABB2D(ctypes.Structure):
+    min: Vector2f
+    max: Vector2f
+    _fields_ = [
+        ("min", Vector2f),
+        ("max", Vector2f),
+    ]
+
+
+class cTkAABB(ctypes.Structure):
+    min: Vector3f
+    max: Vector3f
+    _fields_ = [
+        ("min", Vector3f),
+        ("max", Vector3f),
     ]
 
 
@@ -258,8 +343,8 @@ class TkSmoothCD(ctypes.Structure, Generic[T]):
         _cls: type["TkSmoothCD"] = types.new_class(f"TkSmoothCD<{key}>", (cls,))
         _cls._template_type = key
         _cls._fields_ = [
-            ("velocity", cls._template_type),
-            ("value", cls._template_type)
+            ("velocity", key),
+            ("value", key)
         ]
         return _cls
 
@@ -269,13 +354,6 @@ class cTkNGuiElementID(ctypes.Structure):
     base: int
     frameRenderTracker: int
     perFrameUseCount: int
-
-class cTkClassPointer:
-    class cTkClassPointerData(ctypes.Union):
-        _fields_ = [
-            ("class_", ctypes.c_void_p),
-            ("offset", ctypes.c_longlong)
-        ]
 
 
 class cTkFrameData(ctypes.Structure, Generic[T]):
@@ -355,11 +433,14 @@ class cTkFixedString(ctypes.Structure):
     _size: int
     value: bytes
 
+    def set(self, val: str):
+        self.value = val[:self._size].encode()
+
     def __class_getitem__(cls: type["cTkFixedString"], key: int):
         _cls: type["cTkFixedString"] = types.new_class(f"cTkFixedString<0x{key:X}>", (cls,))
         _cls._size = key
         _cls._fields_ = [
-            ("value", ctypes.c_char * _cls._size)
+            ("value", ctypes.c_char * key)
         ]
         return _cls
 
@@ -445,6 +526,79 @@ class cTkBitArray(ctypes.Structure, Generic[T, N]):
         for val in self.array:
             res = bin(int(val))[2:].zfill(self._type_size) + " " + res
         return res
+
+
+class cTkClassPointer(ctypes.Structure):
+    class cTkClassPointerData(ctypes.Union):
+        _fields_ = [
+            ("class_", ctypes.c_void_p),
+            ("offset", ctypes.c_longlong)
+        ]
+    _fields_ = [
+        ("classData", cTkClassPointerData),
+        ("className", cTkFixedString[0x63]),
+        ("classFixed", ctypes.c_ubyte),
+        ("classNameHash", ctypes.c_uint64),
+    ]
+    classData: cTkClassPointerData
+    className: cTkFixedString[0x63]
+    classFixed: bool
+    classNameHash: int
+
+
+class cTkListNode(ctypes.Structure, Generic[T1, T2]):
+    _template_type1: T1
+    _template_type2: T2
+    # This is techcnically cTkLinearHashTable<...>::cTkListNode, but this is
+    # easier...
+    # value: std.pair[T1, T2]
+    hash: int
+    _next: int
+    _prev: int
+    used: bool
+
+    def __class_getitem__(cls: Type["cTkListNode"], key: tuple[Type[T1], Type[T2]]):
+        _type1, _type2 = key
+        _cls: type[cTkListNode] = types.new_class(f"cTkListNode<{_type1}, {_type2}>", (cls,))
+        _cls._template_type1 = _type1
+        _cls._template_type2 = _type2
+        _cls._fields_ = [
+            ("value", std.pair[_type1, _type2]),
+            ("hash", ctypes.c_uint64),
+            ("_next", ctypes.c_uint64),
+            ("_prev", ctypes.c_uint64),
+            ("used", ctypes.c_ubyte),
+        ]
+        return _cls
+
+    @property
+    def next(self):
+        from nmspy.memutils import map_struct
+        return map_struct(self._next, cTkListNode[self._template_type1, self._template_type2])
+
+    @property
+    def prev(self):
+        from nmspy.memutils import map_struct
+        return map_struct(self._prev, cTkListNode[self._template_type1, self._template_type2])
+
+
+class cTkLinearHashTable(ctypes.Structure, Generic[T1, T2]):
+    capacity: int
+    size: int
+    tableSize: int
+
+    def __class_getitem__(cls: Type["cTkLinearHashTable"], key: tuple[Type[T1], Type[T2]]):
+        _type1, _type2 = key
+        _cls: type[cTkLinearHashTable] = types.new_class(f"cTkLinearHashTable<{_type1}, {_type2}>", (cls,))
+        _cls._fields_ = [
+            ("nodes", ctypes.POINTER(cTkListNode[_type1, _type2])),
+            ("bucketTable", ctypes.POINTER(ctypes.POINTER(cTkListNode[_type1, _type2]))),
+            ("firstFreeNode", ctypes.POINTER(cTkListNode[_type1, _type2])),
+            ("capacity", ctypes.c_int32),
+            ("size", ctypes.c_int32),
+            ("tableSize", ctypes.c_int32),
+        ]
+        return _cls
 
 
 if __name__ == "__main__":

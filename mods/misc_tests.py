@@ -77,6 +77,7 @@ class MiscMod(NMSMod):
             logging.info(f"Added {meta.name} to metadata registry")
 
     @hooks.cGcSolarSystem.Generate.after
+    @disable
     def generate_solarsystem(self, this, lbUseSettingsFile, lSeed):
         data = map_struct(this, nms_structs.cGcSolarSystem)
         logging.info(f"Number of planets: {data.solarSystemData.planets} in system {data.solarSystemData.name}")
