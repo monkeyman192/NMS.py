@@ -77,8 +77,13 @@ class Vector3f(ctypes.Structure):
     def __str__(self) -> str:
         return f"<{self.x, self.y, self.z}>"
 
+    def __json__(self) -> dict:
+        return {"x": self.x, "y": self.y, "z": self.z}
+
 
 class cTkPhysRelVec3(ctypes.Structure):
+    local: Vector3f
+    offset: Vector3f
     _fields_ = [
         ("local", Vector3f),
         ("offset", Vector3f),

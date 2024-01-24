@@ -18,6 +18,7 @@ from nmspy.errors import UnknownFunctionError
 from nmspy.memutils import find_bytes
 from nmspy._types import NMSHook, FUNCDEF
 from nmspy.caching import function_cache, pattern_cache
+from nmspy.states import StateEnum
 
 hook_logger = logging.getLogger("HookManager")
 
@@ -187,6 +188,10 @@ class _NMSHook(cyminhook.MinHook):
         try:
             super().__init__(signature=self.signature, target=self.target)
         except cyminhook._cyminhook.Error as e:  # type: ignore
+            if e.status == cyminhook._cyminhook.Status.MH_ERROR_ALREADY_CREATED:
+                # In this case, we'll get the already created hook, and add it
+                # to a list so that we can construct a compound hook.
+                hook_logger.info("ALREADY CREATED!!!")
             hook_logger.error(f"Failed to initialize hook {self._name}")
             hook_logger.error(e)
             hook_logger.error(e.status.name[3:].replace("_", " "))
@@ -378,6 +383,13 @@ class _main_loop:
         return func
 
 
+def on_state_change(state):
+    def _inner(func):
+        func._trigger_on_state = state
+        return func
+    return _inner
+
+
 def on_fully_booted(func):
     """
     Configure the decorated function to be run once the game is considered
@@ -385,7 +397,7 @@ def on_fully_booted(func):
     This occurs when the games' internal state first changes to "mode selector"
     (ie. just before the game mode selection screen appears).
     """
-    func._run_on_fully_booted = True
+    func._trigger_on_state = "MODESELECTOR"
     return func
 
 
@@ -581,7 +593,11 @@ class HookManager():
         # after the main update loop each update cycle.
         self.main_loop_before_funcs: list = []
         self.main_loop_after_funcs: list = []
-        self.on_fully_booted_funcs: list = []
+        # Keep track of all the functions which are called on various state
+        # changes.
+        self.on_state_change_funcs: dict[str, list] = {}
+        for state in StateEnum:
+            self.on_state_change_funcs[state.value.decode()] = []
 
     def add_hook(
         self,
@@ -625,16 +641,22 @@ class HookManager():
             self.main_loop_after_funcs.append(func)
 
     def remove_main_loop_func(self, func):
-        if func._main_loop_detour_time == DetourTime.BEFORE:
-            self.main_loop_before_funcs.remove(func)
-        else:
-            self.main_loop_after_funcs.remove(func)
+        try:
+            if func._main_loop_detour_time == DetourTime.BEFORE:
+                self.main_loop_before_funcs.remove(func)
+            else:
+                self.main_loop_after_funcs.remove(func)
+        except ValueError:
+            # In this case maybe there was an error starting the hook the last
+            # time and so it won't be loaded. Just ignore as hopefully this
+            # time when reloading it will go better!
+            pass
 
-    def add_on_fully_booted_func(self, func):
-        self.on_fully_booted_funcs.append(func)
+    def add_state_change_func(self, state, func):
+        self.on_state_change_funcs[state].append(func)
 
-    def remove_on_fully_booted_func(self, func):
-        self.on_fully_booted_funcs.remove(func)
+    def remove_state_change_func(self, state, func):
+        self.on_state_change_funcs[state].remove(func)
 
     def register_function(
             self,

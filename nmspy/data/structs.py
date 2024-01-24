@@ -274,6 +274,7 @@ class cGcPlayerState(ctypes.Structure):
     ]
 
 class cGcGameState(ctypes.Structure):
+    playerState: cGcPlayerState
     _fields_ = [
         ("rRIT", ctypes.c_ulonglong),
         ("rRCE", ctypes.c_ulonglong),
@@ -3324,6 +3325,7 @@ class cGcApplication(cTkFSM, ctypes.Structure):
         FirstBootContext: cGcFirstBootContext
         TkMcQmcLFSRStore: bytes
         RealityManager: cGcRealityManager
+        GameState: cGcGameState
         Simulation: cGcSimulation
 
     data: _Pointer[Data]
@@ -3346,7 +3348,8 @@ cGcApplication.Data._fields_ = [
     ("TkMcQmcLFSRStore", ctypes.c_ubyte * 0x18),
     ("RealityManager", cGcRealityManager),
     ("_padding_0xFC8", ctypes.c_ubyte * 0x8),
-    ("GameState", ctypes.c_ubyte * 0x43c560),  # +0xFD0
+    ("GameState", cGcGameState),
+    ("_paddingGS", ctypes.c_ubyte * (0x43c560 - ctypes.sizeof(cGcGameState))),
     ("SeasonalData", ctypes.c_ubyte * 0x69F0),  # +0x43D530'
     ("Simulation", cGcSimulation),  # +0x443F20
 ]

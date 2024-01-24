@@ -94,6 +94,7 @@ class MiscMod(NMSMod):
 
     @one_shot
     @hooks.cGcGameState.LoadSpecificSave
+    @disable
     def load_specific_save(self, this, leSpecificSave):
         logging.info(f"cGcGameState*: {this}, save type: {leSpecificSave}")
         ret = hooks.cGcGameState.LoadSpecificSave.original(this, leSpecificSave)

@@ -26,6 +26,7 @@ config = configparser.ConfigParser()
 cfg_file = op.join(CWD, "NMS.py.cfg")
 read = config.read(cfg_file)
 binary_path = config["NMS"]["path"]
+root_dir = config["NMS"]["root_dir"]
 
 
 # Steam:
@@ -85,7 +86,7 @@ try:
     cwd = CWD.replace("\\", "\\\\")
     nms.inject_python_shellcode(f"CWD = '{cwd}'")
     nms.inject_python_shellcode("import sys")
-    nms.inject_python_shellcode(f"sys.path.append(CWD)")
+    nms.inject_python_shellcode("sys.path.append(CWD)")
 
     # Inject _preinject AFTER modifying the sys.path for now until we have
     # nmspy installed via pip.
@@ -98,6 +99,9 @@ try:
     nms.inject_python_shellcode(f"nmspy._internal.CWD = '{cwd}'")
     nms.inject_python_shellcode(f"nmspy._internal.HANDLE = {nms.process_handle}")
     nms.inject_python_shellcode(f"nmspy._internal.BINARY_HASH = '{binary_hash}'")
+    nms.inject_python_shellcode(
+        f"nmspy._internal.NMS_ROOT_DIR = \"{root_dir}\""
+    )
     # Inject the script
     with open(op.join(CWD, "injected.py"), "r") as f:
         shellcode = f.read()
@@ -107,7 +111,6 @@ try:
 
     try:
         input("Press something to start NMS")
-        print(time.time())
     except KeyboardInterrupt:
         # Kill the injected code so that we don't wait forever for the future to end.
         kill_injected_code(loop)

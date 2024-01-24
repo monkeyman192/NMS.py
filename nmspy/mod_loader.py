@@ -4,9 +4,12 @@
 # hooks.
 
 from abc import ABC
+from dataclasses import fields
 from functools import partial
 import inspect
+import importlib
 import importlib.util
+import json
 import logging
 import os.path as op
 import os
@@ -17,6 +20,7 @@ import string
 import sys
 
 from nmspy import __version__ as _nmspy_version
+from nmspy.errors import NoSaveError
 from nmspy._types import NMSHook
 from nmspy._internal import CWD
 from nmspy.hooking import HookManager, _NMSHook
@@ -78,12 +82,12 @@ def _main_loop_predicate(value: Any) -> bool:
     return getattr(value, "_is_main_loop_func", False)
 
 
-def _fully_booted_ready_predicate(value: Any) -> bool:
-    """ Determine if the object has the _run_on_fully_booted property.
+def _state_change_hook_predicate(value: Any) -> bool:
+    """ Determine if the object has the _trigger_on_state property.
     This will only be methods on NMSMod classes which are decorated with
-    @on_fully_booted.
+    @on_state_change or on_fully_booted.
     """
-    return getattr(value, "_run_on_fully_booted", False)
+    return hasattr(value, "_trigger_on_state")
 
 
 def _has_hotkey_predicate(value: Any) -> bool:
@@ -109,13 +113,75 @@ def _import_file(fpath: str) -> Optional[ModuleType]:
         mod_logger.exception(traceback.format_exc())
 
 
+class StructEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if hasattr(obj, "__json__"):
+            return {
+                "struct": obj.__class__.__qualname__,
+                "module": obj.__class__.__module__,
+                "fields": obj.__json__()
+            }
+        return json.JSONEncoder.default(self, obj)
+
+
+class StructDecoder(json.JSONDecoder):
+    def __init__(self):
+        json.JSONDecoder.__init__(self, object_hook=self.object_hook)
+
+    def object_hook(seld, obj: dict):
+        if (module := obj.get("module")) is not None:
+            mod_logger.info(module)
+            if module == "__main__":
+                return globals()[obj["struct"]](**obj["fields"])
+            else:
+                try:
+                    module_ = importlib.import_module(module)
+                    return getattr(module_, obj["struct"])(**obj["fields"])
+                except ImportError:
+                    mod_logger.error(f"Cannot import {module}")
+                    return
+                except AttributeError:
+                    mod_logger.error(
+                        f"Cannot find {obj['struct']} in {module}"
+                    )
+                    return
+        return obj
+
+
 class ModState(ABC):
     """A class which is used as a base class to indicate that the class is to be
     used as a mod state.
     Mod State classes will persist across mod reloads so any variables set in it
     will have the same value after the mod has been reloaded.
     """
-    pass
+    _save_fields_: tuple[str]
+
+    def save(self, name: str):
+        _data = {}
+        if hasattr(self, "_save_fields_") and self._save_fields_:
+            for field in self._save_fields_:
+                _data[field] = getattr(self, field)
+        else:
+            try:
+                for f in fields(self):
+                    _data[f.name] = getattr(self, f.name)
+            except TypeError:
+                mod_logger.error(
+                    "To save a mod state it must either be a dataclass or "
+                    "have the _save_fields_ attribute. State was not saved"
+                )
+                return
+        with open(op.join(nms.mod_save_dir, name), "w") as fobj:
+            json.dump(_data, fobj, cls=StructEncoder, indent=1)
+
+    def load(self, name: str):
+        try:
+            with open(op.join(nms.mod_save_dir, name), "r") as f:
+                data = json.load(f, cls=StructDecoder)
+        except FileNotFoundError as e:
+            raise NoSaveError from e
+        for key, value in data.items():
+            setattr(self, key, value)
 
 
 class NMSMod(ABC):
@@ -135,10 +201,8 @@ class NMSMod(ABC):
             x[1] for x in inspect.getmembers(self, _main_loop_predicate)
         ]
 
-        # TODO: Add an inspect to make sure the method has no arguments other
-        # than `self`.
-        self._on_fully_booted_funcs = [
-            x[1] for x in inspect.getmembers(self, _fully_booted_ready_predicate)
+        self._state_change_funcs = [
+            x[1] for x in inspect.getmembers(self, _state_change_hook_predicate)
         ]
 
         self._hotkey_funcs = [
@@ -152,6 +216,7 @@ class ModManager():
         self._preloaded_mods: dict[str, type[NMSMod]] = {}
         # Actual mapping of mods.
         self.mods: dict[str, NMSMod] = {}
+        self._mod_hooks: dict[str, list] = {}
         self.mod_states: dict[str, list[tuple[str, ModState]]] = {}
         self._mod_paths: dict[str, ModuleType] = {}
         self.hook_manager = hook_manager
@@ -231,8 +296,8 @@ class ModManager():
             self.hook_manager.register_function(hook, True, mod, quiet)
         for main_loop_func in mod._main_funcs:
             self.hook_manager.add_main_loop_func(main_loop_func)
-        for on_ready_func in mod._on_fully_booted_funcs:
-            self.hook_manager.add_on_fully_booted_func(on_ready_func)
+        for func in mod._state_change_funcs:
+            self.hook_manager.add_state_change_func(func._trigger_on_state, func)
         for hotkey_func in mod._hotkey_funcs:
             # Don't need to tell the hook manager, register the keyboard
             # hotkey here...
@@ -290,8 +355,8 @@ class ModManager():
                 del hook
             for main_loop_func in mod._main_funcs:
                 self.hook_manager.remove_main_loop_func(main_loop_func)
-            for on_ready_func in mod._on_fully_booted_funcs:
-                self.hook_manager.remove_on_fully_booted_func(on_ready_func)
+            for func in mod._state_change_funcs:
+                self.hook_manager.remove_state_change_func(func._trigger_on_state, func)
             for hotkey_func in mod._hotkey_funcs:
                 cb = self.hotkey_callbacks.pop(
                     (hotkey_func._hotkey, hotkey_func._hotkey_press)

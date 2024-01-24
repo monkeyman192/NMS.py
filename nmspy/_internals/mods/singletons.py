@@ -1,3 +1,6 @@
+from logging import getLogger
+import traceback
+
 import nmspy.common as nms
 import nmspy._internal as _internal
 import nmspy._internals.staging as staging
@@ -7,6 +10,10 @@ from nmspy.hooking import one_shot, hook_manager
 from nmspy.memutils import map_struct
 from nmspy.mod_loader import NMSMod
 from nmspy.states import StateEnum
+from nmspy.utils import safe_assign_enum
+
+
+logger = getLogger()
 
 
 class _INTERNAL_LoadSingletons(NMSMod):
@@ -14,11 +21,14 @@ class _INTERNAL_LoadSingletons(NMSMod):
     __description__ = "Load singletons and other important objects"
     __version__ = "0.1"
 
-    def run_on_fully_booted_funcs(self):
-        # Call any functions which are to be called once the GcApplication
-        # is ready to be used.
-        for func in hook_manager.on_fully_booted_funcs:
-            func()
+    def run_state_change_funcs(self, state):
+        for func in hook_manager.on_state_change_funcs[state]:
+            try:
+                func()
+            except:
+                logger.exception(traceback.format_exception())
+                # TODO: remove the hook...
+                pass
 
     @one_shot
     @hooks.cTkDynamicGravityControl.Construct.before
@@ -48,9 +58,9 @@ class _INTERNAL_LoadSingletons(NMSMod):
             _internal.GameState.game_loaded = True
             if _internal.GameState.game_loaded != curr_gamestate:
                 # Only call this the first time the game loads
-                _internal._executor.submit(self.run_on_fully_booted_funcs)
-        # TODO: We can add hooks for each of the game states to make it easier
-        # to handle when an event like this happens...
+                _internal._executor.submit(self.run_state_change_funcs, "MODESELECTOR")
+        else:
+            _internal._executor.submit(self.run_state_change_funcs, lNewStateID.decode())
 
     # @one_shot
     # @hooks.cGcRealityManager.Construct.after
