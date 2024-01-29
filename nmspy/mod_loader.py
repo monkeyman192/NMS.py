@@ -359,9 +359,11 @@ class ModManager():
                 self.hook_manager.remove_state_change_func(func._trigger_on_state, func)
             for hotkey_func in mod._hotkey_funcs:
                 cb = self.hotkey_callbacks.pop(
-                    (hotkey_func._hotkey, hotkey_func._hotkey_press)
+                    (hotkey_func._hotkey, hotkey_func._hotkey_press),
+                    None,
                 )
-                keyboard.unhook(cb)
+                if cb is not None:
+                    keyboard.unhook(cb)
 
             # Then, reload the module
             module = self._mod_paths[name]

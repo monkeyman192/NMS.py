@@ -1,6 +1,6 @@
 import ctypes
 import types
-from typing import Any, TYPE_CHECKING, TypeVar, Generic, Union, Type
+from typing import Any, TYPE_CHECKING, TypeVar, Generic, Union, Type, Generator
 
 
 if TYPE_CHECKING:
@@ -39,7 +39,7 @@ class _array(ctypes.Structure, Generic[T, N]):
     def __setitem__(self, i: int, val: T):
         self._elements[i] = val
 
-    def __iter__(self):
+    def __iter__(self) -> Generator[T, None, None]:
         for i in range(len(self)):
             yield self[i]
 
@@ -77,7 +77,7 @@ class _vector(ctypes.Structure, Generic[T]):
     def __getitem__(self, i: int) -> T:
         return self._first[i]
 
-    def __iter__(self):
+    def __iter__(self) -> Generator[T, None, None]:
         for i in range(len(self)):
             yield self[i]
 
@@ -90,6 +90,7 @@ class _vector(ctypes.Structure, Generic[T]):
         self._first = nullptr()
         self._last = nullptr()
         self._end = nullptr()
+
 
 class _pair(ctypes.Structure, Generic[T1, T2]):
     first: T1

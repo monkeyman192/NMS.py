@@ -93,6 +93,59 @@ def pprint_mem(offset: int, size: int, stride: Optional[int] = None) -> str:
         return " ".join([k.hex().upper() for k in _data])
 
 
+def _hex_repr(val: int, as_hex: bool) -> str:
+    if as_hex:
+        return hex(val)
+    else:
+        return str(val)
+
+
+def get_field_info(obj, logger=None, indent: int = 0, as_hex: bool = True, max_depth: int = -1):
+    if indent == max_depth:
+        return
+    if isinstance(obj, ctypes.Structure):
+        # Need to get the actual class object to iterate over its' fields:
+        cls_obj = obj.__class__
+        has_values = True
+    elif isinstance(obj, ctypes.Array):
+        cls_obj = obj[0]
+        has_values = True
+    else:
+        try:
+            if issubclass(obj, ctypes.Structure):
+                cls_obj = obj
+                has_values = False
+            elif issubclass(obj, ctypes.Array):
+                cls_obj = obj._type_
+                has_values = False
+            else:
+                raise TypeError(f"obj {obj} must be an instance of a ctypes.Structure or a subclass.")
+        except TypeError as e:
+            yield obj.__mro__
+            raise TypeError(f"!!! obj {obj} must be an instance of a ctypes.Structure or a subclass.") from e
+    for field, field_type in cls_obj._fields_:
+        if has_values:
+            val = getattr(obj, field)
+            # if isinstance(val, ctypes.Array):
+            #     val = [x for x in val]
+        field_data: ctypes._CField = getattr(cls_obj, field)
+        offset = _hex_repr(field_data.offset, as_hex)
+        size = _hex_repr(field_data.size, as_hex)
+        if has_values and not isinstance(val, ctypes.Structure):
+            msg = f"{field} ({field_type.__name__}): size: {size} offset: {offset} value: {val}"
+        else:
+            msg = f"{field} ({field_type.__name__}): size: {size} offset: {offset}"
+        msg = indent * "  " + msg
+        yield msg
+        if not issubclass(field_type, (ctypes._SimpleCData, ctypes.Array, ctypes._Pointer)):
+            if has_values:
+                for _msg in get_field_info(val, logger, indent + 1, as_hex, max_depth):
+                    yield _msg
+            else:
+                for _msg in get_field_info(field_type, logger, indent + 1, as_hex, max_depth):
+                    yield _msg
+
+
 def get_addressof(obj) -> int:
     try:
         # If it's a pointer, this is the branch that is used.

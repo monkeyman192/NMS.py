@@ -2,7 +2,7 @@ import logging
 
 import ctypes
 import types
-from typing import Any, Union, TypeVar, Generic, Type, Annotated
+from typing import Any, Union, TypeVar, Generic, Type, Annotated, Generator
 
 from nmspy.data.cpptypes import std
 
@@ -79,6 +79,13 @@ class Vector3f(ctypes.Structure):
 
     def __json__(self) -> dict:
         return {"x": self.x, "y": self.y, "z": self.z}
+
+    def normalise(self) -> "Vector3f":
+        """ Return a normalised version of the vector. """
+        return ((self.x ** 2 + self.y ** 2 + self.z ** 2) ** (-0.5)) * Vector3f(self.x, self.y, self.z)
+
+    def __len__(self) -> float:
+        return (self.x ** 2 + self.y ** 2 + self.z ** 2) ** (0.5)
 
 
 class cTkPhysRelVec3(ctypes.Structure):
@@ -293,7 +300,7 @@ class cTkDynamicArray(ctypes.Structure, Generic[T]):
             return []
         return map_struct(self.array, self._template_type * self.size)
 
-    def __iter__(self):
+    def __iter__(self) -> Generator[T, None, None]:
         # TODO: Improve to generate as we go.
         for obj in self.value:
             yield obj
