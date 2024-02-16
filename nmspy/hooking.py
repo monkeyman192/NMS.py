@@ -390,6 +390,16 @@ def on_state_change(state):
     return _inner
 
 
+def on_game_save(func):
+    func._on_game_save = True
+    return func
+
+
+def on_game_load(func):
+    func._on_game_load = True
+    return func
+
+
 def on_fully_booted(func):
     """
     Configure the decorated function to be run once the game is considered

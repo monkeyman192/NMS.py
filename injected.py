@@ -177,6 +177,9 @@ try:
 
     mod_manager = ModManager(hook_manager)
 
+    # TODO: Need to re-write how we load mods.
+    # To enable compound mods
+
     # First, load our internal mod before anything else.
     mod_manager.load_mod_folder(op.join(_internal.CWD, "nmspy/_internals/mods"))
     mod_manager.enable_all(quiet=not debug_mode)
