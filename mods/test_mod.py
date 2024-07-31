@@ -1,17 +1,21 @@
 import logging
 import ctypes
+from dataclasses import dataclass
 
-import nmspy.data.function_hooks as hooks
-from nmspy.hooking import disable, main_loop, on_key_pressed, on_key_release
-from nmspy.memutils import map_struct
+import nmspy.data.functions.hooks as hooks
+from pymhf.core.hooking import disable, on_key_pressed, on_key_release
+from pymhf.core.memutils import map_struct
 import nmspy.data.structs as nms_structs
-from nmspy.mod_loader import NMSMod, ModState
-from nmspy.calling import call_function
+from pymhf.core.mod_loader import ModState
+from nmspy import NMSMod
+from nmspy.decorators import main_loop
+from pymhf.core.calling import call_function
+from pymhf.gui.decorators import gui_variable, gui_button, STRING
 
-
+@dataclass
 class TestModState(ModState):
-    def __init__(self):
-        self.value: int = 1
+    value: int = 1
+    text: str = "Hi"
 
 
 @disable
@@ -19,34 +23,36 @@ class TestMod(NMSMod):
     __author__ = "monkeyman192"
     __description__ = "A simple test mod"
     __version__ = "0.1"
-    __NMSPY_required_version__ = "0.6.0"
+    __NMSPY_required_version__ = "0.7.0"
 
     state = TestModState()
 
     def __init__(self):
         super().__init__()
-        self.text: str = "NO"
         self.should_print = False
 
     @property
-    def _text(self):
-        return self.text.encode()
+    @STRING("Replace 'Options' prefix: ")
+    def option_replace(self):
+        return self.state.text
 
-    @on_key_pressed("space")
-    def press(self):
-        self.text = f"BBB {self.state.value}"
+    @option_replace.setter
+    def option_replace(self, value):
+        self.state.text = value
+
+    @property
+    def _text(self):
+        return f"{self.state.text}: {self.state.value}".encode()
 
     @on_key_release("space")
     def release(self):
-        self.text = "NO"
         self.state.value += 1
 
-    @hooks.nvgText
+    @hooks.nvgText.before
     def change_test(self, ctx, x: float, y: float, string, end):
         if string == b"Options":
             string = ctypes.c_char_p(b"Hi")
-            call_function("nvgText", ctx, x + 30, y, ctypes.c_char_p(self._text), end)
-        return hooks.nvgText.original(ctx, x, y, string, end)
+            return ctx, x + 30, y, ctypes.c_char_p(self._text), end
 
     # @nvgText.before
     # def change_test_after(self, ctx, x: float, y: float, string, end):
@@ -93,4 +99,4 @@ class TestMod(NMSMod):
     @main_loop.before
     def do_something(self):
         if self.should_print:
-            logging.info(self.text)
+            logging.info(self._text)

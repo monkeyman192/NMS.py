@@ -1,1 +1,1 @@
-from .function_offsets import FUNC_OFFSETS
+from .functions.offsets import FUNC_OFFSETS

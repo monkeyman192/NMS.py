@@ -1,70 +1,32 @@
-# Have the NMS* class definitions here since there is a circular dependency
-# otherwise.
+from typing import Any
 
-from collections import namedtuple
-from ctypes import CFUNCTYPE
-from _ctypes import CFuncPtr
-from typing import Callable, Any, Optional
-import inspect
-from types import MethodType
-
-import cyminhook
+from pymhf import Mod
 
 
-FUNCDEF = namedtuple("FUNCDEF", ["restype", "argtypes"])
+def _state_change_hook_predicate(value: Any) -> bool:
+    """ Determine if the object has the _trigger_on_state property.
+    This will only be methods on NMSMod classes which are decorated with
+    @on_state_change or on_fully_booted.
+    """
+    return hasattr(value, "_trigger_on_state")
 
 
-class NMSHook(cyminhook.MinHook):
-    original: Callable[..., Any]
-    target: int
-    detour: Callable[..., Any]
-    signature: CFuncPtr
-    _name: str
-    _should_enable: bool
-    _invalid: bool
-    _pattern: Optional[str]
-    mod: Any
+def _main_loop_predicate(value: Any) -> bool:
+    """ Determine if the objecy has the _is_main_loop_func property.
+    This will only be methods on Mod classes which are decorated with either
+    @main_loop.before or @main_loop.after
+    """
+    return getattr(value, "_is_main_loop_func", False)
 
-    def __init__(self,
-        *,
-        detour: Optional[Callable[..., Any]] = None,
-        signature: Optional[CFuncPtr] = None,
-        target: Optional[int] = None
-    ):
-        # Normally defined classes will not be "compound compatible".
-        # This means that they will be the only function to hook a given game
-        # function.
-        if detour is not None:
-            # If detour is provided, then bind it to the detour method of
-            # ourself.
-            setattr(self, "detour", MethodType(detour, self))
-        self._is_compound_compatible = False
-        if not hasattr(self, "_should_enable"):
-            self._should_enable = True
-        for _, obj in inspect.getmembers(self):
-            if hasattr(obj, "_before"):
-                self._before_hook = obj
-                self._is_compound_compatible = True
-            elif hasattr(obj, "_after"):
-                self._after_hook = obj
-                self._is_compound_compatible = True
-        # Only initialize the cyminhook subclass if we are not a compound-compatible hook.
-        # If it's a compound hook then initializing it will cause and error to
-        # occur. We will initialize the hook properly when we create the actual
-        # compound hook.
-        if not self._is_compound_compatible:
-            super().__init__(signature=signature, target=target)
-        self.state = "initialized"
 
-    def close(self):
-        super().close()
-        self.state = "closed"
+def _state_change_hook_predicate(value: Any) -> bool:
+    """ Determine if the object has the _trigger_on_state property.
+    This will only be methods on Mod classes which are decorated with
+    @on_state_change or on_fully_booted.
+    """
+    return hasattr(value, "_trigger_on_state")
 
-    def enable(self):
-        if self._should_enable:
-            super().enable()
-            self.state = "enabled"
 
-    def disable(self):
-        super().disable()
-        self.state = "disabled"
+class NMSMod(Mod):
+    def __init__(self):
+        super().__init__()

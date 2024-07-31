@@ -3,11 +3,7 @@ node_modules
 CRITICAL_ERROR.txt
 
 **/__pycache__/**
-stuff/
-extractors/**
 logs/
-nmspy/data/functions/
 .cache/*
 
-extractors_v2/extracted/**
 .venv/

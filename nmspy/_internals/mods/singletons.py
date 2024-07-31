@@ -1,34 +1,27 @@
 from logging import getLogger
 import traceback
 
+from pymhf.core._types import DetourTime
+from pymhf.gui.decorators import no_gui
+import pymhf.core._internal as _internal
+from pymhf.core.hooking import one_shot, hook_manager
+from pymhf.core.memutils import map_struct
 import nmspy.common as nms
-import nmspy._internal as _internal
 import nmspy._internals.staging as staging
 import nmspy.data.structs as structs
-import nmspy.data.function_hooks as hooks
-from nmspy.hooking import one_shot, hook_manager
-from nmspy.memutils import map_struct
-from nmspy.mod_loader import NMSMod
+import nmspy.data.functions.hooks as hooks
+from nmspy._types import NMSMod
 from nmspy.states import StateEnum
-from nmspy.utils import safe_assign_enum
 
 
 logger = getLogger()
 
 
+@no_gui
 class _INTERNAL_LoadSingletons(NMSMod):
     __author__ = "monkeyman192"
     __description__ = "Load singletons and other important objects"
     __version__ = "0.1"
-
-    def run_state_change_funcs(self, state):
-        for func in hook_manager.on_state_change_funcs[state]:
-            try:
-                func()
-            except:
-                logger.exception(traceback.format_exception())
-                # TODO: remove the hook...
-                pass
 
     @one_shot
     @hooks.cTkDynamicGravityControl.Construct.before
@@ -53,14 +46,17 @@ class _INTERNAL_LoadSingletons(NMSMod):
 
     @hooks.cTkFSMState.StateChange.after
     def state_change(self, this, lNewStateID, lpUserData, lbForceRestart):
+        logger.info(f"New State: {lNewStateID}")
         if lNewStateID == StateEnum.ApplicationGameModeSelectorState.value:
             curr_gamestate = _internal.GameState.game_loaded
             _internal.GameState.game_loaded = True
             if _internal.GameState.game_loaded != curr_gamestate:
                 # Only call this the first time the game loads
-                _internal._executor.submit(self.run_state_change_funcs, "MODESELECTOR")
+                hook_manager.call_custom_callbacks("MODESELECTOR", DetourTime.AFTER)
+                hook_manager.call_custom_callbacks("MODESELECTOR", DetourTime.NONE)
         else:
-            _internal._executor.submit(self.run_state_change_funcs, lNewStateID.decode())
+            hook_manager.call_custom_callbacks(lNewStateID.decode(), DetourTime.AFTER)
+            hook_manager.call_custom_callbacks(lNewStateID.decode(), DetourTime.NONE)
 
     # @one_shot
     # @hooks.cGcRealityManager.Construct.after
@@ -72,11 +68,12 @@ class _INTERNAL_LoadSingletons(NMSMod):
     #     except:
     #         logging.info(traceback.format_exc())
 
-    @hooks.cGcApplication.Update
-    def _main_loop(self, *args):
-        """ The main application loop. Run any before or after functions here. """
-        for func in hook_manager.main_loop_before_funcs:
-            func()
-        hooks.cGcApplication.Update.original(*args)
-        for func in hook_manager.main_loop_after_funcs:
-            func()
+    @hooks.cGcApplication.Update.before
+    def _main_loop_before(self, *args):
+        """ The main application loop. Run any before functions here. """
+        hook_manager.call_custom_callbacks("MAIN_LOOP", DetourTime.BEFORE)
+
+    @hooks.cGcApplication.Update.after
+    def _main_loop_before(self, *args):
+        """ The main application loop. Run any after functions here. """
+        hook_manager.call_custom_callbacks("MAIN_LOOP", DetourTime.AFTER)

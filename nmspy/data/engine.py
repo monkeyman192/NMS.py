@@ -5,7 +5,7 @@
 import ctypes
 from typing import Optional
 
-from nmspy.calling import call_function as _call_function
+from pymhf.core.calling import call_function
 from nmspy.data.common import TkHandle, Vector3f, cTkMatrix34
 
 
@@ -15,7 +15,7 @@ def GetNodeAbsoluteTransMatrix(
 ) -> cTkMatrix34:
     if mat is None:
         mat = cTkMatrix34()
-    _call_function(
+    call_function(
         "Engine::GetNodeAbsoluteTransMatrix",
         node.lookupInt,
         ctypes.addressof(mat)
@@ -32,7 +32,7 @@ def GetNodeTransMats(
         rel_mat = cTkMatrix34()
     if abs_mat is None:
         abs_mat = cTkMatrix34()
-    _call_function(
+    call_function(
         "Engine::GetNodeTransMats",
         node.lookupInt,
         ctypes.addressof(rel_mat),
@@ -43,19 +43,19 @@ def GetNodeTransMats(
 
 
 def RequestRemoveNode(node: TkHandle) -> None:
-    _call_function("Engine::RequestRemoveNode", node.lookupInt)
+    call_function("Engine::RequestRemoveNode", node.lookupInt)
 
 
 def SetNodeActivation(node: TkHandle, active: bool):
-    _call_function("Engine::SetNodeActivation", node.lookupInt, active)
+    call_function("Engine::SetNodeActivation", node.lookupInt, active)
 
 
 def SetNodeActivationRecursive(node: TkHandle, active: bool):
-    _call_function("Engine::SetNodeActivationRecursive", node.lookupInt, active)
+    call_function("Engine::SetNodeActivationRecursive", node.lookupInt, active)
 
 
 def SetNodeTransMat(node: TkHandle, mat: cTkMatrix34):
-    _call_function(
+    call_function(
         "Engine::SetNodeTransMat",
         node.lookupInt,
         ctypes.addressof(mat),
@@ -63,7 +63,7 @@ def SetNodeTransMat(node: TkHandle, mat: cTkMatrix34):
 
 
 def ShiftAllTransformsForNode(node: TkHandle, shift: Vector3f) -> None:
-    return _call_function(
+    return call_function(
         "Engine::ShiftAllTransformsForNode",
         node.lookupInt,
         ctypes.addressof(shift)

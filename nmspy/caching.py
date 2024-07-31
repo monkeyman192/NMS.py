@@ -7,7 +7,7 @@ import os
 import os.path as op
 from typing import Optional
 
-import nmspy._internal as _internal
+import pymhf.core._internal as _internal
 
 
 CACHE_DIR = ".cache"

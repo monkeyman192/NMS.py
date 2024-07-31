@@ -4,7 +4,7 @@ Our first mod will be something simple which will demonstate a number of concept
 
 ```py
 import nmspy.data.function_hooks as hooks
-from nmspy.hooking import disable, main_loop, on_key_pressed, on_key_release
+from pymhf.core.hooking import disable, main_loop, on_key_pressed, on_key_release
 from nmspy.memutils import map_struct
 import nmspy.data.structs as nms_structs
 from nmspy.mod_loader import NMSMod

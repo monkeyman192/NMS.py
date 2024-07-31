@@ -1,12 +1,12 @@
 # import ctypes
 import logging
 
-from nmspy.hooking import one_shot, disable, manual_hook
+from pymhf.core.hooking import one_shot, disable
 import nmspy.common as nms
-from nmspy.memutils import map_struct
+from pymhf.core.memutils import map_struct
 import nmspy.data.structs as nms_structs
-import nmspy.data.function_hooks as hooks
-from nmspy.mod_loader import NMSMod
+import nmspy.data.functions.hooks as hooks
+from nmspy import NMSMod
 # from nmspy._types import FUNCDEF
 
 
@@ -18,6 +18,7 @@ from nmspy.mod_loader import NMSMod
 # )
 
 
+@disable
 class MiscMod(NMSMod):
     __author__ = "monkeyman192"
     __description__ = "Misc stuff..."
@@ -93,13 +94,11 @@ class MiscMod(NMSMod):
     #             return self.original(this, leIndex)
 
     @one_shot
-    @hooks.cGcGameState.LoadSpecificSave
+    @hooks.cGcGameState.LoadSpecificSave.after
     @disable
-    def load_specific_save(self, this, leSpecificSave):
+    def load_specific_save(self, this, leSpecificSave, _result_):
         logging.info(f"cGcGameState*: {this}, save type: {leSpecificSave}")
-        ret = hooks.cGcGameState.LoadSpecificSave.original(this, leSpecificSave)
-        logging.info(str(ret))
-        return ret
+        logging.info(_result_)
 
     def slow_thing(self):
         import time

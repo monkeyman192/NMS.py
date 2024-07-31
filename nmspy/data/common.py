@@ -4,7 +4,8 @@ import ctypes
 import types
 from typing import Any, Union, TypeVar, Generic, Type, Annotated, Generator
 
-from nmspy.data.cpptypes import std
+from pymhf.extensions.cpptypes import std
+from pymhf.core.memutils import map_struct
 
 # from nmspy.hashing import fnv_1a
 
@@ -293,8 +294,6 @@ class cTkDynamicArray(ctypes.Structure, Generic[T]):
 
     @property
     def value(self) -> Any:
-        from nmspy.memutils import map_struct
-
         if self.array == 0 or self.size == 0:
             # Empty lists are store with an empty pointer in mem.
             return []
@@ -528,6 +527,9 @@ class cTkBitArray(ctypes.Structure, Generic[T, N]):
     def ones(self) -> list[int]:
         return [i for i in range(self._size) if self[i]]
 
+    def __eq__(self, other: "cTkBitArray"):
+        return self.ones() == other.ones()
+
     def __str__(self):
         """ A string representation.
         This will be an "unwrapped" version of how it's actually represented in
@@ -575,7 +577,7 @@ class cTkListNode(ctypes.Structure, Generic[T1, T2]):
         _cls._template_type1 = _type1
         _cls._template_type2 = _type2
         _cls._fields_ = [
-            ("value", std.pair[_type1, _type2]),
+            ("_value", std.pair[_type1, _type2]),
             ("hash", ctypes.c_uint64),
             ("_next", ctypes.c_uint64),
             ("_prev", ctypes.c_uint64),
@@ -584,14 +586,18 @@ class cTkListNode(ctypes.Structure, Generic[T1, T2]):
         return _cls
 
     @property
+    def value(self):
+        return (self._value.first, self._value.second)
+
+    @property
     def next(self):
-        from nmspy.memutils import map_struct
-        return map_struct(self._next, cTkListNode[self._template_type1, self._template_type2])
+        if self._next:
+            return map_struct(self._next, cTkListNode[self._template_type1, self._template_type2])
 
     @property
     def prev(self):
-        from nmspy.memutils import map_struct
-        return map_struct(self._prev, cTkListNode[self._template_type1, self._template_type2])
+        if self._prev:
+            return map_struct(self._prev, cTkListNode[self._template_type1, self._template_type2])
 
 
 class cTkLinearHashTable(ctypes.Structure, Generic[T1, T2]):

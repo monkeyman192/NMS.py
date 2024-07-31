@@ -1,6 +1,6 @@
-## Writing a mod using NMS.py
+## Writing a mod using pyMHF
 
-NMS.py contains offsets and mappings for many functions in the game.
+*pyMHF* contains offsets and mappings for many functions in the game.
 It aims to make hooking the various game functions as simple as possible with an easy to understand syntax.
 
 First, we need a mod class which will contain all the relevant hooks for your mod.
@@ -8,9 +8,9 @@ First, we need a mod class which will contain all the relevant hooks for your mo
 The basics look something like this:
 
 ```py
-from nmspy.mod_loader import NMSMod
+from pymhf import Mod
 
-class MyMod(NMSMod):
+class MyMod(Mod):
     __author__ = "you!"
     __description__ = "Your fantastic mod!"
     __version__ = "1.0"
@@ -24,6 +24,7 @@ This is best shown with an example:
 
 ```py
 import logging
+from pymhf import Mod
 import nmspy.data.function_hooks as hooks
 
 class MyMod(NMSMod):

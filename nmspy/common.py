@@ -2,7 +2,7 @@ from concurrent.futures import ThreadPoolExecutor
 import os
 import os.path as op
 
-import nmspy._internal as _internal
+import pymhf.core._internal as _internal
 import nmspy.data.structs as nms_structs
 
 # Store all the globals here like this so that we may access them easily and
@@ -47,6 +47,6 @@ memory_manager: int = 0
 # TODO: Move somewhere else? Not sure where but this doesn't really fit here...
 executor: ThreadPoolExecutor = None  # type: ignore
 
-mod_save_dir = op.join(_internal.NMS_ROOT_DIR, "NMSPY_SAVES")
+mod_save_dir = op.join(_internal.GAME_ROOT_DIR, "MOD_SAVES")
 if not op.exists(mod_save_dir):
     os.makedirs(mod_save_dir)

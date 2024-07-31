@@ -12,13 +12,11 @@ import ctypes
 import ctypes.wintypes
 
 from nmspy.data import common, enums as nms_enums
-from nmspy.calling import call_function
+from pymhf.core.calling import call_function
 # from nmspy.data.types import core, simple
-from nmspy.data.cpptypes import std
-from nmspy.memutils import map_struct
-from nmspy.utils import safe_assign_enum
-
-
+from pymhf.extensions.cpptypes import std
+from pymhf.core.memutils import map_struct
+from pymhf.core.utils import safe_assign_enum
 
 
 class cTkMetaDataXMLFunctionLookup(ctypes.Structure):
@@ -6965,6 +6963,319 @@ cGcGameState._fields_ = [
     ("waitingForSeasonalGameMode", ctypes.c_ubyte),
     ("padding0x43C283", ctypes.c_ubyte * 0x5),
     # ("cloudSaveManager", cGcCloudSaveManager),
+]
+
+
+class cGcPlayerSpawnStateData(ctypes.Structure):
+    playerPositionInSystem: common.Vector4f
+    playerTransformAt: common.Vector4f
+    playerDeathRespawnPositionInSystem: common.Vector4f
+    playerDeathRespawnTransformAt: common.Vector4f
+    shipPositionInSystem: common.Vector4f
+    shipTransformAt: common.Vector4f
+    _meLastKnownPlayerState: ctypes.c_int32
+    freighterPositionInSystem: common.Vector4f
+    freighterTransformAt: common.Vector4f
+    freighterTransformUp: common.Vector4f
+    abandonedFreighterPositionInSystem: common.Vector4f
+    abandonedFreighterTransformAt: common.Vector4f
+    abandonedFreighterTransformUp: common.Vector4f
+
+cGcPlayerSpawnStateData._fields_ = [
+    ("playerPositionInSystem", common.Vector4f),
+    ("playerTransformAt", common.Vector4f),
+    ("playerDeathRespawnPositionInSystem", common.Vector4f),
+    ("playerDeathRespawnTransformAt", common.Vector4f),
+    ("shipPositionInSystem", common.Vector4f),
+    ("shipTransformAt", common.Vector4f),
+    ("_meLastKnownPlayerState", ctypes.c_int32),
+    ("padding0x64", ctypes.c_ubyte * 0xC),
+    ("freighterPositionInSystem", common.Vector4f),
+    ("freighterTransformAt", common.Vector4f),
+    ("freighterTransformUp", common.Vector4f),
+    ("abandonedFreighterPositionInSystem", common.Vector4f),
+    ("abandonedFreighterTransformAt", common.Vector4f),
+    ("abandonedFreighterTransformUp", common.Vector4f),
+]
+
+
+class cGcNetworkBufferHash_vtbl(ctypes.Structure):
+    cGcNetworkBufferHash_dtor_0: bytes
+    GetHashValue: bytes
+    GetHashTimestamp: bytes
+    GenerateHashValue: bytes
+    OnHashOffsetChanged: bytes
+
+cGcNetworkBufferHash_vtbl._fields_ = [
+    ("cGcNetworkBufferHash_dtor_0", ctypes.c_ubyte * 0x8),
+    ("GetHashValue", ctypes.c_ubyte * 0x8),
+    ("GetHashTimestamp", ctypes.c_ubyte * 0x8),
+    ("GenerateHashValue", ctypes.c_ubyte * 0x8),
+    ("OnHashOffsetChanged", ctypes.c_ubyte * 0x8),
+]
+
+
+class sHashValue(ctypes.Structure):
+    hashValue: int
+    timeStamp: int
+
+sHashValue._fields_ = [
+    ("hashValue", ctypes.c_uint16),
+    ("timeStamp", ctypes.c_int16),
+]
+
+
+class cGcNetworkBufferHash(ctypes.Structure):
+    __vftable: _Pointer["cGcNetworkBufferHash_vtbl"]
+    kiChunkSize: int
+    chunkHashOffset: int
+    chunkHashValues: std.vector[sHashValue]
+    timestamp: int
+    initialised: bool
+
+cGcNetworkBufferHash._fields_ = [
+    ("__vftable", ctypes.POINTER(cGcNetworkBufferHash_vtbl)),
+    ("kiChunkSize", ctypes.c_int32),
+    ("chunkHashOffset", ctypes.c_int32),
+    ("chunkHashValues", std.vector[sHashValue]),
+    ("timestamp", ctypes.c_uint64),
+    ("initialised", ctypes.c_ubyte),
+    ("_padding", ctypes.c_ubyte * 0x7)
+]
+
+
+class cGcNetworkSynchronisedBuffer(cGcNetworkBufferHash, ctypes.Structure):
+    pass
+
+cGcNetworkSynchronisedBuffer._fields_ = []
+
+
+class cGcBaseBuildingPersistentBuffer(cGcNetworkSynchronisedBuffer, ctypes.Structure):
+    class BaseBuildingPersistentData(ctypes.Structure):
+        pass
+
+    baseBuildingObjects: std.vector[cGcBaseBuildingPersistentBuffer.BaseBuildingPersistentData]
+    currentPlanetObjects: bytes
+    currentAddress: int
+    debugPositions: bool
+    networkOwnerId: bytes
+    bufferIndex: int
+
+cGcBaseBuildingPersistentBuffer._fields_ = [
+    ("baseBuildingObjects", std.vector[cGcBaseBuildingPersistentBuffer.BaseBuildingPersistentData]),
+    ("currentPlanetObjects", ctypes.c_ubyte * 0x40),
+    ("currentAddress", ctypes.c_uint64),
+    ("debugPositions", ctypes.c_ubyte),
+    ("networkOwnerId", ctypes.c_ubyte * 0x40),
+    ("padding0xD9", ctypes.c_ubyte * 0x3),
+    ("bufferIndex", ctypes.c_uint32),
+]
+
+
+class cGcBaseBuildingGlobalBuffer(ctypes.Structure):
+    persistentBuffers: list[cGcBaseBuildingPersistentBuffer]
+
+cGcBaseBuildingGlobalBuffer._fields_ = [
+    ("persistentBuffers", cGcBaseBuildingPersistentBuffer * 0x20),
+]
+
+
+class cGcPersistentInteractionsManager(ctypes.Structure):
+    baseBuildingBuffer: "cGcBaseBuildingGlobalBuffer"
+    persistentBaseBuffers: std.vector[cGcPlayerBasePersistentBuffer]
+    distressSignalBuffer: "cGcPersistentInteractionBuffer"
+    crateBuffer: "cGcPersistentInteractionBuffer"
+    destructableBuffer: "cGcPersistentInteractionBuffer"
+    costBuffer: "cGcPersistentInteractionBuffer"
+    buildingBuffer: "cGcPersistentInteractionBuffer"
+    creatureBuffer: "cGcPersistentInteractionBuffer"
+    personalBuffer: "cGcPersistentInteractionBuffer"
+    fireteamSyncBuffer: "cGcPersistentInteractionBuffer"
+    terrainEditBuffer: "cGcTerrainEditsPersistentBuffer"
+    tradingSupplyBuffer: "cGcTradingSupplyBuffer"
+    maintenanceBuffer: "cGcMaintenanceBuffer"
+    personalMaintenanceBuffer: "cGcMaintenanceBuffer"
+    visitedSystemsBuffer: "cGcVisitedSystemsBuffer"
+
+cGcPersistentInteractionsManager._fields_ = [
+    ("baseBuildingBuffer", cGcBaseBuildingGlobalBuffer),
+    ("persistentBaseBuffers", std.vector[cGcPlayerBasePersistentBuffer]),
+    ("padding0x1C18", ctypes.c_ubyte * 0x8),
+    ("distressSignalBuffer", cGcPersistentInteractionBuffer),
+    ("crateBuffer", cGcPersistentInteractionBuffer),
+    ("destructableBuffer", cGcPersistentInteractionBuffer),
+    ("costBuffer", cGcPersistentInteractionBuffer),
+    ("buildingBuffer", cGcPersistentInteractionBuffer),
+    ("creatureBuffer", cGcPersistentInteractionBuffer),
+    ("personalBuffer", cGcPersistentInteractionBuffer),
+    ("fireteamSyncBuffer", cGcPersistentInteractionBuffer),
+    ("terrainEditBuffer", cGcTerrainEditsPersistentBuffer),
+    ("tradingSupplyBuffer", cGcTradingSupplyBuffer),
+    ("maintenanceBuffer", cGcMaintenanceBuffer),
+    ("personalMaintenanceBuffer", cGcMaintenanceBuffer),
+    ("visitedSystemsBuffer", cGcVisitedSystemsBuffer),
+]
+
+
+class cGcGameState(ctypes.Structure):
+    class SaveThreadData(ctypes.Structure):
+        gameState: _Pointer["cGcGameState"]
+        _meSaveReason: ctypes.c_int32
+        showMessage: bool
+        fullSave: bool
+        playerStateDataToSave: bytes  # cGcPlayerStateData
+        saveMaskFlagsToRemove: int
+
+    SaveThreadData._fields_ = [
+        ("gameState", ctypes.c_uint64),
+        ("_meSaveReason", ctypes.c_int32),
+        ("showMessage", ctypes.c_ubyte),
+        ("fullSave", ctypes.c_ubyte),
+        ("padding0xE", ctypes.c_ubyte * 0x2),
+        ("playerStateDataToSave", ctypes.c_ubyte * 496960),
+        ("saveMaskFlagsToRemove", ctypes.c_uint32),
+    ]
+
+    RRIT: _Pointer[ctypes.c_uint32]
+    RRCE: _Pointer[ctypes.c_uint32]
+    RRBB: _Pointer[ctypes.c_uint32]
+    gameStateGroupNode: common.TkHandle
+    playerState: "cGcPlayerState"
+    savedSpawnState: "cGcPlayerSpawnStateData"
+    playerShipOwnership: "cGcPlayerShipOwnership"
+    playerVehicleOwnership: "cGcPlayerVehicleOwnership"
+    playerCreatureOwnership: "cGcPlayerCreatureOwnership"
+    playerMultitoolOwnership: "cGcPlayerMultitoolOwnership"
+    playerFreighterOwnership: bytes
+    playerFleetManager: bytes
+    playerSquadronOwnership: "cGcPlayerSquadronOwnership"
+    gameKnowledge: "cGcGameKnowledge"
+    # discoveryManager: "cGcDiscoveryManager"
+    # wonderManager: "cGcWonderManager"
+    # graveManager: "cGcGraveManager"
+    # msgBeaconManager: "cGcMsgBeaconManager"
+    # playerDiscoveryHelper: "cGcPlayerDiscoveryHelper"
+    # statsManager: "cGcStatsManager"
+    # telemetryManager: "cGcTelemetryManager"
+    # userSettings: "cGcUserSettings"
+    # userSeenItemsState: "cGcUserSeenItemsState"
+    # difficultySettings: "cGcDifficultySettings"
+    # mPMissionTracker: "cGcMPMissionTracker"
+    # entitlementManager: "cGcEntitlementManager"
+    # planetMappingManager: "cGcPlanetMappingManager"
+    # settlementStateManager: "cGcSettlementStateManager"
+    # saveStateDisplayTime: float
+    # _meSaveStateLastResult: ctypes.c_int32
+    # lastSaveOperationTimestamp: int
+    # restoreRequested: bool
+    # _meRestoreType: ctypes.c_int32
+    # savedInteractionsManager: "cGcPersistentInteractionsManager"  # 1906688
+    # pendingProgressWrite: bool
+    # delayedMicroSave: bool
+    # pendingDifficultySave: bool
+    # restartAllInactiveSeasonalMissions: bool
+    # _mePatchVersion: ctypes.c_int32
+    # patchAffectsLoading: bool
+    # warpTunnelRes: common.cTkSmartResHandle
+    # teleportTunnelRes: common.cTkSmartResHandle
+    # blackHoleTunnelRes: common.cTkSmartResHandle
+    # portalTunnelRes: common.cTkSmartResHandle
+    # placeMarkerRes: common.cTkSmartResHandle
+    # inventoryStoreBalance: "cGcInventoryStoreBalance"
+    # playerRichPresence: "cGcRichPresence"
+    # singleMultiPositionInSync: bool
+    # saveCompletedThisFrame: bool
+    # startedSaveTime: float
+    # saveThreadData: _Pointer["cGcGameState.SaveThreadData"]
+    # saveThreadId: int
+    # saveRequestNewEvent: int
+    # saveThreadExitedEvent: int
+    # saveThreadRequestExit: bool
+    # pendingAsyncSaveRequest: bool
+    # _mePendingAsyncSaveRequestReason: ctypes.c_int32
+    # pendingAsyncSaveRequestShowMessage: bool
+    # upgradeMessageFilterTimer: float
+    # networkClientLoad: bool
+    # lastDeathTriggeredSlotSelect: bool
+    # waitingForSeasonalGameMode: bool
+    # cloudSaveManager: bytes
+
+cGcGameState._fields_ = [
+    ("RRIT", ctypes.POINTER(ctypes.c_int32)),
+    ("RRCE", ctypes.POINTER(ctypes.c_int32)),
+    ("RRBB", ctypes.POINTER(ctypes.c_int32)),
+    ("gameStateGroupNode", common.TkHandle),
+    ("padding0x1C", ctypes.c_ubyte * 0x4),
+    ("playerState", cGcPlayerState),
+    ("savedSpawnState", cGcPlayerSpawnStateData),
+    ("playerShipOwnership", cGcPlayerShipOwnership),
+    ("playerVehicleOwnership", cGcPlayerVehicleOwnership),
+    ("playerCreatureOwnership", cGcPlayerCreatureOwnership),
+    ("playerMultitoolOwnership", cGcPlayerMultitoolOwnership),
+    ("playerFreighterOwnership", ctypes.c_ubyte * 0x3940),
+    ("playerFleetManager", ctypes.c_ubyte * 0x10F00),
+    ("playerSquadronOwnership", cGcPlayerSquadronOwnership),
+    ("gameKnowledge", cGcGameKnowledge),
+    # ("discoveryManager", cGcDiscoveryManager),
+    # ("padding0x1977D8", ctypes.c_ubyte * 0x8),
+    # ("wonderManager", cGcWonderManager),
+    # ("graveManager", cGcGraveManager),
+    # ("msgBeaconManager", cGcMsgBeaconManager),
+    # ("playerDiscoveryHelper", cGcPlayerDiscoveryHelper),
+    # ("statsManager", cGcStatsManager),
+    # ("telemetryManager", cGcTelemetryManager),
+    # ("padding0x1CCE08", ctypes.c_ubyte * 0x8),
+    # ("userSettings", cGcUserSettings),
+    # ("userSeenItemsState", cGcUserSeenItemsState),
+    # ("difficultySettings", cGcDifficultySettings),
+    # ("mPMissionTracker", cGcMPMissionTracker),
+    # ("entitlementManager", cGcEntitlementManager),
+    # ("planetMappingManager", cGcPlanetMappingManager),
+    # ("settlementStateManager", cGcSettlementStateManager),
+    # ("saveStateDisplayTime", ctypes.c_float),
+    # ("_meSaveStateLastResult", ctypes.c_int32),
+    # ("lastSaveOperationTimestamp", ctypes.c_uint64),
+    # ("restoreRequested", ctypes.c_ubyte),
+    # ("padding0x1D17F1", ctypes.c_ubyte * 0x3),
+    # ("_meRestoreType", ctypes.c_int32),
+    # ("padding0x1D17F8", ctypes.c_ubyte * 0x8),
+    # ("savedInteractionsManager", cGcPersistentInteractionsManager),
+    # ("pendingProgressWrite", ctypes.c_ubyte),
+    # ("delayedMicroSave", ctypes.c_ubyte),
+    # ("pendingDifficultySave", ctypes.c_ubyte),
+    # ("restartAllInactiveSeasonalMissions", ctypes.c_ubyte),
+    # ("_mePatchVersion", ctypes.c_int32),
+    # ("patchAffectsLoading", ctypes.c_ubyte),
+    # ("padding0x43C209", ctypes.c_ubyte * 0x3),
+    # ("warpTunnelRes", common.cTkSmartResHandle),
+    # ("teleportTunnelRes", common.cTkSmartResHandle),
+    # ("blackHoleTunnelRes", common.cTkSmartResHandle),
+    # ("portalTunnelRes", common.cTkSmartResHandle),
+    # ("placeMarkerRes", common.cTkSmartResHandle),
+    # ("inventoryStoreBalance", cGcInventoryStoreBalance),
+    # ("padding0x43C234", ctypes.c_ubyte * 0x4),
+    # ("playerRichPresence", cGcRichPresence),
+    # ("singleMultiPositionInSync", ctypes.c_ubyte),
+    # ("saveCompletedThisFrame", ctypes.c_ubyte),
+    # ("padding0x43C24A", ctypes.c_ubyte * 0x2),
+    # ("startedSaveTime", ctypes.c_float),
+    # ("saveThreadData", ctypes.POINTER(cGcGameState.SaveThreadData)),
+    # ("saveThreadId", ctypes.c_uint32),
+    # ("padding0x43C25C", ctypes.c_ubyte * 0x4),
+    # ("saveRequestNewEvent", ctypes.c_void_p),
+    # ("saveThreadExitedEvent", ctypes.c_void_p),
+    # ("saveThreadRequestExit", ctypes.c_ubyte),
+    # ("pendingAsyncSaveRequest", ctypes.c_ubyte),
+    # ("padding0x43C272", ctypes.c_ubyte * 0x2),
+    # ("_mePendingAsyncSaveRequestReason", ctypes.c_int32),
+    # ("pendingAsyncSaveRequestShowMessage", ctypes.c_ubyte),
+    # ("padding0x43C279", ctypes.c_ubyte * 0x3),
+    # ("upgradeMessageFilterTimer", ctypes.c_float),
+    # ("networkClientLoad", ctypes.c_ubyte),
+    # ("lastDeathTriggeredSlotSelect", ctypes.c_ubyte),
+    # ("waitingForSeasonalGameMode", ctypes.c_ubyte),
+    # ("padding0x43C283", ctypes.c_ubyte * 0x5),
+    # ("cloudSaveManager", ctypes.c_ubyte * 0x2D8),
 ]
 
 
