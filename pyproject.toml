@@ -22,7 +22,7 @@ classifiers = [
   "Programming Language :: Python :: 3 :: Only",
 ]
 dependencies = [
-  "pymhf"
+  "pymhf @ git+https://github.com/monkeyman192/pyMHF.git@master"
 ]
 version = "0.7.0"
 
