@@ -7,3 +7,5 @@ logs/
 .cache/*
 
 .venv/
+build/*
+NMS.py.egg-info/*
