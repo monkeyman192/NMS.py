@@ -74,6 +74,6 @@ class _INTERNAL_LoadSingletons(NMSMod):
         hook_manager.call_custom_callbacks("MAIN_LOOP", DetourTime.BEFORE)
 
     @hooks.cGcApplication.Update.after
-    def _main_loop_before(self, *args):
+    def _main_loop_after(self, *args):
         """ The main application loop. Run any after functions here. """
         hook_manager.call_custom_callbacks("MAIN_LOOP", DetourTime.AFTER)
