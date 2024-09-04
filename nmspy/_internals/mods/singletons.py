@@ -28,21 +28,21 @@ class _INTERNAL_LoadSingletons(NMSMod):
     def load_gravity_singleton(self, this):
         nms.gravity_singleton = map_struct(this, structs.cTkDynamicGravityControl)
 
-    @one_shot
-    @hooks.cTkMemoryManager.Construct.after
-    def construct_cTkMemoryManager(self, this, *args):
-        nms.memory_manager = this
+    # @one_shot
+    # @hooks.cTkMemoryManager.Construct.after
+    # def construct_cTkMemoryManager(self, this, *args):
+    #     nms.memory_manager = this
 
-    @one_shot
-    @hooks.cGcApplication.cGcApplication.after
-    def load_cGcApplication(self, this):
-        staging._cGcApplication = map_struct(this + 0x50, structs.cGcApplication)  # WHY??
+    # @one_shot
+    # @hooks.cGcApplication.cGcApplication.after
+    # def load_cGcApplication(self, this):
+    #     staging._cGcApplication = map_struct(this + 0x50, structs.cGcApplication)  # WHY??
 
-    @one_shot
-    @hooks.cGcRealityManager.cGcRealityManager.after
-    def cGcRealityManager_initializer(self, this):
-        # At this point we can move cGcApplication out of staging.
-        nms.GcApplication = staging._cGcApplication
+    # @one_shot
+    # @hooks.cGcRealityManager.cGcRealityManager.after
+    # def cGcRealityManager_initializer(self, this):
+    #     # At this point we can move cGcApplication out of staging.
+    #     nms.GcApplication = staging._cGcApplication
 
     @hooks.cTkFSMState.StateChange.after
     def state_change(self, this, lNewStateID, lpUserData, lbForceRestart):

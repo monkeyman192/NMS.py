@@ -24,7 +24,7 @@ classifiers = [
 dependencies = [
   "pymhf @ git+https://github.com/monkeyman192/pyMHF.git@master"
 ]
-version = "0.7.1-pre1"
+version = "0.7.1+dev1"
 
 [tool.setuptools.package-dir]
 nmspy = "nmspy"
