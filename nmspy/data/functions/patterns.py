@@ -16,4 +16,12 @@ FUNC_PATTERNS: dict[str, Union[str, dict[str, str]]] = {
     "cGcSolarSystem::OnLeavePlanetOrbit": "48 89 5C 24 20 55 56 57 41 55 41 57 48 8B EC 48 83 EC 60",
     "cGcApplication::Update": "40 53 48 83 EC 20 E8 ?? ?? ?? ?? 48 89",
     "cTkFSMState::StateChange": "4C 8B 51 18 4D 8B D8 48 8B 05 ?? ?? ?? ?? 4D 8D 42 18 49 39 40 08 75 1C 48 8B 05 ?? ?? ?? ?? 49 39 00 75 10 0F 10 02 4D 89 5A 28 45 88 4A 30 41 0F 11 00 C3 48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ??",
+    "cGcSpaceshipComponent::UpdateLanding": "F3 0F 11 4C 24 10 55 41 56 41",
+    "cGcGameState::GetPlayerFreighterOwnership": {
+        "cGcGameState *, int": "48 83 EC 48 4C 8B D1 83 FA 03 77 4A 48 63 C2 4C 69 C8 A0",
+    },
+    "cGcPlayerVehicleOwnership::GetPlayerVehicleName": {
+        "cGcPlayerVehicleOwnership *": "40 53 48 83 EC 20 48 8B 05 ?? ?? ?? ?? 48 63 98",  # 0x4DA610
+        "cGcPlayerVehicleOwnership *, eVehicleType": "40 53 48 83 EC 20 48 8B 05 ?? ?? ?? ?? 48 63 DA 48",  # 0x4DA660
+    },
 }
