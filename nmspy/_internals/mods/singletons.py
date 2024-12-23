@@ -68,12 +68,19 @@ class _INTERNAL_LoadSingletons(NMSMod):
     #     except:
     #         logging.info(traceback.format_exc())
 
+    @one_shot
+    @hooks.cTkFSM.StateChange.before
+    def fsm_state_change(self, this, lNewStateID, lpUserData, lbForceRestart):
+        offset = this - _internal.BASE_ADDRESS
+        logger.info(f"cGcApplication offset: NMS.exe+0x{offset:X}")
+        nms.GcApplication_ptr = this
+
     @hooks.cGcApplication.Update.before
-    def _main_loop_before(self, *args):
+    def _main_loop_before(self, this):
         """ The main application loop. Run any before functions here. """
         hook_manager.call_custom_callbacks("MAIN_LOOP", DetourTime.BEFORE)
 
     @hooks.cGcApplication.Update.after
-    def _main_loop_after(self, *args):
+    def _main_loop_after(self, this):
         """ The main application loop. Run any after functions here. """
         hook_manager.call_custom_callbacks("MAIN_LOOP", DetourTime.AFTER)

@@ -3880,7 +3880,7 @@ class cGcGameState:
         _name = "cGcGameState::GetPlayerFreighterOwnership"
         _overload: overloads.cGcGameState.GetPlayerFreighterOwnership.overloads = "cGcGameState *, int"
         @classmethod
-        def overload(cls, overload_args: overloads.cGcGameState.GetPlayerFreighterOwnership.overloads):
+        def overload(cls, overload_args: overloads.cGcGameState.GetPlayerFreighterOwnership.overloads) -> HookFactory:
             cls._overload = overload_args
             return cls
     class GetPlayerFleetManager(HookFactory):

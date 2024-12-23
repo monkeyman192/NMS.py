@@ -1,1 +1,1 @@
-include nmspy/pymhf.cfg
+include nmspy/pymhf.toml

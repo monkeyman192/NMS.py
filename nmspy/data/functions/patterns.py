@@ -24,4 +24,8 @@ FUNC_PATTERNS: dict[str, Union[str, dict[str, str]]] = {
         "cGcPlayerVehicleOwnership *": "40 53 48 83 EC 20 48 8B 05 ?? ?? ?? ?? 48 63 98",  # 0x4DA610
         "cGcPlayerVehicleOwnership *, eVehicleType": "40 53 48 83 EC 20 48 8B 05 ?? ?? ?? ?? 48 63 DA 48",  # 0x4DA660
     },
+    "Engine::ShiftAllTransformsForNode": "40 53 48 83 EC 20 44 8B D1",  # 0x145F6B0
+    "cTkAudioManager::Play": "48 83 EC 48 33 C9 4C 8B D2 89 4C 24 38 49 8B C0 48 89 4C 24 30 45",
+    "cGcApplication::AllowPause": "48 89 5C 24 08 57 48 83 EC 20 33 DB 38",
+    "cTkFSM::StateChange": "48 89 6C 24 10 48 89 74 24 18 57 48 83 EC 20 4C 8B 51",
 }
