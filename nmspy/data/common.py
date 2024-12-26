@@ -7,7 +7,7 @@ from typing import Any, Union, TypeVar, Generic, Type, Annotated, Generator
 from pymhf.extensions.cpptypes import std
 from pymhf.core.memutils import map_struct
 
-# from nmspy.hashing import fnv_1a
+from nmspy.hashing import fnv_1a
 
 CTYPES = Union[ctypes._SimpleCData, ctypes.Structure, ctypes._Pointer]
 

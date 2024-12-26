@@ -41,6 +41,7 @@ GcVehicleGlobals = None
 GcWaterGlobals = None
 
 GcApplication: nms_structs.cGcApplication = None  # type: ignore
+GcApplication_ptr: int = 0
 gravity_singleton: nms_structs.cTkDynamicGravityControl = None  # type: ignore
 memory_manager: int = 0
 

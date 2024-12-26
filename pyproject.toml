@@ -1,5 +1,5 @@
 [project]
-name = "NMS.py"
+name = "NMSpy"
 description = "No Man's Sky python modding API"
 requires-python = ">=3.9"
 # TODO: Add
@@ -22,20 +22,42 @@ classifiers = [
   "Programming Language :: Python :: 3 :: Only",
 ]
 dependencies = [
-  "pymhf @ git+https://github.com/monkeyman192/pyMHF.git@master"
+  "pymhf[gui]==0.1.8"
 ]
-version = "0.7.1-pre1"
+dynamic = ["version"]
+
+[dependency-groups]
+dev = [
+  "pytest",
+  "ruff",
+  "setuptools_scm",
+  "twine",
+]
+
+[tool.uv]
+python-preference = "only-system"
+
+[tool.uv.sources]
+pymhf = { index = "pypi_test" }
+
+[[tool.uv.index]]
+name = "pypi_test"
+url = "https://test.pypi.org/simple/"
+explicit = true
 
 [tool.setuptools.package-dir]
 nmspy = "nmspy"
 
 [project.urls]
 Homepage = "https://github.com/monkeyman192/NMS.py"
-Repository = "https://github.com/monkeyman192/NMS.py"
+Repository = "https://github.com/monkeyman192/NMS.py.git"
 
 [project.entry-points.pymhflib]
 nmspy = "nmspy"
 
+[tool.setuptools_scm]
+local_scheme = "no-local-version"
+
 [build-system]
-requires = ["setuptools>=43.0.0", "wheel"]
+requires = ["setuptools>=64", "wheel", "setuptools-scm>=8", "setuptools_scm_git_semver"]
 build-backend = "setuptools.build_meta"
