@@ -22,7 +22,7 @@ classifiers = [
   "Programming Language :: Python :: 3 :: Only",
 ]
 dependencies = [
-  "pymhf[gui]==0.1.8.dev9"
+  "pymhf[gui]==0.1.8"
 ]
 dynamic = ["version"]
 
