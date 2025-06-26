@@ -1,0 +1,332 @@
+[
+ {
+  "name": "cGcNGuiLayer::FindTextRecursive",
+  "signature": "48 83 EC ? 4C 8B 02 4C 8B C9 0F 10 02 49 8B C0 48 B9 ? ? ? ? ? ? ? ? 48 33 42 ? 48 0F AF C1 0F 11 44 24 ? 48 8B D0 48 C1 EA ? 48 33 D0 49 33 D0 48 0F AF D1 4C 8B C2 49 C1 E8 ? 4C 33 C2 4C 0F AF C1 41 8B C8 41 0F B7 D0 81 C2 ? ? ? ? C1 E9 ? 8B C2 49 C1 E8 ? C1 E0 ? 81 E1 ? ? ? ? 33 C8 33 D1 41 0F B7 C8 8B C2 41 C1 E8 ? C1 E8 ? 41 81 E0 ? ? ? ? 03 D0 03 D1 8B C2 C1 E0 ? 44 33 C0 41 33 D0 41 B8 ? ? ? ? 8B C2 C1 E8 ? 03 D0 8D 04 D5 ? ? ? ? 33 D0 8B C2 C1 E8 ? 03 D0 8B C2 C1 E0 ? 33 D0 8B C2 C1 E8 ? 03 D0 8B C2 C1 E0 ? 33 D0 8B C2 C1 E8 ? 03 C2 48 8D 54 24 ? 69 C0 ? ? ? ? C1 C8 ? 69 C8 ? ? ? ? 83 F1 ? C1 C9 ? 8D 0C 89 81 C1 ? ? ? ? 48 89 4C 24 ? 49 8B C9 E8 ? ? ? ? 48 83 C4 ? C3 CC CC CC CC CC CC 0F B6 41",
+  "mangled_name": "?FindTextRecursive@cGcNGuiLayer@@QEAAPEAVcGcNGuiText@@AEBT?$TkID@$0IA@@@@Z"
+ },
+ {
+  "name": "cGcNGuiLayer::FindElementRecursive",
+  "signature": "40 55 57 41 57 48 83 EC ? 4C 8B 89",
+  "mangled_name": "?FindElementRecursive@cGcNGuiLayer@@QEAAPEAVcGcNGuiElement@@AEBVcTkHashedNGuiElement@@W4eNGuiGameElementType@@@Z"
+ },
+ {
+  "name": "cGcShipHUD::LoadData",
+  "signature": "48 89 5C 24 ? 57 41 54 41 55 41 56 41 57 48 81 EC",
+  "mangled_name": "?LoadData@cGcShipHUD@@QEAAXXZ"
+ },
+ {
+  "name": "cGcShipHUD::RenderHeadsUp",
+  "signature": "40 55 53 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 1D",
+  "mangled_name": "?RenderHeadsUp@cGcShipHUD@@QEAAXXZ"
+ },
+ {
+  "name": "cTkStopwatch::GetDurationInSeconds",
+  "signature": "48 83 EC ? 48 8B 11 0F 29 74 24",
+  "mangled_name": "?GetDurationInSeconds@cTkStopwatch@@QEBAMXZ"
+ },
+ {
+  "name": "cGcApplication::Update",
+  "signature": "40 53 48 83 EC 20 E8 ? ? ? ? 48 89",
+  "mangled_name": "?Update@cGcApplication@@QEAAXXZ"
+ },
+ {
+  "name": "cGcApplication::Construct",
+  "signature": "48 89 5C 24 ? 57 48 83 EC ? 33 FF 48 89 74 24 ? 83 3D",
+  "mangled_name": "?Construct@cGcApplication@@QEAAXXZ"
+ },
+ {
+  "name": "cTkFSM::Construct",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 ED 48 89 51",
+  "mangled_name": "?Construct@cTkFSM@@UEAAXPEBVcTkFSMStateOffset@@AEBT?$TkID@$0IA@@@@Z"
+ },
+ {
+  "name": "cTkFSM::Update",
+  "signature": "48 89 5C 24 ? 57 48 83 EC ? 48 8B 05 ? ? ? ? 48 8B D9 0F 29 74 24",
+  "mangled_name": "?Update@cTkFSM@@UEAAXM@Z"
+ },
+ {
+  "name": "cTkFSM::StateChange",
+  "signature": "48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 4C 8B 51 ? 49 8B E8",
+  "mangled_name": "?StateChange@cTkFSM@@IEAAXAEBT?$TkID@$0IA@@@PEBX_N@Z"
+ },
+ {
+  "name": "cGcLaserBeam::Fire",
+  "signature": "48 89 5C 24 10 57 48 83 EC 50 48 83 B9",
+  "mangled_name": "?Fire@cGcLaserBeam@@QEAAX_N@Z"
+ },
+ {
+  "name": "cGcMarkerPoint::cGcMarkerPoint",
+  "signature": "40 53 48 83 EC ? 33 C0 0F 57 C0 0F 11 01 48 8B D9",
+  "mangled_name": "??0cGcMarkerPoint@@QEAA@XZ"
+ },
+ {
+  "name": "cGcMarkerPoint::Reset",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 28 05 ? ? ? ? 48 8D 79",
+  "mangled_name": "?Reset@cGcMarkerPoint@@QEAAXXZ"
+ },
+ {
+  "name": "cGcMarkerList::RemoveMarker",
+  "signature": "48 89 5C 24 ? 55 56 41 56 48 83 EC ? 40 32 ED",
+  "mangled_name": "?RemoveMarker@cGcMarkerList@@QEAA_NAEAVcGcMarkerPoint@@@Z"
+ },
+ {
+  "name": "cGcMarkerList::TryAddMarker",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 54 41 56 41 57 48 83 EC ? 80 BA",
+  "mangled_name": "?TryAddMarker@cGcMarkerList@@QEAA_NAEBVcGcMarkerPoint@@_N@Z"
+ },
+ {
+  "name": "cGcBaseBuildingManager::GetBaseRootNode",
+  "signature": "4C 8B DC 49 89 5B ? 49 89 6B ? 56 57 41 56 48 81 EC ? ? ? ? 41 0F B7 00",
+  "mangled_name": "?GetBaseRootNode@cGcBaseBuildingManager@@QEAA?AVTkHandle@@UBaseIndex@@_N@Z"
+ },
+ {
+  "name": "cGcBaseSearch::FindNearestBaseInCurrentSystem",
+  "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 4C 89 70 ? 55 48 8D 68 ? 48 81 EC ? ? ? ? 66 0F 6F 05",
+  "mangled_name": "?FindNearestBaseInCurrentSystem@cGcBaseSearch@@SA?AUBaseIndex@@AEBVcTkVector3@@W4ePersistentBaseTypes@@@Z"
+ },
+ {
+  "name": "cGcBuilding::DestroyIntersectingVolcanoes",
+  "signature": "4C 8B DC 55 49 8D AB ? ? ? ? 48 81 EC ? ? ? ? 48 8B D1",
+  "mangled_name": "?DestroyIntersectingVolcanoes@cGcBuilding@@QEBAXXZ"
+ },
+ {
+  "name": "cGcScanEvent::Construct",
+  "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 33 F6",
+  "mangled_name": "?Construct@cGcScanEvent@@QEAAXW4eScanTable@@PEAVcGcScanEventData@@PEAVcGcBuilding@@M_NPEAU?$pair@T?$TkID@$0IA@@@VcTkSeed@@@std@@T?$TkID@$0IA@@@@Z"
+ },
+ {
+  "name": "cGcScanEvent::CalculateMarkerPosition",
+  "signature": "48 8B C4 55 53 56 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 48 8B F9",
+  "mangled_name": "?CalculateMarkerPosition@cGcScanEvent@@AEAAXXZ"
+ },
+ {
+  "name": "cGcScanEvent::Update",
+  "signature": "4C 8B DC 55 57 49 8D AB ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 8B F9",
+  "mangled_name": "?Update@cGcScanEvent@@QEAAXM@Z"
+ },
+ {
+  "name": "cGcScanEvent::UpdateInteraction",
+  "signature": "48 8B C4 55 53 56 57 41 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 4C 8B F1 0F 29 78",
+  "mangled_name": "?UpdateInteraction@cGcScanEvent@@AEAAXXZ"
+ },
+ {
+  "name": "cGcScanEvent::UpdateSpaceStationLocation",
+  "signature": "4C 8B DC 55 56 49 8D 6B ? 48 81 EC ? ? ? ? 48 8B 81",
+  "mangled_name": "?UpdateSpaceStationLocation@cGcScanEvent@@AEAAXXZ"
+ },
+ {
+  "name": "cGcPlayer::CheckFallenThroughFloor",
+  "signature": "40 55 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 4C 8B F9",
+  "mangled_name": "?CheckFallenThroughFloor@cGcPlayer@@IEAAXXZ"
+ },
+ {
+  "name": "cGcNGuiLayer::LoadFromMetadata",
+  "signature": "48 8B C4 53 48 81 EC ? ? ? ? 48 89 78 ? 4C 8B D2",
+  "mangled_name": "?LoadFromMetadata@cGcNGuiLayer@@QEAAXPEBD_N@Z"
+ },
+ {
+  "name": "cGcGameState::OnSaveProgressCompleted",
+  "signature": "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 88 54 24",
+  "mangled_name": "?OnSaveProgressCompleted@cGcGameState@@AEAAX_N0W4Type@SpecificSave@GcGameStatePersistence@@@Z"
+ },
+ {
+  "name": "cGcGameState::LoadFromPersistentStorage",
+  "signature": "44 89 44 24 ? 89 54 24 ? 55 56 57 41 57",
+  "mangled_name": "?LoadFromPersistentStorage@cGcGameState@@AEAA_NW4Slot@cTkStoragePersistent@@_N@Z"
+ },
+ {
+  "name": "cGcPlanetGenerationInputData::SetDefaults",
+  "signature": "48 89 5C 24 ? 57 48 83 EC ? 0F 57 C0 33 FF 0F 11 01 48 89 7C 24",
+  "mangled_name": "?SetDefaults@cGcPlanetGenerationInputData@@QEAAXXZ"
+ },
+ {
+  "name": "cGcPlanet::cGcPlanet",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 45 33 FF 48 C7 41 ? ? ? ? ? 44 89 79",
+  "mangled_name": "??0cGcPlanet@@QEAA@XZ"
+ },
+ {
+  "name": "cGcPlanet::Construct",
+  "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 F6 89 51 ? 89 B1",
+  "mangled_name": "?Construct@cGcPlanet@@QEAAXH@Z"
+ },
+ {
+  "name": "cGcPlanet::SetupRegionMap",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 56 48 83 EC ? 48 8B D9 8B 89",
+  "mangled_name": "?SetupRegionMap@cGcPlanet@@IEAAXXZ"
+ },
+ {
+  "name": "cGcSolarSystem::cGcSolarSystem",
+  "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 29 74 24 ? 48 8B D9 48 8B F9",
+  "mangled_name": "??0cGcSolarSystem@@QEAA@XZ"
+ },
+ {
+  "name": "cGcSolarSystem::Construct",
+  "signature": "48 8B C4 48 89 58 ? 48 89 48 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 83 3D",
+  "mangled_name": "?Construct@cGcSolarSystem@@QEAAXXZ"
+ },
+ {
+  "name": "cGcSolarSystem::OnLeavePlanetOrbit",
+  "signature": "48 89 5C 24 ? 55 56 57 41 55 41 57 48 8B EC 48 83 EC ? 83 3D",
+  "mangled_name": "?OnLeavePlanetOrbit@cGcSolarSystem@@QEAAX_N@Z"
+ },
+ {
+  "name": "cGcSolarSystem::OnEnterPlanetOrbit",
+  "signature": "48 8B C4 55 41 54 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 58 ? 45 33 E4 44 39 25",
+  "mangled_name": "?OnEnterPlanetOrbit@cGcSolarSystem@@QEAAX_N@Z"
+ },
+ {
+  "name": "cGcSolarSystem::Generate",
+  "signature": "48 8B C4 48 89 58 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 41 BC",
+  "mangled_name": "?Generate@cGcSolarSystem@@QEAAX_NVcTkSeed@@@Z"
+ },
+ {
+  "name": "cGcApplicationLocalLoadState::GetRespawnReason",
+  "signature": "48 89 5C 24 ? 57 48 83 EC ? 80 B9 ? ? ? ? ? 48 8B F9 BB",
+  "mangled_name": "?GetRespawnReason@cGcApplicationLocalLoadState@@AEAA?AW4RespawnReason@cGcPlayerRespawn@@XZ"
+ },
+ {
+  "name": "cTkDynamicGravityControl::Construct",
+  "signature": "33 C0 48 8D 91 ? ? ? ? 89 81",
+  "mangled_name": "?Construct@cTkDynamicGravityControl@@QEAAXXZ"
+ },
+ {
+  "name": "cTkDynamicGravityControl::cTkDynamicGravityControl",
+  "signature": "4C 8B C1 48 8B C1 BA ? ? ? ? 0F 57 C0",
+  "mangled_name": "??0cTkDynamicGravityControl@@QEAA@XZ"
+ },
+ {
+  "name": "cTkDynamicGravityControl::GetGravity",
+  "signature": "48 8B C4 55 57 41 54 41 55 48 81 EC",
+  "mangled_name": "?GetGravity@cTkDynamicGravityControl@@QEBA?AUcTkGravityData@@AEBVcTkVector3@@@Z"
+ },
+ {
+  "name": "cGcSimulation::Construct",
+  "signature": "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 45 33 FF",
+  "mangled_name": "?Construct@cGcSimulation@@QEAAXXZ"
+ },
+ {
+  "name": "cGcPlayerEnvironment::IsOnboardOwnFreighter",
+  "signature": "48 83 EC ? 80 B9 ? ? ? ? ? C6 04 24",
+  "mangled_name": "?IsOnboardOwnFreighter@cGcPlayerEnvironment@@QEBA_NXZ"
+ },
+ {
+  "name": "cGcPlayerEnvironment::IsOnPlanet",
+  "signature": "8B 81 ? ? ? ? 83 E8 ? 83 F8 ? 0F 96 C0 C3 4C 8B D1",
+  "mangled_name": "?IsOnPlanet@cGcPlayerEnvironment@@QEBA_NXZ"
+ },
+ {
+  "name": "cGcPlayerEnvironment::Update",
+  "signature": "48 8B C4 F3 0F 11 48 ? 55 53 57 41 56 48 8D A8",
+  "mangled_name": "__ZN20cGcPlayerEnvironment6UpdateEf"
+ },
+ {
+  "name": "cGcEnvironment::UpdateRender",
+  "signature": "48 8B C4 48 89 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 4C 8B F9",
+  "mangled_name": "?UpdateRender@cGcEnvironment@@QEAAXXZ"
+ },
+ {
+  "name": "Engine::ShiftAllTransformsForNode",
+  "signature": "40 53 48 83 EC ? 44 8B D1 44 8B C1",
+  "mangled_name": "?ShiftAllTransformsForNode@Engine@@YAXVTkHandle@@AEBVcTkVector3@@@Z"
+ },
+ {
+  "name": "Engine::GetNodeAbsoluteTransMatrix",
+  "signature": "40 56 48 83 EC ? 44 8B C9",
+  "mangled_name": "?GetNodeAbsoluteTransMatrix@Engine@@YAXVTkHandle@@PEAVcTkMatrix34@@@Z"
+ },
+ {
+  "name": "Engine::SetUniformArrayDefaultMultipleShaders",
+  "signature": "4C 89 4C 24 ? 48 89 4C 24 ? 55 56 41 57",
+  "mangled_name": "?SetUniformArrayDefaultMultipleShaders@Engine@@YAHPEAU?$TkStrongType@HUTkResHandleID@TkStrongTypeIDs@@@@HPEBDPEBMH@Z"
+ },
+ {
+  "name": "Engine::SetMaterialUniformArray",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 4D 63 F1 49 8B F8",
+  "mangled_name": "?SetMaterialUniformArray@Engine@@YA_NU?$TkStrongType@HUTkResHandleID@TkStrongTypeIDs@@@@PEBDPEBMH@Z"
+ },
+ {
+  "name": "cGcRewardManager::GiveGenericReward",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 48 8B 3D ? ? ? ? 48 8B F1",
+  "mangled_name": "?GiveGenericReward@cGcRewardManager@@QEAA_NAEBT?$TkID@$0IA@@@0AEBVcTkSeed@@_N2AEAH2W4InventoryChoice@@2@Z"
+ },
+ {
+  "name": "cGcInteractionComponent::GiveReward",
+  "signature": "44 88 4C 24 ? 44 88 44 24 ? 48 89 54 24",
+  "mangled_name": "?GiveReward@cGcInteractionComponent@@QEAA_NAEBVcGcAlienPuzzleOption@@_N1@Z"
+ },
+ {
+  "name": "cGcInteractionComponent::GetPuzzle",
+  "signature": "48 8B 81 ? ? ? ? 48 85 C0 74 ? 48 83 B9 ? ? ? ? ? 75 ? 48 83 B9",
+  "mangled_name": "?GetPuzzle@cGcInteractionComponent@@QEBAPEBVcGcAlienPuzzleEntry@@XZ"
+ },
+ {
+  "name": "cTkInputPort::SetButton",
+  "signature": "40 57 48 83 EC ? 48 83 79 ? ? 44 8B CA",
+  "mangled_name": "?SetButton@cTkInputPort@@QEAAXW4eInputButton@@@Z"
+ },
+ {
+  "name": "cTkInputPort::GetButton",
+  "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 41 8B D8 8B FA 48 8B F1 45 84 C9",
+  "mangled_name": "?GetButton@cTkInputPort@@QEBA_NW4eInputButton@@W4eInputValidation@@_N@Z"
+ },
+ {
+  "name": "cGcBinoculars::SetMarker",
+  "signature": "40 55 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 80 3D",
+  "mangled_name": "?SetMarker@cGcBinoculars@@QEAAXXZ"
+ },
+ {
+  "name": "cGcBinoculars::GetRange",
+  "signature": "40 53 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 8D 54 24",
+  "mangled_name": "?GetRange@cGcBinoculars@@QEBAMXZ"
+ },
+ {
+  "name": "cGcBinoculars::UpdateRayCasts",
+  "signature": "48 8B C4 55 53 56 57 41 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 4C 8B F1 48 8B 0D",
+  "mangled_name": "?UpdateRayCasts@cGcBinoculars@@AEAAXAEAVcTkContactPoint@@@Z"
+ },
+ {
+  "name": "cTkFSMState::StateChange",
+  "signature": "4C 8B 51 ? 4D 8B D8",
+  "mangled_name": "?StateChange@cTkFSMState@@IEAAXAEBT?$TkID@$0IA@@@PEBX_N@Z"
+ },
+{
+  "name": "cTkAudioManager::Play",
+  "signature": "48 83 EC ? 33 C9 4C 8B D2 89 4C 24 ? 49 8B C0 48 89 4C 24 ? 45 33 C9",
+  "mangled_name": "?Play@cTkAudioManager@@QEAA_NVTkAudioID@@VTkAudioObject@@@Z"
+ },
+ {
+  "name": "cTkAudioManager::Play_attenuated",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 56 48 83 EC ? 48 8B F1 48 8B C2",
+  "mangled_name": "?Play@cTkAudioManager@@QEAA_NVTkAudioID@@AEBVcTkVector3@@VTkAudioObject@@M@Z"
+ },
+ {
+  "name": "cGcPlayerNotifications::AddTimedMessage",
+  "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 44 8B 81",
+  "mangled_name": "?AddTimedMessage@cGcPlayerNotifications@@QEAAXPEBDMAEBVcTkColour@@IAEBVcTkSmartResHandle@@_NM3@Z"
+ },
+ {
+  "name": "cGcSky::SetStormState",
+  "signature": "40 53 55 56 57 41 56 48 83 EC ? 4C 8B 15",
+  "mangled_name": "?SetStormState@cGcSky@@QEAAXW4eStormState@1@@Z"
+ },
+ {
+  "name": "cGcPlanet::UpdateWeather",
+  "signature": "40 55 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 80 3D",
+  "mangled_name": "?UpdateWeather@cGcPlanet@@IEAAXM@Z"
+ },
+ {
+  "name": "cGcPlanet::UpdateGravity",
+  "signature": "40 53 48 83 EC ? 83 B9 ? ? ? ? ? 48 8B D9 0F 29 74 24",
+  "mangled_name": "?UpdateGravity@cGcPlanet@@IEBAXM@Z"
+ },
+ {
+  "name": "cGcPlanet::UpdateClouds",
+  "signature": "48 8B C4 57 48 81 EC ? ? ? ? F3 0F 10 15",
+  "mangled_name": "?UpdateClouds@cGcPlanet@@IEAAXM@Z"
+ },
+ {
+  "name": "cTkDynamicGravityControl::UpdateGravityPoint",
+  "signature": "40 57 48 83 EC ? 48 63 81 ? ? ? ? 45 33 D2",
+  "mangled_name": "?UpdateGravityPoint@cTkDynamicGravityControl@@QEAAXAEBVcTkVector3@@MM@Z"
+ }
+]
