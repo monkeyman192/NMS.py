@@ -1,10 +1,6 @@
-from concurrent.futures import ThreadPoolExecutor
-import os
-import os.path as op
+import nmspy.data.types as nms
 
-import pymhf.core._internal as _internal
-import nmspy.data.structs as nms_structs
-
+# TODO:
 # Store all the globals here like this so that we may access them easily and
 # from anywhere.
 GcAISpaceshipGlobals = None
@@ -40,10 +36,4 @@ GcUIGlobals = None
 GcVehicleGlobals = None
 GcWaterGlobals = None
 
-GcApplication: nms_structs.cGcApplication = None  # type: ignore
-GcApplication_ptr: int = 0
-gravity_singleton: nms_structs.cTkDynamicGravityControl = None  # type: ignore
-memory_manager: int = 0
-
-# TODO: Move somewhere else? Not sure where but this doesn't really fit here...
-executor: ThreadPoolExecutor = None  # type: ignore
+GcApplication: nms.cGcApplication = None  # type: ignore

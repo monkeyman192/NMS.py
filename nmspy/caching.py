@@ -13,7 +13,7 @@ import pymhf.core._internal as _internal
 CACHE_DIR = ".cache"
 
 
-def hash_bytes(fileobj: BufferedReader, _bufsize: int = 2 ** 18) -> str:
+def hash_bytes(fileobj: BufferedReader, _bufsize: int = 2**18) -> str:
     # Essentially implement hashlib.file_digest since it's python 3.11+
     # cf. https://github.com/python/cpython/blob/main/Lib/hashlib.py#L195
     digestobj = hashlib.sha1()
@@ -27,7 +27,7 @@ def hash_bytes(fileobj: BufferedReader, _bufsize: int = 2 ** 18) -> str:
     return digestobj.hexdigest()
 
 
-class OffsetCache():
+class OffsetCache:
     def __init__(self, path: str):
         self._path = path
         self._binary_hash: Optional[str] = None
@@ -36,29 +36,27 @@ class OffsetCache():
     @property
     def path(self) -> str:
         return op.join(
-            _internal.CWD,
-            CACHE_DIR,
-            f"{self._binary_hash}_{self._path}.json"
+            _internal.CWD, CACHE_DIR, f"{self._binary_hash}_{self._path}.json"
         )
 
     def load(self, binary_hash: str):
-        """ Load the data. """
+        """Load the data."""
         self._binary_hash = binary_hash
         if op.exists(self.path):
             with open(self.path, "r") as f:
-               self._lookup = json.load(f)
+                self._lookup = json.load(f)
 
     def save(self):
-        """ Persist the cache to disk. """
+        """Persist the cache to disk."""
         with open(self.path, "w") as f:
             json.dump(self._lookup, f)
 
     def get(self, name: str) -> Optional[int]:
-        """ Get the offset based on the key provided. """
+        """Get the offset based on the key provided."""
         return self._lookup.get(name)
 
     def set(self, key: str, value: int, save: bool = True):
-        """ Set the key with the given value and optionally save."""
+        """Set the key with the given value and optionally save."""
         self._lookup[key] = value
         if save:
             self.save()

@@ -1,12 +1,12 @@
 import logging
-from dataclasses import dataclass
+import ctypes
+from dataclasses import dataclass, field
 
 from pymhf.core.hooking import on_key_pressed
 from pymhf.core.mod_loader import ModState
-from nmspy import NMSMod
-from pymhf.core.calling import call_function
+from pymhf import Mod
 from pymhf.gui import FLOAT
-import nmspy.data.functions.hooks as hooks
+import nmspy.data.types as nms
 
 # A quick mod used to change the gravity multiplier on all planets simultaneously, utilizing pyMHF's auto-gui.
 
@@ -17,13 +17,13 @@ logger = logging.getLogger("GravMod")
 class gravModState(ModState):
     # A special class inheriting from ModState which persists between mod Hot Reloads, allowing mod developers
     # to cache pointers, values etc.
-    gravity: int = 1
-    planetAddresses: list[int] = []
+    gravity: float = 1
+    planets: list[nms.cGcPlanet] = field(default_factory=list)
 
 
-class gravityManipulator(NMSMod):
+class gravityManipulator(Mod):
     # General "Nice To Have"s
-    __author__ = "ThatBomberBoi"
+    __author__ = ["ThatBomberBoi", "monkeyman192"]
     __description__ = "Gravity Manipulator"
     __version__ = "0.2"
     __NMSPY_required_version__ = "0.7.0"
@@ -49,20 +49,22 @@ class gravityManipulator(NMSMod):
     # Functions are hooked by specifying the function to be hooked from the list of in game functions
     # available. You can specify whether you want your detour to run either before or after the original
     # function as shown below.
-    @hooks.cGcPlanet.SetupRegionMap.after
-    def onRegionMap(self, this):
+    @nms.cGcPlanet.SetupRegionMap.after
+    def onRegionMap(self, this: ctypes._Pointer[nms.cGcPlanet]):
         # Include each in-game function's arguments seperately in the function, or use *args to get all
         # arguments without knowing them prior.
         # In this case we know that the argument is `this` which is a pointer to the instance of `cGcPlanet`
         # which is automatically passed into this function by the game.
-        logger.info(f"Generated A Planet!")
-        self.state.planetAddresses.append(this)
-        logger.debug(f"Found {len(self.state.planetAddresses)} Planets So Far")
+        planet = this.contents
+        self.state.planets.append(this.contents)
+        biome = planet.mPlanetGenerationInputData.Biome
+        logger.info(f"Generated a {biome.name} Planet!")
+        logger.debug(f"Found {len(self.state.planets)} Planets So Far")
 
     @on_key_pressed("o")
     def modifyGravity(self):
-        for ptr in self.state.planetAddresses:
+        for planet in self.state.planets:
             # Call an in-game function directly from your mod code.
             # You will need to provide the arguments for the in-game function
-            call_function("cGcPlanet::UpdateGravity", ptr, self.state.gravity)
+            planet.UpdateGravity(self.state.gravity)
         logger.info(f"Set Planetary Gravity Multiplier To {self.state.gravity} For All Planets") 

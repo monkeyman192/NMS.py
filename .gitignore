@@ -8,4 +8,4 @@ logs/
 
 .venv/
 build/*
-NMS.py.egg-info/*
+*.egg-info/*
