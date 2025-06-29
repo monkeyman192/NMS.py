@@ -328,5 +328,115 @@
   "name": "cTkDynamicGravityControl::UpdateGravityPoint",
   "signature": "40 57 48 83 EC ? 48 63 81 ? ? ? ? 45 33 D2",
   "mangled_name": "?UpdateGravityPoint@cTkDynamicGravityControl@@QEAAXAEBVcTkVector3@@MM@Z"
+ },
+ {
+  "name": "cGcPlayer::TakeDamage",
+  "signature": "48 8B C4 48 89 58 ?? 4C 89 48 ?? 44 89 40 ?? 55 56 57 41 54 41 55 41 56 41 57 48 8D A8",
+  "mangled_name": "?TakeDamage@cGcPlayer@@QEAAXMW4eDamageType@@AEBT?$TkID@$0IA@@@AEBVcTkVector3@@PEAVcGcOwnerConcept@@AEBV?$vector@VcGcCombatEffectDamageMultiplier@@V?$TkSTLAllocatorShim@VcGcCombatEffectDamageMultiplier@@$03$0?0@@@std@@@Z"
+ },
+ {
+  "name": "cGcPlayer::OnEnteredCockpit",
+  "signature": "40 53 48 81 EC E0 00 00 00 48 8B D9 E8 ?? ?? ?? ?? 83 78 10 05",
+  "mangled_name": "?OnEnteredCockpit@cGcPlayer@@QEAAXXZ"
+ },
+ {
+  "name": "cGcPlayer::GetDominantHand",
+  "signature": "40 53 48 83 EC 20 48 8B 1D ?? ?? ?? ?? E8 ?? ?? ?? ?? 83 78 10 05 75 ?? 48 8B",
+  "mangled_name": "?GetDominantHand@cGcPlayer@@UEBA?AW4eHand@@XZ"
+ },
+ {
+  "name": "cGcTerrainEditorBeam::Fire",
+  "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B F2",
+  "mangled_name": "?Fire@cGcTerrainEditorBeam@@QEAA_NAEBVcTkPhysRelVec3@@PEAVcTkRigidBody@@PEAVcGcOwnerConcept@@W4eStatsType@@_N@Z"
+ },
+ {
+  "name": "cGcTerrainEditorBeam::StartEffect",
+  "signature": "48 89 5C 24 ? 48 89 7C 24 ? 55 48 8D 6C 24 ? 48 81 EC ? ? ? ? 0F 28 05 ? ? ? ? 48 8B D9",
+  "mangled_name": "?StartEffect@cGcTerrainEditorBeam@@QEAAXXZ"
+ },
+ {
+  "name": "cGcTerrainEditorBeam::ApplyTerrainEditStroke",
+  "signature": "4C 89 44 24 18 55 53 56 57 41 54 41 55 41 56 48 8D AC 24 ?? FE FF FF 48",
+  "mangled_name": "?ApplyTerrainEditStroke@cGcTerrainEditorBeam@@QEAAHUsTerrainEditData@@AEBVcGcProjectileImpact@@@Z"
+ },
+ {
+  "name": "cGcTerrainEditorBeam::ApplyTerrainEditFlatten",
+  "signature": "48 8B C4 4C 89 40 ? 88 50 ? 48 89 48",
+  "mangled_name": "?ApplyTerrainEditFlatten@cGcTerrainEditorBeam@@QEAAHUsTerrainEditData@@AEBVcGcProjectileImpact@@@Z"
+ },
+ {
+  "name": "cGcBeamEffect::Prepare",
+  "signature": "40 53 48 83 EC ? 8B 41 ? 48 8B D9 A9 ? ? ? ? 76 ? 25 ? ? ? ? 3D ? ? ? ? 74 ? B0",
+  "mangled_name": "?Prepare@cGcBeamEffect@@QEAAXXZ"
+ },
+ {
+  "name": "cGcLocalPlayerCharacterInterface::IsJetpacking",
+  "signature": "40 53 48 83 EC 20 48 8B 1D ?? ?? ?? ?? 48 8D 8B ?? ?? ?? 00 E8 ?? ?? ?? 00",
+  "mangled_name": "?IsJetpacking@cGcLocalPlayerCharacterInterface@@UEBA_NXZ"
+ },
+ {
+  "name": "cGcSpaceshipComponent::Eject",
+  "signature": "48 89 5C 24 18 48 89 54 24 10 57 48 83 EC 70 41 0F B6 F8",
+  "mangled_name": "?Eject@cGcSpaceshipComponent@@QEAAXPEAVcGcPlayer@@_N1@Z"
+ },
+ {
+  "name": "cGcSpaceshipWarp::GetPulseDriveFuelFactor",
+  "signature": "48 83 EC 38 48 8B 0D ?? ?? ?? ?? 41 B9 01 00 00 00 48 81 C1 30 B3 00 00 C7 44 24 20 FF FF FF FF BA 9A",
+  "mangled_name": "?GetPulseDriveFuelFactor@cGcSpaceshipWarp@@QEBAMXZ"
+ },
+ {
+  "name": "cGcSpaceshipWeapons::GetOverheatProgress",
+  "signature": "48 63 81 ?? ?? 00 00 80 BC 08 ?? ?? 00 00 00 74 12",
+  "mangled_name": "?GetOverheatProgress@cGcSpaceshipWeapons@@UEBAMXZ"
+ },
+ {
+  "name": "cGcSpaceshipWeapons::GetAverageBarrelPos",
+  "signature": "48 8B C4 48 89 70 ? 57 48 81 EC ? ? ? ? 83 B9",
+  "mangled_name": "?GetAverageBarrelPos@cGcSpaceshipWeapons@@QEAA?AVcTkPhysRelVec3@@XZ"
+ },
+ {
+  "name": "cGcSpaceshipWeapons::GetCurrentShootPoints",
+  "signature": "40 53 48 83 EC ? 48 8B 41 ? 48 8B D9 0F BF 0D ? ? ? ? 48 8B 50 ? E8 ? ? ? ? 48 85 C0 74 ? 48 89 7C 24",
+  "mangled_name": "?GetCurrentShootPoints@cGcSpaceshipWeapons@@IEAAPEAVcGcShootPoint@@XZ"
+ },
+ {
+  "name": "cGcPlayerCharacterComponent::SetDeathState",
+  "signature": "48 8B C4 55 53 56 57 41 56 48 8D 68 A1 48 81 EC 90 00 00",
+  "mangled_name": "?SetDeathState@cGcPlayerCharacterComponent@@AEAAXXZ"
+ },
+ {
+  "name": "nvgText",
+  "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 55 57 41 54 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 48 8B F9",
+  "mangled_name": "nvgText"
+ },
+ {
+  "name": "nvgTextBox",
+  "signature": "4C 8B DC 53 56 57 41 54 48 81 EC",
+  "mangled_name": "nvgTextBox"
+ },
+ {
+  "name": "nvgArc",
+  "signature": "48 8B C4 48 89 58 ? 48 89 68 ? F3 0F 11 50",
+  "mangled_name": "nvgArc"
+ },
+ {
+  "name": "cGcTextChatInput::ParseTextForCommands",
+  "signature": "40 55 53 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 80 3A",
+  "mangled_name": "?ParseTextForCommands@cGcTextChatInput@@AEAAXAEBV?$cTkFixedString@$0DPP@D@@@Z"
+ },
+ {
+  "name": "cGcTextChatManager::Say",
+  "signature": "40 53 48 81 EC ? ? ? ? F3 0F 10 05",
+  "mangled_name": "?Say@cGcTextChatManager@@QEAAXAEBV?$cTkFixedString@$0DPP@D@@_N@Z"
+ },
+ {
+  "name": "cGcTextChatManager::Construct",
+  "signature": "48 89 5C 24 ? 57 48 83 EC ? 48 8D 91 ? ? ? ? 33 FF",
+  "mangled_name": "?Construct@cGcTextChatManager@@QEAAXXZ"
+ },
+ {
+  "name": "cGcPlanet::Generate",
+  "signature": "48 89 5C 24 ? 57 48 83 EC ? 48 8D 91 ? ? ? ? 33 FF",
+  "mangled_name": "?Generate@cGcPlanet@@QEAAX_NAEBVcTkVector3@@AEBVcGcDiscoveryData@@AEBVcGcPlanetGenerationInputData@@@Z"
  }
 ]
