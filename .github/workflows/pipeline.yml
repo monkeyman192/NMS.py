@@ -34,7 +34,6 @@ jobs:
         run: uv build
       - name: Lint and format code
         run: |
-          uv run python -m twine check ./dist/*
           uv run ruff check ./nmspy
           uv run ruff format --check ./nmspy
           uv run python -m twine check ./dist/*
@@ -45,8 +44,8 @@ jobs:
           path: dist/
   release:
     name: Release NMSpy wheels and source build to PyPI
-    # Only run this job if the commit was tagged.
-    if: startsWith(github.ref, 'refs/tags')
+    # Only run this job if we merge into master. Addition check is added later.
+    if: github.ref == 'refs/heads/master'
     needs:
       - build_test
     runs-on: ubuntu-latest
@@ -68,8 +67,8 @@ jobs:
 
   test-release:
     name: Release NMSpy wheels and source build to test-PyPI
-    # Release to the test PyPI if we have merged into master or if we have tagged.
-    if: ${{ (github.ref == 'refs/heads/master') || startsWith(github.ref, 'refs/tags') }}
+    # Only run this job if we merge into master. Addition check is added later.
+    if: github.ref == 'refs/heads/master'
     needs:
       - build_test
     runs-on: ubuntu-latest

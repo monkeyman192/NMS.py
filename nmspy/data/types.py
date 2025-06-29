@@ -215,6 +215,14 @@ class cTkFSM(Structure):
         pass
 
 
+class cGcBeamEffect(Structure):
+    @function_hook(
+        "40 53 48 83 EC ? 8B 41 ? 48 8B D9 A9 ? ? ? ? 76 ? 25 ? ? ? ? 3D ? ? ? ? 74 ? B0"
+    )
+    def Prepare(self, this: "ctypes._Pointer[cGcBeamEffect]"):
+        pass
+
+
 class cGcLaserBeam(Structure):
     @function_hook("48 89 5C 24 10 57 48 83 EC 50 48 83 B9")
     def Fire(
@@ -364,6 +372,31 @@ class cGcPlayer(Structure):
     def CheckFallenThroughFloor(self, this: "ctypes._Pointer[cGcPlayer]"):
         pass
 
+    @function_hook(
+        "48 8B C4 48 89 58 ?? 4C 89 48 ?? 44 89 40 ?? 55 56 57 41 54 41 55 41 56 41 57 48 8D A8"
+    )
+    def TakeDamage(
+        self,
+        this: "ctypes._Pointer[cGcPlayer]",
+        lfDamageAmount: ctypes.c_float,
+        leDamageType: c_enum32[enums.GcDamageType],
+        lDamageId: ctypes._Pointer[basic.TkID[0x10]],
+        lDir: ctypes._Pointer[basic.Vector3f],
+        lpOwner: ctypes.c_uint64,  # cGcOwnerConcept *
+        laEffectsDamageMultipliers: ctypes.c_uint64,  # std::vector<cGcCombatEffectDamageMultiplier,TkSTLAllocatorShim<cGcCombatEffectDamageMultiplier,4,-1> > *
+    ):
+        pass
+
+    @function_hook("40 53 48 81 EC E0 00 00 00 48 8B D9 E8 ?? ?? ?? ?? 83 78 10 05")
+    def OnEnteredCockpit(self, this: "ctypes._Pointer[cGcPlayer]"):
+        pass
+
+    @function_hook(
+        "40 53 48 83 EC 20 48 8B 1D ?? ?? ?? ?? E8 ?? ?? ?? ?? 83 78 10 05 75 ?? 48 8B"
+    )
+    def GetDominantHand(self, this: "ctypes._Pointer[cGcPlayer]") -> ctypes.c_int64:
+        pass
+
 
 class cGcPlayerState(Structure):
     pass
@@ -433,6 +466,17 @@ class cGcPlanet(Structure):
         "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 45 33 FF 48 C7 41 ? ? ? ? ? 44 89 79"
     )
     def cGcPlanet(self, this: "ctypes._Pointer[cGcPlanet]"):
+        pass
+
+    @function_hook("48 8B C4 4C 89 40 ? 88 50 ? 55 53")
+    def Generate(
+        self,
+        this: "ctypes._Pointer[cGcPlanet]",
+        lbLoad: ctypes.c_bool,
+        lPosition: ctypes._Pointer[basic.Vector3f],
+        lSolarSystemDiscoveryData: ctypes.c_uint64,  # cGcDiscoveryData *
+        lGenerationInputParams: ctypes._Pointer[nmse.cGcPlanetGenerationInputData],
+    ):
         pass
 
     @function_hook("48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 F6 89 51 ? 89 B1")
@@ -815,5 +859,151 @@ class cGcSky(Structure):
     @function_hook("40 53 55 56 57 41 56 48 83 EC ? 4C 8B 15")
     def SetStormState(
         self, this: "ctypes._Pointer[cGcSky]", leNewState: c_enum32[eStormState]
+    ):
+        pass
+
+
+class sTerrainEditData(ctypes.Structure):
+    mVoxelType: int
+    mShape: int
+    mCustom1: int
+    mCustom2: int
+
+    _fields_ = [
+        ("mVoxelType", ctypes.c_uint8, 3),
+        ("mShape", ctypes.c_uint8, 1),
+        ("mCustom1", ctypes.c_uint8, 3),
+        ("mCustom2", ctypes.c_uint8, 1),
+    ]
+
+
+class cGcTerrainEditorBeam(Structure):
+    @function_hook(
+        "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B F2"
+    )
+    def Fire(
+        self,
+        this: "ctypes._Pointer[cGcTerrainEditorBeam]",
+        lvTargetPos: ctypes._Pointer[basic.cTkPhysRelVec3],
+        lpTargetBody: ctypes.c_uint64,  # cTkRigidBody *
+        lpOwnerConcept: ctypes.c_uint64,  # cGcOwnerConcept *
+        leStatType: c_enum32[enums.GcStatsTypes],
+        lbVehicle: ctypes.c_bool,
+    ) -> ctypes.c_char:
+        pass
+
+    @function_hook(
+        "48 89 5C 24 ? 48 89 7C 24 ? 55 48 8D 6C 24 ? 48 81 EC ? ? ? ? 0F 28 05 ? ? ? ? 48 8B D9"
+    )
+    def StartEffect(self, this: "ctypes._Pointer[cGcTerrainEditorBeam]"):
+        pass
+
+    @function_hook(
+        "4C 89 44 24 18 55 53 56 57 41 54 41 55 41 56 48 8D AC 24 ?? FE FF FF 48"
+    )
+    def ApplyTerrainEditStroke(
+        self,
+        this: "ctypes._Pointer[cGcTerrainEditorBeam]",
+        lEditData: sTerrainEditData,
+        lImpact: ctypes.c_uint64,  # cGcProjectileImpact *
+    ) -> ctypes.c_int64:
+        pass
+
+    @function_hook("48 8B C4 4C 89 40 ? 88 50 ? 48 89 48")
+    def ApplyTerrainEditFlatten(
+        self,
+        this: "ctypes._Pointer[cGcTerrainEditorBeam]",
+        lEditData: sTerrainEditData,
+        lImpact: ctypes.c_uint64,  # cGcProjectileImpact *
+    ) -> ctypes.c_uint64:
+        pass
+
+
+class cGcLocalPlayerCharacterInterface(Structure):
+    @function_hook(
+        "40 53 48 83 EC 20 48 8B 1D ?? ?? ?? ?? 48 8D 8B ?? ?? ?? 00 E8 ?? ?? ?? 00"
+    )
+    def IsJetpacking(
+        self, this: "ctypes._Pointer[cGcLocalPlayerCharacterInterface]"
+    ) -> ctypes.c_bool:
+        pass
+
+
+class cGcSpaceshipComponent(Structure):
+    @function_hook("48 89 5C 24 18 48 89 54 24 10 57 48 83 EC 70 41 0F B6 F8")
+    def Eject(
+        self,
+        this: "ctypes._Pointer[cGcSpaceshipComponent]",
+        lpPlayer: ctypes._Pointer[cGcPlayer],
+        lbAnimate: ctypes.c_bool,
+        lbForceDuringCommunicator: ctypes.c_bool,
+    ):
+        pass
+
+
+class cGcSpaceshipWarp(Structure):
+    @function_hook(
+        "48 83 EC 38 48 8B 0D ?? ?? ?? ?? 41 B9 01 00 00 00 48 81 C1 30 B3 00 00 C7 44 24 20 FF FF FF FF BA 9A"
+    )
+    def GetPulseDriveFuelFactor(
+        self, this: "ctypes._Pointer[cGcSpaceshipWarp]"
+    ) -> ctypes.c_float:
+        pass
+
+
+class cGcSpaceshipWeapons(Structure):
+    @function_hook("48 63 81 ?? ?? 00 00 80 BC 08 ?? ?? 00 00 00 74 12")
+    def GetOverheatProgress(
+        self, this: "ctypes._Pointer[cGcSpaceshipWeapons]"
+    ) -> ctypes.c_float:
+        pass
+
+    @function_hook("48 8B C4 48 89 70 ? 57 48 81 EC ? ? ? ? 83 B9")
+    def GetAverageBarrelPos(
+        self,
+        this: "ctypes._Pointer[cGcSpaceshipWeapons]",
+        result: ctypes._Pointer[basic.cTkPhysRelVec3],
+    ) -> ctypes.c_uint64:  # cTkPhysRelVec3 *
+        pass
+
+    @function_hook(
+        "40 53 48 83 EC ? 48 8B 41 ? 48 8B D9 0F BF 0D ? ? ? ? 48 8B 50 ? E8 ? ? ? ? 48 85 C0 74 ? 48 89 7C 24"
+    )
+    def GetCurrentShootPoints(
+        self,
+        this: "ctypes._Pointer[cGcSpaceshipWeapons]",
+    ) -> ctypes.c_uint64:  # cGcShootPoint *
+        pass
+
+
+class cGcPlayerCharacterComponent(Structure):
+    @function_hook("48 8B C4 55 53 56 57 41 56 48 8D 68 A1 48 81 EC 90 00 00")
+    def SetDeathState(self, this: ctypes.c_uint64):
+        pass
+
+
+class cGcTextChatInput(Structure):
+    @function_hook(
+        "40 55 53 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 80 3A"
+    )
+    def ParseTextForCommands(
+        self,
+        this: "ctypes._Pointer[cGcTextChatInput]",
+        lMessageText: ctypes._Pointer[basic.cTkFixedString[0x80]],
+    ):
+        pass
+
+
+class cGcTextChatManager(Structure):
+    @function_hook("48 89 5C 24 ? 57 48 83 EC ? 48 8D 91 ? ? ? ? 33 FF")
+    def Construct(self, this: "ctypes._Pointer[cGcTextChatManager]"):
+        pass
+
+    @function_hook("40 53 48 81 EC ? ? ? ? F3 0F 10 05")
+    def Say(
+        self,
+        this: "ctypes._Pointer[cGcTextChatManager]",
+        lsMessageBody: ctypes._Pointer[basic.cTkFixedString[0x80]],
+        lbSystemMessage: ctypes.c_bool,
     ):
         pass
