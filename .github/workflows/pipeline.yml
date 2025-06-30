@@ -48,8 +48,8 @@ jobs:
       - build_test
     runs-on: ubuntu-latest
     outputs:
-      should_release_pypi: ${{ steps.whether_to_release.outputs.should_release_pypi}}
-      should_release_test_pypi: ${{ steps.whether_to_release.outputs.should_release_pypi_test}}
+      should_release_pypi: ${{ steps.whether_to_release_pypi.outputs.should_release_pypi}}
+      should_release_test_pypi: ${{ steps.whether_to_release_test_pypi.outputs.should_release_pypi_test}}
     permissions:
       id-token: write  # IMPORTANT: this permission is required to write to github envs
     steps:
