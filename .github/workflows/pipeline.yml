@@ -44,8 +44,8 @@ jobs:
           path: dist/
   release:
     name: Release NMSpy wheels and source build to PyPI
-    # Only run this job if we merge into master. Addition check is added later.
-    if: github.ref == 'refs/heads/master'
+    # Only run this job if the commit was tagged.
+    if: startsWith(github.ref, 'refs/tags')
     needs:
       - build_test
     runs-on: ubuntu-latest
