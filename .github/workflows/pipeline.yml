@@ -34,7 +34,6 @@ jobs:
         run: uv build
       - name: Lint and format code
         run: |
-          uv run python -m twine check ./dist/*
           uv run ruff check ./nmspy
           uv run ruff format --check ./nmspy
           uv run python -m twine check ./dist/*
@@ -56,20 +55,24 @@ jobs:
     permissions:
       id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
     steps:
+      - name: Check whether to release
+        uses: MathieuMoalic/action-python-package-new-version@v1.0.5
       - name: Download files for release
+        if: env.PUBLISHING == 'true'
         uses: actions/download-artifact@v4
         with:
           name: python-package-distributions
           path: dist/
       - name: Publish package distributions to PyPI
+        if: env.PUBLISHING == 'true'
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           attestations: true
 
   test-release:
     name: Release NMSpy wheels and source build to test-PyPI
-    # Release to the test PyPI if we have merged into master or if we have tagged.
-    if: ${{ (github.ref == 'refs/heads/master') || startsWith(github.ref, 'refs/tags') }}
+    # Only run this job if we merge into master. Addition check is added later.
+    if: github.ref == 'refs/heads/master'
     needs:
       - build_test
     runs-on: ubuntu-latest
@@ -79,12 +82,16 @@ jobs:
     permissions:
       id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
     steps:
+      - name: Check whether to release
+        uses: MathieuMoalic/action-python-package-new-version@v1.0.5
       - name: Download files for release
+        if: env.PUBLISHING == 'true'
         uses: actions/download-artifact@v4
         with:
           name: python-package-distributions
           path: dist/
       - name: Publish package distributions to PyPI
+        if: env.PUBLISHING == 'true'
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           repository-url: https://test.pypi.org/legacy/
