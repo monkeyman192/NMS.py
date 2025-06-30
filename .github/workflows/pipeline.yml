@@ -62,8 +62,8 @@ jobs:
         run: echo "should_release=${{ env.PUBLISHING }}" >> "$GITHUB_OUTPUT"
   release:
     name: Release NMSpy wheels and source build to PyPI
-    # Only run this job if the commit was tagged.
-    if: ${{ startsWith(github.ref, 'refs/tags') && needs.release_check.outputs.should_release == 'true' }}
+    # Only run this job if we merge into master, we need to do a release, and we don't specifically have some tag to skip publishing to pypi.
+    if: ${{ github.ref == 'refs/heads/master' && needs.release_check.outputs.should_release == 'true' && !startsWith(github.event.head_commit.message, '[skip pypi]') }}
     needs:
       - build_test
       - release_check
@@ -86,7 +86,7 @@ jobs:
 
   test-release:
     name: Release NMSpy wheels and source build to test-PyPI
-    # Only run this job if we merge into master. Addition check is added later.
+    # Only run this job if we merge into master and if we need to do a release.
     if: ${{ github.ref == 'refs/heads/master' && needs.release_check.outputs.should_release == 'true' }}
     needs:
       - build_test
