@@ -1,86 +1,42 @@
 # NMS.py
 
-NMS.py, a python hooking and modding library for No Man's Sky.
+NMS.py is a python library to expose interal game functions for No Man's Sky.
 
-**NOTE:** This is a heavy WIP. The API is NOT considered stable currently and a decent amount of data is missing and/or wrong.
+**NOTE:** This library is missing a lot of info which will gradually get added over time.
+It should also be noted that Game updates can very easily break mods utilising NMS.py, so care should be taken when using mods.
+Any responsibility for broken saves is entirely on the users of this library.
+
+Also note that this library will never contain functions relating to online functionality to avoid any abuse.
+The author of this library condones any use of this for any usage that is detrimental to other players.
 
 ## Installation
 
-There are two ways to install NMS.py.
+**Note:** Before you start: NMS.py can only run on python 3.9 - 3.11 inclusive. Newer versions are not supported due to issues injecting python into them unfortunately.
+It is recommended that you download python from the [official site](https://www.python.org/downloads) as the windows store version may have issues, as well as the managed python which [uv](https://docs.astral.sh/uv/) installs.
 
-### Basic installation
-
-This method is for those who don't use python much or are not familiar with the python ecosystem (ie. virtual environments etc).
-
-1. Download a version of python [3.9](https://www.python.org/downloads/release/python-3913/) or [3.10](https://www.python.org/downloads/release/python-31011/) from the official python site.
-Note: Later versions of python may work (eg. 3.11), however pymem seems to have issues injecting them sometimes it seems, so I find it better to stick to a slightly older version for simplicity.
-1. Clone/download this repository to somewhere on your computer.
-1. Open `cmd` in the directory this was downloaded to. This can be done most easily by typing `cmd` in the explorer path bar.
-1. Run `python -m pip install .`
-  This should install all the dependencies including pulling the latest [`pyMHF`](https://github.com/monkeyman192/pyMHF) from GitHub which is the core framework which is used to power `NMS.py`.
-
-### Advanced installation
-
-This method is more suited for those who want to modify `pyMHF` or `NMS.py` as it doesn't involve installing `NMS.py`, but will just run `NMS.py` in local mode.
-This will assume some experience with python.
-
-1. Clone both [`pyMHF`](https://github.com/monkeyman192/pyMHF) and `NMS.py` into separate folders. I recommend creating a directory and then cloning both into that directory so that the folders are siblings.
-1. Install `pyMHF` in editable mode. This can done in either a virtual envirnonment or using the system python by running `python -m pip install -e .` in the `pyMHF` folder.
-1. In the `NMS.py` folder, edit the `pymhf.cfg` file. Depending on whether or not you are wanting to run the old version of the game (4.13), or the latest on steam, will change what settings to change. (See `settings` section below)
-1. In the `pymhf` folder add a python file called `run_nms.py` which looks like the following:
-```py
-from pymhf import load_module
-
-DIR = "<absolute path to NMS.py/nmspy folder>"
-
-load_module("nmspy", DIR, True)
-```
-5. Run `python ./run_nms.py`
+The recommended way to install NMS.py is to simply run `python -m pip install nmspy`. This will install NMS.py and its' dependency [`pyMHF`](https://github.com/monkeyman192/pyMHF) into your system python. You can of course install it in a venv or as a dependency using uv if you prefer.
 
 ## Usage
 
-The following is for anyone running `NMS.py` as per the "Basic Installation" above.
+To run NMS.py, enter the following command into a terminal:
+```
+pymhf run nmspy
+```
 
-1. Run `pymhf nmspy`. The first time this is run it will copy the config file over to your appdata folder (`%AppData%/pymhf/nmspy`) and it will guide you through configuring `NMS.py`.
-If you ever want to return to this configuration menu, run `python --config nmspy`.
-1. Once the game has been configured, you will have an option to run it. Selecting `y` should run the game. This will create a popup with the `pyMHF` logo and this is your log terminal.
-If this doesn't occur then your firewall may be blocking the port 6770, so make sure that a TCP connection is allowed on this port on your local network (ie. 127.0.0.0, or possibly 0.0.0.0)
+This will display some config options to complete. The only option to consider is the location of the mods folder. It is recommended that you create a new folder inside the normal MODS folder which can dontain all the python scripts you want to be run.
 
-If all goes well you should see `"Serving on executor ('127.0.0.1', 6770)"`.
-
-If the game starts paused, you'll need to press the return key on your keyboard in the console window that `pymhf nmspy` was run from to start the game properly.
-
-Any exceptions will be logged to a file named `CRITICAL_ERROR.txt`, and logs will be placed in a `logs` directory.
+If NMS.py starts up successfully you should see two extra windows; an auto-created GUI from pyMHF, and a terminal window which will show the logs for pyMHF.
 
 If you want to stop NMS, you can press `ctrl + C` in the window you started the process in to kill it.
-
-## Settings
-
-Depending on what version of NMS you are running, you'll need to change different settings:
-
-### Running NMS 4.13 (Fractals)
-
-`[binary]`:
-- `path`: The absolute path to the `NMS.exe` which is to be run.
-- `steam_gameid`: This key should be either commented out or not present.
-- `mod_dir`: The absolute path to the directory containing mods.
-- `start_paused`: Should be `True`. This can be `False`, but you get better hook coverage with the value set to `True`.
-
-### Running latest Steam version
-
-`[binary]`:
-- `steam_gameid`: This should have the value `275850`.
-- `mod_dir`: The absolute path to the directory containing mods.
-- `internal_mod_dir`: This key should be either commented out or not present for now.
-- `start_paused`: Must be `False`.
-
 
 ### Credits
 
 Thanks to the developers of minhook, cyminhook and pymem, all of which are instrumental in making this framework possible.
 
-Big thanks to [vitalised](https://github.com/VITALISED) for their constant RE discussions. and [gurren3](https://github.com/gurrenm3) for the same as well as the initial work done on NMS.API which heavily inspired the creation of this.
+Big thanks to [vitalised](https://github.com/VITALISED) for their constant RE discussions, and [gurren3](https://github.com/gurrenm3) for the same as well as the initial work done on NMS.API which heavily inspired the creation of this.
 
 Thanks also to the many people I have discussed various NMS details with, both big and small.
 
-Thanks to rayrod for initially discovering the pdb.
+Thanks to [RaYRoD](https://github.com/RaYRoD-TV) for initially discovering the pdb as well as regular insightful discussions regarding all things reverse engineering NMS.
+
+Thanks also to anyone who has contributed function definitions or patterns. Any and all help is always appreciated!
