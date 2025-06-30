@@ -63,10 +63,10 @@ jobs:
         run: |
           export PYPI_INDEX=test.pypi.org
           ./.github/scripts/version_check.sh
-      - name: Assign whether to release to output
+      - name: Assign whether to release to pypi to output
         id: whether_to_release_pypi
         run: echo "should_release_pypi=${{ env.PUBLISHING_pypi_org }}" >> "$GITHUB_OUTPUT"
-      - name: Assign whether to release to output
+      - name: Assign whether to release to test pypi to output
         id: whether_to_release_test_pypi
         run: echo "should_release_test_pypi=${{ env.PUBLISHING_test_pypi_org }}" >> "$GITHUB_OUTPUT"
   release:

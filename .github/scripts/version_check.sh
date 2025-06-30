@@ -17,8 +17,6 @@ if [ -z "$VERSION" ]; then
 fi
 echo "Version is $VERSION"
 
-INDEX="${PYPI_INDEX:-pypi.org}"
-
 # Step 2: Get package name from pyproject.toml
 PACKAGE_NAME=$(awk -F'=' '/^name/ {gsub(/[" ]/, "", $2); print $2}' "$PYPROJECT_FILE")
 if [ -z "$PACKAGE_NAME" ]; then
@@ -27,12 +25,13 @@ fi
 echo "PACKAGE_NAME is $PACKAGE_NAME"
 
 # Step 3: Get latest release version from PyPI
+INDEX="${PYPI_INDEX:-pypi.org}"
 PUBLISHED_VERSIONS=$(curl -s "https://$INDEX/pypi/$PACKAGE_NAME/json" | jq -r '.releases | keys | .[]')
 
 if [ -z "$PUBLISHED_VERSIONS" ]; then
-    error_exit "Unable to retrieve published version from PyPI for $PACKAGE_NAME"
+    error_exit "Unable to retrieve published version from $INDEX for $PACKAGE_NAME"
 fi
-echo "Published PyPI versions are $PUBLISHED_VERSIONS"
+echo "Published PyPI versions on $INDEX are $PUBLISHED_VERSIONS"
 
 # Step 4: Check if current version is in the list of published versions
 PUBLISHING="true"
