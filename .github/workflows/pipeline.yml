@@ -42,12 +42,31 @@ jobs:
         with:
           name: python-package-distributions
           path: dist/
+  release_check:
+    name: Check whether to do a release
+    needs:
+      - build_test
+    runs-on: ubuntu-latest
+    outputs:
+      should_release: ${{ steps.whether_to_release.outputs.should_release}}
+    permissions:
+      id-token: write  # IMPORTANT: this permission is required to write to github envs
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check whether to release
+        uses: MathieuMoalic/action-python-package-new-version@v1.0.5
+      - name: Assign whether to release to output
+        id: whether_to_release
+        run: echo "should_release=${{ env.PUBLISHING }}" >> "$GITHUB_OUTPUT"
   release:
     name: Release NMSpy wheels and source build to PyPI
     # Only run this job if the commit was tagged.
-    if: startsWith(github.ref, 'refs/tags')
+    if: ${{ startsWith(github.ref, 'refs/tags') && needs.release_check.outputs.should_release == 'true' }}
     needs:
       - build_test
+      - release_check
     runs-on: ubuntu-latest
     environment:
       name: pypi
@@ -55,16 +74,12 @@ jobs:
     permissions:
       id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
     steps:
-      - name: Check whether to release
-        uses: MathieuMoalic/action-python-package-new-version@v1.0.5
       - name: Download files for release
-        if: env.PUBLISHING == 'true'
         uses: actions/download-artifact@v4
         with:
           name: python-package-distributions
           path: dist/
       - name: Publish package distributions to PyPI
-        if: env.PUBLISHING == 'true'
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           attestations: true
@@ -72,9 +87,10 @@ jobs:
   test-release:
     name: Release NMSpy wheels and source build to test-PyPI
     # Only run this job if we merge into master. Addition check is added later.
-    if: github.ref == 'refs/heads/master'
+    if: ${{ github.ref == 'refs/heads/master' && needs.release_check.outputs.should_release == 'true' }}
     needs:
       - build_test
+      - release_check
     runs-on: ubuntu-latest
     environment:
       name: testpypi
@@ -82,16 +98,12 @@ jobs:
     permissions:
       id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
     steps:
-      - name: Check whether to release
-        uses: MathieuMoalic/action-python-package-new-version@v1.0.5
       - name: Download files for release
-        if: env.PUBLISHING == 'true'
         uses: actions/download-artifact@v4
         with:
           name: python-package-distributions
           path: dist/
       - name: Publish package distributions to PyPI
-        if: env.PUBLISHING == 'true'
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           repository-url: https://test.pypi.org/legacy/
