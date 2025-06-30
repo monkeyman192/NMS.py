@@ -58,11 +58,11 @@ jobs:
           fetch-depth: 0
       - name: Check whether to release on pypi.org
         run: |
-          ./version_check.sh
+          ./.github/scripts/version_check.sh
       - name: Check whether to release on test.pypi.org
         run: |
-          export INDEX=test.pypi.org
-          ./version_check.sh
+          export PYPI_INDEX=test.pypi.org
+          ./.github/scripts/version_check.sh
       - name: Assign whether to release to output
         id: whether_to_release_pypi
         run: echo "should_release_pypi=${{ env.PUBLISHING_pypi_org }}" >> "$GITHUB_OUTPUT"
