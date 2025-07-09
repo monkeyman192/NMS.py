@@ -57,8 +57,13 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Check whether to release on indexes
-        uses: MathieuMoalic/action-python-package-new-version@c4e361a9d28c1bcc19fe10bb4dcb751b625f031b
+      - name: Check whether to release on pypi.org
+        run: |
+          ./.github/scripts/version_check.sh
+      - name: Check whether to release on test.pypi.org
+        run: |
+          export PYPI_INDEX=test.pypi.org
+          ./.github/scripts/version_check.sh
       - name: Globalise determined version
         id: set_version
         run: echo "package_version=${{ env.PACKAGE_VERSION }}" >> "$GITHUB_OUTPUT"

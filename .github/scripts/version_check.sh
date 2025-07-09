@@ -3,6 +3,12 @@
 # This script is copied directly from https://github.com/MathieuMoalic/action-python-package-new-version/blob/main/entrypoint.sh
 # This is just until there is extra functionality as part of that repo to allow specifying a different index.
 
+########## helper ##########
+error_exit() {
+    echo "Error: $1" >&2
+    exit 1
+}
+
 # Check if pyproject.toml exists
 PYPROJECT_FILE=pyproject.toml
 
@@ -18,15 +24,15 @@ fi
 echo "Version is $VERSION"
 
 # Step 2: Get package name from pyproject.toml
-PACKAGE_NAME=$(awk -F'=' '/^name/ {gsub(/[" ]/, "", $2); print $2}' "$PYPROJECT_FILE")
+PACKAGE_NAME=$(awk -F'=' '/^name/ {gsub(/[" ]/, "", $2); print $2;exit;}' "$PYPROJECT_FILE")
 if [ -z "$PACKAGE_NAME" ]; then
     error_exit "Unable to extract package name from $PYPROJECT_FILE"
 fi
-echo "PACKAGE_NAME is $PACKAGE_NAME"
+echo "PACKAGE_NAME is ${PACKAGE_NAME}..."
 
 # Step 3: Get latest release version from PyPI
 INDEX="${PYPI_INDEX:-pypi.org}"
-PUBLISHED_VERSIONS=$(curl -s "https://$INDEX/pypi/$PACKAGE_NAME/json" | jq -r '.releases | keys | .[]')
+PUBLISHED_VERSIONS=$(curl -s "https://${INDEX}/pypi/${PACKAGE_NAME}/json" | jq -r '.releases | keys | .[]')
 
 if [ -z "$PUBLISHED_VERSIONS" ]; then
     error_exit "Unable to retrieve published version from $INDEX for $PACKAGE_NAME"
@@ -44,5 +50,5 @@ done
 
 echo "PUBLISHING is $PUBLISHING"
 echo "PUBLISHING=$PUBLISHING" >> $GITHUB_ENV
-echo "PUBLISHING_${INDEX/./_}=$PUBLISHING" >> $GITHUB_ENV
+echo "PUBLISHING_${INDEX//./_}=$PUBLISHING" >> $GITHUB_ENV
 echo "PACKAGE_VERSION=$VERSION" >> $GITHUB_ENV
