@@ -1,7 +1,8 @@
 [project]
 name = "NMSpy"
 description = "No Man's Sky python modding API"
-requires-python = ">=3.9"
+readme = "README.md"
+requires-python = ">=3.9, <3.12"
 # TODO: Add
 license = {file = "LICENSE.md"}
 keywords = ["hooking", "games", "hacking", "modding"]
@@ -22,9 +23,9 @@ classifiers = [
   "Programming Language :: Python :: 3 :: Only",
 ]
 dependencies = [
-  "pymhf[gui]>=0.1.13"
+  "pymhf[gui]>=0.1.14.dev8"
 ]
-version = "146545.0"
+version = "147323.0.dev1"
 
 [dependency-groups]
 dev = [
@@ -36,6 +37,14 @@ dev = [
 
 [tool.uv]
 python-preference = "only-system"
+
+[tool.uv.sources]
+pymhf = { index = "pypi_test" }
+
+[[tool.uv.index]]
+name = "pypi_test"
+url = "https://test.pypi.org/simple/"
+explicit = true
 
 [tool.setuptools.package-dir]
 nmspy = "nmspy"

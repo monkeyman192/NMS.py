@@ -373,7 +373,7 @@ class cGcPlayer(Structure):
         pass
 
     @function_hook(
-        "48 8B C4 48 89 58 ?? 4C 89 48 ?? 44 89 40 ?? 55 56 57 41 54 41 55 41 56 41 57 48 8D A8"
+        "48 8B C4 48 89 58 ? 44 89 40 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B 35"
     )
     def TakeDamage(
         self,
