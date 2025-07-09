@@ -34,8 +34,8 @@ jobs:
         run: uv build
       - name: Lint and format code
         run: |
-          uv run ruff check ./nmspy
-          uv run ruff format --check ./nmspy
+          uv run ruff check ./nmspy ./example_mods
+          uv run ruff format --check ./nmspy ./example_mods
           uv run python -m twine check ./dist/*
       - name: Upload Wheels
         uses: actions/upload-artifact@v4
@@ -48,8 +48,9 @@ jobs:
       - build_test
     runs-on: ubuntu-latest
     outputs:
-      should_release_pypi: ${{ steps.whether_to_release_pypi.outputs.should_release_pypi}}
-      should_release_test_pypi: ${{ steps.whether_to_release_test_pypi.outputs.should_release_pypi_test}}
+      package_version: ${{ steps.set_version.outputs.package_version }}
+      should_release_pypi: ${{ steps.whether_to_release_pypi.outputs.should_release_pypi }}
+      should_release_test_pypi: ${{ steps.whether_to_release_test_pypi.outputs.should_release_pypi_test }}
     permissions:
       id-token: write  # IMPORTANT: this permission is required to write to github envs
     steps:
@@ -63,6 +64,9 @@ jobs:
         run: |
           export PYPI_INDEX=test.pypi.org
           ./.github/scripts/version_check.sh
+      - name: Globalise determined version
+        id: set_version
+        run: echo "package_version=${{ env.PACKAGE_VERSION }}" >> "$GITHUB_OUTPUT"
       - name: Assign whether to release to pypi to output
         id: whether_to_release_pypi
         run: echo "should_release_pypi=${{ env.PUBLISHING_pypi_org }}" >> "$GITHUB_OUTPUT"
@@ -71,8 +75,12 @@ jobs:
         run: echo "should_release_test_pypi=${{ env.PUBLISHING_test_pypi_org }}" >> "$GITHUB_OUTPUT"
   release:
     name: Release NMSpy wheels and source build to PyPI
-    # Only run this job if we merge into master, we need to do a release, and we don't specifically have some tag to skip publishing to pypi.
-    if: ${{ github.ref == 'refs/heads/master' && needs.release_check.outputs.should_release_pypi == 'true' && !startsWith(github.event.head_commit.message, '[skip pypi]') }}
+    # Only run this job if the following conditions are met:
+    # 1. We merge into master.
+    # 2. We need to do a release.
+    # 3. The commit message doesn't start with [skip pypi].
+    # 4. The version isn't a dev version.
+    if: ${{ github.ref == 'refs/heads/master' && needs.release_check.outputs.should_release_pypi == 'true' && !startsWith(github.event.head_commit.message, '[skip pypi]') && !contains(needs.release_check.outputs.package_version, 'dev') }}
     needs:
       - build_test
       - release_check

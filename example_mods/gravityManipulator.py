@@ -1,10 +1,26 @@
+# /// script
+# dependencies = ["pymhf[gui]>=0.1.14"]
+#
+# [tool.pymhf]
+# exe = "NMS.exe"
+# steam_gameid = 275850
+# start_paused = false
+#
+# [tool.pymhf.gui]
+# always_on_top = true
+#
+# [tool.pymhf.logging]
+# log_dir = "."
+# log_level = "info"
+# window_name_override = "NMS Example gravity manipulator"
+# ///
+
 import logging
 import ctypes
 from dataclasses import dataclass, field
 
+from pymhf import Mod, ModState
 from pymhf.core.hooking import on_key_pressed
-from pymhf.core.mod_loader import ModState
-from pymhf import Mod
 from pymhf.gui import FLOAT
 import nmspy.data.types as nms
 
@@ -25,9 +41,8 @@ class gravityManipulator(Mod):
     # General "Nice To Have"s
     __author__ = ["ThatBomberBoi", "monkeyman192"]
     __description__ = "Gravity Manipulator"
-    __version__ = "0.2"
-    __NMSPY_required_version__ = "0.7.0"
-    
+    __version__ = "0.3"
+
     # Create an instance of the persistant ModState Class in your mod class.
     state = gravModState()
 
@@ -44,7 +59,7 @@ class gravityManipulator(Mod):
     # Used to actually update the persisted value with the one input by the user in the GUI.
     @gravMult.setter
     def gravMult(self, value):
-        self.state.gravity = value 
+        self.state.gravity = value
 
     # Functions are hooked by specifying the function to be hooked from the list of in game functions
     # available. You can specify whether you want your detour to run either before or after the original
@@ -67,4 +82,6 @@ class gravityManipulator(Mod):
             # Call an in-game function directly from your mod code.
             # You will need to provide the arguments for the in-game function
             planet.UpdateGravity(self.state.gravity)
-        logger.info(f"Set Planetary Gravity Multiplier To {self.state.gravity} For All Planets") 
+        logger.info(
+            f"Set Planetary Gravity Multiplier To {self.state.gravity} For All Planets"
+        )
