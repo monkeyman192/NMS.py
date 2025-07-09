@@ -23,9 +23,9 @@ classifiers = [
   "Programming Language :: Python :: 3 :: Only",
 ]
 dependencies = [
-  "pymhf[gui]>=0.1.14.dev8"
+  "pymhf[gui]>=0.1.14"
 ]
-version = "147323.0.dev1"
+version = "147323.0"
 
 [dependency-groups]
 dev = [
@@ -38,8 +38,8 @@ dev = [
 [tool.uv]
 python-preference = "only-system"
 
-[tool.uv.sources]
-pymhf = { index = "pypi_test" }
+# [tool.uv.sources]
+# pymhf = { index = "pypi_test" }
 
 [[tool.uv.index]]
 name = "pypi_test"
