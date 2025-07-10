@@ -256,7 +256,6 @@ class cGcMarkerPoint(Structure):
         pass
 
 
-# HERE!
 @partial_struct
 class cGcMarkerList(Structure):
     maMarkerObjects: Annotated[
@@ -454,13 +453,16 @@ class GcPlanetSkyProperties(Structure):
 class cGcPlanet(Structure):
     # Most of these found in cGcPlanet::Construct or cGcPlanet::cGcPlanet
     miPlanetIndex: Annotated[int, Field(ctypes.c_int32, 0x50)]
-    mPlanetGenerationInputData: Annotated[cGcPlanetGenerationInputData, 0x3A40]
-    mRegionMap: Annotated[cGcTerrainRegionMap, 0x3B70]
-    mNode: Annotated[basic.TkHandle, 0xD73B8]
-    mPosition: Annotated[basic.Vector3f, 0xD73D0]
+    mPlanetData: Annotated[nmse.cGcPlanetData, 0x60]
+    # TODO: This field follows directly after the above one. Once we have the cGcPlanetData struct mapped
+    # correctly we can remove the offset to make it just be determined automatically.
+    mPlanetGenerationInputData: Annotated[cGcPlanetGenerationInputData, 0x3A50]
+    mRegionMap: Annotated[cGcTerrainRegionMap, 0x3B80]
+    mNode: Annotated[basic.TkHandle, 0xD73C8]
+    mPosition: Annotated[basic.Vector3f, 0xD73E0]
 
-    mpEnvProperties: Annotated[ctypes._Pointer[GcEnvironmentProperties], 0xD9038]
-    mpSkyProperties: Annotated[ctypes._Pointer[GcPlanetSkyProperties], 0xD9040]
+    mpEnvProperties: Annotated[ctypes._Pointer[GcEnvironmentProperties], 0xD9048]
+    mpSkyProperties: Annotated[ctypes._Pointer[GcPlanetSkyProperties], 0xD9050]
 
     @function_hook(
         "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 45 33 FF 48 C7 41 ? ? ? ? ? 44 89 79"
@@ -795,12 +797,31 @@ class cTkInputPort(Structure):
 
 @partial_struct
 class cGcBinoculars(Structure):
+    mfScanProgress: Annotated[float, Field(ctypes.c_float, 0x24)]
+    mpBinocularInfoGui: Annotated[ctypes._Pointer[cGcNGui], 0x800]
+
     @function_hook("40 55 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 80 3D")
     def SetMarker(self, this: "ctypes._Pointer[cGcBinoculars]"):
         pass
 
     @function_hook("40 53 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 8D 54 24")
     def GetRange(self, this: "ctypes._Pointer[cGcBinoculars]") -> ctypes.c_float:
+        pass
+
+    @function_hook(
+        "48 8B C4 55 57 41 54 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 70"
+    )
+    def UpdateTarget(
+        self, this: "ctypes._Pointer[cGcBinoculars]", lfTimeStep: ctypes.c_float
+    ):
+        pass
+
+    @function_hook("40 53 48 83 EC ? 48 8B 91 ? ? ? ? 48 8B D9 F3 0F 11 49")
+    def UpdateScanBarProgress(
+        self, this: "ctypes._Pointer[cGcBinoculars]", lfScanProgress: ctypes.c_float
+    ):
+        """Called each frame while scanning to set the cGcBinoculars.mfScanProgress from the lfScanProgress
+        argument of this function."""
         pass
 
     @function_hook(
@@ -1007,3 +1028,277 @@ class cGcTextChatManager(Structure):
         lbSystemMessage: ctypes.c_bool,
     ):
         pass
+
+
+class cGcNotificationSequenceStartEvent(Structure):
+    @function_hook(
+        "48 89 5C 24 ? 57 48 83 EC ? 48 8B 81 ? ? ? ? 48 8D 91 ? ? ? ? 44 8B 81"
+    )
+    def DeepInterstellarSearch(
+        self, this: "ctypes._Pointer[cGcNotificationSequenceStartEvent]"
+    ) -> ctypes.c_char:
+        pass
+
+
+class PlanetGenerationQuery(Structure):
+    pass
+
+
+class cGcScanEventSolarSystemLookup(Structure):
+    pass
+
+
+class cGcScanEventManager(Structure):
+    @static_function_hook(
+        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 8B B1 ? ? ? ? 48 8B DA"
+    )
+    @staticmethod
+    def PassesPlanetInfoChecks(
+        lPlanet: ctypes._Pointer[PlanetGenerationQuery],
+        lSolarSystemLookup: ctypes._Pointer[cGcScanEventSolarSystemLookup],
+        lbAbandonedSystemInteraction: ctypes.c_bool,
+        leBuildingClass: ctypes.c_uint32,  # eBuildingClass
+        lbIsAbandonedOrEmptySystem: ctypes.c_bool,
+    ) -> ctypes.c_bool:
+        pass
+
+
+class cGcPlanetGenerator(Structure):
+    @function_hook(
+        "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4D 8B F8 C6 85"
+    )
+    def Generate(
+        self,
+        this: "ctypes._Pointer[cGcPlanetGenerator]",
+        lPlanetData: ctypes._Pointer[nmse.cGcPlanetData],
+        lGenerationData: ctypes._Pointer[nmse.cGcPlanetGenerationInputData],
+        lpPlanet: ctypes._Pointer[cGcPlanet],
+    ):
+        pass
+
+    @function_hook(
+        "48 8B C4 48 89 58 ? 48 89 50 ? 48 89 48 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 4C 63 B2"
+    )
+    def GenerateCreatureRoles(
+        self,
+        this: "ctypes._Pointer[cGcPlanetGenerator]",
+        lPlanetData: ctypes._Pointer[nmse.cGcPlanetData],
+        lUA: ctypes.c_uint64,
+    ):
+        pass
+
+    @function_hook(
+        "48 8B C4 48 89 50 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 33 F6"
+    )
+    def GenerateCreatureInfo(
+        self,
+        this: "ctypes._Pointer[cGcPlanetGenerator]",
+        lPlanetData: ctypes._Pointer[nmse.cGcPlanetData],
+        lRole: ctypes._Pointer[nmse.cGcCreatureRoleData],
+    ):
+        pass
+
+    @function_hook(
+        "4C 89 4C 24 ? 48 89 54 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D AC 24"
+    )
+    def GenerateQueryInfo(
+        self,
+        this: "ctypes._Pointer[cGcPlanetGenerator]",
+        lQueryData: ctypes._Pointer[PlanetGenerationQuery],
+        lGenerationData: ctypes._Pointer[nmse.cGcPlanetGenerationInputData],
+        lUA: ctypes.c_uint64,
+    ):
+        pass
+
+    @function_hook(
+        "48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 4C 89 48 ? 57 41 54 41 55 41 56 41 57 48 81 EC ? ? ? ? 4C 8B E1"
+    )
+    def FillCreatureSpawnDataFromDescription(
+        self,
+        this: "ctypes._Pointer[cGcPlanetGenerator]",
+        lRole: ctypes._Pointer[nmse.cGcCreatureRoleData],
+        lSpawnData: ctypes._Pointer[nmse.cGcCreatureSpawnData],
+        lPlanetData: ctypes._Pointer[nmse.cGcPlanetData],
+    ):
+        pass
+
+
+class cGcGalaxyAttributesAtAddress(Structure):
+    pass
+
+
+class cGcSolarSystemGenerator(Structure):
+    class GenerationData(Structure):
+        pass
+
+    @function_hook(
+        "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 33 F6"
+    )
+    def GenerateQueryInfo(
+        self,
+        this: "ctypes._Pointer[cGcSolarSystemGenerator]",
+        lSeed: ctypes._Pointer[basic.cTkSeed],
+        lAttributes: ctypes._Pointer[cGcGalaxyAttributesAtAddress],
+        lData: "ctypes._Pointer[cGcSolarSystemGenerator.GenerationData]",
+    ):
+        pass
+
+
+class cGcDiscoveryPageData(Structure):
+    pass
+
+
+class cGcFrontendTextInput(Structure):
+    pass
+
+
+class cGcFrontendModelRenderer(Structure):
+    pass
+
+
+class cGcFrontendPageDiscovery(Structure):
+    @function_hook(
+        "4C 89 4C 24 ? 4C 89 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 48 8B 99"
+    )
+    def DoDiscoveryView(
+        self,
+        this: "ctypes._Pointer[cGcFrontendPageDiscovery]",
+        lPageData: ctypes._Pointer[cGcDiscoveryPageData],
+        lFrontEndTextInput: ctypes._Pointer[cGcFrontendTextInput],
+        lFronteEndModelRenderer: ctypes._Pointer[cGcFrontendModelRenderer],
+    ):
+        pass
+
+    @static_function_hook(
+        "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 8D 05 ? ? ? ? 41 8B F9"
+    )
+    @staticmethod
+    def GetDiscoveryHintString(
+        result: ctypes._Pointer[basic.cTkFixedString[0x40]],
+        leTileType: ctypes.c_uint32,  # eTileType
+        leCreatureType: c_enum32[enums.GcCreatureTypes],
+        leRarity: c_enum32[enums.GcRarity],
+        leActiveTime: c_enum32[enums.GcCreatureActiveTime],
+        leHemisphere: c_enum32[enums.GcCreatureHemiSphere],
+    ):
+        pass
+
+
+@partial_struct
+class cGcGalacticVoxelCoordinate(Structure):
+    mX: Annotated[int, Field(ctypes.c_uint16)]
+    mZ: Annotated[int, Field(ctypes.c_uint16)]
+    mY: Annotated[int, Field(ctypes.c_uint16)]
+    mbValid: Annotated[bool, Field(ctypes.c_bool)]
+
+
+class cGcFrontendPage(Structure):
+    pass
+
+
+class cGcFrontendPagePortalRunes(Structure):
+    @static_function_hook(
+        "48 8B C4 44 88 48 20 44 88 40 18 48 89 50 10 55 53 56 57 41 54"
+    )
+    @staticmethod
+    def CheckUAIsValid(
+        lTargetUA: ctypes.c_ulonglong,
+        lModifiedUA: "ctypes._Pointer[cGcGalacticVoxelCoordinate]",
+        lbDeterministicRandom: ctypes.c_bool,
+        a4: ctypes.c_bool,
+    ) -> ctypes.c_bool:
+        pass
+
+    @function_hook(
+        "48 89 54 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 55 48 8D 6C 24 ? 48 81 EC ? ? ? ? 0F 57 C0"
+    )
+    def DoInteraction(
+        self,
+        this: "ctypes._Pointer[cGcFrontendPagePortalRunes]",
+        lpPage: ctypes._Pointer[cGcFrontendPage],
+    ):
+        pass
+
+
+class cGcGalaxyVoxelAttributesData(nmse.cGcGalaxyVoxelAttributesData):
+    @function_hook(
+        "33 C0 0F 57 C0 0F 11 01 0F 11 41 ? 0F 11 41 ? 48 89 41 ? 48 89 41 ? 48 89 41 ? 48 89 41"
+    )
+    def SetDefaults(self, this: "ctypes._Pointer[cGcGalaxyVoxelAttributesData]"):
+        pass
+
+
+class cGcGalaxyStarAttributesData(nmse.cGcGalaxyStarAttributesData):
+    @function_hook(
+        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 ED 48 8D B9 ? ? ? ? 48 89 6C 24"
+    )
+    def SetDefaults(self, this: "ctypes._Pointer[cGcGalaxyStarAttributesData]"):
+        pass
+
+
+class cGcGalaxyAttributeGenerator(Structure):
+    @static_function_hook(
+        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F BF 41"
+    )
+    @staticmethod
+    def ClassifyVoxel(
+        lCoordinate: ctypes._Pointer[cGcGalacticVoxelCoordinate],
+        lOutput: ctypes._Pointer[cGcGalaxyVoxelAttributesData],
+    ):
+        pass
+
+    @static_function_hook(
+        "48 89 54 24 ? 55 53 56 57 41 54 41 55 41 57 48 8B EC 48 83 EC ? 48 8B F9"
+    )
+    @staticmethod
+    def ClassifyStarSystem(
+        lUA: ctypes.c_ulonglong, lOutput: ctypes._Pointer[cGcGalaxyStarAttributesData]
+    ):
+        pass
+
+
+class cGcGalaxyVoxelData(Structure):
+    pass
+
+
+class cGcGalaxyVoxelGenerator(nmse.cGcGalaxyStarAttributesData):
+    @static_function_hook("48 8B C4 4C 89 40 ? 48 89 48 ? 55 53 56 57 41 56 48 8D A8")
+    @staticmethod
+    def Populate(
+        lu64UniverseAddress: ctypes.c_uint64,
+        lVoxelData: ctypes._Pointer[cGcGalaxyVoxelData],
+        lRootOffset: ctypes._Pointer[basic.Vector3f],
+    ):
+        pass
+
+
+class cTkLanguageManagerBase(Structure):
+    @function_hook("48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 57 C0 49 8B F0")
+    def Translate(
+        self,
+        this: "ctypes._Pointer[cTkLanguageManagerBase]",
+        lpacText: ctypes.c_char_p,
+        lpacDefaultReturnValue: ctypes._Pointer[basic.TkID[0x20]],
+    ) -> ctypes.c_uint64:
+        pass
+
+
+class cGcNameGenerator(Structure):
+    @function_hook(
+        "4C 89 4C 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 44 8B D2"
+    )
+    def GeneratePlanetName(
+        self,
+        this: "ctypes._Pointer[cGcNameGenerator]",
+        lu64Seed: ctypes.c_uint64,
+        lResult: ctypes._Pointer[basic.cTkFixedString[0x79]],
+        lLocResult: ctypes._Pointer[basic.cTkFixedString[0x79]],
+    ):
+        pass
+
+
+# Dummy values to copy and paste to make adding new things quicker...
+# class name(Structure):
+#     @function_hook("")
+#     def method(self, this: "ctypes._Pointer[name]"):
+#         pass

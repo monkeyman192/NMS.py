@@ -25,7 +25,7 @@ classifiers = [
 dependencies = [
   "pymhf[gui]>=0.1.14"
 ]
-version = "147323.0"
+version = "147408.0"
 
 [dependency-groups]
 dev = [

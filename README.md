@@ -23,7 +23,7 @@ To run NMS.py, enter the following command into a terminal:
 pymhf run nmspy
 ```
 
-This will display some config options to complete. The only option to consider is the location of the mods folder. It is recommended that you create a new folder inside the normal MODS folder which can dontain all the python scripts you want to be run.
+This will display some config options to complete. The only option to consider is the location of the mods folder. It is recommended that you create a new folder inside the normal MODS folder which can contain all the python scripts you want to be run.
 
 If NMS.py starts up successfully you should see two extra windows; an auto-created GUI from pyMHF, and a terminal window which will show the logs for pyMHF.
 

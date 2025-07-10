@@ -3171,3 +3171,81 @@ class GcBiomeType(IntEnum):
     Waterworld = 0xE
     GasGiant = 0xF
     All = 0x10
+
+
+class GcCreatureTypes(IntEnum):
+    None_ = 0x0
+    Bird = auto()
+    FlyingLizard = auto()
+    FlyingSnake = auto()
+    Butterfly = auto()
+    FlyingBeetle = auto()
+    Beetle = auto()
+    Fish = auto()
+    Shark = auto()
+    Crab = auto()
+    Snake = auto()
+    Dino = auto()
+    Antelope = auto()
+    Rodent = auto()
+    Cat = auto()
+    Fiend = auto()
+    BugQueen = auto()
+    BugFiend = auto()
+    Drone = auto()
+    Quad = auto()
+    SpiderQuad = auto()
+    SpiderQuadMini = auto()
+    Walker = auto()
+    Predator = auto()
+    PlayerPredator = auto()
+    Prey = auto()
+    Passive = auto()
+    FishPredator = auto()
+    FishPrey = auto()
+    FiendFishSmall = auto()
+    FiendFishBig = auto()
+    Jellyfish = auto()
+    LandJellyfish = auto()
+    RockCreature = auto()
+    MiniFiend = auto()
+    Floater = auto()
+    Scuttler = auto()
+    Slug = auto()
+    MiniDrone = auto()
+    MiniRobo = auto()
+    SpaceFloater = auto()
+    JellyBoss = auto()
+    JellyBossBrood = auto()
+    LandSquid = auto()
+    Weird = auto()
+    SeaSnake = auto()
+    SandWorm = auto()
+    ProtoRoller = auto()
+    ProtoFlyer = auto()
+    ProtoDigger = auto()
+    Plough = auto()
+    Digger = auto()
+    Drill = auto()
+    Brainless = auto()
+    Pet = auto()
+
+
+class GcRarity(IntEnum):
+    Common = 0x0
+    Uncommon = 0x1
+    Rare = 0x2
+
+
+class GcCreatureActiveTime(IntEnum):
+    OnlyDay = 0x0
+    MostlyDay = 0x1
+    AnyTime = 0x2
+    MostlyNight = 0x3
+    OnlyNight = 0x4
+
+
+class GcCreatureHemiSphere(IntEnum):
+    Any = 0x0
+    Northern = 0x1
+    Southern = 0x2

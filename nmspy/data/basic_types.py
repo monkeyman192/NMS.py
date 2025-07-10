@@ -154,6 +154,9 @@ class Vector3f(ctypes.Structure):
         return (self.x**2 + self.y**2 + self.z**2) ** (0.5)
 
 
+cTkVector3 = Vector3f
+
+
 class Vector4f(ctypes.Structure):
     x: float
     y: float
@@ -228,6 +231,8 @@ class Colour(ctypes.Structure):
 
 
 class TkID(ctypes.Structure):
+    """TkID<128> -> TkID[0x10], TkID<256> -> TkID[0x20]"""
+
     _align_ = 0x10  # One day this will work...
     _size: int  # This should only ever be 0x10 or 0x20...
     value: bytes

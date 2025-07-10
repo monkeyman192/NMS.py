@@ -336,12 +336,12 @@
  },
  {
   "name": "cGcPlayer::OnEnteredCockpit",
-  "signature": "40 53 48 81 EC E0 00 00 00 48 8B D9 E8 ?? ?? ?? ?? 83 78 10 05",
+  "signature": "40 53 48 81 EC E0 00 00 00 48 8B D9 E8 ? ? ? ? 83 78 10 05",
   "mangled_name": "?OnEnteredCockpit@cGcPlayer@@QEAAXXZ"
  },
  {
   "name": "cGcPlayer::GetDominantHand",
-  "signature": "40 53 48 83 EC 20 48 8B 1D ?? ?? ?? ?? E8 ?? ?? ?? ?? 83 78 10 05 75 ?? 48 8B",
+  "signature": "40 53 48 83 EC 20 48 8B 1D ? ? ? ? E8 ? ? ? ? 83 78 10 05 75 ? 48 8B",
   "mangled_name": "?GetDominantHand@cGcPlayer@@UEBA?AW4eHand@@XZ"
  },
  {
@@ -356,7 +356,7 @@
  },
  {
   "name": "cGcTerrainEditorBeam::ApplyTerrainEditStroke",
-  "signature": "4C 89 44 24 18 55 53 56 57 41 54 41 55 41 56 48 8D AC 24 ?? FE FF FF 48",
+  "signature": "4C 89 44 24 18 55 53 56 57 41 54 41 55 41 56 48 8D AC 24 ? FE FF FF 48",
   "mangled_name": "?ApplyTerrainEditStroke@cGcTerrainEditorBeam@@QEAAHUsTerrainEditData@@AEBVcGcProjectileImpact@@@Z"
  },
  {
@@ -371,7 +371,7 @@
  },
  {
   "name": "cGcLocalPlayerCharacterInterface::IsJetpacking",
-  "signature": "40 53 48 83 EC 20 48 8B 1D ?? ?? ?? ?? 48 8D 8B ?? ?? ?? 00 E8 ?? ?? ?? 00",
+  "signature": "40 53 48 83 EC 20 48 8B 1D ? ? ? ? 48 8D 8B ? ? ? 00 E8 ? ? ? 00",
   "mangled_name": "?IsJetpacking@cGcLocalPlayerCharacterInterface@@UEBA_NXZ"
  },
  {
@@ -381,12 +381,12 @@
  },
  {
   "name": "cGcSpaceshipWarp::GetPulseDriveFuelFactor",
-  "signature": "48 83 EC 38 48 8B 0D ?? ?? ?? ?? 41 B9 01 00 00 00 48 81 C1 30 B3 00 00 C7 44 24 20 FF FF FF FF BA 9A",
+  "signature": "48 83 EC 38 48 8B 0D ? ? ? ? 41 B9 01 00 00 00 48 81 C1 30 B3 00 00 C7 44 24 20 FF FF FF FF BA 9A",
   "mangled_name": "?GetPulseDriveFuelFactor@cGcSpaceshipWarp@@QEBAMXZ"
  },
  {
   "name": "cGcSpaceshipWeapons::GetOverheatProgress",
-  "signature": "48 63 81 ?? ?? 00 00 80 BC 08 ?? ?? 00 00 00 74 12",
+  "signature": "48 63 81 ? ? 00 00 80 BC 08 ? ? 00 00 00 74 12",
   "mangled_name": "?GetOverheatProgress@cGcSpaceshipWeapons@@UEBAMXZ"
  },
  {
@@ -438,5 +438,110 @@
   "name": "cGcPlanet::Generate",
   "signature": "48 8B C4 4C 89 40 ? 88 50 ? 55 53",
   "mangled_name": "?Generate@cGcPlanet@@QEAAX_NAEBVcTkVector3@@AEBVcGcDiscoveryData@@AEBVcGcPlanetGenerationInputData@@@Z"
+ },
+ {
+  "name": "cGcNotificationSequenceStartEvent::DeepInterstellarSearch",
+  "signature": "48 89 5C 24 ? 57 48 83 EC ? 48 8B 81 ? ? ? ? 48 8D 91 ? ? ? ? 44 8B 81",
+  "mangled_name": "?DeepInterstellarSearch@cGcNotificationSequenceStartEvent@@SA_NPEAVcGcNotificationSequenceStage@@@Z"
+ },
+ {
+  "name": "cGcScanEventManager::PassesPlanetInfoChecks",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 8B B1 ? ? ? ? 48 8B DA",
+  "mangled_name": "?PassesPlanetInfoChecks@cGcScanEventManager@@SA_NAEBVPlanetGenerationQuery@@AEBVcGcScanEventSolarSystemLookup@@_NW4eBuildingClass@@2@Z"
+ },
+ {
+  "name": "cGcPlanetGenerator::GenerateCreatureRoles",
+  "signature": "48 8B C4 48 89 58 ? 48 89 50 ? 48 89 48 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 4C 63 B2",
+  "mangled_name": "?GenerateCreatureRoles@cGcPlanetGenerator@@QEAAXAEAVcGcPlanetData@@AEB_K@Z"
+ },
+ {
+  "name": "cGcPlanetGenerator::GenerateQueryInfo",
+  "signature": "4C 89 4C 24 ? 48 89 54 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D AC 24",
+  "mangled_name": "?GenerateQueryInfo@cGcPlanetGenerator@@QEAAXAEAVPlanetGenerationQuery@@AEBVcGcPlanetGenerationInputData@@_K_N@Z"
+ },
+ {
+  "name": "cGcPlanetGenerator::GenerateCreatureInfo",
+  "signature": "48 8B C4 48 89 50 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 33 F6",
+  "mangled_name": "?GenerateCreatureInfo@cGcPlanetGenerator@@IEAAXAEAVcGcPlanetData@@AEAVcGcCreatureRoleData@@@Z"
+ },
+ {
+  "name": "cGcSolarSystemGenerator::GenerateQueryInfo",
+  "signature": "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 33 F6",
+  "mangled_name": "?GenerateQueryInfo@cGcSolarSystemGenerator@@QEAAXAEBVcTkSeed@@AEBVcGcGalaxyAttributesAtAddress@@AEAUGenerationData@1@@Z"
+ },
+ {
+  "name": "cGcFrontendPageDiscovery::DoDiscoveryView",
+  "signature": "4C 89 4C 24 ? 4C 89 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 48 8B 99",
+  "mangled_name": "?DoDiscoveryView@cGcFrontendPageDiscovery@@SAXPEAVcGcFrontendPage@@AEAVcGcDiscoveryPageData@@AEAVcGcFrontendTextInput@@AEAVcGcFrontendModelRenderer@@@Z"
+ },
+ {
+  "name": "cGcFrontendPageDiscovery::GetDiscoveryHintString",
+  "signature": "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 8D 05 ? ? ? ? 41 8B F9",
+  "mangled_name": "?GetDiscoveryHintString@cGcFrontendPageDiscovery@@KA?AV?$cTkFixedString@$0EA@D@@W4eTileType@@W4eCreatureType@@W4eRarity@@W4eCreatureActiveTime@@W4eCreatureHemiSphere@@@Z"
+ },
+ {
+  "name": "cGcPlanetGenerator::FillCreatureSpawnDataFromDescription",
+  "signature": "48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 4C 89 48 ? 57 41 54 41 55 41 56 41 57 48 81 EC ? ? ? ? 4C 8B E1",
+  "mangled_name": "?FillCreatureSpawnDataFromDescription@cGcPlanetGenerator@@IEAAXAEBVcGcCreatureRoleData@@AEAVcGcCreatureSpawnData@@AEAVcGcPlanetData@@@Z"
+ },
+ {
+  "name": "cGcBinoculars::UpdateTarget",
+  "signature": "48 8B C4 55 57 41 54 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 70",
+  "mangled_name": "?UpdateTarget@cGcBinoculars@@AEAAXM@Z"
+ },
+ {
+  "name": "cGcFrontendPagePortalRunes::CheckUAIsValid",
+  "signature": "48 8B C4 44 88 48 20 44 88 40 18 48 89 50 10 55 53 56 57 41 54",
+  "mangled_name": "?CheckUAIsValid@cGcFrontendPagePortalRunes@@SA_N_KAEA_K_N@Z"
+ },
+ {
+  "name": "cGcGalaxyVoxelAttributesData::SetDefaults",
+  "signature": "33 C0 0F 57 C0 0F 11 01 0F 11 41 ? 0F 11 41 ? 48 89 41 ? 48 89 41 ? 48 89 41 ? 48 89 41",
+  "mangled_name": "?SetDefaults@cGcGalaxyVoxelAttributesData@@QEAAXXZ"
+ },
+ {
+  "name": "cGcGalaxyAttributeGenerator::ClassifyVoxel",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F BF 41",
+  "mangled_name": "?ClassifyVoxel@cGcGalaxyAttributeGenerator@@SAXAEBVcGcGalacticVoxelCoordinate@@AEAVcGcGalaxyVoxelAttributesData@@@Z"
+ },
+ {
+  "name": "cGcGalaxyStarAttributesData::SetDefaults",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 ED 48 8D B9 ? ? ? ? 48 89 6C 24",
+  "mangled_name": "?SetDefaults@cGcGalaxyStarAttributesData@@QEAAXXZ"
+ },
+ {
+  "name": "cGcGalaxyAttributeGenerator::ClassifyStarSystem",
+  "signature": "48 89 54 24 ? 55 53 56 57 41 54 41 55 41 57 48 8B EC 48 83 EC ? 48 8B F9",
+  "mangled_name": "?ClassifyStarSystem@cGcGalaxyAttributeGenerator@@SAX_KAEAVcGcGalaxyStarAttributesData@@@Z"
+ },
+ {
+  "name": "cGcGalaxyVoxelGenerator::Populate",
+  "signature": "48 8B C4 4C 89 40 ? 48 89 48 ? 55 53 56 57 41 56 48 8D A8",
+  "mangled_name": "?Populate@cGcGalaxyVoxelGenerator@@SAX_KAEAVcGcGalaxyVoxelData@@AEBVcTkVector3@@@Z"
+ },
+ {
+  "name": "cGcFrontendPagePortalRunes::DoInteraction",
+  "signature": "48 89 54 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 55 48 8D 6C 24 ? 48 81 EC ? ? ? ? 0F 57 C0",
+  "mangled_name": "?DoInteraction@cGcFrontendPagePortalRunes@@QEAAXPEAVcGcFrontendPage@@@Z"
+ },
+ {
+  "name": "cTkLanguageManagerBase::Translate",
+  "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 57 C0 49 8B F0",
+  "mangled_name": "?Translate@cTkLanguageManagerBase@@QEBAPEBDPEBD0@Z"
+ },
+ {
+  "name": "cGcBinoculars::UpdateScanBarProgress",
+  "signature": "40 53 48 83 EC ? 48 8B 91 ? ? ? ? 48 8B D9 F3 0F 11 49",
+  "mangled_name": "?UpdateScanBarProgress@cGcBinoculars@@AEAAXM@Z"
+ },
+ {
+  "name": "cGcNameGenerator::GeneratePlanetName",
+  "signature": "4C 89 4C 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 44 8B D2",
+  "mangled_name": "?GeneratePlanetName@cGcNameGenerator@@QEBAX_KAEAV?$cTkFixedString@$0HP@D@@PEAV2@@Z"
+ },
+ {
+  "name": "cGcPlanetGenerator::Generate",
+  "signature": "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4D 8B F8 C6 85",
+  "mangled_name": "?Generate@cGcPlanetGenerator@@QEAAXAEAVcGcPlanetData@@AEBVcGcPlanetGenerationInputData@@PEAVcGcPlanet@@@Z"
  }
 ]
