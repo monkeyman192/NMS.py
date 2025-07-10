@@ -30,11 +30,6 @@ class cGcScanEventData(Structure):
 
 
 @partial_struct
-class GcSolarSystemData(Structure):
-    PlanetOrbits: Annotated[list[int], Field(ctypes.c_int32 * 8, 0x21D0)]
-
-
-@partial_struct
 class cGcInteractionComponentData(Structure):
     mInteractionType: Annotated[c_enum32[enums.GcInteractionType], 0x31C]
 
@@ -45,3 +40,24 @@ class cGcPlanetGenerationInputData(Structure):
     RareSubstance: Annotated[basic.cTkFixedString[0x10], 0x10]
     Seed: Annotated[basic.GcSeed, 0x20]
     Biome: Annotated[c_enum32[enums.GcBiomeType], 0x30]
+
+
+@partial_struct
+class cGcPlanetData(Structure):
+    Name: Annotated[basic.cTkFixedString[0x80], 0x3956]
+
+
+class cGcCreatureRoleData(Structure):
+    pass
+
+
+class cGcCreatureSpawnData(Structure):
+    pass
+
+
+class cGcGalaxyVoxelAttributesData(Structure):
+    pass
+
+
+class cGcGalaxyStarAttributesData(Structure):
+    pass
