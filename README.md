@@ -7,7 +7,7 @@ It should also be noted that Game updates can very easily break mods utilising N
 Any responsibility for broken saves is entirely on the users of this library.
 
 Also note that this library will never contain functions relating to online functionality to avoid any abuse.
-The author of this library condones any use of this for any usage that is detrimental to other players.
+The author of this library condones any use of this code for any purpose that is directly detrimental to other players.
 
 ## Installation
 
@@ -23,11 +23,16 @@ To run NMS.py, enter the following command into a terminal:
 pymhf run nmspy
 ```
 
-This will display some config options to complete. The only option to consider is the location of the mods folder. It is recommended that you create a new folder inside the normal MODS folder which can contain all the python scripts you want to be run.
+This will display some config options to complete. The only option to consider is the location of the mods folder. It is recommended that you specify the `MODS` folder inside the `GAMEDATA` folder as your mod directory (ie. the same one you put normal mods in).
+All mods will be placed in either this folder, or in a chcild folder of this. You can essentially think of any mod using NMS.py being able to be "installed" in the same way you would any other normal mod.
 
 If NMS.py starts up successfully you should see two extra windows; an auto-created GUI from pyMHF, and a terminal window which will show the logs for pyMHF.
 
 If you want to stop NMS, you can press `ctrl + C` in the window you started the process in to kill it.
+
+## Writing mods
+
+Currently the best way to see how to write a mod is to look at the `example_mods` folder, as well as looking at the [pyMHF docs](https://monkeyman192.github.io/pyMHF/) which has comprehensive details on how to use pyMHF.
 
 ### Credits
 
