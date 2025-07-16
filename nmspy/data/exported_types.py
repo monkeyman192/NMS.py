@@ -19,10 +19,7 @@ class cGcSolarSystemData(Structure):
 
 @partial_struct
 class cGcNGuiTextData(Structure):
-    Text: Annotated[
-        basic.cTkDynamicArray[ctypes.c_char],
-        Field(basic.cTkDynamicArray[ctypes.c_char], 0x88),
-    ]
+    Text: Annotated[basic.cTkDynamicArray[ctypes.c_char], 0x88]
 
 
 class cGcScanEventData(Structure):
@@ -31,7 +28,7 @@ class cGcScanEventData(Structure):
 
 @partial_struct
 class cGcInteractionComponentData(Structure):
-    mInteractionType: Annotated[c_enum32[enums.GcInteractionType], 0x31C]
+    InteractionType: Annotated[c_enum32[enums.GcInteractionType], 0x32C]
 
 
 @partial_struct

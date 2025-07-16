@@ -398,7 +398,21 @@ class cGcPlayer(Structure):
 
 
 class cGcPlayerState(Structure):
-    pass
+    @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 44 8B 81 ? ? ? ? 48 8D 2D")
+    def AwardUnits(
+        self,
+        this: "ctypes._Pointer[cGcPlayerState]",
+        liChange: ctypes.c_int32,
+    ) -> ctypes.c_uint64:
+        pass
+
+    @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 44 8B 81 ? ? ? ? 48 8D 35")
+    def AwardNanites(
+        self,
+        this: "ctypes._Pointer[cGcPlayerState]",
+        liChange: ctypes.c_int32,
+    ) -> ctypes.c_uint64:
+        pass
 
 
 class cGcGameState(Structure):
