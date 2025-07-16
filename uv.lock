@@ -400,7 +400,7 @@ wheels = [
 
 [[package]]
 name = "nmspy"
-version = "147408.0"
+version = "147408.1"
 source = { editable = "." }
 dependencies = [
     { name = "pymhf", extra = ["gui"] },

@@ -30,6 +30,10 @@ If NMS.py starts up successfully you should see two extra windows; an auto-creat
 
 If you want to stop NMS, you can press `ctrl + C` in the window you started the process in to kill it.
 
+## Writing mods
+
+Currently the best way to see how to write a mod is to look at the `example_mods` folder, as well as looking at the [pyMHF docs](https://monkeyman192.github.io/pyMHF/) which has comprehensive details on how to use pyMHF.
+
 ### Credits
 
 Thanks to the developers of minhook, cyminhook and pymem, all of which are instrumental in making this framework possible.
