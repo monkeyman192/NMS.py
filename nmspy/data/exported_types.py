@@ -56,5 +56,28 @@ class cGcGalaxyVoxelAttributesData(Structure):
     pass
 
 
+@partial_struct
+class GcPlanetTradingData(Structure):
+    TradingClass: Annotated[c_enum32[enums.GcTradingClass], 0x0]
+    WealthClass: Annotated[c_enum32[enums.GcWealthClass], 0x4]
+
+
+@partial_struct
 class cGcGalaxyStarAttributesData(Structure):
-    pass
+    PlanetSeeds: Annotated[list[basic.GcSeed], Field(basic.GcSeed * 0x10, 0x000)]
+    PlanetParentIndices: Annotated[list[int], Field(ctypes.c_int32 * 0x10, 0x100)]
+    PlanetSizes: Annotated[
+        list[enums.GcPlanetSize], Field(c_enum32[enums.GcPlanetSize] * 0x10, 0x140)
+    ]
+    TradingData: Annotated[GcPlanetTradingData, 0x180]
+    Anomaly: Annotated[c_enum32[enums.GcGalaxyStarAnomaly], 0x188]
+    ConflictData: Annotated[c_enum32[enums.GcPlayerConflictData], 0x18C]
+    NumberOfPlanets: Annotated[ctypes.c_int32, 0x190]
+    NumberOfPrimePlanets: Annotated[ctypes.c_int32, 0x194]
+    Race: Annotated[c_enum32[enums.GcAlienRace], 0x198]
+    Type: Annotated[c_enum32[enums.GcGalaxyStarTypes], 0x19C]
+    AbandonedSystem: Annotated[ctypes.c_bool, 0x1A0]
+    IsGasGiantSystem: Annotated[ctypes.c_bool, 0x1A1]
+    IsGiantSystem: Annotated[ctypes.c_bool, 0x1A2]
+    IsPirateSystem: Annotated[ctypes.c_bool, 0x1A3]
+    IsSystemSafe: Annotated[ctypes.c_bool, 0x1A4]

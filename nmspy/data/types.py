@@ -431,7 +431,7 @@ class cGcGameState(Structure):
     ):
         pass
 
-    @function_hook("44 89 44 24 ? 89 54 24 ? 55 56 57 41 57")
+    @function_hook("44 89 44 24 ? 89 54 24 ? 55 56 57 41 54 48 8D AC 24")
     def LoadFromPersistentStorage(
         self,
         this: "ctypes._Pointer[cGcGameState]",

@@ -7,7 +7,7 @@ It should also be noted that Game updates can very easily break mods utilising N
 Any responsibility for broken saves is entirely on the users of this library.
 
 Also note that this library will never contain functions relating to online functionality to avoid any abuse.
-The author of this library condones any use of this code for any purpose that is directly detrimental to other players.
+The author of this library does not condone any use of this code for any purpose that is directly detrimental to other players.
 
 ## Installation
 
