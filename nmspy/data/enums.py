@@ -3249,3 +3249,63 @@ class GcCreatureHemiSphere(IntEnum):
     Any = 0x0
     Northern = 0x1
     Southern = 0x2
+
+
+class GcPlanetSize(IntEnum):
+    Large = 0x0
+    Medium = 0x1
+    Small = 0x2
+    Moon = 0x3
+    Giant = 0x4
+
+
+class GcGalaxyStarAnomaly(IntEnum):
+    None_ = 0x0
+    AtlasStation = 0x1
+    AtlasStationFinal = 0x2
+    BlackHole = 0x3
+    MiniStation = 0x4
+
+
+class GcPlayerConflictData(IntEnum):
+    Low = 0x0
+    Default = 0x1
+    High = 0x2
+    Pirate = 0x3
+
+
+class GcAlienRace(IntEnum):
+    Traders = 0x0
+    Warriors = 0x1
+    Explorers = 0x2
+    Robots = 0x3
+    Atlas = 0x4
+    Diplomats = 0x5
+    Exotics = 0x6
+    None_ = 0x7
+    Builders = 0x8
+
+
+class GcGalaxyStarTypes(IntEnum):
+    Yellow = 0x0
+    Green = 0x1
+    Blue = 0x2
+    Red = 0x3
+    Purple = 0x4
+
+
+class GcTradingClass(IntEnum):
+    Mining = 0x0
+    HighTech = 0x1
+    Trading = 0x2
+    Manufacturing = 0x3
+    Fusion = 0x4
+    Scientific = 0x5
+    PowerGeneration = 0x6
+
+
+class GcWealthClass(IntEnum):
+    Poor = 0x0
+    Average = 0x1
+    Wealthy = 0x2
+    Pirate = 0x3
