@@ -260,7 +260,9 @@ class cTkFixedString(ctypes.Structure):
     value: bytes
 
     def set(self, val: str):
-        self.value = val[: self._size].encode()
+        """Set the value of the string."""
+        new_len = len(val)
+        self.value = val[: self._size].encode() + (self._size - new_len) * b"\x00"
 
     def __class_getitem__(cls: type["cTkFixedString"], key: int):
         _cls: type["cTkFixedString"] = types.new_class(
