@@ -553,5 +553,30 @@
   "name": "cGcPlayerState::AwardNanites",
   "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 44 8B 81 ? ? ? ? 48 8D 35",
   "mangled_name": "?AwardNanites@cGcPlayerState@@QEAAIH@Z"
+ },
+ {
+  "name": "cGcCreatureComponent::Prepare",
+  "signature": "48 8B C4 55 56 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 51",
+  "mangled_name": "?Prepare@cGcCreatureComponent@@MEAAXXZ"
+ },
+ {
+  "name": "cGcSky::SetSunAngle",
+  "signature": "40 53 48 83 EC ? 0F 28 C1 0F 29 7C 24 ? F3 0F 5E 05",
+  "mangled_name": "?SetSunAngle@cGcSky@@IEAAXM@Z"
+ },
+ {
+  "name": "cGcSky::UpdateSunPosition",
+  "signature": "48 8B C4 53 48 81 EC ? ? ? ? 4C 8B 05 ? ? ? ? 48 8B D9",
+  "mangled_name": "?UpdateSunPosition@cGcSky@@QEAAXXZ"
+ },
+ {
+  "name": "cGcSky::Update",
+  "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 55 57 41 54 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 48 8B D9",
+  "mangled_name": "?Update@cGcSky@@QEAAXM@Z"
+ },
+ {
+  "name": "cGcNGuiLayer::AddElement",
+  "signature": "48 89 5C 24 ? 48 89 74 24 ? 48 89 54 24 ? 57 48 81 EC ? ? ? ? 44 8B 51",
+  "mangled_name": "?AddElement@cGcNGuiLayer@@QEAAPEAVcGcNGuiElement@@PEAV2@_N@Z"
  }
 ]

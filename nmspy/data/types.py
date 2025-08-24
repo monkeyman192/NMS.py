@@ -127,6 +127,17 @@ class cGcNGuiLayer(Structure):
     ):
         pass
 
+    @function_hook(
+        "48 89 5C 24 ? 48 89 74 24 ? 48 89 54 24 ? 57 48 81 EC ? ? ? ? 44 8B 51"
+    )
+    def AddElement(
+        self,
+        this: "ctypes._Pointer[cGcNGuiLayer]",
+        lpElement: "ctypes._Pointer[cGcNGuiLayer]",
+        lbOnTheEnd: ctypes.c_int64,
+    ):
+        pass
+
 
 @partial_struct
 class cGcNGui(Structure):
@@ -892,12 +903,31 @@ class cGcPlayerNotifications(Structure):
         pass
 
 
+@partial_struct
 class cGcSky(Structure):
     eStormState = enums.eStormState
+
+    mSunDirection: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x500)]
 
     @function_hook("40 53 55 56 57 41 56 48 83 EC ? 4C 8B 15")
     def SetStormState(
         self, this: "ctypes._Pointer[cGcSky]", leNewState: c_enum32[eStormState]
+    ):
+        pass
+
+    @function_hook("40 53 48 83 EC ? 0F 28 C1 0F 29 7C 24 ? F3 0F 5E 05")
+    def SetSunAngle(self, this: "ctypes._Pointer[cGcSky]", lfAngle: ctypes.c_float):
+        pass
+
+    @function_hook(
+        "48 8B C4 48 89 58 ? 48 89 70 ? 55 57 41 54 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 48 8B D9"
+    )
+    def Update(self, this: "ctypes._Pointer[cGcSky]", lfTimeStep: ctypes.c_float):
+        pass
+
+    @function_hook("48 8B C4 53 48 81 EC ? ? ? ? 4C 8B 05 ? ? ? ? 48 8B D9")
+    def UpdateSunPosition(
+        self, this: "ctypes._Pointer[cGcSky]", lfAngle: ctypes.c_float
     ):
         pass
 
@@ -1028,7 +1058,7 @@ class cGcTextChatInput(Structure):
     def ParseTextForCommands(
         self,
         this: "ctypes._Pointer[cGcTextChatInput]",
-        lMessageText: ctypes._Pointer[basic.cTkFixedString[0x80]],
+        lMessageText: ctypes._Pointer[basic.cTkFixedString[0x3FF]],
     ):
         pass
 
@@ -1042,7 +1072,7 @@ class cGcTextChatManager(Structure):
     def Say(
         self,
         this: "ctypes._Pointer[cGcTextChatManager]",
-        lsMessageBody: ctypes._Pointer[basic.cTkFixedString[0x80]],
+        lsMessageBody: ctypes._Pointer[basic.cTkFixedString[0x3FF]],
         lbSystemMessage: ctypes.c_bool,
     ):
         pass
@@ -1312,6 +1342,12 @@ class cGcNameGenerator(Structure):
         lResult: ctypes._Pointer[basic.cTkFixedString[0x79]],
         lLocResult: ctypes._Pointer[basic.cTkFixedString[0x79]],
     ):
+        pass
+
+
+class cGcCreatureComponent(Structure):
+    @function_hook("48 8B C4 55 56 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 51")
+    def Prepare(self, this: "ctypes._Pointer[cGcCreatureComponent]"):
         pass
 
 
