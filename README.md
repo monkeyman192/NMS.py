@@ -11,7 +11,7 @@ The author of this library does not condone any use of this code for any purpose
 
 ## Installation
 
-**Note:** Before you start: NMS.py can only run on python 3.9 - 3.11 inclusive. Newer versions are not supported due to issues injecting python into them unfortunately.
+**Note:**
 It is recommended that you download python from the [official site](https://www.python.org/downloads) as the windows store version may have issues, as well as the managed python which [uv](https://docs.astral.sh/uv/) installs.
 
 The recommended way to install NMS.py is to simply run `python -m pip install nmspy`. This will install NMS.py and its' dependency [`pyMHF`](https://github.com/monkeyman192/pyMHF) into your system python. You can of course install it in a venv or as a dependency using uv if you prefer.

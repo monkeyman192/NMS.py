@@ -17,6 +17,19 @@ import nmspy.data.enums as enums
 # Exported functions
 
 
+@partial_struct
+class cTkResource(Structure):
+    # __vftable: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0)]
+    miType: Annotated[
+        c_enum32[enums.ResourceTypes], Field(c_enum32[enums.ResourceTypes], 0x8)
+    ]
+    msName: Annotated[
+        basic.cTkFixedString[0x100], Field(basic.cTkFixedString[0x100], 0xC)
+    ]
+    mxFlags: Annotated[int, Field(ctypes.c_int32, 0x10C)]
+    mHandle: Annotated[int, Field(ctypes.c_int32, 0x128)]
+
+
 class AK(Structure):
     class SoundEngine(Structure):
         @static_function_hook(
@@ -51,10 +64,17 @@ class AK(Structure):
 
 @partial_struct
 class cGcNGuiText(Structure):
+    # Found in cGcNGuiText::EditElement
     mpTextData: Annotated[
         ctypes._Pointer[nmse.cGcNGuiTextData],
-        Field(ctypes._Pointer[nmse.cGcNGuiTextData], 0x180),
+        Field(ctypes._Pointer[nmse.cGcNGuiTextData], 0x160),
     ]
+
+    @function_hook(
+        "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 81 EC ? ? ? ? 0F 29 70 ? 0F 29 78 ? 48 8D A8 ? ? ? ? 48 83 E5 ? 48 8B 01 48 8B F9"
+    )
+    def EditElement(self, this: "ctypes._Pointer[cGcNGuiText]"):
+        pass
 
 
 @partial_struct
@@ -153,9 +173,9 @@ class cGcShipHUD(Structure):
 
     # The following offset is found by searching for "UI\\HUD\\SHIP\\MAINSCREEN.MXML"
     # (It's above the below entry.)
-    mMainScreenGUI: Annotated[cGcNGui, Field(cGcNGui, offset=0x275D8)]
+    mMainScreenGUI: Annotated[cGcNGui, Field(cGcNGui, offset=0x27478)]
     # The following offset is found by searching for "UI\\HUD\\SHIP\\HEADSUP.MXML"
-    mHeadsUpGUI: Annotated[cGcNGui, Field(cGcNGui, offset=0x27B90)]
+    mHeadsUpGUI: Annotated[cGcNGui, Field(cGcNGui, offset=0x27A10)]
 
     # hud_root: Annotated[int, Field(ctypes.c_ulonglong, 0x27F70)]  # TODO: Fix
 
@@ -163,7 +183,9 @@ class cGcShipHUD(Structure):
     def LoadData(self, this: "ctypes._Pointer[cGcShipHUD]"):
         pass
 
-    @function_hook("40 55 53 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 1D")
+    @function_hook(
+        "40 55 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B F9 48 8B 0D ? ? ? ? 48 81 C1"
+    )
     def RenderHeadsUp(self, this: "ctypes._Pointer[cGcShipHUD]"):
         pass
 
@@ -173,27 +195,6 @@ class cTkStopwatch(Structure):
     def GetDurationInSeconds(
         self, this: "ctypes._Pointer[cTkStopwatch]"
     ) -> ctypes.c_float:
-        pass
-
-
-# TODO: Once we have pymhf 0.1.14 subclass from cTkFSM
-@partial_struct
-class cGcApplication(Structure):
-    # There are tricky to get...
-    # The game mostly sets a lot of the fields of the cGcApplication struct in some kind of "baked" way, we
-    # don't see the offsets as with other structs, and instead we need to find the object, and then infer the
-    # offset from the offset of the cGcApplication object. We can get this by seeing the value passed in to
-    # cTkFSM::Construct in cGcApplication::Construct.
-    # These properties can be found in cGcApplication::Construct
-    muPlayerSaveSlot: Annotated[int, Field(ctypes.c_uint32, 0x40)]
-    mbPaused: Annotated[bool, Field(ctypes.c_bool, 0xB4F5)]
-
-    @function_hook("40 53 48 83 EC 20 E8 ? ? ? ? 48 89")
-    def Update(self, this: "ctypes._Pointer[cGcApplication]"):
-        pass
-
-    @function_hook("48 89 5C 24 ? 57 48 83 EC ? 33 FF 48 89 74 24 ? 83 3D")
-    def Construct(self, this: "ctypes._Pointer[cGcApplication]"):
         pass
 
 
@@ -226,6 +227,27 @@ class cTkFSM(Structure):
         pass
 
 
+@partial_struct
+class cGcApplication(cTkFSM):
+    # There are tricky to get...
+    # The game mostly sets a lot of the fields of the cGcApplication struct in some kind of "baked" way, we
+    # don't see the offsets as with other structs, and instead we need to find the object, and then infer the
+    # offset from the offset of the cGcApplication object. We can get this by seeing the value passed in to
+    # cTkFSM::Construct in cGcApplication::Construct.
+    # These properties can be found in cGcApplication::Construct
+    muPlayerSaveSlot: Annotated[int, Field(ctypes.c_uint32, 0x40)]
+    mbPaused: Annotated[bool, Field(ctypes.c_bool, 0xB505)]
+    mbMultiplayerActive: Annotated[bool, Field(ctypes.c_bool, 0xB508)]
+
+    @function_hook("40 53 48 83 EC 20 E8 ? ? ? ? 48 89")
+    def Update(self, this: "ctypes._Pointer[cGcApplication]"):
+        pass
+
+    @function_hook("48 89 5C 24 ? 57 48 83 EC ? 33 FF 48 89 74 24 ? 83 3D")
+    def Construct(self, this: "ctypes._Pointer[cGcApplication]"):
+        pass
+
+
 class cGcBeamEffect(Structure):
     @function_hook(
         "40 53 48 83 EC ? 8B 41 ? 48 8B D9 A9 ? ? ? ? 76 ? 25 ? ? ? ? 3D ? ? ? ? 74 ? B0"
@@ -235,7 +257,9 @@ class cGcBeamEffect(Structure):
 
 
 class cGcLaserBeam(Structure):
-    @function_hook("48 89 5C 24 10 57 48 83 EC 50 48 83 B9")
+    @function_hook(
+        "48 89 5C 24 ? 57 48 83 EC ? 48 83 B9 ? ? ? ? ? 0F B6 FA 48 8B D9 77"
+    )
     def Fire(
         self, this: "ctypes._Pointer[cGcLaserBeam]", lbHitOnFirstFrame: ctypes.c_bool
     ):
@@ -244,15 +268,18 @@ class cGcLaserBeam(Structure):
 
 @partial_struct
 class cGcMarkerPoint(Structure):
-    _total_size_ = 0x280
-    # Found in cGcScanEvent::Construct
-    # Seems to be same as 4.13 at least up to where this is mapped
+    # Size found in the vector allocator in cGcMarkerList::TryAddMarker
+    _total_size_ = 0x260
+    # Found in cGcMarkerPoint::Reset
     mPosition: Annotated[basic.cTkPhysRelVec3, 0x0]
     mCenterOffset: Annotated[basic.Vector3f, 0x20]
-    mCustomName: Annotated[basic.cTkFixedString[0x40], 0x3C]
-    mNode: Annotated[basic.TkHandle, 0x108]
-    mModelNode: Annotated[basic.TkHandle, 0x10C]
-    meDisplay: Annotated[ctypes.c_bool * 4, 0x268]
+    mCustomName: Annotated[basic.cTkFixedString[0x40], 0x38]
+    mCustomSubtitle: Annotated[basic.cTkFixedString[0x80], 0x78]
+    mNode: Annotated[basic.TkHandle, 0x104]
+    mModelNode: Annotated[basic.TkHandle, 0x108]
+    meBuildingClass: Annotated[
+        int, Field(ctypes.c_uint32, 0x118)
+    ]  # cGcBuildingClassification
 
     @static_function_hook("40 53 48 83 EC ? 33 C0 0F 57 C0 0F 11 01 48 8B D9")
     @staticmethod
@@ -273,7 +300,7 @@ class cGcMarkerList(Structure):
         std.vector[cGcMarkerPoint], Field(std.vector[cGcMarkerPoint])
     ]
 
-    @function_hook("48 89 5C 24 ? 55 56 41 56 48 83 EC ? 40 32 ED")
+    @function_hook("48 89 5C 24 ? 55 57 41 56 48 83 EC ? 40 32 ED")
     def RemoveMarker(
         self,
         this: "ctypes._Pointer[cGcMarkerList]",
@@ -282,7 +309,7 @@ class cGcMarkerList(Structure):
         pass
 
     @function_hook(
-        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 54 41 56 41 57 48 83 EC ? 80 BA"
+        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 54 41 56 41 57 48 83 EC ? F6 82"
     )
     def TryAddMarker(
         self,
@@ -334,7 +361,7 @@ class cGcScanEvent(Structure):
     mMarker: Annotated[cGcMarkerPoint, Field(cGcMarkerPoint, 0x10)]
     mpEvent: Annotated[
         ctypes._Pointer[nmse.cGcScanEventData],
-        Field(ctypes._Pointer[nmse.cGcScanEventData], 0x290),
+        Field(ctypes._Pointer[nmse.cGcScanEventData], 0x270),
     ]
 
     @function_hook(
@@ -353,7 +380,7 @@ class cGcScanEvent(Structure):
         pass
 
     @function_hook(
-        "48 8B C4 55 53 56 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 48 8B F9"
+        "48 8B C4 55 53 56 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 33 F6 0F 29 78 ? 48 8B F9"
     )
     def CalculateMarkerPosition(self, this: "ctypes._Pointer[cGcScanEvent]"):
         pass
@@ -365,7 +392,7 @@ class cGcScanEvent(Structure):
         pass
 
     @function_hook(
-        "48 8B C4 55 53 56 57 41 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 4C 8B F1 0F 29 78"
+        "48 8B C4 55 53 57 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 91"
     )
     def UpdateInteraction(self, this: "ctypes._Pointer[cGcScanEvent]"):
         pass
@@ -377,19 +404,17 @@ class cGcScanEvent(Structure):
 
 class cGcPlayer(Structure):
     @function_hook(
-        "40 55 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 4C 8B F9"
+        "40 55 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B F9 48 8B 0D ? ? ? ? 83 B9"
     )
     def CheckFallenThroughFloor(self, this: "ctypes._Pointer[cGcPlayer]"):
         pass
 
-    @function_hook(
-        "48 8B C4 48 89 58 ? 44 89 40 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B 35"
-    )
+    @function_hook("48 8B C4 4C 89 48 ? 44 89 40 ? 55 56")
     def TakeDamage(
         self,
         this: "ctypes._Pointer[cGcPlayer]",
         lfDamageAmount: ctypes.c_float,
-        leDamageType: c_enum32[enums.GcDamageType],
+        leDamageType: c_enum32[enums.cGcDamageType],
         lDamageId: ctypes._Pointer[basic.TkID[0x10]],
         lDir: ctypes._Pointer[basic.Vector3f],
         lpOwner: ctypes.c_uint64,  # cGcOwnerConcept *
@@ -442,11 +467,11 @@ class cGcGameState(Structure):
     ):
         pass
 
-    @function_hook("44 89 44 24 ? 89 54 24 ? 55 56 57 41 54 48 8D AC 24")
+    @function_hook("44 89 44 24 ? 89 54 24 ? 55 53 48 8D AC 24")
     def LoadFromPersistentStorage(
         self,
         this: "ctypes._Pointer[cGcGameState]",
-        a2: ctypes.c_int32,
+        leSlot: ctypes.c_uint32,
         a3: ctypes.c_int32,
         lbNetworkClientLoad: ctypes.c_bool,
     ) -> ctypes.c_uint64:
@@ -463,6 +488,21 @@ class cGcPlanetGenerationInputData(nmse.cGcPlanetGenerationInputData):
 class cGcTerrainRegionMap(Structure):
     mfCachedRadius: Annotated[float, Field(ctypes.c_float, 0x30)]
     mMatrix: Annotated[basic.cTkMatrix34, 0xD3490]
+    mRootNode: Annotated[basic.TkHandle, 0x9E808]
+
+    @function_hook(
+        "48 8B C4 48 89 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24"
+    )
+    def Construct(
+        self,
+        this: "ctypes._Pointer[cGcTerrainRegionMap]",
+        lRootNode: basic.TkHandle,
+        lpGeneratorData: ctypes.c_uint64,  # cTkVoxelGeneratorData*
+        lpBuildingData: ctypes.c_uint64,  # cGcPlanetBuildingData*
+        liRadius: ctypes.c_int32,
+        liBorderRegions: ctypes.c_int32,
+    ):
+        pass
 
 
 @partial_struct
@@ -480,6 +520,7 @@ class GcPlanetSkyProperties(Structure):
 
 @partial_struct
 class cGcPlanet(Structure):
+    _total_size_ = 0xD9060
     # Most of these found in cGcPlanet::Construct or cGcPlanet::cGcPlanet
     miPlanetIndex: Annotated[int, Field(ctypes.c_int32, 0x50)]
     mPlanetData: Annotated[nmse.cGcPlanetData, 0x60]
@@ -543,7 +584,7 @@ class cGcSolarSystem(Structure):
     maPlanets: Annotated[list["cGcPlanet"], Field(cGcPlanet * 6, 0x2630)]
 
     @function_hook(
-        "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 29 74 24 ? 48 8B D9 48 8B F9"
+        "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 29 74 24 ? 48 8B F9 48 8B D9"
     )
     def cGcSolarSystem(self, this: "ctypes._Pointer[cGcSolarSystem]"):
         pass
@@ -617,13 +658,15 @@ class cTkDynamicGravityControl(Structure):
     def Construct(self, this: "ctypes._Pointer[cTkDynamicGravityControl]"):
         pass
 
-    @function_hook("4C 8B C1 48 8B C1 BA ? ? ? ? 0F 57 C0")
+    @function_hook(
+        "0F 28 05 ? ? ? ? 4C 8B C1 48 8B C1 BA ? ? ? ? 0F 11 00 48 8D 40 ? 48 83 EA ? 75 ? 8D 4A"
+    )
     def cTkDynamicGravityControl(
         self, this: "ctypes._Pointer[cTkDynamicGravityControl]"
     ):
         pass
 
-    @function_hook("48 8B C4 55 57 41 54 41 55 48 81 EC")
+    @function_hook("48 8B C4 56 57 41 54 41 56")
     def GetGravity(
         self,
         this: "ctypes._Pointer[cTkDynamicGravityControl]",
@@ -663,6 +706,7 @@ class cGcPlayerEnvironment(Structure):
     mPlayerTM: Annotated[basic.cTkMatrix34, Field(basic.cTkMatrix34, 0x0)]
     mUp: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x40)]
 
+    # Found below the call to cTkDynamicGravityControl::GetGravity in cGcPlayerEnvironment::Update
     miNearestPlanetIndex: Annotated[int, Field(ctypes.c_uint32, 0x2BC)]
     mfDistanceFromPlanet: Annotated[float, Field(ctypes.c_float, 0x2C0)]
     mfNearestPlanetSealevel: Annotated[float, Field(ctypes.c_float, 0x2C4)]
@@ -670,11 +714,15 @@ class cGcPlayerEnvironment(Structure):
     mbInsidePlanetAtmosphere: Annotated[bool, Field(ctypes.c_bool, 0x2EC)]
 
     @function_hook("48 83 EC ? 80 B9 ? ? ? ? ? C6 04 24")
-    def IsOnboardOwnFreighter(self, this: "ctypes._Pointer[cGcPlayerEnvironment]"):
+    def IsOnboardOwnFreighter(
+        self, this: "ctypes._Pointer[cGcPlayerEnvironment]"
+    ) -> ctypes.c_bool:
         pass
 
-    @function_hook("8B 81 ? ? ? ? 83 E8 ? 83 F8 ? 0F 96 C0 C3 4C 8B D1")
-    def IsOnPlanet(self, this: "ctypes._Pointer[cGcPlayerEnvironment]"):
+    @function_hook("8B 81 ? ? ? ? 83 E8 ? 83 F8 ? 0F 96 C0 C3 48 83 EC")
+    def IsOnPlanet(
+        self, this: "ctypes._Pointer[cGcPlayerEnvironment]"
+    ) -> ctypes.c_bool:
         pass
 
     @function_hook("48 8B C4 F3 0F 11 48 ? 55 53 57 41 56 48 8D A8")
@@ -721,6 +769,25 @@ class Engine:
     ):
         pass
 
+    @static_function_hook("48 83 EC ? FF C9")
+    @staticmethod
+    def SetOption(leParam: ctypes.c_int32, lfValue: ctypes.c_float) -> ctypes.c_char:
+        pass
+
+    @static_function_hook(
+        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 81 EC ? ? ? ? 48 8B BC 24 ? ? ? ? 48 8B D9 4C 8B 3D"
+    )
+    @staticmethod
+    def AddResource(
+        result: ctypes.c_uint64,  # cTkSmartResHandle *
+        liType: ctypes.c_int32,
+        lpcName: ctypes.c_char_p,
+        liFlags: ctypes.c_uint32,
+        lAlternateMaterialId: ctypes.c_uint64,  # cTkResourceDescriptor *
+        unknown: ctypes.c_uint64,
+    ) -> ctypes.c_uint64:  # cTkSmartResHandle *
+        pass
+
 
 def ShiftAllTransformsForNode(node: basic.TkHandle, shift: basic.Vector3f):
     Engine.ShiftAllTransformsForNode(node.lookupInt, get_addressof(shift))
@@ -728,6 +795,36 @@ def ShiftAllTransformsForNode(node: basic.TkHandle, shift: basic.Vector3f):
 
 def GetNodeAbsoluteTransMatrix(node: basic.TkHandle, absMat: basic.cTkMatrix34):
     Engine.ShiftAllTransformsForNode(node.lookupInt, get_addressof(absMat))
+
+
+class cTkResourceManager(Structure):
+    @function_hook("44 89 44 24 ? 55 57 41 54 41 55")
+    def AddResource(
+        self,
+        this: "ctypes._Pointer[cTkResourceManager]",
+        result: ctypes.c_uint64,  # cTkSmartResHandle *
+        liType: c_enum32[enums.ResourceTypes],
+        lsName: ctypes.c_char_p,
+        lxFlags: ctypes.c_uint32,
+        lbUserCall: ctypes.c_bool,
+        lpResourceDescriptor: ctypes.c_uint64,  # cTkResourceDescriptor *
+        unknown: ctypes.c_uint64,
+    ) -> ctypes.c_uint64:  # cTkSmartResHandle *
+        pass
+
+    @function_hook("4C 89 4C 24 ? 89 54 24 ? 53 55 48 81 EC")
+    def FindResourceA(
+        self,
+        this: "ctypes._Pointer[cTkResourceManager]",
+        liType: c_enum32[enums.ResourceTypes],
+        lsName: ctypes.c_char_p,
+        lpResourceDescriptor: ctypes.c_uint64,  # cTkResourceDescriptor *
+        a5: ctypes.c_uint32,
+        lbIgnoreDefaultFallback: ctypes.c_bool,
+        lbIgnoreKilled: ctypes.c_bool,
+        a8: ctypes.c_bool,
+    ) -> ctypes.c_uint64:  # cTkSmartResHandle *
+        pass
 
 
 class cGcRewardManager(Structure):
@@ -773,7 +870,7 @@ class cGcAlienPuzzleEntry(Structure):
 class cGcInteractionComponent(Structure):
     mpData: Annotated[ctypes._Pointer[nmse.cGcInteractionComponentData], 0x30]
 
-    @function_hook("44 88 4C 24 ? 44 88 44 24 ? 48 89 54 24")
+    @function_hook("44 88 4C 24 ? 44 88 44 24 ? 48 89 54 24 ? 53")
     def GiveReward(
         self,
         this: "ctypes._Pointer[cGcInteractionComponent]",
@@ -826,7 +923,10 @@ class cTkInputPort(Structure):
 
 @partial_struct
 class cGcBinoculars(Structure):
+    # This and mpBinocularInfoGui found in cGcBinoculars::UpdateScanBarProgress
     mfScanProgress: Annotated[float, Field(ctypes.c_float, 0x24)]
+    # Found in cGcBinoculars::SetMarker at the top
+    mMarkerModel: Annotated[basic.TkHandle, 0x7B0]
     mpBinocularInfoGui: Annotated[ctypes._Pointer[cGcNGui], 0x800]
 
     @function_hook("40 55 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 80 3D")
@@ -878,9 +978,10 @@ class cTkFSMState(Structure):
 
 class cGcEnvironment(Structure):
     @function_hook(
-        "48 8B C4 48 89 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 4C 8B F9"
+        "48 8B C4 48 89 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 4C 8B E9"
     )
     def UpdateRender(self, this: "ctypes._Pointer[cGcEnvironment]"):
+        # TODO: There could be a few good functions to get which are called in here...
         pass
 
 
@@ -907,6 +1008,7 @@ class cGcPlayerNotifications(Structure):
 class cGcSky(Structure):
     eStormState = enums.eStormState
 
+    # Found in cGcSky::SetSunAngle
     mSunDirection: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x500)]
 
     @function_hook("40 53 55 56 57 41 56 48 83 EC ? 4C 8B 15")
@@ -948,7 +1050,7 @@ class sTerrainEditData(ctypes.Structure):
 
 class cGcTerrainEditorBeam(Structure):
     @function_hook(
-        "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B F2"
+        "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 8B F2"
     )
     def Fire(
         self,
@@ -956,7 +1058,7 @@ class cGcTerrainEditorBeam(Structure):
         lvTargetPos: ctypes._Pointer[basic.cTkPhysRelVec3],
         lpTargetBody: ctypes.c_uint64,  # cTkRigidBody *
         lpOwnerConcept: ctypes.c_uint64,  # cGcOwnerConcept *
-        leStatType: c_enum32[enums.GcStatsTypes],
+        leStatType: c_enum32[enums.cGcStatsTypes],
         lbVehicle: ctypes.c_bool,
     ) -> ctypes.c_char:
         pass
@@ -978,7 +1080,9 @@ class cGcTerrainEditorBeam(Structure):
     ) -> ctypes.c_int64:
         pass
 
-    @function_hook("48 8B C4 4C 89 40 ? 88 50 ? 48 89 48")
+    @function_hook(
+        "48 8B C4 4C 89 40 ? 48 89 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8"
+    )
     def ApplyTerrainEditFlatten(
         self,
         this: "ctypes._Pointer[cGcTerrainEditorBeam]",
@@ -1012,7 +1116,7 @@ class cGcSpaceshipComponent(Structure):
 
 class cGcSpaceshipWarp(Structure):
     @function_hook(
-        "48 83 EC 38 48 8B 0D ?? ?? ?? ?? 41 B9 01 00 00 00 48 81 C1 30 B3 00 00 C7 44 24 20 FF FF FF FF BA 9A"
+        "48 83 EC ? 48 8B 0D ? ? ? ? 41 B9 ? ? ? ? 48 81 C1 ? ? ? ? C7 44 24 ? ? ? ? ? BA ? ? ? ? 45 8D 41 ? E8 ? ? ? ? 48 85 C0 74 ? 66 0F 6E 40"
     )
     def GetPulseDriveFuelFactor(
         self, this: "ctypes._Pointer[cGcSpaceshipWarp]"
@@ -1027,7 +1131,7 @@ class cGcSpaceshipWeapons(Structure):
     ) -> ctypes.c_float:
         pass
 
-    @function_hook("48 8B C4 48 89 70 ? 57 48 81 EC ? ? ? ? 83 B9")
+    @function_hook("48 8B C4 48 89 70 ? 57 48 81 EC ? ? ? ? 83 79")
     def GetAverageBarrelPos(
         self,
         this: "ctypes._Pointer[cGcSpaceshipWeapons]",
@@ -1224,10 +1328,10 @@ class cGcFrontendPageDiscovery(Structure):
     def GetDiscoveryHintString(
         result: ctypes._Pointer[basic.cTkFixedString[0x40]],
         leTileType: ctypes.c_uint32,  # eTileType
-        leCreatureType: c_enum32[enums.GcCreatureTypes],
-        leRarity: c_enum32[enums.GcRarity],
-        leActiveTime: c_enum32[enums.GcCreatureActiveTime],
-        leHemisphere: c_enum32[enums.GcCreatureHemiSphere],
+        leCreatureType: c_enum32[enums.cGcCreatureTypes],
+        leRarity: c_enum32[enums.cGcRarity],
+        leActiveTime: c_enum32[enums.cGcCreatureActiveTime],
+        leHemisphere: c_enum32[enums.cGcCreatureHemiSphere],
     ):
         pass
 
@@ -1257,9 +1361,7 @@ class cGcFrontendPagePortalRunes(Structure):
     ) -> ctypes.c_bool:
         pass
 
-    @function_hook(
-        "48 89 54 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 55 48 8D 6C 24 ? 48 81 EC ? ? ? ? 0F 57 C0"
-    )
+    @function_hook("48 89 54 24 ? 48 89 4C 24 ? 55 53 57 41 54 41 55 41 57")
     def DoInteraction(
         self,
         this: "ctypes._Pointer[cGcFrontendPagePortalRunes]",
@@ -1321,7 +1423,7 @@ class cGcGalaxyVoxelGenerator(nmse.cGcGalaxyStarAttributesData):
 
 
 class cTkLanguageManagerBase(Structure):
-    @function_hook("48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 57 C0 49 8B F0")
+    @function_hook("48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 57 C0 49 8B E8")
     def Translate(
         self,
         this: "ctypes._Pointer[cTkLanguageManagerBase]",
@@ -1348,6 +1450,29 @@ class cGcNameGenerator(Structure):
 class cGcCreatureComponent(Structure):
     @function_hook("48 8B C4 55 56 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 51")
     def Prepare(self, this: "ctypes._Pointer[cGcCreatureComponent]"):
+        pass
+
+
+class cEgSceneGraphResource(Structure):
+    @function_hook("4C 89 44 24 ? 55 53 56 57 41 55 41 56 48 8D AC 24")
+    def ParseData(
+        self,
+        this: "ctypes._Pointer[cEgSceneGraphResource]",
+        lData: ctypes.c_uint64,  # std::string *
+        lpParent: ctypes.c_uint64,  # cEgSceneNodeTemplate *
+    ) -> ctypes.c_char:
+        pass
+
+
+class cGcPlayerHUD(Structure):
+    @function_hook("48 8B C4 55 57 48 8D 68 ? 48 81 EC ? ? ? ? 48 8B 91")
+    def RenderIndicatorPanel(self, this: "ctypes._Pointer[cGcPlayerHUD]"):
+        pass
+
+    @function_hook(
+        "48 8B C4 48 89 48 ? 55 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 83 B9"
+    )
+    def RenderWeaponPanel(self, this: "ctypes._Pointer[cGcPlayerHUD]"):
         pass
 
 

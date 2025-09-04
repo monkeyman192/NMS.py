@@ -1,5 +1,5 @@
 # /// script
-# dependencies = ["pymhf[gui]>=0.1.13"]
+# dependencies = ["pymhf[gui]>=0.1.16"]
 #
 # [tool.pymhf]
 # exe = "NMS.exe"
@@ -26,26 +26,24 @@ from pymhf.core.utils import set_main_window_active
 from pymhf.gui.decorators import BOOLEAN, STRING, gui_button, gui_combobox
 
 from nmspy.data.audiokinetic import AK
-from nmspy.data.enums import GcAudioWwiseEvents
+from nmspy.data.enums import cGcAudioWwiseEvents
 import nmspy.data.types as nms
 
 logger = logging.getLogger("AudioNames")
 
 
-AUDIO_EVENTS = {i.name: i.value for i in GcAudioWwiseEvents}
-AUDIO_EVENTS_REV = {i.value: i.name for i in GcAudioWwiseEvents}
-EVENT_NAMES = [i.name for i in GcAudioWwiseEvents]
+AUDIO_EVENTS = {i.name: i.value for i in cGcAudioWwiseEvents}
+AUDIO_EVENTS_REV = {i.value: i.name for i in cGcAudioWwiseEvents}
+EVENT_NAMES = [i.name for i in cGcAudioWwiseEvents]
 
 
 @dataclass
 class AudioState(ModState):
     event_id: int = 0
     obj_id: int = 0
-    play_sounds: bool = True
-    log_sounds: bool = True
+    log_sounds: bool = False
 
 
-@disable
 class AudioNames(Mod):
     __author__ = "monkeyman192"
     __description__ = "Log (almost) all audio events when they happen"
@@ -99,20 +97,19 @@ class AudioNames(Mod):
     def log_sounds(self, value):
         self.state.log_sounds = value
 
-    @disable
     @AK.SoundEngine.PostEvent.before
-    def play_event(self, *args):
+    def play_event(self, in_ulEventID, in_GameObjID, *args):
         if self.state.log_sounds:
-            event_id = args[0]
+            event_id = in_ulEventID
             event_name = AUDIO_EVENTS_REV.get(event_id, "unknown event thing...")
-            logger.info(f"{args} -> {event_name}")
+            logger.info(f"Event ID: {in_ulEventID}, Object ID: {in_GameObjID} -> {event_name}")
 
+    @disable
     @AK.SoundEngine.RegisterGameObj.before
     def register_object(self, in_GameObj, in_pszObjName):
         if self.state.log_sounds:
             logger.info(f"{in_GameObj} name: {ctypes.c_char_p(in_pszObjName).value}")
 
-    @disable
     @nms.cTkAudioManager.Play.after
     def after_play(
         self,
@@ -120,13 +117,4 @@ class AudioNames(Mod):
         event: ctypes._Pointer[nms.TkAudioID],
         object_,
     ):
-        audioID = event.contents
-        logger.info(f"After play: ID: {audioID.muID}, object: {object_}")
         self.audio_manager = this.contents
-        self.state.event_id = audioID.muID
-        self.state.obj_id = object_
-
-    @disable
-    @nms.cTkAudioManager.Play_attenuated.after
-    def after_play_attenuated(self, *args):
-        logger.info(f"Just played an attenuated sound: {args}")
