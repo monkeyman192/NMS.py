@@ -19,12 +19,14 @@ classifiers = [
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3 :: Only",
 ]
 dependencies = [
   "pymhf[gui]>=0.1.16"
 ]
-version = "147803.1"
+version = "151441.0"
 
 [dependency-groups]
 dev = [

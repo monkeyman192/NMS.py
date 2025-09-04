@@ -27,7 +27,7 @@ def nvgArc(
 
 
 @static_function_hook(
-    "48 8B C4 48 89 58 ? 48 89 70 ? 55 57 41 54 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 48 8B F9"
+    "48 8B C4 48 89 58 ? 48 89 70 ? 55 57 41 54 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 48 8B F9 0F 29 78"
 )
 def nvgText(
     ctx: ctypes._Pointer[NVGcontext],
