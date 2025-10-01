@@ -24,9 +24,9 @@ classifiers = [
   "Programming Language :: Python :: 3 :: Only",
 ]
 dependencies = [
-  "pymhf[gui]>=0.1.16"
+  "pymhf[gui]>=0.2.0"
 ]
-version = "151441.0"
+version = "152998.0"
 
 [dependency-groups]
 dev = [

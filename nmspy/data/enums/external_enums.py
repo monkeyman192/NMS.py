@@ -437,6 +437,60 @@ class cTkInputHandEnum(IntEnum):
     Right = 0x2
 
 
+class cTkInputAxisEnum(IntEnum):
+    None_ = 0x0
+    Invalid = 0x0
+    LeftStick = 0x1
+    LeftStickX = 0x2
+    LeftStickY = 0x3
+    RightStick = 0x4
+    RightStickX = 0x5
+    RightStickY = 0x6
+    LeftTrigger = 0x7
+    RightTrigger = 0x8
+    Mouse = 0x9
+    MouseX = 0xA
+    MouseY = 0xB
+    MousePositiveX = 0xC
+    MouseNegativeX = 0xD
+    MousePositiveY = 0xE
+    MouseNegativeY = 0xF
+    MouseWheel = 0x10
+    MouseWheelPositive = 0x11
+    MouseWheelNegative = 0x12
+    Touchpad = 0x13
+    TouchpadX = 0x14
+    TouchpadY = 0x15
+    TouchpadPositiveX = 0x16
+    TouchpadNegativeX = 0x17
+    TouchpadPositiveY = 0x18
+    TouchpadNegativeY = 0x19
+    LeftTouchpad = 0x1A
+    LeftTouchpadX = 0x1B
+    LeftTouchpadY = 0x1C
+    LeftTouchpadPositiveX = 0x1D
+    LeftTouchpadNegativeX = 0x1E
+    LeftTouchpadPositiveY = 0x1F
+    LeftTouchpadNegativeY = 0x20
+    LeftGrip = 0x21
+    RightGrip = 0x22
+    LeftStickPositiveX = 0x23
+    LeftStickNegativeX = 0x24
+    LeftStickPositiveY = 0x25
+    LeftStickNegativeY = 0x26
+    RightStickPositiveX = 0x27
+    RightStickNegativeX = 0x28
+    RightStickPositiveY = 0x29
+    RightStickNegativeY = 0x2A
+    DirectionalPadX = 0x2B
+    DirectionalPadY = 0x2C
+    DirectionalButtonsX = 0x2D
+    DirectionalButtonsY = 0x2E
+    ChordAD = 0x2F
+    FakeLeftStick = 0x30
+    FakeRightStick = 0x31
+
+
 class cTkInputEnum(IntEnum):
     None_ = 0x0
     Space = 0x20
@@ -627,60 +681,6 @@ class cTkInputEnum(IntEnum):
     GestureBinoculars_LeftHanded = 0x173
     GestureBackpack_LeftHanded = 0x174
     MaxEnumValue = 0x175
-
-
-class cTkInputAxisEnum(IntEnum):
-    None_ = 0x0
-    Invalid = 0x0
-    LeftStick = 0x1
-    LeftStickX = 0x2
-    LeftStickY = 0x3
-    RightStick = 0x4
-    RightStickX = 0x5
-    RightStickY = 0x6
-    LeftTrigger = 0x7
-    RightTrigger = 0x8
-    Mouse = 0x9
-    MouseX = 0xA
-    MouseY = 0xB
-    MousePositiveX = 0xC
-    MouseNegativeX = 0xD
-    MousePositiveY = 0xE
-    MouseNegativeY = 0xF
-    MouseWheel = 0x10
-    MouseWheelPositive = 0x11
-    MouseWheelNegative = 0x12
-    Touchpad = 0x13
-    TouchpadX = 0x14
-    TouchpadY = 0x15
-    TouchpadPositiveX = 0x16
-    TouchpadNegativeX = 0x17
-    TouchpadPositiveY = 0x18
-    TouchpadNegativeY = 0x19
-    LeftTouchpad = 0x1A
-    LeftTouchpadX = 0x1B
-    LeftTouchpadY = 0x1C
-    LeftTouchpadPositiveX = 0x1D
-    LeftTouchpadNegativeX = 0x1E
-    LeftTouchpadPositiveY = 0x1F
-    LeftTouchpadNegativeY = 0x20
-    LeftGrip = 0x21
-    RightGrip = 0x22
-    LeftStickPositiveX = 0x23
-    LeftStickNegativeX = 0x24
-    LeftStickPositiveY = 0x25
-    LeftStickNegativeY = 0x26
-    RightStickPositiveX = 0x27
-    RightStickNegativeX = 0x28
-    RightStickPositiveY = 0x29
-    RightStickNegativeY = 0x2A
-    DirectionalPadX = 0x2B
-    DirectionalPadY = 0x2C
-    DirectionalButtonsX = 0x2D
-    DirectionalButtonsY = 0x2E
-    ChordAD = 0x2F
-    FakeLeftStick = 0x30
-    FakeRightStick = 0x31
 
 
 class cTkSketchConditions(IntEnum):
@@ -3648,26 +3648,6 @@ class cGcProjectileImpactType(IntEnum):
     FreighterShield = 0x11
 
 
-class cGcPlayerSurvivalBarType(IntEnum):
-    Health = 0x0
-    Hazard = 0x1
-    Energy = 0x2
-
-
-class cGcScanType(IntEnum):
-    Tool = 0x0
-    Beacon = 0x1
-    RadioTower = 0x2
-    Observatory = 0x3
-    DistressSignal = 0x4
-    Waypoint = 0x5
-    Ship = 0x6
-    DebugPlanet = 0x7
-    DebugSpace = 0x8
-    VisualOnly = 0x9
-    VisualOnlyAerial = 0xA
-
-
 class cGcDamageType(IntEnum):
     Gun = 0x0
     Laser = 0x1
@@ -3696,45 +3676,18 @@ class cGcDamageType(IntEnum):
     FreighterTorpedo = 0x18
 
 
-class cGcPlayerHazardType(IntEnum):
-    None_ = 0x0
-    NoOxygen = 0x1
-    ExtremeHeat = 0x2
-    ExtremeCold = 0x3
-    ToxicGas = 0x4
-    Radiation = 0x5
-    Spook = 0x6
-
-
-class cGcPhotoShip(IntEnum):
-    Freighter = 0x0
-    Dropship = 0x1
-    Fighter = 0x2
-    Scientific = 0x3
-    Shuttle = 0x4
-    PlayerFreighter = 0x5
-    Royal = 0x6
-    Alien = 0x7
-    Sail = 0x8
-    Robot = 0x9
-    Corvette = 0xA
-
-
-class cGcHand(IntEnum):
-    Right = 0x0
-    Left = 0x1
-
-
-class cGcHandType(IntEnum):
-    Offhand = 0x0
-    Dominant = 0x1
-
-
-class cGcMovementDirection(IntEnum):
-    WorldRelative = 0x0
-    BodyRelative = 0x1
-    HeadRelative = 0x2
-    NotSet = 0x3
+class cGcScanType(IntEnum):
+    Tool = 0x0
+    Beacon = 0x1
+    RadioTower = 0x2
+    Observatory = 0x3
+    DistressSignal = 0x4
+    Waypoint = 0x5
+    Ship = 0x6
+    DebugPlanet = 0x7
+    DebugSpace = 0x8
+    VisualOnly = 0x9
+    VisualOnlyAerial = 0xA
 
 
 class cGcPlayerCharacterStateType(IntEnum):
@@ -3758,6 +3711,39 @@ class cGcPlayerCharacterStateType(IntEnum):
     LowGWalk = 0x11
     LowGRun = 0x12
     Fishing = 0x13
+
+
+class cGcPlayerHazardType(IntEnum):
+    None_ = 0x0
+    NoOxygen = 0x1
+    ExtremeHeat = 0x2
+    ExtremeCold = 0x3
+    ToxicGas = 0x4
+    Radiation = 0x5
+    Spook = 0x6
+
+
+class cGcPlayerSurvivalBarType(IntEnum):
+    Health = 0x0
+    Hazard = 0x1
+    Energy = 0x2
+
+
+class cGcHand(IntEnum):
+    Right = 0x0
+    Left = 0x1
+
+
+class cGcHandType(IntEnum):
+    Offhand = 0x0
+    Dominant = 0x1
+
+
+class cGcMovementDirection(IntEnum):
+    WorldRelative = 0x0
+    BodyRelative = 0x1
+    HeadRelative = 0x2
+    NotSet = 0x3
 
 
 class cGcPhotoBuilding(IntEnum):
@@ -3788,12 +3774,18 @@ class cGcPhotoPlant(IntEnum):
     BluePlant = 0x2
 
 
-class cGcNPCSettlementBehaviourState(IntEnum):
-    Generic = 0x0
-    Sociable = 0x1
-    Productive = 0x2
-    Tired = 0x3
-    Afraid = 0x4
+class cGcPhotoShip(IntEnum):
+    Freighter = 0x0
+    Dropship = 0x1
+    Fighter = 0x2
+    Scientific = 0x3
+    Shuttle = 0x4
+    PlayerFreighter = 0x5
+    Royal = 0x6
+    Alien = 0x7
+    Sail = 0x8
+    Robot = 0x9
+    Corvette = 0xA
 
 
 class cGcNPCSettlementBehaviourAreaProperty(IntEnum):
@@ -3810,6 +3802,14 @@ class cGcNPCInteractiveObjectType(IntEnum):
     Shop = 0x5
     Dance = 0x6
     None_ = 0x7
+
+
+class cGcNPCSettlementBehaviourState(IntEnum):
+    Generic = 0x0
+    Sociable = 0x1
+    Productive = 0x2
+    Tired = 0x3
+    Afraid = 0x4
 
 
 class cGcMissionCategory(IntEnum):
@@ -3968,16 +3968,16 @@ class cGcLocalSubstanceType(IntEnum):
     Plant = 0x4
 
 
-class cGcDefaultMissionProductEnum(IntEnum):
-    None_ = 0x0
-    PrimaryProduct = 0x1
-    SecondaryProduct = 0x2
-
-
 class cGcDefaultMissionSubstanceEnum(IntEnum):
     None_ = 0x0
     PrimarySubstance = 0x1
     SecondarySubstance = 0x2
+
+
+class cGcDefaultMissionProductEnum(IntEnum):
+    None_ = 0x0
+    PrimaryProduct = 0x1
+    SecondaryProduct = 0x2
 
 
 class cGcMissionConditionUsingPortal(IntEnum):
@@ -4196,17 +4196,18 @@ class cGcPhysicsCollisionGroups(IntEnum):
     Raycast_AiShipTravel = 0x39
     Raycast_ObstructionQuery = 0x3A
     Raycast_GeometryProbe = 0x3B
-    Raycast_DroneTargetSensing_Friendly = 0x3C
-    Raycast_DroneTargetSensing_Unfriendly = 0x3D
-    Raycast_DroneTargetSensing_Friendly_NoShield = 0x3E
-    Raycast_DroneTargetSensing_Unfriendly_NoShield = 0x3F
-    Raycast_ObjectPlacementAddObject = 0x40
-    Raycast_CatchCreatures = 0x41
-    Raycast_CatchNormal = 0x42
-    Raycast_CatchTerrain = 0x43
-    Raycast_CatchTerrainAndNormal = 0x44
-    Raycast_CatchCreatureObstacles = 0x45
-    Raycast_SpaceStationShipBuilderCamera = 0x46
+    Raycast_AirNavigationProbe = 0x3C
+    Raycast_DroneTargetSensing_Friendly = 0x3D
+    Raycast_DroneTargetSensing_Unfriendly = 0x3E
+    Raycast_DroneTargetSensing_Friendly_NoShield = 0x3F
+    Raycast_DroneTargetSensing_Unfriendly_NoShield = 0x40
+    Raycast_ObjectPlacementAddObject = 0x41
+    Raycast_CatchCreatures = 0x42
+    Raycast_CatchNormal = 0x43
+    Raycast_CatchTerrain = 0x44
+    Raycast_CatchTerrainAndNormal = 0x45
+    Raycast_CatchCreatureObstacles = 0x46
+    Raycast_SpaceStationShipBuilderCamera = 0x47
 
 
 class cGcFrigateFlybyType(IntEnum):
@@ -4444,6 +4445,7 @@ class cGcMarkerType(IntEnum):
     CorvetteAutopilotDestination = 0x46
     CorvetteDeployedTeleporter = 0x47
     CorvettePadLink = 0x48
+    NetworkPlayerFireTeamCorvetteTeleporter = 0x49
 
 
 class cGcBuildingDensityLevels(IntEnum):
@@ -4523,11 +4525,6 @@ class cGcBuildingClassification(IntEnum):
     Settlement_Hub_Builders = 0x39
     Settlement_FishPond = 0x3A
     Settlement_Builders_RoboArm = 0x3B
-
-
-class cGcNPCSeatedPosture(IntEnum):
-    Sofa = 0x0
-    Sit = 0x1
 
 
 class cGcPetAccessoryType(IntEnum):
@@ -4628,6 +4625,11 @@ class cGcNPCPropType(IntEnum):
     Box = 0xC
     Cup = 0xD
     Staff = 0xE
+
+
+class cGcNPCSeatedPosture(IntEnum):
+    Sofa = 0x0
+    Sit = 0x1
 
 
 class cGcCreatureGroups(IntEnum):
@@ -5028,6 +5030,7 @@ class cGcInteractionType(IntEnum):
     EditShip = 0x95
     CorvetteTeleport = 0x96
     CorvetteTeleportReturn = 0x97
+    CorvetteMissionBoard = 0x98
 
 
 class cGcHologramState(IntEnum):
@@ -5047,12 +5050,6 @@ class cGcHologramType(IntEnum):
 class cGcHologramPivotType(IntEnum):
     Origin = 0x0
     CentreBounds = 0x1
-
-
-class cGcCharacterControlInputValidity(IntEnum):
-    Always = 0x0
-    PadOnly = 0x1
-    KeyboardAnMouseOnly = 0x2
 
 
 class cGcCharacterControlOutputSpace(IntEnum):
@@ -5280,10 +5277,26 @@ class cGcWordCategoryTableEnum(IntEnum):
     THREAT = 0x6
 
 
+class cGcCharacterControlInputValidity(IntEnum):
+    Always = 0x0
+    PadOnly = 0x1
+    KeyboardAnMouseOnly = 0x2
+
+
 class cGcItemFilterMatchIDType(IntEnum):
     Exact = 0x0
     Prefix = 0x1
     Postfix = 0x2
+
+
+class cGcWeightingCurve(IntEnum):
+    NoWeighting = 0x0
+    MaxIsUncommon = 0x1
+    MaxIsRare = 0x2
+    MaxIsSuperRare = 0x3
+    MinIsUncommon = 0x4
+    MinIsRare = 0x5
+    MinIsSuperRare = 0x6
 
 
 class cGcUnlockableItemTreeGroups(IntEnum):
@@ -5304,14 +5317,16 @@ class cGcUnlockableItemTreeGroups(IntEnum):
     CorvetteParts = 0xE
 
 
-class cGcWeightingCurve(IntEnum):
-    NoWeighting = 0x0
-    MaxIsUncommon = 0x1
-    MaxIsRare = 0x2
-    MaxIsSuperRare = 0x3
-    MinIsUncommon = 0x4
-    MinIsRare = 0x5
-    MinIsSuperRare = 0x6
+class cGcTradeCategory(IntEnum):
+    Mineral = 0x0
+    Tech = 0x1
+    Commodity = 0x2
+    Component = 0x3
+    Alloy = 0x4
+    Exotic = 0x5
+    Energy = 0x6
+    None_ = 0x7
+    SpecialShop = 0x8
 
 
 class cGcTechnologyCategory(IntEnum):
@@ -5345,16 +5360,20 @@ class cGcTechnologyRarity(IntEnum):
     Always = 0x6
 
 
-class cGcTradeCategory(IntEnum):
-    Mineral = 0x0
-    Tech = 0x1
-    Commodity = 0x2
-    Component = 0x3
-    Alloy = 0x4
-    Exotic = 0x5
-    Energy = 0x6
-    None_ = 0x7
-    SpecialShop = 0x8
+class cGcSizeIndicator(IntEnum):
+    Small = 0x0
+    Medium = 0x1
+    Large = 0x2
+
+
+class cGcSettlementStatStrength(IntEnum):
+    PositiveWide = 0x0
+    PositiveLarge = 0x1
+    PositiveMedium = 0x2
+    PositiveSmall = 0x3
+    NegativeSmall = 0x4
+    NegativeMedium = 0x5
+    NegativeLarge = 0x6
 
 
 class cGcStatsEnum(IntEnum):
@@ -5384,22 +5403,6 @@ class cGcStatsEnum(IntEnum):
     SEAGLASS = 0x17
     RUINS_LOOTED = 0x18
     STONE_KILLS = 0x19
-
-
-class cGcSettlementStatStrength(IntEnum):
-    PositiveWide = 0x0
-    PositiveLarge = 0x1
-    PositiveMedium = 0x2
-    PositiveSmall = 0x3
-    NegativeSmall = 0x4
-    NegativeMedium = 0x5
-    NegativeLarge = 0x6
-
-
-class cGcSizeIndicator(IntEnum):
-    Small = 0x0
-    Medium = 0x1
-    Large = 0x2
 
 
 class cGcRewardTeleport(IntEnum):
@@ -5448,6 +5451,14 @@ class cGcRewardRepairWholeInventory(IntEnum):
     Weapon = 0x7
 
 
+class cGcRewardJourneyThroughCentre(IntEnum):
+    Next = 0x0
+    Abandoned = 0x1
+    Vicious = 0x2
+    Lush = 0x3
+    Balanced = 0x4
+
+
 class cGcRewardFrigateDamageResponse(IntEnum):
     StayOut = 0x0
     ReturnHome = 0x1
@@ -5455,14 +5466,6 @@ class cGcRewardFrigateDamageResponse(IntEnum):
     ShowDamagedCaptain = 0x3
     ShowExpeditionCaptain = 0x4
     AbortExpedition = 0x5
-
-
-class cGcRewardJourneyThroughCentre(IntEnum):
-    Next = 0x0
-    Abandoned = 0x1
-    Vicious = 0x2
-    Lush = 0x3
-    Balanced = 0x4
 
 
 class cGcRewardEndSettlementExpedition(IntEnum):
@@ -6745,14 +6748,6 @@ class cGcGameMode(IntEnum):
     Seasonal = 0x6
 
 
-class cGcFreighterNPCType(IntEnum):
-    SquadronPilot = 0x0
-    FrigateCaptain = 0x1
-    WorkerBio = 0x2
-    WorkerTech = 0x3
-    WorkerIndustry = 0x4
-
-
 class cGcNPCNavSubgraphNodeType(IntEnum):
     Path = 0x0
     Connection = 0x1
@@ -6775,28 +6770,12 @@ class cGcPersistentBaseTypes(IntEnum):
     ShipBaseScratch = 0xC
 
 
-class cGcBuildMenuOption(IntEnum):
-    Place = 0x0
-    ChangeColour = 0x1
-    FreeRotate = 0x2
-    Scale = 0x3
-    SnapRotate = 0x4
-    Move = 0x5
-    Duplicate = 0x6
-    Delete = 0x7
-    ToggleBuildCam = 0x8
-    ToggleSnappingAndCollision = 0x9
-    ToggleSelectionMode = 0xA
-    ToggleWiringMode = 0xB
-    ViewRelatives = 0xC
-    CyclePart = 0xD
-    PlaceWire = 0xE
-    CycleRotateMode = 0xF
-    Flip = 0x10
-    ToggleCatalogue = 0x11
-    Purchase = 0x12
-    FamiliesRotate = 0x13
-    YFlip = 0x14
+class cGcFreighterNPCType(IntEnum):
+    SquadronPilot = 0x0
+    FrigateCaptain = 0x1
+    WorkerBio = 0x2
+    WorkerTech = 0x3
+    WorkerIndustry = 0x4
 
 
 class cGcLinkNetworkTypes(IntEnum):
@@ -6842,6 +6821,30 @@ class cGcBuildingPlacementErrorTypes(IntEnum):
     ShipInside = 0x16
     PlayerInside = 0x17
     InvalidCorvettePosition = 0x18
+
+
+class cGcBuildMenuOption(IntEnum):
+    Place = 0x0
+    ChangeColour = 0x1
+    FreeRotate = 0x2
+    Scale = 0x3
+    SnapRotate = 0x4
+    Move = 0x5
+    Duplicate = 0x6
+    Delete = 0x7
+    ToggleBuildCam = 0x8
+    ToggleSnappingAndCollision = 0x9
+    ToggleSelectionMode = 0xA
+    ToggleWiringMode = 0xB
+    ViewRelatives = 0xC
+    CyclePart = 0xD
+    PlaceWire = 0xE
+    CycleRotateMode = 0xF
+    Flip = 0x10
+    ToggleCatalogue = 0x11
+    Purchase = 0x12
+    FamiliesRotate = 0x13
+    YFlip = 0x14
 
 
 class cGcBaseBuildingSecondaryMode(IntEnum):

@@ -1,5 +1,3 @@
-# pyright: reportReturnType=false
-
 import ctypes
 from typing import Annotated, Optional
 
@@ -39,8 +37,7 @@ class AK(Structure):
         def RegisterGameObj(
             in_GameObj: ctypes.c_uint64,
             in_pszObjName: ctypes.c_uint64,
-        ) -> ctypes.c_int64:
-            pass
+        ) -> ctypes.c_int64: ...
 
         @static_function_hook(
             exported_name=(
@@ -58,8 +55,7 @@ class AK(Structure):
             in_cExternals: ctypes.c_uint32 = 0,
             in_pExternalSources: ctypes.c_uint64 = 0,
             in_PlayingID: ctypes.c_uint32 = 0,
-        ) -> ctypes.c_uint64:
-            pass
+        ) -> ctypes.c_uint64: ...
 
 
 @partial_struct
@@ -73,8 +69,7 @@ class cGcNGuiText(Structure):
     @function_hook(
         "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 81 EC ? ? ? ? 0F 29 70 ? 0F 29 78 ? 48 8D A8 ? ? ? ? 48 83 E5 ? 48 8B 01 48 8B F9"
     )
-    def EditElement(self, this: "ctypes._Pointer[cGcNGuiText]"):
-        pass
+    def EditElement(self, this: "ctypes._Pointer[cGcNGuiText]"): ...
 
 
 @partial_struct
@@ -94,8 +89,7 @@ class cTkAudioManager(Structure):
         position: ctypes.c_uint64,
         object: ctypes.c_int64,
         attenuationScale: ctypes.c_float,
-    ) -> ctypes.c_bool:
-        pass
+    ) -> ctypes.c_bool: ...
 
     @function_hook(
         "48 83 EC ? 33 C9 4C 8B D2 89 4C 24 ? 49 8B C0 48 89 4C 24 ? 45 33 C9"
@@ -105,8 +99,7 @@ class cTkAudioManager(Structure):
         this: "ctypes._Pointer[cTkAudioManager]",
         event: ctypes._Pointer[TkAudioID],
         object: ctypes.c_int64,
-    ) -> ctypes.c_bool:
-        pass
+    ) -> ctypes.c_bool: ...
 
 
 @partial_struct
@@ -126,7 +119,7 @@ class cGcNGuiLayer(Structure):
         this: "ctypes._Pointer[cGcNGuiLayer]",
         lID: ctypes.c_uint64,
     ) -> ctypes.c_uint64:  # cGcNGuiElement *
-        pass
+        ...
 
     @function_hook("40 55 57 41 57 48 83 EC ? 4C 8B 89")
     def FindElementRecursive(
@@ -135,7 +128,7 @@ class cGcNGuiLayer(Structure):
         lID: ctypes.c_uint64,  # const cTkHashedNGuiElement *
         leType: ctypes.c_uint32,  # eNGuiGameElementType
     ) -> ctypes.c_uint64:  # cGcNGuiElement *
-        pass
+        ...
 
     @function_hook("48 8B C4 53 48 81 EC ? ? ? ? 48 89 78 ? 4C 8B D2")
     def LoadFromMetadata(
@@ -144,8 +137,7 @@ class cGcNGuiLayer(Structure):
         lpacFilename: ctypes._Pointer[basic.cTkFixedString[0x80]],
         lbUseCached: ctypes.c_bool,
         a4: ctypes.c_bool,
-    ):
-        pass
+    ): ...
 
     @function_hook(
         "48 89 5C 24 ? 48 89 74 24 ? 48 89 54 24 ? 57 48 81 EC ? ? ? ? 44 8B 51"
@@ -155,8 +147,7 @@ class cGcNGuiLayer(Structure):
         this: "ctypes._Pointer[cGcNGuiLayer]",
         lpElement: "ctypes._Pointer[cGcNGuiLayer]",
         lbOnTheEnd: ctypes.c_int64,
-    ):
-        pass
+    ): ...
 
 
 @partial_struct
@@ -180,22 +171,64 @@ class cGcShipHUD(Structure):
     # hud_root: Annotated[int, Field(ctypes.c_ulonglong, 0x27F70)]  # TODO: Fix
 
     @function_hook("48 89 5C 24 ? 57 41 54 41 55 41 56 41 57 48 81 EC")
-    def LoadData(self, this: "ctypes._Pointer[cGcShipHUD]"):
-        pass
+    def LoadData(self, this: "ctypes._Pointer[cGcShipHUD]"): ...
 
     @function_hook(
         "40 55 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B F9 48 8B 0D ? ? ? ? 48 81 C1"
     )
-    def RenderHeadsUp(self, this: "ctypes._Pointer[cGcShipHUD]"):
-        pass
+    def RenderHeadsUp(self, this: "ctypes._Pointer[cGcShipHUD]"): ...
 
 
 class cTkStopwatch(Structure):
     @function_hook("48 83 EC ? 48 8B 11 0F 29 74 24")
     def GetDurationInSeconds(
         self, this: "ctypes._Pointer[cTkStopwatch]"
-    ) -> ctypes.c_float:
-        pass
+    ) -> ctypes.c_float: ...
+
+
+class cGcRealityManager(Structure):
+    @function_hook("48 8B C4 48 89 48 ? 55 53 56 57 41 54 41 56 48 8D A8")
+    def Construct(self, this: "ctypes._Pointer[cGcRealityManager]"): ...
+
+    @function_hook(
+        "48 89 54 24 ? 48 89 4C 24 ? 55 53 41 54 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 48 8B DA 4C 8B E1"
+    )
+    def GenerateProceduralProduct(
+        self,
+        this: "ctypes._Pointer[cGcRealityManager]",
+        lProcProdID: ctypes._Pointer[basic.TkID[0x10]],
+    ) -> ctypes.c_uint64:  # cGcProductData *
+        ...
+
+    @function_hook("4C 89 4C 24 ? 44 88 44 24 ? 48 89 4C 24")
+    def GenerateProceduralTechnology(
+        self,
+        this: "ctypes._Pointer[cGcRealityManager]",
+        lProcTechID: ctypes._Pointer[basic.TkID[0x10]],
+        lbExampleForWiki: ctypes.c_bool,
+    ) -> ctypes.c_uint64:  # cGcProductData *
+        ...
+
+
+class cGcGameState(Structure):
+    @function_hook("48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 88 54 24")
+    def OnSaveProgressCompleted(
+        self,
+        this: "ctypes._Pointer[cGcGameState]",
+        a2: ctypes.c_uint64,
+        lbShowMessage: ctypes.c_bool,
+        lbFullSave: ctypes.c_bool,
+        leSaveReason: ctypes.c_int32,
+    ): ...
+
+    @function_hook("44 89 44 24 ? 89 54 24 ? 55 53 48 8D AC 24")
+    def LoadFromPersistentStorage(
+        self,
+        this: "ctypes._Pointer[cGcGameState]",
+        leSlot: ctypes.c_uint32,
+        a3: ctypes.c_int32,
+        lbNetworkClientLoad: ctypes.c_bool,
+    ) -> ctypes.c_uint64: ...
 
 
 class cTkFSM(Structure):
@@ -207,14 +240,13 @@ class cTkFSM(Structure):
         this: "ctypes._Pointer[cTkFSM]",
         lpOffsetTable: ctypes.c_uint64,
         lInitialState: ctypes.c_uint64,
-    ):
-        pass
+    ): ...
 
     @function_hook("48 89 5C 24 ? 57 48 83 EC ? 48 8B 05 ? ? ? ? 48 8B D9 0F 29 74 24")
     def Update(self, this: "ctypes._Pointer[cTkFSM]"):
         """Run every frame. Depsite `this` being of type `cTkFSM`, it's actually a pointer to the
         `cGcApplication` singleton since it has `cTkFSM` as a subclass."""
-        pass
+        ...
 
     @function_hook("48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 4C 8B 51 ? 49 8B E8")
     def StateChange(
@@ -223,8 +255,7 @@ class cTkFSM(Structure):
         lNewStateID: ctypes.c_uint64,
         lpUserData: ctypes.c_uint64,
         lbForceRestart: ctypes.c_bool,
-    ):
-        pass
+    ): ...
 
 
 @partial_struct
@@ -239,21 +270,29 @@ class cGcApplication(cTkFSM):
     mbPaused: Annotated[bool, Field(ctypes.c_bool, 0xB505)]
     mbMultiplayerActive: Annotated[bool, Field(ctypes.c_bool, 0xB508)]
 
+    @partial_struct
+    class Data(Structure):
+        # These are found in cGcApplication::Data::Data
+        mRealityManager: Annotated[cGcRealityManager, 0x60]
+        mGameState: Annotated[cGcGameState, 0xDB0]
+
+        @function_hook(
+            "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 45 33 FF 48 C7 41 ? ? ? ? ? 4C 89 39"
+        )
+        def Data(self, this: "ctypes._Pointer[cGcApplication.Data]"): ...
+
     @function_hook("40 53 48 83 EC 20 E8 ? ? ? ? 48 89")
-    def Update(self, this: "ctypes._Pointer[cGcApplication]"):
-        pass
+    def Update(self, this: "ctypes._Pointer[cGcApplication]"): ...
 
     @function_hook("48 89 5C 24 ? 57 48 83 EC ? 33 FF 48 89 74 24 ? 83 3D")
-    def Construct(self, this: "ctypes._Pointer[cGcApplication]"):
-        pass
+    def Construct(self, this: "ctypes._Pointer[cGcApplication]"): ...
 
 
 class cGcBeamEffect(Structure):
     @function_hook(
         "40 53 48 83 EC ? 8B 41 ? 48 8B D9 A9 ? ? ? ? 76 ? 25 ? ? ? ? 3D ? ? ? ? 74 ? B0"
     )
-    def Prepare(self, this: "ctypes._Pointer[cGcBeamEffect]"):
-        pass
+    def Prepare(self, this: "ctypes._Pointer[cGcBeamEffect]"): ...
 
 
 class cGcLaserBeam(Structure):
@@ -262,8 +301,7 @@ class cGcLaserBeam(Structure):
     )
     def Fire(
         self, this: "ctypes._Pointer[cGcLaserBeam]", lbHitOnFirstFrame: ctypes.c_bool
-    ):
-        pass
+    ): ...
 
 
 @partial_struct
@@ -285,13 +323,12 @@ class cGcMarkerPoint(Structure):
     @staticmethod
     def cGcMarkerPoint(address: ctypes.c_uint64):
         """Construct an instance of the cGcMarkerPoint at the provided address"""
-        pass
+        ...
 
     @function_hook(
         "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 28 05 ? ? ? ? 48 8D 79"
     )
-    def Reset(self, this: "ctypes._Pointer[cGcMarkerPoint]"):
-        pass
+    def Reset(self, this: "ctypes._Pointer[cGcMarkerPoint]"): ...
 
 
 @partial_struct
@@ -305,8 +342,7 @@ class cGcMarkerList(Structure):
         self,
         this: "ctypes._Pointer[cGcMarkerList]",
         lExampleMarker: ctypes._Pointer[cGcMarkerPoint],
-    ) -> ctypes.c_uint64:
-        pass
+    ) -> ctypes.c_uint64: ...
 
     @function_hook(
         "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 54 41 56 41 57 48 83 EC ? F6 82"
@@ -316,8 +352,7 @@ class cGcMarkerList(Structure):
         this: "ctypes._Pointer[cGcMarkerList]",
         lPoint: ctypes._Pointer[cGcMarkerPoint],
         lbUpdateTime: ctypes.c_bool,
-    ) -> ctypes.c_char:
-        pass
+    ) -> ctypes.c_char: ...
 
 
 # TODO: Add/search for PersistentBaseBuffer data
@@ -334,7 +369,7 @@ class cGcBaseBuildingManager(Structure):
         luBaseIndex: ctypes.c_uint64,  # _WORD *
         lbForceUpdateMatrix: ctypes.c_bool,
     ) -> ctypes.c_uint64:  # TkHandle *
-        pass
+        ...
 
 
 class cGcBaseSearch(Structure):
@@ -346,14 +381,12 @@ class cGcBaseSearch(Structure):
         result: ctypes.c_uint64,  # BaseIndex *
         lWorldPosition: ctypes._Pointer[basic.Vector3f],  # cTkVector3 *
         leBaseType: ctypes.c_int32,  # ePersistentBaseTypes
-    ):
-        pass
+    ): ...
 
 
 class cGcBuilding(Structure):
     @function_hook("4C 8B DC 55 49 8D AB ? ? ? ? 48 81 EC ? ? ? ? 48 8B D1")
-    def DestroyIntersectingVolcanoes(self, this: ctypes.c_uint64):
-        pass
+    def DestroyIntersectingVolcanoes(self, this: ctypes.c_uint64): ...
 
 
 @partial_struct
@@ -376,38 +409,34 @@ class cGcScanEvent(Structure):
         lfStartTime: ctypes.c_float,
         lbMostImportant: ctypes.c_bool,
         lpMission: ctypes.c_uint64,  # std::pair<TkID<128>,cTkSeed> *
-    ):
-        pass
+    ): ...
 
     @function_hook(
         "48 8B C4 55 53 56 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 33 F6 0F 29 78 ? 48 8B F9"
     )
-    def CalculateMarkerPosition(self, this: "ctypes._Pointer[cGcScanEvent]"):
-        pass
+    def CalculateMarkerPosition(self, this: "ctypes._Pointer[cGcScanEvent]"): ...
 
     @function_hook(
         "4C 8B DC 55 57 49 8D AB ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 8B F9"
     )
-    def Update(slef, this: "ctypes._Pointer[cGcScanEvent]", lfTimeStep: ctypes.c_float):
-        pass
+    def Update(
+        slef, this: "ctypes._Pointer[cGcScanEvent]", lfTimeStep: ctypes.c_float
+    ): ...
 
     @function_hook(
         "48 8B C4 55 53 57 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 91"
     )
-    def UpdateInteraction(self, this: "ctypes._Pointer[cGcScanEvent]"):
-        pass
+    def UpdateInteraction(self, this: "ctypes._Pointer[cGcScanEvent]"): ...
 
     @function_hook("4C 8B DC 55 56 49 8D 6B ? 48 81 EC ? ? ? ? 48 8B 81")
-    def UpdateSpaceStationLocation(self, this: "ctypes._Pointer[cGcScanEvent]"):
-        pass
+    def UpdateSpaceStationLocation(self, this: "ctypes._Pointer[cGcScanEvent]"): ...
 
 
 class cGcPlayer(Structure):
     @function_hook(
         "40 55 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B F9 48 8B 0D ? ? ? ? 83 B9"
     )
-    def CheckFallenThroughFloor(self, this: "ctypes._Pointer[cGcPlayer]"):
-        pass
+    def CheckFallenThroughFloor(self, this: "ctypes._Pointer[cGcPlayer]"): ...
 
     @function_hook("48 8B C4 4C 89 48 ? 44 89 40 ? 55 56")
     def TakeDamage(
@@ -419,18 +448,15 @@ class cGcPlayer(Structure):
         lDir: ctypes._Pointer[basic.Vector3f],
         lpOwner: ctypes.c_uint64,  # cGcOwnerConcept *
         laEffectsDamageMultipliers: ctypes.c_uint64,  # std::vector<cGcCombatEffectDamageMultiplier,TkSTLAllocatorShim<cGcCombatEffectDamageMultiplier,4,-1> > *
-    ):
-        pass
+    ): ...
 
     @function_hook("40 53 48 81 EC E0 00 00 00 48 8B D9 E8 ?? ?? ?? ?? 83 78 10 05")
-    def OnEnteredCockpit(self, this: "ctypes._Pointer[cGcPlayer]"):
-        pass
+    def OnEnteredCockpit(self, this: "ctypes._Pointer[cGcPlayer]"): ...
 
     @function_hook(
         "40 53 48 83 EC 20 48 8B 1D ?? ?? ?? ?? E8 ?? ?? ?? ?? 83 78 10 05 75 ?? 48 8B"
     )
-    def GetDominantHand(self, this: "ctypes._Pointer[cGcPlayer]") -> ctypes.c_int64:
-        pass
+    def GetDominantHand(self, this: "ctypes._Pointer[cGcPlayer]") -> ctypes.c_int64: ...
 
 
 class cGcPlayerState(Structure):
@@ -441,8 +467,7 @@ class cGcPlayerState(Structure):
         self,
         this: "ctypes._Pointer[cGcPlayerState]",
         liChange: ctypes.c_int32,
-    ) -> ctypes.c_uint64:
-        pass
+    ) -> ctypes.c_uint64: ...
 
     @function_hook(
         "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 44 8B 81 ? ? ? ? 48 8D 35"
@@ -451,37 +476,12 @@ class cGcPlayerState(Structure):
         self,
         this: "ctypes._Pointer[cGcPlayerState]",
         liChange: ctypes.c_int32,
-    ) -> ctypes.c_uint64:
-        pass
-
-
-class cGcGameState(Structure):
-    @function_hook("48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 88 54 24")
-    def OnSaveProgressCompleted(
-        self,
-        this: "ctypes._Pointer[cGcGameState]",
-        a2: ctypes.c_uint64,
-        lbShowMessage: ctypes.c_bool,
-        lbFullSave: ctypes.c_bool,
-        leSaveReason: ctypes.c_int32,
-    ):
-        pass
-
-    @function_hook("44 89 44 24 ? 89 54 24 ? 55 53 48 8D AC 24")
-    def LoadFromPersistentStorage(
-        self,
-        this: "ctypes._Pointer[cGcGameState]",
-        leSlot: ctypes.c_uint32,
-        a3: ctypes.c_int32,
-        lbNetworkClientLoad: ctypes.c_bool,
-    ) -> ctypes.c_uint64:
-        pass
+    ) -> ctypes.c_uint64: ...
 
 
 class cGcPlanetGenerationInputData(nmse.cGcPlanetGenerationInputData):
     @function_hook("48 89 5C 24 ? 57 48 83 EC ? 0F 57 C0 33 FF 0F 11 01 48 89 7C 24")
-    def SetDefaults(self, this: "ctypes._Pointer[cGcPlanetGenerationInputData]"):
-        pass
+    def SetDefaults(self, this: "ctypes._Pointer[cGcPlanetGenerationInputData]"): ...
 
 
 @partial_struct
@@ -501,8 +501,7 @@ class cGcTerrainRegionMap(Structure):
         lpBuildingData: ctypes.c_uint64,  # cGcPlanetBuildingData*
         liRadius: ctypes.c_int32,
         liBorderRegions: ctypes.c_int32,
-    ):
-        pass
+    ): ...
 
 
 @partial_struct
@@ -514,8 +513,7 @@ class GcEnvironmentProperties(Structure):
 
 
 @partial_struct
-class GcPlanetSkyProperties(Structure):
-    pass
+class GcPlanetSkyProperties(Structure): ...
 
 
 @partial_struct
@@ -537,8 +535,7 @@ class cGcPlanet(Structure):
     @function_hook(
         "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 45 33 FF 48 C7 41 ? ? ? ? ? 44 89 79"
     )
-    def cGcPlanet(self, this: "ctypes._Pointer[cGcPlanet]"):
-        pass
+    def cGcPlanet(self, this: "ctypes._Pointer[cGcPlanet]"): ...
 
     @function_hook("48 8B C4 4C 89 40 ? 88 50 ? 55 53")
     def Generate(
@@ -548,34 +545,30 @@ class cGcPlanet(Structure):
         lPosition: ctypes._Pointer[basic.Vector3f],
         lSolarSystemDiscoveryData: ctypes.c_uint64,  # cGcDiscoveryData *
         lGenerationInputParams: ctypes._Pointer[nmse.cGcPlanetGenerationInputData],
-    ):
-        pass
+    ): ...
 
     @function_hook("48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 F6 89 51 ? 89 B1")
-    def Construct(self, this: "ctypes._Pointer[cGcPlanet]", liIndex: ctypes.c_int32):
-        pass
+    def Construct(
+        self, this: "ctypes._Pointer[cGcPlanet]", liIndex: ctypes.c_int32
+    ): ...
 
     @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 56 48 83 EC ? 48 8B D9 8B 89")
-    def SetupRegionMap(self, this: "ctypes._Pointer[cGcPlanet]"):
-        pass
+    def SetupRegionMap(self, this: "ctypes._Pointer[cGcPlanet]"): ...
 
     @function_hook("48 8B C4 57 48 81 EC ? ? ? ? F3 0F 10 15")
     def UpdateClouds(
         self, this: "ctypes._Pointer[cGcPlanet]", lfTimeStep: ctypes.c_float
-    ):
-        pass
+    ): ...
 
     @function_hook("40 53 48 83 EC ? 83 B9 ? ? ? ? ? 48 8B D9 0F 29 74 24")
     def UpdateGravity(
         self, this: "ctypes._Pointer[cGcPlanet]", lfNewGravityMultiplier: ctypes.c_float
-    ):
-        pass
+    ): ...
 
     @function_hook("40 55 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 80 3D")
     def UpdateWeather(
         self, this: "ctypes._Pointer[cGcPlanet]", lfTimeStep: ctypes.c_float
-    ):
-        pass
+    ): ...
 
 
 @partial_struct
@@ -586,29 +579,26 @@ class cGcSolarSystem(Structure):
     @function_hook(
         "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 29 74 24 ? 48 8B F9 48 8B D9"
     )
-    def cGcSolarSystem(self, this: "ctypes._Pointer[cGcSolarSystem]"):
-        pass
+    def cGcSolarSystem(self, this: "ctypes._Pointer[cGcSolarSystem]"): ...
 
     @function_hook(
         "48 8B C4 48 89 58 ? 48 89 48 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 83 3D"
     )
-    def Construct(self, this: "ctypes._Pointer[cGcSolarSystem]"):
-        pass
+    def Construct(self, this: "ctypes._Pointer[cGcSolarSystem]"): ...
 
     @function_hook("48 89 5C 24 ? 55 56 57 41 55 41 57 48 8B EC 48 83 EC ? 83 3D")
     def OnLeavePlanetOrbit(
         self, this: "ctypes._Pointer[cGcSolarSystem]", lbAnnounceOSD: ctypes.c_bool
     ):
         """lbAnnounceOSD not used."""
-        pass
+        ...
 
     @function_hook(
         "48 8B C4 55 41 54 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 58 ? 45 33 E4 44 39 25"
     )
     def OnEnterPlanetOrbit(
         self, this: "ctypes._Pointer[cGcSolarSystem]", lbAnnounceOSD: ctypes.c_bool
-    ):
-        pass
+    ): ...
 
     @function_hook(
         "48 8B C4 48 89 58 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 41 BC"
@@ -618,16 +608,14 @@ class cGcSolarSystem(Structure):
         this: "ctypes._Pointer[cGcSolarSystem]",
         lbUseSettingsFile: ctypes.c_bool,
         lSeed: ctypes._Pointer[basic.GcSeed],
-    ):
-        pass
+    ): ...
 
 
 class cGcApplicationLocalLoadState(Structure):
     @function_hook("48 89 5C 24 ? 57 48 83 EC ? 80 B9 ? ? ? ? ? 48 8B F9 BB")
     def GetRespawnReason(
         self, this: "ctypes._Pointer[cGcApplicationLocalLoadState]"
-    ) -> ctypes.c_int64:
-        pass
+    ) -> ctypes.c_int64: ...
 
 
 class cTkDynamicGravityControl(Structure):
@@ -655,16 +643,14 @@ class cTkDynamicGravityControl(Structure):
     maGravityOBBs: bytes
 
     @function_hook("33 C0 48 8D 91 ? ? ? ? 89 81")
-    def Construct(self, this: "ctypes._Pointer[cTkDynamicGravityControl]"):
-        pass
+    def Construct(self, this: "ctypes._Pointer[cTkDynamicGravityControl]"): ...
 
     @function_hook(
         "0F 28 05 ? ? ? ? 4C 8B C1 48 8B C1 BA ? ? ? ? 0F 11 00 48 8D 40 ? 48 83 EA ? 75 ? 8D 4A"
     )
     def cTkDynamicGravityControl(
         self, this: "ctypes._Pointer[cTkDynamicGravityControl]"
-    ):
-        pass
+    ): ...
 
     @function_hook("48 8B C4 56 57 41 54 41 56")
     def GetGravity(
@@ -672,8 +658,7 @@ class cTkDynamicGravityControl(Structure):
         this: "ctypes._Pointer[cTkDynamicGravityControl]",
         result: ctypes.c_uint64,
         lPos: ctypes._Pointer[basic.Vector3f],
-    ) -> ctypes.c_uint64:
-        pass
+    ) -> ctypes.c_uint64: ...
 
     @function_hook("40 57 48 83 EC ? 48 63 81 ? ? ? ? 45 33 D2")
     def UpdateGravityPoint(
@@ -682,8 +667,7 @@ class cTkDynamicGravityControl(Structure):
         lCentre: ctypes._Pointer[basic.Vector3f],
         lfRadius: ctypes.c_float,
         lfNewStrength: ctypes.c_float,
-    ):
-        pass
+    ): ...
 
 
 cTkDynamicGravityControl._fields_ = [
@@ -697,8 +681,7 @@ class cGcSimulation(Structure):
     @function_hook(
         "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 45 33 FF"
     )
-    def Construct(self, this: "ctypes._Pointer[cGcSimulation]"):
-        pass
+    def Construct(self, this: "ctypes._Pointer[cGcSimulation]"): ...
 
 
 @partial_struct
@@ -716,35 +699,30 @@ class cGcPlayerEnvironment(Structure):
     @function_hook("48 83 EC ? 80 B9 ? ? ? ? ? C6 04 24")
     def IsOnboardOwnFreighter(
         self, this: "ctypes._Pointer[cGcPlayerEnvironment]"
-    ) -> ctypes.c_bool:
-        pass
+    ) -> ctypes.c_bool: ...
 
     @function_hook("8B 81 ? ? ? ? 83 E8 ? 83 F8 ? 0F 96 C0 C3 48 83 EC")
     def IsOnPlanet(
         self, this: "ctypes._Pointer[cGcPlayerEnvironment]"
-    ) -> ctypes.c_bool:
-        pass
+    ) -> ctypes.c_bool: ...
 
-    @function_hook("48 8B C4 F3 0F 11 48 ? 55 53 57 41 56 48 8D A8")
+    @function_hook("48 8B C4 F3 0F 11 48 ? 55 53 41 54")
     def Update(
         self, this: "ctypes._Pointer[cGcPlayerEnvironment]", lfTimeStep: ctypes.c_float
-    ):
-        pass
+    ): ...
 
 
 class Engine:
     @static_function_hook("40 53 48 83 EC ? 44 8B D1 44 8B C1")
     @staticmethod
-    def ShiftAllTransformsForNode(node: ctypes.c_uint32, lShift: ctypes.c_uint64):
-        pass
+    def ShiftAllTransformsForNode(node: ctypes.c_uint32, lShift: ctypes.c_uint64): ...
 
     @static_function_hook("40 56 48 83 EC ? 44 8B C9")
     @staticmethod
     def GetNodeAbsoluteTransMatrix(
         node: ctypes.c_uint32,  # TkHandle
         absMat: ctypes.c_uint64,  # cTkMatrix34 *
-    ):
-        pass
+    ): ...
 
     @static_function_hook("4C 89 4C 24 ? 48 89 4C 24 ? 55 56 41 57")
     @staticmethod
@@ -754,8 +732,7 @@ class Engine:
         name: ctypes.c_uint64,  # char *
         lpafData: ctypes.c_uint64,  # float *
         liNumVectors: ctypes.c_int32,
-    ) -> ctypes.c_int64:
-        pass
+    ) -> ctypes.c_int64: ...
 
     @static_function_hook(
         "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 4D 63 F1 49 8B F8"
@@ -766,13 +743,13 @@ class Engine:
         name: ctypes.c_uint64,  # char *
         lpafData: ctypes.c_uint64,  # float *
         liNumVectors: ctypes.c_int32,
-    ):
-        pass
+    ): ...
 
     @static_function_hook("48 83 EC ? FF C9")
     @staticmethod
-    def SetOption(leParam: ctypes.c_int32, lfValue: ctypes.c_float) -> ctypes.c_char:
-        pass
+    def SetOption(
+        leParam: ctypes.c_int32, lfValue: ctypes.c_float
+    ) -> ctypes.c_char: ...
 
     @static_function_hook(
         "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 81 EC ? ? ? ? 48 8B BC 24 ? ? ? ? 48 8B D9 4C 8B 3D"
@@ -786,7 +763,7 @@ class Engine:
         lAlternateMaterialId: ctypes.c_uint64,  # cTkResourceDescriptor *
         unknown: ctypes.c_uint64,
     ) -> ctypes.c_uint64:  # cTkSmartResHandle *
-        pass
+        ...
 
 
 def ShiftAllTransformsForNode(node: basic.TkHandle, shift: basic.Vector3f):
@@ -810,7 +787,7 @@ class cTkResourceManager(Structure):
         lpResourceDescriptor: ctypes.c_uint64,  # cTkResourceDescriptor *
         unknown: ctypes.c_uint64,
     ) -> ctypes.c_uint64:  # cTkSmartResHandle *
-        pass
+        ...
 
     @function_hook("4C 89 4C 24 ? 89 54 24 ? 53 55 48 81 EC")
     def FindResourceA(
@@ -824,7 +801,7 @@ class cTkResourceManager(Structure):
         lbIgnoreKilled: ctypes.c_bool,
         a8: ctypes.c_bool,
     ) -> ctypes.c_uint64:  # cTkSmartResHandle *
-        pass
+        ...
 
 
 class cGcRewardManager(Structure):
@@ -843,8 +820,7 @@ class cGcRewardManager(Structure):
         lbForceSilent: ctypes.c_bool,
         lInventoryChoiceOverride: ctypes.c_int32,
         lbUseMiningModifier: ctypes.c_bool,
-    ) -> ctypes.c_uint64:
-        pass
+    ) -> ctypes.c_uint64: ...
 
 
 @partial_struct
@@ -878,15 +854,14 @@ class cGcInteractionComponent(Structure):
         lbPeek: ctypes.c_bool,
         lbForceShowMessage: ctypes.c_bool,
         lbForceSilent: ctypes.c_bool,
-    ) -> ctypes.c_uint64:
-        pass
+    ) -> ctypes.c_uint64: ...
 
     @function_hook("48 8B 81 ? ? ? ? 48 85 C0 74 ? 48 83 B9 ? ? ? ? ? 75 ? 48 83 B9")
     def GetPuzzle(
         self,
         this: "ctypes._Pointer[cGcInteractionComponent]",
     ) -> ctypes.c_uint64:  # cGcAlienPuzzleEntry *
-        pass
+        ...
 
 
 @partial_struct
@@ -905,8 +880,7 @@ class cTkInputPort(Structure):
         self,
         this: "ctypes._Pointer[cTkInputPort]",
         leIndex: ctypes.c_int32,
-    ):
-        pass
+    ): ...
 
     @function_hook(
         "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 41 8B D8 8B FA 48 8B F1 45 84 C9"
@@ -917,8 +891,7 @@ class cTkInputPort(Structure):
         leIndex: ctypes.c_int32,
         leValidation: ctypes.c_int32,
         lbDebugOnly: ctypes.c_bool,
-    ) -> ctypes.c_uint8:
-        pass
+    ) -> ctypes.c_uint8: ...
 
 
 @partial_struct
@@ -930,20 +903,17 @@ class cGcBinoculars(Structure):
     mpBinocularInfoGui: Annotated[ctypes._Pointer[cGcNGui], 0x800]
 
     @function_hook("40 55 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 80 3D")
-    def SetMarker(self, this: "ctypes._Pointer[cGcBinoculars]"):
-        pass
+    def SetMarker(self, this: "ctypes._Pointer[cGcBinoculars]"): ...
 
     @function_hook("40 53 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 8D 54 24")
-    def GetRange(self, this: "ctypes._Pointer[cGcBinoculars]") -> ctypes.c_float:
-        pass
+    def GetRange(self, this: "ctypes._Pointer[cGcBinoculars]") -> ctypes.c_float: ...
 
     @function_hook(
         "48 8B C4 55 57 41 54 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 70"
     )
     def UpdateTarget(
         self, this: "ctypes._Pointer[cGcBinoculars]", lfTimeStep: ctypes.c_float
-    ):
-        pass
+    ): ...
 
     @function_hook("40 53 48 83 EC ? 48 8B 91 ? ? ? ? 48 8B D9 F3 0F 11 49")
     def UpdateScanBarProgress(
@@ -951,7 +921,7 @@ class cGcBinoculars(Structure):
     ):
         """Called each frame while scanning to set the cGcBinoculars.mfScanProgress from the lfScanProgress
         argument of this function."""
-        pass
+        ...
 
     @function_hook(
         "48 8B C4 55 53 56 57 41 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 4C 8B F1 48 8B 0D"
@@ -960,8 +930,7 @@ class cGcBinoculars(Structure):
         self,
         this: "ctypes._Pointer[cGcBinoculars]",
         lTargetInfo: ctypes.c_uint64,  # cTkContactPoint *
-    ):
-        pass
+    ): ...
 
 
 class cTkFSMState(Structure):
@@ -972,8 +941,7 @@ class cTkFSMState(Structure):
         lNewStateID: ctypes._Pointer[basic.cTkFixedString[0x10]],
         lpUserData: ctypes.c_void_p,
         lbForceRestart: ctypes.c_bool,
-    ):
-        pass
+    ): ...
 
 
 class cGcEnvironment(Structure):
@@ -982,7 +950,7 @@ class cGcEnvironment(Structure):
     )
     def UpdateRender(self, this: "ctypes._Pointer[cGcEnvironment]"):
         # TODO: There could be a few good functions to get which are called in here...
-        pass
+        ...
 
 
 class cGcPlayerNotifications(Structure):
@@ -1000,8 +968,7 @@ class cGcPlayerNotifications(Structure):
         unknown2: ctypes.c_uint32,
         lbShowMessageBackground: ctypes.c_bool,
         lbShowIconGlow: ctypes.c_bool,
-    ):
-        pass
+    ): ...
 
 
 @partial_struct
@@ -1014,24 +981,20 @@ class cGcSky(Structure):
     @function_hook("40 53 55 56 57 41 56 48 83 EC ? 4C 8B 15")
     def SetStormState(
         self, this: "ctypes._Pointer[cGcSky]", leNewState: c_enum32[eStormState]
-    ):
-        pass
+    ): ...
 
     @function_hook("40 53 48 83 EC ? 0F 28 C1 0F 29 7C 24 ? F3 0F 5E 05")
-    def SetSunAngle(self, this: "ctypes._Pointer[cGcSky]", lfAngle: ctypes.c_float):
-        pass
+    def SetSunAngle(self, this: "ctypes._Pointer[cGcSky]", lfAngle: ctypes.c_float): ...
 
     @function_hook(
         "48 8B C4 48 89 58 ? 48 89 70 ? 55 57 41 54 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 48 8B D9"
     )
-    def Update(self, this: "ctypes._Pointer[cGcSky]", lfTimeStep: ctypes.c_float):
-        pass
+    def Update(self, this: "ctypes._Pointer[cGcSky]", lfTimeStep: ctypes.c_float): ...
 
     @function_hook("48 8B C4 53 48 81 EC ? ? ? ? 4C 8B 05 ? ? ? ? 48 8B D9")
     def UpdateSunPosition(
         self, this: "ctypes._Pointer[cGcSky]", lfAngle: ctypes.c_float
-    ):
-        pass
+    ): ...
 
 
 class sTerrainEditData(ctypes.Structure):
@@ -1060,14 +1023,12 @@ class cGcTerrainEditorBeam(Structure):
         lpOwnerConcept: ctypes.c_uint64,  # cGcOwnerConcept *
         leStatType: c_enum32[enums.cGcStatsTypes],
         lbVehicle: ctypes.c_bool,
-    ) -> ctypes.c_char:
-        pass
+    ) -> ctypes.c_char: ...
 
     @function_hook(
         "48 89 5C 24 ? 48 89 7C 24 ? 55 48 8D 6C 24 ? 48 81 EC ? ? ? ? 0F 28 05 ? ? ? ? 48 8B D9"
     )
-    def StartEffect(self, this: "ctypes._Pointer[cGcTerrainEditorBeam]"):
-        pass
+    def StartEffect(self, this: "ctypes._Pointer[cGcTerrainEditorBeam]"): ...
 
     @function_hook(
         "4C 89 44 24 18 55 53 56 57 41 54 41 55 41 56 48 8D AC 24 ?? FE FF FF 48"
@@ -1077,8 +1038,7 @@ class cGcTerrainEditorBeam(Structure):
         this: "ctypes._Pointer[cGcTerrainEditorBeam]",
         lEditData: sTerrainEditData,
         lImpact: ctypes.c_uint64,  # cGcProjectileImpact *
-    ) -> ctypes.c_int64:
-        pass
+    ) -> ctypes.c_int64: ...
 
     @function_hook(
         "48 8B C4 4C 89 40 ? 48 89 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8"
@@ -1088,8 +1048,7 @@ class cGcTerrainEditorBeam(Structure):
         this: "ctypes._Pointer[cGcTerrainEditorBeam]",
         lEditData: sTerrainEditData,
         lImpact: ctypes.c_uint64,  # cGcProjectileImpact *
-    ) -> ctypes.c_uint64:
-        pass
+    ) -> ctypes.c_uint64: ...
 
 
 class cGcLocalPlayerCharacterInterface(Structure):
@@ -1098,8 +1057,7 @@ class cGcLocalPlayerCharacterInterface(Structure):
     )
     def IsJetpacking(
         self, this: "ctypes._Pointer[cGcLocalPlayerCharacterInterface]"
-    ) -> ctypes.c_bool:
-        pass
+    ) -> ctypes.c_bool: ...
 
 
 class cGcSpaceshipComponent(Structure):
@@ -1110,8 +1068,7 @@ class cGcSpaceshipComponent(Structure):
         lpPlayer: ctypes._Pointer[cGcPlayer],
         lbAnimate: ctypes.c_bool,
         lbForceDuringCommunicator: ctypes.c_bool,
-    ):
-        pass
+    ): ...
 
 
 class cGcSpaceshipWarp(Structure):
@@ -1120,16 +1077,14 @@ class cGcSpaceshipWarp(Structure):
     )
     def GetPulseDriveFuelFactor(
         self, this: "ctypes._Pointer[cGcSpaceshipWarp]"
-    ) -> ctypes.c_float:
-        pass
+    ) -> ctypes.c_float: ...
 
 
 class cGcSpaceshipWeapons(Structure):
     @function_hook("48 63 81 ?? ?? 00 00 80 BC 08 ?? ?? 00 00 00 74 12")
     def GetOverheatProgress(
         self, this: "ctypes._Pointer[cGcSpaceshipWeapons]"
-    ) -> ctypes.c_float:
-        pass
+    ) -> ctypes.c_float: ...
 
     @function_hook("48 8B C4 48 89 70 ? 57 48 81 EC ? ? ? ? 83 79")
     def GetAverageBarrelPos(
@@ -1137,7 +1092,7 @@ class cGcSpaceshipWeapons(Structure):
         this: "ctypes._Pointer[cGcSpaceshipWeapons]",
         result: ctypes._Pointer[basic.cTkPhysRelVec3],
     ) -> ctypes.c_uint64:  # cTkPhysRelVec3 *
-        pass
+        ...
 
     @function_hook(
         "40 53 48 83 EC ? 48 8B 41 ? 48 8B D9 0F BF 0D ? ? ? ? 48 8B 50 ? E8 ? ? ? ? 48 85 C0 74 ? 48 89 7C 24"
@@ -1146,13 +1101,12 @@ class cGcSpaceshipWeapons(Structure):
         self,
         this: "ctypes._Pointer[cGcSpaceshipWeapons]",
     ) -> ctypes.c_uint64:  # cGcShootPoint *
-        pass
+        ...
 
 
 class cGcPlayerCharacterComponent(Structure):
     @function_hook("48 8B C4 55 53 56 57 41 56 48 8D 68 A1 48 81 EC 90 00 00")
-    def SetDeathState(self, this: ctypes.c_uint64):
-        pass
+    def SetDeathState(self, this: ctypes.c_uint64): ...
 
 
 class cGcTextChatInput(Structure):
@@ -1163,14 +1117,12 @@ class cGcTextChatInput(Structure):
         self,
         this: "ctypes._Pointer[cGcTextChatInput]",
         lMessageText: ctypes._Pointer[basic.cTkFixedString[0x3FF]],
-    ):
-        pass
+    ): ...
 
 
 class cGcTextChatManager(Structure):
     @function_hook("48 89 5C 24 ? 57 48 83 EC ? 48 8D 91 ? ? ? ? 33 FF")
-    def Construct(self, this: "ctypes._Pointer[cGcTextChatManager]"):
-        pass
+    def Construct(self, this: "ctypes._Pointer[cGcTextChatManager]"): ...
 
     @function_hook("40 53 48 81 EC ? ? ? ? F3 0F 10 05")
     def Say(
@@ -1178,8 +1130,7 @@ class cGcTextChatManager(Structure):
         this: "ctypes._Pointer[cGcTextChatManager]",
         lsMessageBody: ctypes._Pointer[basic.cTkFixedString[0x3FF]],
         lbSystemMessage: ctypes.c_bool,
-    ):
-        pass
+    ): ...
 
 
 class cGcNotificationSequenceStartEvent(Structure):
@@ -1188,16 +1139,13 @@ class cGcNotificationSequenceStartEvent(Structure):
     )
     def DeepInterstellarSearch(
         self, this: "ctypes._Pointer[cGcNotificationSequenceStartEvent]"
-    ) -> ctypes.c_char:
-        pass
+    ) -> ctypes.c_char: ...
 
 
-class PlanetGenerationQuery(Structure):
-    pass
+class PlanetGenerationQuery(Structure): ...
 
 
-class cGcScanEventSolarSystemLookup(Structure):
-    pass
+class cGcScanEventSolarSystemLookup(Structure): ...
 
 
 class cGcScanEventManager(Structure):
@@ -1211,8 +1159,7 @@ class cGcScanEventManager(Structure):
         lbAbandonedSystemInteraction: ctypes.c_bool,
         leBuildingClass: ctypes.c_uint32,  # eBuildingClass
         lbIsAbandonedOrEmptySystem: ctypes.c_bool,
-    ) -> ctypes.c_bool:
-        pass
+    ) -> ctypes.c_bool: ...
 
 
 class cGcPlanetGenerator(Structure):
@@ -1225,8 +1172,7 @@ class cGcPlanetGenerator(Structure):
         lPlanetData: ctypes._Pointer[nmse.cGcPlanetData],
         lGenerationData: ctypes._Pointer[nmse.cGcPlanetGenerationInputData],
         lpPlanet: ctypes._Pointer[cGcPlanet],
-    ):
-        pass
+    ): ...
 
     @function_hook(
         "48 8B C4 48 89 58 ? 48 89 50 ? 48 89 48 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 4C 63 B2"
@@ -1236,8 +1182,7 @@ class cGcPlanetGenerator(Structure):
         this: "ctypes._Pointer[cGcPlanetGenerator]",
         lPlanetData: ctypes._Pointer[nmse.cGcPlanetData],
         lUA: ctypes.c_uint64,
-    ):
-        pass
+    ): ...
 
     @function_hook(
         "48 8B C4 48 89 50 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 33 F6"
@@ -1247,8 +1192,7 @@ class cGcPlanetGenerator(Structure):
         this: "ctypes._Pointer[cGcPlanetGenerator]",
         lPlanetData: ctypes._Pointer[nmse.cGcPlanetData],
         lRole: ctypes._Pointer[nmse.cGcCreatureRoleData],
-    ):
-        pass
+    ): ...
 
     @function_hook(
         "4C 89 4C 24 ? 48 89 54 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D AC 24"
@@ -1259,8 +1203,7 @@ class cGcPlanetGenerator(Structure):
         lQueryData: ctypes._Pointer[PlanetGenerationQuery],
         lGenerationData: ctypes._Pointer[nmse.cGcPlanetGenerationInputData],
         lUA: ctypes.c_uint64,
-    ):
-        pass
+    ): ...
 
     @function_hook(
         "48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 4C 89 48 ? 57 41 54 41 55 41 56 41 57 48 81 EC ? ? ? ? 4C 8B E1"
@@ -1271,17 +1214,14 @@ class cGcPlanetGenerator(Structure):
         lRole: ctypes._Pointer[nmse.cGcCreatureRoleData],
         lSpawnData: ctypes._Pointer[nmse.cGcCreatureSpawnData],
         lPlanetData: ctypes._Pointer[nmse.cGcPlanetData],
-    ):
-        pass
+    ): ...
 
 
-class cGcGalaxyAttributesAtAddress(Structure):
-    pass
+class cGcGalaxyAttributesAtAddress(Structure): ...
 
 
 class cGcSolarSystemGenerator(Structure):
-    class GenerationData(Structure):
-        pass
+    class GenerationData(Structure): ...
 
     @function_hook(
         "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 33 F6"
@@ -1292,20 +1232,16 @@ class cGcSolarSystemGenerator(Structure):
         lSeed: ctypes._Pointer[basic.cTkSeed],
         lAttributes: ctypes._Pointer[cGcGalaxyAttributesAtAddress],
         lData: "ctypes._Pointer[cGcSolarSystemGenerator.GenerationData]",
-    ):
-        pass
+    ): ...
 
 
-class cGcDiscoveryPageData(Structure):
-    pass
+class cGcDiscoveryPageData(Structure): ...
 
 
-class cGcFrontendTextInput(Structure):
-    pass
+class cGcFrontendTextInput(Structure): ...
 
 
-class cGcFrontendModelRenderer(Structure):
-    pass
+class cGcFrontendModelRenderer(Structure): ...
 
 
 class cGcFrontendPageDiscovery(Structure):
@@ -1318,8 +1254,7 @@ class cGcFrontendPageDiscovery(Structure):
         lPageData: ctypes._Pointer[cGcDiscoveryPageData],
         lFrontEndTextInput: ctypes._Pointer[cGcFrontendTextInput],
         lFronteEndModelRenderer: ctypes._Pointer[cGcFrontendModelRenderer],
-    ):
-        pass
+    ): ...
 
     @static_function_hook(
         "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 8D 05 ? ? ? ? 41 8B F9"
@@ -1332,8 +1267,7 @@ class cGcFrontendPageDiscovery(Structure):
         leRarity: c_enum32[enums.cGcRarity],
         leActiveTime: c_enum32[enums.cGcCreatureActiveTime],
         leHemisphere: c_enum32[enums.cGcCreatureHemiSphere],
-    ):
-        pass
+    ): ...
 
 
 @partial_struct
@@ -1344,8 +1278,7 @@ class cGcGalacticVoxelCoordinate(Structure):
     mbValid: Annotated[bool, Field(ctypes.c_bool)]
 
 
-class cGcFrontendPage(Structure):
-    pass
+class cGcFrontendPage(Structure): ...
 
 
 class cGcFrontendPagePortalRunes(Structure):
@@ -1358,32 +1291,28 @@ class cGcFrontendPagePortalRunes(Structure):
         lModifiedUA: "ctypes._Pointer[cGcGalacticVoxelCoordinate]",
         lbDeterministicRandom: ctypes.c_bool,
         a4: ctypes.c_bool,
-    ) -> ctypes.c_bool:
-        pass
+    ) -> ctypes.c_bool: ...
 
     @function_hook("48 89 54 24 ? 48 89 4C 24 ? 55 53 57 41 54 41 55 41 57")
     def DoInteraction(
         self,
         this: "ctypes._Pointer[cGcFrontendPagePortalRunes]",
         lpPage: ctypes._Pointer[cGcFrontendPage],
-    ):
-        pass
+    ): ...
 
 
 class cGcGalaxyVoxelAttributesData(nmse.cGcGalaxyVoxelAttributesData):
     @function_hook(
         "33 C0 0F 57 C0 0F 11 01 0F 11 41 ? 0F 11 41 ? 48 89 41 ? 48 89 41 ? 48 89 41 ? 48 89 41"
     )
-    def SetDefaults(self, this: "ctypes._Pointer[cGcGalaxyVoxelAttributesData]"):
-        pass
+    def SetDefaults(self, this: "ctypes._Pointer[cGcGalaxyVoxelAttributesData]"): ...
 
 
 class cGcGalaxyStarAttributesData(nmse.cGcGalaxyStarAttributesData):
     @function_hook(
         "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 ED 48 8D B9 ? ? ? ? 48 89 6C 24"
     )
-    def SetDefaults(self, this: "ctypes._Pointer[cGcGalaxyStarAttributesData]"):
-        pass
+    def SetDefaults(self, this: "ctypes._Pointer[cGcGalaxyStarAttributesData]"): ...
 
 
 class cGcGalaxyAttributeGenerator(Structure):
@@ -1394,8 +1323,7 @@ class cGcGalaxyAttributeGenerator(Structure):
     def ClassifyVoxel(
         lCoordinate: ctypes._Pointer[cGcGalacticVoxelCoordinate],
         lOutput: ctypes._Pointer[cGcGalaxyVoxelAttributesData],
-    ):
-        pass
+    ): ...
 
     @static_function_hook(
         "48 89 54 24 ? 55 53 56 57 41 54 41 55 41 57 48 8B EC 48 83 EC ? 48 8B F9"
@@ -1403,12 +1331,10 @@ class cGcGalaxyAttributeGenerator(Structure):
     @staticmethod
     def ClassifyStarSystem(
         lUA: ctypes.c_ulonglong, lOutput: ctypes._Pointer[cGcGalaxyStarAttributesData]
-    ):
-        pass
+    ): ...
 
 
-class cGcGalaxyVoxelData(Structure):
-    pass
+class cGcGalaxyVoxelData(Structure): ...
 
 
 class cGcGalaxyVoxelGenerator(nmse.cGcGalaxyStarAttributesData):
@@ -1418,19 +1344,37 @@ class cGcGalaxyVoxelGenerator(nmse.cGcGalaxyStarAttributesData):
         lu64UniverseAddress: ctypes.c_uint64,
         lVoxelData: ctypes._Pointer[cGcGalaxyVoxelData],
         lRootOffset: ctypes._Pointer[basic.Vector3f],
-    ):
-        pass
+    ): ...
 
 
+class cTkLanguageManager(Structure):
+    @static_function_hook(
+        "48 83 EC ? 65 48 8B 04 25 ? ? ? ? B9 ? ? ? ? 48 8B 00 8B 04 01 39 05 ? ? ? ? 0F 8F ? ? ? ? 48 8D 05 ? ? ? ? 48 83 C4 ? C3 4C 89 00"
+    )
+    def GetInstance(self) -> ctypes.c_uint64: ...
+
+
+@partial_struct
 class cTkLanguageManagerBase(Structure):
+    meRegion: Annotated[
+        c_enum32[enums.eLanguageRegion], Field(c_enum32[enums.eLanguageRegion], 0x8)
+    ]
+
     @function_hook("48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 57 C0 49 8B E8")
     def Translate(
         self,
         this: "ctypes._Pointer[cTkLanguageManagerBase]",
         lpacText: ctypes.c_char_p,
         lpacDefaultReturnValue: ctypes._Pointer[basic.TkID[0x20]],
-    ) -> ctypes.c_uint64:
-        pass
+    ) -> ctypes.c_uint64: ...
+
+    @function_hook("48 89 5C 24 ? 57 48 81 EC ? ? ? ? 33 DB")
+    def Load(
+        self,
+        this: "ctypes._Pointer[cTkLanguageManagerBase]",
+        a2: ctypes.c_char_p,
+        a3: ctypes.c_bool,
+    ): ...
 
 
 class cGcNameGenerator(Structure):
@@ -1443,14 +1387,12 @@ class cGcNameGenerator(Structure):
         lu64Seed: ctypes.c_uint64,
         lResult: ctypes._Pointer[basic.cTkFixedString[0x79]],
         lLocResult: ctypes._Pointer[basic.cTkFixedString[0x79]],
-    ):
-        pass
+    ): ...
 
 
 class cGcCreatureComponent(Structure):
     @function_hook("48 8B C4 55 56 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 51")
-    def Prepare(self, this: "ctypes._Pointer[cGcCreatureComponent]"):
-        pass
+    def Prepare(self, this: "ctypes._Pointer[cGcCreatureComponent]"): ...
 
 
 class cEgSceneGraphResource(Structure):
@@ -1460,24 +1402,21 @@ class cEgSceneGraphResource(Structure):
         this: "ctypes._Pointer[cEgSceneGraphResource]",
         lData: ctypes.c_uint64,  # std::string *
         lpParent: ctypes.c_uint64,  # cEgSceneNodeTemplate *
-    ) -> ctypes.c_char:
-        pass
+    ) -> ctypes.c_char: ...
 
 
 class cGcPlayerHUD(Structure):
     @function_hook("48 8B C4 55 57 48 8D 68 ? 48 81 EC ? ? ? ? 48 8B 91")
-    def RenderIndicatorPanel(self, this: "ctypes._Pointer[cGcPlayerHUD]"):
-        pass
+    def RenderIndicatorPanel(self, this: "ctypes._Pointer[cGcPlayerHUD]"): ...
 
     @function_hook(
         "48 8B C4 48 89 48 ? 55 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 83 B9"
     )
-    def RenderWeaponPanel(self, this: "ctypes._Pointer[cGcPlayerHUD]"):
-        pass
+    def RenderWeaponPanel(self, this: "ctypes._Pointer[cGcPlayerHUD]"): ...
 
 
 # Dummy values to copy and paste to make adding new things quicker...
 # class name(Structure):
 #     @function_hook("")
 #     def method(self, this: "ctypes._Pointer[name]"):
-#         pass
+#         ...
