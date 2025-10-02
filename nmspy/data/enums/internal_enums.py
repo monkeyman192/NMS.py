@@ -57,3 +57,23 @@ class eStormState(IntEnum):
     TransitionIn = 0x2
     Active = 0x3
     TransitionOut = 0x4
+
+
+class eLanguageRegion(IntEnum):
+    English = 0x0
+    USEnglish = 0x1
+    French = 0x2
+    Italian = 0x3
+    German = 0x4
+    Spanish = 0x5
+    Russian = 0x6
+    Polish = 0x7
+    Dutch = 0x8
+    Portuguese = 0x9
+    LatinAmericanSpanish = 0xA
+    BrazilianPortuguese = 0xB
+    Japanese = 0xC
+    TraditionalChinese = 0xD
+    SimplifiedChinese = 0xE
+    TencentChinese = 0xF
+    Korean = 0x10

@@ -31,6 +31,7 @@ def fnv_1a(input: str, length: int):
     return _hash
 
 
+# TODO: Rewrite a bit?
 class cTkBitArray(ctypes.Structure, Generic[T, N]):
     _size: int
     _template_type: T
@@ -208,6 +209,16 @@ class cTkPhysRelVec3(ctypes.Structure):
     ]
 
 
+class GcResource(ctypes.Structure):
+    ResourceID: int
+    _fields_ = [("ResourceID", ctypes.c_int32)]
+
+
+class GcNodeID(ctypes.Structure):
+    NodeID: int
+    _fields_ = [("NodeID", ctypes.c_int32)]
+
+
 class GcSeed(ctypes.Structure):
     Seed: int
     UseSeedValue: bool
@@ -218,15 +229,31 @@ class GcSeed(ctypes.Structure):
     ]
 
 
-cTkSeed = GcSeed
-
-
 class Colour(ctypes.Structure):
+    r: float
+    g: float
+    b: float
+    a: float
+
     _fields_ = [
         ("r", ctypes.c_float),
         ("g", ctypes.c_float),
         ("b", ctypes.c_float),
         ("a", ctypes.c_float),
+    ]
+
+
+class Colour32(ctypes.Structure):
+    r: int
+    g: int
+    b: int
+    a: int
+
+    _fields_ = [
+        ("r", ctypes.c_byte),
+        ("g", ctypes.c_byte),
+        ("b", ctypes.c_byte),
+        ("a", ctypes.c_byte),
     ]
 
 
@@ -387,7 +414,7 @@ class cTkClassPool(ctypes.Structure, Generic[T, N]):
 
 
 class cTkDynamicArray(ctypes.Structure, Generic[T]):
-    _template_type: T
+    _template_type: Type[T]
     _fields_ = [
         ("Array", ctypes.c_uint64),
         ("Size", ctypes.c_uint32),
@@ -402,8 +429,8 @@ class cTkDynamicArray(ctypes.Structure, Generic[T]):
     @property
     def value(self) -> ctypes.Array[T]:
         if self.Array == 0 or self.Size == 0:
-            # Empty lists are store with an empty pointer in mem.
-            return []
+            # Empty lists are stored with an empty pointer in mem.
+            return (self._template_type * 0)()
         return map_struct(self.Array, self._template_type * self.Size)
 
     def set(self, data: ctypes.Array[T]):
@@ -518,3 +545,51 @@ class cTkLinearHashTable(ctypes.Structure, Generic[T1, T2]):
             ("tableSize", ctypes.c_int32),
         ]
         return _cls
+
+
+class halfVector4(ctypes.Structure):
+    pass
+
+
+class HashedString(ctypes.Structure):
+    pass
+
+
+class NMSTemplate(ctypes.Structure):
+    pass
+
+
+class LinkableNMSTemplate(ctypes.Structure):
+    pass
+
+
+class VariableSizeString(cTkDynamicArray[ctypes.c_char]):
+    @property
+    def value(self) -> str:
+        return super().value.value.decode()
+
+    def __str__(self):
+        return self.value
+
+
+class VariableSizeWString(cTkDynamicArray[ctypes.c_wchar]):
+    @property
+    def value(self) -> str:
+        return super().value.value.decode()
+
+    def __str__(self):
+        return self.value
+
+
+# Aliases
+cTkSeed = GcSeed
+# String type aliases
+TkID0x10 = TkID[0x10]
+TkID0x20 = TkID[0x20]
+cTkFixedString0x20 = cTkFixedString[0x20]
+cTkFixedString0x40 = cTkFixedString[0x40]
+cTkFixedString0x80 = cTkFixedString[0x80]
+cTkFixedString0x100 = cTkFixedString[0x100]
+cTkFixedString0x200 = cTkFixedString[0x200]
+cTkFixedString0x400 = cTkFixedString[0x400]
+cTkFixedString0x800 = cTkFixedString[0x800]

@@ -216,7 +216,7 @@
  },
  {
   "name": "cGcPlayerEnvironment::Update",
-  "signature": "48 8B C4 F3 0F 11 48 ? 55 53 57 41 56 48 8D A8",
+  "signature": "48 8B C4 F3 0F 11 48 ? 55 53 41 54",
   "mangled_name": "__ZN20cGcPlayerEnvironment6UpdateEf"
  },
  {
@@ -623,5 +623,35 @@
   "name": "cGcNGuiText::EditElement",
   "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 81 EC ? ? ? ? 0F 29 70 ? 0F 29 78 ? 48 8D A8 ? ? ? ? 48 83 E5 ? 48 8B 01 48 8B F9",
   "mangled_name": "?EditElement@cGcNGuiText@@UEAAXXZ"
+ },
+ {
+  "name": "cTkLanguageManagerBase::Load",
+  "signature": "48 89 5C 24 ? 57 48 81 EC ? ? ? ? 33 DB",
+  "mangled_name": "?Load@cTkLanguageManagerBase@@QEAAXXZ"
+ },
+ {
+  "name": "cGcRealityManager::Construct",
+  "signature": "48 8B C4 48 89 48 ? 55 53 56 57 41 54 41 56 48 8D A8",
+  "mangled_name": "?Construct@cGcRealityManager@@QEAAXXZ"
+ },
+ {
+  "name": "cGcRealityManager::GenerateProceduralProduct",
+  "signature": "48 89 54 24 ? 48 89 4C 24 ? 55 53 41 54 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 48 8B DA 4C 8B E1",
+  "mangled_name": "?GenerateProceduralProduct@cGcRealityManager@@QEAAPEBVcGcProductData@@AEBT?$TkID@$0IA@@@@Z"
+ },
+ {
+  "name": "cGcRealityManager::GenerateProceduralTechnology",
+  "signature": "4C 89 4C 24 ? 44 88 44 24 ? 48 89 4C 24",
+  "mangled_name": "?GenerateProceduralTechnology@cGcRealityManager@@QEAAPEBVcGcTechnology@@AEBT?$TkID@$0IA@@@_N@Z"
+ },
+ {
+  "name": "cGcApplication::Data::Data",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 45 33 FF 48 C7 41 ? ? ? ? ? 4C 89 39",
+  "mangled_name": "??0Data@cGcApplication@@QEAA@XZ"
+ },
+ {
+  "name": "cTkLanguageManager::GetInstance",
+  "signature": "48 83 EC ? 65 48 8B 04 25 ? ? ? ? B9 ? ? ? ? 48 8B 00 8B 04 01 39 05 ? ? ? ? 0F 8F ? ? ? ? 48 8D 05 ? ? ? ? 48 83 C4 ? C3 4C 89 00",
+  "mangled_name": "?GetInstance@cTkLanguageManager@@SAAEAV1@XZ"
  }
 ]
