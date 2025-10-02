@@ -13,17 +13,11 @@ on:
 jobs:
   build_test:
     name: Build artefacts
-    runs-on: Windows-2025
+    runs-on: Windows-latest
     strategy:
       fail-fast: false
       matrix:
-        py_ver: [
-          {version: '3.9'},
-          {version: '3.10'},
-          {version: '3.11'},
-          {version: '3.12'},
-          {version: '3.13'},
-        ]
+        py_ver: [{version: '3.9'}] # , {version: '3.10'}, {version: '3.11'}]
     steps:
       - uses: actions/checkout@v4
         with:
