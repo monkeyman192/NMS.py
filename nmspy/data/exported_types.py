@@ -444,6 +444,22 @@ class cTkLSystemRulesData(Structure):
 
 
 @partial_struct
+class cTkHeavyAirSystem(Structure):
+    AmplitudeMax: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x0)]
+    AmplitudeMin: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x10)]
+    Colour1: Annotated[basic.Colour, Field(basic.Colour, 0x20)]
+    Colour2: Annotated[basic.Colour, Field(basic.Colour, 0x30)]
+    FadeSpeedRange: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x40)]
+    MajorDirection: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x50)]
+    RotationSpeedRange: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x60)]
+    ScaleRange: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x70)]
+    TwinkleRange: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x80)]
+    Material: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x90)]
+    Colour1Alpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xA0)]
+    Colour2Alpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xA4)]
+
+
+@partial_struct
 class cTkIdSceneFilename(Structure):
     Filename: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
     Id: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x10)]
@@ -469,8 +485,28 @@ class cTkInputFrame(Structure):
 
 
 @partial_struct
-class cTkInputFrameArray(Structure):
-    Array: Annotated[cTkInputFrame, Field(cTkInputFrame, 0x0)]
+class cTkProductIdArray(Structure):
+    Array: Annotated[
+        basic.cTkDynamicArray[basic.TkID0x10],
+        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x0),
+    ]
+
+
+@partial_struct
+class cTkFoliageData(Structure):
+    Colour: Annotated[basic.Colour, Field(basic.Colour, 0x0)]
+    Material: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x10)]
+    AngleMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20)]
+    Density: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x24)]
+    DensityVariance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x28)]
+    Scale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2C)]
+    AngleExponentially: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x30)]
+
+
+@partial_struct
+class cTkRawID(Structure):
+    Value0: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x0)]
+    Value1: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x8)]
 
 
 @partial_struct
@@ -507,22 +543,6 @@ class cTkSketchNodeData(Structure):
         c_enum32[eTriggerTypeEnum], Field(c_enum32[eTriggerTypeEnum], 0x2C)
     ]
     TypeName: Annotated[basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x30)]
-
-
-@partial_struct
-class cTkHeavyAirSystem(Structure):
-    AmplitudeMax: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x0)]
-    AmplitudeMin: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x10)]
-    Colour1: Annotated[basic.Colour, Field(basic.Colour, 0x20)]
-    Colour2: Annotated[basic.Colour, Field(basic.Colour, 0x30)]
-    FadeSpeedRange: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x40)]
-    MajorDirection: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x50)]
-    RotationSpeedRange: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x60)]
-    ScaleRange: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x70)]
-    TwinkleRange: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x80)]
-    Material: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x90)]
-    Colour1Alpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xA0)]
-    Colour2Alpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xA4)]
 
 
 @partial_struct
@@ -585,28 +605,47 @@ class cTkEmitterData(Structure):
 
 
 @partial_struct
-class cTkProductIdArray(Structure):
-    Array: Annotated[
-        basic.cTkDynamicArray[basic.TkID0x10],
-        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x0),
+class cTkLocalisationEntry(Structure):
+    Id: Annotated[basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)]
+    BrazilianPortuguese: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0x20)
+    ]
+    Dutch: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x30)]
+    English: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x40)]
+    French: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x50)]
+    German: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x60)]
+    Italian: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x70)]
+    Japanese: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x80)]
+    Korean: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x90)]
+    LatinAmericanSpanish: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0xA0)
+    ]
+    Polish: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0xB0)]
+    Portuguese: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0xC0)
+    ]
+    Russian: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0xD0)]
+    SimplifiedChinese: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0xE0)
+    ]
+    Spanish: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0xF0)]
+    TencentChinese: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0x100)
+    ]
+    TraditionalChinese: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0x110)
+    ]
+    USEnglish: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0x120)
     ]
 
 
 @partial_struct
-class cTkFoliageData(Structure):
-    Colour: Annotated[basic.Colour, Field(basic.Colour, 0x0)]
-    Material: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x10)]
-    AngleMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20)]
-    Density: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x24)]
-    DensityVariance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x28)]
-    Scale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2C)]
-    AngleExponentially: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x30)]
-
-
-@partial_struct
-class cTkRawID(Structure):
-    Value0: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x0)]
-    Value1: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x8)]
+class cTkLocalisationTable(Structure):
+    Table: Annotated[
+        basic.cTkDynamicArray[cTkLocalisationEntry],
+        Field(basic.cTkDynamicArray[cTkLocalisationEntry], 0x0),
+    ]
 
 
 @partial_struct
@@ -643,6 +682,14 @@ class cTkLanguageFontTableEntry(Structure):
     ]
     Language: Annotated[
         c_enum32[enums.cTkLanguages], Field(c_enum32[enums.cTkLanguages], 0x40)
+    ]
+
+
+@partial_struct
+class cTkLanguageFontTable(Structure):
+    Table: Annotated[
+        basic.cTkDynamicArray[cTkLanguageFontTableEntry],
+        Field(basic.cTkDynamicArray[cTkLanguageFontTableEntry], 0x0),
     ]
 
 
@@ -762,52 +809,6 @@ class cTkProceduralTexture(Structure):
     ]
     Multiply: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x54)]
     OverrideAverageColour: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x55)]
-
-
-@partial_struct
-class cTkProceduralTextureChosenOption(Structure):
-    Colour: Annotated[basic.Colour, Field(basic.Colour, 0x0)]
-    OptionName: Annotated[basic.TkID0x20, Field(basic.TkID0x20, 0x10)]
-    Group: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x30)]
-    Layer: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x40)]
-    Palette: Annotated[cTkPaletteTexture, Field(cTkPaletteTexture, 0x50)]
-    OverrideColour: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x5C)]
-
-
-@partial_struct
-class cTkLocalisationEntry(Structure):
-    Id: Annotated[basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)]
-    BrazilianPortuguese: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0x20)
-    ]
-    Dutch: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x30)]
-    English: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x40)]
-    French: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x50)]
-    German: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x60)]
-    Italian: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x70)]
-    Japanese: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x80)]
-    Korean: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x90)]
-    LatinAmericanSpanish: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0xA0)
-    ]
-    Polish: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0xB0)]
-    Portuguese: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0xC0)
-    ]
-    Russian: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0xD0)]
-    SimplifiedChinese: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0xE0)
-    ]
-    Spanish: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0xF0)]
-    TencentChinese: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0x100)
-    ]
-    TraditionalChinese: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0x110)
-    ]
-    USEnglish: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0x120)
-    ]
 
 
 @partial_struct
@@ -976,38 +977,39 @@ class cTkGlobals(Structure):
         ctypes.c_bool, Field(ctypes.c_bool, 0x4CB)
     ]
     ForceGPUPreset: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4CC)]
-    FreezeCulling: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4CD)]
-    HideRenderdocOverlay: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4CE)]
-    HmdDistortionPassthru: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4CF)]
-    HmdEnable: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4D0)]
-    HmdFoveated: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4D1)]
-    HmdStereoRender: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4D2)]
-    HmdTracking: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4D3)]
-    JitterRenderOffsetEveryFrame: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4D4)]
-    LoadRelativeEditorLayouts: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4D5)]
-    LogInputChanges: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4D6)]
-    LogInputSetup: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4D7)]
-    MakeUnusedUniformsNaN: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4D8)]
-    MinGPUMode: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4D9)]
-    OctahedralImpostersDisable: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4DA)]
-    OctahedralImpostersEnable: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4DB)]
+    ForceWinGdkHandheld: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4CD)]
+    FreezeCulling: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4CE)]
+    HideRenderdocOverlay: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4CF)]
+    HmdDistortionPassthru: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4D0)]
+    HmdEnable: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4D1)]
+    HmdFoveated: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4D2)]
+    HmdStereoRender: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4D3)]
+    HmdTracking: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4D4)]
+    JitterRenderOffsetEveryFrame: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4D5)]
+    LoadRelativeEditorLayouts: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4D6)]
+    LogInputChanges: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4D7)]
+    LogInputSetup: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4D8)]
+    MakeUnusedUniformsNaN: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4D9)]
+    MinGPUMode: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4DA)]
+    OctahedralImpostersDisable: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4DB)]
+    OctahedralImpostersEnable: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4DC)]
     OctahedralImpostersViewFromSpace: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x4DC)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x4DD)
     ]
-    SampleCollisionWithCamera: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4DD)]
-    ScratchpadInstanced: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4DE)]
-    ScratchpadWind: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4DF)]
-    ShowPlayerCollisions: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4E0)]
+    SampleCollisionWithCamera: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4DE)]
+    ScratchpadInstanced: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4DF)]
+    ScratchpadWind: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4E0)]
+    ShowPlayerCollisions: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4E1)]
     SimulateDisabledParticleRefractions: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x4E1)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x4E2)
     ]
-    SmokeTestSmokeBotAutoStart: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4E2)]
-    UseDebugScreenSettings: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4E3)]
-    UseHeavyAir: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4E4)]
-    VulkanValidationEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4E5)]
-    VulkanValidationPrintMessages: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4E6)]
+    SmokeTestSmokeBotAutoStart: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4E3)]
+    UseDebugScreenSettings: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4E4)]
+    UseHeavyAir: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4E5)]
+    VulkanValidationEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4E6)]
+    VulkanValidationPrintMessages: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4E7)]
     VulkanValidationPrintUniqueOnly: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x4E7)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x4E8)
     ]
 
 
@@ -1044,14 +1046,6 @@ class cTkIdModelResource(Structure):
 class cTkBoundingBoxData(Structure):
     Max: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x0)]
     Min: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x10)]
-
-
-@partial_struct
-class cTkLanguageFontTable(Structure):
-    Table: Annotated[
-        basic.cTkDynamicArray[cTkLanguageFontTableEntry],
-        Field(basic.cTkDynamicArray[cTkLanguageFontTableEntry], 0x0),
-    ]
 
 
 @partial_struct
@@ -4124,20 +4118,25 @@ class cGcPulseEncounterSpawnObject(Structure):
 
 @partial_struct
 class cGcPulseEncounterSpawnConditions(Structure):
-    RequiresMissionActive: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
-    RequiresMissionComplete: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x10)]
-    RequiresMissionNotActive: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x20)]
-    RequiresMissionNotComplete: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x30)]
-    RequiresProduct: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x40)]
-    AllowedBeyondPortals: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x50)]
-    AllowedDuringTutorial: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x51)]
-    AllowedInCreative: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x52)]
-    AllowedInEmptySystem: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x53)]
-    AllowedWhileOnMPMission: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x54)]
-    MissionEncounter: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x55)]
-    RequiresAlienShip: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x56)]
-    RequiresNearbyCorruptWorld: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x57)]
-    StandardEncounter: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x58)]
+    BlockDuringSeasons: Annotated[
+        basic.cTkDynamicArray[ctypes.c_int32],
+        Field(basic.cTkDynamicArray[ctypes.c_int32], 0x0),
+    ]
+    RequiresMissionActive: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x10)]
+    RequiresMissionComplete: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x20)]
+    RequiresMissionNotActive: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x30)]
+    RequiresMissionNotComplete: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x40)]
+    RequiresProduct: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x50)]
+    AllowedBeyondPortals: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x60)]
+    AllowedDuringTutorial: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x61)]
+    AllowedInCreative: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x62)]
+    AllowedInEmptySystem: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x63)]
+    AllowedWhileOnMPMission: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x64)]
+    MissionEncounter: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x65)]
+    RequiresAlienShip: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x66)]
+    RequiresCorvette: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x67)]
+    RequiresNearbyCorruptWorld: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x68)]
+    StandardEncounter: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x69)]
 
 
 @partial_struct
@@ -4594,87 +4593,6 @@ class cGcAIShipSpawnData(Structure):
 
 
 @partial_struct
-class cGcTerrainEditing(Structure):
-    EditSizes: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x0)]
-    SubtractSizes: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20)]
-    BaseEditSizes: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2C)]
-    UndoEditSizes: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x34)]
-    DensityBlendDistanceMultiplier: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x3C)
-    ]
-    EditEffectScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x40)]
-    EditPlaneMaxAdditiveOffsetFactor: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x44)
-    ]
-    EditPlaneMaxSubtractiveOffsetFactor: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x48)
-    ]
-    EditPlaneMinAdditiveOffsetFactor: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4C)
-    ]
-    EditPlaneMinSubtractiveOffsetFactor: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x50)
-    ]
-    FlatteningSizes: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x54)]
-    MinimumSubstancePresence: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x58)]
-    RegionEditAreaMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x5C)]
-    RegionMapSearchRadiusMultiplier: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x60)
-    ]
-    TerrainBlocksSearchRadiusMultiplier: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x64)
-    ]
-    TerrainEditBaseDistanceTolerance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x68)
-    ]
-    TerrainEditBeamAddInterpolationStepFactor: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6C)
-    ]
-    TerrainEditBeamMaxRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70)]
-    TerrainEditBeamSpherecastRadius: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x74)
-    ]
-    TerrainEditBeamSubtractInterpolationStepFactor: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x78)
-    ]
-    TerrainEditsNormalCostFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7C)]
-    TerrainEditsSurvivalCostFactor: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x80)
-    ]
-    TerrainUndoBaseDistanceTolerance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x84)
-    ]
-    UndoBaseEditEffectiveScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x88)]
-    UndoEditToleranceFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x8C)]
-    VoxelsDeletedAffectCostFactor: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x90)
-    ]
-    EditGunBeamEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x94)]
-    EditGunParticlesEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x95)]
-    SubtractGunBeamEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x96)]
-    SubtractGunParticlesEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x97)]
-
-
-@partial_struct
-class cGcPlanetWeatherColourData(Structure):
-    CloudColour1: Annotated[basic.Colour, Field(basic.Colour, 0x0)]
-    CloudColour2: Annotated[basic.Colour, Field(basic.Colour, 0x10)]
-    FogColour: Annotated[basic.Colour, Field(basic.Colour, 0x20)]
-    HeightFogColour: Annotated[basic.Colour, Field(basic.Colour, 0x30)]
-    HorizonColour: Annotated[basic.Colour, Field(basic.Colour, 0x40)]
-    LightColour: Annotated[basic.Colour, Field(basic.Colour, 0x50)]
-    LightColourUnderground: Annotated[basic.Colour, Field(basic.Colour, 0x60)]
-    SkyColour: Annotated[basic.Colour, Field(basic.Colour, 0x70)]
-    SkyGradientSpeed: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x80)]
-    SkySolarColour: Annotated[basic.Colour, Field(basic.Colour, 0x90)]
-    SkyUpperColour: Annotated[basic.Colour, Field(basic.Colour, 0xA0)]
-    SunColour: Annotated[basic.Colour, Field(basic.Colour, 0xB0)]
-    GasGiantAtmosphereID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0xC0)]
-    CirrusCloudDensity: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xD0)]
-    SelectionWeighting: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xD4)]
-
-
-@partial_struct
 class cGcPlanetWeatherColourIndex(Structure):
     Index: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x0)]
 
@@ -4779,6 +4697,87 @@ class cGcPlanetWaterData(Structure):
         c_enum32[enums.cGcWaterEmissionBehaviourType],
         Field(c_enum32[enums.cGcWaterEmissionBehaviourType], 0xC),
     ]
+
+
+@partial_struct
+class cGcTerrainEditing(Structure):
+    EditSizes: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x0)]
+    SubtractSizes: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20)]
+    BaseEditSizes: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2C)]
+    UndoEditSizes: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x34)]
+    DensityBlendDistanceMultiplier: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x3C)
+    ]
+    EditEffectScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x40)]
+    EditPlaneMaxAdditiveOffsetFactor: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x44)
+    ]
+    EditPlaneMaxSubtractiveOffsetFactor: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x48)
+    ]
+    EditPlaneMinAdditiveOffsetFactor: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4C)
+    ]
+    EditPlaneMinSubtractiveOffsetFactor: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x50)
+    ]
+    FlatteningSizes: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x54)]
+    MinimumSubstancePresence: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x58)]
+    RegionEditAreaMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x5C)]
+    RegionMapSearchRadiusMultiplier: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x60)
+    ]
+    TerrainBlocksSearchRadiusMultiplier: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x64)
+    ]
+    TerrainEditBaseDistanceTolerance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x68)
+    ]
+    TerrainEditBeamAddInterpolationStepFactor: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x6C)
+    ]
+    TerrainEditBeamMaxRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70)]
+    TerrainEditBeamSpherecastRadius: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x74)
+    ]
+    TerrainEditBeamSubtractInterpolationStepFactor: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x78)
+    ]
+    TerrainEditsNormalCostFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7C)]
+    TerrainEditsSurvivalCostFactor: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x80)
+    ]
+    TerrainUndoBaseDistanceTolerance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x84)
+    ]
+    UndoBaseEditEffectiveScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x88)]
+    UndoEditToleranceFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x8C)]
+    VoxelsDeletedAffectCostFactor: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x90)
+    ]
+    EditGunBeamEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x94)]
+    EditGunParticlesEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x95)]
+    SubtractGunBeamEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x96)]
+    SubtractGunParticlesEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x97)]
+
+
+@partial_struct
+class cGcPlanetWeatherColourData(Structure):
+    CloudColour1: Annotated[basic.Colour, Field(basic.Colour, 0x0)]
+    CloudColour2: Annotated[basic.Colour, Field(basic.Colour, 0x10)]
+    FogColour: Annotated[basic.Colour, Field(basic.Colour, 0x20)]
+    HeightFogColour: Annotated[basic.Colour, Field(basic.Colour, 0x30)]
+    HorizonColour: Annotated[basic.Colour, Field(basic.Colour, 0x40)]
+    LightColour: Annotated[basic.Colour, Field(basic.Colour, 0x50)]
+    LightColourUnderground: Annotated[basic.Colour, Field(basic.Colour, 0x60)]
+    SkyColour: Annotated[basic.Colour, Field(basic.Colour, 0x70)]
+    SkyGradientSpeed: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x80)]
+    SkySolarColour: Annotated[basic.Colour, Field(basic.Colour, 0x90)]
+    SkyUpperColour: Annotated[basic.Colour, Field(basic.Colour, 0xA0)]
+    SunColour: Annotated[basic.Colour, Field(basic.Colour, 0xB0)]
+    GasGiantAtmosphereID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0xC0)]
+    CirrusCloudDensity: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xD0)]
+    SelectionWeighting: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xD4)]
 
 
 @partial_struct
@@ -5687,59 +5686,6 @@ class cGcNPCProbabilityWordReactionData(Structure):
 
 
 @partial_struct
-class cGcNPCSettlementBehaviourAreaPropertyWeightEntry(Structure):
-    AreaProperty: Annotated[
-        c_enum32[enums.cGcNPCSettlementBehaviourAreaProperty],
-        Field(c_enum32[enums.cGcNPCSettlementBehaviourAreaProperty], 0x0),
-    ]
-    EntryWeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4)]
-    ExitWeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x8)]
-
-
-@partial_struct
-class cGcNPCWordReactionList(Structure):
-    Reactions: Annotated[
-        basic.cTkDynamicArray[cGcNPCProbabilityWordReactionData],
-        Field(basic.cTkDynamicArray[cGcNPCProbabilityWordReactionData], 0x0),
-    ]
-
-
-@partial_struct
-class cGcNPCWordReactionCategory(Structure):
-    Categories: Annotated[cGcNPCWordReactionList, Field(cGcNPCWordReactionList, 0x0)]
-    Fallback: Annotated[cGcNPCWordReactionList, Field(cGcNPCWordReactionList, 0x70)]
-
-
-@partial_struct
-class cGcNPCSettlementBehaviourObjectTypeWeightEntry(Structure):
-    ObjectType: Annotated[
-        c_enum32[enums.cGcNPCInteractiveObjectType],
-        Field(c_enum32[enums.cGcNPCInteractiveObjectType], 0x0),
-    ]
-    Weight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4)]
-
-
-@partial_struct
-class cGcProductToCollect(Structure):
-    Product: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
-    Amount: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x10)]
-
-
-@partial_struct
-class cGcConstructionPart(Structure):
-    Part: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
-    Amount: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x10)]
-
-
-@partial_struct
-class cGcConstructionPartGroup(Structure):
-    ValidParts: Annotated[
-        basic.cTkDynamicArray[cGcConstructionPart],
-        Field(basic.cTkDynamicArray[cGcConstructionPart], 0x0),
-    ]
-
-
-@partial_struct
 class cGcJudgementMessageOptions(Structure):
     MessageInSettlement: Annotated[
         basic.cTkFixedString0x80, Field(basic.cTkFixedString0x80, 0x0)
@@ -5760,6 +5706,99 @@ class cGcNPCColourGroup(Structure):
         Field(basic.cTkDynamicArray[basic.Colour], 0x10),
     ]
     Rarity: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20)]
+
+
+@partial_struct
+class cGcProductToCollect(Structure):
+    Product: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
+    Amount: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x10)]
+
+
+@partial_struct
+class cGcMissionSequenceWaitRealTime(Structure):
+    DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
+    DisplayStat: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x10)]
+    Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x20)]
+    Time: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x30)]
+    Randomness: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x38)]
+    StatFromNow: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3C)]
+    TakeDisplayStatTargetFromSeasonData: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x3D)
+    ]
+
+
+@partial_struct
+class cGcMissionSequenceWaitRealTimeCombat(Structure):
+    DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
+    DisplayStat: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x10)]
+    Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x20)]
+    MessageCombat: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0x30)
+    ]
+    Time: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x40)]
+    Randomness: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x48)]
+    StatFromNow: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4C)]
+
+
+@partial_struct
+class cGcConstructionPart(Structure):
+    Part: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
+    Amount: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x10)]
+
+
+@partial_struct
+class cGcConstructionPartGroup(Structure):
+    ValidParts: Annotated[
+        basic.cTkDynamicArray[cGcConstructionPart],
+        Field(basic.cTkDynamicArray[cGcConstructionPart], 0x0),
+    ]
+
+
+@partial_struct
+class cGcMissionSequenceWaitForSuitUpgrade(Structure):
+    DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
+
+
+@partial_struct
+class cGcMissionSequenceWaitForWarps(Structure):
+    DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
+    Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x10)]
+    Amount: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x20)]
+
+
+@partial_struct
+class cGcMissionSequenceWaitForPhoto(Structure):
+    Biomes: Annotated[
+        basic.cTkDynamicArray[c_enum32[enums.cGcBiomeType]],
+        Field(basic.cTkDynamicArray[c_enum32[enums.cGcBiomeType]], 0x0),
+    ]
+    Buildings: Annotated[
+        basic.cTkDynamicArray[cGcPhotoBuildings],
+        Field(basic.cTkDynamicArray[cGcPhotoBuildings], 0x10),
+    ]
+    DebugText: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0x20)
+    ]
+    Fauna: Annotated[
+        basic.cTkDynamicArray[cGcPhotoFauna],
+        Field(basic.cTkDynamicArray[cGcPhotoFauna], 0x30),
+    ]
+    Flora: Annotated[
+        basic.cTkDynamicArray[cGcPhotoFlora],
+        Field(basic.cTkDynamicArray[cGcPhotoFlora], 0x40),
+    ]
+    Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x50)]
+    MessageSecondary: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0x60)
+    ]
+    MessageSuccess: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0x70)
+    ]
+    Ships: Annotated[
+        basic.cTkDynamicArray[cGcPhotoShips],
+        Field(basic.cTkDynamicArray[cGcPhotoShips], 0x80),
+    ]
+    TakeAmountFromSeasonData: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x90)]
 
 
 @partial_struct
@@ -5791,32 +5830,6 @@ class cGcMissionSequenceWaitForWonderValue(Structure):
         c_enum32[enums.cGcWonderType], Field(c_enum32[enums.cGcWonderType], 0x3C)
     ]
     TakeAmountFromSeasonalData: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x40)]
-
-
-@partial_struct
-class cGcMissionSequenceWaitRealTime(Structure):
-    DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
-    DisplayStat: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x10)]
-    Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x20)]
-    Time: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x30)]
-    Randomness: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x38)]
-    StatFromNow: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3C)]
-    TakeDisplayStatTargetFromSeasonData: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x3D)
-    ]
-
-
-@partial_struct
-class cGcMissionSequenceWaitRealTimeCombat(Structure):
-    DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
-    DisplayStat: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x10)]
-    Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x20)]
-    MessageCombat: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0x30)
-    ]
-    Time: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x40)]
-    Randomness: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x48)]
-    StatFromNow: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4C)]
 
 
 @partial_struct
@@ -5874,6 +5887,14 @@ class cGcMissionSequenceWaitForScanEvent(Structure):
 
 
 @partial_struct
+class cGcMissionSequenceWaitForDepots(Structure):
+    DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
+    Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x10)]
+    AmountMax: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x20)]
+    AmountMin: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x24)]
+
+
+@partial_struct
 class cGcMissionSequenceWaitForSettlementActivity(Structure):
     DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
     Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x10)]
@@ -5895,6 +5916,14 @@ class cGcMissionSequenceWaitForSettlementActivity(Structure):
 class cGcMissionSequenceWaitForSettlementMiniMission(Structure):
     DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
     Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x10)]
+
+
+@partial_struct
+class cGcMissionSequenceWaitForFreighterPods(Structure):
+    DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
+    Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x10)]
+    Amount: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x20)]
+    TakeAmountFromPulseEncounter: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x24)]
 
 
 @partial_struct
@@ -5967,91 +5996,6 @@ class cGcMissionSequenceWaitForStatSeasonal(Structure):
 
 
 @partial_struct
-class cGcMissionSequenceWaitForSuitUpgrade(Structure):
-    DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
-
-
-@partial_struct
-class cGcMissionSequenceWaitForWarps(Structure):
-    DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
-    Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x10)]
-    Amount: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x20)]
-
-
-@partial_struct
-class cGcMissionSequenceWaitForPhoto(Structure):
-    Biomes: Annotated[
-        basic.cTkDynamicArray[c_enum32[enums.cGcBiomeType]],
-        Field(basic.cTkDynamicArray[c_enum32[enums.cGcBiomeType]], 0x0),
-    ]
-    Buildings: Annotated[
-        basic.cTkDynamicArray[cGcPhotoBuildings],
-        Field(basic.cTkDynamicArray[cGcPhotoBuildings], 0x10),
-    ]
-    DebugText: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0x20)
-    ]
-    Fauna: Annotated[
-        basic.cTkDynamicArray[cGcPhotoFauna],
-        Field(basic.cTkDynamicArray[cGcPhotoFauna], 0x30),
-    ]
-    Flora: Annotated[
-        basic.cTkDynamicArray[cGcPhotoFlora],
-        Field(basic.cTkDynamicArray[cGcPhotoFlora], 0x40),
-    ]
-    Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x50)]
-    MessageSecondary: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0x60)
-    ]
-    MessageSuccess: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0x70)
-    ]
-    Ships: Annotated[
-        basic.cTkDynamicArray[cGcPhotoShips],
-        Field(basic.cTkDynamicArray[cGcPhotoShips], 0x80),
-    ]
-    TakeAmountFromSeasonData: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x90)]
-
-
-@partial_struct
-class cGcMissionSequenceWaitForFreighterPods(Structure):
-    DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
-    Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x10)]
-    Amount: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x20)]
-    TakeAmountFromPulseEncounter: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x24)]
-
-
-@partial_struct
-class cGcMissionSequenceStop(Structure):
-    DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
-    Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x10)]
-
-
-@partial_struct
-class cGcMissionSequenceSummonNexus(Structure):
-    DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
-    Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x10)]
-    IgnorePlanetRadiusAndForceSpawn: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x20)
-    ]
-
-
-@partial_struct
-class cGcMissionSequenceSuppressMarkers(Structure):
-    Suppressed: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x0)]
-    SuppressedAfterNextWarp: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1)]
-
-
-@partial_struct
-class cGcMissionSequenceVehicleScan(Structure):
-    ScanEventID: Annotated[basic.TkID0x20, Field(basic.TkID0x20, 0x0)]
-    DebugText: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0x20)
-    ]
-    Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x30)]
-
-
-@partial_struct
 class cGcMissionSequenceVisitPlanets(Structure):
     DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
     Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x10)]
@@ -6074,6 +6018,44 @@ class cGcMissionSequenceWait(Structure):
     Time: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x10)]
     MultiplyTimeBySeasonValue: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x14)]
     SuppressMessages: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x15)]
+
+
+@partial_struct
+class cGcMissionSequenceShowMissionUpdateMessage(Structure):
+    CustomMessageLocID: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)
+    ]
+    CustomObjectiveLocID: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x20)
+    ]
+    DebugText: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0x40)
+    ]
+
+    class eMissionUpdateMessageEnum(IntEnum):
+        Start = 0x0
+        End = 0x1
+
+    MissionUpdateMessage: Annotated[
+        c_enum32[eMissionUpdateMessageEnum],
+        Field(c_enum32[eMissionUpdateMessageEnum], 0x50),
+    ]
+
+    class ePlayMusicStingEnum(IntEnum):
+        None_ = 0x0
+        Start = 0x1
+        End = 0x2
+        Corrupted = 0x3
+
+    PlayMusicSting: Annotated[
+        c_enum32[ePlayMusicStingEnum], Field(c_enum32[ePlayMusicStingEnum], 0x54)
+    ]
+    SetMissionSelected: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x58)]
+    ShowChangeMissionNotify: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x59)]
+    SuppressNotificationsNotFromThisMission: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x5A)
+    ]
+    WaitForMessageOver: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x5B)]
 
 
 @partial_struct
@@ -6147,171 +6129,33 @@ class cGcMissionSequenceStartPartyEventForStage(Structure):
 
 
 @partial_struct
-class cGcMissionSequenceWaitForDepots(Structure):
+class cGcMissionSequenceStop(Structure):
     DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
     Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x10)]
-    AmountMax: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x20)]
-    AmountMin: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x24)]
 
 
 @partial_struct
-class cGcMissionSequencePinProductSurrogate(Structure):
-    ProductID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
-    TakeProductFromSeasonData: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x10)]
-
-
-@partial_struct
-class cGcMissionSequencePirates(Structure):
-    RewardMessageOverride: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)
+class cGcMissionSequenceSummonNexus(Structure):
+    DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
+    Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x10)]
+    IgnorePlanetRadiusAndForceSpawn: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x20)
     ]
-    AttackDefinition: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x20)]
+
+
+@partial_struct
+class cGcMissionSequenceSuppressMarkers(Structure):
+    Suppressed: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x0)]
+    SuppressedAfterNextWarp: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1)]
+
+
+@partial_struct
+class cGcMissionSequenceVehicleScan(Structure):
+    ScanEventID: Annotated[basic.TkID0x20, Field(basic.TkID0x20, 0x0)]
     DebugText: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0x30)
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0x20)
     ]
-    DistanceOverride: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x40)]
-    NumSquads: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x44)]
-
-    class ePirateSpawnTypeEnum(IntEnum):
-        CargoAttackStart = 0x0
-        ProbeSuccess = 0x1
-        PlanetaryRaidStart = 0x2
-
-    PirateSpawnType: Annotated[
-        c_enum32[ePirateSpawnTypeEnum], Field(c_enum32[ePirateSpawnTypeEnum], 0x48)
-    ]
-    ForceSpawn: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4C)]
-    Silent: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4D)]
-
-
-@partial_struct
-class cGcMissionSequenceProductAmountNeeded(Structure):
-    DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
-    Item: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x10)]
-    Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x20)]
-    ToBuild: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x30)]
-    IsRepair: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x40)]
-
-
-@partial_struct
-class cGcMissionSequenceQuickWarp(Structure):
-    ScanEventToWarpTo: Annotated[basic.TkID0x20, Field(basic.TkID0x20, 0x0)]
-    CameraShakeID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x20)]
-    DebugText: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0x30)
-    ]
-    MessageCannotWarp: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0x40)
-    ]
-    MessageWarping: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0x50)
-    ]
-    EffectTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x60)]
-    SequenceTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x64)]
-    DoCameraShake: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x68)]
-    DoWhiteout: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x69)]
-
-
-@partial_struct
-class cGcMissionSequenceShowMissionUpdateMessage(Structure):
-    CustomMessageLocID: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)
-    ]
-    CustomObjectiveLocID: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x20)
-    ]
-    DebugText: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0x40)
-    ]
-
-    class eMissionUpdateMessageEnum(IntEnum):
-        Start = 0x0
-        End = 0x1
-
-    MissionUpdateMessage: Annotated[
-        c_enum32[eMissionUpdateMessageEnum],
-        Field(c_enum32[eMissionUpdateMessageEnum], 0x50),
-    ]
-
-    class ePlayMusicStingEnum(IntEnum):
-        None_ = 0x0
-        Start = 0x1
-        End = 0x2
-        Corrupted = 0x3
-
-    PlayMusicSting: Annotated[
-        c_enum32[ePlayMusicStingEnum], Field(c_enum32[ePlayMusicStingEnum], 0x54)
-    ]
-    SetMissionSelected: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x58)]
-    ShowChangeMissionNotify: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x59)]
-    SuppressNotificationsNotFromThisMission: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x5A)
-    ]
-    WaitForMessageOver: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x5B)]
-
-
-@partial_struct
-class cGcMissionSequenceRepairTech(Structure):
-    DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
-    Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x10)]
-    TechsToRepair: Annotated[
-        basic.cTkDynamicArray[basic.TkID0x10],
-        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x20),
-    ]
-
-
-@partial_struct
-class cGcMissionSequenceRestorePurpleSystemStats(Structure):
-    DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
-
-
-@partial_struct
-class cGcMissionSequenceReward(Structure):
-    DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
-    Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x10)]
-    Reward: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x20)]
-
-    class eRewardInventoryOverrideEnum(IntEnum):
-        None_ = 0x0
-        Suit = 0x1
-        Ship = 0x2
-        Vehicle = 0x3
-        Freighter = 0x4
-
-    RewardInventoryOverride: Annotated[
-        c_enum32[eRewardInventoryOverrideEnum],
-        Field(c_enum32[eRewardInventoryOverrideEnum], 0x30),
-    ]
-    DoMissionBoardOverride: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x34)]
-    Silent: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x35)]
-
-
-@partial_struct
-class cGcMissionSequenceScan(Structure):
-    DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
-    Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x10)]
-    ScanOverrideData: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x20)]
-    WaitTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x30)]
-    ScanTypesToOverride: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x34)]
-    BlockTimedScans: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3F)]
-    RequiresMissionActive: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x40)]
-
-
-@partial_struct
-class cGcMissionSequenceSendChatMessage(Structure):
-    CustomText: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)
-    ]
-    StatusMessageId: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x20)]
-
-
-@partial_struct
-class cGcMissionSequenceSetCurrentMission(Structure):
-    DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
-    MissionID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x10)]
-    FirstIncompleteMilestone: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x20)]
-    OverrideMultiplayerPriority: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21)]
-    Silent: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x22)]
+    Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x30)]
 
 
 @partial_struct
@@ -6422,6 +6266,128 @@ class cGcMissionSequenceOpenSettlementBuildingWithScanEvent(Structure):
 
 
 @partial_struct
+class cGcMissionSequencePinProductSurrogate(Structure):
+    ProductID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
+    TakeProductFromSeasonData: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x10)]
+
+
+@partial_struct
+class cGcMissionSequencePirates(Structure):
+    RewardMessageOverride: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)
+    ]
+    AttackDefinition: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x20)]
+    DebugText: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0x30)
+    ]
+    DistanceOverride: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x40)]
+    NumSquads: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x44)]
+
+    class ePirateSpawnTypeEnum(IntEnum):
+        CargoAttackStart = 0x0
+        ProbeSuccess = 0x1
+        PlanetaryRaidStart = 0x2
+
+    PirateSpawnType: Annotated[
+        c_enum32[ePirateSpawnTypeEnum], Field(c_enum32[ePirateSpawnTypeEnum], 0x48)
+    ]
+    ForceSpawn: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4C)]
+    Silent: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4D)]
+
+
+@partial_struct
+class cGcMissionSequenceProductAmountNeeded(Structure):
+    DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
+    Item: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x10)]
+    Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x20)]
+    ToBuild: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x30)]
+    IsRepair: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x40)]
+
+
+@partial_struct
+class cGcMissionSequenceQuickWarp(Structure):
+    ScanEventToWarpTo: Annotated[basic.TkID0x20, Field(basic.TkID0x20, 0x0)]
+    CameraShakeID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x20)]
+    DebugText: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0x30)
+    ]
+    MessageCannotWarp: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0x40)
+    ]
+    MessageWarping: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0x50)
+    ]
+    EffectTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x60)]
+    SequenceTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x64)]
+    DoCameraShake: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x68)]
+    DoWhiteout: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x69)]
+
+
+@partial_struct
+class cGcMissionSequenceRepairTech(Structure):
+    DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
+    Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x10)]
+    TechsToRepair: Annotated[
+        basic.cTkDynamicArray[basic.TkID0x10],
+        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x20),
+    ]
+
+
+@partial_struct
+class cGcMissionSequenceRestorePurpleSystemStats(Structure):
+    DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
+
+
+@partial_struct
+class cGcMissionSequenceReward(Structure):
+    DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
+    Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x10)]
+    Reward: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x20)]
+
+    class eRewardInventoryOverrideEnum(IntEnum):
+        None_ = 0x0
+        Suit = 0x1
+        Ship = 0x2
+        Vehicle = 0x3
+        Freighter = 0x4
+
+    RewardInventoryOverride: Annotated[
+        c_enum32[eRewardInventoryOverrideEnum],
+        Field(c_enum32[eRewardInventoryOverrideEnum], 0x30),
+    ]
+    DoMissionBoardOverride: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x34)]
+    Silent: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x35)]
+
+
+@partial_struct
+class cGcMissionSequenceScan(Structure):
+    DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
+    Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x10)]
+    ScanOverrideData: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x20)]
+    WaitTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x30)]
+    ScanTypesToOverride: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x34)]
+    BlockTimedScans: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3F)]
+    RequiresMissionActive: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x40)]
+
+
+@partial_struct
+class cGcMissionSequenceSendChatMessage(Structure):
+    CustomText: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)
+    ]
+    StatusMessageId: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x20)]
+
+
+@partial_struct
+class cGcMissionSequenceSetCurrentMission(Structure):
+    DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
+    MissionID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x10)]
+    FirstIncompleteMilestone: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x20)]
+    OverrideMultiplayerPriority: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21)]
+    Silent: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x22)]
+
+
+@partial_struct
 class cGcMissionSequenceFindPurpleSystem(Structure):
     DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
     Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x10)]
@@ -6518,16 +6484,23 @@ class cGcMissionSequenceGetToScanEvent(Structure):
     TimeoutOSD: Annotated[
         basic.VariableSizeString, Field(basic.VariableSizeString, 0x100)
     ]
-    Distance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x110)]
-    Timeout: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x114)]
+    UseTeleporterMessage: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0x110)
+    ]
+    Distance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x120)]
+    Timeout: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x124)]
     UseGPSInText: Annotated[
         c_enum32[enums.cGcScanEventGPSHint],
-        Field(c_enum32[enums.cGcScanEventGPSHint], 0x118),
+        Field(c_enum32[enums.cGcScanEventGPSHint], 0x128),
     ]
-    AlwaysAllowInShip: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x11C)]
-    CanFormatObjectives: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x11D)]
-    DistanceTimeout: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x11E)]
-    EndEventWhenReached: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x11F)]
+    AlwaysAllowInShip: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x12C)]
+    CanFormatObjectives: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x12D)]
+    DistanceTimeout: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x12E)]
+    EndEventWhenReached: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x12F)]
+    RequireInsideToEnd: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x130)]
+    WaterworldEndEventWhenPlanetReached: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x131)
+    ]
 
 
 @partial_struct
@@ -7102,6 +7075,13 @@ class cGcMissionConsequenceResetStoryPortal(Structure):
 
 
 @partial_struct
+class cGcMissionConditionWeaponMode(Structure):
+    WeaponMode: Annotated[
+        c_enum32[enums.cGcPlayerWeapons], Field(c_enum32[enums.cGcPlayerWeapons], 0x0)
+    ]
+
+
+@partial_struct
 class cGcMissionConsequenceSetMissionStat(Structure):
     ValueToAdd: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x0)]
     ValueToSet: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x4)]
@@ -7122,6 +7102,7 @@ class cGcMissionConditionWeather(Structure):
     IgnoreStormIfInShip: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x5)]
     IsExtreme: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x6)]
     StormActive: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x7)]
+    UseStrictSkyExtremeTest: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8)]
 
 
 @partial_struct
@@ -7161,6 +7142,14 @@ class cGcMissionConditionWristMenuOpen(Structure):
 
 
 @partial_struct
+class cGcMissionConditionWaitForTime(Structure):
+    WaitTimeInSeconds: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x0)]
+    ThisConditionWillSetMissionUserDataIsThatOk: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x8)
+    ]
+
+
+@partial_struct
 class cGcMissionConditionWarping(Structure):
     pass
 
@@ -7197,13 +7186,6 @@ class cGcMissionConditionTechnologyKnown(Structure):
     Technology: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
     DependentOnSeasonMilestone: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x10)]
     TakeTechFromSeasonData: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x11)]
-
-
-@partial_struct
-class cGcMissionConditionWeaponMode(Structure):
-    WeaponMode: Annotated[
-        c_enum32[enums.cGcPlayerWeapons], Field(c_enum32[enums.cGcPlayerWeapons], 0x0)
-    ]
 
 
 @partial_struct
@@ -7267,6 +7249,11 @@ class cGcMissionConditionUnderwaterDepth(Structure):
 
 
 @partial_struct
+class cGcMissionConditionSystemHasGasGiant(Structure):
+    pass
+
+
+@partial_struct
 class cGcMissionConditionSystemHasInfestedPlanet(Structure):
     pass
 
@@ -7291,6 +7278,7 @@ class cGcMissionConditionSystemPlanetTest(Structure):
         Field(c_enum32[enums.cGcPlayerHazardType], 0x4),
     ]
     RequiresExtremePlanet: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8)]
+    UseStrictSkyExtremeTest: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x9)]
 
 
 @partial_struct
@@ -7308,14 +7296,6 @@ class cGcMissionConditionWaitForPirates(Structure):
     CheckAllFireteamMembers: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x9)]
     CompleteOnlyInSpace: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xA)]
     CountHostileTraders: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xB)]
-
-
-@partial_struct
-class cGcMissionConditionWaitForTime(Structure):
-    WaitTimeInSeconds: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x0)]
-    ThisConditionWillSetMissionUserDataIsThatOk: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x8)
-    ]
 
 
 @partial_struct
@@ -7350,8 +7330,10 @@ class cGcMissionConditionSeasonRewardsRecipe(Structure):
 
 
 @partial_struct
-class cGcMissionConditionSystemHasGasGiant(Structure):
-    pass
+class cGcMissionConditionSystemHasCreatureType(Structure):
+    CreatureID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
+    AllowInNexus: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x10)]
+    RequireOnPlanet: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x11)]
 
 
 @partial_struct
@@ -8671,6 +8653,7 @@ class cGcMissionConditionAllMilestonesComplete(Structure):
 @partial_struct
 class cGcMissionConditionAllSystemPlanetsDiscovered(Structure):
     DisplayNumberOffset: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x0)]
+    OnlyMoons: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4)]
 
 
 @partial_struct
@@ -10456,6 +10439,7 @@ class cGcCreatureSwarmData(Structure):
     SwarmMovementType: Annotated[
         c_enum32[eSwarmMovementTypeEnum], Field(c_enum32[eSwarmMovementTypeEnum], 0x20)
     ]
+    AttractedToBait: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x24)]
 
 
 @partial_struct
@@ -10479,29 +10463,30 @@ class cGcCreatureRidingAnimation(Structure):
 
 @partial_struct
 class cGcCreatureRidingPartModifier(Structure):
-    Offset: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x0)]
-    RotationOffset: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x10)]
-    VROffset: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x20)]
-    PartName: Annotated[basic.TkID0x20, Field(basic.TkID0x20, 0x30)]
-    DefaultRidingAnim: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x50)]
-    IdleRidingAnim: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x60)]
+    AnimOffset: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x0)]
+    Offset: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x10)]
+    RotationOffset: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x20)]
+    VROffset: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x30)]
+    PartName: Annotated[basic.TkID0x20, Field(basic.TkID0x20, 0x40)]
+    DefaultRidingAnim: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x60)]
+    IdleRidingAnim: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x70)]
     RidingAnims: Annotated[
         basic.cTkDynamicArray[cGcCreatureRidingAnimation],
-        Field(basic.cTkDynamicArray[cGcCreatureRidingAnimation], 0x70),
+        Field(basic.cTkDynamicArray[cGcCreatureRidingAnimation], 0x80),
     ]
-    HeadCounterRotation: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x80)]
-    LegSpreadOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x84)]
-    MaxScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x88)]
-    MinScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x8C)]
+    HeadCounterRotation: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x90)]
+    LegSpreadOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x94)]
+    MaxScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x98)]
+    MinScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x9C)]
     AdditionalScaleJoint: Annotated[
-        basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x90)
+        basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0xA0)
     ]
     JointName: Annotated[
-        basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x190)
+        basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x1A0)
     ]
-    BreakIfNotSelected: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x290)]
-    OverrideAnims: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x291)]
-    RelativeOffset: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x292)]
+    BreakIfNotSelected: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2A0)]
+    OverrideAnims: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2A1)]
+    RelativeOffset: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2A2)]
 
 
 @partial_struct
@@ -11117,6 +11102,23 @@ class cGcCustomisationFreighterEngineEffect(Structure):
 
 
 @partial_struct
+class cGcRewardAction(Structure):
+    Reward: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
+
+
+@partial_struct
+class cGcCustomisationBoneScales(Structure):
+    GroupTitle: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)
+    ]
+    Positions: Annotated[
+        basic.cTkDynamicArray[ctypes.c_float],
+        Field(basic.cTkDynamicArray[ctypes.c_float], 0x20),
+    ]
+    ScaleBoneName: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x30)]
+
+
+@partial_struct
 class cGcScareCreaturesAction(Structure):
     FleeRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x0)]
     HearRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4)]
@@ -11165,6 +11167,52 @@ class cGcBeenShotEvent(Structure):
         PlayerOrRemotePlayer = 0x2
 
     ShotBy: Annotated[c_enum32[eShotByEnum], Field(c_enum32[eShotByEnum], 0x8)]
+
+
+@partial_struct
+class cGcCustomisationDescriptorGroupOption(Structure):
+    BoneScales: Annotated[
+        basic.cTkDynamicArray[cGcCustomisationBoneScales],
+        Field(basic.cTkDynamicArray[cGcCustomisationBoneScales], 0x0),
+    ]
+    ColourGroups: Annotated[
+        basic.cTkDynamicArray[cGcCustomisationColourGroup],
+        Field(basic.cTkDynamicArray[cGcCustomisationColourGroup], 0x10),
+    ]
+    DescriptorOption: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x20)]
+    HideIfGroupActive: Annotated[
+        basic.cTkDynamicArray[basic.TkID0x10],
+        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x30),
+    ]
+    SelectingAddsGroup: Annotated[
+        basic.cTkDynamicArray[basic.TkID0x10],
+        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x40),
+    ]
+    SelectingRemovesGroup: Annotated[
+        basic.cTkDynamicArray[basic.TkID0x10],
+        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x50),
+    ]
+    TextureGroups: Annotated[
+        basic.cTkDynamicArray[cGcCustomisationTextureGroup],
+        Field(basic.cTkDynamicArray[cGcCustomisationTextureGroup], 0x60),
+    ]
+    UnselectingAddsGroup: Annotated[
+        basic.cTkDynamicArray[basic.TkID0x10],
+        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x70),
+    ]
+    UnselectingRemovesGroup: Annotated[
+        basic.cTkDynamicArray[basic.TkID0x10],
+        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x80),
+    ]
+    InteractionCameraIndexOverride: Annotated[
+        ctypes.c_int32, Field(ctypes.c_int32, 0x90)
+    ]
+    InteracttionCameraFocusJointOverride: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x94)
+    ]
+    ForceDisableDoF: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xB4)]
+    ReplaceBaseBoneScales: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xB5)]
+    ReplaceBaseColours: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xB6)]
 
 
 @partial_struct
@@ -11238,6 +11286,15 @@ class cGcCustomisationBackpackData(Structure):
 
 
 @partial_struct
+class cGcPainAction(Structure):
+    Damage: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
+    Radius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x10)]
+    RetriggerTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14)]
+    AffectsPlayer: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x18)]
+    RadiusBasedDamage: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x19)]
+
+
+@partial_struct
 class cGcCustomisationBannerImageData(Structure):
     TipText: Annotated[basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)]
     BannerImage: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x20)]
@@ -11275,20 +11332,10 @@ class cGcCustomisationBobbleHead(Structure):
 
 
 @partial_struct
-class cGcRewardAction(Structure):
-    Reward: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
-
-
-@partial_struct
-class cGcCustomisationBoneScales(Structure):
-    GroupTitle: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)
-    ]
-    Positions: Annotated[
-        basic.cTkDynamicArray[ctypes.c_float],
-        Field(basic.cTkDynamicArray[ctypes.c_float], 0x20),
-    ]
-    ScaleBoneName: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x30)]
+class cGcDestroyAction(Structure):
+    PlayEffect: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
+    DestroyAll: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x10)]
+    UseDestructables: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x11)]
 
 
 @partial_struct
@@ -11377,15 +11424,6 @@ class cGcSpaceStormData(Structure):
 
 
 @partial_struct
-class cGcPainAction(Structure):
-    Damage: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
-    Radius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x10)]
-    RetriggerTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14)]
-    AffectsPlayer: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x18)]
-    RadiusBasedDamage: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x19)]
-
-
-@partial_struct
 class cGcLootProbability(Structure):
     LootModel: Annotated[cTkModelResource, Field(cTkModelResource, 0x0)]
     Probability: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20)]
@@ -11422,13 +11460,6 @@ class cGcCameraShakeAction(Structure):
     Shake: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
     FalloffMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x10)]
     FalloffMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14)]
-
-
-@partial_struct
-class cGcDestroyAction(Structure):
-    PlayEffect: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
-    DestroyAll: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x10)]
-    UseDestructables: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x11)]
 
 
 @partial_struct
@@ -12824,7 +12855,8 @@ class cGcRewardMissionMessageToMatchingSeeds(Structure):
 class cGcRewardMissionOverride(Structure):
     ForceLocalMissionSelection: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
     Mission: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x10)]
-    Reward: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x20)]
+    OptionalMissionSeed: Annotated[basic.GcSeed, Field(basic.GcSeed, 0x20)]
+    Reward: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x30)]
 
 
 @partial_struct
@@ -13667,6 +13699,11 @@ class cGcCostSalvageShip(Structure):
 
 
 @partial_struct
+class cGcCostSalvageTool(Structure):
+    pass
+
+
+@partial_struct
 class cGcDeathQuote(Structure):
     QuoteLine1: Annotated[
         basic.cTkFixedString0x80, Field(basic.cTkFixedString0x80, 0x0)
@@ -13675,11 +13712,6 @@ class cGcDeathQuote(Structure):
         basic.cTkFixedString0x80, Field(basic.cTkFixedString0x80, 0x80)
     ]
     Author: Annotated[basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x100)]
-
-
-@partial_struct
-class cGcCostSalvageTool(Structure):
-    pass
 
 
 @partial_struct
@@ -13704,6 +13736,14 @@ class cGcDialogClearanceInfo(Structure):
 @partial_struct
 class cGcCostShipLowSpeed(Structure):
     MaxShipSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x0)]
+
+
+@partial_struct
+class cGcCostShipType(Structure):
+    ShipType: Annotated[
+        c_enum32[enums.cGcSpaceshipClasses],
+        Field(c_enum32[enums.cGcSpaceshipClasses], 0x0),
+    ]
 
 
 @partial_struct
@@ -13740,6 +13780,11 @@ class cGcCostStatCompare(Structure):
 
 
 @partial_struct
+class cGcCostPoliceCargoComply(Structure):
+    pass
+
+
+@partial_struct
 class cGcCostSubstance(Structure):
     UseScanEventToDetermineLocalSubstance: Annotated[
         basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)
@@ -13762,8 +13807,14 @@ class cGcCostSubstance(Structure):
 
 
 @partial_struct
-class cGcCostPoliceCargoComply(Structure):
-    pass
+class cGcCostProcProduct(Structure):
+    FreighterPasswordIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x0)]
+    Rarity: Annotated[c_enum32[enums.cGcRarity], Field(c_enum32[enums.cGcRarity], 0x4)]
+    Type: Annotated[
+        c_enum32[enums.cGcProceduralProductCategory],
+        Field(c_enum32[enums.cGcProceduralProductCategory], 0x8),
+    ]
+    CareAboutRarity: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xC)]
 
 
 @partial_struct
@@ -13789,17 +13840,6 @@ class cGcCostTableEntry(Structure):
 
 
 @partial_struct
-class cGcCostProcProduct(Structure):
-    FreighterPasswordIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x0)]
-    Rarity: Annotated[c_enum32[enums.cGcRarity], Field(c_enum32[enums.cGcRarity], 0x4)]
-    Type: Annotated[
-        c_enum32[enums.cGcProceduralProductCategory],
-        Field(c_enum32[enums.cGcProceduralProductCategory], 0x8),
-    ]
-    CareAboutRarity: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xC)]
-
-
-@partial_struct
 class cGcCostProduct(Structure):
     Id: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
     Amount: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x10)]
@@ -13822,6 +13862,25 @@ class cGcCostProductOnlyTakeIfCanAfford(Structure):
         c_enum32[enums.cGcDefaultMissionProductEnum],
         Field(c_enum32[enums.cGcDefaultMissionProductEnum], 0x34),
     ]
+
+
+@partial_struct
+class cGcCostInstalledTech(Structure):
+    Id: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
+
+    class eInventoryToCheckEnum(IntEnum):
+        All = 0x0
+        Suit = 0x1
+        Ship = 0x2
+        Weapon = 0x3
+        Freighter = 0x4
+        Buggy = 0x5
+
+    InventoryToCheck: Annotated[
+        c_enum32[eInventoryToCheckEnum], Field(c_enum32[eInventoryToCheckEnum], 0x10)
+    ]
+    MinChargePercent: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14)]
+    BurnCharge: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x18)]
 
 
 @partial_struct
@@ -14068,22 +14127,8 @@ class cGcCostHealth(Structure):
 
 
 @partial_struct
-class cGcCostInstalledTech(Structure):
-    Id: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
-
-    class eInventoryToCheckEnum(IntEnum):
-        All = 0x0
-        Suit = 0x1
-        Ship = 0x2
-        Weapon = 0x3
-        Freighter = 0x4
-        Buggy = 0x5
-
-    InventoryToCheck: Annotated[
-        c_enum32[eInventoryToCheckEnum], Field(c_enum32[eInventoryToCheckEnum], 0x10)
-    ]
-    MinChargePercent: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14)]
-    BurnCharge: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x18)]
+class cGcCostCanUseShipPad(Structure):
+    ShipPadAvalible: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x0)]
 
 
 @partial_struct
@@ -14236,11 +14281,6 @@ class cGcCostCanMilkCreature(Structure):
 @partial_struct
 class cGcCostCanRideCreature(Structure):
     pass
-
-
-@partial_struct
-class cGcCostCanUseShipPad(Structure):
-    ShipPadAvalible: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x0)]
 
 
 @partial_struct
@@ -16965,66 +17005,54 @@ class cGcStatLevelData(Structure):
 
 
 @partial_struct
-class cGcStatRewardGroupStatData(Structure):
-    StatID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
-    ManualAdjust: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x10)]
-    StatMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14)]
+class cGcLeveledStatData(Structure):
+    StatLevels: Annotated[cGcStatLevelData, Field(cGcStatLevelData, 0x0)]
+    NotifyMessage: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x580)
+    ]
+    NotifyMessageSingular: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x5A0)
+    ]
+    StatTitle: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x5C0)
+    ]
+    Icon: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x5E0)]
+    StatId: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x5F8)]
+
+    class eStatMessageTypeEnum(IntEnum):
+        Full = 0x0
+        Quick = 0x1
+        Silent = 0x2
+
+    StatMessageType: Annotated[
+        c_enum32[eStatMessageTypeEnum], Field(c_enum32[eStatMessageTypeEnum], 0x608)
+    ]
+    ShowInTerminal: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x60C)]
+    ShowStatLevel: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x60D)]
+    TelemetryUpload: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x60E)]
+    UseRankNotStats: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x60F)]
 
 
 @partial_struct
-class cGcStatRewardGroup(Structure):
-    LocIDMultiple: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)
-    ]
-    LocIDSingle: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x20)
-    ]
-    Icon: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x40)]
-    ID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x58)]
+class cGcMinMaxFloat(Structure):
+    Max: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x0)]
+    Min: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4)]
+
+
+@partial_struct
+class cGcPlayerStat(Structure):
+    Id: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
+    Value: Annotated[cGcStatValueData, Field(cGcStatValueData, 0x10)]
+
+
+@partial_struct
+class cGcPlayerStatsGroup(Structure):
+    GroupId: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
     Stats: Annotated[
-        basic.cTkDynamicArray[cGcStatRewardGroupStatData],
-        Field(basic.cTkDynamicArray[cGcStatRewardGroupStatData], 0x68),
+        basic.cTkDynamicArray[cGcPlayerStat],
+        Field(basic.cTkDynamicArray[cGcPlayerStat], 0x10),
     ]
-    BaseMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78)]
-    Currency: Annotated[
-        c_enum32[enums.cGcCurrency], Field(c_enum32[enums.cGcCurrency], 0x7C)
-    ]
-
-
-@partial_struct
-class cGcStatusMessageDefinition(Structure):
-    CustomPrefixLocID: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)
-    ]
-    Message: Annotated[basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x20)]
-    Id: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x40)]
-    DisplayDurationMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x50)]
-    Distance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x54)]
-    MissionMarkup: Annotated[
-        c_enum32[enums.cGcStatusMessageMissionMarkup],
-        Field(c_enum32[enums.cGcStatusMessageMissionMarkup], 0x58),
-    ]
-
-    class eReplicateToEnum(IntEnum):
-        None_ = 0x0
-        Fireteam = 0x1
-        Fireteam_SameUA = 0x2
-        Global = 0x3
-        Global_Distance = 0x4
-        Fireteam_Distance = 0x5
-        Fireteam_Global_Distance = 0x6
-        Not_Fireteam = 0x7
-
-    ReplicateTo: Annotated[
-        c_enum32[eReplicateToEnum], Field(c_enum32[eReplicateToEnum], 0x5C)
-    ]
-    AddFriendlyDronePrefix: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x60)]
-    AddPetNamePrefix: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x61)]
-    AddPlayerNamePrefix: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x62)]
-    IncludePlayerName: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x63)]
-    OnlyInMultiplayer: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x64)]
-    OnlyOnFireteam: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x65)]
-    PostLocally: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x66)]
+    Address: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x20)]
 
 
 @partial_struct
@@ -17102,39 +17130,49 @@ class cGcJourneyMilestoneData(Structure):
 
 
 @partial_struct
-class cGcFriendlyDroneVocabularyEntry(Structure):
-    GenericFallback: Annotated[
+class cGcStatRewardGroupStatData(Structure):
+    StatID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
+    ManualAdjust: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x10)]
+    StatMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14)]
+
+
+@partial_struct
+class cGcStatRewardGroup(Structure):
+    LocIDMultiple: Annotated[
         basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)
+    ]
+    LocIDSingle: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x20)
+    ]
+    Icon: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x40)]
+    ID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x58)]
+    Stats: Annotated[
+        basic.cTkDynamicArray[cGcStatRewardGroupStatData],
+        Field(basic.cTkDynamicArray[cGcStatRewardGroupStatData], 0x68),
+    ]
+    BaseMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78)]
+    Currency: Annotated[
+        c_enum32[enums.cGcCurrency], Field(c_enum32[enums.cGcCurrency], 0x7C)
     ]
 
 
 @partial_struct
-class cGcLeveledStatData(Structure):
-    StatLevels: Annotated[cGcStatLevelData, Field(cGcStatLevelData, 0x0)]
-    NotifyMessage: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x580)
-    ]
-    NotifyMessageSingular: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x5A0)
-    ]
-    StatTitle: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x5C0)
-    ]
-    Icon: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x5E0)]
-    StatId: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x5F8)]
+class cGcSavedInteractionDialogData(Structure):
+    Dialog: Annotated[basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)]
+    Hash: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x20)]
 
-    class eStatMessageTypeEnum(IntEnum):
-        Full = 0x0
-        Quick = 0x1
-        Silent = 0x2
 
-    StatMessageType: Annotated[
-        c_enum32[eStatMessageTypeEnum], Field(c_enum32[eStatMessageTypeEnum], 0x608)
+@partial_struct
+class cGcSavedInteractionRaceData(Structure):
+    SavedRaceIndicies: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x0)]
+    HasLoopedIndicies: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x24)]
+
+
+@partial_struct
+class cGcFriendlyDroneVocabularyEntry(Structure):
+    GenericFallback: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)
     ]
-    ShowInTerminal: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x60C)]
-    ShowStatLevel: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x60D)]
-    TelemetryUpload: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x60E)]
-    UseRankNotStats: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x60F)]
 
 
 @partial_struct
@@ -17160,36 +17198,55 @@ class cGcPetVocabularyEntry(Structure):
 
 
 @partial_struct
-class cGcMinMaxFloat(Structure):
-    Max: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x0)]
-    Min: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4)]
+class cGcInteractionData(Structure):
+    Position: Annotated[basic.Vector4f, Field(basic.Vector4f, 0x0)]
+    GalacticAddress: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x10)]
+    Value: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x18)]
 
 
 @partial_struct
-class cGcPlayerStat(Structure):
-    Id: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
-    Value: Annotated[cGcStatValueData, Field(cGcStatValueData, 0x10)]
+class cGcInteractionBuffer(Structure):
+    Interactions: Annotated[
+        basic.cTkDynamicArray[cGcInteractionData],
+        Field(basic.cTkDynamicArray[cGcInteractionData], 0x0),
+    ]
+    CurrentPos: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x10)]
 
 
 @partial_struct
-class cGcSyncBufferSaveData(Structure):
-    SpaceAddress: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x0)]
-    BufferVersion: Annotated[ctypes.c_uint32, Field(ctypes.c_uint32, 0x8)]
-    ItemsCount: Annotated[ctypes.c_uint32, Field(ctypes.c_uint32, 0xC)]
-    OwnerOnlineId: Annotated[
-        basic.cTkFixedString0x40, Field(basic.cTkFixedString0x40, 0x10)
+class cGcStatusMessageDefinition(Structure):
+    CustomPrefixLocID: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)
     ]
-    OwnerPlatformId: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x50)
+    Message: Annotated[basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x20)]
+    Id: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x40)]
+    DisplayDurationMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x50)]
+    Distance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x54)]
+    MissionMarkup: Annotated[
+        c_enum32[enums.cGcStatusMessageMissionMarkup],
+        Field(c_enum32[enums.cGcStatusMessageMissionMarkup], 0x58),
     ]
 
+    class eReplicateToEnum(IntEnum):
+        None_ = 0x0
+        Fireteam = 0x1
+        Fireteam_SameUA = 0x2
+        Global = 0x3
+        Global_Distance = 0x4
+        Fireteam_Distance = 0x5
+        Fireteam_Global_Distance = 0x6
+        Not_Fireteam = 0x7
 
-@partial_struct
-class cGcSyncBufferSaveDataArray(Structure):
-    Data: Annotated[
-        basic.cTkDynamicArray[cGcSyncBufferSaveData],
-        Field(basic.cTkDynamicArray[cGcSyncBufferSaveData], 0x0),
+    ReplicateTo: Annotated[
+        c_enum32[eReplicateToEnum], Field(c_enum32[eReplicateToEnum], 0x5C)
     ]
+    AddFriendlyDronePrefix: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x60)]
+    AddPetNamePrefix: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x61)]
+    AddPlayerNamePrefix: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x62)]
+    IncludePlayerName: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x63)]
+    OnlyInMultiplayer: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x64)]
+    OnlyOnFireteam: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x65)]
+    PostLocally: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x66)]
 
 
 @partial_struct
@@ -17216,33 +17273,32 @@ class cGcPersistentTerrainEdits(Structure):
 
 
 @partial_struct
+class cGcSyncBufferSaveData(Structure):
+    SpaceAddress: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x0)]
+    BufferVersion: Annotated[ctypes.c_uint32, Field(ctypes.c_uint32, 0x8)]
+    ItemsCount: Annotated[ctypes.c_uint32, Field(ctypes.c_uint32, 0xC)]
+    OwnerOnlineId: Annotated[
+        basic.cTkFixedString0x40, Field(basic.cTkFixedString0x40, 0x10)
+    ]
+    OwnerPlatformId: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x50)
+    ]
+
+
+@partial_struct
+class cGcSyncBufferSaveDataArray(Structure):
+    Data: Annotated[
+        basic.cTkDynamicArray[cGcSyncBufferSaveData],
+        Field(basic.cTkDynamicArray[cGcSyncBufferSaveData], 0x0),
+    ]
+
+
+@partial_struct
 class cGcSynchronisedBufferData(Structure):
     Data: Annotated[
         basic.cTkDynamicArray[ctypes.c_uint64],
         Field(basic.cTkDynamicArray[ctypes.c_uint64], 0x0),
     ]
-
-
-@partial_struct
-class cGcSavedInteractionDialogData(Structure):
-    Dialog: Annotated[basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)]
-    Hash: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x20)]
-
-
-@partial_struct
-class cGcSavedInteractionRaceData(Structure):
-    SavedRaceIndicies: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x0)]
-    HasLoopedIndicies: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x24)]
-
-
-@partial_struct
-class cGcTerrainEditsBuffer(Structure):
-    BufferAnchors: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x0)]
-    GalacticAddresses: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x1000)]
-    Edits: Annotated[cGcTerrainEdit, Field(cGcTerrainEdit, 0x1800)]
-    BufferSizes: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x3C180)]
-    BufferAges: Annotated[ctypes.c_byte, Field(ctypes.c_byte, 0x3C580)]
-    BufferProtected: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3C680)]
 
 
 @partial_struct
@@ -17306,13 +17362,6 @@ class cGcSkiffSaveData(Structure):
 class cGcWordKnowledge(Structure):
     Word: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
     Races: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x10)]
-
-
-@partial_struct
-class cGcInteractionData(Structure):
-    Position: Annotated[basic.Vector4f, Field(basic.Vector4f, 0x0)]
-    GalacticAddress: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x10)]
-    Value: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x18)]
 
 
 @partial_struct
@@ -17383,6 +17432,55 @@ class cGcSeasonalMilestoneEncryption(Structure):
     DecryptMissionId: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x90)]
     DecryptMissionSeed: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0xA0)]
     IsEncrypted: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xA4)]
+
+
+@partial_struct
+class cGcSeasonalMilestone(Structure):
+    Encryption: Annotated[
+        cGcSeasonalMilestoneEncryption, Field(cGcSeasonalMilestoneEncryption, 0x0)
+    ]
+    CantRewardMessage: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0xA8)
+    ]
+    Description: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0xC8)
+    ]
+    DescriptionDone: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0xE8)
+    ]
+    Title: Annotated[basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x108)]
+    TitleUpper: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x128)
+    ]
+    Icon: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x148)]
+    IconGrey: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x160)]
+    MissionIcon: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x178)]
+    MissionIconNotSelected: Annotated[
+        cTkTextureResource, Field(cTkTextureResource, 0x190)
+    ]
+    MissionIconSelected: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x1A8)]
+    IdToUseInMissionData: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x1C0)]
+    Mission: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x1D0)]
+    Reward: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x1E0)]
+    RewardSwitchAlt: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x1F0)]
+    Amount: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x200)]
+    BlockRendezvousMilestoneSeed: Annotated[
+        ctypes.c_int32, Field(ctypes.c_int32, 0x204)
+    ]
+    MilestoneIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x208)]
+    RendezvousIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x20C)]
+    StageIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x210)]
+    CantClaimRewardDescription: Annotated[
+        basic.cTkFixedString0x200, Field(basic.cTkFixedString0x200, 0x214)
+    ]
+    RewardDescription: Annotated[
+        basic.cTkFixedString0x200, Field(basic.cTkFixedString0x200, 0x414)
+    ]
+    DontAttemptFallbackTextSubs: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x614)]
+    GreyIfCantStart: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x615)]
+    IsOptional: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x616)]
+    IsRendezvous: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x617)]
+    IsStageControl: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x618)]
 
 
 @partial_struct
@@ -17485,55 +17583,6 @@ class cGcSavedEntitlement(Structure):
     EntitlementId: Annotated[
         basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x0)
     ]
-
-
-@partial_struct
-class cGcSeasonalMilestone(Structure):
-    Encryption: Annotated[
-        cGcSeasonalMilestoneEncryption, Field(cGcSeasonalMilestoneEncryption, 0x0)
-    ]
-    CantRewardMessage: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0xA8)
-    ]
-    Description: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0xC8)
-    ]
-    DescriptionDone: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0xE8)
-    ]
-    Title: Annotated[basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x108)]
-    TitleUpper: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x128)
-    ]
-    Icon: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x148)]
-    IconGrey: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x160)]
-    MissionIcon: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x178)]
-    MissionIconNotSelected: Annotated[
-        cTkTextureResource, Field(cTkTextureResource, 0x190)
-    ]
-    MissionIconSelected: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x1A8)]
-    IdToUseInMissionData: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x1C0)]
-    Mission: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x1D0)]
-    Reward: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x1E0)]
-    RewardSwitchAlt: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x1F0)]
-    Amount: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x200)]
-    BlockRendezvousMilestoneSeed: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x204)
-    ]
-    MilestoneIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x208)]
-    RendezvousIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x20C)]
-    StageIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x210)]
-    CantClaimRewardDescription: Annotated[
-        basic.cTkFixedString0x200, Field(basic.cTkFixedString0x200, 0x214)
-    ]
-    RewardDescription: Annotated[
-        basic.cTkFixedString0x200, Field(basic.cTkFixedString0x200, 0x414)
-    ]
-    DontAttemptFallbackTextSubs: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x614)]
-    GreyIfCantStart: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x615)]
-    IsOptional: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x616)]
-    IsRendezvous: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x617)]
-    IsStageControl: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x618)]
 
 
 @partial_struct
@@ -18667,6 +18716,18 @@ class cGcBaseBuildingEntryGroup(Structure):
 
 
 @partial_struct
+class cGcSentinelWaveGroup(Structure):
+    ExtremeWaves: Annotated[
+        basic.cTkDynamicArray[basic.TkID0x10],
+        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x0),
+    ]
+    Waves: Annotated[
+        basic.cTkDynamicArray[basic.TkID0x10],
+        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x10),
+    ]
+
+
+@partial_struct
 class cGcSettlementStatValueRange(Structure):
     MaxValue: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x0)]
     MinValue: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x4)]
@@ -18674,6 +18735,116 @@ class cGcSettlementStatValueRange(Structure):
         c_enum32[enums.cGcSettlementStatType],
         Field(c_enum32[enums.cGcSettlementStatType], 0x8),
     ]
+
+
+@partial_struct
+class cGcSettlementBuildingContribution(Structure):
+    Base: Annotated[
+        basic.cTkDynamicArray[cGcSettlementStatValueRange],
+        Field(basic.cTkDynamicArray[cGcSettlementStatValueRange], 0x0),
+    ]
+    Upgrade1: Annotated[
+        basic.cTkDynamicArray[cGcSettlementStatValueRange],
+        Field(basic.cTkDynamicArray[cGcSettlementStatValueRange], 0x10),
+    ]
+    Upgrade2: Annotated[
+        basic.cTkDynamicArray[cGcSettlementStatValueRange],
+        Field(basic.cTkDynamicArray[cGcSettlementStatValueRange], 0x20),
+    ]
+    Upgrade3: Annotated[
+        basic.cTkDynamicArray[cGcSettlementStatValueRange],
+        Field(basic.cTkDynamicArray[cGcSettlementStatValueRange], 0x30),
+    ]
+
+
+@partial_struct
+class cGcPortalData(Structure):
+    RuneRotateTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x0)]
+    KnowAllRunes: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4)]
+    SkipRuneEntry: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x5)]
+
+
+@partial_struct
+class cGcSentinelSpawnData(Structure):
+    MaxAmount: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x0)]
+    MinAmount: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x4)]
+    Type: Annotated[
+        c_enum32[enums.cGcSentinelTypes], Field(c_enum32[enums.cGcSentinelTypes], 0x8)
+    ]
+
+
+@partial_struct
+class cGcSentinelSpawnSequenceStep(Structure):
+    WavePool: Annotated[
+        basic.cTkDynamicArray[basic.TkID0x10],
+        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x0),
+    ]
+
+
+@partial_struct
+class cGcSentinelSpawnNamedSequence(Structure):
+    Id: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
+    Waves: Annotated[
+        basic.cTkDynamicArray[cGcSentinelSpawnSequenceStep],
+        Field(basic.cTkDynamicArray[cGcSentinelSpawnSequenceStep], 0x10),
+    ]
+
+
+@partial_struct
+class cGcPersistencyMissionOverride(Structure):
+    Mission: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
+    Buffer: Annotated[
+        c_enum32[enums.cGcInteractionBufferType],
+        Field(c_enum32[enums.cGcInteractionBufferType], 0x10),
+    ]
+
+
+@partial_struct
+class cGcSentinelSpawnSequence(Structure):
+    Waves: Annotated[
+        basic.cTkDynamicArray[cGcSentinelSpawnSequenceStep],
+        Field(basic.cTkDynamicArray[cGcSentinelSpawnSequenceStep], 0x0),
+    ]
+
+
+@partial_struct
+class cGcPlayerExperienceAsteroidCreatureSpawnData(Structure):
+    ID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
+    LargeMinMax: Annotated[basic.Vector2f, Field(basic.Vector2f, 0x10)]
+    MediumMinMax: Annotated[basic.Vector2f, Field(basic.Vector2f, 0x18)]
+    SmallMinMax: Annotated[basic.Vector2f, Field(basic.Vector2f, 0x20)]
+    Weight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x28)]
+
+
+@partial_struct
+class cGcSentinelSpawnSequenceGroup(Structure):
+    ExtremeSequence: Annotated[
+        cGcSentinelSpawnSequence, Field(cGcSentinelSpawnSequence, 0x0)
+    ]
+    Sequence: Annotated[cGcSentinelSpawnSequence, Field(cGcSentinelSpawnSequence, 0x10)]
+
+
+@partial_struct
+class cGcPlayerExperienceAsteroidCreatureSpawnTable(Structure):
+    LargeAsteroidSpawns: Annotated[
+        basic.cTkDynamicArray[cGcPlayerExperienceAsteroidCreatureSpawnData],
+        Field(basic.cTkDynamicArray[cGcPlayerExperienceAsteroidCreatureSpawnData], 0x0),
+    ]
+    MediumAsteroidSpawns: Annotated[
+        basic.cTkDynamicArray[cGcPlayerExperienceAsteroidCreatureSpawnData],
+        Field(
+            basic.cTkDynamicArray[cGcPlayerExperienceAsteroidCreatureSpawnData], 0x10
+        ),
+    ]
+    SmallAsteroidSpawns: Annotated[
+        basic.cTkDynamicArray[cGcPlayerExperienceAsteroidCreatureSpawnData],
+        Field(
+            basic.cTkDynamicArray[cGcPlayerExperienceAsteroidCreatureSpawnData], 0x20
+        ),
+    ]
+    LargeAsteroidSpawnPercent: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x30)]
+    MediumAsteroidSpawnPercent: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x34)]
+    SmallAsteroidSpawnPercent: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x38)]
 
 
 @partial_struct
@@ -18745,18 +18916,6 @@ class cGcPlayerExperienceSpawnData(Structure):
 
 
 @partial_struct
-class cGcSentinelWaveGroup(Structure):
-    ExtremeWaves: Annotated[
-        basic.cTkDynamicArray[basic.TkID0x10],
-        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x0),
-    ]
-    Waves: Annotated[
-        basic.cTkDynamicArray[basic.TkID0x10],
-        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x10),
-    ]
-
-
-@partial_struct
 class cGcPlayerExperienceSpawnTable(Structure):
     Event: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
     Spawns: Annotated[
@@ -18779,119 +18938,9 @@ class cGcPlayerExperienceSpawnTable(Structure):
 
 
 @partial_struct
-class cGcSettlementBuildingContribution(Structure):
-    Base: Annotated[
-        basic.cTkDynamicArray[cGcSettlementStatValueRange],
-        Field(basic.cTkDynamicArray[cGcSettlementStatValueRange], 0x0),
-    ]
-    Upgrade1: Annotated[
-        basic.cTkDynamicArray[cGcSettlementStatValueRange],
-        Field(basic.cTkDynamicArray[cGcSettlementStatValueRange], 0x10),
-    ]
-    Upgrade2: Annotated[
-        basic.cTkDynamicArray[cGcSettlementStatValueRange],
-        Field(basic.cTkDynamicArray[cGcSettlementStatValueRange], 0x20),
-    ]
-    Upgrade3: Annotated[
-        basic.cTkDynamicArray[cGcSettlementStatValueRange],
-        Field(basic.cTkDynamicArray[cGcSettlementStatValueRange], 0x30),
-    ]
-
-
-@partial_struct
 class cGcPoliceSpawnWaveData(Structure):
     ShipData: Annotated[cGcAIShipSpawnData, Field(cGcAIShipSpawnData, 0x0)]
     MaxCountsForFireteamSize: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x160)]
-
-
-@partial_struct
-class cGcPortalData(Structure):
-    RuneRotateTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x0)]
-    KnowAllRunes: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4)]
-    SkipRuneEntry: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x5)]
-
-
-@partial_struct
-class cGcSentinelSpawnData(Structure):
-    MaxAmount: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x0)]
-    MinAmount: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x4)]
-    Type: Annotated[
-        c_enum32[enums.cGcSentinelTypes], Field(c_enum32[enums.cGcSentinelTypes], 0x8)
-    ]
-
-
-@partial_struct
-class cGcSentinelSpawnSequenceStep(Structure):
-    WavePool: Annotated[
-        basic.cTkDynamicArray[basic.TkID0x10],
-        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x0),
-    ]
-
-
-@partial_struct
-class cGcSentinelSpawnNamedSequence(Structure):
-    Id: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
-    Waves: Annotated[
-        basic.cTkDynamicArray[cGcSentinelSpawnSequenceStep],
-        Field(basic.cTkDynamicArray[cGcSentinelSpawnSequenceStep], 0x10),
-    ]
-
-
-@partial_struct
-class cGcPersistencyMissionOverride(Structure):
-    Mission: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
-    Buffer: Annotated[
-        c_enum32[enums.cGcInteractionBufferType],
-        Field(c_enum32[enums.cGcInteractionBufferType], 0x10),
-    ]
-
-
-@partial_struct
-class cGcPlayerExperienceAsteroidCreatureSpawnData(Structure):
-    ID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
-    LargeMinMax: Annotated[basic.Vector2f, Field(basic.Vector2f, 0x10)]
-    MediumMinMax: Annotated[basic.Vector2f, Field(basic.Vector2f, 0x18)]
-    SmallMinMax: Annotated[basic.Vector2f, Field(basic.Vector2f, 0x20)]
-    Weight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x28)]
-
-
-@partial_struct
-class cGcSentinelSpawnSequence(Structure):
-    Waves: Annotated[
-        basic.cTkDynamicArray[cGcSentinelSpawnSequenceStep],
-        Field(basic.cTkDynamicArray[cGcSentinelSpawnSequenceStep], 0x0),
-    ]
-
-
-@partial_struct
-class cGcPlayerExperienceAsteroidCreatureSpawnTable(Structure):
-    LargeAsteroidSpawns: Annotated[
-        basic.cTkDynamicArray[cGcPlayerExperienceAsteroidCreatureSpawnData],
-        Field(basic.cTkDynamicArray[cGcPlayerExperienceAsteroidCreatureSpawnData], 0x0),
-    ]
-    MediumAsteroidSpawns: Annotated[
-        basic.cTkDynamicArray[cGcPlayerExperienceAsteroidCreatureSpawnData],
-        Field(
-            basic.cTkDynamicArray[cGcPlayerExperienceAsteroidCreatureSpawnData], 0x10
-        ),
-    ]
-    SmallAsteroidSpawns: Annotated[
-        basic.cTkDynamicArray[cGcPlayerExperienceAsteroidCreatureSpawnData],
-        Field(
-            basic.cTkDynamicArray[cGcPlayerExperienceAsteroidCreatureSpawnData], 0x20
-        ),
-    ]
-    LargeAsteroidSpawnPercent: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x30)]
-    MediumAsteroidSpawnPercent: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x34)]
-    SmallAsteroidSpawnPercent: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x38)]
-
-
-@partial_struct
-class cGcSentinelSpawnSequenceGroup(Structure):
-    ExtremeSequence: Annotated[
-        cGcSentinelSpawnSequence, Field(cGcSentinelSpawnSequence, 0x0)
-    ]
-    Sequence: Annotated[cGcSentinelSpawnSequence, Field(cGcSentinelSpawnSequence, 0x10)]
 
 
 @partial_struct
@@ -19694,6 +19743,15 @@ class cGcBaseObjectDescriptorComponentData(Structure):
 
 
 @partial_struct
+class cGcCockpitComponentData(Structure):
+    Cockpit: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
+    FoVFixedDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x10)]
+    MaxHeadPitchDown: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14)]
+    MaxHeadPitchUp: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x18)]
+    MaxHeadTurn: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C)]
+
+
+@partial_struct
 class cGcFishingRodTable(Structure):
     FishingRodResource: Annotated[
         basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)
@@ -19861,15 +19919,6 @@ class cTkNetReplicatedEntityComponentData(Structure):
 
 
 @partial_struct
-class cGcCustomisationColourPalettes(Structure):
-    CustomisationTypePalettes: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
-    Palettes: Annotated[
-        basic.cTkDynamicArray[cGcCustomisationColourPalette],
-        Field(basic.cTkDynamicArray[cGcCustomisationColourPalette], 0x1A0),
-    ]
-
-
-@partial_struct
 class cGcCustomisationTextureOptions(Structure):
     MultiTextureOptions: Annotated[
         basic.cTkDynamicArray[cGcCustomisationMultiTextureOption],
@@ -19882,22 +19931,11 @@ class cGcCustomisationTextureOptions(Structure):
 
 
 @partial_struct
-class cGcCustomisationThrusterEffects(Structure):
-    BackpackData: Annotated[
-        basic.cTkDynamicArray[cGcCustomisationBackpackData],
-        Field(basic.cTkDynamicArray[cGcCustomisationBackpackData], 0x0),
-    ]
-    FreighterEngineEffects: Annotated[
-        basic.cTkDynamicArray[cGcCustomisationFreighterEngineEffect],
-        Field(basic.cTkDynamicArray[cGcCustomisationFreighterEngineEffect], 0x10),
-    ]
-    JetpackEffects: Annotated[
-        basic.cTkDynamicArray[cGcCustomisationThrusterEffect],
-        Field(basic.cTkDynamicArray[cGcCustomisationThrusterEffect], 0x20),
-    ]
-    ShipEffects: Annotated[
-        basic.cTkDynamicArray[cGcCustomisationShipTrails],
-        Field(basic.cTkDynamicArray[cGcCustomisationShipTrails], 0x30),
+class cGcCustomisationColourPalettes(Structure):
+    CustomisationTypePalettes: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
+    Palettes: Annotated[
+        basic.cTkDynamicArray[cGcCustomisationColourPalette],
+        Field(basic.cTkDynamicArray[cGcCustomisationColourPalette], 0x1A0),
     ]
 
 
@@ -19924,6 +19962,26 @@ class cGcCustomisationShipBobbleHeads(Structure):
     BobbleHeads: Annotated[
         basic.cTkDynamicArray[cGcCustomisationBobbleHead],
         Field(basic.cTkDynamicArray[cGcCustomisationBobbleHead], 0x0),
+    ]
+
+
+@partial_struct
+class cGcCustomisationThrusterEffects(Structure):
+    BackpackData: Annotated[
+        basic.cTkDynamicArray[cGcCustomisationBackpackData],
+        Field(basic.cTkDynamicArray[cGcCustomisationBackpackData], 0x0),
+    ]
+    FreighterEngineEffects: Annotated[
+        basic.cTkDynamicArray[cGcCustomisationFreighterEngineEffect],
+        Field(basic.cTkDynamicArray[cGcCustomisationFreighterEngineEffect], 0x10),
+    ]
+    JetpackEffects: Annotated[
+        basic.cTkDynamicArray[cGcCustomisationThrusterEffect],
+        Field(basic.cTkDynamicArray[cGcCustomisationThrusterEffect], 0x20),
+    ]
+    ShipEffects: Annotated[
+        basic.cTkDynamicArray[cGcCustomisationShipTrails],
+        Field(basic.cTkDynamicArray[cGcCustomisationShipTrails], 0x30),
     ]
 
 
@@ -20218,22 +20276,6 @@ class cGcUserSettingsData(Structure):
 
 
 @partial_struct
-class cGcLeveledStatTable(Structure):
-    LeveledStatTable: Annotated[
-        basic.cTkDynamicArray[cGcLeveledStatData],
-        Field(basic.cTkDynamicArray[cGcLeveledStatData], 0x0),
-    ]
-
-
-@partial_struct
-class cGcStatGroupTable(Structure):
-    StatGroupTable: Annotated[
-        basic.cTkDynamicArray[cGcStatGroupData],
-        Field(basic.cTkDynamicArray[cGcStatGroupData], 0x0),
-    ]
-
-
-@partial_struct
 class cGcJourneyMilestoneTable(Structure):
     JourneyMilestoneTable: Annotated[
         basic.cTkDynamicArray[cGcJourneyMilestoneData],
@@ -20242,10 +20284,26 @@ class cGcJourneyMilestoneTable(Structure):
 
 
 @partial_struct
+class cGcLeveledStatTable(Structure):
+    LeveledStatTable: Annotated[
+        basic.cTkDynamicArray[cGcLeveledStatData],
+        Field(basic.cTkDynamicArray[cGcLeveledStatData], 0x0),
+    ]
+
+
+@partial_struct
 class cGcStatDefinitionTable(Structure):
     StatDefinitionTable: Annotated[
         basic.cTkDynamicArray[cGcStatDefinition],
         Field(basic.cTkDynamicArray[cGcStatDefinition], 0x0),
+    ]
+
+
+@partial_struct
+class cGcStatGroupTable(Structure):
+    StatGroupTable: Annotated[
+        basic.cTkDynamicArray[cGcStatGroupData],
+        Field(basic.cTkDynamicArray[cGcStatGroupData], 0x0),
     ]
 
 
@@ -20303,14 +20361,6 @@ class cGcCustomInventoryComponentData(Structure):
     ]
     Size: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x10)]
     Cool: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x20)]
-
-
-@partial_struct
-class cTkMetadataFilenameList(Structure):
-    Filenames: Annotated[
-        basic.cTkDynamicArray[basic.VariableSizeString],
-        Field(basic.cTkDynamicArray[basic.VariableSizeString], 0x0),
-    ]
 
 
 @partial_struct
@@ -20413,6 +20463,14 @@ class cGcScreenFilterTable(Structure):
 
 
 @partial_struct
+class cTkMetadataFilenameList(Structure):
+    Filenames: Annotated[
+        basic.cTkDynamicArray[basic.VariableSizeString],
+        Field(basic.cTkDynamicArray[basic.VariableSizeString], 0x0),
+    ]
+
+
+@partial_struct
 class cGcNetworkInterpolationComponentData(Structure):
     class eSynchroniseScaleEnum(IntEnum):
         Never = 0x0
@@ -20456,6 +20514,11 @@ class cGcItemFilterDataTable(Structure):
 
 
 @partial_struct
+class cGcPlayerEmoteList(Structure):
+    Emotes: Annotated[cGcPlayerEmote, Field(cGcPlayerEmote, 0x0)]
+
+
+@partial_struct
 class cGcGalaxyInfoIcons(Structure):
     RaceIcons: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x0)]
     EconomyIcons: Annotated[cTkTextureResource, Field(cTkTextureResource, 0xD8)]
@@ -20487,11 +20550,6 @@ class cGcMissionCommunityData(Structure):
 
 
 @partial_struct
-class cGcPlayerEmoteList(Structure):
-    Emotes: Annotated[cGcPlayerEmote, Field(cGcPlayerEmote, 0x0)]
-
-
-@partial_struct
 class cGcHistoricalSeasonDataTable(Structure):
     Table: Annotated[
         basic.cTkDynamicArray[cGcHistoricalSeasonData],
@@ -20505,14 +20563,6 @@ class cGcPlayerTitleData(Structure):
 
 
 @partial_struct
-class cGcBaitTable(Structure):
-    Bait: Annotated[
-        basic.cTkDynamicArray[cGcBaitData],
-        Field(basic.cTkDynamicArray[cGcBaitData], 0x0),
-    ]
-
-
-@partial_struct
 class cGcProductDescriptionOverrideTable(Structure):
     Table: Annotated[
         basic.cTkDynamicArray[cGcProductDescriptionOverride],
@@ -20521,10 +20571,10 @@ class cGcProductDescriptionOverrideTable(Structure):
 
 
 @partial_struct
-class cGcDialogClearanceTable(Structure):
-    Table: Annotated[
-        basic.cTkDynamicArray[cGcDialogClearanceInfo],
-        Field(basic.cTkDynamicArray[cGcDialogClearanceInfo], 0x0),
+class cGcBaitTable(Structure):
+    Bait: Annotated[
+        basic.cTkDynamicArray[cGcBaitData],
+        Field(basic.cTkDynamicArray[cGcBaitData], 0x0),
     ]
 
 
@@ -20533,6 +20583,14 @@ class cGcFishTable(Structure):
     Fish: Annotated[
         basic.cTkDynamicArray[cGcFishData],
         Field(basic.cTkDynamicArray[cGcFishData], 0x0),
+    ]
+
+
+@partial_struct
+class cGcDialogClearanceTable(Structure):
+    Table: Annotated[
+        basic.cTkDynamicArray[cGcDialogClearanceInfo],
+        Field(basic.cTkDynamicArray[cGcDialogClearanceInfo], 0x0),
     ]
 
 
@@ -20547,8 +20605,11 @@ class cGcTradingClassTable(Structure):
 
 
 @partial_struct
-class cGcItemCostTable(Structure):
-    Items: Annotated[cGcItemCostData, Field(cGcItemCostData, 0x0)]
+class cGcUnlockableTwitchRewards(Structure):
+    Table: Annotated[
+        basic.cTkDynamicArray[cGcUnlockableTwitchReward],
+        Field(basic.cTkDynamicArray[cGcUnlockableTwitchReward], 0x0),
+    ]
 
 
 @partial_struct
@@ -20560,6 +20621,11 @@ class cGcUnlockableSeasonRewards(Structure):
 
 
 @partial_struct
+class cGcItemCostTable(Structure):
+    Items: Annotated[cGcItemCostData, Field(cGcItemCostData, 0x0)]
+
+
+@partial_struct
 class cGcUnlockablePlatformRewards(Structure):
     Table: Annotated[
         basic.cTkDynamicArray[cGcUnlockablePlatformReward],
@@ -20568,10 +20634,30 @@ class cGcUnlockablePlatformRewards(Structure):
 
 
 @partial_struct
-class cGcUnlockableTwitchRewards(Structure):
+class cGcPurchaseableBuildingBlueprints(Structure):
+    GroupMaxItems: Annotated[
+        basic.cTkDynamicArray[ctypes.c_int32],
+        Field(basic.cTkDynamicArray[ctypes.c_int32], 0x0),
+    ]
     Table: Annotated[
-        basic.cTkDynamicArray[cGcUnlockableTwitchReward],
-        Field(basic.cTkDynamicArray[cGcUnlockableTwitchReward], 0x0),
+        basic.cTkDynamicArray[cGcBuildingBlueprint],
+        Field(basic.cTkDynamicArray[cGcBuildingBlueprint], 0x10),
+    ]
+
+
+@partial_struct
+class cGcPurchaseableSpecials(Structure):
+    Table: Annotated[
+        basic.cTkDynamicArray[cGcPurchaseableSpecial],
+        Field(basic.cTkDynamicArray[cGcPurchaseableSpecial], 0x0),
+    ]
+
+
+@partial_struct
+class cGcStatRewardsTable(Structure):
+    StatRewardGroups: Annotated[
+        basic.cTkDynamicArray[cGcStatRewardGroup],
+        Field(basic.cTkDynamicArray[cGcStatRewardGroup], 0x0),
     ]
 
 
@@ -20600,22 +20686,10 @@ class cGcCostTable(Structure):
 
 
 @partial_struct
-class cGcPurchaseableSpecials(Structure):
+class cGcAlienSpeechTable(Structure):
     Table: Annotated[
-        basic.cTkDynamicArray[cGcPurchaseableSpecial],
-        Field(basic.cTkDynamicArray[cGcPurchaseableSpecial], 0x0),
-    ]
-
-
-@partial_struct
-class cGcPurchaseableBuildingBlueprints(Structure):
-    GroupMaxItems: Annotated[
-        basic.cTkDynamicArray[ctypes.c_int32],
-        Field(basic.cTkDynamicArray[ctypes.c_int32], 0x0),
-    ]
-    Table: Annotated[
-        basic.cTkDynamicArray[cGcBuildingBlueprint],
-        Field(basic.cTkDynamicArray[cGcBuildingBlueprint], 0x10),
+        basic.cTkDynamicArray[cGcAlienSpeechEntry],
+        Field(basic.cTkDynamicArray[cGcAlienSpeechEntry], 0x0),
     ]
 
 
@@ -20628,18 +20702,10 @@ class cGcDiscoveryRewardLookupTable(Structure):
 
 
 @partial_struct
-class cGcStatRewardsTable(Structure):
-    StatRewardGroups: Annotated[
-        basic.cTkDynamicArray[cGcStatRewardGroup],
-        Field(basic.cTkDynamicArray[cGcStatRewardGroup], 0x0),
-    ]
-
-
-@partial_struct
-class cGcAlienSpeechTable(Structure):
+class cGcTechBoxTable(Structure):
     Table: Annotated[
-        basic.cTkDynamicArray[cGcAlienSpeechEntry],
-        Field(basic.cTkDynamicArray[cGcAlienSpeechEntry], 0x0),
+        basic.cTkDynamicArray[cGcTechBoxData],
+        Field(basic.cTkDynamicArray[cGcTechBoxData], 0x0),
     ]
 
 
@@ -20648,14 +20714,6 @@ class cGcLegacyItemTable(Structure):
     Table: Annotated[
         basic.cTkDynamicArray[cGcLegacyItem],
         Field(basic.cTkDynamicArray[cGcLegacyItem], 0x0),
-    ]
-
-
-@partial_struct
-class cGcTechBoxTable(Structure):
-    Table: Annotated[
-        basic.cTkDynamicArray[cGcTechBoxData],
-        Field(basic.cTkDynamicArray[cGcTechBoxData], 0x0),
     ]
 
 
@@ -20682,15 +20740,15 @@ class cGcAudioAreaTriggerComponentData(Structure):
 
 
 @partial_struct
+class cGcSpawnedObjectComponentData(Structure):
+    CanBeTeleported: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x0)]
+
+
+@partial_struct
 class cGcObjectSpawnerComponentData(Structure):
     Object: Annotated[cTkModelResource, Field(cTkModelResource, 0x0)]
     SpawnCooldown: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20)]
     SpawnPowerCost: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x24)]
-
-
-@partial_struct
-class cGcSpawnedObjectComponentData(Structure):
-    CanBeTeleported: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x0)]
 
 
 @partial_struct
@@ -20802,6 +20860,11 @@ class cGcBaseDefenceComponentData(Structure):
 
 
 @partial_struct
+class cGcChairComponentData(Structure):
+    pass
+
+
+@partial_struct
 class cGcByteBeatSwitchComponentData(Structure):
     Temp: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x0)]
 
@@ -20812,8 +20875,10 @@ class cGcBuildingComponentData(Structure):
 
 
 @partial_struct
-class cGcChairComponentData(Structure):
-    pass
+class cGcDiscoveryDisplayComponentData(Structure):
+    DiscoveryScanEffect: Annotated[cGcScanEffectData, Field(cGcScanEffectData, 0x0)]
+    DiscoveryScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x50)]
+    DiscoveryScalePlanets: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x54)]
 
 
 @partial_struct
@@ -20830,13 +20895,6 @@ class cTkLODComponentData(Structure):
 @partial_struct
 class cGcCustomSpaceStormComponentData(Structure):
     StormId: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
-
-
-@partial_struct
-class cGcDiscoveryDisplayComponentData(Structure):
-    DiscoveryScanEffect: Annotated[cGcScanEffectData, Field(cGcScanEffectData, 0x0)]
-    DiscoveryScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x50)]
-    DiscoveryScalePlanets: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x54)]
 
 
 @partial_struct
@@ -20925,6 +20983,11 @@ class cGcNPCHabitationComponentData(Structure):
 
 
 @partial_struct
+class cGcEncounterStateComponentData(Structure):
+    pass
+
+
+@partial_struct
 class cGcEncounterComponentData(Structure):
     InteractMissionTable: Annotated[
         basic.cTkDynamicArray[basic.TkID0x10],
@@ -20933,11 +20996,6 @@ class cGcEncounterComponentData(Structure):
     EncounterType: Annotated[
         c_enum32[enums.cGcEncounterType], Field(c_enum32[enums.cGcEncounterType], 0x10)
     ]
-
-
-@partial_struct
-class cGcEncounterStateComponentData(Structure):
-    pass
 
 
 @partial_struct
@@ -21001,20 +21059,20 @@ class cGcExhibitAssemblyComponentData(Structure):
 
 
 @partial_struct
-class cGcFishableAreaComponentData(Structure):
-    Radius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x0)]
-    SourceFishBasedOnSettlementBuildingLevel: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x4)
-    ]
-
-
-@partial_struct
 class cGcExpeditionHologramComponentData(Structure):
     SpawnOffset: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x0)]
     CaptainScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x10)]
     FrigateScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14)]
     HologramRotationSpeedDegPerSec: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x18)
+    ]
+
+
+@partial_struct
+class cGcFishableAreaComponentData(Structure):
+    Radius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x0)]
+    SourceFishBasedOnSettlementBuildingLevel: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x4)
     ]
 
 
@@ -21090,13 +21148,6 @@ class cGcGrabbableComponentData(Structure):
 
 
 @partial_struct
-class cGcLandingHelperComponentData(Structure):
-    ActiveDistanceMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x0)]
-    ActiveDistanceMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4)]
-    LandPoint: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8)]
-
-
-@partial_struct
 class cGcLadderComponentData(Structure):
     pass
 
@@ -21127,6 +21178,13 @@ class cGcLookAtComponentData(Structure):
 
 
 @partial_struct
+class cGcLandingHelperComponentData(Structure):
+    ActiveDistanceMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x0)]
+    ActiveDistanceMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4)]
+    LandPoint: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8)]
+
+
+@partial_struct
 class cGcNPCPlacementComponentData(Structure):
     PlacementInfosToApply: Annotated[
         basic.cTkDynamicArray[basic.TkID0x10],
@@ -21154,6 +21212,11 @@ class cGcObjectPlacementComponentData(Structure):
     ]
     UseNodeParent: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x30)]
     UseRaycast: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x31)]
+
+
+@partial_struct
+class cGcPortalComponentData(Structure):
+    Temp: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x0)]
 
 
 @partial_struct
@@ -21194,35 +21257,39 @@ class cGcSimpleInteractionComponentData(Structure):
         Field(basic.cTkDynamicArray[cGcInteractionBaseBuildingState], 0x178),
     ]
     Id: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x188)]
+    OnlyActiveDuringSeasons: Annotated[
+        basic.cTkDynamicArray[ctypes.c_int32],
+        Field(basic.cTkDynamicArray[ctypes.c_int32], 0x198),
+    ]
     PersistencyBufferOverride: Annotated[
         basic.cTkDynamicArray[cGcPersistencyMissionOverride],
-        Field(basic.cTkDynamicArray[cGcPersistencyMissionOverride], 0x198),
+        Field(basic.cTkDynamicArray[cGcPersistencyMissionOverride], 0x1A8),
     ]
     RewardOverrideTable: Annotated[
         basic.cTkDynamicArray[cGcRewardMissionOverride],
-        Field(basic.cTkDynamicArray[cGcRewardMissionOverride], 0x1A8),
+        Field(basic.cTkDynamicArray[cGcRewardMissionOverride], 0x1B8),
     ]
-    TriggerAction: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x1B8)]
-    TriggerActionOnPrepare: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x1C8)]
-    TriggerActionToggle: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x1D8)]
+    TriggerAction: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x1C8)]
+    TriggerActionOnPrepare: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x1D8)]
+    TriggerActionToggle: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x1E8)]
     DeactivateSimilarInteractionsNearbyRadius: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1E8)
+        ctypes.c_float, Field(ctypes.c_float, 0x1F8)
     ]
-    Delay: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1EC)]
+    Delay: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FC)]
     IncreaseCorruptSentinelWanted: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x1F0)
+        ctypes.c_int32, Field(ctypes.c_int32, 0x200)
     ]
-    InteractCrimeLevel: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1F4)]
-    InteractDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F8)]
-    InteractFiendCrimeChance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FC)]
+    InteractCrimeLevel: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x204)]
+    InteractDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x208)]
+    InteractFiendCrimeChance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20C)]
     InteractFiendCrimeType: Annotated[
-        c_enum32[enums.cGcFiendCrime], Field(c_enum32[enums.cGcFiendCrime], 0x200)
+        c_enum32[enums.cGcFiendCrime], Field(c_enum32[enums.cGcFiendCrime], 0x210)
     ]
     Rarity: Annotated[
-        c_enum32[enums.cGcRarity], Field(c_enum32[enums.cGcRarity], 0x204)
+        c_enum32[enums.cGcRarity], Field(c_enum32[enums.cGcRarity], 0x214)
     ]
     ScanIcon: Annotated[
-        c_enum32[enums.cGcDiscoveryType], Field(c_enum32[enums.cGcDiscoveryType], 0x208)
+        c_enum32[enums.cGcDiscoveryType], Field(c_enum32[enums.cGcDiscoveryType], 0x218)
     ]
 
     class eSimpleInteractionTypeEnum(IntEnum):
@@ -21268,27 +21335,43 @@ class cGcSimpleInteractionComponentData(Structure):
 
     SimpleInteractionType: Annotated[
         c_enum32[eSimpleInteractionTypeEnum],
-        Field(c_enum32[eSimpleInteractionTypeEnum], 0x20C),
+        Field(c_enum32[eSimpleInteractionTypeEnum], 0x21C),
     ]
     Size: Annotated[
-        c_enum32[enums.cGcSizeIndicator], Field(c_enum32[enums.cGcSizeIndicator], 0x210)
+        c_enum32[enums.cGcSizeIndicator], Field(c_enum32[enums.cGcSizeIndicator], 0x220)
     ]
     StatToTrack: Annotated[
-        c_enum32[enums.cGcStatsEnum], Field(c_enum32[enums.cGcStatsEnum], 0x214)
+        c_enum32[enums.cGcStatsEnum], Field(c_enum32[enums.cGcStatsEnum], 0x224)
     ]
-    ActivateLocatorsFromRarity: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x218)]
-    BroadcastTriggerAction: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x219)]
-    CanCollectInMech: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21A)]
-    DisableAnimationUntilInteract: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21B)]
-    HideContents: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21C)]
-    InteractIsCrime: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21D)]
-    MustBeVisibleToInteract: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21E)]
-    NeedsStorm: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21F)]
-    NotifyEncounter: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x220)]
-    ReseedOnRewardSuccess: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x221)]
-    StartsBuried: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x222)]
-    Use2dInteractDistance: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x223)]
-    UsePersonalPersistentBuffer: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x224)]
+    ActivateLocatorsFromRarity: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x228)]
+    BroadcastTriggerAction: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x229)]
+    CanCollectInMech: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x22A)]
+    DisableAnimationUntilInteract: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x22B)]
+    HideContents: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x22C)]
+    InteractIsCrime: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x22D)]
+    MustBeVisibleToInteract: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x22E)]
+    NeedsStorm: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x22F)]
+    NotifyEncounter: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x230)]
+    ReseedOnRewardSuccess: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x231)]
+    StartsBuried: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x232)]
+    Use2dInteractDistance: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x233)]
+    UsePersonalPersistentBuffer: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x234)]
+
+
+@partial_struct
+class cGcSquadronHologramComponentData(Structure):
+    SpawnOffset: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x0)]
+    HologramRotationSpeedDegPerSec: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x10)
+    ]
+    PilotScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14)]
+    SpawnRotation: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x18)]
+
+
+@partial_struct
+class cGcSpaceObjectComponentData(Structure):
+    Size: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x0)]
+    Strength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4)]
 
 
 @partial_struct
@@ -21311,16 +21394,6 @@ class cGcThereminComponentData(Structure):
     VolumeBBName: Annotated[
         basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x64)
     ]
-
-
-@partial_struct
-class cGcSquadronHologramComponentData(Structure):
-    SpawnOffset: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x0)]
-    HologramRotationSpeedDegPerSec: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x10)
-    ]
-    PilotScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14)]
-    SpawnRotation: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x18)]
 
 
 @partial_struct
@@ -21391,17 +21464,6 @@ class cGcTurretComponentData(Structure):
 
 
 @partial_struct
-class cGcPortalComponentData(Structure):
-    Temp: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x0)]
-
-
-@partial_struct
-class cGcSkiffComponentData(Structure):
-    ArrivalTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x0)]
-    MaximumTravelForce: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4)]
-
-
-@partial_struct
 class cGcBuoyancyComponentData(Structure):
     AirborneSpringTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x0)]
     AnchorArrivalTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4)]
@@ -21421,6 +21483,12 @@ class cGcBuoyancyComponentData(Structure):
 @partial_struct
 class cGcRocketLockerComponentData(Structure):
     NumSlots: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x0)]
+
+
+@partial_struct
+class cGcSkiffComponentData(Structure):
+    ArrivalTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x0)]
+    MaximumTravelForce: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4)]
 
 
 @partial_struct
@@ -21514,16 +21582,19 @@ class cGcScannableComponentData(Structure):
     ClearTagOnArrival: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x76)]
     DisableIfBuildingPart: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x77)]
     DisableIfInBase: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x78)]
-    GetIconAndNameFromSettlementBuilding: Annotated[
+    ForceCompassMarkerOnForScannerIcon: Annotated[
         ctypes.c_bool, Field(ctypes.c_bool, 0x79)
     ]
-    IsPlacedMarker: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x7A)]
-    MarkerActiveWithNodeInactive: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x7B)]
-    ShowInFreighterBranchRoom: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x7C)]
-    TellPlayerIfFreighterObjectUsed: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x7D)
+    GetIconAndNameFromSettlementBuilding: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x7A)
     ]
-    UseModelNode: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x7E)]
+    IsPlacedMarker: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x7B)]
+    MarkerActiveWithNodeInactive: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x7C)]
+    ShowInFreighterBranchRoom: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x7D)]
+    TellPlayerIfFreighterObjectUsed: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x7E)
+    ]
+    UseModelNode: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x7F)]
 
 
 @partial_struct
@@ -21558,6 +21629,13 @@ class cGcScanToRevealComponentData(Structure):
 
 
 @partial_struct
+class cGcEncyclopediaComponentData(Structure):
+    Type: Annotated[
+        c_enum32[enums.cGcDiscoveryType], Field(c_enum32[enums.cGcDiscoveryType], 0x0)
+    ]
+
+
+@partial_struct
 class cGcScanEffectComponentData(Structure):
     ScanEffects: Annotated[
         basic.cTkDynamicArray[cGcScanEffectData],
@@ -21567,9 +21645,15 @@ class cGcScanEffectComponentData(Structure):
 
 
 @partial_struct
-class cGcEncyclopediaComponentData(Structure):
-    Type: Annotated[
-        c_enum32[enums.cGcDiscoveryType], Field(c_enum32[enums.cGcDiscoveryType], 0x0)
+class cGcAbandonedFreighterComponentData(Structure):
+    DungeonRootScene: Annotated[cTkModelResource, Field(cTkModelResource, 0x0)]
+    MarkerLabel: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x20)
+    ]
+    MarkerIcon: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x40)]
+    DungeonOptions: Annotated[
+        basic.cTkDynamicArray[cGcFreighterDungeonChoice],
+        Field(basic.cTkDynamicArray[cGcFreighterDungeonChoice], 0x58),
     ]
 
 
@@ -21631,19 +21715,6 @@ class cGcWFCBuilding(Structure):
 
 
 @partial_struct
-class cGcAbandonedFreighterComponentData(Structure):
-    DungeonRootScene: Annotated[cTkModelResource, Field(cTkModelResource, 0x0)]
-    MarkerLabel: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x20)
-    ]
-    MarkerIcon: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x40)]
-    DungeonOptions: Annotated[
-        basic.cTkDynamicArray[cGcFreighterDungeonChoice],
-        Field(basic.cTkDynamicArray[cGcFreighterDungeonChoice], 0x58),
-    ]
-
-
-@partial_struct
 class cGcColouriseComponentData(Structure):
     PrimaryColour: Annotated[basic.Colour, Field(basic.Colour, 0x0)]
     QuaternaryColour: Annotated[basic.Colour, Field(basic.Colour, 0x10)]
@@ -21691,6 +21762,11 @@ class cGcPlayerCharacterStateTable(Structure):
     CharacterStates: Annotated[
         cGcPlayerCharacterStateData, Field(cGcPlayerCharacterStateData, 0x0)
     ]
+
+
+@partial_struct
+class cGcMultiTextureComponentData(Structure):
+    MultiTextureIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x0)]
 
 
 @partial_struct
@@ -21821,18 +21897,18 @@ class cGcCreatureLegIKComponentData(Structure):
 
 
 @partial_struct
-class cGcCreatureFilenameTable(Structure):
-    Table: Annotated[
-        basic.cTkDynamicArray[cGcCreatureFilename],
-        Field(basic.cTkDynamicArray[cGcCreatureFilename], 0x0),
-    ]
-
-
-@partial_struct
 class cGcCreatureAudioTable(Structure):
     Table: Annotated[
         basic.cTkDynamicArray[cGcCreatureVocalSoundData],
         Field(basic.cTkDynamicArray[cGcCreatureVocalSoundData], 0x0),
+    ]
+
+
+@partial_struct
+class cGcCreatureFilenameTable(Structure):
+    Table: Annotated[
+        basic.cTkDynamicArray[cGcCreatureFilename],
+        Field(basic.cTkDynamicArray[cGcCreatureFilename], 0x0),
     ]
 
 
@@ -22112,23 +22188,10 @@ class cGcSpaceSkyColourSettingList(Structure):
 
 
 @partial_struct
-class cGcNPCWordReactionTable(Structure):
-    Races: Annotated[cGcNPCWordReactionCategory, Field(cGcNPCWordReactionCategory, 0x0)]
-
-
-@partial_struct
 class cGcNPCColourTable(Structure):
     Groups: Annotated[
         basic.cTkDynamicArray[cGcNPCColourGroup],
         Field(basic.cTkDynamicArray[cGcNPCColourGroup], 0x0),
-    ]
-
-
-@partial_struct
-class cGcDeprecatedAssetsTable(Structure):
-    Table: Annotated[
-        basic.cTkDynamicArray[basic.cTkFixedString0x80],
-        Field(basic.cTkDynamicArray[basic.cTkFixedString0x80], 0x0),
     ]
 
 
@@ -22148,6 +22211,14 @@ class cGcBiomeListPerStarType(Structure):
     AbandonedLifeChance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x3B8)]
     LifeChance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x3C8)]
     ConvertDeadToWeird: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x3D8)]
+
+
+@partial_struct
+class cGcDeprecatedAssetsTable(Structure):
+    Table: Annotated[
+        basic.cTkDynamicArray[basic.cTkFixedString0x80],
+        Field(basic.cTkDynamicArray[basic.cTkFixedString0x80], 0x0),
+    ]
 
 
 @partial_struct
@@ -22372,15 +22443,6 @@ class cGcShipAccesswayComponentData(Structure):
 @partial_struct
 class cGcFreighterSyncComponentData(Structure):
     Dummy: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x0)]
-
-
-@partial_struct
-class cGcCockpitComponentData(Structure):
-    Cockpit: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
-    FoVFixedDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x10)]
-    MaxHeadPitchDown: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14)]
-    MaxHeadPitchUp: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x18)]
-    MaxHeadTurn: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C)]
 
 
 @partial_struct
@@ -23138,6 +23200,11 @@ class cTkReplacementResource(Structure):
 
 
 @partial_struct
+class cTkInputFrameArray(Structure):
+    Array: Annotated[cTkInputFrame, Field(cTkInputFrame, 0x0)]
+
+
+@partial_struct
 class cTkMaterialMetaData(Structure):
     WaveOneAmplitude: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x0)]
     WaveOneFallOff: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x10)]
@@ -23302,6 +23369,24 @@ class cTkMaterialMetaData(Structure):
 
 
 @partial_struct
+class cTkEmitterWindDrift(Structure):
+    CurveBlendMidpoint: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x0)]
+    CurveEndValue: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4)]
+    CurveMidValue: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x8)]
+    CurveStartValue: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xC)]
+    Speed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x10)]
+    Strength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14)]
+    Curve1Shape: Annotated[
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x18)
+    ]
+    Curve2Shape: Annotated[
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x19)
+    ]
+    LimitEmitterLifetime: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1A)]
+    LimitEmitterSpeed: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1B)]
+
+
+@partial_struct
 class cTkProceduralTextureLayer(Structure):
     Group: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
     LinkedLayer: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x10)]
@@ -23359,45 +23444,13 @@ class cTkEmitterRotation(Structure):
 
 
 @partial_struct
-class cTkEmitterWindDrift(Structure):
-    CurveBlendMidpoint: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x0)]
-    CurveEndValue: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4)]
-    CurveMidValue: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x8)]
-    CurveStartValue: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xC)]
-    Speed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x10)]
-    Strength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14)]
-    Curve1Shape: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x18)
-    ]
-    Curve2Shape: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x19)
-    ]
-    LimitEmitterLifetime: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1A)]
-    LimitEmitterSpeed: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1B)]
-
-
-@partial_struct
-class cTkProceduralTextureChosenOptionSampler(Structure):
-    Options: Annotated[
-        basic.cTkDynamicArray[cTkProceduralTextureChosenOption],
-        Field(basic.cTkDynamicArray[cTkProceduralTextureChosenOption], 0x0),
-    ]
-
-
-@partial_struct
-class cTkLocalisationTable(Structure):
-    Table: Annotated[
-        basic.cTkDynamicArray[cTkLocalisationEntry],
-        Field(basic.cTkDynamicArray[cTkLocalisationEntry], 0x0),
-    ]
-
-
-@partial_struct
-class cTkProceduralTextureChosenOptionList(Structure):
-    Samplers: Annotated[
-        basic.cTkDynamicArray[cTkProceduralTextureChosenOptionSampler],
-        Field(basic.cTkDynamicArray[cTkProceduralTextureChosenOptionSampler], 0x0),
-    ]
+class cTkProceduralTextureChosenOption(Structure):
+    Colour: Annotated[basic.Colour, Field(basic.Colour, 0x0)]
+    OptionName: Annotated[basic.TkID0x20, Field(basic.TkID0x20, 0x10)]
+    Group: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x30)]
+    Layer: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x40)]
+    Palette: Annotated[cTkPaletteTexture, Field(cTkPaletteTexture, 0x50)]
+    OverrideColour: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x5C)]
 
 
 @partial_struct
@@ -23897,18 +23950,6 @@ class cTkAnimBlendTree(Structure):
 
 
 @partial_struct
-class cGcResourceElement(Structure):
-    AltId: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
-    Filename: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x10)]
-    ProceduralTexture: Annotated[
-        cTkProceduralTextureChosenOptionList,
-        Field(cTkProceduralTextureChosenOptionList, 0x20),
-    ]
-    Seed: Annotated[basic.GcSeed, Field(basic.GcSeed, 0x30)]
-    ResHandle: Annotated[basic.GcResource, Field(basic.GcResource, 0x40)]
-
-
-@partial_struct
 class cGcWikiTopic(Structure):
     MissionButtonText: Annotated[
         basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)
@@ -24356,32 +24397,32 @@ class cGcPulseEncounterInfo(Structure):
         cGcPulseEncounterSpawnConditions, Field(cGcPulseEncounterSpawnConditions, 0x10)
     ]
     ChatMessageName: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x70)
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x80)
     ]
     CustomNotify: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x90)
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0xA0)
     ]
     CustomNotifyOSD: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0xB0)
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0xC0)
     ]
     CustomNotifyTitle: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0xD0)
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0xE0)
     ]
     MarkerLabel: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0xF0)
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x100)
     ]
-    MarkerIcon: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x110)]
-    Encounter: Annotated[basic.NMSTemplate, Field(basic.NMSTemplate, 0x128)]
-    Id: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x138)]
+    MarkerIcon: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x120)]
+    Encounter: Annotated[basic.NMSTemplate, Field(basic.NMSTemplate, 0x138)]
+    Id: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x148)]
     AudioEvent: Annotated[
         c_enum32[enums.cGcAudioWwiseEvents],
-        Field(c_enum32[enums.cGcAudioWwiseEvents], 0x148),
+        Field(c_enum32[enums.cGcAudioWwiseEvents], 0x158),
     ]
-    SpawnChance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14C)]
-    SpawnDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x150)]
-    HasColourOverride: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x154)]
-    Silent: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x155)]
-    UseMarkerIconInOSD: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x156)]
+    SpawnChance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15C)]
+    SpawnDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x160)]
+    HasColourOverride: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x164)]
+    Silent: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x165)]
+    UseMarkerIconInOSD: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x166)]
 
 
 @partial_struct
@@ -24414,13 +24455,6 @@ class cGcBackgroundSpaceEncounterInfo(Structure):
     SelectionWeighting: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xA8)]
     SpawnChance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xAC)]
     SpawnDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xB0)]
-
-
-@partial_struct
-class cGcPulseEncounterSpawnSpaceHostiles(Structure):
-    CustomShipResource: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x0)]
-    AttackDefinition: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x48)]
-    NumberOfShips: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x58)]
 
 
 @partial_struct
@@ -25049,6 +25083,90 @@ class cGcExplosionData(Structure):
 
 
 @partial_struct
+class cGcNPCWordReactionList(Structure):
+    Reactions: Annotated[
+        basic.cTkDynamicArray[cGcNPCProbabilityWordReactionData],
+        Field(basic.cTkDynamicArray[cGcNPCProbabilityWordReactionData], 0x0),
+    ]
+
+
+@partial_struct
+class cGcNPCWordReactionCategory(Structure):
+    Categories: Annotated[cGcNPCWordReactionList, Field(cGcNPCWordReactionList, 0x0)]
+    Fallback: Annotated[cGcNPCWordReactionList, Field(cGcNPCWordReactionList, 0x70)]
+
+
+@partial_struct
+class cGcNPCSettlementBehaviourAreaPropertyWeightEntry(Structure):
+    AreaProperty: Annotated[
+        c_enum32[enums.cGcNPCSettlementBehaviourAreaProperty],
+        Field(c_enum32[enums.cGcNPCSettlementBehaviourAreaProperty], 0x0),
+    ]
+    EntryWeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4)]
+    ExitWeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x8)]
+
+
+@partial_struct
+class cGcNPCSettlementBehaviourBuildingClassCapacityEntry(Structure):
+    BuildingClass: Annotated[
+        c_enum32[enums.cGcBuildingClassification],
+        Field(c_enum32[enums.cGcBuildingClassification], 0x0),
+    ]
+    Capacity: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x4)]
+
+
+@partial_struct
+class cGcNPCSettlementBehaviourBuildingClassWeightEntry(Structure):
+    BuildingClass: Annotated[
+        c_enum32[enums.cGcBuildingClassification],
+        Field(c_enum32[enums.cGcBuildingClassification], 0x0),
+    ]
+    EntryWeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4)]
+    ExitWeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x8)]
+
+
+@partial_struct
+class cGcNPCSettlementBehaviourObjectTypeWeightEntry(Structure):
+    ObjectType: Annotated[
+        c_enum32[enums.cGcNPCInteractiveObjectType],
+        Field(c_enum32[enums.cGcNPCInteractiveObjectType], 0x0),
+    ]
+    Weight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4)]
+
+
+@partial_struct
+class cGcNPCSettlementBehaviourEntry(Structure):
+    AreaPropertyWeights: Annotated[
+        basic.cTkDynamicArray[cGcNPCSettlementBehaviourAreaPropertyWeightEntry],
+        Field(
+            basic.cTkDynamicArray[cGcNPCSettlementBehaviourAreaPropertyWeightEntry], 0x0
+        ),
+    ]
+    BuildingClassCapacities: Annotated[
+        basic.cTkDynamicArray[cGcNPCSettlementBehaviourBuildingClassCapacityEntry],
+        Field(
+            basic.cTkDynamicArray[cGcNPCSettlementBehaviourBuildingClassCapacityEntry],
+            0x10,
+        ),
+    ]
+    BuildingClassWeights: Annotated[
+        basic.cTkDynamicArray[cGcNPCSettlementBehaviourBuildingClassWeightEntry],
+        Field(
+            basic.cTkDynamicArray[cGcNPCSettlementBehaviourBuildingClassWeightEntry],
+            0x20,
+        ),
+    ]
+    ObjectTypeWeights: Annotated[
+        basic.cTkDynamicArray[cGcNPCSettlementBehaviourObjectTypeWeightEntry],
+        Field(
+            basic.cTkDynamicArray[cGcNPCSettlementBehaviourObjectTypeWeightEntry], 0x30
+        ),
+    ]
+    RunWhenOutdoorsProbability: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x40)]
+    OnlyUseIndoorPOIs: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x44)]
+
+
+@partial_struct
 class cGcNPCRaceProbabilityModifierData(Structure):
     Modifier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x0)]
     Race: Annotated[
@@ -25099,6 +25217,12 @@ class cGcNPCPropInfo(Structure):
 
 
 @partial_struct
+class cGcNPCInteractionData(Structure):
+    Data: Annotated[cTkAttachmentData, Field(cTkAttachmentData, 0x0)]
+    ID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x38)]
+
+
+@partial_struct
 class cGcNPCReactionEntry(Structure):
     Animations: Annotated[
         basic.cTkDynamicArray[cGcNPCProbabilityReactionData],
@@ -25106,82 +25230,6 @@ class cGcNPCReactionEntry(Structure):
     ]
     Emote: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x10)]
     ReactionChance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20)]
-
-
-@partial_struct
-class cGcNPCInteractiveObjectStateTransition(Structure):
-    ExcludeTags: Annotated[
-        basic.cTkDynamicArray[basic.TkID0x10],
-        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x0),
-    ]
-    ForceIfMood: Annotated[
-        basic.cTkDynamicArray[c_enum32[enums.cGcAlienMood]],
-        Field(basic.cTkDynamicArray[c_enum32[enums.cGcAlienMood]], 0x10),
-    ]
-    NewState: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x20)]
-    RequireEvent: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x30)]
-    RequireLocator: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x40)]
-    Probability: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x50)]
-
-    class eRequireModeEnum(IntEnum):
-        Seated = 0x0
-        Standing = 0x1
-        None_ = 0x2
-
-    RequireMode: Annotated[
-        c_enum32[eRequireModeEnum], Field(c_enum32[eRequireModeEnum], 0x54)
-    ]
-
-
-@partial_struct
-class cGcNPCSettlementBehaviourBuildingClassCapacityEntry(Structure):
-    BuildingClass: Annotated[
-        c_enum32[enums.cGcBuildingClassification],
-        Field(c_enum32[enums.cGcBuildingClassification], 0x0),
-    ]
-    Capacity: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x4)]
-
-
-@partial_struct
-class cGcNPCSettlementBehaviourBuildingClassWeightEntry(Structure):
-    BuildingClass: Annotated[
-        c_enum32[enums.cGcBuildingClassification],
-        Field(c_enum32[enums.cGcBuildingClassification], 0x0),
-    ]
-    EntryWeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4)]
-    ExitWeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x8)]
-
-
-@partial_struct
-class cGcNPCSettlementBehaviourEntry(Structure):
-    AreaPropertyWeights: Annotated[
-        basic.cTkDynamicArray[cGcNPCSettlementBehaviourAreaPropertyWeightEntry],
-        Field(
-            basic.cTkDynamicArray[cGcNPCSettlementBehaviourAreaPropertyWeightEntry], 0x0
-        ),
-    ]
-    BuildingClassCapacities: Annotated[
-        basic.cTkDynamicArray[cGcNPCSettlementBehaviourBuildingClassCapacityEntry],
-        Field(
-            basic.cTkDynamicArray[cGcNPCSettlementBehaviourBuildingClassCapacityEntry],
-            0x10,
-        ),
-    ]
-    BuildingClassWeights: Annotated[
-        basic.cTkDynamicArray[cGcNPCSettlementBehaviourBuildingClassWeightEntry],
-        Field(
-            basic.cTkDynamicArray[cGcNPCSettlementBehaviourBuildingClassWeightEntry],
-            0x20,
-        ),
-    ]
-    ObjectTypeWeights: Annotated[
-        basic.cTkDynamicArray[cGcNPCSettlementBehaviourObjectTypeWeightEntry],
-        Field(
-            basic.cTkDynamicArray[cGcNPCSettlementBehaviourObjectTypeWeightEntry], 0x30
-        ),
-    ]
-    RunWhenOutdoorsProbability: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x40)]
-    OnlyUseIndoorPOIs: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x44)]
 
 
 @partial_struct
@@ -25210,17 +25258,36 @@ class cGcNPCProbabilityAnimationData(Structure):
 
 
 @partial_struct
+class cGcNPCInteractiveObjectStateTransition(Structure):
+    ExcludeTags: Annotated[
+        basic.cTkDynamicArray[basic.TkID0x10],
+        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x0),
+    ]
+    ForceIfMood: Annotated[
+        basic.cTkDynamicArray[c_enum32[enums.cGcAlienMood]],
+        Field(basic.cTkDynamicArray[c_enum32[enums.cGcAlienMood]], 0x10),
+    ]
+    NewState: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x20)]
+    RequireEvent: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x30)]
+    RequireLocator: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x40)]
+    Probability: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x50)]
+
+    class eRequireModeEnum(IntEnum):
+        Seated = 0x0
+        Standing = 0x1
+        None_ = 0x2
+
+    RequireMode: Annotated[
+        c_enum32[eRequireModeEnum], Field(c_enum32[eRequireModeEnum], 0x54)
+    ]
+
+
+@partial_struct
 class cGcNPCAnimationList(Structure):
     Animations: Annotated[
         basic.cTkDynamicArray[cGcNPCProbabilityAnimationData],
         Field(basic.cTkDynamicArray[cGcNPCProbabilityAnimationData], 0x0),
     ]
-
-
-@partial_struct
-class cGcNPCInteractionData(Structure):
-    Data: Annotated[cTkAttachmentData, Field(cTkAttachmentData, 0x0)]
-    ID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x38)]
 
 
 @partial_struct
@@ -25271,44 +25338,6 @@ class cGcNPCAnimationSetData(Structure):
 
 
 @partial_struct
-class cGcNPCInteractiveObjectState(Structure):
-    Animations: Annotated[
-        basic.cTkDynamicArray[cGcNPCProbabilityAnimationData],
-        Field(basic.cTkDynamicArray[cGcNPCProbabilityAnimationData], 0x0),
-    ]
-    Name: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x10)]
-    Transitions: Annotated[
-        basic.cTkDynamicArray[cGcNPCInteractiveObjectStateTransition],
-        Field(basic.cTkDynamicArray[cGcNPCInteractiveObjectStateTransition], 0x20),
-    ]
-    BlendTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x30)]
-    EarlyOutTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x34)]
-    MaxAnims: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x38)]
-    MaxTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x3C)]
-    MinAnims: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x40)]
-    MinTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44)]
-    Prop: Annotated[
-        c_enum32[enums.cGcNPCPropType], Field(c_enum32[enums.cGcNPCPropType], 0x48)
-    ]
-    SeatedPosture: Annotated[
-        c_enum32[enums.cGcNPCSeatedPosture],
-        Field(c_enum32[enums.cGcNPCSeatedPosture], 0x4C),
-    ]
-    SpineAdjustAmount: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x50)]
-    LookAtNode: Annotated[
-        basic.cTkFixedString0x40, Field(basic.cTkFixedString0x40, 0x54)
-    ]
-    CanConverse: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x94)]
-    FaceInvNodeDir: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x95)]
-    FaceLookAt: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x96)]
-    FaceNodeDir: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x97)]
-    FaceSpawnDir: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x98)]
-    LookAtModel: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x99)]
-    MaintainLookAt: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x9A)]
-    PlayIdles: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x9B)]
-
-
-@partial_struct
 class cGcMissionSequenceWaitForRefuel(Structure):
     DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
     Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x10)]
@@ -25328,6 +25357,15 @@ class cGcMissionSequenceWaitForRepair(Structure):
 
 
 @partial_struct
+class cGcMissionSequenceWaitForFactionStanding(Structure):
+    DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
+    Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x10)]
+    SelectFrom: Annotated[cGcFactionSelectOptions, Field(cGcFactionSelectOptions, 0x20)]
+    AmountMax: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x28)]
+    AmountMin: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x2C)]
+
+
+@partial_struct
 class cGcMissionSequenceWaitForShips(Structure):
     DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
     Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x10)]
@@ -25339,97 +25377,6 @@ class cGcMissionSequenceWaitForShips(Structure):
         c_enum32[enums.cGcRealityCommonFactions],
         Field(c_enum32[enums.cGcRealityCommonFactions], 0x34),
     ]
-
-
-@partial_struct
-class cGcMissionSequenceStartScanEvent(Structure):
-    Event: Annotated[basic.TkID0x20, Field(basic.TkID0x20, 0x0)]
-    DebugText: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0x20)
-    ]
-    InSystemRerolls: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x30)]
-    Participant: Annotated[
-        c_enum32[enums.cGcPlayerMissionParticipantType],
-        Field(c_enum32[enums.cGcPlayerMissionParticipantType], 0x34),
-    ]
-    Table: Annotated[
-        c_enum32[enums.cGcScanEventTableType],
-        Field(c_enum32[enums.cGcScanEventTableType], 0x38),
-    ]
-    Time: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x3C)]
-    AllowOtherPlayersBase: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x40)]
-    DoAerialScan: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x41)]
-    IgnoreIfAlreadyActive: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x42)]
-
-
-@partial_struct
-class cGcMissionSequenceWaitForFactionStanding(Structure):
-    DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
-    Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x10)]
-    SelectFrom: Annotated[cGcFactionSelectOptions, Field(cGcFactionSelectOptions, 0x20)]
-    AmountMax: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x28)]
-    AmountMin: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x2C)]
-
-
-@partial_struct
-class cGcMissionSequenceStartScanEventSpecific(Structure):
-    Participant: Annotated[
-        cGcPlayerMissionParticipant, Field(cGcPlayerMissionParticipant, 0x0)
-    ]
-    Event: Annotated[basic.TkID0x20, Field(basic.TkID0x20, 0x30)]
-    DebugText: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0x50)
-    ]
-    Time: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x60)]
-    AllowOtherPlayersBase: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x64)]
-    IMeantThisAndKnowWhatItDoes: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x65)]
-
-
-@partial_struct
-class cGcMissionSequenceStartSummonAnomaly(Structure):
-    DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
-    Anomaly: Annotated[
-        c_enum32[enums.cGcGalaxyStarAnomaly],
-        Field(c_enum32[enums.cGcGalaxyStarAnomaly], 0x10),
-    ]
-    SummonInFrontDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14)]
-
-
-@partial_struct
-class cGcMissionSequenceTeleport(Structure):
-    DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
-    Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x10)]
-    EffectTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20)]
-    SequenceTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x24)]
-    TeleporterType: Annotated[
-        c_enum32[enums.cGcTeleporterType],
-        Field(c_enum32[enums.cGcTeleporterType], 0x28),
-    ]
-    DoCameraShake: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2C)]
-    DoWhiteout: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2D)]
-
-
-@partial_struct
-class cGcMissionSequenceWaitForConditions(Structure):
-    ForceAllowMissionRestartEvent: Annotated[basic.TkID0x20, Field(basic.TkID0x20, 0x0)]
-    Conditions: Annotated[
-        basic.cTkDynamicArray[basic.NMSTemplate],
-        Field(basic.cTkDynamicArray[basic.NMSTemplate], 0x20),
-    ]
-    DebugText: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0x30)
-    ]
-    Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x40)]
-    ConditionTest: Annotated[
-        c_enum32[enums.cGcMissionConditionTest],
-        Field(c_enum32[enums.cGcMissionConditionTest], 0x50),
-    ]
-    StatusMessageMissionMarkup: Annotated[
-        c_enum32[enums.cGcStatusMessageMissionMarkup],
-        Field(c_enum32[enums.cGcStatusMessageMissionMarkup], 0x54),
-    ]
-    AllowedToFormatObjectives: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x58)]
-    ForceAllowMissionRestart: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x59)]
 
 
 @partial_struct
@@ -25474,6 +25421,88 @@ class cGcMissionSequenceShowMessage(Structure):
     DisableIcon: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84)]
     DisableTitlePrefix: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x85)]
     OSDUseMissionIcon: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x86)]
+
+
+@partial_struct
+class cGcMissionSequenceWaitForConditions(Structure):
+    ForceAllowMissionRestartEvent: Annotated[basic.TkID0x20, Field(basic.TkID0x20, 0x0)]
+    Conditions: Annotated[
+        basic.cTkDynamicArray[basic.NMSTemplate],
+        Field(basic.cTkDynamicArray[basic.NMSTemplate], 0x20),
+    ]
+    DebugText: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0x30)
+    ]
+    Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x40)]
+    ConditionTest: Annotated[
+        c_enum32[enums.cGcMissionConditionTest],
+        Field(c_enum32[enums.cGcMissionConditionTest], 0x50),
+    ]
+    StatusMessageMissionMarkup: Annotated[
+        c_enum32[enums.cGcStatusMessageMissionMarkup],
+        Field(c_enum32[enums.cGcStatusMessageMissionMarkup], 0x54),
+    ]
+    AllowedToFormatObjectives: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x58)]
+    ForceAllowMissionRestart: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x59)]
+
+
+@partial_struct
+class cGcMissionSequenceStartScanEvent(Structure):
+    Event: Annotated[basic.TkID0x20, Field(basic.TkID0x20, 0x0)]
+    DebugText: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0x20)
+    ]
+    InSystemRerolls: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x30)]
+    Participant: Annotated[
+        c_enum32[enums.cGcPlayerMissionParticipantType],
+        Field(c_enum32[enums.cGcPlayerMissionParticipantType], 0x34),
+    ]
+    Table: Annotated[
+        c_enum32[enums.cGcScanEventTableType],
+        Field(c_enum32[enums.cGcScanEventTableType], 0x38),
+    ]
+    Time: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x3C)]
+    AllowOtherPlayersBase: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x40)]
+    DoAerialScan: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x41)]
+    IgnoreIfAlreadyActive: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x42)]
+
+
+@partial_struct
+class cGcMissionSequenceStartScanEventSpecific(Structure):
+    Participant: Annotated[
+        cGcPlayerMissionParticipant, Field(cGcPlayerMissionParticipant, 0x0)
+    ]
+    Event: Annotated[basic.TkID0x20, Field(basic.TkID0x20, 0x30)]
+    DebugText: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0x50)
+    ]
+    Time: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x60)]
+    AllowOtherPlayersBase: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x64)]
+    IMeantThisAndKnowWhatItDoes: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x65)]
+
+
+@partial_struct
+class cGcMissionSequenceStartSummonAnomaly(Structure):
+    DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
+    Anomaly: Annotated[
+        c_enum32[enums.cGcGalaxyStarAnomaly],
+        Field(c_enum32[enums.cGcGalaxyStarAnomaly], 0x10),
+    ]
+    SummonInFrontDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14)]
+
+
+@partial_struct
+class cGcMissionSequenceTeleport(Structure):
+    DebugText: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
+    Message: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x10)]
+    EffectTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20)]
+    SequenceTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x24)]
+    TeleporterType: Annotated[
+        c_enum32[enums.cGcTeleporterType],
+        Field(c_enum32[enums.cGcTeleporterType], 0x28),
+    ]
+    DoCameraShake: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2C)]
+    DoWhiteout: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2D)]
 
 
 @partial_struct
@@ -25898,6 +25927,14 @@ class cGcMissionConditionWordCategoryKnown(Structure):
 
 
 @partial_struct
+class cGcMissionConditionSystemStarClass(Structure):
+    Class: Annotated[
+        c_enum32[enums.cGcGalaxyStarTypes],
+        Field(c_enum32[enums.cGcGalaxyStarTypes], 0x0),
+    ]
+
+
+@partial_struct
 class cGcMissionConditionUsingInteraction(Structure):
     InteractionType: Annotated[
         c_enum32[enums.cGcInteractionType],
@@ -25913,14 +25950,6 @@ class cGcMissionConditionUsingInteraction(Structure):
 class cGcMissionConditionSystemRace(Structure):
     Race: Annotated[
         c_enum32[enums.cGcAlienRace], Field(c_enum32[enums.cGcAlienRace], 0x0)
-    ]
-
-
-@partial_struct
-class cGcMissionConditionSystemStarClass(Structure):
-    Class: Annotated[
-        c_enum32[enums.cGcGalaxyStarTypes],
-        Field(c_enum32[enums.cGcGalaxyStarTypes], 0x0),
     ]
 
 
@@ -26417,74 +26446,77 @@ class cGcScanEventSolarSystemLookup(Structure):
         Field(basic.cTkDynamicArray[basic.TkID0x20], 0x20),
     ]
     NeedsResourceHint: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x30)]
-    SystemNeedsResourceHint: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x40)]
-    TradingData: Annotated[cGcPlanetTradingData, Field(cGcPlanetTradingData, 0x50)]
-    MinPlanets: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x58)]
+    NeedsSpecificCreature: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x40)]
+    SystemNeedsResourceHint: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x50)]
+    TradingData: Annotated[cGcPlanetTradingData, Field(cGcPlanetTradingData, 0x60)]
+    MinPlanets: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x68)]
     NeedsBiomeType: Annotated[
-        c_enum32[enums.cGcBiomeType], Field(c_enum32[enums.cGcBiomeType], 0x5C)
+        c_enum32[enums.cGcBiomeType], Field(c_enum32[enums.cGcBiomeType], 0x6C)
     ]
-    SamePlanetAsSeasonParty: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x60)]
+    SamePlanetAsSeasonParty: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x70)]
     StarType: Annotated[
         c_enum32[enums.cGcGalaxyStarTypes],
-        Field(c_enum32[enums.cGcGalaxyStarTypes], 0x64),
+        Field(c_enum32[enums.cGcGalaxyStarTypes], 0x74),
     ]
     UseAnomaly: Annotated[
         c_enum32[enums.cGcGalaxyStarAnomaly],
-        Field(c_enum32[enums.cGcGalaxyStarAnomaly], 0x68),
+        Field(c_enum32[enums.cGcGalaxyStarAnomaly], 0x78),
     ]
     UseBiomeSubType: Annotated[
-        c_enum32[enums.cGcBiomeSubType], Field(c_enum32[enums.cGcBiomeSubType], 0x6C)
+        c_enum32[enums.cGcBiomeSubType], Field(c_enum32[enums.cGcBiomeSubType], 0x7C)
     ]
     UseConflict: Annotated[
         c_enum32[enums.cGcPlayerConflictData],
-        Field(c_enum32[enums.cGcPlayerConflictData], 0x70),
+        Field(c_enum32[enums.cGcPlayerConflictData], 0x80),
     ]
     UseRace: Annotated[
-        c_enum32[enums.cGcAlienRace], Field(c_enum32[enums.cGcAlienRace], 0x74)
+        c_enum32[enums.cGcAlienRace], Field(c_enum32[enums.cGcAlienRace], 0x84)
     ]
-    AllowedToBePurpleWithoutAccess: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x78)]
-    AllowUnsafeMatches: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x79)]
-    AnyBiomeNotWeirdOrDead: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x7A)]
-    AnyInfestedBiome: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x7B)]
-    AnyRGBBiome: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x7C)]
-    NeedsAbandonedSystem: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x7D)]
-    NeedsBiome: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x7E)]
-    NeedsCorruptSentinelPlanet: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x7F)]
-    NeedsDeepWaterPlanet: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x80)]
-    NeedsEmptySystem: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x81)]
-    NeedsExtremeHazardPlanet: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x82)]
-    NeedsExtremeSentinelPlanet: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x83)]
-    NeedsExtremeWeatherPlanet: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84)]
-    NeedsPrimePlanet: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x85)]
-    NeedsSentinels: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x86)]
-    NeedsWaterPlanet: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x87)]
-    NeverAllowAbandoned: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x88)]
-    NeverAllowEmpty: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x89)]
+    AllowedToBePurpleWithoutAccess: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x88)]
+    AllowUnsafeMatches: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x89)]
+    AnyBiomeNotWeirdOrDead: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8A)]
+    AnyInfestedBiome: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8B)]
+    AnyRGBBiome: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8C)]
+    NeedsAbandonedSystem: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8D)]
+    NeedsBiome: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8E)]
+    NeedsCorruptSentinelPlanet: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8F)]
+    NeedsDeepWaterPlanet: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x90)]
+    NeedsEmptySystem: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x91)]
+    NeedsExtremeHazardPlanet: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x92)]
+    NeedsExtremeSentinelPlanet: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x93)]
+    NeedsExtremeWeatherPlanet: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x94)]
+    NeedsPrimePlanet: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x95)]
+    NeedsSentinels: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x96)]
+    NeedsWaterPlanet: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x97)]
+    NeverAllowAbandoned: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x98)]
+    NeverAllowEmpty: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x99)]
     NeverAllowExtremeSentinelPlanet: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x8A)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x9A)
     ]
-    NeverAllowExtremeWeatherPlanet: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8B)]
-    NeverAllowGasGiantSystem: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8C)]
-    RequireUndiscovered: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8D)]
-    SuitableForCreatureDiscovery: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8E)]
-    SuitableForCreatureTaming: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8F)]
+    NeverAllowExtremeWeatherPlanet: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x9B)]
+    NeverAllowGasGiantSystem: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x9C)]
+    RequireUndiscovered: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x9D)]
+    SuitableForCreatureDiscovery: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x9E)]
+    SuitableForCreatureTaming: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x9F)]
     SuitableForRobotCreatureDiscovery: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x90)
+        ctypes.c_bool, Field(ctypes.c_bool, 0xA0)
     ]
     SuitableForWeirdCreatureDiscovery: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x91)
+        ctypes.c_bool, Field(ctypes.c_bool, 0xA1)
     ]
     SystemNeedsCorruptSentinelPlanet: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x92)
+        ctypes.c_bool, Field(ctypes.c_bool, 0xA2)
     ]
-    SystemNeedsExtremeStormPlanet: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x93)]
-    SystemNeedsGasGiant: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x94)]
-    SystemNeedsInfestedPlanet: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x95)]
-    SystemNeedsWater: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x96)]
-    SystemNeedsWeirdPlanet: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x97)]
-    UseStarType: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x98)]
-    UseTrading: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x99)]
-    UseWealth: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x9A)]
+    SystemNeedsExtremeStormPlanet: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xA3)]
+    SystemNeedsGasGiant: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xA4)]
+    SystemNeedsInfestedPlanet: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xA5)]
+    SystemNeedsNonGasGiant: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xA6)]
+    SystemNeedsRelicPlanet: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xA7)]
+    SystemNeedsWater: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xA8)]
+    SystemNeedsWeirdPlanet: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xA9)]
+    UseStarType: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xAA)]
+    UseTrading: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xAB)]
+    UseWealth: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xAC)]
 
 
 @partial_struct
@@ -26890,20 +26922,6 @@ class cGcSettlementColourPalette(Structure):
 
 
 @partial_struct
-class cGcSelectableObjectSpawnData(Structure):
-    Resource: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x0)]
-
-
-@partial_struct
-class cGcSelectableObjectSpawnList(Structure):
-    Name: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
-    Objects: Annotated[
-        basic.cTkDynamicArray[cGcSelectableObjectSpawnData],
-        Field(basic.cTkDynamicArray[cGcSelectableObjectSpawnData], 0x10),
-    ]
-
-
-@partial_struct
 class cGcWeatherColourModifiers(Structure):
     HeavyAirColour: Annotated[cGcColourModifier, Field(cGcColourModifier, 0x0)]
     CloudColour1: Annotated[cGcColourModifier, Field(cGcColourModifier, 0xF0)]
@@ -27053,148 +27071,6 @@ class cGcPlanetSkyProperties(Structure):
 
 
 @partial_struct
-class cGcObjectSpawnData(Structure):
-    QualityVariantData: Annotated[
-        cGcObjectSpawnDataVariant, Field(cGcObjectSpawnDataVariant, 0x0)
-    ]
-    Resource: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x48)]
-    AltResources: Annotated[
-        basic.cTkDynamicArray[cGcResourceElement],
-        Field(basic.cTkDynamicArray[cGcResourceElement], 0x90),
-    ]
-    DebugName: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0xA0)]
-    DestroyedByVehicleEffect: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0xB0)]
-    ExtraTileTypes: Annotated[
-        basic.cTkDynamicArray[c_enum32[enums.cGcTerrainTileType]],
-        Field(basic.cTkDynamicArray[c_enum32[enums.cGcTerrainTileType]], 0xC0),
-    ]
-    Placement: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0xD0)]
-    QualityVariants: Annotated[
-        basic.cTkDynamicArray[cGcObjectSpawnDataVariant],
-        Field(basic.cTkDynamicArray[cGcObjectSpawnDataVariant], 0xE0),
-    ]
-    Seed: Annotated[basic.GcSeed, Field(basic.GcSeed, 0xF0)]
-
-    class eGroundColourIndexEnum(IntEnum):
-        Auto = 0x0
-        Main = 0x1
-        Patch = 0x2
-
-    GroundColourIndex: Annotated[
-        c_enum32[eGroundColourIndexEnum], Field(c_enum32[eGroundColourIndexEnum], 0x100)
-    ]
-
-    class eLargeObjectCoverageEnum(IntEnum):
-        DoNotPlace = 0x0
-        DoNotPlaceIgnoreFootprint = 0x1
-        DoNotPlaceClose = 0x2
-        DoNotPlaceAnywhereNear = 0x3
-        OnlyPlaceAround = 0x4
-        OnlyPlaceAroundIgnoreFootprint = 0x5
-        AlwaysPlace = 0x6
-
-    LargeObjectCoverage: Annotated[
-        c_enum32[eLargeObjectCoverageEnum],
-        Field(c_enum32[eLargeObjectCoverageEnum], 0x104),
-    ]
-    MaxAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x108)]
-    MaxHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x10C)]
-    MaxLower: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x110)]
-    MaxRaise: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x114)]
-    MaxScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x118)]
-    MaxScaleY: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x11C)]
-    MaxXZRotation: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x120)]
-    MaxYRotation: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x124)]
-    MinAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x128)]
-    MinHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12C)]
-    MinScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x130)]
-    MinScaleY: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x134)]
-    Order: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x138)]
-
-    class eOverlapStyleEnum(IntEnum):
-        None_ = 0x0
-        SameSeed = 0x1
-        All = 0x2
-
-    OverlapStyle: Annotated[
-        c_enum32[eOverlapStyleEnum], Field(c_enum32[eOverlapStyleEnum], 0x13C)
-    ]
-    PatchEdgeScaling: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x140)]
-
-    class ePlacementPriorityEnum(IntEnum):
-        Low = 0x0
-        Normal = 0x1
-        High = 0x2
-
-    PlacementPriority: Annotated[
-        c_enum32[ePlacementPriorityEnum], Field(c_enum32[ePlacementPriorityEnum], 0x144)
-    ]
-    ShearWindStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x148)]
-    SlopeScaling: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14C)]
-
-    class eTypeEnum(IntEnum):
-        Instanced = 0x0
-        Single = 0x1
-
-    Type: Annotated[c_enum32[eTypeEnum], Field(c_enum32[eTypeEnum], 0x150)]
-    AlignToNormal: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x154)]
-    AutoCollision: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x155)]
-    CollideWithPlayer: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x156)]
-    CollideWithPlayerVehicle: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x157)]
-    CreaturesCanEat: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x158)]
-    DestroyedByPlayerShip: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x159)]
-    DestroyedByPlayerVehicle: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x15A)]
-    DestroyedByTerrainEdit: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x15B)]
-    ImposterActivation: Annotated[
-        c_enum32[enums.cTkImposterActivation],
-        Field(c_enum32[enums.cTkImposterActivation], 0x15C),
-    ]
-    ImposterType: Annotated[
-        c_enum32[enums.cTkImposterType], Field(c_enum32[enums.cTkImposterType], 0x15D)
-    ]
-    InvisibleToCamera: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x15E)]
-    IsFloatingIsland: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x15F)]
-    MatchGroundColour: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x160)]
-    MoveToGroundOnUpgrade: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x161)]
-    RelativeToSeaLevel: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x162)]
-    SupportsScanToReveal: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x163)]
-    SwapPrimaryForRandomColour: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x164)]
-    SwapPrimaryForSecondaryColour: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x165)]
-
-
-@partial_struct
-class cGcBuildingSpawnData(Structure):
-    AABBMax: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x0)]
-    AABBMin: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x10)]
-    Resource: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x20)]
-    Seed: Annotated[basic.GcSeed, Field(basic.GcSeed, 0x68)]
-    ClusterLayouts: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x78)]
-    FlattenType: Annotated[cTkNoiseFlattenOptions, Field(cTkNoiseFlattenOptions, 0x98)]
-    Classification: Annotated[
-        c_enum32[enums.cGcBuildingClassification],
-        Field(c_enum32[enums.cGcBuildingClassification], 0xA0),
-    ]
-    ClusterLayoutCount: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0xA4)]
-    ClusterSpacing: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xA8)]
-    Density: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xAC)]
-    InstanceID: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0xB0)]
-    LSystemID: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0xB4)]
-    MaxHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xB8)]
-    MaxXZRotation: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xBC)]
-    MinHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xC0)]
-    Radius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xC4)]
-    Scale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xC8)]
-    WFCBuildingPreset: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0xCC)]
-    WFCModuleSet: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0xD0)]
-    AlignToNormal: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xD4)]
-    AutoCollision: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xD5)]
-    BuildingSizeCalculated: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xD6)]
-    GivesShelter: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xD7)]
-    IgnoreParticlesAABB: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xD8)]
-    LowerIntoGround: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xD9)]
-
-
-@partial_struct
 class cGcPetEggTraitModifierOverrideData(Structure):
     ProductID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
     SubstanceID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x10)]
@@ -27204,13 +27080,6 @@ class cGcPetEggTraitModifierOverrideData(Structure):
         Field(c_enum32[enums.cGcCreaturePetTraits], 0x24),
     ]
     IncreasesTrait: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x28)]
-
-
-@partial_struct
-class cGcSpawnComponentOption(Structure):
-    SpecificModel: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x0)]
-    Name: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x48)]
-    Seed: Annotated[basic.GcSeed, Field(basic.GcSeed, 0x58)]
 
 
 @partial_struct
@@ -27254,46 +27123,6 @@ class cGcCreatureRoleDescription(Structure):
     Role: Annotated[
         c_enum32[enums.cGcCreatureRoles], Field(c_enum32[enums.cGcCreatureRoles], 0x64)
     ]
-
-
-@partial_struct
-class cGcCreatureSpawnData(Structure):
-    ExtraResource: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x0)]
-    FemaleResource: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x48)]
-    Resource: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x90)]
-    Filter: Annotated[basic.TkID0x20, Field(basic.TkID0x20, 0xD8)]
-    CreatureID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0xF8)]
-    CreatureActiveInDayChance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x108)]
-    CreatureActiveInNightChance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x10C)]
-    CreatureDespawnDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x110)]
-    CreatureGroupsPerSquareKm: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x114)]
-    CreatureMaxGroupSize: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x118)]
-    CreatureMinGroupSize: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x11C)]
-    CreatureRole: Annotated[
-        c_enum32[enums.cGcCreatureRoles], Field(c_enum32[enums.cGcCreatureRoles], 0x120)
-    ]
-    CreatureSpawnDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x124)]
-    CreatureType: Annotated[
-        c_enum32[enums.cGcCreatureTypes], Field(c_enum32[enums.cGcCreatureTypes], 0x128)
-    ]
-    HemiSphere: Annotated[
-        c_enum32[enums.cGcCreatureHemiSphere],
-        Field(c_enum32[enums.cGcCreatureHemiSphere], 0x12C),
-    ]
-    MaxScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x130)]
-    MinScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x134)]
-    Rarity: Annotated[
-        c_enum32[enums.cGcRarity], Field(c_enum32[enums.cGcRarity], 0x138)
-    ]
-    RoleDataIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x13C)]
-    TileType: Annotated[
-        c_enum32[enums.cGcTerrainTileType],
-        Field(c_enum32[enums.cGcTerrainTileType], 0x140),
-    ]
-    AllowFur: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x144)]
-    Herd: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x145)]
-    SwapPrimaryForRandomColour: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x146)]
-    SwapPrimaryForSecondaryColour: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x147)]
 
 
 @partial_struct
@@ -27545,16 +27374,6 @@ class cGcCreatureData(Structure):
 
 
 @partial_struct
-class cGcCreaturePetEggData(Structure):
-    EggResource: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x0)]
-    HatchResource: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x48)]
-    IconResource: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x90)]
-    Id: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0xA8)]
-    HatchOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xB8)]
-    HatchScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xBC)]
-
-
-@partial_struct
 class cGcCreatureSpookFiendAttackData(Structure):
     SpitAttackAnim: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
     FollowDistanceOscillationRange: Annotated[
@@ -27707,49 +27526,19 @@ class cGcCreatureCrystalMovementData(Structure):
 
 
 @partial_struct
-class cGcCustomisationDescriptorGroupOption(Structure):
-    BoneScales: Annotated[
-        basic.cTkDynamicArray[cGcCustomisationBoneScales],
-        Field(basic.cTkDynamicArray[cGcCustomisationBoneScales], 0x0),
+class cGcCustomisationDescriptorGroupOptions(Structure):
+    GroupTitle: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)
     ]
-    ColourGroups: Annotated[
-        basic.cTkDynamicArray[cGcCustomisationColourGroup],
-        Field(basic.cTkDynamicArray[cGcCustomisationColourGroup], 0x10),
+    DescriptorGroupOptions: Annotated[
+        basic.cTkDynamicArray[cGcCustomisationDescriptorGroupOption],
+        Field(basic.cTkDynamicArray[cGcCustomisationDescriptorGroupOption], 0x20),
     ]
-    DescriptorOption: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x20)]
-    HideIfGroupActive: Annotated[
+    PrerequisiteGroup: Annotated[
         basic.cTkDynamicArray[basic.TkID0x10],
         Field(basic.cTkDynamicArray[basic.TkID0x10], 0x30),
     ]
-    SelectingAddsGroup: Annotated[
-        basic.cTkDynamicArray[basic.TkID0x10],
-        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x40),
-    ]
-    SelectingRemovesGroup: Annotated[
-        basic.cTkDynamicArray[basic.TkID0x10],
-        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x50),
-    ]
-    TextureGroups: Annotated[
-        basic.cTkDynamicArray[cGcCustomisationTextureGroup],
-        Field(basic.cTkDynamicArray[cGcCustomisationTextureGroup], 0x60),
-    ]
-    UnselectingAddsGroup: Annotated[
-        basic.cTkDynamicArray[basic.TkID0x10],
-        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x70),
-    ]
-    UnselectingRemovesGroup: Annotated[
-        basic.cTkDynamicArray[basic.TkID0x10],
-        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x80),
-    ]
-    InteractionCameraIndexOverride: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x90)
-    ]
-    InteracttionCameraFocusJointOverride: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x94)
-    ]
-    ForceDisableDoF: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xB4)]
-    ReplaceBaseBoneScales: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xB5)]
-    ReplaceBaseColours: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xB6)]
+    FirstOptionIsEmpty: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x40)]
 
 
 @partial_struct
@@ -28398,38 +28187,6 @@ class cGcRewardTableCategory(Structure):
 class cGcRewardTableEntry(Structure):
     Rarities: Annotated[cGcRewardTableCategory, Field(cGcRewardTableCategory, 0x0)]
     Id: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x168)]
-
-
-@partial_struct
-class cGcRewardSpecificShip(Structure):
-    ShipInventory: Annotated[cGcInventoryContainer, Field(cGcInventoryContainer, 0x0)]
-    Customisation: Annotated[
-        cGcCharacterCustomisationData, Field(cGcCharacterCustomisationData, 0x160)
-    ]
-    ShipResource: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x1B8)]
-    NameOverride: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x200)
-    ]
-    ShipLayout: Annotated[cGcInventoryLayout, Field(cGcInventoryLayout, 0x220)]
-    CostAmount: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x238)]
-    CostCurrency: Annotated[
-        c_enum32[enums.cGcCurrency], Field(c_enum32[enums.cGcCurrency], 0x23C)
-    ]
-    ModelViewOverride: Annotated[
-        c_enum32[enums.cGcModelViews], Field(c_enum32[enums.cGcModelViews], 0x240)
-    ]
-    OverrideSizeType: Annotated[
-        c_enum32[enums.cGcInventoryLayoutSizeType],
-        Field(c_enum32[enums.cGcInventoryLayoutSizeType], 0x244),
-    ]
-    ShipType: Annotated[
-        c_enum32[enums.cGcSpaceshipClasses],
-        Field(c_enum32[enums.cGcSpaceshipClasses], 0x248),
-    ]
-    FormatAsSeasonal: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x24C)]
-    IsGift: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x24D)]
-    IsRewardShip: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x24E)]
-    UseOverrideSizeType: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x24F)]
 
 
 @partial_struct
@@ -29270,31 +29027,32 @@ class cGcCostInteractionIndex(Structure):
 class cGcConsumableItem(Structure):
     CustomOSD: Annotated[basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)]
     ID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x20)]
-    RequiresMissionActive: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x30)]
-    RewardID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x40)]
+    RequiresCanAffordCost: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x30)]
+    RequiresMissionActive: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x40)]
+    RewardID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x50)]
     RewardOverrideTable: Annotated[
         basic.cTkDynamicArray[cGcRewardMissionOverride],
-        Field(basic.cTkDynamicArray[cGcRewardMissionOverride], 0x50),
+        Field(basic.cTkDynamicArray[cGcRewardMissionOverride], 0x60),
     ]
-    TutorialRewardID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x60)]
+    TutorialRewardID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x70)]
     AudioEventOnOpen: Annotated[
         c_enum32[enums.cGcAudioWwiseEvents],
-        Field(c_enum32[enums.cGcAudioWwiseEvents], 0x70),
+        Field(c_enum32[enums.cGcAudioWwiseEvents], 0x80),
     ]
     ButtonLocID: Annotated[
-        basic.cTkFixedString0x40, Field(basic.cTkFixedString0x40, 0x74)
+        basic.cTkFixedString0x40, Field(basic.cTkFixedString0x40, 0x84)
     ]
     ButtonSubLocID: Annotated[
-        basic.cTkFixedString0x40, Field(basic.cTkFixedString0x40, 0xB4)
+        basic.cTkFixedString0x40, Field(basic.cTkFixedString0x40, 0xC4)
     ]
     RewardFailedLocID: Annotated[
-        basic.cTkFixedString0x40, Field(basic.cTkFixedString0x40, 0xF4)
+        basic.cTkFixedString0x40, Field(basic.cTkFixedString0x40, 0x104)
     ]
-    AddCommunityTierClassIcon: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x134)]
-    CloseInventoryWhenUsed: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x135)]
-    DestroyItemWhenConsumed: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x136)]
-    OverrideMissionMustBeSelected: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x137)]
-    SuppressResourceMessage: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x138)]
+    AddCommunityTierClassIcon: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x144)]
+    CloseInventoryWhenUsed: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x145)]
+    DestroyItemWhenConsumed: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x146)]
+    OverrideMissionMustBeSelected: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x147)]
+    SuppressResourceMessage: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x148)]
 
 
 @partial_struct
@@ -30943,1936 +30701,1946 @@ class cGcUIGlobals(Structure):
     PlanetLabelOffset: Annotated[basic.Vector2f, Field(basic.Vector2f, 0x6AB8)]
     PlanetLineOffset: Annotated[basic.Vector2f, Field(basic.Vector2f, 0x6AC0)]
     PlanetMeasureOffset: Annotated[basic.Vector2f, Field(basic.Vector2f, 0x6AC8)]
-    RefinerParallax: Annotated[basic.Vector2f, Field(basic.Vector2f, 0x6AD0)]
-    SaveIconPosition: Annotated[basic.Vector2f, Field(basic.Vector2f, 0x6AD8)]
-    ScanLabelOffset: Annotated[basic.Vector2f, Field(basic.Vector2f, 0x6AE0)]
-    TargetScreenCamOffset: Annotated[basic.Vector2f, Field(basic.Vector2f, 0x6AE8)]
-    TrackCriticalHitOffset: Annotated[basic.Vector2f, Field(basic.Vector2f, 0x6AF0)]
-    TrackTypeIconOffset: Annotated[basic.Vector2f, Field(basic.Vector2f, 0x6AF8)]
+    PlanetMeasureOffsetBigText: Annotated[basic.Vector2f, Field(basic.Vector2f, 0x6AD0)]
+    PlanetMeasureOffsetMoonExtra: Annotated[
+        basic.Vector2f, Field(basic.Vector2f, 0x6AD8)
+    ]
+    RefinerParallax: Annotated[basic.Vector2f, Field(basic.Vector2f, 0x6AE0)]
+    SaveIconPosition: Annotated[basic.Vector2f, Field(basic.Vector2f, 0x6AE8)]
+    ScanLabelOffset: Annotated[basic.Vector2f, Field(basic.Vector2f, 0x6AF0)]
+    TargetScreenCamOffset: Annotated[basic.Vector2f, Field(basic.Vector2f, 0x6AF8)]
+    TrackCriticalHitOffset: Annotated[basic.Vector2f, Field(basic.Vector2f, 0x6B00)]
+    TrackTypeIconOffset: Annotated[basic.Vector2f, Field(basic.Vector2f, 0x6B08)]
     AbandonedFreighterAirlockRoomNumber: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x6B00)
+        ctypes.c_int32, Field(ctypes.c_int32, 0x6B10)
     ]
-    AccessibleUIHUDPopupScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B04)]
-    AccessibleUIPopupScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B08)]
+    AccessibleUIHUDPopupScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B14)]
+    AccessibleUIPopupScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B18)]
     AlignmentRequiredToDisableFrostedGlass: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6B0C)
+        ctypes.c_float, Field(ctypes.c_float, 0x6B1C)
     ]
-    AltimeterLineSpacing: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B10)]
-    AltimeterMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B14)]
-    AltimeterMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B18)]
-    AltimeterMinValue: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B1C)]
-    AltimeterResolution: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B20)]
-    AltimeterTextSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B24)]
-    AltimeterWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B28)]
+    AltimeterLineSpacing: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B20)]
+    AltimeterMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B24)]
+    AltimeterMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B28)]
+    AltimeterMinValue: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B2C)]
+    AltimeterResolution: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B30)]
+    AltimeterTextSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B34)]
+    AltimeterWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B38)]
     AlwaysOnHazardMultiplierCold: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6B2C)
-    ]
-    AlwaysOnHazardMultiplierHeat: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6B30)
-    ]
-    AlwaysOnHazardMultiplierRad: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6B34)
-    ]
-    AlwaysOnHazardMultiplierSpook: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6B38)
-    ]
-    AlwaysOnHazardMultiplierTox: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6B3C)
     ]
-    AlwaysOnHazardStrengthCold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B40)]
-    AlwaysOnHazardStrengthHeat: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B44)]
-    AlwaysOnHazardStrengthRad: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B48)]
-    AlwaysOnHazardStrengthSpook: Annotated[
+    AlwaysOnHazardMultiplierHeat: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x6B40)
+    ]
+    AlwaysOnHazardMultiplierRad: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x6B44)
+    ]
+    AlwaysOnHazardMultiplierSpook: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x6B48)
+    ]
+    AlwaysOnHazardMultiplierTox: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6B4C)
     ]
-    AlwaysOnHazardStrengthTox: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B50)]
-    AlwaysOnHazardThreshold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B54)]
-    AlwaysShowIconFadeDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B58)]
-    AlwaysShowIconFadeRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B5C)]
-    AmbientModeFadeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B60)]
-    ArrowBounceLeftRate1: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B64)]
-    ArrowBounceLeftRate2: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B68)]
-    ArrowBounceLeftRate3: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B6C)]
-    ArrowBounceLength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B70)]
-    ArrowBounceRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B74)]
-    ArrowBounceRightRate1: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B78)]
-    ArrowBounceRightRate2: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B7C)]
+    AlwaysOnHazardStrengthCold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B50)]
+    AlwaysOnHazardStrengthHeat: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B54)]
+    AlwaysOnHazardStrengthRad: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B58)]
+    AlwaysOnHazardStrengthSpook: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x6B5C)
+    ]
+    AlwaysOnHazardStrengthTox: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B60)]
+    AlwaysOnHazardThreshold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B64)]
+    AlwaysShowIconFadeDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B68)]
+    AlwaysShowIconFadeRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B6C)]
+    AmbientModeFadeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B70)]
+    ArrowBounceLeftRate1: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B74)]
+    ArrowBounceLeftRate2: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B78)]
+    ArrowBounceLeftRate3: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B7C)]
+    ArrowBounceLength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B80)]
+    ArrowBounceRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B84)]
+    ArrowBounceRightRate1: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B88)]
+    ArrowBounceRightRate2: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B8C)]
     AsteroidMarkerMinDisplayAngleDegrees: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6B80)
-    ]
-    AsteroidMarkerMinDisplayDistance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6B84)
-    ]
-    BaseBuildingFreeRotateDelayBeforeAudioStops: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6B88)
-    ]
-    BaseBuildingFreeRotateDelayBeforeReset: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6B8C)
-    ]
-    BaseBuildingFreeRotateSpeedPadMultiplier: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6B90)
     ]
-    BaseBuildingInputHighlightAlpha: Annotated[
+    AsteroidMarkerMinDisplayDistance: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6B94)
     ]
-    BaseBuildingInputHighlightDuration: Annotated[
+    BaseBuildingFreeRotateDelayBeforeAudioStops: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6B98)
     ]
-    BaseBuildingMaxFreeRotateSpeed: Annotated[
+    BaseBuildingFreeRotateDelayBeforeReset: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6B9C)
     ]
-    BaseBuildingMinFreeRotateSpeed: Annotated[
+    BaseBuildingFreeRotateSpeedPadMultiplier: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6BA0)
     ]
-    BaseBuildingPartsGridBreadcrumbFlashDuration: Annotated[
+    BaseBuildingInputHighlightAlpha: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6BA4)
     ]
-    BaseBuildingPartsGridMaxCursorRestorationTime: Annotated[
+    BaseBuildingInputHighlightDuration: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6BA8)
     ]
-    BaseBuildingPartsGridMinVisibilityForActive: Annotated[
+    BaseBuildingMaxFreeRotateSpeed: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6BAC)
     ]
-    BaseBuildingPartsGridPopupDelay: Annotated[
+    BaseBuildingMinFreeRotateSpeed: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6BB0)
     ]
-    BaseBuildingPartsGridScrollSpeed: Annotated[
+    BaseBuildingPartsGridBreadcrumbFlashDuration: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6BB4)
     ]
-    BaseBuildingPartsGridScrollSpeedPad: Annotated[
+    BaseBuildingPartsGridMaxCursorRestorationTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6BB8)
     ]
-    BaseBuildingPinHighlightDuration: Annotated[
+    BaseBuildingPartsGridMinVisibilityForActive: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6BBC)
     ]
-    BaseBuildingRotationResetRate: Annotated[
+    BaseBuildingPartsGridPopupDelay: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6BC0)
     ]
-    BaseBuildingScaleSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6BC4)]
-    BaseBuildingTimeToMaxRotationSpeed: Annotated[
+    BaseBuildingPartsGridScrollSpeed: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x6BC4)
+    ]
+    BaseBuildingPartsGridScrollSpeedPad: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6BC8)
     ]
-    BaseBuildingUIAdjustTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6BCC)]
-    BaseBuildingUIErrorFadeTime: Annotated[
+    BaseBuildingPinHighlightDuration: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x6BCC)
+    ]
+    BaseBuildingRotationResetRate: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6BD0)
     ]
-    BaseBuildingUIHorizontalSafeArea: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6BD4)
-    ]
-    BaseBuildingUIVerticalOffset: Annotated[
+    BaseBuildingScaleSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6BD4)]
+    BaseBuildingTimeToMaxRotationSpeed: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6BD8)
     ]
-    BaseBuildingUIVerticalOffsetEdit: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6BDC)
-    ]
-    BaseBuildingUIVerticalOffsetFromBB: Annotated[
+    BaseBuildingUIAdjustTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6BDC)]
+    BaseBuildingUIErrorFadeTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6BE0)
     ]
-    BaseBuildingUIVerticalPosWiring: Annotated[
+    BaseBuildingUIHorizontalSafeArea: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6BE4)
     ]
-    BaseBuildingUIVerticalSafeArea: Annotated[
+    BaseBuildingUIVerticalOffset: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6BE8)
     ]
-    BaseComplexityDangerFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6BEC)]
-    BaseComplexityWarningFactor: Annotated[
+    BaseBuildingUIVerticalOffsetEdit: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x6BEC)
+    ]
+    BaseBuildingUIVerticalOffsetFromBB: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6BF0)
     ]
-    BattleHUDBarInterpTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6BF4)]
-    BeaconHUDMarkerOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6BF8)]
-    BinocularMarkerSideAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6BFC)]
-    BinocularMarkerUpAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C00)]
+    BaseBuildingUIVerticalPosWiring: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x6BF4)
+    ]
+    BaseBuildingUIVerticalSafeArea: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x6BF8)
+    ]
+    BaseComplexityDangerFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6BFC)]
+    BaseComplexityWarningFactor: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x6C00)
+    ]
+    BattleHUDBarInterpTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C04)]
+    BeaconHUDMarkerOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C08)]
+    BinocularMarkerSideAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C0C)]
+    BinocularMarkerUpAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C10)]
     BinocularsAltUIRescaleFactor: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6C04)
+        ctypes.c_float, Field(ctypes.c_float, 0x6C14)
     ]
-    BinocularScreenOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C08)]
-    BinocularScreenScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C0C)]
-    BinocularsFarIconDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C10)]
-    BinocularsFarIconFadeDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C14)]
-    BinocularsFarIconOpacity: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C18)]
-    BinocularsMidIconOpacity: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C1C)]
-    BinocularsNearIconDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C20)]
-    BinocularsNearIconFadeDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C24)]
-    BinocularsNearIconOpacity: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C28)]
-    BountyMarkerOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C2C)]
-    BuildingShopMaxItems: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x6C30)]
+    BinocularScreenOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C18)]
+    BinocularScreenScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C1C)]
+    BinocularsFarIconDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C20)]
+    BinocularsFarIconFadeDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C24)]
+    BinocularsFarIconOpacity: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C28)]
+    BinocularsMidIconOpacity: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C2C)]
+    BinocularsNearIconDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C30)]
+    BinocularsNearIconFadeDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C34)]
+    BinocularsNearIconOpacity: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C38)]
+    BountyMarkerOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C3C)]
+    BuildingShopMaxItems: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x6C40)]
     BuildMenuActionMessageDuration: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6C34)
+        ctypes.c_float, Field(ctypes.c_float, 0x6C44)
     ]
-    BuildMenuItemNavAnimTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C38)]
+    BuildMenuItemNavAnimTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C48)]
     BuildMenuItemNextNavAnimTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6C3C)
+        ctypes.c_float, Field(ctypes.c_float, 0x6C4C)
     ]
     BuildMenuItemNextNavAnimWait: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6C40)
+        ctypes.c_float, Field(ctypes.c_float, 0x6C50)
     ]
-    ByteBeatArpLineWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C44)]
-    ByteBeatArpPad: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C48)]
-    ByteBeatArpRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C4C)]
-    ByteBeatIconLineWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C50)]
-    ByteBeatIconPad: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C54)]
-    ByteBeatPartSequencerPad: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C58)]
-    ByteBeatRhythmBeatPad: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C5C)]
+    ByteBeatArpLineWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C54)]
+    ByteBeatArpPad: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C58)]
+    ByteBeatArpRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C5C)]
+    ByteBeatIconLineWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C60)]
+    ByteBeatIconPad: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C64)]
+    ByteBeatPartSequencerPad: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C68)]
+    ByteBeatRhythmBeatPad: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C6C)]
     ByteBeatRhythmSequencerActiveSaturation: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6C60)
-    ]
-    ByteBeatRhythmSequencerInactiveSaturation: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6C64)
-    ]
-    ByteBeatSequencerActiveSaturation: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6C68)
-    ]
-    ByteBeatSequencerCornerRadius: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6C6C)
-    ]
-    ByteBeatSequencerHighlightLineWidth: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6C70)
     ]
-    ByteBeatSequencerInactiveSaturation: Annotated[
+    ByteBeatRhythmSequencerInactiveSaturation: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6C74)
     ]
-    ByteBeatSequencerLineWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C78)]
-    ByteBeatSequencerPad: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C7C)]
-    ByteBeatSequencerUnpoweredTintStrength: Annotated[
+    ByteBeatSequencerActiveSaturation: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x6C78)
+    ]
+    ByteBeatSequencerCornerRadius: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x6C7C)
+    ]
+    ByteBeatSequencerHighlightLineWidth: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6C80)
     ]
-    ByteBeatSliderCornerRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C84)]
-    ByteBeatSliderLineWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C88)]
-    ByteBeatSliderPad: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C8C)]
-    ByteBeatSwitchPanelAlpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C90)]
-    ByteBeatSwitchPanelSplit: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C94)]
-    ByteBeatTreeLineWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C98)]
-    ByteBeatVisLineWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C9C)]
-    ClosestDoorMarkerBuffer: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CA0)]
-    CockpitGlassDefrostTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CA4)]
-    CockpitGlassFrostTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CA8)]
-    CommunicatorMessageTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CAC)]
-    CompassAngleClamp: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CB0)]
-    CompassAngleClampSpace: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CB4)]
-    CompassAngleFade: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CB8)]
-    CompassDistanceMarkerMinScale: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6CBC)
+    ByteBeatSequencerInactiveSaturation: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x6C84)
     ]
-    CompassDistanceMaxAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CC0)]
-    CompassDistanceScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CC4)]
-    CompassDistanceScaleMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CC8)]
-    CompassDistanceScaleRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CCC)]
+    ByteBeatSequencerLineWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C88)]
+    ByteBeatSequencerPad: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C8C)]
+    ByteBeatSequencerUnpoweredTintStrength: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x6C90)
+    ]
+    ByteBeatSliderCornerRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C94)]
+    ByteBeatSliderLineWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C98)]
+    ByteBeatSliderPad: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C9C)]
+    ByteBeatSwitchPanelAlpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CA0)]
+    ByteBeatSwitchPanelSplit: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CA4)]
+    ByteBeatTreeLineWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CA8)]
+    ByteBeatVisLineWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CAC)]
+    ClosestDoorMarkerBuffer: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CB0)]
+    CockpitGlassDefrostTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CB4)]
+    CockpitGlassFrostTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CB8)]
+    CommunicatorMessageTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CBC)]
+    CompassAngleClamp: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CC0)]
+    CompassAngleClampSpace: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CC4)]
+    CompassAngleFade: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CC8)]
+    CompassDistanceMarkerMinScale: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x6CCC)
+    ]
+    CompassDistanceMaxAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CD0)]
+    CompassDistanceScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CD4)]
+    CompassDistanceScaleMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CD8)]
+    CompassDistanceScaleRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CDC)]
     CompassDistanceShipMinScale: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6CD0)
+        ctypes.c_float, Field(ctypes.c_float, 0x6CE0)
     ]
     CompassDistanceSpaceScaleMin: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6CD4)
+        ctypes.c_float, Field(ctypes.c_float, 0x6CE4)
     ]
     CompassDistanceSpaceScaleRange: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6CD8)
-    ]
-    CompassDistanceYOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CDC)]
-    CompassHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CE0)]
-    CompassIconOffsetVR: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CE4)]
-    CompassLineContractionEndAngle: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6CE8)
     ]
+    CompassDistanceYOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CEC)]
+    CompassHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CF0)]
+    CompassIconOffsetVR: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CF4)]
+    CompassLineContractionEndAngle: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x6CF8)
+    ]
     CompassLineContractionStartAngle: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6CEC)
+        ctypes.c_float, Field(ctypes.c_float, 0x6CFC)
     ]
     CompassLineContractionTargetAngle: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6CF0)
+        ctypes.c_float, Field(ctypes.c_float, 0x6D00)
     ]
-    CompassLineNotchAngleRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CF4)]
-    CompassLineNotchLength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CF8)]
-    CompassLineNotchThickness: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CFC)]
-    CompassLineNumNotches: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x6D00)]
-    CompassLineOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D04)]
-    CompassLineThickness: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D08)]
-    CompassScreenHeight: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x6D0C)]
-    CompassScreenWidth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x6D10)]
-    CompassWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D14)]
-    ConsoleTextSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D18)]
-    ConsoleTextTimeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D1C)]
-    ConsoleTextTimeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D20)]
-    ControlScrollDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D24)]
-    ControlScrollSteps: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x6D28)]
-    CreatureDistanceAlpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D2C)]
+    CompassLineNotchAngleRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D04)]
+    CompassLineNotchLength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D08)]
+    CompassLineNotchThickness: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D0C)]
+    CompassLineNumNotches: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x6D10)]
+    CompassLineOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D14)]
+    CompassLineThickness: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D18)]
+    CompassScreenHeight: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x6D1C)]
+    CompassScreenWidth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x6D20)]
+    CompassWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D24)]
+    ConsoleTextSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D28)]
+    ConsoleTextTimeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D2C)]
+    ConsoleTextTimeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D30)]
+    ControlScrollDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D34)]
+    ControlScrollSteps: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x6D38)]
+    CreatureDistanceAlpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D3C)]
     CreatureDistanceDisplayAngle: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6D30)
+        ctypes.c_float, Field(ctypes.c_float, 0x6D40)
     ]
-    CreatureDistanceFadeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D34)]
-    CreatureDistanceOffsetY: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D38)]
+    CreatureDistanceFadeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D44)]
+    CreatureDistanceOffsetY: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D48)]
     CreatureDistanceShadowOffset: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6D3C)
+        ctypes.c_float, Field(ctypes.c_float, 0x6D4C)
     ]
-    CreatureDistanceSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D40)]
-    CreatureIconMergeAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D44)]
-    CreatureIconOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D48)]
-    CreatureIconOffsetPhysics: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D4C)]
+    CreatureDistanceSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D50)]
+    CreatureIconMergeAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D54)]
+    CreatureIconOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D58)]
+    CreatureIconOffsetPhysics: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D5C)]
     CreatureInteractLabelOffsetY: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6D50)
+        ctypes.c_float, Field(ctypes.c_float, 0x6D60)
     ]
-    CreatureReticuleScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D54)]
-    CreatureRoutineMarkerTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D58)]
+    CreatureReticuleScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D64)]
+    CreatureRoutineMarkerTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D68)]
     CreatureRoutineRegionsPerFrame: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x6D5C)
+        ctypes.c_int32, Field(ctypes.c_int32, 0x6D6C)
     ]
-    CriticalMessageTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D60)]
-    CrosshairAimOffTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D64)]
-    CrosshairAimTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D68)]
-    CrosshairInnerMinFade: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D6C)]
-    CrosshairInnerMinFadeRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D70)]
-    CrosshairInterceptAlpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D74)]
-    CrosshairInterceptBaseSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D78)]
+    CriticalMessageTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D70)]
+    CrosshairAimOffTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D74)]
+    CrosshairAimTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D78)]
+    CrosshairInnerMinFade: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D7C)]
+    CrosshairInnerMinFadeRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D80)]
+    CrosshairInterceptAlpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D84)]
+    CrosshairInterceptBaseSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D88)]
     CrosshairInterceptCentreBaseSize: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6D7C)
+        ctypes.c_float, Field(ctypes.c_float, 0x6D8C)
     ]
     CrosshairInterceptLockRange: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6D80)
+        ctypes.c_float, Field(ctypes.c_float, 0x6D90)
     ]
-    CrosshairInterceptSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D84)]
+    CrosshairInterceptSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D94)]
     CrosshairInterceptSpringTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6D88)
+        ctypes.c_float, Field(ctypes.c_float, 0x6D98)
     ]
-    CrosshairLeadCornerOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D8C)]
-    CrosshairLeadFadeRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D90)]
-    CrosshairLeadFadeSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D94)]
-    CrosshairLeadInDelay: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D98)]
-    CrosshairLeadInTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D9C)]
-    CrosshairLeadPulseSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DA0)]
-    CrosshairLeadScaleIn: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DA4)]
-    CrosshairLeadSpring: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DA8)]
-    CrosshairLeadSpringOff: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DAC)]
-    CrosshairLeadTopLock: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DB0)]
-    CrosshairLeadTopOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DB4)]
-    CrosshairOffsetHmd: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DB8)]
-    CrosshairOffsetHmdUp: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DBC)]
-    CrosshairScaleHmd: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DC0)]
-    CrosshairScreenHeight: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x6DC4)]
-    CrosshairScreenWidth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x6DC8)]
-    CrosshairSpringAimTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DCC)]
-    CrosshairSpringTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DD0)]
-    CrosshairTargetLockSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DD4)]
-    CursorHoverSlowFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DD8)]
-    CursorHoverSlowFactorMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DDC)]
-    CursorHoverSlowFixedValue: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DE0)]
+    CrosshairLeadCornerOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6D9C)]
+    CrosshairLeadFadeRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DA0)]
+    CrosshairLeadFadeSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DA4)]
+    CrosshairLeadInDelay: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DA8)]
+    CrosshairLeadInTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DAC)]
+    CrosshairLeadPulseSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DB0)]
+    CrosshairLeadScaleIn: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DB4)]
+    CrosshairLeadSpring: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DB8)]
+    CrosshairLeadSpringOff: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DBC)]
+    CrosshairLeadTopLock: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DC0)]
+    CrosshairLeadTopOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DC4)]
+    CrosshairOffsetHmd: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DC8)]
+    CrosshairOffsetHmdUp: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DCC)]
+    CrosshairScaleHmd: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DD0)]
+    CrosshairScreenHeight: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x6DD4)]
+    CrosshairScreenWidth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x6DD8)]
+    CrosshairSpringAimTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DDC)]
+    CrosshairSpringTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DE0)]
+    CrosshairTargetLockSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DE4)]
+    CursorHoverSlowFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DE8)]
+    CursorHoverSlowFactorMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DEC)]
+    CursorHoverSlowFixedValue: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DF0)]
     DamageDirectionIndicatorOnScreenRadiusMultiplier: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6DE4)
+        ctypes.c_float, Field(ctypes.c_float, 0x6DF4)
     ]
-    DamageImpactMergeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DE8)]
-    DamageImpactMinDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DEC)]
+    DamageImpactMergeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DF8)]
+    DamageImpactMinDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DFC)]
     DamageImpactTimeBetweenNumbers: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6DF0)
+        ctypes.c_float, Field(ctypes.c_float, 0x6E00)
     ]
-    DamageNumberBlackAlpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DF4)]
-    DamageNumberFadeIn: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DF8)]
-    DamageNumberFadeOut: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6DFC)]
-    DamageNumberLaserMaxDamage: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E00)]
-    DamageNumberLaserMinDamage: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E04)]
-    DamageNumberOffsetX: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E08)]
-    DamageNumberOffsetY: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E0C)]
-    DamageNumberOutline: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E10)]
-    DamageNumberOutline2: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E14)]
-    DamageNumberSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E18)]
+    DamageNumberBlackAlpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E04)]
+    DamageNumberFadeIn: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E08)]
+    DamageNumberFadeOut: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E0C)]
+    DamageNumberLaserMaxDamage: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E10)]
+    DamageNumberLaserMinDamage: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E14)]
+    DamageNumberOffsetX: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E18)]
+    DamageNumberOffsetY: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E1C)]
+    DamageNumberOutline: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E20)]
+    DamageNumberOutline2: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E24)]
+    DamageNumberSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E28)]
     DamageNumberSizeCritMultiplier: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6E1C)
+        ctypes.c_float, Field(ctypes.c_float, 0x6E2C)
     ]
-    DamageNumberSizeInShip: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E20)]
+    DamageNumberSizeInShip: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E30)]
     DamageNumberSizeLaserMultiplier: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6E24)
-    ]
-    DamageNumberTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E28)]
-    DamageNumberUpOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E2C)]
-    DamagePerSecondSampleTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E30)]
-    DamageScannableHighlightTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6E34)
     ]
-    DamageTrackArrowTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E38)]
-    DeathMessageSwitchTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E3C)]
-    DeathMessageTotalTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E40)]
-    DebugMedalRank: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x6E44)]
+    DamageNumberTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E38)]
+    DamageNumberUpOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E3C)]
+    DamagePerSecondSampleTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E40)]
+    DamageScannableHighlightTime: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x6E44)
+    ]
+    DamageTrackArrowTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E48)]
+    DeathMessageSwitchTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E4C)]
+    DeathMessageTotalTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E50)]
+    DebugMedalRank: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x6E54)]
     DeepSeaHazardMultiplierCold: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6E48)
-    ]
-    DeepSeaHazardMultiplierHeat: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6E4C)
-    ]
-    DeepSeaHazardMultiplierRad: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E50)]
-    DeepSeaHazardMultiplierTox: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E54)]
-    DelayBeforeHidingHangarAfterGalaxyMap: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6E58)
     ]
-    DelayBeforeShowingHangarIntoGalaxyMap: Annotated[
+    DeepSeaHazardMultiplierHeat: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6E5C)
     ]
-    DescriptionTextDelay: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E60)]
-    DescriptionTextSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E64)]
-    DescriptionTextSpeedProgressive: Annotated[
+    DeepSeaHazardMultiplierRad: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E60)]
+    DeepSeaHazardMultiplierTox: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E64)]
+    DelayBeforeHidingHangarAfterGalaxyMap: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6E68)
     ]
-    DescriptionTextTimeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E6C)]
-    DescriptionTextTimeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E70)]
-    DetailMessageDismissTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E74)]
-    DroneIndicatorCentreRadiusMax: Annotated[
+    DelayBeforeShowingHangarIntoGalaxyMap: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x6E6C)
+    ]
+    DescriptionTextDelay: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E70)]
+    DescriptionTextSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E74)]
+    DescriptionTextSpeedProgressive: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6E78)
     ]
+    DescriptionTextTimeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E7C)]
+    DescriptionTextTimeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E80)]
+    DetailMessageDismissTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E84)]
+    DroneIndicatorCentreRadiusMax: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x6E88)
+    ]
     DroneIndicatorCentreRadiusMin: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6E7C)
+        ctypes.c_float, Field(ctypes.c_float, 0x6E8C)
     ]
-    DroneIndicatorFadeRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E80)]
-    DroneIndicatorRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E84)]
-    EggModifiyAnimLoopTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E88)]
-    EggModifiyAnimMaxSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E8C)]
-    EndOfSeasonAlertDelay: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E90)]
+    DroneIndicatorFadeRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E90)]
+    DroneIndicatorRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E94)]
+    EggModifiyAnimLoopTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E98)]
+    EggModifiyAnimMaxSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E9C)]
+    EndOfSeasonAlertDelay: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6EA0)]
     ExocraftHUDMarkerHideDistance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6E94)
-    ]
-    ExocraftHUDMarkerOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E98)]
-    ExpeditionStageChangeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6E9C)]
-    EyeTrackingCursorBlendRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6EA0)]
-    EyeTrackingCursorBlendRateGameModeSelect: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6EA4)
     ]
+    ExocraftHUDMarkerOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6EA8)]
+    ExpeditionStageChangeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6EAC)]
+    EyeTrackingCursorBlendRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6EB0)]
+    EyeTrackingCursorBlendRateGameModeSelect: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x6EB4)
+    ]
     EyeTrackingPopupLookAwayTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6EA8)
+        ctypes.c_float, Field(ctypes.c_float, 0x6EB8)
     ]
-    EyeTrackingStickyHoverTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6EAC)]
+    EyeTrackingStickyHoverTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6EBC)]
     EyeTrackingTimeBeforePopupsActivate: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6EB0)
+        ctypes.c_float, Field(ctypes.c_float, 0x6EC0)
     ]
-    FeedFrigateAnimAlphaChange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6EB4)]
-    FeedFrigateAnimNumPeriods: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x6EB8)]
-    FeedFrigateAnimPeriod: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6EBC)]
-    FeedFrigateAnimScaleChange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6EC0)]
+    FeedFrigateAnimAlphaChange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6EC4)]
+    FeedFrigateAnimNumPeriods: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x6EC8)]
+    FeedFrigateAnimPeriod: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6ECC)]
+    FeedFrigateAnimScaleChange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6ED0)]
     ForceOpenHazardProtInventoryThreshold: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x6EC4)
+        ctypes.c_int32, Field(ctypes.c_int32, 0x6ED4)
     ]
     FreighterCommanderMarkerMinDistance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6EC8)
-    ]
-    FreighterEntranceOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6ECC)]
-    FreighterHighlightRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6ED0)]
-    FreighterLeaderIconDistance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6ED4)
-    ]
-    FreighterMegaWarpTransitionTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6ED8)
     ]
-    FreighterSummonDelay: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6EDC)]
-    FreighterSummonGridSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6EE0)]
-    FreighterSummonLookTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6EE4)]
-    FreighterSummonOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6EE8)]
-    FreighterSummonOffsetPulse: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6EEC)]
-    FreighterSummonPitch: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6EF0)]
+    FreighterEntranceOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6EDC)]
+    FreighterHighlightRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6EE0)]
+    FreighterLeaderIconDistance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x6EE4)
+    ]
+    FreighterMegaWarpTransitionTime: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x6EE8)
+    ]
+    FreighterSummonDelay: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6EEC)]
+    FreighterSummonGridSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6EF0)]
+    FreighterSummonLookTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6EF4)]
+    FreighterSummonOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6EF8)]
+    FreighterSummonOffsetPulse: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6EFC)]
+    FreighterSummonPitch: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F00)]
     FreighterSummonPlanetOffset: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6EF4)
-    ]
-    FreighterSummonPulseFadeAmount: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6EF8)
-    ]
-    FreighterSummonPulseRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6EFC)]
-    FreighterSummonTurn: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F00)]
-    FreighterSummonTurnAngleIncrement: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6F04)
     ]
+    FreighterSummonPulseFadeAmount: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x6F08)
+    ]
+    FreighterSummonPulseRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F0C)]
+    FreighterSummonTurn: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F10)]
+    FreighterSummonTurnAngleIncrement: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x6F14)
+    ]
     FreighterSummonTurnNumTries: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x6F08)
+        ctypes.c_int32, Field(ctypes.c_int32, 0x6F18)
     ]
-    FreighterSurfaceMinAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F0C)]
+    FreighterSurfaceMinAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F1C)]
     FrigateDamageIconVisibilityDistance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6F10)
+        ctypes.c_float, Field(ctypes.c_float, 0x6F20)
     ]
-    FrigateIconOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F14)]
+    FrigateIconOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F24)]
     FrigatePurchaseNotificationResetDistanceMultiplier: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6F18)
+        ctypes.c_float, Field(ctypes.c_float, 0x6F28)
     ]
-    FrontendActivateSplit: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F1C)]
-    FrontendActivateTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F20)]
-    FrontendBGAlpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F24)]
-    FrontendBootBarTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F28)]
-    FrontendBootTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F2C)]
-    FrontendConfirmTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F30)]
-    FrontendConfirmTimeFast: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F34)]
+    FrontendActivateSplit: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F2C)]
+    FrontendActivateTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F30)]
+    FrontendBGAlpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F34)]
+    FrontendBootBarTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F38)]
+    FrontendBootTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F3C)]
+    FrontendConfirmTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F40)]
+    FrontendConfirmTimeFast: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F44)]
     FrontendConfirmTimeMouseMultiplier: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6F38)
+        ctypes.c_float, Field(ctypes.c_float, 0x6F48)
     ]
-    FrontendConfirmTimeSlow: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F3C)]
-    FrontendCursorOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F40)]
-    FrontendCursorSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F44)]
-    FrontendCursorWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F48)]
-    FrontendDeactivateSplit: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F4C)]
-    FrontendDeactivateTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F50)]
-    FrontendDoFBlurMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F54)]
-    FrontendDoFFarPlane: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F58)]
-    FrontendDoFFarPlaneFade: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F5C)]
-    FrontendDoFNearPlane: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F60)]
-    FrontendOffsetVR: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F64)]
-    FrontendShineSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F68)]
-    FrontendStatCircleWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F6C)]
+    FrontendConfirmTimeSlow: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F4C)]
+    FrontendCursorOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F50)]
+    FrontendCursorSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F54)]
+    FrontendCursorWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F58)]
+    FrontendDeactivateSplit: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F5C)]
+    FrontendDeactivateTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F60)]
+    FrontendDoFBlurMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F64)]
+    FrontendDoFFarPlane: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F68)]
+    FrontendDoFFarPlaneFade: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F6C)]
+    FrontendDoFNearPlane: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F70)]
+    FrontendOffsetVR: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F74)]
+    FrontendShineSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F78)]
+    FrontendStatCircleWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F7C)]
     FrontendStatCircleWidthExtra: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6F70)
-    ]
-    FrontendTitleFontSpacing: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F74)]
-    FrontendToolbarTextHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F78)]
-    FrontendToolbarTextHeightSelected: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6F7C)
-    ]
-    FrontendTouchConfirmTimeFastMultiplier: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6F80)
     ]
+    FrontendTitleFontSpacing: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F84)]
+    FrontendToolbarTextHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F88)]
+    FrontendToolbarTextHeightSelected: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x6F8C)
+    ]
+    FrontendTouchConfirmTimeFastMultiplier: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x6F90)
+    ]
     FrontendWaitFadeProgressiveDialogOut: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6F84)
-    ]
-    FrontendWaitFadeTextFrameOut: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6F88)
-    ]
-    FrontendWaitFadeTextOut: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F8C)]
-    FrontendWaitInitial: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F90)]
-    FrontendWaitInitialTerminal: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x6F94)
     ]
-    FrontendWaitResponse: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F98)]
-    FrontendWaitResponseOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F9C)]
-    GalaxyMapRadialBorder: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FA0)]
-    GalaxyMapRadialTargetDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FA4)]
-    GalmapDiscoveryOffsetVR: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FA8)]
+    FrontendWaitFadeTextFrameOut: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x6F98)
+    ]
+    FrontendWaitFadeTextOut: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F9C)]
+    FrontendWaitInitial: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FA0)]
+    FrontendWaitInitialTerminal: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x6FA4)
+    ]
+    FrontendWaitResponse: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FA8)]
+    FrontendWaitResponseOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FAC)]
+    GalaxyMapRadialBorder: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FB0)]
+    GalaxyMapRadialTargetDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FB4)]
+    GalmapDiscoveryOffsetVR: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FB8)]
     GameModeSelectColourFadeTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6FAC)
+        ctypes.c_float, Field(ctypes.c_float, 0x6FBC)
     ]
-    GridDecayRateSwitchValue: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FB0)]
-    GridFlickerAmp: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FB4)]
-    GridFlickerBaseAlpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FB8)]
-    GridFlickerFreq: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FBC)]
-    HandButtonClickTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FC0)]
-    HandButtonCursorScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FC4)]
-    HandButtonDotRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FC8)]
+    GDKHandheldMinFontHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FC0)]
+    GridDecayRateSwitchValue: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FC4)]
+    GridFlickerAmp: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FC8)]
+    GridFlickerBaseAlpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FCC)]
+    GridFlickerFreq: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FD0)]
+    HandButtonClickTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FD4)]
+    HandButtonCursorScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FD8)]
+    HandButtonDotRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FDC)]
     HandButtonFrontendCursorScale: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6FCC)
+        ctypes.c_float, Field(ctypes.c_float, 0x6FE0)
     ]
-    HandButtonNearDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FD0)]
-    HandButtonPostClickTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FD4)]
-    HandButtonPulseRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FD8)]
-    HandButtonPulseThickness: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FDC)]
-    HandButtonPushDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FE0)]
-    HandButtonRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FE4)]
-    HandButtonRadiusClick: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FE8)]
-    HandButtonRadiusTouch: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FEC)]
-    HandButtonRadiusTouchNear: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FF0)]
+    HandButtonNearDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FE4)]
+    HandButtonPostClickTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FE8)]
+    HandButtonPulseRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FEC)]
+    HandButtonPulseThickness: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FF0)]
+    HandButtonPushDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FF4)]
+    HandButtonRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FF8)]
+    HandButtonRadiusClick: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FFC)]
+    HandButtonRadiusTouch: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7000)]
+    HandButtonRadiusTouchNear: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7004)]
     HandButtonRadiusTouchNearActive: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6FF4)
+        ctypes.c_float, Field(ctypes.c_float, 0x7008)
     ]
-    HandButtonReleaseThreshold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6FF8)]
+    HandButtonReleaseThreshold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x700C)]
     HandButtonReleaseThresholdInit: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x6FFC)
+        ctypes.c_float, Field(ctypes.c_float, 0x7010)
     ]
-    HandButtonThickness: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7000)]
-    HandButtonTouchReturnTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7004)]
-    HandControlButtonSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7008)]
-    HandControlMenuAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x700C)]
-    HandControlMenuCursorScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7010)]
-    HandControlMenuDepth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7014)]
+    HandButtonThickness: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7014)]
+    HandButtonTouchReturnTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7018)]
+    HandControlButtonSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x701C)]
+    HandControlMenuAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7020)]
+    HandControlMenuCursorScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7024)]
+    HandControlMenuDepth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7028)]
     HandControlMenuMoveActionDistance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7018)
-    ]
-    HandControlMenuMoveDistance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x701C)
-    ]
-    HandControlMenuMoveDistanceScroll: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7020)
-    ]
-    HandControlMenuMoveDistanceVertical: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7024)
-    ]
-    HandControlMenuSelectRadius: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7028)
-    ]
-    HandControlMenuSelectRadius1: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x702C)
     ]
-    HandControlMenuSelectRadius2: Annotated[
+    HandControlMenuMoveDistance: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7030)
     ]
-    HandControlMenuSurfaceOffset: Annotated[
+    HandControlMenuMoveDistanceScroll: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7034)
     ]
-    HandControlPointActiveMargin: Annotated[
+    HandControlMenuMoveDistanceVertical: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7038)
     ]
-    HandControlPointMargin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x703C)]
-    HandControlTopMenuSelectRadius: Annotated[
+    HandControlMenuSelectRadius: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x703C)
+    ]
+    HandControlMenuSelectRadius1: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7040)
     ]
-    HandheldZoomFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7044)]
-    HandScreenGraphicsHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7048)]
-    HandScreenGraphicsWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x704C)]
-    HandScreenHeight: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7050)]
-    HandScreenNearActivateDistance: Annotated[
+    HandControlMenuSelectRadius2: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7044)
+    ]
+    HandControlMenuSurfaceOffset: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7048)
+    ]
+    HandControlPointActiveMargin: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x704C)
+    ]
+    HandControlPointMargin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7050)]
+    HandControlTopMenuSelectRadius: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7054)
     ]
-    HandScreenWeaponHeight: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7058)]
-    HandScreenWeaponWidth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x705C)]
-    HandScreenWidth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7060)]
-    HatchAlphaBase: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7064)]
-    HatchAlphaCursor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7068)]
-    HatchAlphaMain: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x706C)]
-    HatchCount: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7070)]
-    HatchCursorRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7074)]
-    HatchPulsePauseTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7078)]
-    HatchPulseSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x707C)]
-    HatchPulseWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7080)]
+    HandheldHUDZoomFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7058)]
+    HandScreenGraphicsHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x705C)]
+    HandScreenGraphicsWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7060)]
+    HandScreenHeight: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7064)]
+    HandScreenNearActivateDistance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7068)
+    ]
+    HandScreenWeaponHeight: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x706C)]
+    HandScreenWeaponWidth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7070)]
+    HandScreenWidth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7074)]
+    HatchAlphaBase: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7078)]
+    HatchAlphaCursor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x707C)]
+    HatchAlphaMain: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7080)]
+    HatchCount: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7084)]
+    HatchCursorRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7088)]
+    HatchPulsePauseTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x708C)]
+    HatchPulseSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7090)]
+    HatchPulseWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7094)]
     HazardArrowsLevel2Threshold: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7084)
-    ]
-    HazardArrowsLevel3Threshold: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7088)
-    ]
-    HazardBarPulseTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x708C)]
-    HazardPainPulseStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7090)]
-    HazardPulseRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7094)]
-    HazardScreenEffectPulseRate: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7098)
     ]
-    HazardScreenEffectPulseTime: Annotated[
+    HazardArrowsLevel3Threshold: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x709C)
     ]
-    HazardScreenEffectStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70A0)]
-    HazardWarningPulseStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70A4)]
-    HazardWarningPulseTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70A8)]
-    HitMarkerPulseSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70AC)]
-    HitMarkerPulseSizeStatic: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70B0)]
-    HitMarkerPulseTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70B4)]
-    HmdFramerateScreenPitch: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70B8)]
-    HoldTimerResetTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70BC)]
-    HoverOffscreenBorder: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70C0)]
-    HoverOffscreenBorderXVR: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70C4)]
-    HoverOffscreenBorderYAltUI: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70C8)]
-    HoverPopAnimDuration: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70CC)]
-    HoverPopScaleModification: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70D0)]
-    HUDDisplayTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70D4)]
-    HUDDroneCombatPulse: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70D8)]
-    HUDDroneHealingPulse: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70DC)]
-    HUDDroneSummoningPulse: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70E0)]
-    HUDElementsOffsetHMDBottom: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70E4)]
-    HUDElementsOffsetHMDSide: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70E8)]
-    HUDElementsOffsetHMDTop: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70EC)]
-    HUDElementsOffsetX_0: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70F0)]
-    HUDElementsOffsetX_1: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70F4)]
-    HUDElementsOffsetX_2: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70F8)]
-    HUDElementsOffsetX_3: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70FC)]
-    HUDElementsOffsetX_4: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7100)]
-    HUDElementsOffsetX_5: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7104)]
-    HUDElementsOffsetY_0: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7108)]
-    HUDElementsOffsetY_1: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x710C)]
-    HUDElementsOffsetY_2: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7110)]
-    HUDElementsOffsetY_3: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7114)]
-    HUDElementsOffsetY_4: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7118)]
-    HUDElementsOffsetY_5: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x711C)]
-    HUDMarkerActiveTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7120)]
-    HUDMarkerAlpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7124)]
-    HUDMarkerAnimLoopTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7128)]
-    HUDMarkerAnimOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x712C)]
-    HUDMarkerAnimScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7130)]
-    HUDMarkerAnimSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7134)]
+    HazardBarPulseTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70A0)]
+    HazardPainPulseStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70A4)]
+    HazardPulseRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70A8)]
+    HazardScreenEffectPulseRate: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x70AC)
+    ]
+    HazardScreenEffectPulseTime: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x70B0)
+    ]
+    HazardScreenEffectStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70B4)]
+    HazardWarningPulseStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70B8)]
+    HazardWarningPulseTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70BC)]
+    HitMarkerPulseSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70C0)]
+    HitMarkerPulseSizeStatic: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70C4)]
+    HitMarkerPulseTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70C8)]
+    HmdFramerateScreenPitch: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70CC)]
+    HoldTimerResetTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70D0)]
+    HoverOffscreenBorder: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70D4)]
+    HoverOffscreenBorderXVR: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70D8)]
+    HoverOffscreenBorderYAltUI: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70DC)]
+    HoverPopAnimDuration: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70E0)]
+    HoverPopScaleModification: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70E4)]
+    HUDDisplayTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70E8)]
+    HUDDroneCombatPulse: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70EC)]
+    HUDDroneHealingPulse: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70F0)]
+    HUDDroneSummoningPulse: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70F4)]
+    HUDElementsOffsetHMDBottom: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70F8)]
+    HUDElementsOffsetHMDSide: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70FC)]
+    HUDElementsOffsetHMDTop: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7100)]
+    HUDElementsOffsetX_0: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7104)]
+    HUDElementsOffsetX_1: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7108)]
+    HUDElementsOffsetX_2: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x710C)]
+    HUDElementsOffsetX_3: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7110)]
+    HUDElementsOffsetX_4: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7114)]
+    HUDElementsOffsetX_5: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7118)]
+    HUDElementsOffsetY_0: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x711C)]
+    HUDElementsOffsetY_1: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7120)]
+    HUDElementsOffsetY_2: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7124)]
+    HUDElementsOffsetY_3: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7128)]
+    HUDElementsOffsetY_4: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x712C)]
+    HUDElementsOffsetY_5: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7130)]
+    HUDMarkerActiveTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7134)]
+    HUDMarkerAlpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7138)]
+    HUDMarkerAnimLoopTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x713C)]
+    HUDMarkerAnimOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7140)]
+    HUDMarkerAnimScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7144)]
+    HUDMarkerAnimSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7148)]
     HUDMarkerDistanceOrTimeDistance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7138)
-    ]
-    HUDMarkerFarDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x713C)]
-    HUDMarkerFarFadeRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7140)]
-    HUDMarkerHorizonBlendRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7144)]
-    HUDMarkerHoverAngleTestGround: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7148)
-    ]
-    HUDMarkerHoverAngleTestGroundHmd: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x714C)
     ]
-    HUDMarkerHoverAngleTestShip: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7150)
-    ]
-    HUDMarkerHoverShowLargeAngleTest: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7154)
-    ]
-    HUDMarkerIconHoverMinScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7158)]
-    HUDMarkerLabelArriveDistance: Annotated[
+    HUDMarkerFarDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7150)]
+    HUDMarkerFarFadeRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7154)]
+    HUDMarkerHorizonBlendRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7158)]
+    HUDMarkerHoverAngleTestGround: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x715C)
     ]
-    HUDMarkerLabelBaseWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7160)]
-    HUDMarkerLabelDisplayDistance: Annotated[
+    HUDMarkerHoverAngleTestGroundHmd: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7160)
+    ]
+    HUDMarkerHoverAngleTestShip: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7164)
     ]
-    HUDMarkerLabelWidthMultiplier: Annotated[
+    HUDMarkerHoverShowLargeAngleTest: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7168)
     ]
-    HUDMarkerModelFadeMinHeight: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x716C)
+    HUDMarkerIconHoverMinScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x716C)]
+    HUDMarkerLabelArriveDistance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7170)
     ]
-    HUDMarkerModelFadeRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7170)]
-    HUDMarkerNearFadeDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7174)]
-    HUDMarkerNearFadeRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7178)]
-    HUDMarkerNonActiveMissionAlpha: Annotated[
+    HUDMarkerLabelBaseWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7174)]
+    HUDMarkerLabelDisplayDistance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7178)
+    ]
+    HUDMarkerLabelWidthMultiplier: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x717C)
     ]
-    HUDMarkerObjectMinScreenDistance: Annotated[
+    HUDMarkerModelFadeMinHeight: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7180)
     ]
-    HUDMarkerOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7184)]
+    HUDMarkerModelFadeRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7184)]
+    HUDMarkerNearFadeDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7188)]
+    HUDMarkerNearFadeRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x718C)]
+    HUDMarkerNonActiveMissionAlpha: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7190)
+    ]
+    HUDMarkerObjectMinScreenDistance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7194)
+    ]
+    HUDMarkerOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7198)]
     HUDMarkerPrimaryIndicatorSize: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7188)
+        ctypes.c_float, Field(ctypes.c_float, 0x719C)
     ]
-    HUDMarkerScalerMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x718C)]
-    HUDMarkerScalerRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7190)]
-    HUDMarkerScalerSizeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7194)]
-    HUDMarkerScalerSizeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7198)]
-    HUDMarkerShipOffsetMaxDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x719C)]
-    HUDMarkerShipOffsetMinDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x71A0)]
+    HUDMarkerScalerMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x71A0)]
+    HUDMarkerScalerRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x71A4)]
+    HUDMarkerScalerSizeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x71A8)]
+    HUDMarkerScalerSizeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x71AC)]
+    HUDMarkerShipOffsetMaxDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x71B0)]
+    HUDMarkerShipOffsetMinDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x71B4)]
     HUDMarkerShowActualIconDistance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x71A4)
-    ]
-    HUDMarkerShowActualSpaceIconDistance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x71A8)
-    ]
-    HUDMarkerWideHoverAngleTest: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x71AC)
-    ]
-    HUDMarkerWideHoverAngleTestHmd: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x71B0)
-    ]
-    HUDNetworkMarkerHoverAngleTestGround: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x71B4)
-    ]
-    HUDNetworkMarkerHoverAngleVRMul: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x71B8)
     ]
-    HUDNetworkMarkerHoverShowLargeAngleTest: Annotated[
+    HUDMarkerShowActualSpaceIconDistance: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x71BC)
     ]
-    HUDPetCentreScreenAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x71C0)]
-    HUDPetMarkerAngleTest: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x71C4)]
-    HUDPetMarkerAngleVRMul: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x71C8)]
-    HUDPlayerPhonePulseScanFreq: Annotated[
+    HUDMarkerWideHoverAngleTest: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x71C0)
+    ]
+    HUDMarkerWideHoverAngleTestHmd: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x71C4)
+    ]
+    HUDNetworkMarkerHoverAngleTestGround: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x71C8)
+    ]
+    HUDNetworkMarkerHoverAngleVRMul: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x71CC)
     ]
-    HUDPlayerSentinelPulseScanFreq: Annotated[
+    HUDNetworkMarkerHoverShowLargeAngleTest: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x71D0)
     ]
-    HUDPlayerSentinelPulseWidth: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x71D4)
-    ]
-    HUDPlayerSentinelRangeFactor: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x71D8)
-    ]
-    HUDPlayerTrackArrowArrowSize: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x71DC)
-    ]
-    HUDPlayerTrackArrowDamageGlowHullHitCriticalOpacityScale: Annotated[
+    HUDPetCentreScreenAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x71D4)]
+    HUDPetMarkerAngleTest: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x71D8)]
+    HUDPetMarkerAngleVRMul: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x71DC)]
+    HUDPlayerPhonePulseScanFreq: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x71E0)
     ]
-    HUDPlayerTrackArrowDamageGlowHullHitOpacityScale: Annotated[
+    HUDPlayerSentinelPulseScanFreq: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x71E4)
     ]
-    HUDPlayerTrackArrowDamageGlowOffset: Annotated[
+    HUDPlayerSentinelPulseWidth: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x71E8)
     ]
-    HUDPlayerTrackArrowDamageGlowShieldHitCriticalOpacityScale: Annotated[
+    HUDPlayerSentinelRangeFactor: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x71EC)
     ]
-    HUDPlayerTrackArrowDamageGlowShieldHitOpacityScale: Annotated[
+    HUDPlayerTrackArrowArrowSize: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x71F0)
     ]
-    HUDPlayerTrackArrowDotSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x71F4)]
-    HUDPlayerTrackArrowEnergyShieldDepletedGlowOpacityScale: Annotated[
+    HUDPlayerTrackArrowDamageGlowHullHitCriticalOpacityScale: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x71F4)
+    ]
+    HUDPlayerTrackArrowDamageGlowHullHitOpacityScale: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x71F8)
     ]
-    HUDPlayerTrackArrowEnergyShieldDepletedTime: Annotated[
+    HUDPlayerTrackArrowDamageGlowOffset: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x71FC)
     ]
-    HUDPlayerTrackArrowEnergyShieldGlowOffset: Annotated[
+    HUDPlayerTrackArrowDamageGlowShieldHitCriticalOpacityScale: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7200)
     ]
-    HUDPlayerTrackArrowEnergyShieldLowThreshold: Annotated[
+    HUDPlayerTrackArrowDamageGlowShieldHitOpacityScale: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7204)
     ]
-    HUDPlayerTrackArrowEnergyShieldOffset: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7208)
-    ]
-    HUDPlayerTrackArrowEnergyShieldStartChargeGlowOpacityScale: Annotated[
+    HUDPlayerTrackArrowDotSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7208)]
+    HUDPlayerTrackArrowEnergyShieldDepletedGlowOpacityScale: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x720C)
     ]
-    HUDPlayerTrackArrowEnergyShieldStartChargeTime: Annotated[
+    HUDPlayerTrackArrowEnergyShieldDepletedTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7210)
     ]
-    HUDPlayerTrackArrowFadeRange: Annotated[
+    HUDPlayerTrackArrowEnergyShieldGlowOffset: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7214)
     ]
-    HUDPlayerTrackArrowGlowBaseOpacity: Annotated[
+    HUDPlayerTrackArrowEnergyShieldLowThreshold: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7218)
     ]
-    HUDPlayerTrackArrowHealthOffset: Annotated[
+    HUDPlayerTrackArrowEnergyShieldOffset: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x721C)
     ]
-    HUDPlayerTrackArrowIconBorderReducerShip: Annotated[
+    HUDPlayerTrackArrowEnergyShieldStartChargeGlowOpacityScale: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7220)
     ]
-    HUDPlayerTrackArrowIconFadeDist: Annotated[
+    HUDPlayerTrackArrowEnergyShieldStartChargeTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7224)
     ]
-    HUDPlayerTrackArrowIconFadeDistDrone: Annotated[
+    HUDPlayerTrackArrowFadeRange: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7228)
     ]
-    HUDPlayerTrackArrowIconFadeDistShip: Annotated[
+    HUDPlayerTrackArrowGlowBaseOpacity: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x722C)
     ]
-    HUDPlayerTrackArrowIconFadeRange: Annotated[
+    HUDPlayerTrackArrowHealthOffset: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7230)
     ]
-    HUDPlayerTrackArrowIconFadeRangeShip: Annotated[
+    HUDPlayerTrackArrowIconBorderReducerShip: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7234)
     ]
-    HUDPlayerTrackArrowIconFadeTime: Annotated[
+    HUDPlayerTrackArrowIconFadeDist: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7238)
     ]
-    HUDPlayerTrackArrowIconPulse2Alpha: Annotated[
+    HUDPlayerTrackArrowIconFadeDistDrone: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x723C)
     ]
-    HUDPlayerTrackArrowIconPulseTime: Annotated[
+    HUDPlayerTrackArrowIconFadeDistShip: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7240)
     ]
-    HUDPlayerTrackArrowIconPulseWidth1: Annotated[
+    HUDPlayerTrackArrowIconFadeRange: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7244)
     ]
-    HUDPlayerTrackArrowIconPulseWidth2: Annotated[
+    HUDPlayerTrackArrowIconFadeRangeShip: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7248)
     ]
-    HUDPlayerTrackArrowIconShowTime: Annotated[
+    HUDPlayerTrackArrowIconFadeTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x724C)
     ]
-    HUDPlayerTrackArrowIconSize: Annotated[
+    HUDPlayerTrackArrowIconPulse2Alpha: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7250)
     ]
-    HUDPlayerTrackArrowMinFadeDist: Annotated[
+    HUDPlayerTrackArrowIconPulseTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7254)
     ]
-    HUDPlayerTrackArrowOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7258)]
-    HUDPlayerTrackArrowPulseOffset: Annotated[
+    HUDPlayerTrackArrowIconPulseWidth1: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7258)
+    ]
+    HUDPlayerTrackArrowIconPulseWidth2: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x725C)
     ]
-    HUDPlayerTrackArrowPulseRate: Annotated[
+    HUDPlayerTrackArrowIconShowTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7260)
     ]
-    HUDPlayerTrackArrowScreenBorder: Annotated[
+    HUDPlayerTrackArrowIconSize: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7264)
     ]
-    HUDPlayerTrackArrowShipLabelOffset: Annotated[
+    HUDPlayerTrackArrowMinFadeDist: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7268)
     ]
-    HUDPlayerTrackArrowSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x726C)]
-    HUDPlayerTrackArrowSizeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7270)]
-    HUDPlayerTrackArrowSizeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7274)]
-    HUDPlayerTrackArrowSmallIconSize: Annotated[
+    HUDPlayerTrackArrowOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x726C)]
+    HUDPlayerTrackArrowPulseOffset: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7270)
+    ]
+    HUDPlayerTrackArrowPulseRate: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7274)
+    ]
+    HUDPlayerTrackArrowScreenBorder: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7278)
     ]
-    HUDPlayerTrackArrowTargetDist: Annotated[
+    HUDPlayerTrackArrowShipLabelOffset: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x727C)
     ]
-    HUDPlayerTrackArrowTargetDistShip: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7280)
-    ]
-    HUDPlayerTrackArrowTextExtraHeight: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7284)
-    ]
-    HUDPlayerTrackArrowTextExtraOffsetX: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7288)
-    ]
-    HUDPlayerTrackArrowTextExtraOffsetY: Annotated[
+    HUDPlayerTrackArrowSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7280)]
+    HUDPlayerTrackArrowSizeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7284)]
+    HUDPlayerTrackArrowSizeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7288)]
+    HUDPlayerTrackArrowSmallIconSize: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x728C)
     ]
-    HUDPlayerTrackArrowTextHeight: Annotated[
+    HUDPlayerTrackArrowTargetDist: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7290)
     ]
-    HUDPlayerTrackArrowTextOffset: Annotated[
+    HUDPlayerTrackArrowTargetDistShip: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7294)
     ]
-    HUDPlayerTrackDangerPulse: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7298)]
-    HUDPlayerTrackNoSightPulse: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x729C)]
-    HUDPlayerTrackTimerEnd: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72A0)]
-    HUDPlayerTrackTimerPulseRate: Annotated[
+    HUDPlayerTrackArrowTextExtraHeight: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7298)
+    ]
+    HUDPlayerTrackArrowTextExtraOffsetX: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x729C)
+    ]
+    HUDPlayerTrackArrowTextExtraOffsetY: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x72A0)
+    ]
+    HUDPlayerTrackArrowTextHeight: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x72A4)
     ]
-    HUDPlayerTrackTimerStart: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72A8)]
+    HUDPlayerTrackArrowTextOffset: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x72A8)
+    ]
+    HUDPlayerTrackDangerPulse: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72AC)]
+    HUDPlayerTrackNoSightPulse: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72B0)]
+    HUDPlayerTrackTimerEnd: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72B4)]
+    HUDPlayerTrackTimerPulseRate: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x72B8)
+    ]
+    HUDPlayerTrackTimerStart: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72BC)]
     HUDPlayerTrackTimerStartFade: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x72AC)
+        ctypes.c_float, Field(ctypes.c_float, 0x72C0)
     ]
-    HUDTargetHealthDangerTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72B0)]
-    HUDTargetHealthIconSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72B4)]
-    HUDTargetIconOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72B8)]
-    HUDTargetIconSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72BC)]
-    HUDTargetMarkerOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72C0)]
-    HUDTargetMarkerSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72C4)]
-    IconBackgroundAlpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72C8)]
-    IconGlowStrengthActive: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72CC)]
-    IconGlowStrengthError: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72D0)]
-    IconGlowStrengthHighlight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72D4)]
-    IconGlowStrengthNeutral: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72D8)]
-    IconPulseRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72DC)]
-    InfoPortalGuideCycleTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72E0)]
+    HUDTargetHealthDangerTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72C4)]
+    HUDTargetHealthIconSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72C8)]
+    HUDTargetIconOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72CC)]
+    HUDTargetIconSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72D0)]
+    HUDTargetMarkerOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72D4)]
+    HUDTargetMarkerSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72D8)]
+    IconBackgroundAlpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72DC)]
+    IconGlowStrengthActive: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72E0)]
+    IconGlowStrengthError: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72E4)]
+    IconGlowStrengthHighlight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72E8)]
+    IconGlowStrengthNeutral: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72EC)]
+    IconPulseRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72F0)]
+    InfoPortalGuideCycleTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72F4)]
     InfoPortalMilestonesCycleTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x72E4)
-    ]
-    InteractionIconInnerRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72E8)]
-    InteractionIconOuterRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72EC)]
-    InteractionInWorldMinScreenDistance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x72F0)
-    ]
-    InteractionInWorldMinScreenDistanceV2: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x72F4)
-    ]
-    InteractionInWorldPitchDistance: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x72F8)
     ]
-    InteractionInWorldSeatedNPCHeightAdjust: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x72FC)
+    InteractionIconInnerRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72FC)]
+    InteractionIconOuterRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7300)]
+    InteractionInWorldMinScreenDistance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7304)
     ]
-    InteractionInWorldSeatedNPCHeightAdjustV2: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7300)
-    ]
-    InteractionLabelHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7304)]
-    InteractionLabelHorizontalLineLength: Annotated[
+    InteractionInWorldMinScreenDistanceV2: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7308)
     ]
-    InteractionLabelLineAlpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x730C)]
-    InteractionLabelPixelHeightMax: Annotated[
+    InteractionInWorldPitchDistance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x730C)
+    ]
+    InteractionInWorldSeatedNPCHeightAdjust: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7310)
     ]
-    InteractionLabelPixelHeightMin: Annotated[
+    InteractionInWorldSeatedNPCHeightAdjustV2: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7314)
     ]
+    InteractionLabelHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7318)]
+    InteractionLabelHorizontalLineLength: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x731C)
+    ]
+    InteractionLabelLineAlpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7320)]
+    InteractionLabelPixelHeightMax: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7324)
+    ]
+    InteractionLabelPixelHeightMin: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7328)
+    ]
     InteractionLabelRadiusScaler: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7318)
+        ctypes.c_float, Field(ctypes.c_float, 0x732C)
     ]
-    InteractionLabelSpeedClose: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x731C)]
-    InteractionLabelSpeedOpen: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7320)]
-    InteractionScanDisplayTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7324)]
-    InteractionScanMinTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7328)]
-    InteractionScanScanTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x732C)]
+    InteractionLabelSpeedClose: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7330)]
+    InteractionLabelSpeedOpen: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7334)]
+    InteractionScanDisplayTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7338)]
+    InteractionScanMinTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x733C)]
+    InteractionScanScanTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7340)]
     InteractionScanSlapOverallTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7330)
+        ctypes.c_float, Field(ctypes.c_float, 0x7344)
     ]
-    InteractionScanSlapScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7334)]
-    InteractionScanSlapTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7338)]
+    InteractionScanSlapScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7348)]
+    InteractionScanSlapTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x734C)]
     InventoryFullMessageRepeatTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x733C)
-    ]
-    InventoryIconTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7340)]
-    InvSlotGradientFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7344)]
-    InvSlotGradientFactorMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7348)]
-    InvSlotGradientTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x734C)]
-    InWorldInteractionScreenScale: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7350)
     ]
-    InWorldInteractLabelFarDistance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7354)
-    ]
-    InWorldInteractLabelFarRange: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7358)
-    ]
-    InWorldInteractLabelHeight: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x735C)]
-    InWorldInteractLabelMinHeadOffset: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7360)
-    ]
-    InWorldInteractLabelNearDistance: Annotated[
+    InventoryIconTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7354)]
+    InvSlotGradientFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7358)]
+    InvSlotGradientFactorMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x735C)]
+    InvSlotGradientTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7360)]
+    InWorldInteractionScreenScale: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7364)
     ]
-    InWorldInteractLabelNearRange: Annotated[
+    InWorldInteractLabelFarDistance: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7368)
     ]
-    InWorldInteractLabelScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x736C)]
-    InWorldInteractLabelScaleV2: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7370)
+    InWorldInteractLabelFarRange: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x736C)
     ]
-    InWorldInteractLabelWidth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7374)]
-    InWorldNGuiScreenScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7378)]
-    InWorldNPCInteractionScreenScale: Annotated[
+    InWorldInteractLabelHeight: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7370)]
+    InWorldInteractLabelMinHeadOffset: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7374)
+    ]
+    InWorldInteractLabelNearDistance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7378)
+    ]
+    InWorldInteractLabelNearRange: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x737C)
     ]
-    InWorldScreenForwardOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7380)]
-    InWorldScreenMinScreenDistance: Annotated[
+    InWorldInteractLabelScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7380)]
+    InWorldInteractLabelScaleV2: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7384)
     ]
-    InWorldScreenScaleDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7388)]
-    InWorldUIInteractionDistanceWithEyeTrackingEnabled: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x738C)
-    ]
-    ItemReceivedMessageTimeToAdd: Annotated[
+    InWorldInteractLabelWidth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7388)]
+    InWorldNGuiScreenScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x738C)]
+    InWorldNPCInteractionScreenScale: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7390)
     ]
+    InWorldScreenForwardOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7394)]
+    InWorldScreenMinScreenDistance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7398)
+    ]
+    InWorldScreenScaleDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x739C)]
+    InWorldUIInteractionDistanceWithEyeTrackingEnabled: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x73A0)
+    ]
+    ItemReceivedMessageTimeToAdd: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x73A4)
+    ]
     ItemSlotColourTechChargeRate: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7394)
+        ctypes.c_float, Field(ctypes.c_float, 0x73A8)
     ]
-    KeepHazardBarActiveTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7398)]
+    KeepHazardBarActiveTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73AC)]
     KeepSecondHazardBarActiveTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x739C)
+        ctypes.c_float, Field(ctypes.c_float, 0x73B0)
     ]
-    LandNotifyHeightThreshold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73A0)]
-    LandNotifySpeedThreshold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73A4)]
-    LandNotifyTimeThreshold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73A8)]
-    LargeSpaceIconSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73AC)]
-    LoadFadeInDefaultTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73B0)]
-    LoadingScreenTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73B4)]
-    LoadingScreenTravelSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73B8)]
-    LoadingTravelDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73BC)]
-    LockOnMarkerSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73C0)]
-    LockOnMarkerSizeLock: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73C4)]
-    LowerHelmetScreenPitch: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73C8)]
-    LowerHelmetScreenScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73CC)]
-    LowHealthShieldFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73D0)]
-    LowHealthShieldMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73D4)]
-    MaintenanceIconFadeStart: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73D8)]
-    MaintenanceIconFadeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73DC)]
+    LandNotifyHeightThreshold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73B4)]
+    LandNotifySpeedThreshold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73B8)]
+    LandNotifyTimeThreshold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73BC)]
+    LargeSpaceIconSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73C0)]
+    LoadFadeInDefaultTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73C4)]
+    LoadingScreenTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73C8)]
+    LoadingScreenTravelSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73CC)]
+    LoadingTravelDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73D0)]
+    LockOnMarkerSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73D4)]
+    LockOnMarkerSizeLock: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73D8)]
+    LowerHelmetScreenPitch: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73DC)]
+    LowerHelmetScreenScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73E0)]
+    LowHealthShieldFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73E4)]
+    LowHealthShieldMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73E8)]
+    MaintenanceIconFadeStart: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73EC)]
+    MaintenanceIconFadeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73F0)]
     ManualNotificationPauseTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x73E0)
+        ctypes.c_float, Field(ctypes.c_float, 0x73F4)
     ]
     ManualScrollChangePerInputMax: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x73E4)
-    ]
-    ManualScrollChangePerInputMin: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x73E8)
-    ]
-    MarkerComponentOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73EC)]
-    MarkerHorizonApproachAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73F0)]
-    MarkerHorizonMinOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73F4)]
-    MarkerHorizonOffPlanetLightBeamAngle: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x73F8)
     ]
-    MarkerHorizonOffsetAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x73FC)]
-    MarkerHorizonShipApproachOffset: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7400)
+    ManualScrollChangePerInputMin: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x73FC)
     ]
-    MarkerOffsetTypeAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7404)]
-    MarkerOffsetTypeAngleAsteroid: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7408)
-    ]
-    MarkerOffsetTypeAngleBattle: Annotated[
+    MarkerComponentOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7400)]
+    MarkerHorizonApproachAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7404)]
+    MarkerHorizonMinOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7408)]
+    MarkerHorizonOffPlanetLightBeamAngle: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x740C)
     ]
-    MarkerOffsetTypeAngleBounty: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7410)
-    ]
-    MarkerOffsetTypeAnglePlayerShip: Annotated[
+    MarkerHorizonOffsetAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7410)]
+    MarkerHorizonShipApproachOffset: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7414)
     ]
-    MarkerRingInnerRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7418)]
-    MarkerRingOuterRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x741C)]
-    MarkerTagAppearDelay: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7420)]
+    MarkerOffsetTypeAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7418)]
+    MarkerOffsetTypeAngleAsteroid: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x741C)
+    ]
+    MarkerOffsetTypeAngleBattle: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7420)
+    ]
+    MarkerOffsetTypeAngleBounty: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7424)
+    ]
+    MarkerOffsetTypeAnglePlayerShip: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7428)
+    ]
+    MarkerRingInnerRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x742C)]
+    MarkerRingOuterRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7430)]
+    MarkerTagAppearDelay: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7434)]
     MaxDialogCharSizeIdeographic: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x7424)
-    ]
-    MaxDialogCharSizeRoman: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7428)]
-    MaxNumMessageBeaconIcons: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x742C)]
-    MaxProjectorDistanceFromDefault: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7430)
-    ]
-    MaxProjectorGrabDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7434)]
-    MaxSubstanceMaxAmountForAmountFraction: Annotated[
         ctypes.c_int32, Field(ctypes.c_int32, 0x7438)
     ]
-    MessageNotificationTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x743C)]
-    MessageTimeQuick: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7440)]
-    MilestoneStingDisplayTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7444)]
-    MinimumHoldFill: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7448)]
-    MinSeasonPlayTimeInDays: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x744C)]
-    MissileCentreOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7450)]
+    MaxDialogCharSizeRoman: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x743C)]
+    MaxNumMessageBeaconIcons: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7440)]
+    MaxProjectorDistanceFromDefault: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7444)
+    ]
+    MaxProjectorGrabDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7448)]
+    MaxSubstanceMaxAmountForAmountFraction: Annotated[
+        ctypes.c_int32, Field(ctypes.c_int32, 0x744C)
+    ]
+    MessageNotificationTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7450)]
+    MessageTimeQuick: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7454)]
+    MilestoneStingDisplayTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7458)]
+    MinimumHoldFill: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x745C)]
+    MinSeasonPlayTimeInDays: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7460)]
+    MissileCentreOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7464)]
     MissileIconAttackPulseAmount: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7454)
+        ctypes.c_float, Field(ctypes.c_float, 0x7468)
     ]
-    MissileIconAttackPulseTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7458)]
-    MissionCompassIconScaler: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x745C)]
+    MissileIconAttackPulseTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x746C)]
+    MissionCompassIconScaler: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7470)]
     MissionDetailsPageBaseHeight: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7460)
+        ctypes.c_float, Field(ctypes.c_float, 0x7474)
     ]
-    MissionLoopCount: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7464)]
-    MissionLoopCountPirate: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7468)]
-    MissionMarkerSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x746C)]
-    MissionObjectiveBaseHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7470)]
-    MissionObjectiveDoneHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7474)]
+    MissionLoopCount: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7478)]
+    MissionLoopCountPirate: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x747C)]
+    MissionMarkerSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7480)]
+    MissionObjectiveBaseHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7484)]
+    MissionObjectiveDoneHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7488)]
     MissionObjectiveScrollingExtra: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7478)
+        ctypes.c_float, Field(ctypes.c_float, 0x748C)
     ]
-    MissionSeedOffset: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x747C)]
+    MissionSeedOffset: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7490)]
     MissionSpecificMissionPercent: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x7480)
+        ctypes.c_int32, Field(ctypes.c_int32, 0x7494)
     ]
-    MissionStartEndOSDTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7484)]
+    MissionStartEndOSDTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7498)]
     MissionStartEndOSDTimeProcedural: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7488)
-    ]
-    MissionStartEndTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x748C)]
-    ModularCustomisationApplyTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7490)
-    ]
-    MouseRotateCameraSensitivity: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7494)
-    ]
-    MultiplayerTeleportEffectAppearTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7498)
-    ]
-    MultiplayerTeleportEffectDisappearTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x749C)
     ]
-    NGuiActiveAreaOffsetTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x74A0)]
-    NGuiAltPlacementDistanceScrollSpeed: Annotated[
+    MissionStartEndTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x74A0)]
+    ModularCustomisationApplyTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x74A4)
     ]
-    NGuiCursorOffsetMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x74A8)]
-    NGuiHmdOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x74AC)]
-    NGuiModelRotationDegreesX: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x74B0)]
-    NGuiModelRotationDegreesY: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x74B4)]
-    NGuiModelRotationDegreesZ: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x74B8)]
-    NGuiModelViewCdSmoothTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x74BC)]
+    MouseRotateCameraSensitivity: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x74A8)
+    ]
+    MultiplayerTeleportEffectAppearTime: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x74AC)
+    ]
+    MultiplayerTeleportEffectDisappearTime: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x74B0)
+    ]
+    NGuiActiveAreaOffsetTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x74B4)]
+    NGuiAltPlacementDistanceScrollSpeed: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x74B8)
+    ]
+    NGuiCursorOffsetMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x74BC)]
+    NGuiHmdOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x74C0)]
+    NGuiModelRotationDegreesX: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x74C4)]
+    NGuiModelRotationDegreesY: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x74C8)]
+    NGuiModelRotationDegreesZ: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x74CC)]
+    NGuiModelViewCdSmoothTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x74D0)]
     NGuiModelViewDistanceDiscoveryPage: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x74C0)
-    ]
-    NGuiModelViewDistanceGlobal: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x74C4)
-    ]
-    NGuiModelViewDistanceShipPage: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x74C8)
-    ]
-    NGuiModelViewDistanceSuitPage: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x74CC)
-    ]
-    NGuiModelViewDistanceWeaponPage: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x74D0)
-    ]
-    NGuiModelViewFadeInAfterRenderTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x74D4)
     ]
-    NGuiModelViewFov: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x74D8)]
-    NGuiModelViewFractionOfBBHeightAboveReflectivePlane: Annotated[
+    NGuiModelViewDistanceGlobal: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x74D8)
+    ]
+    NGuiModelViewDistanceShipPage: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x74DC)
     ]
-    NGuiMouseSensitivity: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x74E0)]
-    NGuiPadSensitivity: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x74E4)]
-    NGuiPlacementAngleScrollSpeed: Annotated[
+    NGuiModelViewDistanceSuitPage: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x74E0)
+    ]
+    NGuiModelViewDistanceWeaponPage: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x74E4)
+    ]
+    NGuiModelViewFadeInAfterRenderTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x74E8)
     ]
-    NGuiThumbnailModelRotationDegreesY: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x74EC)
-    ]
-    NGuiThumbnailModelViewDistance: Annotated[
+    NGuiModelViewFov: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x74EC)]
+    NGuiModelViewFractionOfBBHeightAboveReflectivePlane: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x74F0)
     ]
-    NotificationBackgroundGradientAlphaInShip: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x74F4)
-    ]
-    NotificationBackgroundGradientEndOffsetPercentInShip: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x74F8)
-    ]
-    NotificationBridgeReachDistance: Annotated[
+    NGuiMouseSensitivity: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x74F4)]
+    NGuiPadSensitivity: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x74F8)]
+    NGuiPlacementAngleScrollSpeed: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x74FC)
     ]
-    NotificationBuildHintStartTime: Annotated[
+    NGuiThumbnailModelRotationDegreesY: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7500)
     ]
-    NotificationCantFireTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7504)]
-    NotificationDangerTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7508)]
-    NotificationDeviceIdleTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x750C)]
-    NotificationDiscoveryIdleTime: Annotated[
+    NGuiThumbnailModelViewDistance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7504)
+    ]
+    NotificationBackgroundGradientAlphaInShip: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7508)
+    ]
+    NotificationBackgroundGradientEndOffsetPercentInShip: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x750C)
+    ]
+    NotificationBridgeReachDistance: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7510)
     ]
-    NotificationFinalMissionWait: Annotated[
+    NotificationBuildHintStartTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7514)
     ]
+    NotificationCantFireTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7518)]
+    NotificationDangerTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x751C)]
+    NotificationDeviceIdleTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7520)]
+    NotificationDiscoveryIdleTime: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7524)
+    ]
+    NotificationFinalMissionWait: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7528)
+    ]
     NotificationGoToSpaceStationWait: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7518)
-    ]
-    NotificationHazardMinTimeAfterRecharge: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x751C)
-    ]
-    NotificationHazardSafeThreshold: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7520)
-    ]
-    NotificationHazardTimer: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7524)]
-    NotificationInfoIdleTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7528)]
-    NotificationInteractHintStartTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x752C)
     ]
-    NotificationJetpackTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7530)]
-    NotificationMaxPageHintTime: Annotated[
+    NotificationHazardMinTimeAfterRecharge: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7530)
+    ]
+    NotificationHazardSafeThreshold: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7534)
     ]
-    NotificationMessageCycleTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7538)
-    ]
-    NotificationMinVisibleTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x753C)]
-    NotificationMissionHintTime: Annotated[
+    NotificationHazardTimer: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7538)]
+    NotificationInfoIdleTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x753C)]
+    NotificationInteractHintStartTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7540)
     ]
-    NotificationMissionHintTimeCritical: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7544)
-    ]
-    NotificationMissionHintTimeSecondary: Annotated[
+    NotificationJetpackTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7544)]
+    NotificationMaxPageHintTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7548)
     ]
-    NotificationMonolithMissionWait: Annotated[
+    NotificationMessageCycleTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x754C)
     ]
-    NotificationNewTechIdleTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7550)
-    ]
-    NotificationScanEventMissionIdleTime: Annotated[
+    NotificationMinVisibleTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7550)]
+    NotificationMissionHintTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7554)
     ]
-    NotificationScanTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7558)]
-    NotificationScanTimeCutoff: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x755C)]
-    NotificationShieldTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7560)]
-    NotificationShipBoostMinTime: Annotated[
+    NotificationMissionHintTimeCritical: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7558)
+    ]
+    NotificationMissionHintTimeSecondary: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x755C)
+    ]
+    NotificationMonolithMissionWait: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7560)
+    ]
+    NotificationNewTechIdleTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7564)
     ]
-    NotificationShipBoostReminderTime: Annotated[
+    NotificationScanEventMissionIdleTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7568)
     ]
-    NotificationShipBoostReminderTimeTutorial: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x756C)
-    ]
-    NotificationShipBoostTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7570)]
-    NotificationShipBoostTimeVR: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7574)
-    ]
-    NotificationShipJumpMinTime: Annotated[
+    NotificationScanTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x756C)]
+    NotificationScanTimeCutoff: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7570)]
+    NotificationShieldTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7574)]
+    NotificationShipBoostMinTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7578)
     ]
-    NotificationShipJumpReminderTime: Annotated[
+    NotificationShipBoostReminderTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x757C)
     ]
-    NotificationShipJumpReminderTutorial: Annotated[
+    NotificationShipBoostReminderTimeTutorial: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7580)
     ]
-    NotificationsResourceExtractHintCount: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x7584)
-    ]
-    NotificationStaminaHintDistanceWalked: Annotated[
+    NotificationShipBoostTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7584)]
+    NotificationShipBoostTimeVR: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7588)
     ]
-    NotificationTimeBeforeHeridiumMarker: Annotated[
+    NotificationShipJumpMinTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x758C)
     ]
-    NotificationUrgentMessageTime: Annotated[
+    NotificationShipJumpReminderTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7590)
     ]
-    NotificationWaypointReachDistance: Annotated[
+    NotificationShipJumpReminderTutorial: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7594)
     ]
-    NumDeathQuotes: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7598)]
-    OnFootDamageDirectionIndicatorFadeRange: Annotated[
+    NotificationsResourceExtractHintCount: Annotated[
+        ctypes.c_int32, Field(ctypes.c_int32, 0x7598)
+    ]
+    NotificationStaminaHintDistanceWalked: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x759C)
     ]
-    OnFootDamageDirectionIndicatorRadius: Annotated[
+    NotificationTimeBeforeHeridiumMarker: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x75A0)
     ]
-    OSDMessagePauseOffscreenAngle: Annotated[
+    NotificationUrgentMessageTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x75A4)
     ]
-    OSDMessageQueueMax: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x75A8)]
-    OSDMessageQueueMin: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x75AC)]
-    OSDMessageQueueSpeedMultiplier: Annotated[
+    NotificationWaypointReachDistance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x75A8)
+    ]
+    NumDeathQuotes: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x75AC)]
+    OnFootDamageDirectionIndicatorFadeRange: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x75B0)
     ]
-    OutpostPortalMarkerDistance: Annotated[
+    OnFootDamageDirectionIndicatorRadius: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x75B4)
     ]
-    PadCursorAcceleration: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x75B8)]
-    PadCursorMaxSpeedModifier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x75BC)]
-    PadCursorUICurveStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x75C0)]
-    PadRotateCameraSensitivity: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x75C4)]
-    PageTurnTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x75C8)]
-    ParagraphAutoScrollSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x75CC)]
-    PauseMenuHoldTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x75D0)]
-    PetHoverIconSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x75D4)]
+    OSDMessagePauseOffscreenAngle: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x75B8)
+    ]
+    OSDMessageQueueMax: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x75BC)]
+    OSDMessageQueueMin: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x75C0)]
+    OSDMessageQueueSpeedMultiplier: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x75C4)
+    ]
+    OutpostPortalMarkerDistance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x75C8)
+    ]
+    PadCursorAcceleration: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x75CC)]
+    PadCursorMaxSpeedModifier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x75D0)]
+    PadCursorUICurveStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x75D4)]
+    PadRotateCameraSensitivity: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x75D8)]
+    PageTurnTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x75DC)]
+    ParagraphAutoScrollSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x75E0)]
+    PauseMenuHoldTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x75E4)]
+    PetHoverIconSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x75E8)]
     PetHUDMarkerExtraFollowInfoDistance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x75D8)
+        ctypes.c_float, Field(ctypes.c_float, 0x75EC)
     ]
-    PetHUDMarkerHideDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x75DC)]
+    PetHUDMarkerHideDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x75F0)]
     PetHUDMarkerHideDistanceShort: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x75E0)
+        ctypes.c_float, Field(ctypes.c_float, 0x75F4)
     ]
-    PetHUDMarkerOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x75E4)]
-    PetIconSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x75E8)]
-    PetMoodMarkerOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x75EC)]
-    PetSlotUnlockBounceTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x75F0)]
-    PhotoModeTimeofDayChange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x75F4)]
-    PhotoModeValueAlpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x75F8)]
+    PetHUDMarkerOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x75F8)]
+    PetIconSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x75FC)]
+    PetMoodMarkerOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7600)]
+    PetSlotUnlockBounceTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7604)]
+    PhotoModeTimeofDayChange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7608)]
+    PhotoModeValueAlpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x760C)]
     PirateAttackIndicatorRadius: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x75FC)
-    ]
-    PirateAttackIndicatorWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7600)]
-    PirateAttackProbeDisplayFinishFactor: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7604)
-    ]
-    PirateCountdownTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7608)]
-    PirateFreighterSummonAtOffset: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x760C)
-    ]
-    PirateFreighterSummonOffset: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7610)
     ]
-    PirateFreighterSummonOffsetPulse: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7614)
+    PirateAttackIndicatorWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7614)]
+    PirateAttackProbeDisplayFinishFactor: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7618)
     ]
-    PlacedMarkerFadeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7618)]
-    PlanetDataExtraRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x761C)]
-    PlanetLabelAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7620)]
-    PlanetLabelTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7624)]
-    PlanetPoleEastWestDistanceFromPlayer: Annotated[
+    PirateCountdownTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x761C)]
+    PirateFreighterSummonAtOffset: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7620)
+    ]
+    PirateFreighterSummonOffset: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7624)
+    ]
+    PirateFreighterSummonOffsetPulse: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7628)
     ]
-    PlanetPoleMaxDotProduct: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x762C)]
-    PlanetRaidMarkerOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7630)]
-    PlanetScanDelayTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7634)]
-    PopupActivateTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7638)]
-    PopupDeactivateTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x763C)]
-    PopupDebounceTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7640)]
-    PopupSlotWidthOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7644)]
-    PopupTitleGradientFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7648)]
+    PlacedMarkerFadeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x762C)]
+    PlanetDataExtraRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7630)]
+    PlanetLabelAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7634)]
+    PlanetLabelTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7638)]
+    PlanetPoleEastWestDistanceFromPlayer: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x763C)
+    ]
+    PlanetPoleMaxDotProduct: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7640)]
+    PlanetRaidMarkerOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7644)]
+    PlanetScanDelayTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7648)]
+    PopupActivateTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x764C)]
+    PopupDeactivateTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7650)]
+    PopupDebounceTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7654)]
+    PopupSlotWidthOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7658)]
+    PopupTitleGradientFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x765C)]
     PopupValueSectionBaseHeight: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x764C)
+        ctypes.c_float, Field(ctypes.c_float, 0x7660)
     ]
-    PopupValueSectionHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7650)]
-    PopupXClampOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7654)]
+    PopupValueSectionHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7664)]
+    PopupXClampOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7668)]
     PopupXClampOffsetRightAligned: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7658)
+        ctypes.c_float, Field(ctypes.c_float, 0x766C)
     ]
-    ProjectorGrabBorderPercent: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x765C)]
-    ProjectorGrabDistanceBias: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7660)]
-    ProjectorGrabResetTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7664)]
-    ProjectorScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7668)]
-    QuickMenuAlpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x766C)]
-    QuickMenuCentrePos: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7670)]
-    QuickMenuCentreSideOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7674)]
-    QuickMenuCloseTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7678)]
-    QuickMenuCursorScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x767C)]
-    QuickMenuErrorTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7680)]
-    QuickMenuHighlightRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7684)]
-    QuickMenuHoldNavTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7688)]
-    QuickMenuInteractAdjustX: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x768C)]
-    QuickMenuInteractAdjustY: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7690)]
-    QuickMenuScreenHeight: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7694)]
-    QuickMenuScreenWidth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7698)]
-    QuickMenuSideOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x769C)]
-    QuickMenuSwipeHeightMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x76A0)]
-    QuickMenuSwipeHeightMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x76A4)]
-    RadialMenuInnerRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x76A8)]
+    ProjectorGrabBorderPercent: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7670)]
+    ProjectorGrabDistanceBias: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7674)]
+    ProjectorGrabResetTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7678)]
+    ProjectorScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x767C)]
+    QuickMenuAlpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7680)]
+    QuickMenuCentrePos: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7684)]
+    QuickMenuCentreSideOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7688)]
+    QuickMenuCloseTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x768C)]
+    QuickMenuCursorScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7690)]
+    QuickMenuErrorTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7694)]
+    QuickMenuHighlightRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7698)]
+    QuickMenuHoldNavTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x769C)]
+    QuickMenuInteractAdjustX: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x76A0)]
+    QuickMenuInteractAdjustY: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x76A4)]
+    QuickMenuScreenHeight: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x76A8)]
+    QuickMenuScreenWidth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x76AC)]
+    QuickMenuSideOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x76B0)]
+    QuickMenuSwipeHeightMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x76B4)]
+    QuickMenuSwipeHeightMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x76B8)]
+    RadialMenuInnerRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x76BC)]
     RadialMenuInnerRadiusCursor: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x76AC)
+        ctypes.c_float, Field(ctypes.c_float, 0x76C0)
     ]
-    RadialMenuWedgeOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x76B0)]
-    RefinerAutoCloseTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x76B4)]
+    RadialMenuWedgeOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x76C4)]
+    RefinerAutoCloseTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x76C8)]
     RefinerBeginDialInnerRadius: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x76B8)
-    ]
-    RefinerPadStartDecayTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x76BC)]
-    RefinerPadStartTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x76C0)]
-    RefinerProgressDialInnerRadius: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x76C4)
-    ]
-    RepairTechLabelOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x76C8)]
-    RepairTechRepairedMessageTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x76CC)
     ]
+    RefinerPadStartDecayTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x76D0)]
+    RefinerPadStartTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x76D4)]
+    RefinerProgressDialInnerRadius: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x76D8)
+    ]
+    RepairTechLabelOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x76DC)]
+    RepairTechRepairedMessageTime: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x76E0)
+    ]
     RepairTechRepairedWaitTime1: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x76D0)
+        ctypes.c_float, Field(ctypes.c_float, 0x76E4)
     ]
     RepairTechRepairedWaitTime2: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x76D4)
-    ]
-    ReportBaseFlashDelay: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x76D8)]
-    ReportBaseFlashIntensity: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x76DC)]
-    ReportBaseFlashTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x76E0)]
-    ReportCameraSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x76E4)]
-    ScanEventArrowOffsetMultiplier: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x76E8)
     ]
-    ScanEventArrowOffsetMultiplierFresh: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x76EC)
-    ]
-    ScanEventArrowOffsetMultiplierLerpTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x76F0)
-    ]
-    ScanEventArrowOffsetMultiplierOneEvent: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x76F4)
-    ]
-    ScanEventArrowPlayerFadeDistance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x76F8)
-    ]
-    ScanEventArrowPlayerFadeRange: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x76FC)
-    ]
-    ScanEventArrowSecondaryAlpha: Annotated[
+    ReportBaseFlashDelay: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x76EC)]
+    ReportBaseFlashIntensity: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x76F0)]
+    ReportBaseFlashTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x76F4)]
+    ReportCameraSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x76F8)]
+    ROGAllyFrontendZoomFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x76FC)]
+    ScanEventArrowOffsetMultiplier: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7700)
     ]
-    ScanEventArrowShipFadeDistance: Annotated[
+    ScanEventArrowOffsetMultiplierFresh: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7704)
     ]
-    ScanEventArrowShipFadeRange: Annotated[
+    ScanEventArrowOffsetMultiplierLerpTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7708)
+    ]
+    ScanEventArrowOffsetMultiplierOneEvent: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x770C)
+    ]
+    ScanEventArrowPlayerFadeDistance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7710)
+    ]
+    ScanEventArrowPlayerFadeRange: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7714)
+    ]
+    ScanEventArrowSecondaryAlpha: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7718)
+    ]
+    ScanEventArrowShipFadeDistance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x771C)
+    ]
+    ScanEventArrowShipFadeRange: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7720)
     ]
     ScanEventIconAudio: Annotated[
         c_enum32[enums.cGcAudioWwiseEvents],
-        Field(c_enum32[enums.cGcAudioWwiseEvents], 0x770C),
+        Field(c_enum32[enums.cGcAudioWwiseEvents], 0x7724),
     ]
-    ScannableIconMergeAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7710)]
-    ScanTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7714)]
-    SeasonalRingChangeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7718)]
-    SeasonalRingMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x771C)]
-    SeasonalRingPulseTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7720)]
+    ScannableIconMergeAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7728)]
+    ScanTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x772C)]
+    SeasonalRingChangeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7730)]
+    SeasonalRingMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7734)]
+    SeasonalRingPulseTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7738)]
     SeasonEndAutoHighlightDuration: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7724)
+        ctypes.c_float, Field(ctypes.c_float, 0x773C)
     ]
     SeasonEndAutoHighlightDurationMilestone: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7728)
+        ctypes.c_float, Field(ctypes.c_float, 0x7740)
     ]
     SeasonEndAutoHighlightSFX: Annotated[
         c_enum32[enums.cGcAudioWwiseEvents],
-        Field(c_enum32[enums.cGcAudioWwiseEvents], 0x772C),
+        Field(c_enum32[enums.cGcAudioWwiseEvents], 0x7744),
     ]
     SeasonEndRewardsMaxScrollRate: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7730)
+        ctypes.c_float, Field(ctypes.c_float, 0x7748)
     ]
     SeasonEndRewardsPageOpenDelayTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7734)
+        ctypes.c_float, Field(ctypes.c_float, 0x774C)
     ]
-    SeasonFinalStageIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7738)]
-    SeasonMessageDelayTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x773C)]
+    SeasonFinalStageIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7750)]
+    SeasonMessageDelayTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7754)]
     SentinelsDisabledHUDMessageTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7740)
+        ctypes.c_float, Field(ctypes.c_float, 0x7758)
     ]
-    SettlementStatFlashSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7744)]
-    SettlementStatInnerRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7748)]
-    SettlementStatOuterRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x774C)]
-    ShieldHazardPulseRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7750)]
-    ShieldHazardPulseThreshold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7754)]
-    ShieldPulseTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7758)]
-    ShieldSpringTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x775C)]
-    ShipBuilderBarTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7760)]
-    ShipBuilderEndCircleRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7764)]
+    SettlementStatFlashSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x775C)]
+    SettlementStatInnerRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7760)]
+    SettlementStatOuterRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7764)]
+    ShieldHazardPulseRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7768)]
+    ShieldHazardPulseThreshold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x776C)]
+    ShieldPulseTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7770)]
+    ShieldSpringTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7774)]
+    ShipBuilderBarTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7778)]
+    ShipBuilderEndCircleRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x777C)]
     ShipBuilderLineLengthFadeMax: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7768)
-    ]
-    ShipBuilderLineLengthFadeMin: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x776C)
-    ]
-    ShipBuilderLineMinFade: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7770)]
-    ShipBuilderLineWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7774)]
-    ShipBuilderSlotDropLength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7778)]
-    ShipBuilderSlotLineDefaultWidthFactor: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x777C)
-    ]
-    ShipBuilderSlotLineMaxFactor: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7780)
     ]
-    ShipBuilderSlotLineMinFactor: Annotated[
+    ShipBuilderLineLengthFadeMin: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7784)
     ]
-    ShipBuilderSlotStartOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7788)]
-    ShipBuilderStartCircleRadius: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x778C)
-    ]
-    ShipDamageDirectionIndicatorFadeRange: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7790)
-    ]
-    ShipDamageDirectionIndicatorRadius: Annotated[
+    ShipBuilderLineMinFade: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7788)]
+    ShipBuilderLineWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x778C)]
+    ShipBuilderSlotDropLength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7790)]
+    ShipBuilderSlotLineDefaultWidthFactor: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7794)
     ]
-    ShipDesatDamper: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7798)]
-    ShipFullscreenDamper: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x779C)]
-    ShipFullscreenDamperMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x77A0)]
-    ShipHeadsUpDisplayDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x77A4)]
-    ShipHeadsUpLineFadeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x77A8)]
-    ShipHologramInWorldUIHeightAdjust: Annotated[
+    ShipBuilderSlotLineMaxFactor: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7798)
+    ]
+    ShipBuilderSlotLineMinFactor: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x779C)
+    ]
+    ShipBuilderSlotStartOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x77A0)]
+    ShipBuilderStartCircleRadius: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x77A4)
+    ]
+    ShipDamageDirectionIndicatorFadeRange: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x77A8)
+    ]
+    ShipDamageDirectionIndicatorRadius: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x77AC)
     ]
-    ShipHologramInWorldUIHeightAdjustV2: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x77B0)
-    ]
-    ShipHUDHitPointSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x77B4)]
-    ShipHUDHitPointTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x77B8)]
-    ShipHUDMarkerHideDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x77BC)]
-    ShipHUDMarkerOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x77C0)]
-    ShipHUDMaxOffscreenTargetDist: Annotated[
+    ShipDesatDamper: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x77B0)]
+    ShipFullscreenDamper: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x77B4)]
+    ShipFullscreenDamperMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x77B8)]
+    ShipHeadsUpDisplayDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x77BC)]
+    ShipHeadsUpLineFadeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x77C0)]
+    ShipHologramInWorldUIHeightAdjust: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x77C4)
     ]
-    ShipHUDMissileLockSizeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x77C8)]
-    ShipHUDMissileLockSizeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x77CC)]
+    ShipHologramInWorldUIHeightAdjustV2: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x77C8)
+    ]
+    ShipHUDHitPointSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x77CC)]
+    ShipHUDHitPointTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x77D0)]
+    ShipHUDMarkerHideDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x77D4)]
+    ShipHUDMarkerOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x77D8)]
+    ShipHUDMaxOffscreenTargetDist: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x77DC)
+    ]
+    ShipHUDMissileLockSizeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x77E0)]
+    ShipHUDMissileLockSizeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x77E4)]
     ShipHUDMissileLockSpringFast: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x77D0)
+        ctypes.c_float, Field(ctypes.c_float, 0x77E8)
     ]
     ShipHUDMissileLockSpringSlow: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x77D4)
+        ctypes.c_float, Field(ctypes.c_float, 0x77EC)
     ]
-    ShipHUDTargetAlpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x77D8)]
-    ShipHUDTargetArrowLength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x77DC)]
+    ShipHUDTargetAlpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x77F0)]
+    ShipHUDTargetArrowLength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x77F4)]
     ShipHUDTargetArrowsRotationRate: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x77E0)
-    ]
-    ShipHUDTargetMinDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x77E4)]
-    ShipHUDTargetRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x77E8)]
-    ShipHUDTargetRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x77EC)]
-    ShipHUDTargetScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x77F0)]
-    ShipHUDTargetTriangleRadius: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x77F4)
-    ]
-    ShipOverheatSwitchMessageTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x77F8)
     ]
-    ShipOverheatSwitchMessageWait: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x77FC)
+    ShipHUDTargetMinDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x77FC)]
+    ShipHUDTargetRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7800)]
+    ShipHUDTargetRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7804)]
+    ShipHUDTargetScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7808)]
+    ShipHUDTargetTriangleRadius: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x780C)
     ]
-    ShipScreenTexScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7800)]
-    ShipSideScreenHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7804)]
-    ShipTeleportPadMarkerDistance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7808)
-    ]
-    ShipTeleportPadMinDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x780C)]
-    ShopInteractionInWorldForcedOffset: Annotated[
+    ShipOverheatSwitchMessageTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7810)
     ]
-    ShopInteractionInWorldForcedOffsetV2: Annotated[
+    ShipOverheatSwitchMessageWait: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7814)
     ]
-    ShowDaysIfLessThan: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7818)]
-    ShowHoursIfLessThan: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x781C)]
-    ShowWeeksIfLessThan: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7820)]
-    SmallSpaceIconSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7824)]
-    SolidPointerLengthScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7828)]
-    SolidPointerMaxLength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x782C)]
-    SolidPointerScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7830)]
-    SpaceMapActionScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7834)]
-    SpaceMapAnomalyScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7838)]
-    SpaceMapAspectRatio: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x783C)]
-    SpaceMapCamAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7840)]
-    SpaceMapCamDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7844)]
-    SpaceMapCamHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7848)]
-    SpaceMapCockpitAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x784C)]
-    SpaceMapCockpitScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7850)]
+    ShipScreenTexScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7818)]
+    ShipSideScreenHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x781C)]
+    ShipTeleportPadMarkerDistance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7820)
+    ]
+    ShipTeleportPadMinDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7824)]
+    ShopInteractionInWorldForcedOffset: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7828)
+    ]
+    ShopInteractionInWorldForcedOffsetV2: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x782C)
+    ]
+    ShowDaysIfLessThan: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7830)]
+    ShowHoursIfLessThan: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7834)]
+    ShowWeeksIfLessThan: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7838)]
+    SmallSpaceIconSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x783C)]
+    SolidPointerLengthScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7840)]
+    SolidPointerMaxLength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7844)]
+    SolidPointerScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7848)]
+    SpaceMapActionScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x784C)]
+    SpaceMapAnomalyScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7850)]
+    SpaceMapAspectRatio: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7854)]
+    SpaceMapCamAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7858)]
+    SpaceMapCamDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x785C)]
+    SpaceMapCamHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7860)]
+    SpaceMapCockpitAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7864)]
+    SpaceMapCockpitScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7868)]
     SpaceMapCockpitScaleAdjustAlien: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7854)
-    ]
-    SpaceMapCockpitScaleAdjustCorvette: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7858)
-    ]
-    SpaceMapCockpitScaleAdjustDropShip: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x785C)
-    ]
-    SpaceMapCockpitScaleAdjustFighter: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7860)
-    ]
-    SpaceMapCockpitScaleAdjustRobot: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7864)
-    ]
-    SpaceMapCockpitScaleAdjustRoyal: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7868)
-    ]
-    SpaceMapCockpitScaleAdjustSail: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x786C)
     ]
-    SpaceMapCockpitScaleAdjustScientific: Annotated[
+    SpaceMapCockpitScaleAdjustCorvette: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7870)
     ]
-    SpaceMapCockpitScaleAdjustShuttle: Annotated[
+    SpaceMapCockpitScaleAdjustDropShip: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7874)
     ]
-    SpaceMapDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7878)]
-    SpaceMapDistanceLogScaler: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x787C)]
-    SpaceMapDistanceMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7880)]
-    SpaceMapDistanceScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7884)]
-    SpaceMapFadeAngleMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7888)]
-    SpaceMapFadeAngleMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x788C)]
-    SpaceMapFoV: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7890)]
-    SpaceMapFreighterScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7894)]
-    SpaceMapHorizonThickness: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7898)]
-    SpaceMapLightPitch: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x789C)]
-    SpaceMapLightYaw: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78A0)]
-    SpaceMapLineBaseFade: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78A4)]
-    SpaceMapLineBaseScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78A8)]
-    SpaceMapLineWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78AC)]
-    SpaceMapMarkerScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78B0)]
-    SpaceMapMaxTraderDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78B4)]
-    SpaceMapMoonScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78B8)]
-    SpaceMapObjectScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78BC)]
+    SpaceMapCockpitScaleAdjustFighter: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7878)
+    ]
+    SpaceMapCockpitScaleAdjustRobot: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x787C)
+    ]
+    SpaceMapCockpitScaleAdjustRoyal: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7880)
+    ]
+    SpaceMapCockpitScaleAdjustSail: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7884)
+    ]
+    SpaceMapCockpitScaleAdjustScientific: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7888)
+    ]
+    SpaceMapCockpitScaleAdjustShuttle: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x788C)
+    ]
+    SpaceMapDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7890)]
+    SpaceMapDistanceLogScaler: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7894)]
+    SpaceMapDistanceMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7898)]
+    SpaceMapDistanceScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x789C)]
+    SpaceMapFadeAngleMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78A0)]
+    SpaceMapFadeAngleMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78A4)]
+    SpaceMapFoV: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78A8)]
+    SpaceMapFreighterScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78AC)]
+    SpaceMapHorizonThickness: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78B0)]
+    SpaceMapLightPitch: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78B4)]
+    SpaceMapLightYaw: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78B8)]
+    SpaceMapLineBaseFade: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78BC)]
+    SpaceMapLineBaseScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78C0)]
+    SpaceMapLineWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78C4)]
+    SpaceMapMarkerScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78C8)]
+    SpaceMapMaxTraderDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78CC)]
+    SpaceMapMoonScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78D0)]
+    SpaceMapObjectScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78D4)]
     SpaceMapPirateFreighterScale: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x78C0)
+        ctypes.c_float, Field(ctypes.c_float, 0x78D8)
     ]
-    SpaceMapPirateFrigateScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78C4)]
-    SpaceMapPlanetLineOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78C8)]
-    SpaceMapPlanetScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78CC)]
-    SpaceMapScaleMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78D0)]
-    SpaceMapScaleRangeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78D4)]
-    SpaceMapScaleRangeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78D8)]
+    SpaceMapPirateFrigateScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78DC)]
+    SpaceMapPlanetLineOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78E0)]
+    SpaceMapPlanetScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78E4)]
+    SpaceMapScaleMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78E8)]
+    SpaceMapScaleRangeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78EC)]
+    SpaceMapScaleRangeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78F0)]
     SpaceMapShipCombineDistance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x78DC)
+        ctypes.c_float, Field(ctypes.c_float, 0x78F4)
     ]
-    SpaceMapShipScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78E0)]
-    SpaceMapShipScaleMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78E4)]
-    SpaceMapStationScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78E8)]
-    SpaceMarkersBattleOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78EC)]
-    SpaceMarkersOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78F0)]
-    StackSizeChangeMaxRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78F4)]
-    StackSizeChangeMinRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78F8)]
-    StackSizeRateChangeRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78FC)]
-    StageStingDisplayTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7900)]
-    StandingRewardOSDTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7904)]
-    StatsMessageDelayTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7908)]
-    StoreDialDecayTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x790C)]
-    StoreDialHoldTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7910)]
-    StoreDialInnerRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7914)]
-    StoreDialOuterRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7918)]
-    SuperchargeGradientFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x791C)]
+    SpaceMapShipScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78F8)]
+    SpaceMapShipScaleMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x78FC)]
+    SpaceMapStationScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7900)]
+    SpaceMarkersBattleOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7904)]
+    SpaceMarkersOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7908)]
+    StackSizeChangeMaxRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x790C)]
+    StackSizeChangeMinRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7910)]
+    StackSizeRateChangeRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7914)]
+    StageStingDisplayTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7918)]
+    StandingRewardOSDTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x791C)]
+    StatsMessageDelayTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7920)]
+    SteamDeckFrontendZoomFactor: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7924)
+    ]
+    SteamDeckMinFontHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7928)]
+    StoreDialDecayTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x792C)]
+    StoreDialHoldTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7930)]
+    StoreDialInnerRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7934)]
+    StoreDialOuterRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7938)]
+    SuperchargeGradientFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x793C)]
     SuperchargeGradientFactorMin: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7920)
+        ctypes.c_float, Field(ctypes.c_float, 0x7940)
     ]
-    SuperchargeGradientTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7924)]
+    SuperchargeGradientTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7944)]
     SurveyObjectArrowOffsetMultiplier: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7928)
+        ctypes.c_float, Field(ctypes.c_float, 0x7948)
     ]
-    TakeoffFuelMessageTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x792C)]
-    TalkBoxAlienTextSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7930)]
-    TalkBoxAlienTextTimeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7934)]
-    TalkBoxAlienTextTimeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7938)]
+    TakeoffFuelMessageTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x794C)]
+    TalkBoxAlienTextSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7950)]
+    TalkBoxAlienTextTimeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7954)]
+    TalkBoxAlienTextTimeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7958)]
     TargetDisplayDamageFlashTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x793C)
-    ]
-    TargetDisplayScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7940)]
-    TargetDisplayShipScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7944)]
-    TargetDisplayTorpedoScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7948)]
-    TargetMarkerFadeAngleMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x794C)]
-    TargetMarkerFadeAngleRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7950)]
-    TargetMarkerScaleEnd: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7954)]
-    TargetMarkerScaleStart: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7958)]
-    TargetParallaxMaintenancePageMultiplier: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x795C)
     ]
+    TargetDisplayScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7960)]
+    TargetDisplayShipScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7964)]
+    TargetDisplayTorpedoScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7968)]
+    TargetMarkerFadeAngleMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x796C)]
+    TargetMarkerFadeAngleRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7970)]
+    TargetMarkerScaleEnd: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7974)]
+    TargetMarkerScaleStart: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7978)]
+    TargetParallaxMaintenancePageMultiplier: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x797C)
+    ]
     TargetParallaxMouseMultiplier: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7960)
+        ctypes.c_float, Field(ctypes.c_float, 0x7980)
     ]
-    TargetScreenDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7964)]
-    TargetScreenFoV: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7968)]
-    TechDisplayDelayTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x796C)]
-    TechPopupBuildLayerHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7970)]
+    TargetScreenDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7984)]
+    TargetScreenFoV: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7988)]
+    TechDisplayDelayTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x798C)]
+    TechPopupBuildLayerHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7990)]
     TechPopupInstallLayerHeight: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7974)
-    ]
-    TechPopupRepairLayerHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7978)]
-    TechPopupRequirementHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x797C)]
-    TextChatMaxDisplayTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7980)]
-    TextChatStayBigAfterTextInput: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7984)
-    ]
-    TextPrintoutMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7988)]
-    TextPrintoutMultiplierAlien: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x798C)
-    ]
-    TextTouchScrollCap: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7990)]
-    ThirdPersonCrosshairCircle1Distance: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7994)
     ]
+    TechPopupRepairLayerHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7998)]
+    TechPopupRequirementHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x799C)]
+    TextChatMaxDisplayTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79A0)]
+    TextChatStayBigAfterTextInput: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x79A4)
+    ]
+    TextPrintoutMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79A8)]
+    TextPrintoutMultiplierAlien: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x79AC)
+    ]
+    TextTouchScrollCap: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79B0)]
+    ThirdPersonCrosshairCircle1Distance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x79B4)
+    ]
     ThirdPersonCrosshairCircle2Distance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7998)
+        ctypes.c_float, Field(ctypes.c_float, 0x79B8)
     ]
     ThirdPersonCrosshairDistance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x799C)
+        ctypes.c_float, Field(ctypes.c_float, 0x79BC)
     ]
-    TimedEventLookTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79A0)]
-    TooltipTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79A4)]
+    TimedEventLookTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79C0)]
+    TooltipTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79C4)]
     TouchScrollChangePageThreshold: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x79A8)
+        ctypes.c_float, Field(ctypes.c_float, 0x79C8)
     ]
-    TouchScrollMaxDelta: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79AC)]
-    TouchScrollSpeedMul: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79B0)]
-    TrackCriticalHitSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79B4)]
-    TrackCriticalPulseTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79B8)]
-    TrackLeadTargetInScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79BC)]
+    TouchScrollMaxDelta: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79CC)]
+    TouchScrollSpeedMul: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79D0)]
+    TrackCriticalHitSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79D4)]
+    TrackCriticalPulseTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79D8)]
+    TrackLeadTargetInScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79DC)]
     TrackMissileTargetPulseRate: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x79C0)
+        ctypes.c_float, Field(ctypes.c_float, 0x79E0)
     ]
     TrackPoliceFreighterCentreOffset: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x79C4)
+        ctypes.c_float, Field(ctypes.c_float, 0x79E4)
     ]
-    TrackPrimaryCentreOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79C8)]
-    TrackReticuleAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79CC)]
-    TrackReticuleInactiveTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79D0)]
-    TrackReticuleInTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79D4)]
-    TrackReticuleRandomDelay: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79D8)]
-    TrackReticuleRandomTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79DC)]
-    TrackReticuleScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79E0)]
-    TrackScaleCritical: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79E4)]
-    TrackScaleHit: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79E8)]
-    TrackTimerAlpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79EC)]
+    TrackPrimaryCentreOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79E8)]
+    TrackReticuleAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79EC)]
+    TrackReticuleInactiveTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79F0)]
+    TrackReticuleInTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79F4)]
+    TrackReticuleRandomDelay: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79F8)]
+    TrackReticuleRandomTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79FC)]
+    TrackReticuleScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A00)]
+    TrackScaleCritical: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A04)]
+    TrackScaleHit: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A08)]
+    TrackTimerAlpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A0C)]
     TrackTimerIconExclaimRadius: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x79F0)
+        ctypes.c_float, Field(ctypes.c_float, 0x7A10)
     ]
-    TrackTimerIconInnerRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79F4)]
-    TrackTimerIconOuterRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79F8)]
-    TrackTimerRadarPulseSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x79FC)]
-    TrackTypeIconSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A00)]
-    TradePageNotifyOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A04)]
+    TrackTimerIconInnerRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A14)]
+    TrackTimerIconOuterRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A18)]
+    TrackTimerRadarPulseSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A1C)]
+    TrackTypeIconSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A20)]
+    TradePageNotifyOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A24)]
     TransferPopupCursorOffsetFactor: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7A08)
-    ]
-    TransferSendOffscreenBorder: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7A0C)
-    ]
-    TransitionOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A10)]
-    TravelLineThickness: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A14)]
-    TravelTargetRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A18)]
-    TrialUpsellDeclineDecayTimeQuick: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7A1C)
-    ]
-    TrialUpsellDeclineDecayTimeSlow: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7A20)
-    ]
-    TrialUpsellDeclineDialInnerRadius: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7A24)
-    ]
-    TrialUpsellDeclineDialOuterRadius: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7A28)
     ]
-    TrialUpsellDeclineHoldTimeQuick: Annotated[
+    TransferSendOffscreenBorder: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x7A2C)
     ]
+    TransitionOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A30)]
+    TravelLineThickness: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A34)]
+    TravelTargetRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A38)]
+    TrialUpsellDeclineDecayTimeQuick: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7A3C)
+    ]
+    TrialUpsellDeclineDecayTimeSlow: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7A40)
+    ]
+    TrialUpsellDeclineDialInnerRadius: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7A44)
+    ]
+    TrialUpsellDeclineDialOuterRadius: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7A48)
+    ]
+    TrialUpsellDeclineHoldTimeQuick: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x7A4C)
+    ]
     TrialUpsellDeclineHoldTimeSlow: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7A30)
+        ctypes.c_float, Field(ctypes.c_float, 0x7A50)
     ]
     UnknownWordsToShowInCatalogue: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x7A34)
+        ctypes.c_int32, Field(ctypes.c_int32, 0x7A54)
     ]
-    UseZoomedOutBuildCamRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A38)]
-    VRFaceLockedScreenHeight: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7A3C)]
-    VRFaceLockedScreenWidth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7A40)]
-    WantedDetectMessageTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A44)]
-    WantedDetectMinTimeout: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A48)]
-    WantedLevelScanAlpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A4C)]
-    WantedLevelScannedRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A50)]
+    UseZoomedOutBuildCamRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A58)]
+    VRFaceLockedScreenHeight: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7A5C)]
+    VRFaceLockedScreenWidth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7A60)]
+    WantedDetectMessageTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A64)]
+    WantedDetectMinTimeout: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A68)]
+    WantedLevelScanAlpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A6C)]
+    WantedLevelScannedRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A70)]
     WantedLevelTimeoutPulseRate: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7A54)
+        ctypes.c_float, Field(ctypes.c_float, 0x7A74)
     ]
-    WantedLevelWitnessAlpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A58)]
-    WantedLevelWitnessOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A5C)]
+    WantedLevelWitnessAlpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A78)]
+    WantedLevelWitnessOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A7C)]
     WantedLevelWitnessPulseRate: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7A60)
+        ctypes.c_float, Field(ctypes.c_float, 0x7A80)
     ]
-    ZoomFactorOverride: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A64)]
-    ZoomHUDElementsOffsetX: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A68)]
-    ZoomHUDElementsOffsetY: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A6C)]
-    ZoomHUDElementTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A70)]
+    ZoomFactorOverride: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A84)]
+    ZoomHUDElementsOffsetX: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A88)]
+    ZoomHUDElementsOffsetY: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A8C)]
+    ZoomHUDElementTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7A90)]
     HUDCircleAnimIcon: Annotated[
-        basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x7A74)
+        basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x7A94)
     ]
     HUDDeathPointIcon: Annotated[
-        basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x7B74)
+        basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x7B94)
     ]
     HUDHexAnimIcon: Annotated[
-        basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x7C74)
+        basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x7C94)
     ]
     HUDMarkerColourIcon: Annotated[
-        basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x7D74)
+        basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x7D94)
     ]
     HUDMarkerIcon: Annotated[
-        basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x7E74)
+        basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x7E94)
     ]
     HUDMarkerPrimaryIndicatorIcon: Annotated[
-        basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x7F74)
+        basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x7F94)
     ]
     HUDPointIcon: Annotated[
-        basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x8074)
+        basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x8094)
     ]
     HUDSaveIcon: Annotated[
-        basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x8174)
+        basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x8194)
     ]
     HUDSpaceshipIcon: Annotated[
-        basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x8274)
+        basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x8294)
     ]
     DistanceUnitKM: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x8374)
-    ]
-    DistanceUnitM: Annotated[
         basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x8394)
     ]
-    DistanceUnitMpS: Annotated[
+    DistanceUnitM: Annotated[
         basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x83B4)
     ]
-    MaxDialogCharSizeIdeographicString: Annotated[
+    DistanceUnitMpS: Annotated[
         basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x83D4)
     ]
-    MaxDialogCharSizeRomanString: Annotated[
+    MaxDialogCharSizeIdeographicString: Annotated[
         basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x83F4)
     ]
-    VRDistanceWarningUIFile: Annotated[
+    MaxDialogCharSizeRomanString: Annotated[
         basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x8414)
     ]
-    BuildMenuUseSmallIconOnPad: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8434)]
-    AllowInventorySorting: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8449)]
-    AllowInWorldDebugBorders: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x844A)]
-    AllowProjectorRepositioning: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x844B)]
-    AlwaysCloseQuickMenu: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x844C)]
+    VRDistanceWarningUIFile: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x8434)
+    ]
+    BuildMenuUseSmallIconOnPad: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8454)]
+    AllowInventorySorting: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8469)]
+    AllowInWorldDebugBorders: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x846A)]
+    AllowProjectorRepositioning: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x846B)]
+    AlwaysCloseQuickMenu: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x846C)]
     ArrowBounceLeftCurve: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x844D)
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x846D)
     ]
     ArrowBounceRightCurve: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x844E)
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x846E)
     ]
-    AutoScrollParagraphs: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x844F)]
+    AutoScrollParagraphs: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x846F)]
     BaseBuildingSmoothMenuWhileSnapped: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x8450)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x8470)
     ]
-    BigPicking: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8451)]
-    BigPickingUsesNumbers: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8452)]
-    BinocularScanScreen: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8453)]
+    BigPicking: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8471)]
+    BigPickingUsesNumbers: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8472)]
+    BinocularScanScreen: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8473)]
     CompassCurve: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x8454)
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x8474)
     ]
-    CreatureInteractLabelUseBB: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8455)]
+    CreatureInteractLabelUseBB: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8475)]
     CreatureReticuleAlphaCurve: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x8456)
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x8476)
     ]
     CreatureReticuleScaleCurve: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x8457)
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x8477)
     ]
     CrosshairLeadScaleCurve: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x8458)
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x8478)
     ]
     CrosshairTargetLockAlphaCurve: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x8459)
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x8479)
     ]
     CrosshairTargetLockCurve: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x845A)
-    ]
-    DamageNumberUpCurve: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x845B)
-    ]
-    DebugInventoryIndices: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x845C)]
-    DebugMarkerLabels: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x845D)]
-    DebugMissionLogText: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x845E)]
-    DebugPopupSizes: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x845F)]
-    DebugShowMaintenanceScreenCentre: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x8460)
-    ]
-    EnableAccessibleUIOnSwitch: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8461)]
-    EnableBlackouts: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8462)]
-    EnableBuilderRobotGreekConversion: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x8463)
-    ]
-    EnableCraftingTree: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8464)]
-    EnableHandMenuButtons: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8465)]
-    EnableHandMenuDebug: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8466)]
-    EnableKanaConversion: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8467)]
-    EnablePopupUses: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8468)]
-    FixedInventoryIconPositions: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8469)]
-    FrontendBootBarCurve: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x846A)
-    ]
-    FrontendConfirmCurve: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x846B)
-    ]
-    FrontendDoFCurve: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x846C)
-    ]
-    HideExtremePlanetNotifications: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x846D)
-    ]
-    HideQuickMenuControls: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x846E)]
-    HUDMarkerActiveCurve: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x846F)
-    ]
-    HUDMarkerAnimAlphaCurve: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x8470)
-    ]
-    HUDMarkerAnimCurve: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x8471)
-    ]
-    HUDPlayerTrackArrowEnergyShieldDepletedCurve: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x8472)
-    ]
-    HUDPlayerTrackArrowEnergyShieldStartChargeCurve: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x8473)
-    ]
-    InteractionInWorldPlayerCamAlways: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x8474)
-    ]
-    InteractionScanSlapCurve: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x8475)
-    ]
-    LeadTargetEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8476)]
-    ModelRendererBGPass: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8477)]
-    ModelRendererPass1: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8478)]
-    ModelRendererPass2: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8479)]
-    NGuiModelViewFadeInAfterRenderCurve: Annotated[
         c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x847A)
     ]
-    NGuiUseSeparateLayersForModelAndReflection: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x847B)
+    DamageNumberUpCurve: Annotated[
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x847B)
     ]
-    OnlyShowEjectHandlesInVR: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x847C)]
-    PadCursorUICurve: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x847D)
+    DebugInventoryIndices: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x847C)]
+    DebugMarkerLabels: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x847D)]
+    DebugMissionLogText: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x847E)]
+    DebugPopupSizes: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x847F)]
+    DebugShowMaintenanceScreenCentre: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x8480)
     ]
-    PageTurnCurve: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x847E)
+    EnableAccessibleUIOnSwitch: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8481)]
+    EnableBlackouts: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8482)]
+    EnableBuilderRobotGreekConversion: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x8483)
     ]
-    PageTurnFadeCurve: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x847F)
+    EnableCraftingTree: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8484)]
+    EnableHandMenuButtons: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8485)]
+    EnableHandMenuDebug: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8486)]
+    EnableKanaConversion: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8487)]
+    EnablePopupUses: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8488)]
+    FixedInventoryIconPositions: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8489)]
+    FrontendBootBarCurve: Annotated[
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x848A)
     ]
-    PopupActivateCurve1: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x8480)
+    FrontendConfirmCurve: Annotated[
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x848B)
     ]
-    PopupActivateCurve2: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x8481)
+    FrontendDoFCurve: Annotated[
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x848C)
     ]
-    ProgressiveDialogStyle: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8482)]
-    QuickMenuAllowCycle: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8483)]
-    QuickMenuEnableSwipe: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8484)]
-    RepairTechUseTechIcon: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8485)]
-    ReplaceItemBarWithNumbers: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8486)]
-    ShieldHUDAlwaysOn: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8487)]
-    ShowDamageNumbers: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8488)]
-    ShowDifficultyForBases: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8489)]
-    ShowJetpackNotificationForNonTerrain: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x848A)
+    HideExtremePlanetNotifications: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x848D)
     ]
-    ShowOnscreenPredatorMarkers: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x848B)]
-    ShowPadlockForLockedSettings: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x848C)]
-    ShowVRDistanceWarning: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x848D)]
-    SkipShopIntro: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x848E)]
-    SpaceMapDistanceCurve: Annotated[
+    HideQuickMenuControls: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x848E)]
+    HUDMarkerActiveCurve: Annotated[
         c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x848F)
     ]
-    SpaceMapShowAnomaly: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8490)]
-    SpaceMapShowAnomalyLines: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8491)]
-    SpaceMapShowFrieghterLines: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8492)]
-    SpaceMapShowFrieghters: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8493)]
-    SpaceMapShowNexus: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8494)]
-    SpaceMapShowNexusLines: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8495)]
-    SpaceMapShowPlanetLines: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8496)]
-    SpaceMapShowPlanets: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8497)]
-    SpaceMapShowPulseEncounterLines: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x8498)
+    HUDMarkerAnimAlphaCurve: Annotated[
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x8490)
     ]
-    SpaceMapShowPulseEncounters: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8499)]
-    SpaceMapShowShipLines: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x849A)]
-    SpaceMapShowShips: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x849B)]
-    SpaceMapShowStation: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x849C)]
-    SpaceMapShowStationLines: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x849D)]
-    SpaceOnlyLeadTargetEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x849E)]
-    TechBoxesCanStack: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x849F)]
-    TrackCritCurve: Annotated[
+    HUDMarkerAnimCurve: Annotated[
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x8491)
+    ]
+    HUDPlayerTrackArrowEnergyShieldDepletedCurve: Annotated[
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x8492)
+    ]
+    HUDPlayerTrackArrowEnergyShieldStartChargeCurve: Annotated[
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x8493)
+    ]
+    InteractionInWorldPlayerCamAlways: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x8494)
+    ]
+    InteractionScanSlapCurve: Annotated[
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x8495)
+    ]
+    LeadTargetEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8496)]
+    ModelRendererBGPass: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8497)]
+    ModelRendererPass1: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8498)]
+    ModelRendererPass2: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x8499)]
+    NGuiModelViewFadeInAfterRenderCurve: Annotated[
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x849A)
+    ]
+    NGuiUseSeparateLayersForModelAndReflection: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x849B)
+    ]
+    OnlyShowEjectHandlesInVR: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x849C)]
+    PadCursorUICurve: Annotated[
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x849D)
+    ]
+    PageTurnCurve: Annotated[
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x849E)
+    ]
+    PageTurnFadeCurve: Annotated[
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x849F)
+    ]
+    PopupActivateCurve1: Annotated[
         c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x84A0)
     ]
-    TrackReticuleInAngleCurve: Annotated[
+    PopupActivateCurve2: Annotated[
         c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x84A1)
     ]
+    ProgressiveDialogStyle: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84A2)]
+    QuickMenuAllowCycle: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84A3)]
+    QuickMenuEnableSwipe: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84A4)]
+    RepairTechUseTechIcon: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84A5)]
+    ReplaceItemBarWithNumbers: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84A6)]
+    ShieldHUDAlwaysOn: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84A7)]
+    ShowDamageNumbers: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84A8)]
+    ShowDifficultyForBases: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84A9)]
+    ShowJetpackNotificationForNonTerrain: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x84AA)
+    ]
+    ShowOnscreenPredatorMarkers: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84AB)]
+    ShowPadlockForLockedSettings: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84AC)]
+    ShowVRDistanceWarning: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84AD)]
+    SkipShopIntro: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84AE)]
+    SpaceMapDistanceCurve: Annotated[
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x84AF)
+    ]
+    SpaceMapShowAnomaly: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84B0)]
+    SpaceMapShowAnomalyLines: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84B1)]
+    SpaceMapShowFrieghterLines: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84B2)]
+    SpaceMapShowFrieghters: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84B3)]
+    SpaceMapShowNexus: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84B4)]
+    SpaceMapShowNexusLines: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84B5)]
+    SpaceMapShowPlanetLines: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84B6)]
+    SpaceMapShowPlanets: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84B7)]
+    SpaceMapShowPulseEncounterLines: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x84B8)
+    ]
+    SpaceMapShowPulseEncounters: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84B9)]
+    SpaceMapShowShipLines: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84BA)]
+    SpaceMapShowShips: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84BB)]
+    SpaceMapShowStation: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84BC)]
+    SpaceMapShowStationLines: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84BD)]
+    SpaceOnlyLeadTargetEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84BE)]
+    TechBoxesCanStack: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84BF)]
+    TrackCritCurve: Annotated[
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x84C0)
+    ]
+    TrackReticuleInAngleCurve: Annotated[
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x84C1)
+    ]
     TrackReticuleInCurve: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x84A2)
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x84C2)
     ]
-    UseCursorHoverSlowFixedValue: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84A3)]
+    UseCursorHoverSlowFixedValue: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84C3)]
     UseIntermediateMissionGiverOptions: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x84A4)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x84C4)
     ]
-    UseNamesOnShipHUD: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84A5)]
-    UseSquareSlots: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84A6)]
-    UseWorldNodesForRepair: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84A7)]
+    UseNamesOnShipHUD: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84C5)]
+    UseSquareSlots: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84C6)]
+    UseWorldNodesForRepair: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x84C7)]
 
 
 @partial_struct
@@ -33107,894 +32875,895 @@ class cGcSpaceshipGlobals(Structure):
     AutoPilotSmallShipAlignStrength: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1274)
     ]
-    AvoidanceDistancePower: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1278)]
-    AvoidancePower: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x127C)]
-    BoostChargeRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1280)]
-    BoostNoAsteroidRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1284)]
-    CameraPostWarpFov: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1288)]
-    CameraPostWarpFovTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x128C)]
-    CockpitDriftAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1290)]
-    CockpitDriftAngleHmd: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1294)]
-    CockpitExitAnimMul: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1298)]
-    CockpitExitAnimOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x129C)]
-    CockpitExitAnimTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12A0)]
-    CockpitPitchCorrectAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12A4)]
+    AutoPilotStoppingMargin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1278)]
+    AvoidanceDistancePower: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x127C)]
+    AvoidancePower: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1280)]
+    BoostChargeRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1284)]
+    BoostNoAsteroidRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1288)]
+    CameraPostWarpFov: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x128C)]
+    CameraPostWarpFovTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1290)]
+    CockpitDriftAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1294)]
+    CockpitDriftAngleHmd: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1298)]
+    CockpitExitAnimMul: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x129C)]
+    CockpitExitAnimOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12A0)]
+    CockpitExitAnimTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12A4)]
+    CockpitPitchCorrectAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12A8)]
     CockpitPitchCorrectAngleHmd: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x12A8)
+        ctypes.c_float, Field(ctypes.c_float, 0x12AC)
     ]
-    CockpitRollAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12AC)]
-    CockpitRollAngleExtra: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12B0)]
-    CockpitRollAngleHmd: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12B4)]
+    CockpitRollAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12B0)]
+    CockpitRollAngleExtra: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12B4)]
+    CockpitRollAngleHmd: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12B8)]
     CockpitRollMultiplierCentre: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x12B8)
-    ]
-    CockpitRollMultiplierOpposite: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x12BC)
     ]
-    CockpitRollTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12C0)]
-    CollisionAlignStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12C4)]
-    CollisionAsteroidDamp: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12C8)]
-    CollisionDeflectDamping: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12CC)]
-    CollisionDeflectForce: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12D0)]
+    CockpitRollMultiplierOpposite: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x12C0)
+    ]
+    CockpitRollTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12C4)]
+    CollisionAlignStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12C8)]
+    CollisionAsteroidDamp: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12CC)]
+    CollisionDeflectDamping: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12D0)]
+    CollisionDeflectForce: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12D4)]
     CollisionDeflectNormalFactor: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x12D4)
+        ctypes.c_float, Field(ctypes.c_float, 0x12D8)
     ]
-    CollisionDeflectTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12D8)]
-    CollisionDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12DC)]
-    CollisionDistanceAsteroid: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12E0)]
+    CollisionDeflectTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12DC)]
+    CollisionDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12E0)]
+    CollisionDistanceAsteroid: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12E4)]
     CollisionDistanceAsteroidSide: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x12E4)
+        ctypes.c_float, Field(ctypes.c_float, 0x12E8)
     ]
-    CollisionDistanceGround: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12E8)]
+    CollisionDistanceGround: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12EC)]
     CollisionDistanceSpaceships: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x12EC)
+        ctypes.c_float, Field(ctypes.c_float, 0x12F0)
     ]
-    CollisionGroundDamp: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12F0)]
-    CollisionRadiusMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12F4)]
-    CollisionSpeedDamageAmount: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12F8)]
-    CombatBoostMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12FC)]
-    CombatBoostTurnDamp: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1300)]
-    ContrailDefaultAlpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1304)]
-    ContrailSpeedDamping: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1308)]
-    CorvetteAutopilotSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x130C)]
+    CollisionGroundDamp: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12F4)]
+    CollisionRadiusMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12F8)]
+    CollisionSpeedDamageAmount: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12FC)]
+    CombatBoostMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1300)]
+    CombatBoostTurnDamp: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1304)]
+    ContrailDefaultAlpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1308)]
+    ContrailSpeedDamping: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x130C)]
+    CorvetteAutopilotSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1310)]
     CorvetteAutopilotSpeedSpace: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1310)
-    ]
-    CorvetteBignessLandingMultiplier: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1314)
     ]
-    CorvetteBignessLandingTurnMultiplier: Annotated[
+    CorvetteBignessLandingMultiplier: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1318)
     ]
-    CorvetteHoverBobPosAmount: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x131C)]
-    CorvetteHoverBobPosSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1320)]
-    CorvetteHoverBobRotationAmount: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1324)
+    CorvetteBignessLandingTurnMultiplier: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x131C)
     ]
-    CorvetteHoverBobRotationSpeed: Annotated[
+    CorvetteHoverBobPosAmount: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1320)]
+    CorvetteHoverBobPosSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1324)]
+    CorvetteHoverBobRotationAmount: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1328)
     ]
-    CorvetteLandingRotateNoseLiftAmount: Annotated[
+    CorvetteHoverBobRotationSpeed: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x132C)
     ]
-    CorvetteLandingRotateTilt: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1330)]
-    CorvetteLandingRotateTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1334)]
-    CorvettePulseBoost: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1338)]
-    CorvetteSizeMaxTurnDamping: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x133C)]
-    CruiseForce: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1340)]
-    CruiseHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1344)]
-    CruiseHeightRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1348)]
-    CruiseOffAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x134C)]
-    CruiseOffAngleRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1350)]
-    DamageFlashMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1354)]
-    DamageFlashScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1358)]
-    DamageLightIntensity: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x135C)]
-    DamageMaxHitTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1360)]
-    DamageMinHitTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1364)]
-    DamageMinWoundTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1368)]
-    DefaultTrailInitialSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x136C)]
+    CorvetteLandingRotateNoseLiftAmount: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1330)
+    ]
+    CorvetteLandingRotateTilt: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1334)]
+    CorvetteLandingRotateTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1338)]
+    CorvettePulseBoost: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x133C)]
+    CorvetteSizeMaxTurnDamping: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1340)]
+    CruiseForce: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1344)]
+    CruiseHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1348)]
+    CruiseHeightRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x134C)]
+    CruiseOffAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1350)]
+    CruiseOffAngleRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1354)]
+    DamageFlashMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1358)]
+    DamageFlashScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x135C)]
+    DamageLightIntensity: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1360)]
+    DamageMaxHitTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1364)]
+    DamageMinHitTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1368)]
+    DamageMinWoundTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x136C)]
+    DefaultTrailInitialSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1370)]
     DefaultTrailMinForwardSpeed: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1370)
+        ctypes.c_float, Field(ctypes.c_float, 0x1374)
     ]
-    DefaultTrailSpeedDamping: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1374)]
-    DeflectAlignTimeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1378)]
-    DeflectAlignTimeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x137C)]
-    DeflectDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1380)]
+    DefaultTrailSpeedDamping: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1378)]
+    DeflectAlignTimeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x137C)]
+    DeflectAlignTimeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1380)]
+    DeflectDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1384)]
     DirectionBrakeVerticalMultiplier: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1384)
+        ctypes.c_float, Field(ctypes.c_float, 0x1388)
     ]
-    DirectionBrakeVRBoost: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1388)]
+    DirectionBrakeVRBoost: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x138C)]
     DirectionDockingAlignmentAngle: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x138C)
+        ctypes.c_float, Field(ctypes.c_float, 0x1390)
     ]
-    DirectionDockingAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1390)]
+    DirectionDockingAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1394)]
     DirectionDockingCircleOffset: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1394)
-    ]
-    DirectionDockingCircleOffsetExtra: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1398)
     ]
-    DirectionDockingCircleRadius: Annotated[
+    DirectionDockingCircleOffsetExtra: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x139C)
     ]
-    DirectionDockingCircleRadiusExtra: Annotated[
+    DirectionDockingCircleRadius: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x13A0)
     ]
-    DirectionDockingCircleWidth: Annotated[
+    DirectionDockingCircleRadiusExtra: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x13A4)
     ]
-    DirectionDockingIndicatorAngleRange: Annotated[
+    DirectionDockingCircleWidth: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x13A8)
     ]
-    DirectionDockingIndicatorClearAngleRange: Annotated[
+    DirectionDockingIndicatorAngleRange: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x13AC)
     ]
-    DirectionDockingIndicatorMaxHeight: Annotated[
+    DirectionDockingIndicatorClearAngleRange: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x13B0)
     ]
-    DirectionDockingIndicatorMinHeight: Annotated[
+    DirectionDockingIndicatorMaxHeight: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x13B4)
     ]
-    DirectionDockingIndicatorRange: Annotated[
+    DirectionDockingIndicatorMinHeight: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x13B8)
     ]
-    DirectionDockingIndicatorSpeed: Annotated[
+    DirectionDockingIndicatorRange: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x13BC)
     ]
-    DirectionDockingInfoRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x13C0)]
-    DirectionDockTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x13C4)]
+    DirectionDockingIndicatorSpeed: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x13C0)
+    ]
+    DirectionDockingInfoRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x13C4)]
+    DirectionDockTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x13C8)]
     DistanceFromShipToAllowSpawningOnFreighter: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x13C8)
+        ctypes.c_float, Field(ctypes.c_float, 0x13CC)
     ]
-    DockingApproachActiveRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x13CC)]
-    DockingApproachBrakeHmdMod: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x13D0)]
-    DockingApproachRollHmdMod: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x13D4)]
-    DockingApproachSpeedHmdMod: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x13D8)]
-    DockingRotateSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x13DC)]
-    DockingRotateSpeedVR: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x13E0)]
+    DockingApproachActiveRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x13D0)]
+    DockingApproachBrakeHmdMod: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x13D4)]
+    DockingApproachRollHmdMod: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x13D8)]
+    DockingApproachSpeedHmdMod: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x13DC)]
+    DockingRotateSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x13E0)]
+    DockingRotateSpeedVR: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x13E4)]
     DrawLineLockTargetLineWidth: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x13E4)
+        ctypes.c_float, Field(ctypes.c_float, 0x13E8)
     ]
-    DriftEffectIntensity: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x13E8)]
-    DriftSpring: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x13EC)]
-    DriftTurnBrakeMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x13F0)]
+    DriftEffectIntensity: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x13EC)]
+    DriftSpring: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x13F0)]
+    DriftTurnBrakeMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x13F4)]
     DriftTurnStrengthMultiplier: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x13F4)
+        ctypes.c_float, Field(ctypes.c_float, 0x13F8)
     ]
-    DroneAlertAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x13F8)]
-    DroneAlertRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x13FC)]
-    DroneAlignUpTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1400)]
-    DroneDustHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1404)]
-    DroneHeightAdjust: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1408)]
-    DroneMinHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x140C)]
-    DroneMoveArrivedRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1410)]
-    DronePatrolRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1414)]
-    DronePatrolTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1418)]
-    DronePlanetAttackMinRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x141C)]
-    DronePlanetAttackRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1420)]
-    DroneShootTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1424)]
-    DroneWarpMaxForce: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1428)]
-    DroneWarpMinForce: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x142C)]
-    DroneWarpTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1430)]
-    EjectAnimSpeedFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1434)]
-    EjectAnimSwitchPoint: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1438)]
+    DroneAlertAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x13FC)]
+    DroneAlertRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1400)]
+    DroneAlignUpTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1404)]
+    DroneDustHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1408)]
+    DroneHeightAdjust: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x140C)]
+    DroneMinHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1410)]
+    DroneMoveArrivedRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1414)]
+    DronePatrolRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1418)]
+    DronePatrolTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x141C)]
+    DronePlanetAttackMinRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1420)]
+    DronePlanetAttackRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1424)]
+    DroneShootTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1428)]
+    DroneWarpMaxForce: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x142C)]
+    DroneWarpMinForce: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1430)]
+    DroneWarpTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1434)]
+    EjectAnimSpeedFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1438)]
+    EjectAnimSwitchPoint: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x143C)]
     EngineEffectsThrustContribution: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x143C)
-    ]
-    EngineJetLightIntensityMultiplier: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1440)
     ]
-    ExhaustSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1444)]
-    ExplorerTakeOffMod: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1448)]
-    FighterTakeOffMod: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x144C)]
-    FreighterApproachCombatDistanceMax: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1450)
+    EngineJetLightIntensityMultiplier: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1444)
     ]
-    FreighterApproachCombatDistanceMin: Annotated[
+    ExhaustSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1448)]
+    ExplorerTakeOffMod: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x144C)]
+    FighterTakeOffMod: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1450)]
+    FreighterApproachCombatDistanceMax: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1454)
     ]
-    FreighterApproachCombatMinSpeedFactor: Annotated[
+    FreighterApproachCombatDistanceMin: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1458)
     ]
-    FreighterApproachDistanceMax: Annotated[
+    FreighterApproachCombatMinSpeedFactor: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x145C)
     ]
-    FreighterApproachDistanceMin: Annotated[
+    FreighterApproachDistanceMax: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1460)
     ]
-    FreighterApproachExtraMargin: Annotated[
+    FreighterApproachDistanceMin: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1464)
     ]
-    FreighterApproachExtraMarginCombat: Annotated[
+    FreighterApproachExtraMargin: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1468)
     ]
-    FreighterApproachExtraMarginPirate: Annotated[
+    FreighterApproachExtraMarginCombat: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x146C)
     ]
-    FreighterApproachSpeedDamper: Annotated[
+    FreighterApproachExtraMarginPirate: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1470)
     ]
-    FreighterBattleIgnoreFriendlyFireDistance: Annotated[
+    FreighterApproachSpeedDamper: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1474)
     ]
-    FreighterBattleRangeBoost: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1478)]
-    FreighterCombatBoostMul: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x147C)]
-    FreighterCombatSpeedMul: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1480)]
-    FreighterSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1484)]
-    FrigateTargetLockRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1488)]
-    GravityDropForce: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x148C)]
-    GravityDropMaxForceHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1490)]
-    GravityDropMaxHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1494)]
-    GravityDropMinHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1498)]
-    GroundHeightBrakeMultiplier: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x149C)
+    FreighterBattleIgnoreFriendlyFireDistance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1478)
     ]
-    GroundHeightDownSpeedMultiplier: Annotated[
+    FreighterBattleRangeBoost: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x147C)]
+    FreighterCombatBoostMul: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1480)]
+    FreighterCombatSpeedMul: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1484)]
+    FreighterSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1488)]
+    FrigateTargetLockRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x148C)]
+    GravityDropForce: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1490)]
+    GravityDropMaxForceHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1494)]
+    GravityDropMaxHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1498)]
+    GravityDropMinHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x149C)]
+    GroundHeightBrakeMultiplier: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x14A0)
     ]
-    GroundHeightHard: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14A4)]
+    GroundHeightDownSpeedMultiplier: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x14A4)
+    ]
+    GroundHeightHard: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14A8)]
     GroundHeightHardCorvetteAutopilot: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x14A8)
+        ctypes.c_float, Field(ctypes.c_float, 0x14AC)
     ]
-    GroundHeightHardHorizontal: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14AC)]
+    GroundHeightHardHorizontal: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14B0)]
     GroundHeightHardHorizontalCorvetteAutopilot: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x14B0)
+        ctypes.c_float, Field(ctypes.c_float, 0x14B4)
     ]
-    GroundHeightHardOverWater: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14B4)]
-    GroundHeightHardTimeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14B8)]
-    GroundHeightHardTimeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14BC)]
-    GroundHeightNumRays: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x14C0)]
+    GroundHeightHardOverWater: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14B8)]
+    GroundHeightHardTimeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14BC)]
+    GroundHeightHardTimeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14C0)]
+    GroundHeightNumRays: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x14C4)]
     GroundHeightPostCollisionDamper: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x14C4)
-    ]
-    GroundHeightPostCollisionMultiplier: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x14C8)
     ]
-    GroundHeightPostCollisionMultiplierTime: Annotated[
+    GroundHeightPostCollisionMultiplier: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x14CC)
     ]
-    GroundHeightSmoothTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14D0)]
-    GroundHeightSoft: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14D4)]
+    GroundHeightPostCollisionMultiplierTime: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x14D0)
+    ]
+    GroundHeightSmoothTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14D4)]
+    GroundHeightSoft: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14D8)]
     GroundHeightSoftCorvetteAutopilot: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x14D8)
+        ctypes.c_float, Field(ctypes.c_float, 0x14DC)
     ]
-    GroundHeightSoftForce: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14DC)]
+    GroundHeightSoftForce: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14E0)]
     GroundHeightSoftForceCorvetteAutopilot: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x14E0)
+        ctypes.c_float, Field(ctypes.c_float, 0x14E4)
     ]
-    GroundHeightSoftHorizontal: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14E4)]
+    GroundHeightSoftHorizontal: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14E8)]
     GroundHeightSoftHorizontalCorvetteAutopilot: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x14E8)
+        ctypes.c_float, Field(ctypes.c_float, 0x14EC)
     ]
-    GroundHeightSpeedAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14EC)]
+    GroundHeightSpeedAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14F0)]
     GroundHeightSpeedAngleRange: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x14F0)
+        ctypes.c_float, Field(ctypes.c_float, 0x14F4)
     ]
-    GroundHeightSpeedLength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14F4)]
+    GroundHeightSpeedLength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14F8)]
     GroundNearEffectBuildingFade: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x14F8)
+        ctypes.c_float, Field(ctypes.c_float, 0x14FC)
     ]
-    GroundNearEffectHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14FC)]
+    GroundNearEffectHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1500)]
     GroundNearEffectLightFactor: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1500)
-    ]
-    GroundNearEffectNormalOffset: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1504)
     ]
-    GroundNearEffectRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1508)]
+    GroundNearEffectNormalOffset: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1508)
+    ]
+    GroundNearEffectRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x150C)]
     GroundNearEffectWaterLightFactor: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x150C)
+        ctypes.c_float, Field(ctypes.c_float, 0x1510)
     ]
-    GroundWaterSpeedFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1510)]
-    GunAimLevel: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1514)]
-    GunAmmoMultiplier: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1518)]
+    GroundWaterSpeedFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1514)]
+    GunAimLevel: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1518)]
+    GunAmmoMultiplier: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x151C)]
     GunOffset3rdPersonMultiplier: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x151C)
-    ]
-    HandControllerActiveBlendMinTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1520)
     ]
-    HandControllerActiveBlendTime: Annotated[
+    HandControllerActiveBlendMinTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1524)
     ]
-    HandControllerDirOffsetAngle: Annotated[
+    HandControllerActiveBlendTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1528)
     ]
-    HandControllerDirOffsetAngleMove: Annotated[
+    HandControllerDirOffsetAngle: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x152C)
     ]
-    HandControllerThrottleDeadZone: Annotated[
+    HandControllerDirOffsetAngleMove: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1530)
     ]
-    HandControllerThrottleDistance: Annotated[
+    HandControllerThrottleDeadZone: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1534)
     ]
-    HandControllerThrottleRange: Annotated[
+    HandControllerThrottleDistance: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1538)
     ]
-    HandControllerXReorientation: Annotated[
+    HandControllerThrottleRange: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x153C)
     ]
-    HandControllerXReorientationMove: Annotated[
+    HandControllerXReorientation: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1540)
     ]
-    HandControllerZReorientation: Annotated[
+    HandControllerXReorientationMove: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1544)
     ]
-    HandControllerZReorientationMove: Annotated[
+    HandControllerZReorientation: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1548)
     ]
-    HaulerTakeOffMod: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x154C)]
-    HitAsteroidDamage: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1550)]
-    HoverAlignTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1554)]
-    HoverAlignTimeAlt: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1558)]
-    HoverBrakeStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x155C)]
-    HoverHeightFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1560)]
-    HoverLandManeuvreBrake: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1564)]
-    HoverLandManeuvreTimeCorvetteMultiplier: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1568)
+    HandControllerZReorientationMove: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x154C)
     ]
-    HoverLandManeuvreTimeHmdMax: Annotated[
+    HaulerTakeOffMod: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1550)]
+    HitAsteroidDamage: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1554)]
+    HoverAlignTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1558)]
+    HoverAlignTimeAlt: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x155C)]
+    HoverBrakeStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1560)]
+    HoverHeightFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1564)]
+    HoverLandManeuvreBrake: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1568)]
+    HoverLandManeuvreTimeCorvetteMultiplier: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x156C)
     ]
-    HoverLandManeuvreTimeHmdMin: Annotated[
+    HoverLandManeuvreTimeHmdMax: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1570)
     ]
-    HoverLandManeuvreTimeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1574)]
-    HoverLandManeuvreTimeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1578)]
+    HoverLandManeuvreTimeHmdMin: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1574)
+    ]
+    HoverLandManeuvreTimeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1578)]
+    HoverLandManeuvreTimeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x157C)]
     HoverLandManeuvreTimeWaterMultiplier: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x157C)
+        ctypes.c_float, Field(ctypes.c_float, 0x1580)
     ]
-    HoverLandReachedDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1580)]
-    HoverLandReachedMinTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1584)]
-    HoverMaxSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1588)]
-    HoverMinSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x158C)]
-    HoverSpeedFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1590)]
-    HoverStopTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1594)]
-    HoverTakeoffHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1598)]
-    HoverTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x159C)]
-    HoverTimeAlt: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15A0)]
-    HUDBoostUpgradeMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15A4)]
-    KBThrustSmoothTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15A8)]
-    LandGroundTakeOffTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15AC)]
-    LandHeightThreshold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15B0)]
-    LandingAreaFloorOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15B4)]
-    LandingAreaRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15B8)]
-    LandingButtonMinTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15BC)]
+    HoverLandReachedDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1584)]
+    HoverLandReachedMinTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1588)]
+    HoverMaxSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x158C)]
+    HoverMinSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1590)]
+    HoverSpeedFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1594)]
+    HoverStopTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1598)]
+    HoverTakeoffHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x159C)]
+    HoverTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15A0)]
+    HoverTimeAlt: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15A4)]
+    HUDBoostUpgradeMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15A8)]
+    KBThrustSmoothTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15AC)]
+    LandGroundTakeOffTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15B0)]
+    LandHeightThreshold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15B4)]
+    LandingAreaFloorOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15B8)]
+    LandingAreaRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15BC)]
+    LandingButtonMinTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15C0)]
     LandingCheckBuildingRadiusFactor: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x15C0)
+        ctypes.c_float, Field(ctypes.c_float, 0x15C4)
     ]
-    LandingCost: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x15C4)]
+    LandingCost: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x15C8)]
     LandingDirectionalSideOffsetFactor: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x15C8)
+        ctypes.c_float, Field(ctypes.c_float, 0x15CC)
     ]
-    LandingHelperMinAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15CC)]
-    LandingHelperRollTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15D0)]
-    LandingHelperTurnTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15D4)]
-    LandingHoverOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15D8)]
-    LandingMargin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15DC)]
-    LandingMaxAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15E0)]
-    LandingMaxSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15E4)]
-    LandingObstacleMinHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15E8)]
-    LandingOnGroundTip: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15EC)]
-    LandingPushNoseUpFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15F0)]
+    LandingHelperMinAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15D0)]
+    LandingHelperRollTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15D4)]
+    LandingHelperTurnTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15D8)]
+    LandingHoverOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15DC)]
+    LandingMargin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15E0)]
+    LandingMaxAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15E4)]
+    LandingMaxSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15E8)]
+    LandingObstacleMinHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15EC)]
+    LandingOnGroundTip: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15F0)]
+    LandingPushNoseUpFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15F4)]
     LandingTooManyLowPointsFraction: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x15F4)
+        ctypes.c_float, Field(ctypes.c_float, 0x15F8)
     ]
-    LandingWaterHoverHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15F8)]
+    LandingWaterHoverHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x15FC)]
     LandingWaterHoverHeightCorvette: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x15FC)
+        ctypes.c_float, Field(ctypes.c_float, 0x1600)
     ]
-    LandingWaterHoverOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1600)]
-    LandLookingForward: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1604)]
-    LandOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1608)]
-    LandSlopeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x160C)]
-    LandWidthThreshold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1610)]
-    LaserAimLevel: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1614)]
-    LaserCoolFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1618)]
-    LaserFireTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x161C)]
-    LaserOverheatDownTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1620)]
-    LaserOverheatTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1624)]
-    LaserWaitTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1628)]
-    LateralDriftRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x162C)]
-    LateralDriftRollAmount: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1630)]
+    LandingWaterHoverOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1604)]
+    LandLookingForward: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1608)]
+    LandOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x160C)]
+    LandSlopeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1610)]
+    LandWidthThreshold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1614)]
+    LaserAimLevel: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1618)]
+    LaserCoolFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x161C)]
+    LaserFireTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1620)]
+    LaserOverheatDownTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1624)]
+    LaserOverheatTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1628)]
+    LaserWaitTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x162C)]
+    LateralDriftRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1630)]
+    LateralDriftRollAmount: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1634)]
     LaunchThrustersMinimumSummonPercentage: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1634)
-    ]
-    LaunchThrustersRegenTimePeriod: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1638)
     ]
-    LaunchThrustersSummonCostMultiplier: Annotated[
+    LaunchThrustersRegenTimePeriod: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x163C)
     ]
-    LinearDamping: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1640)]
-    LockTargetMaxScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1644)]
-    LockTargetMinDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1648)]
-    LockTargetMinScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x164C)]
-    LockTargetRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1650)]
-    LootAttractDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1654)]
-    LootAttractTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1658)]
-    LootCollectDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x165C)]
-    LootDampForce: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1660)]
-    LowAltitudeAnimationHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1664)]
+    LaunchThrustersSummonCostMultiplier: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1640)
+    ]
+    LinearDamping: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1644)]
+    LockTargetMaxScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1648)]
+    LockTargetMinDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x164C)]
+    LockTargetMinScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1650)]
+    LockTargetRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1654)]
+    LootAttractDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1658)]
+    LootAttractTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x165C)]
+    LootCollectDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1660)]
+    LootDampForce: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1664)]
+    LowAltitudeAnimationHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1668)]
     LowAltitudeAnimationHysteresisTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1668)
+        ctypes.c_float, Field(ctypes.c_float, 0x166C)
     ]
-    LowAltitudeAnimationTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x166C)]
+    LowAltitudeAnimationTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1670)]
     LowAltitudeContrailFadeAtAnimProgress: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1670)
+        ctypes.c_float, Field(ctypes.c_float, 0x1674)
     ]
-    MarkerEventTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1674)]
+    MarkerEventTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1678)]
     MaximumDistanceFromShipWhenExiting: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1678)
-    ]
-    MaximumHeightWhenExitingShip: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x167C)
     ]
-    MaxOverspeedBrake: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1680)]
-    MaxSpeedUpDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1684)]
-    MaxSpeedUpVelocity: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1688)]
-    MiniWarpAlignSlerp: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x168C)]
-    MiniWarpAlignStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1690)]
-    MiniWarpChargeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1694)]
-    MiniWarpCooldownTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1698)]
-    MiniWarpExitSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x169C)]
-    MiniWarpExitSpeedStation: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x16A0)]
-    MiniWarpExitTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x16A4)]
-    MiniWarpFlashDelay: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x16A8)]
-    MiniWarpFlashDuration: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x16AC)]
-    MiniWarpFlashIntensity: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x16B0)]
-    MiniWarpFuelTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x16B4)]
-    MiniWarpHUDArrowAttractAngle: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x16B8)
+    MaximumHeightWhenExitingShip: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1680)
     ]
-    MiniWarpHUDArrowAttractAngleDense: Annotated[
+    MaxOverspeedBrake: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1684)]
+    MaxSpeedUpDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1688)]
+    MaxSpeedUpVelocity: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x168C)]
+    MiniWarpAlignSlerp: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1690)]
+    MiniWarpAlignStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1694)]
+    MiniWarpChargeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1698)]
+    MiniWarpCooldownTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x169C)]
+    MiniWarpExitSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x16A0)]
+    MiniWarpExitSpeedStation: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x16A4)]
+    MiniWarpExitTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x16A8)]
+    MiniWarpFlashDelay: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x16AC)]
+    MiniWarpFlashDuration: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x16B0)]
+    MiniWarpFlashIntensity: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x16B4)]
+    MiniWarpFuelTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x16B8)]
+    MiniWarpHUDArrowAttractAngle: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x16BC)
     ]
-    MiniWarpHUDArrowAttractAngleOtherPlayerStuff: Annotated[
+    MiniWarpHUDArrowAttractAngleDense: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x16C0)
     ]
-    MiniWarpHUDArrowAttractAngleSaveBeacon: Annotated[
+    MiniWarpHUDArrowAttractAngleOtherPlayerStuff: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x16C4)
     ]
-    MiniWarpHUDArrowAttractAngleStation: Annotated[
+    MiniWarpHUDArrowAttractAngleSaveBeacon: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x16C8)
     ]
+    MiniWarpHUDArrowAttractAngleStation: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x16CC)
+    ]
     MiniWarpHUDArrowNumMarkersToBeDense: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x16CC)
+        ctypes.c_int32, Field(ctypes.c_int32, 0x16D0)
     ]
-    MiniWarpLinesHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x16D0)]
-    MiniWarpLinesNum: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x16D4)]
-    MiniWarpLinesOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x16D8)]
-    MiniWarpLinesSpacing: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x16DC)]
+    MiniWarpLinesHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x16D4)]
+    MiniWarpLinesNum: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x16D8)]
+    MiniWarpLinesOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x16DC)]
+    MiniWarpLinesSpacing: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x16E0)]
     MiniWarpMarkerAlignSlowdown: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x16E0)
-    ]
-    MiniWarpMarkerAlignSlowdownRange: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x16E4)
     ]
-    MiniWarpMarkerApproachSlowdown: Annotated[
+    MiniWarpMarkerAlignSlowdownRange: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x16E8)
     ]
-    MiniWarpMinPlanetDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x16EC)]
-    MiniWarpNoAsteroidRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x16F0)]
-    MiniWarpPlanetRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x16F4)]
-    MiniWarpShakeStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x16F8)]
-    MiniWarpSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x16FC)]
-    MiniWarpStationRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1700)]
+    MiniWarpMarkerApproachSlowdown: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x16EC)
+    ]
+    MiniWarpMinPlanetDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x16F0)]
+    MiniWarpNoAsteroidRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x16F4)]
+    MiniWarpPlanetRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x16F8)]
+    MiniWarpShakeStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x16FC)]
+    MiniWarpSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1700)]
+    MiniWarpStationRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1704)]
     MiniWarpStoppingMarginDefault: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1704)
+        ctypes.c_float, Field(ctypes.c_float, 0x1708)
     ]
-    MiniWarpStoppingMarginLong: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1708)]
+    MiniWarpStoppingMarginLong: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x170C)]
     MiniWarpStoppingMarginPlanet: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x170C)
+        ctypes.c_float, Field(ctypes.c_float, 0x1710)
     ]
-    MiniWarpTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1710)]
-    MiniWarpTopSpeedTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1714)]
-    MiniWarpTrackingMargin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1718)]
-    MissileLockSpeedUp: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x171C)]
-    MissileLockTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1720)]
-    MissileShootTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1724)]
-    MuzzleAnimSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1728)]
-    MuzzleLightIntensity: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x172C)]
+    MiniWarpTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1714)]
+    MiniWarpTopSpeedTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1718)]
+    MiniWarpTrackingMargin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x171C)]
+    MissileLockSpeedUp: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1720)]
+    MissileLockTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1724)]
+    MissileShootTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1728)]
+    MuzzleAnimSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x172C)]
+    MuzzleLightIntensity: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1730)]
     NearGroundPitchCorrectMinHeight: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1730)
-    ]
-    NearGroundPitchCorrectMinHeightRemote: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1734)
     ]
-    NearGroundPitchCorrectRange: Annotated[
+    NearGroundPitchCorrectMinHeightRemote: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1738)
     ]
-    NearGroundPitchCorrectRangeRemote: Annotated[
+    NearGroundPitchCorrectRange: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x173C)
     ]
-    NetworkDockSearchRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1740)]
-    NoBoostAnomalyDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1744)]
-    NoBoostCombatEventMinBattleTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1748)
+    NearGroundPitchCorrectRangeRemote: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1740)
     ]
-    NoBoostCombatEventMinFreighterBattleTime: Annotated[
+    NetworkDockSearchRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1744)]
+    NoBoostAnomalyDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1748)]
+    NoBoostCombatEventMinBattleTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x174C)
     ]
-    NoBoostCombatEventTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1750)]
-    NoBoostFreighterAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1754)]
-    NoBoostFreighterDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1758)]
-    NoBoostShipDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x175C)]
-    NoBoostShipLastHitTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1760)]
-    NoBoostShipNearMinTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1764)]
+    NoBoostCombatEventMinFreighterBattleTime: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1750)
+    ]
+    NoBoostCombatEventTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1754)]
+    NoBoostFreighterAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1758)]
+    NoBoostFreighterDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x175C)]
+    NoBoostShipDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1760)]
+    NoBoostShipLastHitTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1764)]
+    NoBoostShipNearMinTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1768)]
     NoBoostSpaceAnomalyDistance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1768)
+        ctypes.c_float, Field(ctypes.c_float, 0x176C)
     ]
-    NoBoostStationDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x176C)]
+    NoBoostStationDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1770)]
     OutpostDockSpeedAlignMinDistance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1770)
+        ctypes.c_float, Field(ctypes.c_float, 0x1774)
     ]
-    OutpostDockSpeedAlignRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1774)]
-    PadThrustSmoothTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1778)]
-    PadTurnSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x177C)]
-    PitchCorrectCockpitSpring: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1780)]
+    OutpostDockSpeedAlignRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1778)]
+    PadThrustSmoothTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x177C)]
+    PadTurnSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1780)]
+    PitchCorrectCockpitSpring: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1784)]
     PitchCorrectDownSpeedHeightMax: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1784)
-    ]
-    PitchCorrectDownSpeedHeightMin: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1788)
     ]
-    PitchCorrectDownSpeedMaxDownAngle: Annotated[
+    PitchCorrectDownSpeedHeightMin: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x178C)
     ]
-    PitchCorrectDownSpeedMinSpeed: Annotated[
+    PitchCorrectDownSpeedMaxDownAngle: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1790)
     ]
-    PitchCorrectDownSpeedRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1794)]
+    PitchCorrectDownSpeedMinSpeed: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1794)
+    ]
+    PitchCorrectDownSpeedRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1798)]
     PitchCorrectDownSpeedSoftAngle: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1798)
+        ctypes.c_float, Field(ctypes.c_float, 0x179C)
     ]
-    PitchCorrectHeightMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x179C)]
-    PitchCorrectHeightMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x17A0)]
-    PitchCorrectHeightSpring: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x17A4)]
-    PitchCorrectMaxDownAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x17A8)]
+    PitchCorrectHeightMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x17A0)]
+    PitchCorrectHeightMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x17A4)]
+    PitchCorrectHeightSpring: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x17A8)]
+    PitchCorrectMaxDownAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x17AC)]
     PitchCorrectMaxDownAnglePostCollision: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x17AC)
-    ]
-    PitchCorrectMaxDownAngleWater: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x17B0)
     ]
-    PitchCorrectSoftDownAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x17B4)]
-    PitchCorrectSoftDownAnglePostCollision: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x17B8)
+    PitchCorrectMaxDownAngleWater: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x17B4)
     ]
-    PitchCorrectSoftDownAngleWater: Annotated[
+    PitchCorrectSoftDownAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x17B8)]
+    PitchCorrectSoftDownAnglePostCollision: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x17BC)
     ]
-    PitchCorrectTimeHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x17C0)]
-    PitchCorrectTimeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x17C4)]
-    PitchCorrectTimeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x17C8)]
-    PlayerFreighterClearSpaceRadius: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x17CC)
+    PitchCorrectSoftDownAngleWater: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x17C0)
     ]
-    PostFreighterWarpTransitionTime: Annotated[
+    PitchCorrectTimeHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x17C4)]
+    PitchCorrectTimeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x17C8)]
+    PitchCorrectTimeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x17CC)]
+    PlayerFreighterClearSpaceRadius: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x17D0)
     ]
-    PostWarpSlowDownTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x17D4)]
-    PowerSettingEngineDamper: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x17D8)]
-    PowerSettingEngineMul: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x17DC)]
-    PowerSettingShieldDamper: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x17E0)]
-    PowerSettingShieldMul: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x17E4)]
-    PowerSettingWeaponDamper: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x17E8)]
-    PowerSettingWeaponMul: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x17EC)]
-    ProjectileClipSize: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x17F0)]
-    ProjectileFireRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x17F4)]
-    ProjectileOverheatTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x17F8)]
-    ProjectileReloadTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x17FC)]
-    PulseDriveBoostDoubleTapTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1800)
+    PostFreighterWarpTransitionTime: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x17D4)
     ]
-    PulseDrivePlanetApproachHeight: Annotated[
+    PostWarpSlowDownTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x17D8)]
+    PowerSettingEngineDamper: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x17DC)]
+    PowerSettingEngineMul: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x17E0)]
+    PowerSettingShieldDamper: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x17E4)]
+    PowerSettingShieldMul: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x17E8)]
+    PowerSettingWeaponDamper: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x17EC)]
+    PowerSettingWeaponMul: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x17F0)]
+    ProjectileClipSize: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x17F4)]
+    ProjectileFireRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x17F8)]
+    ProjectileOverheatTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x17FC)]
+    ProjectileReloadTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1800)]
+    PulseDriveBoostDoubleTapTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1804)
     ]
-    PulseDrivePlanetApproachMaxAngle: Annotated[
+    PulseDrivePlanetApproachHeight: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1808)
     ]
-    PulseDrivePlanetApproachMinAngle: Annotated[
+    PulseDrivePlanetApproachMaxAngle: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x180C)
     ]
-    PulseDriveStationApproachAngleMin: Annotated[
+    PulseDrivePlanetApproachMinAngle: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1810)
     ]
-    PulseDriveStationApproachAngleRange: Annotated[
+    PulseDriveStationApproachAngleMin: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1814)
     ]
-    PulseDriveStationApproachOffset: Annotated[
+    PulseDriveStationApproachAngleRange: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1818)
     ]
-    PulseDriveStationApproachPerpAngleMin: Annotated[
+    PulseDriveStationApproachOffset: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x181C)
     ]
-    PulseDriveStationApproachPerpAngleRange: Annotated[
+    PulseDriveStationApproachPerpAngleMin: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1820)
     ]
-    PulseDriveStationApproachSlowdown: Annotated[
+    PulseDriveStationApproachPerpAngleRange: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1824)
     ]
-    PulseDriveStationApproachSlowdownRange: Annotated[
+    PulseDriveStationApproachSlowdown: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1828)
     ]
-    PulseDriveStationApproachSlowdownRangeMin: Annotated[
+    PulseDriveStationApproachSlowdownRange: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x182C)
     ]
-    RemotePlayerLockTimeAfterShot: Annotated[
+    PulseDriveStationApproachSlowdownRangeMin: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1830)
     ]
-    ResetTargetLockAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1834)]
-    ResourceCollectOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1838)]
-    RoyalTakeOffMod: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x183C)]
-    RudderToRollAngleDownMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1840)]
-    RudderToRollAngleDownMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1844)]
-    RudderToRollAngleUpMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1848)]
-    RudderToRollCutoffRotation: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x184C)]
-    RudderToRollMultiplierLow: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1850)]
-    RudderToRollMultiplierMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1854)]
-    RudderToRollMultiplierMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1858)]
-    RudderToRollMultiplierOpposite: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x185C)
+    RemotePlayerLockTimeAfterShot: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1834)
     ]
-    RudderToRollMultiplierSpace: Annotated[
+    ResetTargetLockAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1838)]
+    ResourceCollectOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x183C)]
+    RoyalTakeOffMod: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1840)]
+    RudderToRollAngleDownMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1844)]
+    RudderToRollAngleDownMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1848)]
+    RudderToRollAngleUpMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x184C)]
+    RudderToRollCutoffRotation: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1850)]
+    RudderToRollMultiplierLow: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1854)]
+    RudderToRollMultiplierMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1858)]
+    RudderToRollMultiplierMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x185C)]
+    RudderToRollMultiplierOpposite: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1860)
     ]
-    RudderToRollUpsideDownRotation: Annotated[
+    RudderToRollMultiplierSpace: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x1864)
     ]
-    ShakeAlignBrake: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1868)]
-    ShakeMaxPower: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x186C)]
-    ShakeMaxSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1870)]
-    ShakePowerScaler: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1874)]
-    ShakeSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1878)]
-    ShieldEffectHitTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x187C)]
-    ShieldLeechMul: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1880)]
-    ShieldRechargeMinHitTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1884)]
-    ShieldRechargeRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1888)]
-    ShipDifferentRepelAmount: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x188C)]
-    ShipDifferentRepelRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1890)]
-    ShipEnterAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1894)]
-    ShipEnterMinTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1898)]
-    ShipEnterRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x189C)]
-    ShipEnterSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x18A0)]
-    ShipEnterTransitionTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x18A4)]
-    ShipHeatAlertTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x18A8)]
-    ShipMotionDeadZone: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x18AC)]
-    ShipThrottleBrakeVibrationStrength: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x18B0)
+    RudderToRollUpsideDownRotation: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1868)
     ]
-    ShipThrottleNotchVibrationStrength: Annotated[
+    ShakeAlignBrake: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x186C)]
+    ShakeMaxPower: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1870)]
+    ShakeMaxSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1874)]
+    ShakePowerScaler: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1878)]
+    ShakeSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x187C)]
+    ShieldEffectHitTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1880)]
+    ShieldLeechMul: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1884)]
+    ShieldRechargeMinHitTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1888)]
+    ShieldRechargeRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x188C)]
+    ShipDifferentRepelAmount: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1890)]
+    ShipDifferentRepelRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1894)]
+    ShipEnterAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1898)]
+    ShipEnterMinTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x189C)]
+    ShipEnterRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x18A0)]
+    ShipEnterSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x18A4)]
+    ShipEnterTransitionTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x18A8)]
+    ShipHeatAlertTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x18AC)]
+    ShipMotionDeadZone: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x18B0)]
+    ShipThrottleBrakeVibrationStrength: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x18B4)
     ]
-    ShipThrustReverseThreshhold: Annotated[
+    ShipThrottleNotchVibrationStrength: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x18B8)
     ]
-    ShuttleTakeOffMod: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x18BC)]
-    SpaceBrakeAngularRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x18C0)]
-    SpaceBrakeMinAngularSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x18C4)]
-    SpaceCombatFollowModeAimTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x18C8)
+    ShipThrustReverseThreshhold: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x18BC)
     ]
-    SpaceCombatFollowModeBrakeBehindAngle: Annotated[
+    ShuttleTakeOffMod: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x18C0)]
+    SpaceBrakeAngularRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x18C4)]
+    SpaceBrakeMinAngularSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x18C8)]
+    SpaceCombatFollowModeAimTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x18CC)
     ]
-    SpaceCombatFollowModeEvadeRoll: Annotated[
+    SpaceCombatFollowModeBrakeBehindAngle: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x18D0)
     ]
-    SpaceCombatFollowModeEvadeThrust: Annotated[
+    SpaceCombatFollowModeEvadeRoll: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x18D4)
     ]
-    SpaceCombatFollowModeEvadeTime: Annotated[
+    SpaceCombatFollowModeEvadeThrust: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x18D8)
     ]
-    SpaceCombatFollowModeMaxBrakeBehind: Annotated[
+    SpaceCombatFollowModeEvadeTime: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x18DC)
     ]
-    SpaceCombatFollowModeMaxBrakeHeadOn: Annotated[
+    SpaceCombatFollowModeMaxBrakeBehind: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x18E0)
     ]
-    SpaceCombatFollowModeMaxTorque: Annotated[
+    SpaceCombatFollowModeMaxBrakeHeadOn: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x18E4)
     ]
-    SpaceCombatFollowModeTargetDistance: Annotated[
+    SpaceCombatFollowModeMaxTorque: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x18E8)
     ]
-    SpeedCoolNormalSpeedAmount: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x18EC)]
-    SpeedCoolOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x18F0)]
+    SpaceCombatFollowModeTargetDistance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x18EC)
+    ]
+    SpeedCoolNormalSpeedAmount: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x18F0)]
+    SpeedCoolOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x18F4)]
     SpeedUpDistanceFadeThreshold: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x18F4)
+        ctypes.c_float, Field(ctypes.c_float, 0x18F8)
     ]
-    SpeedUpDistanceThreshold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x18F8)]
-    SpeedUpVelocityCoeff: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x18FC)]
-    SpeedUpVelocityThreshold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1900)]
-    SpringSpeedBoosting: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1904)]
-    SpringSpeedBraking: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1908)]
-    SpringSpeedDefault: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x190C)]
-    SpringSpeedRolling: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1910)]
-    SpringSpeedSpringSpeedIn: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1914)]
-    SpringSpeedSpringSpeedOut: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1918)]
-    StickLandThreshold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x191C)]
-    StickPulseThreshold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1920)]
-    StickyStickAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1924)]
-    StickyTurnAngleRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1928)]
-    StickyTurnHigh: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x192C)]
-    StickyTurnLow: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1930)]
-    StickyTurnMinAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1934)]
+    SpeedUpDistanceThreshold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x18FC)]
+    SpeedUpVelocityCoeff: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1900)]
+    SpeedUpVelocityThreshold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1904)]
+    SpringSpeedBoosting: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1908)]
+    SpringSpeedBraking: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x190C)]
+    SpringSpeedDefault: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1910)]
+    SpringSpeedRolling: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1914)]
+    SpringSpeedSpringSpeedIn: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1918)]
+    SpringSpeedSpringSpeedOut: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x191C)]
+    StickLandThreshold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1920)]
+    StickPulseThreshold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1924)]
+    StickyStickAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1928)]
+    StickyTurnAngleRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x192C)]
+    StickyTurnHigh: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1930)]
+    StickyTurnLow: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1934)]
+    StickyTurnMinAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1938)]
     SummonShipAnywhereFwdOffset: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1938)
-    ]
-    SummonShipAnywhereHeightOffset: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x193C)
     ]
-    SummonShipAnywhereRangeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1940)]
-    SummonShipApproachOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1944)]
-    SummonShipHeightOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1948)]
-    SummonShipInSpaceRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x194C)]
-    TakeOffCost: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1950)]
-    TakeOffSphereCastLength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1954)]
-    TakeOffSphereCastRadiusMul: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1958)]
-    TargetLockAngleTorpedo: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x195C)]
-    TargetLockChangeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1960)]
-    TargetLockLoseTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1964)]
-    TargetLockNearestAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1968)]
-    TargetLockRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x196C)]
-    TargetLockTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1970)]
-    TestJetsBoost: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1974)]
-    TestJetsStage1: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1978)]
-    TestJetsStage2: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x197C)]
-    TestShieldEffect: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1980)]
-    TestShipAnimLowAltitude: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1984)]
-    TestShipAnimPulse: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1988)]
-    TestShipAnimRoll: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x198C)]
-    TestShipAnimSpace: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1990)]
-    TestShipAnimThrust: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1994)]
-    TestTrailRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1998)]
-    TestTrailSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x199C)]
-    TestTrailThreshold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19A0)]
-    ThrustDecaySpring: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19A4)]
-    ThrustDecaySpringCombat: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19A8)]
+    SummonShipAnywhereHeightOffset: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1940)
+    ]
+    SummonShipAnywhereRangeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1944)]
+    SummonShipApproachOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1948)]
+    SummonShipHeightOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x194C)]
+    SummonShipInSpaceRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1950)]
+    TakeOffCost: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1954)]
+    TakeOffSphereCastLength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1958)]
+    TakeOffSphereCastRadiusMul: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x195C)]
+    TargetLockAngleTorpedo: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1960)]
+    TargetLockChangeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1964)]
+    TargetLockLoseTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1968)]
+    TargetLockNearestAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x196C)]
+    TargetLockRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1970)]
+    TargetLockTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1974)]
+    TestJetsBoost: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1978)]
+    TestJetsStage1: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x197C)]
+    TestJetsStage2: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1980)]
+    TestShieldEffect: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1984)]
+    TestShipAnimLowAltitude: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1988)]
+    TestShipAnimPulse: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x198C)]
+    TestShipAnimRoll: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1990)]
+    TestShipAnimSpace: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1994)]
+    TestShipAnimThrust: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1998)]
+    TestTrailRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x199C)]
+    TestTrailSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19A0)]
+    TestTrailThreshold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19A4)]
+    ThrustDecaySpring: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19A8)]
+    ThrustDecaySpringCombat: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19AC)]
     TrailMaxNumPointsPerFrameOverride: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x19AC)
+        ctypes.c_int32, Field(ctypes.c_int32, 0x19B0)
     ]
-    TrailVelocityFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19B0)]
-    TurnRudderStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19B4)]
-    VignetteAmountAcceleration: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19B8)]
-    VignetteAmountTurning: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19BC)]
-    WarpAnimMaxSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19C0)]
-    WarpAnimMinSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19C4)]
-    WarpFadeInTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19C8)]
-    WarpInFlashTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19CC)]
-    WarpInFlashTimeFreighter: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19D0)]
-    WarpInFlashTimeNexus: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19D4)]
-    WarpInLineWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19D8)]
-    WarpInRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19DC)]
-    WarpInRangeFreighter: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19E0)]
-    WarpInRangeNexus: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19E4)]
-    WarpInTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19E8)]
-    WarpInTimeFreighter: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19EC)]
-    WarpInTimeNexus: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19F0)]
-    WarpNexusDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19F4)]
-    WarpNexusPitch: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19F8)]
-    WarpNexusRotation: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19FC)]
+    TrailVelocityFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19B4)]
+    TurnRudderStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19B8)]
+    VignetteAmountAcceleration: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19BC)]
+    VignetteAmountTurning: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19C0)]
+    WarpAnimMaxSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19C4)]
+    WarpAnimMinSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19C8)]
+    WarpFadeInTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19CC)]
+    WarpInFlashTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19D0)]
+    WarpInFlashTimeFreighter: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19D4)]
+    WarpInFlashTimeNexus: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19D8)]
+    WarpInLineWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19DC)]
+    WarpInRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19E0)]
+    WarpInRangeFreighter: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19E4)]
+    WarpInRangeNexus: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19E8)]
+    WarpInTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19EC)]
+    WarpInTimeFreighter: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19F0)]
+    WarpInTimeNexus: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19F4)]
+    WarpNexusDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19F8)]
+    WarpNexusPitch: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19FC)]
+    WarpNexusRotation: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A00)]
     WarpOnFootInCorvetteMaxWaitTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1A00)
+        ctypes.c_float, Field(ctypes.c_float, 0x1A04)
     ]
-    WarpOutRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A04)]
-    WarpOutTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A08)]
-    WarpScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A0C)]
-    WarpScaleFreighter: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A10)]
-    WarpScaleNexus: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A14)]
-    WaterEffectScaler: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A18)]
+    WarpOutRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A08)]
+    WarpOutTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A0C)]
+    WarpScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A10)]
+    WarpScaleFreighter: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A14)]
+    WarpScaleNexus: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A18)]
+    WaterEffectScaler: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A1C)]
     WeaponDamagePotentialReferenceRange: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1A1C)
+        ctypes.c_float, Field(ctypes.c_float, 0x1A20)
     ]
-    WingmanAlign: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A20)]
-    WingmanAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A24)]
-    WingmanAngle2: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A28)]
-    WingmanAttackAimAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A2C)]
-    WingmanAttackAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A30)]
-    WingmanAttackCoolTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A34)]
-    WingmanAttackMinRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A38)]
-    WingmanAttackOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A3C)]
-    WingmanAttackRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A40)]
-    WingmanAttackTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A44)]
-    WingmanAttackTimeout: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A48)]
-    WingmanAtTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A4C)]
-    WingmanAtTimeBack: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A50)]
-    WingmanAtTimeStart: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A54)]
-    WingmanFwd1: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A58)]
-    WingmanFwd2: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A5C)]
-    WingmanPerpTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A60)]
-    WingmanRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A64)]
-    WingmanSpawnDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A68)]
-    WingmanSpeedApproachSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A6C)]
+    WingmanAlign: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A24)]
+    WingmanAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A28)]
+    WingmanAngle2: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A2C)]
+    WingmanAttackAimAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A30)]
+    WingmanAttackAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A34)]
+    WingmanAttackCoolTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A38)]
+    WingmanAttackMinRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A3C)]
+    WingmanAttackOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A40)]
+    WingmanAttackRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A44)]
+    WingmanAttackTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A48)]
+    WingmanAttackTimeout: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A4C)]
+    WingmanAtTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A50)]
+    WingmanAtTimeBack: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A54)]
+    WingmanAtTimeStart: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A58)]
+    WingmanFwd1: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A5C)]
+    WingmanFwd2: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A60)]
+    WingmanPerpTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A64)]
+    WingmanRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A68)]
+    WingmanSpawnDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A6C)]
+    WingmanSpeedApproachSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A70)]
     WingmanSpeedApproachSpeedSpace: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1A70)
+        ctypes.c_float, Field(ctypes.c_float, 0x1A74)
     ]
-    WingmanSpeedTrackDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A74)]
-    WingmanSpeedTrackForceMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A78)]
-    WingmanSpeedTrackForceMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A7C)]
-    WingmanSpeedTrackOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A80)]
-    WingmanViewerAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A84)]
-    HoverShipDataNames: Annotated[cGcShipDataNames, Field(cGcShipDataNames, 0x1A88)]
+    WingmanSpeedTrackDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A78)]
+    WingmanSpeedTrackForceMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A7C)]
+    WingmanSpeedTrackForceMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A80)]
+    WingmanSpeedTrackOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A84)]
+    WingmanViewerAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A88)]
+    HoverShipDataNames: Annotated[cGcShipDataNames, Field(cGcShipDataNames, 0x1A8C)]
     HoverShipDataNamesSpecial: Annotated[
-        cGcShipDataNames, Field(cGcShipDataNames, 0x1BA8)
+        cGcShipDataNames, Field(cGcShipDataNames, 0x1BAC)
     ]
-    SpookShipDataNames: Annotated[cGcShipDataNames, Field(cGcShipDataNames, 0x1CC8)]
-    _3rdPersonShipEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1DE8)]
+    SpookShipDataNames: Annotated[cGcShipDataNames, Field(cGcShipDataNames, 0x1CCC)]
+    _3rdPersonShipEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1DEC)]
     _3rdPersonWarpWanderCurve: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x1DE9)
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x1DED)
     ]
-    AddShipToCollectionOnEnter: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1DEA)]
-    AimZoomAuto: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1DEB)]
-    AllowSideScreenPointing: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1DEC)]
-    AltAtmosphere: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1DED)]
-    AltControls: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1DEE)]
-    ApplyHeightAlign: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1DEF)]
-    ApplyHeightForce: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1DF0)]
-    AutoEjectOnLanding: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1DF1)]
+    AddShipToCollectionOnEnter: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1DEE)]
+    AimZoomAuto: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1DEF)]
+    AllowSideScreenPointing: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1DF0)]
+    AltAtmosphere: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1DF1)]
+    AltControls: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1DF2)]
+    ApplyHeightAlign: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1DF3)]
+    ApplyHeightForce: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1DF4)]
+    AutoEjectOnLanding: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1DF5)]
     CockpitExitAnimCurve: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x1DF2)
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x1DF6)
     ]
-    CritsFromBehind: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1DF3)]
+    CritsFromBehind: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1DF7)]
     DeflectCurve: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x1DF4)
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x1DF8)
     ]
     DirectionDockingIndicatorCurve: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x1DF5)
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x1DF9)
     ]
-    DoPreCollision: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1DF6)]
-    DrawLineLockTarget: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1DF7)]
+    DoPreCollision: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1DFA)]
+    DrawLineLockTarget: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1DFB)]
     EnableDepthTestedCrosshairSections: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x1DF8)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x1DFC)
     ]
     EnablePulseDriveSpaceStationOrient: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x1DF9)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x1DFD)
     ]
     GroundHeightHardCurve: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x1DFA)
-    ]
-    GroundHeightSoftCurve: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x1DFB)
-    ]
-    LandedCockpitFreeLook: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1DFC)]
-    LandingCheckBuildings: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1DFD)]
-    LandingCurve: Annotated[
         c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x1DFE)
     ]
-    LandingCurveHeavy: Annotated[
+    GroundHeightSoftCurve: Annotated[
         c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x1DFF)
     ]
-    LandingCurveWater: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x1E00)
-    ]
-    MiniWarpCurve: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x1E01)
-    ]
-    PitchCorrectHeightCurve: Annotated[
+    LandedCockpitFreeLook: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1E00)]
+    LandingCheckBuildings: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1E01)]
+    LandingCurve: Annotated[
         c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x1E02)
     ]
-    RudderToRollCurve: Annotated[
+    LandingCurveHeavy: Annotated[
         c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x1E03)
     ]
-    ShieldEffectHitCurve: Annotated[
+    LandingCurveWater: Annotated[
         c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x1E04)
     ]
+    MiniWarpCurve: Annotated[
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x1E05)
+    ]
+    PitchCorrectHeightCurve: Annotated[
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x1E06)
+    ]
+    RudderToRollCurve: Annotated[
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x1E07)
+    ]
+    ShieldEffectHitCurve: Annotated[
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x1E08)
+    ]
     SpaceCombatFollowModeUseBoost: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x1E05)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x1E09)
     ]
     SpaceCombatFollowModeUseEvadeTarget: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x1E06)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x1E0A)
     ]
-    SpaceMapInWorld: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1E07)]
-    SpeedTrackModeEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1E08)]
-    SpringSpeedSpringEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1E09)]
-    TestShipAnims: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1E0A)]
+    SpaceMapInWorld: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1E0B)]
+    SpeedTrackModeEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1E0C)]
+    SpringSpeedSpringEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1E0D)]
+    TestShipAnims: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1E0E)]
     WarpInCurve: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x1E0B)
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x1E0F)
     ]
 
 
@@ -36876,910 +36645,6 @@ class cGcFleetGlobals(Structure):
 
 
 @partial_struct
-class cGcCreatureGlobals(Structure):
-    PainShake: Annotated[cGcCameraShakeData, Field(cGcCameraShakeData, 0x0)]
-    PetOffPlanetEffect: Annotated[cGcScanEffectData, Field(cGcScanEffectData, 0xC0)]
-    AllCreaturesDiscoveredColour: Annotated[basic.Colour, Field(basic.Colour, 0x110)]
-    JellyBossBroodIdleColour: Annotated[basic.Colour, Field(basic.Colour, 0x120)]
-    JellyBossBroodProximityWarningColour: Annotated[
-        basic.Colour, Field(basic.Colour, 0x130)
-    ]
-    JellyBossIdleColour: Annotated[basic.Colour, Field(basic.Colour, 0x140)]
-    JellyBossProjectileAttackWarningColour: Annotated[
-        basic.Colour, Field(basic.Colour, 0x150)
-    ]
-    JellyBossSpawnBroodWarningColour: Annotated[
-        basic.Colour, Field(basic.Colour, 0x160)
-    ]
-    PetInteractionLightColour: Annotated[basic.Colour, Field(basic.Colour, 0x170)]
-    PetRadialBadColour: Annotated[basic.Colour, Field(basic.Colour, 0x180)]
-    PetRadialBoostColour: Annotated[basic.Colour, Field(basic.Colour, 0x190)]
-    PetRadialGoodColour: Annotated[basic.Colour, Field(basic.Colour, 0x1A0)]
-    PetRadialNeutralColour: Annotated[basic.Colour, Field(basic.Colour, 0x1B0)]
-    PetThrowArcColour: Annotated[basic.Colour, Field(basic.Colour, 0x1C0)]
-    SpookFiendAggressiveColour: Annotated[basic.Colour, Field(basic.Colour, 0x1D0)]
-    SpookFiendKamikazeColour: Annotated[basic.Colour, Field(basic.Colour, 0x1E0)]
-    SpookFiendPassiveColour: Annotated[basic.Colour, Field(basic.Colour, 0x1F0)]
-    SpookFiendSpitColour: Annotated[basic.Colour, Field(basic.Colour, 0x200)]
-    WeirdBiomeDescriptions: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x210)
-    ]
-    BiomeAirDescriptions: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x610)
-    ]
-    BiomeDescriptions: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x830)
-    ]
-    BiomeWaterDescriptions: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0xA50)
-    ]
-    DietMeat: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0xC70)
-    ]
-    DietVeg: Annotated[basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0xE90)]
-    PetBiomeClimates: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x10B0)
-    ]
-    WeirdKillingRewards: Annotated[
-        cGcWeirdCreatureRewardList, Field(cGcWeirdCreatureRewardList, 0x12D0)
-    ]
-    Temperments: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x14D0)
-    ]
-    Diets: Annotated[basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x1630)]
-    WaterDiets: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x16B0)
-    ]
-    CreatureFilter: Annotated[basic.TkID0x20, Field(basic.TkID0x20, 0x1730)]
-    PetCarePuzzleOverrideID: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x1750)
-    ]
-    AlertTable: Annotated[
-        basic.cTkDynamicArray[cGcCreatureAlertData],
-        Field(basic.cTkDynamicArray[cGcCreatureAlertData], 0x1770),
-    ]
-    AlienShipQuestCreatureWeapon: Annotated[
-        basic.TkID0x10, Field(basic.TkID0x10, 0x1780)
-    ]
-    AlienShipQuestKillingSubstance: Annotated[
-        basic.TkID0x10, Field(basic.TkID0x10, 0x1790)
-    ]
-    BasicFeedingProduct: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x17A0)]
-    CarnivoreFeedingProducts: Annotated[
-        basic.cTkDynamicArray[cGcCreatureFoodList],
-        Field(basic.cTkDynamicArray[cGcCreatureFoodList], 0x17B0),
-    ]
-    CreatureDeathEffectBig: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x17C0)]
-    CreatureDeathEffectMedium: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x17D0)]
-    CreatureDeathEffectSmall: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x17E0)]
-    CreatureHugeRunShake: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x17F0)]
-    CreatureHugeWalkShake: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x1800)]
-    CreatureLargeRunShake: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x1810)]
-    CreatureLargeWalkShake: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x1820)]
-    CreatureSeed: Annotated[basic.GcSeed, Field(basic.GcSeed, 0x1830)]
-    DefaultKillingSubstance: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x1840)]
-    FishDeathEffect: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x1850)]
-    HarvestingProducts: Annotated[
-        basic.cTkDynamicArray[cGcCreatureHarvestSubstanceList],
-        Field(basic.cTkDynamicArray[cGcCreatureHarvestSubstanceList], 0x1860),
-    ]
-    HerbivoreFeedingProducts: Annotated[
-        basic.cTkDynamicArray[cGcCreatureFoodList],
-        Field(basic.cTkDynamicArray[cGcCreatureFoodList], 0x1870),
-    ]
-    HorrorPetFeedingProduct: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x1880)]
-    KillingProducts: Annotated[
-        basic.cTkDynamicArray[cGcCreatureSubstanceList],
-        Field(basic.cTkDynamicArray[cGcCreatureSubstanceList], 0x1890),
-    ]
-    KillingSubstances: Annotated[
-        basic.cTkDynamicArray[basic.TkID0x10],
-        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x18A0),
-    ]
-    LootItems: Annotated[
-        basic.cTkDynamicArray[basic.TkID0x10],
-        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x18B0),
-    ]
-    PetEggMaxChangeProduct: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x18C0)]
-    PetEggs: Annotated[
-        basic.cTkDynamicArray[cGcCreaturePetEggData],
-        Field(basic.cTkDynamicArray[cGcCreaturePetEggData], 0x18D0),
-    ]
-    PetEggsplosionEffect: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x18E0)]
-    PetScan: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x18F0)]
-    RobotFeedingProduct: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x1900)]
-    RockTransformChanceModifiers: Annotated[
-        basic.cTkDynamicArray[ctypes.c_float],
-        Field(basic.cTkDynamicArray[ctypes.c_float], 0x1910),
-    ]
-    SpookFiendsSpawnData: Annotated[
-        basic.cTkDynamicArray[cGcSpookFiendSpawnData],
-        Field(basic.cTkDynamicArray[cGcSpookFiendSpawnData], 0x1920),
-    ]
-    FlyingSnakeData: Annotated[cGcFlyingSnakeData, Field(cGcFlyingSnakeData, 0x1930)]
-    SpherePusherOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1970)]
-    SpherePusherRadiusMul: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1980)]
-    SpherePusherWeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1990)]
-    JellyBossBroodMaxChaseTime: Annotated[basic.Vector2f, Field(basic.Vector2f, 0x19A0)]
-    SpookFiendsSpawnTimer: Annotated[basic.Vector2f, Field(basic.Vector2f, 0x19A8)]
-    AdultBabyKilledNoticeDistance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x19B0)
-    ]
-    AdultCorrelationValue: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19B4)]
-    AlertDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19B8)]
-    AllCreaturesDiscoveredBonusMul: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x19BC)
-    ]
-    AngryRockProportionNormal: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19C0)]
-    AngryRockProportionSurvival: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x19C4)
-    ]
-    AnimationStickToGroundSpeed: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x19C8)
-    ]
-    AnimChangeCoolDown: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19CC)]
-    AsteroidCreatureRichSystemSpawnPercent: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x19D0)
-    ]
-    AsteroidCreatureSpawnPercentOverride: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x19D4)
-    ]
-    AttackPlayerDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19D8)]
-    AttractedMaxAvoidCreaturesDist: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x19DC)
-    ]
-    AttractedMaxAvoidCreaturesStrength: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x19E0)
-    ]
-    AttractedMinAvoidCreaturesDist: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x19E4)
-    ]
-    AttractedMinAvoidCreaturesStrength: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x19E8)
-    ]
-    AttractMinDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19EC)]
-    AvoidCreaturesWeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19F0)]
-    AvoidImpassableWeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19F4)]
-    BadTurnPercent: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19F8)]
-    BadTurnWeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19FC)]
-    BaseAndTerrainModImpassableStrength: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1A00)
-    ]
-    BrakingForce: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A04)]
-    BrakingForceY: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A08)]
-    BugFiendHealth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1A0C)]
-    BugQueenHealth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1A10)]
-    BugQueenSpitballExplosionRadius: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1A14)
-    ]
-    BugQueenSpitballSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A18)]
-    BugQueenSpitCount: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1A1C)]
-    BugQueenSpitRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A20)]
-    CreatureBlobRidingHugeMinSize: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1A24)
-    ]
-    CreatureBlobRidingLargeMinSize: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1A28)
-    ]
-    CreatureBlobRidingMedMinSize: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1A2C)
-    ]
-    CreatureBrakeForce: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A30)]
-    CreatureHarvestAmountHuge: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1A34)]
-    CreatureHarvestAmountLarge: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1A38)]
-    CreatureHarvestAmountMed: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1A3C)]
-    CreatureHarvestAmountSmall: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1A40)]
-    CreatureHearingRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A44)]
-    CreatureHugeHealth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1A48)]
-    CreatureHugeMinSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A4C)]
-    CreatureHugeRunMaxShakeDist: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1A50)
-    ]
-    CreatureHugeWalkMaxShakeDist: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1A54)
-    ]
-    CreatureIndoorSpeedMultiplier: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1A58)
-    ]
-    CreatureInteractBaseRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A5C)]
-    CreatureInteractionRangeBoostHuge: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1A60)
-    ]
-    CreatureInteractionRangeBoostLarge: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1A64)
-    ]
-    CreatureInteractionRangeBoostMedium: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1A68)
-    ]
-    CreatureInteractionRangeBoostRun: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1A6C)
-    ]
-    CreatureInteractionRangeBoostSmall: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1A70)
-    ]
-    CreatureInteractionRangeBoostSprint: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1A74)
-    ]
-    CreatureInteractionRangeReducePredator: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1A78)
-    ]
-    CreatureKillRewardAmountFiend: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x1A7C)
-    ]
-    CreatureKillRewardAmountHuge: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x1A80)
-    ]
-    CreatureKillRewardAmountLarge: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x1A84)
-    ]
-    CreatureKillRewardAmountMed: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x1A88)
-    ]
-    CreatureKillRewardAmountSmall: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x1A8C)
-    ]
-    CreatureLargeHealth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1A90)]
-    CreatureLargeMinSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A94)]
-    CreatureLargeRunMaxShakeDist: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1A98)
-    ]
-    CreatureLargeWalkMaxShakeDist: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1A9C)
-    ]
-    CreatureLookBeforeFleeingIfShotTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1AA0)
-    ]
-    CreatureLookBeforeFleeingTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1AA4)
-    ]
-    CreatureLookBeforeGoingTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1AA8)
-    ]
-    CreatureLookPlayerForceLookTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1AAC)
-    ]
-    CreatureLookScaryThingTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1AB0)]
-    CreatureMedHealth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1AB4)]
-    CreatureMedMinSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1AB8)]
-    CreatureMinAlignSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1ABC)]
-    CreatureMinAnimMoveSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1AC0)]
-    CreatureMinRunTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1AC4)]
-    CreatureMoveIdle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1AC8)]
-    CreatureRidingHugeMinSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1ACC)]
-    CreatureRidingLargeMinSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1AD0)]
-    CreatureRidingMedMinSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1AD4)]
-    CreatureScaleMangle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1AD8)]
-    CreatureSightRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1ADC)]
-    CreatureSmallHealth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1AE0)]
-    CreatureSpeedMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1AE4)]
-    CreatureTurnMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1AE8)]
-    CreatureTurnMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1AEC)]
-    CreatureUpdateRateMultiplier: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1AF0)
-    ]
-    CreatureWaryTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1AF4)]
-    DefaultRunMoveSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1AF8)]
-    DefaultTrotMoveSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1AFC)]
-    DefaultWalkMoveSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B00)]
-    DelayAfterRespawnBeforeAttackable: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1B04)
-    ]
-    DespawnDistFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B08)]
-    DetailAnimBlendInTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B0C)]
-    DetailAnimBlendOutTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B10)]
-    DetailAnimMaxPauseTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B14)]
-    DetailAnimMinPauseTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B18)]
-    DroneExplodeRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B1C)]
-    EdgeClosenessPenalty: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B20)]
-    ExtraFollowFreq1: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B24)]
-    ExtraFollowFreq2: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B28)]
-    ExtraFollowStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B2C)]
-    FadeDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B30)]
-    FadeScaleMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B34)]
-    FadeScalePower: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B38)]
-    FastSwimSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B3C)]
-    FeedingFollowTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B40)]
-    FeedingNoticeDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B44)]
-    FeedingNoticeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B48)]
-    FeedingTaskAmount: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1B4C)]
-    FiendAggroDecreasePerSpawn: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B50)]
-    FiendAggroIncreaseDamageEgg: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1B54)
-    ]
-    FiendAggroIncreaseDestroyEgg: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1B58)
-    ]
-    FiendAggroTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B5C)]
-    FiendBeingShotMemoryTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B60)]
-    FiendCritAreaSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B64)]
-    FiendDespawnDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B68)]
-    FiendDistReduceForBeingShot: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1B6C)
-    ]
-    FiendDistToConsiderTargetSwtich: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1B70)
-    ]
-    FiendEggsToUnlockSpit: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1B74)]
-    FiendHealth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1B78)]
-    FiendHealthLevelMul: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B7C)]
-    FiendMaxAttackers: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1B80)]
-    FiendMaxEngaged: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1B84)]
-    FiendMaxSpawnTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B88)]
-    FiendMaxVerticalForPounce: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B8C)]
-    FiendMinSpawnTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B90)]
-    FiendPerceptionDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B94)]
-    FiendPounceDistanceModifier: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1B98)
-    ]
-    FiendReplicateEndDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B9C)]
-    FiendReplicateStartDistance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1BA0)
-    ]
-    FiendSpawnDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1BA4)]
-    FiendZigZagSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1BA8)]
-    FiendZigZagStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1BAC)]
-    FishBobAmplitude: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1BB0)]
-    FishBobFrequency: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1BB4)]
-    FishDesiredDepth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1BB8)]
-    FishFiendBigBoostStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1BBC)]
-    FishFiendBigBoostTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1BC0)]
-    FishFiendBigHealth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1BC4)]
-    FishFiendBigScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1BC8)]
-    FishFiendSmallBoostStrength: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1BCC)
-    ]
-    FishFiendSmallBoostTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1BD0)]
-    FishFiendSmallHealth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1BD4)]
-    FishFiendSmallScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1BD8)]
-    FishMinHeightAboveSeaBed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1BDC)]
-    FishObstacleAvoidStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1BE0)]
-    FishPlayerAttractionAhead: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1BE4)]
-    FishPlayerAttractionFrontDist: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1BE8)
-    ]
-    FishPlayerAttractionMaxDist: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1BEC)
-    ]
-    FishPlayerAttractionMinDist: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1BF0)
-    ]
-    FishPlayerAttractionStrength: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1BF4)
-    ]
-    FishPredatorChargeDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1BF8)]
-    FishPredatorChargeDistScale: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1BFC)
-    ]
-    FishSeaBedAvoidStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C00)]
-    FishWaterSurfaceAnticipate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C04)]
-    FishWaterSurfaceAvoidStrength: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1C08)
-    ]
-    FloaterObstacleAvoidStrength: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1C0C)
-    ]
-    FloaterSteeringRayLength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C10)]
-    FloaterSteeringRaySphereSize: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1C14)
-    ]
-    FloaterSteeringRaySpread: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C18)]
-    FloaterSurfaceAnticipate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C1C)]
-    FloaterSurfaceAvoidStrength: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1C20)
-    ]
-    FlowFieldWeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C24)]
-    FollowLeaderAlignWeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C28)]
-    FollowLeaderCohereWeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C2C)]
-    FollowPlayerDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C30)]
-    FollowRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C34)]
-    FollowRunPlayerDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C38)]
-    FollowWeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C3C)]
-    FootDustGroundTintStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C40)]
-    FootParticleTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C44)]
-    FootPlantError: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C48)]
-    FreighterDespawnDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C4C)]
-    FreighterJellyBobAmplitude: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C50)]
-    FreighterJellyBobFrequency: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C54)]
-    FreighterSpawnDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C58)]
-    FriendlyCreatureLimit: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1C5C)]
-    GroundWormScaleMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C60)]
-    GroundWormScaleMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C64)]
-    GroundWormSpawnChance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C68)]
-    GroundWormSpawnerActivateRadius: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1C6C)
-    ]
-    GroundWormSpawnerDestroyRadiusActive: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1C70)
-    ]
-    GroundWormSpawnerDestroyRadiusInactive: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1C74)
-    ]
-    GroundWormSpawnMax: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1C78)]
-    GroundWormSpawnMin: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1C7C)]
-    GroundWormSpawnRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C80)]
-    GroundWormSpawnSpacing: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C84)]
-    GroundWormSpawnTimeOut: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C88)]
-    GroupBabyHealthMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C8C)]
-    GroupBabyProportion: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C90)]
-    GroupBabyRunProbability: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C94)]
-    GroupBabyScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C98)]
-    GroupFemaleProportion: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C9C)]
-    GroupLookAtDurationMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CA0)]
-    GroupLookAtDurationMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CA4)]
-    GroupLookAtProbability: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CA8)]
-    GroupRunDurationMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CAC)]
-    GroupRunDurationMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CB0)]
-    GroupRunProbability: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CB4)]
-    GroupRunStormProbability: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CB8)]
-    HarvestCooldownMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CBC)]
-    HarvestCooldownMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CC0)]
-    HeightDiffPenalty: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CC4)]
-    HeightLookAhead: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CC8)]
-    HerdGroupSizeMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CCC)]
-    ImpassabilityBrakeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CD0)]
-    ImpassabilityTurnSpeedMultiplier: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1CD4)
-    ]
-    ImpassabilityUnbrakeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CD8)]
-    IndoorObstacleAvoidStrength: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1CDC)
-    ]
-    IndoorSteeringRayLength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CE0)]
-    IndoorSteeringRaySphereSize: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1CE4)
-    ]
-    IndoorSteeringRaySpread: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CE8)]
-    IndoorTurnTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CEC)]
-    InfluenceDeflect: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CF0)]
-    InfluenceForce: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CF4)]
-    InfluenceRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CF8)]
-    InfluenceThreshold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CFC)]
-    JellyBossBroodColourInterpTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1D00)
-    ]
-    JellyBossBroodSeparateTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D04)]
-    JellyBossBroodWarningRadius: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1D08)
-    ]
-    JellyBossColourInterpTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D0C)]
-    JellyBossFastSwimSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D10)]
-    JellyBossLandAnticipate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D14)]
-    JellyBossLandAvoidStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D18)]
-    LargeCreatureAvoidPlayerDistance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1D1C)
-    ]
-    LargeCreatureFleePlayerDistance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1D20)
-    ]
-    largeCreaturePerceptionDistance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1D24)
-    ]
-    LookMaxPitchWhenMoving: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D28)]
-    LookMaxYawMoving: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D2C)]
-    LookMaxYawStatic: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D30)]
-    LookPitchAtMaxYaw: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D34)]
-    LookRollAtMaxYaw: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D38)]
-    LookRollWhenMoving: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D3C)]
-    LowPerfFlockReduce: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D40)]
-    MaxAdditionalEcosystemCreaturesForDiscovery: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x1D44)
-    ]
-    MaxBirdsProportion: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D48)]
-    MaxCreatureSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D4C)]
-    MaxEcosystemCreaturesLow: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1D50)]
-    MaxEcosystemCreaturesNormal: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x1D54)
-    ]
-    MaxFade: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D58)]
-    MaxFiendsToSpawn: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1D5C)]
-    MaxFiendsToSpawnCarnage: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1D60)]
-    MaxFishFiends: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1D64)]
-    MaxForce: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D68)]
-    MaxHeightTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D6C)]
-    MaxRagdollsBeforeDespawnOffscreen: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x1D70)
-    ]
-    MaxRagdollsBeforeDespawnOnscreen: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x1D74)
-    ]
-    MaxRideLeanCounterRotate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D78)]
-    MaxSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D7C)]
-    MaxTorque: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D80)]
-    MaxTurnRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D84)]
-    MinFade: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D88)]
-    MiniDroneEnergyRecoverRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D8C)]
-    MiniDroneEnergyUsePerShot: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D90)]
-    MiniDroneShotDelay: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D94)]
-    MiniDroneShotMaxAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D98)]
-    MiningRandomProbability: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D9C)]
-    MinRideSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DA0)]
-    MinScaleForNavMap: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DA4)]
-    MinWaterSpawnDepth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DA8)]
-    NavMapLookAhead: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DAC)]
-    NumCreaturesRequiredForDiscoveryMission: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x1DB0)
-    ]
-    NumWeirdCreaturesRequiredForDiscoveryMission: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x1DB4)
-    ]
-    PassiveFleePlayerDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DB8)]
-    PathOverestimate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DBC)]
-    PatrolGradientFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DC0)]
-    PatrolHeightOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DC4)]
-    PatrolMaxDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DC8)]
-    PatrolMinDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DCC)]
-    PatrolSwitchMinTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DD0)]
-    PauseBetweenCreatureSpawnRequests: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x1DD4)
-    ]
-    PelvisIkStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DD8)]
-    PercentagePlayerPredators: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DDC)]
-    PerceptionUpdateRate: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1DE0)]
-    PetAccessoryMoodDisplayThreshold: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1DE4)
-    ]
-    PetAccessoryStateInterval: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DE8)]
-    PetAnimSpeedBoostSmallerThan: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1DEC)
-    ]
-    PetAnimSpeedBoostStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DF0)]
-    PetAnimSpeedMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DF4)]
-    PetAnimSpeedMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DF8)]
-    PetChatCooldown: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DFC)]
-    PetChatUseTraitTemplateChance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1E00)
-    ]
-    PetEffectSpawnOffsetHuge: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E04)]
-    PetEffectSpawnOffsetLarge: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E08)]
-    PetEffectSpawnOffsetMed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E0C)]
-    PetEffectSpawnOffsetSmall: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E10)]
-    PetEggAccessoryChanceModifier: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1E14)
-    ]
-    PetEggColourChanceModifier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E18)]
-    PetEggFirstEggDelay: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1E1C)]
-    PetEggHatchColourChangeChance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1E20)
-    ]
-    PetEggHatchScaleChange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E24)]
-    PetEggHatchTraitChange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E28)]
-    PetEggLayingDuration: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E2C)]
-    PetEggLayingInterval: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1E30)]
-    PetEggMaxAccessoriesChangeChance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1E34)
-    ]
-    PetEggMaxColourChangeChance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1E38)
-    ]
-    PetEggMaxDistStep: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E3C)]
-    PetEggMaxHungry: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E40)]
-    PetEggMaxLonely: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E44)]
-    PetEggMaxOverdosage: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E48)]
-    PetEggMaxTopDescriptorChangeChance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1E4C)
-    ]
-    PetEggMinDistStep: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E50)]
-    PetEggMinGrowthToLay: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E54)]
-    PetEggModificationItemLimit: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x1E58)
-    ]
-    PetEggModificationTime: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1E5C)]
-    PetEggOverdosageModifier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E60)]
-    PetEggScaleRangeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E64)]
-    PetEggScaleRangeModifier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E68)]
-    PetEggSubstanceModifier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E6C)]
-    PetEggTraitRangeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E70)]
-    PetEggTraitRangeModifier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E74)]
-    PetFollowRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E78)]
-    PetFollowRunPlayerDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E7C)]
-    PetFootShakeModifier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E80)]
-    PetForceBehaviour: Annotated[
-        c_enum32[enums.cGcPetBehaviours],
-        Field(c_enum32[enums.cGcPetBehaviours], 0x1E84),
-    ]
-    PetGrowthTime: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1E88)]
-    PetHeartChangePerLayer: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E8C)]
-    PetHeartMaxSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E90)]
-    PetHeartResponseLoopTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E94)]
-    PetHeartResponseTotalTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E98)]
-    PetHeelDistSwitchTimeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E9C)]
-    PetHeelDistSwitchTimeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1EA0)]
-    PetHeelLateralShiftTimeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1EA4)]
-    PetHeelLateralShiftTimeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1EA8)]
-    PetHeelPosSpringTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1EAC)]
-    PetIncubationTime: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1EB0)]
-    PetInteractBaseRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1EB4)]
-    PetInteractionLightHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1EB8)]
-    PetInteractionLightIntensityMax: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1EBC)
-    ]
-    PetInteractionLightIntensityMin: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1EC0)
-    ]
-    PetInteractTurnToFaceMinAngle: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1EC4)
-    ]
-    PetLastActionReportTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1EC8)]
-    PetMaxSizeOffPlanet: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1ECC)]
-    PetMaxSummonDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1ED0)]
-    PetMaxTurnRad: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1ED4)]
-    PetMinSummonDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1ED8)]
-    PetMinTrust: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1EDC)]
-    PetMinTurnRad: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1EE0)]
-    PetMoodCurvePower: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1EE4)]
-    PetMoodSmoothTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1EE8)]
-    PetNavRadForMaxTurn: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1EEC)]
-    PetNavRadForMinTurn: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1EF0)]
-    PetOrderMaxRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1EF4)]
-    PetOrderMinRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1EF8)]
-    PetPlayerSpeedSmoothTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1EFC)]
-    PetRadialCentre: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F00)]
-    PetRadialPulseMul: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F04)]
-    PetRadialPulseTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F08)]
-    PetRadialRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F0C)]
-    PetRadialWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F10)]
-    PetRunAtHeelDistMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F14)]
-    PetRunAtHeelDistMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F18)]
-    PetRunAtHeelLateralShiftMax: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1F1C)
-    ]
-    PetRunAtHeelLateralShiftMin: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1F20)
-    ]
-    PetSlotsUnlockedByDefault: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1F24)]
-    PetStickySideBiasAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F28)]
-    PetSummonRotation: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F2C)]
-    PetTeleportDistOffPlanet: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F30)]
-    PetTeleportDistOnPlanet: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F34)]
-    PetTeleportEffectTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F38)]
-    PetThrowArcRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F3C)]
-    PetTickleChatChance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F40)]
-    PetTreatChatChance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F44)]
-    PetTrustChangeInterval: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1F48)]
-    PetTrustDecreaseStep: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F4C)]
-    PetTrustDecreaseThreshold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F50)]
-    PetTrustIncreaseStep: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F54)]
-    PetTrustIncreaseThreshold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F58)]
-    PetTrustOnAdoption: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F5C)]
-    PetTrustOnHatch: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F60)]
-    PetWalkAtHeelChanceDevoted: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F64)]
-    PetWalkAtHeelChanceIndependent: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1F68)
-    ]
-    PetWalkAtHeelDistMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F6C)]
-    PetWalkAtHeelDistMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F70)]
-    PetWalkAtHeelLateralShift: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F74)]
-    PlayerBirdDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F78)]
-    PlayerDamageTransferScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F7C)]
-    PlayerPredatorBoredomDistance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1F80)
-    ]
-    PlayerPredatorHealthModifier: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1F84)
-    ]
-    PlayerPredatorRegainInterestTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1F88)
-    ]
-    PostRideMoveTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F8C)]
-    PredatorApproachTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F90)]
-    PredatorBoredomDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F94)]
-    PredatorChargeDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F98)]
-    PredatorChargeDistScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F9C)]
-    PredatorEnergyRecoverRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FA0)]
-    PredatorEnergyUseChasing: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FA4)]
-    PredatorFishPerceptionDistance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1FA8)
-    ]
-    PredatorHugeHealth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1FAC)]
-    PredatorLargeHealth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1FB0)]
-    PredatorMedHealth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1FB4)]
-    PredatorNoticePauseTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FB8)]
-    PredatorPerceptionDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FBC)]
-    PredatorRegainInterestTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FC0)]
-    PredatorRoarProbAfterHit: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FC4)]
-    PredatorRoarProbAfterMiss: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FC8)]
-    PredatorRunAwayDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FCC)]
-    PredatorRunAwayHealthPercent: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1FD0)
-    ]
-    PredatorRunMoveSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FD4)]
-    PredatorSmallHealth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1FD8)]
-    PredatorSpeedMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FDC)]
-    PredatorStealthDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FE0)]
-    PredatorTrotMoveSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FE4)]
-    PredatorWalkMoveSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FE8)]
-    QueenHealthLevelMul: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FEC)]
-    RagdollConeLimit: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FF0)]
-    RagdollDamping: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FF4)]
-    RagdollMotorFadeEnd: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FF8)]
-    RagdollMotorFadeStart: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FFC)]
-    RagdollTau: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2000)]
-    RagdollTwistLimit: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2004)]
-    RecoverHealthTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2008)]
-    RemoteSpawnFadeInDelay: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x200C)]
-    RepelAmount: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2010)]
-    RepelRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2014)]
-    ResourceSpawnTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2018)]
-    RideIdleTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x201C)]
-    RiderLeanTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2020)]
-    RideSpeedChangeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2024)]
-    RideSpeedFast: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2028)]
-    RideSpeedSlow: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x202C)]
-    RidingFirstPersonOffsetFwd: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2030)]
-    RidingFirstPersonOffsetUp: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2034)]
-    RidingReplicationRangeMultiplier: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x2038)
-    ]
-    RidingRollAdjustMaxAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x203C)]
-    RidingRollMaxAngleAt: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2040)]
-    RidingSteerWeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2044)]
-    RockTransformGlobalChance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2048)]
-    RoutineOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x204C)]
-    RoutineSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2050)]
-    SandWormChangeDirectionTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x2054)
-    ]
-    SandWormDespawnDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2058)]
-    SandWormJumpHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x205C)]
-    SandWormJumpTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2060)]
-    SandWormMaxHeightAdjust: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2064)]
-    SandWormMaxJumps: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x2068)]
-    SandWormMaxSteer: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x206C)]
-    SandWormSpawnChanceInfested: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x2070)
-    ]
-    SandWormSpawnChanceMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2074)]
-    SandWormSpawnChanceMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2078)]
-    SandWormSpawnTimer: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x207C)]
-    SandWormSteerAdjustTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2080)]
-    SandWormSubmergeDepth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2084)]
-    SandWormSubmergeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2088)]
-    SandWormSurfaceTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x208C)]
-    SceneTerrainSpawnMinDistance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x2090)
-    ]
-    ScuttlerHealth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x2094)]
-    ScuttlerIdleTimeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2098)]
-    ScuttlerIdleTimeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x209C)]
-    ScuttlerInitialNoAttackTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x20A0)
-    ]
-    ScuttlerMoveTimeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20A4)]
-    ScuttlerMoveTimeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20A8)]
-    ScuttlerSpitChargeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20AC)]
-    ScuttlerSpitDelay: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20B0)]
-    ScuttlerZigZagStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20B4)]
-    ScuttlerZigZagTimeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20B8)]
-    ScuttlerZigZagTimeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20BC)]
-    SearchItemDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20C0)]
-    SearchItemFrequency: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20C4)]
-    SearchItemGiveUpDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20C8)]
-    SearchItemGiveUpTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20CC)]
-    SearchItemNotifyTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20D0)]
-    SearchSpawnRandomItemProbability: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x20D4)
-    ]
-    SharkAlignSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20D8)]
-    SharkAlongPathSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20DC)]
-    SharkAttackAccel: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20E0)]
-    SharkAttackSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20E4)]
-    SharkGetToPathSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20E8)]
-    SharkPatrolEnd: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20EC)]
-    SharkPatrolRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20F0)]
-    SharkPatrolSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20F4)]
-    SharkToPathYDamp: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20F8)]
-    ShieldFadeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20FC)]
-    SmallCreatureAvoidPlayerDistance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x2100)
-    ]
-    SmallCreatureFleePlayerDistance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x2104)
-    ]
-    SmallCreaturePerceptionDistance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x2108)
-    ]
-    SoftenAvoidanceRadiusMod: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x210C)]
-    SpawnCameraAngleCos: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2110)]
-    SpawnDistanceModifierForUnderwater: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x2114)
-    ]
-    SpawnDistAtMaxSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2118)]
-    SpawnDistAtMinSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x211C)]
-    SpawnMinDistPercentage: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2120)]
-    SpawnOnscreenDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2124)]
-    SpawnsAvoidBaseMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2128)]
-    SpookBossHealth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x212C)]
-    SpookFiendColourInterpTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2130)]
-    SpookFiendFastSwimSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2134)]
-    SpookSquidHealth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x2138)]
-    SteeringUpdateRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x213C)]
-    StickToGroundCastBegin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2140)]
-    StickToGroundCastEnd: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2144)]
-    StickToGroundSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2148)]
-    SwarmBrakingForce: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x214C)]
-    SwarmMoveYFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2150)]
-    TargetReachedDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2154)]
-    TargetSearchTimeout: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2158)]
-    TrailHalfLife: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x215C)]
-    TurnInPlaceIdleTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2160)]
-    TurnInPlaceMaxAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2164)]
-    TurnInPlaceMaxSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2168)]
-    TurnInPlaceMaxSpeedIndoor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x216C)]
-    TurnInPlaceMinTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2170)]
-    TurnRadiusMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2174)]
-    TurnSlowAreaCos: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2178)]
-    VelocityAlignSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x217C)]
-    VelocityAlignStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2180)]
-    VelocityAlignYFactorMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2184)]
-    VelocityAlignYFactorMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2188)]
-    WaterDepthSizeScalingMaxDepth: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x218C)
-    ]
-    WaterDepthSizeScalingMaxScale: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x2190)
-    ]
-    WaterDepthSizeScalingMinDepth: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x2194)
-    ]
-    WaterDepthSizeScalingMinScale: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x2198)
-    ]
-    WaterSpawnOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x219C)]
-    WeaponRepelAmount: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x21A0)]
-    WeaponRepelRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x21A4)]
-    TempermentDescriptions: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x21A8)
-    ]
-    DietDescriptions: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x2308)
-    ]
-    WaterDietDescriptions: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x2388)
-    ]
-    AggressiveSharks: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2408)]
-    AllBaitIsBasic: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2409)]
-    AllowSleeping: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x240A)]
-    AllowSpawningOnscreen: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x240B)]
-    CanAlwaysLayEgg: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x240C)]
-    CreatureInteractWithoutRaycasts: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x240D)
-    ]
-    CreatureRideDirectControl: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x240E)]
-    DebugDrawTrails: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x240F)]
-    DebugSearch: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2410)]
-    DetailAnimPlayWhileWalking: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2411)]
-    DrawRoutineFollowDebug: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2412)]
-    DrawRoutineInfo: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2413)]
-    EnableFlyingSnakeTails: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2414)]
-    EnableMPCreatureRide: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2415)]
-    EnableNewStuff: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2416)]
-    EnableTrailIk: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2417)]
-    EnableVRCreatureRide: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2418)]
-    FiendOnscreenMarkers: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2419)]
-    FiendsCanAttack: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x241A)]
-    ForceShowDebugTrails: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x241B)]
-    ForceStatic: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x241C)]
-    InstantCreatureRide: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x241D)]
-    IsHurtingCreaturesACrime: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x241E)]
-    PetAnimTest: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x241F)]
-    PetCanSummonOnFreighter: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2420)]
-    PetForceSummonFromEgg: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2421)]
-    PetsShowTraitClassesAsWords: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2422)]
-    PiedPiper: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2423)]
-    ProcessPendingSpawnRequests: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2424)]
-    RidingPositionTest: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2425)]
-    ScuttlersCanAttack: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2426)]
-    ShowScale: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2427)]
-    StaticCreatureRide: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2428)]
-    UncapSpawningforVideo: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2429)]
-    UseCreatureAdoptOSD: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x242A)]
-    UsePetTeleportEffect: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x242B)]
-    WaterDepthSizeScalingCurve: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x242C)
-    ]
-
-
-@partial_struct
 class cGcCameraGlobals(Structure):
     CameraCreatureCustomiseBack: Annotated[
         cTkModelRendererData, Field(cTkModelRendererData, 0x0)
@@ -37942,628 +36807,612 @@ class cGcCameraGlobals(Structure):
     CharacterSpaceCam: Annotated[
         cGcCameraFollowSettings, Field(cGcCameraFollowSettings, 0x23F0)
     ]
-    CharacterSteepSlopeCam: Annotated[
+    CharacterSpacewalkCombatCam: Annotated[
         cGcCameraFollowSettings, Field(cGcCameraFollowSettings, 0x24F0)
     ]
-    CharacterSurfaceWaterCam: Annotated[
+    CharacterSteepSlopeCam: Annotated[
         cGcCameraFollowSettings, Field(cGcCameraFollowSettings, 0x25F0)
     ]
-    CharacterUnarmedCam: Annotated[
+    CharacterSurfaceWaterCam: Annotated[
         cGcCameraFollowSettings, Field(cGcCameraFollowSettings, 0x26F0)
     ]
-    CharacterUndergroundCam: Annotated[
+    CharacterUnarmedCam: Annotated[
         cGcCameraFollowSettings, Field(cGcCameraFollowSettings, 0x27F0)
     ]
-    CharacterUnderwaterCam: Annotated[
+    CharacterUndergroundCam: Annotated[
         cGcCameraFollowSettings, Field(cGcCameraFollowSettings, 0x28F0)
     ]
-    CharacterUnderwaterCombatCam: Annotated[
+    CharacterUnderwaterCam: Annotated[
         cGcCameraFollowSettings, Field(cGcCameraFollowSettings, 0x29F0)
     ]
-    CharacterUnderwaterJetpackAscentCam: Annotated[
+    CharacterUnderwaterCombatCam: Annotated[
         cGcCameraFollowSettings, Field(cGcCameraFollowSettings, 0x2AF0)
     ]
-    CharacterUnderwaterJetpackCam: Annotated[
+    CharacterUnderwaterJetpackAscentCam: Annotated[
         cGcCameraFollowSettings, Field(cGcCameraFollowSettings, 0x2BF0)
     ]
-    CorvetteFollowCam: Annotated[
+    CharacterUnderwaterJetpackCam: Annotated[
         cGcCameraFollowSettings, Field(cGcCameraFollowSettings, 0x2CF0)
     ]
-    DropshipFollowCam: Annotated[
+    CorvetteFollowCam: Annotated[
         cGcCameraFollowSettings, Field(cGcCameraFollowSettings, 0x2DF0)
     ]
-    HovercraftFollowCam: Annotated[
+    DropshipFollowCam: Annotated[
         cGcCameraFollowSettings, Field(cGcCameraFollowSettings, 0x2EF0)
     ]
-    MechCombatCam: Annotated[
+    HovercraftFollowCam: Annotated[
         cGcCameraFollowSettings, Field(cGcCameraFollowSettings, 0x2FF0)
     ]
-    MechFirstPersonCam: Annotated[
+    MechCombatCam: Annotated[
         cGcCameraFollowSettings, Field(cGcCameraFollowSettings, 0x30F0)
     ]
-    MechFollowCam: Annotated[
+    MechFirstPersonCam: Annotated[
         cGcCameraFollowSettings, Field(cGcCameraFollowSettings, 0x31F0)
     ]
-    MechJetpackCam: Annotated[
+    MechFollowCam: Annotated[
         cGcCameraFollowSettings, Field(cGcCameraFollowSettings, 0x32F0)
     ]
-    RobotShipFollowCam: Annotated[
+    MechJetpackCam: Annotated[
         cGcCameraFollowSettings, Field(cGcCameraFollowSettings, 0x33F0)
     ]
-    RoyalShipFollowCam: Annotated[
+    RobotShipFollowCam: Annotated[
         cGcCameraFollowSettings, Field(cGcCameraFollowSettings, 0x34F0)
     ]
-    SailShipFollowCam: Annotated[
+    RoyalShipFollowCam: Annotated[
         cGcCameraFollowSettings, Field(cGcCameraFollowSettings, 0x35F0)
     ]
-    ScienceShipFollowCam: Annotated[
+    SailShipFollowCam: Annotated[
         cGcCameraFollowSettings, Field(cGcCameraFollowSettings, 0x36F0)
     ]
-    ShuttleFollowCam: Annotated[
+    ScienceShipFollowCam: Annotated[
         cGcCameraFollowSettings, Field(cGcCameraFollowSettings, 0x37F0)
     ]
-    SpaceshipFollowCam: Annotated[
+    ShuttleFollowCam: Annotated[
         cGcCameraFollowSettings, Field(cGcCameraFollowSettings, 0x38F0)
     ]
-    SubmarineFollowCam: Annotated[
+    SpaceshipFollowCam: Annotated[
         cGcCameraFollowSettings, Field(cGcCameraFollowSettings, 0x39F0)
     ]
-    SubmarineFollowCamSurface: Annotated[
+    SubmarineFollowCam: Annotated[
         cGcCameraFollowSettings, Field(cGcCameraFollowSettings, 0x3AF0)
     ]
-    TruckFollowCam: Annotated[
+    SubmarineFollowCamSurface: Annotated[
         cGcCameraFollowSettings, Field(cGcCameraFollowSettings, 0x3BF0)
     ]
-    VehicleCam: Annotated[
+    TruckFollowCam: Annotated[
         cGcCameraFollowSettings, Field(cGcCameraFollowSettings, 0x3CF0)
     ]
-    VehicleCamHmd: Annotated[
+    VehicleCam: Annotated[
         cGcCameraFollowSettings, Field(cGcCameraFollowSettings, 0x3DF0)
     ]
-    WheeledBikeFollowCam: Annotated[
+    VehicleCamHmd: Annotated[
         cGcCameraFollowSettings, Field(cGcCameraFollowSettings, 0x3EF0)
     ]
-    AmbientCameraAnimations: Annotated[
-        cGcCameraAnimationData, Field(cGcCameraAnimationData, 0x3FF0)
+    WheeledBikeFollowCam: Annotated[
+        cGcCameraFollowSettings, Field(cGcCameraFollowSettings, 0x3FF0)
     ]
-    AmbientDroneAnimations: Annotated[cTkModelResource, Field(cTkModelResource, 0x4010)]
+    AmbientCameraAnimations: Annotated[
+        cGcCameraAnimationData, Field(cGcCameraAnimationData, 0x40F0)
+    ]
+    AmbientDroneAnimations: Annotated[cTkModelResource, Field(cTkModelResource, 0x4110)]
     AerialViewDataTable: Annotated[
         basic.cTkDynamicArray[cGcCameraAerialViewDataTableEntry],
-        Field(basic.cTkDynamicArray[cGcCameraAerialViewDataTableEntry], 0x4030),
+        Field(basic.cTkDynamicArray[cGcCameraAerialViewDataTableEntry], 0x4130),
     ]
     CameraAmbientAnimationsData: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0x4040)
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0x4140)
     ]
     Cameras: Annotated[
         basic.cTkDynamicArray[cGcCameraFollowSettings],
-        Field(basic.cTkDynamicArray[cGcCameraFollowSettings], 0x4050),
+        Field(basic.cTkDynamicArray[cGcCameraFollowSettings], 0x4150),
     ]
     CameraShakeTable: Annotated[
         basic.cTkDynamicArray[cGcCameraShakeData],
-        Field(basic.cTkDynamicArray[cGcCameraShakeData], 0x4060),
+        Field(basic.cTkDynamicArray[cGcCameraShakeData], 0x4160),
     ]
     SavedCameraFacing: Annotated[
         basic.cTkDynamicArray[basic.Vector3f],
-        Field(basic.cTkDynamicArray[basic.Vector3f], 0x4070),
+        Field(basic.cTkDynamicArray[basic.Vector3f], 0x4170),
     ]
     SavedCameraPositions: Annotated[
         basic.cTkDynamicArray[cTkBigPosData],
-        Field(basic.cTkDynamicArray[cTkBigPosData], 0x4080),
+        Field(basic.cTkDynamicArray[cTkBigPosData], 0x4180),
     ]
     CorvetteWarpSettings: Annotated[
-        cGcCameraWarpSettings, Field(cGcCameraWarpSettings, 0x4090)
+        cGcCameraWarpSettings, Field(cGcCameraWarpSettings, 0x4190)
     ]
     FreighterWarpSettings: Annotated[
-        cGcCameraWarpSettings, Field(cGcCameraWarpSettings, 0x40E4)
+        cGcCameraWarpSettings, Field(cGcCameraWarpSettings, 0x41E4)
     ]
     PirateFreighterWarpSettings: Annotated[
-        cGcCameraWarpSettings, Field(cGcCameraWarpSettings, 0x4138)
+        cGcCameraWarpSettings, Field(cGcCameraWarpSettings, 0x4238)
     ]
-    WarpSettings: Annotated[cGcCameraWarpSettings, Field(cGcCameraWarpSettings, 0x418C)]
+    WarpSettings: Annotated[cGcCameraWarpSettings, Field(cGcCameraWarpSettings, 0x428C)]
     FocusBuildingModeDistanceControlSettings: Annotated[
         cGcCameraFocusBuildingControlSettings,
-        Field(cGcCameraFocusBuildingControlSettings, 0x41E0),
+        Field(cGcCameraFocusBuildingControlSettings, 0x42E0),
     ]
     FocusBuildingModePitchControlSettings: Annotated[
         cGcCameraFocusBuildingControlSettings,
-        Field(cGcCameraFocusBuildingControlSettings, 0x4200),
+        Field(cGcCameraFocusBuildingControlSettings, 0x4300),
     ]
     FocusBuildingModePlanarControlSettings: Annotated[
         cGcCameraFocusBuildingControlSettings,
-        Field(cGcCameraFocusBuildingControlSettings, 0x4220),
+        Field(cGcCameraFocusBuildingControlSettings, 0x4320),
     ]
     FocusBuildingModeVerticalControlSettings: Annotated[
         cGcCameraFocusBuildingControlSettings,
-        Field(cGcCameraFocusBuildingControlSettings, 0x4240),
+        Field(cGcCameraFocusBuildingControlSettings, 0x4340),
     ]
     FocusBuildingModeYawControlSettings: Annotated[
         cGcCameraFocusBuildingControlSettings,
-        Field(cGcCameraFocusBuildingControlSettings, 0x4260),
+        Field(cGcCameraFocusBuildingControlSettings, 0x4360),
     ]
-    ModelViewFocusOffset: Annotated[basic.Vector2f, Field(basic.Vector2f, 0x4280)]
-    PitchForFrigateInteraction: Annotated[basic.Vector2f, Field(basic.Vector2f, 0x4288)]
+    ModelViewFocusOffset: Annotated[basic.Vector2f, Field(basic.Vector2f, 0x4380)]
+    PitchForFrigateInteraction: Annotated[basic.Vector2f, Field(basic.Vector2f, 0x4388)]
     RotationForFrigateInteraction: Annotated[
-        basic.Vector2f, Field(basic.Vector2f, 0x4290)
+        basic.Vector2f, Field(basic.Vector2f, 0x4390)
     ]
-    AerialViewBackTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4298)]
-    AerialViewBlendTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x429C)]
-    AerialViewDownDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x42A0)]
-    AerialViewPause: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x42A4)]
-    AerialViewStartTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x42A8)]
-    BinocularFlashStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x42AC)]
-    BinocularFlashTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x42B0)]
-    BobAmount: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x42B4)]
-    BobAmountAbandFreighter: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x42B8)]
-    BobFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x42BC)]
-    BobFactorAbandFreighter: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x42C0)]
-    BobFocus: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x42C4)]
-    BobFwdAmount: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x42C8)]
-    BobRollAmount: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x42CC)]
-    BobRollFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x42D0)]
-    BobRollOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x42D4)]
-    BuildingModeMaxDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x42D8)]
+    AerialViewBackTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4398)]
+    AerialViewBlendTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x439C)]
+    AerialViewDownDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43A0)]
+    AerialViewPause: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43A4)]
+    AerialViewStartTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43A8)]
+    BinocularFlashStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43AC)]
+    BinocularFlashTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43B0)]
+    BobAmount: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43B4)]
+    BobAmountAbandFreighter: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43B8)]
+    BobFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43BC)]
+    BobFactorAbandFreighter: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43C0)]
+    BobFocus: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43C4)]
+    BobFwdAmount: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43C8)]
+    BobRollAmount: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43CC)]
+    BobRollFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43D0)]
+    BobRollOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43D4)]
+    BuildingModeMaxDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43D8)]
     CameraAmbientAutoSwitchMaxTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x42DC)
+        ctypes.c_float, Field(ctypes.c_float, 0x43DC)
     ]
     CameraAmbientAutoSwitchMinTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x42E0)
+        ctypes.c_float, Field(ctypes.c_float, 0x43E0)
     ]
-    CamSeed1: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x42E4)]
-    CamSeed2: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x42E8)]
-    CamWander1Amplitude: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x42EC)]
-    CamWander1Phase: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x42F0)]
-    CamWander2Amplitude: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x42F4)]
-    CamWander2Phase: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x42F8)]
-    CharCamAutoDirStartTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x42FC)]
-    CharCamDeflectSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4300)]
-    CharCamFocusHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4304)]
-    CharCamHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4308)]
-    CharCamLookOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x430C)]
-    CharCamLookOffsetFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4310)]
-    CharCamMaxDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4314)]
-    CharCamMinDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4318)]
-    CharCamMinSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x431C)]
-    CharCamOffsetTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4320)]
-    CharCamRightStickX: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4324)]
-    CharCamRightStickY: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4328)]
-    CloseFactorSpring: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x432C)]
+    CamSeed1: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43E4)]
+    CamSeed2: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43E8)]
+    CamWander1Amplitude: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43EC)]
+    CamWander1Phase: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43F0)]
+    CamWander2Amplitude: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43F4)]
+    CamWander2Phase: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43F8)]
+    CharCamAutoDirStartTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43FC)]
+    CharCamDeflectSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4400)]
+    CharCamFocusHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4404)]
+    CharCamHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4408)]
+    CharCamLookOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x440C)]
+    CharCamLookOffsetFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4410)]
+    CharCamMaxDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4414)]
+    CharCamMinDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4418)]
+    CharCamMinSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x441C)]
+    CharCamOffsetTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4420)]
+    CharCamRightStickX: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4424)]
+    CharCamRightStickY: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4428)]
+    CloseFactorSpring: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x442C)]
     CreatureInteractionCamSpring: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4330)
+        ctypes.c_float, Field(ctypes.c_float, 0x4430)
     ]
     CreatureInteractionDistMulMax: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4334)
+        ctypes.c_float, Field(ctypes.c_float, 0x4434)
     ]
     CreatureInteractionDistMulMin: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4338)
-    ]
-    CreatureInteractionDownhillPitchTransfer: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x433C)
-    ]
-    CreatureInteractionFoVMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4340)]
-    CreatureInteractionFoVMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4344)]
-    CreatureInteractionFoVSplitSize: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4348)
-    ]
-    CreatureInteractionHeadHeightSpring: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x434C)
-    ]
-    CreatureInteractionMaxDownhillPitchAroundPlayer: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4350)
-    ]
-    CreatureInteractionMaxUphillPitchAroundPlayer: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4354)
-    ]
-    CreatureInteractionMinDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4358)]
-    CreatureInteractionPitchMax: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x435C)
-    ]
-    CreatureInteractionPitchMin: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4360)
-    ]
-    CreatureInteractionPitchSplit: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4364)
-    ]
-    CreatureInteractionPushCameraDownAmount: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4368)
-    ]
-    CreatureInteractionPushCameraDownForCreatureBiggerThan: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x436C)
-    ]
-    CreatureInteractionUphillPitchTransfer: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4370)
-    ]
-    CreatureInteractionYawMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4374)]
-    CreatureInteractionYawMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4378)]
-    CreatureSizeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x437C)]
-    CreatureSizeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4380)]
-    DebugAICamAt: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4384)]
-    DebugAICamUp: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4388)]
-    DebugCameraFastFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x438C)]
-    DebugCameraHeightForAccelerateBegin: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4390)
-    ]
-    DebugCameraHeightForAccelerateEnd: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4394)
-    ]
-    DebugCameraMaxSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4398)]
-    DebugCameraSlowFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x439C)]
-    DebugCameraSpaceFastFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43A0)]
-    DebugCameraSpeedAtPlanetThreshold: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x43A4)
-    ]
-    DebugMoveCamHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43A8)]
-    DebugMoveCamSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43AC)]
-    DebugPlanetJumpFarHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43B0)]
-    DebugPlanetJumpNearHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43B4)]
-    DebugSpaceStationTeleportOffset: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x43B8)
-    ]
-    DistanceForFleetInteraction: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x43BC)
-    ]
-    DistanceForFrigateInteraction: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x43C0)
-    ]
-    DistanceForFrigatePurchaseInteraction: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x43C4)
-    ]
-    FirstPersonCamHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43C8)]
-    FirstPersonFoV: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43CC)]
-    FirstPersonSlerpAway: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43D0)]
-    FirstPersonSlerpTowards: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43D4)]
-    FirstPersonZoom1FoV: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43D8)]
-    FirstPersonZoom2FoV: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43DC)]
-    FleetUIOrbitRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43E0)]
-    FleetUIVerticalMotionAmplitude: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x43E4)
-    ]
-    FleetUIVerticalMotionDuration: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x43E8)
-    ]
-    FlybyInVehicleDamper: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43EC)]
-    FlybyMinRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43F0)]
-    FlybyMinRelativeSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43F4)]
-    FlybyRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43F8)]
-    FlybyRelativeSpeedRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x43FC)]
-    FocusBuildingModeMaxFOV: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4400)]
-    FocusBuildingModeMinFOV: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4404)]
-    FocusBuildingModeStartDistance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4408)
-    ]
-    FoVAdjust: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x440C)]
-    FoVSpring: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4410)]
-    FoVSpringSights: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4414)]
-    FoVSpringSightsPassive: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4418)]
-    FrigateCaptainLateralShiftAmount: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x441C)
-    ]
-    FrontendModelCameraSpringTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4420)
-    ]
-    HmdEyeExtraTurnAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4424)]
-    HmdEyeExtraTurnHeadAngleRange: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4428)
-    ]
-    HmdEyeExtraTurnMinHeadAngle: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x442C)
-    ]
-    HmdEyeLookAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4430)]
-    IndoorCamShakeDamper: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4434)]
-    InteractionHeadHeightCronus: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x4438)
     ]
-    InteractionHeadHeightDefault: Annotated[
+    CreatureInteractionDownhillPitchTransfer: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x443C)
     ]
-    InteractionHeadHeightGek: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4440)]
-    InteractionHeadHeightSpiderman: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4444)
-    ]
-    InteractionHeadHeightVykeen: Annotated[
+    CreatureInteractionFoVMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4440)]
+    CreatureInteractionFoVMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4444)]
+    CreatureInteractionFoVSplitSize: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x4448)
     ]
-    InteractionHeadPosHeightAdjust: Annotated[
+    CreatureInteractionHeadHeightSpring: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x444C)
     ]
-    InteractionHeadPosHeightAdjustCronus: Annotated[
+    CreatureInteractionMaxDownhillPitchAroundPlayer: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x4450)
     ]
-    InteractionHeadPosHeightAdjustSpiderman: Annotated[
+    CreatureInteractionMaxUphillPitchAroundPlayer: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x4454)
     ]
-    InteractionHeadPosHeightAdjustVykeen: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4458)
+    CreatureInteractionMinDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4458)]
+    CreatureInteractionPitchMax: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x445C)
     ]
-    InteractionModeBlendTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x445C)]
-    InteractionModeFocusCamBlend: Annotated[
+    CreatureInteractionPitchMin: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x4460)
     ]
-    InteractionModeFoV: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4464)]
-    InteractionPitchAdjustDeadZone: Annotated[
+    CreatureInteractionPitchSplit: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4464)
+    ]
+    CreatureInteractionPushCameraDownAmount: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x4468)
     ]
-    InteractionPitchAdjustStrength: Annotated[
+    CreatureInteractionPushCameraDownForCreatureBiggerThan: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x446C)
     ]
-    InteractionPitchAdjustTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4470)]
-    LocalMissionBoardLateralShiftAmount: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4474)
+    CreatureInteractionUphillPitchTransfer: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4470)
     ]
-    MaxCreatureRidingYaw: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4478)]
-    MaxFirstPersonCameraPitch: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x447C)]
-    MechCameraArmShootOffsetY: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4480)]
-    MechCameraCombatFakeSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4484)]
-    MechCameraExtraYPostLandingBlendTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4488)
+    CreatureInteractionYawMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4474)]
+    CreatureInteractionYawMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4478)]
+    CreatureSizeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x447C)]
+    CreatureSizeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4480)]
+    DebugAICamAt: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4484)]
+    DebugAICamUp: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4488)]
+    DebugCameraFastFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x448C)]
+    DebugCameraHeightForAccelerateBegin: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4490)
     ]
-    MechCameraNoExtraYTimeAfterLand: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x448C)
+    DebugCameraHeightForAccelerateEnd: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4494)
     ]
-    MechCamSpringStrengthMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4490)]
-    MechCamSpringStrengthMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4494)]
-    MeleeBoostedFoV: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4498)]
-    MeleeFoV: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x449C)]
-    MinFirstPersonCameraPitch: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44A0)]
-    MinInteractFocusAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44A4)]
-    MiniportalFlashStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44A8)]
-    MiniportalFlashTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44AC)]
-    ModelViewDefaultPitch: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44B0)]
-    ModelViewDefaultYaw: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44B4)]
-    ModelViewDistSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44B8)]
-    ModelViewFlashTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44BC)]
-    ModelViewInterpTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44C0)]
-    ModelViewMaxDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44C4)]
-    ModelViewMinDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44C8)]
-    ModelViewMouseMoveSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44CC)]
-    ModelViewMouseRotateSnapStrength: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x44D0)
+    DebugCameraMaxSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4498)]
+    DebugCameraSlowFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x449C)]
+    DebugCameraSpaceFastFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44A0)]
+    DebugCameraSpeedAtPlanetThreshold: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x44A4)
     ]
-    ModelViewMouseRotateSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44D4)]
-    ModelViewRotateSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44D8)]
-    MouseSensitivity: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44DC)]
-    NoControlCamShakeDamper: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44E0)]
-    NPCTradeLateralShiftAmount: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44E4)]
-    NPCTradeLateralShiftTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44E8)]
-    ObjectFocusTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44EC)]
-    OffsetCamFOV: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44F0)]
-    OffsetCombatCameraHorizontalAngle: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x44F4)
+    DebugMoveCamHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44A8)]
+    DebugMoveCamSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44AC)]
+    DebugPlanetJumpFarHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44B0)]
+    DebugPlanetJumpNearHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44B4)]
+    DebugSpaceStationTeleportOffset: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x44B8)
     ]
-    PainShakeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44F8)]
-    PhotoModeCollisionRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44FC)]
-    PhotoModeFlashDuration: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4500)]
-    PhotoModeFlashIntensity: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4504)]
-    PhotoModeMaxDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4508)]
-    PhotoModeMaxDistanceClampBuffer: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x450C)
+    DistanceForFleetInteraction: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x44BC)
     ]
-    PhotoModeMaxDistanceClampForce: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4510)
+    DistanceForFrigateInteraction: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x44C0)
     ]
-    PhotoModeMaxDistanceSpace: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4514)]
-    PhotoModeMoveSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4518)]
-    PhotoModeRollSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x451C)]
-    PhotoModeTurnSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4520)]
-    PhotoModeVelocitySmoothTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4524)
+    DistanceForFrigatePurchaseInteraction: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x44C4)
     ]
-    PilotDetailsLateralShiftAmount: Annotated[
+    FirstPersonCamHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44C8)]
+    FirstPersonFoV: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44CC)]
+    FirstPersonSlerpAway: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44D0)]
+    FirstPersonSlerpTowards: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44D4)]
+    FirstPersonZoom1FoV: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44D8)]
+    FirstPersonZoom2FoV: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44DC)]
+    FleetUIOrbitRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44E0)]
+    FleetUIVerticalMotionAmplitude: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x44E4)
+    ]
+    FleetUIVerticalMotionDuration: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x44E8)
+    ]
+    FlybyInVehicleDamper: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44EC)]
+    FlybyMinRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44F0)]
+    FlybyMinRelativeSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44F4)]
+    FlybyRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44F8)]
+    FlybyRelativeSpeedRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44FC)]
+    FocusBuildingModeMaxFOV: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4500)]
+    FocusBuildingModeMinFOV: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4504)]
+    FocusBuildingModeStartDistance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4508)
+    ]
+    FoVAdjust: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x450C)]
+    FoVSpring: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4510)]
+    FoVSpringSights: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4514)]
+    FoVSpringSightsPassive: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4518)]
+    FrigateCaptainLateralShiftAmount: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x451C)
+    ]
+    FrontendModelCameraSpringTime: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4520)
+    ]
+    HmdEyeExtraTurnAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4524)]
+    HmdEyeExtraTurnHeadAngleRange: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x4528)
     ]
-    RecruitmentLateralShiftAmount: Annotated[
+    HmdEyeExtraTurnMinHeadAngle: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x452C)
     ]
-    RevealedNPCHeadOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4530)]
-    RunningFoVAdjust: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4534)]
-    ScanCameraLookAtTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4538)]
-    SClassLandingShakeMultiplier: Annotated[
+    HmdEyeLookAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4530)]
+    IndoorCamShakeDamper: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4534)]
+    InteractionHeadHeightCronus: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4538)
+    ]
+    InteractionHeadHeightDefault: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x453C)
     ]
-    ScreenshotBackDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4540)]
-    ScreenshotBendDownAmount: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4544)]
-    ScreenshotHorizonFaceFactor: Annotated[
+    InteractionHeadHeightGek: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4540)]
+    InteractionHeadHeightSpiderman: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4544)
+    ]
+    InteractionHeadHeightVykeen: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x4548)
     ]
-    ScreenshotHorizonHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x454C)]
-    ScreenshotInTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4550)]
-    ScreenshotOutTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4554)]
-    ScreenshotRightDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4558)]
-    ShipBuilderFoV: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x455C)]
-    ShipCamAimFOV: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4560)]
-    ShipCamFastSpringStrengthMax: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4564)
+    InteractionHeadPosHeightAdjust: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x454C)
     ]
-    ShipCamFastSpringStrengthMin: Annotated[
+    InteractionHeadPosHeightAdjustCronus: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4550)
+    ]
+    InteractionHeadPosHeightAdjustSpiderman: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4554)
+    ]
+    InteractionHeadPosHeightAdjustVykeen: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4558)
+    ]
+    InteractionModeBlendTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x455C)]
+    InteractionModeFocusCamBlend: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4560)
+    ]
+    InteractionModeFoV: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4564)]
+    InteractionPitchAdjustDeadZone: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x4568)
     ]
-    ShipCamLookInterp: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x456C)]
-    ShipCamMinReturnTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4570)]
-    ShipCamMotionInterp: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4574)]
-    ShipCamMotionMaxLagPitchAngle: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4578)
+    InteractionPitchAdjustStrength: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x456C)
     ]
-    ShipCamMotionMaxLagTurnAngle: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x457C)
+    InteractionPitchAdjustTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4570)]
+    LocalMissionBoardLateralShiftAmount: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4574)
     ]
-    ShipCamMotionPitch: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4580)]
-    ShipCamMotionPitchMod: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4584)]
-    ShipCamMotionTurn: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4588)]
-    ShipCamPitch: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x458C)]
-    ShipCamPitchMod: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4590)]
-    ShipCamReturnTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4594)]
-    ShipCamRollAmountMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4598)]
-    ShipCamRollAmountMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x459C)]
-    ShipCamRollSpeedScaler: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45A0)]
-    ShipCamSpringStrengthMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45A4)]
-    ShipCamSpringStrengthMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45A8)]
-    ShipCamTurn: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45AC)]
-    ShipFirstPersonBlendOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45B0)]
-    ShipFirstPersonBlendTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45B4)]
-    ShipFoVBoost: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45B8)]
-    ShipFoVMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45BC)]
-    ShipFoVMax3rdPerson: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45C0)]
-    ShipFoVMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45C4)]
-    ShipFoVMin2: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45C8)]
-    ShipFoVMin3rdPerson: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45CC)]
-    ShipFoVMiniJump: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45D0)]
-    ShipFoVSpring: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45D4)]
-    ShipMiniJumpFoVSpring: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45D8)]
-    ShipShakeDamper: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45DC)]
-    ShipThirdPersonBlendOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45E0)]
-    ShipThirdPersonBlendOutOffset: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x45E4)
+    MaxCreatureRidingYaw: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4578)]
+    MaxFirstPersonCameraPitch: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x457C)]
+    MechCameraArmShootOffsetY: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4580)]
+    MechCameraCombatFakeSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4584)]
+    MechCameraExtraYPostLandingBlendTime: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4588)
     ]
-    ShipThirdPersonBlendOutTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x45E8)
+    MechCameraNoExtraYTimeAfterLand: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x458C)
     ]
-    ShipThirdPersonBlendTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45EC)]
-    ShipThirdPersonBlendWithOffsetTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x45F0)
+    MechCamSpringStrengthMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4590)]
+    MechCamSpringStrengthMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4594)]
+    MeleeBoostedFoV: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4598)]
+    MeleeFoV: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x459C)]
+    MinFirstPersonCameraPitch: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45A0)]
+    MinInteractFocusAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45A4)]
+    MiniportalFlashStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45A8)]
+    MiniportalFlashTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45AC)]
+    ModelViewDefaultPitch: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45B0)]
+    ModelViewDefaultYaw: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45B4)]
+    ModelViewDistSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45B8)]
+    ModelViewFlashTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45BC)]
+    ModelViewInterpTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45C0)]
+    ModelViewMaxDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45C4)]
+    ModelViewMinDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45C8)]
+    ModelViewMouseMoveSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45CC)]
+    ModelViewMouseRotateSnapStrength: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x45D0)
     ]
-    ShipThirdPersonEnterBlendOffset: Annotated[
+    ModelViewMouseRotateSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45D4)]
+    ModelViewRotateSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45D8)]
+    MouseSensitivity: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45DC)]
+    NoControlCamShakeDamper: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45E0)]
+    NPCTradeLateralShiftAmount: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45E4)]
+    NPCTradeLateralShiftTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45E8)]
+    ObjectFocusTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45EC)]
+    OffsetCamFOV: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45F0)]
+    OffsetCombatCameraHorizontalAngle: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x45F4)
     ]
-    ShipThirdPersonEnterBlendTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x45F8)
+    PainShakeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45F8)]
+    PhotoModeCollisionRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45FC)]
+    PhotoModeFlashDuration: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4600)]
+    PhotoModeFlashIntensity: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4604)]
+    PhotoModeMaxDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4608)]
+    PhotoModeMaxDistanceClampBuffer: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x460C)
     ]
-    ShipWarpFoV: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x45FC)]
-    SpecialVehicleMouseRecentreTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4600)
+    PhotoModeMaxDistanceClampForce: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4610)
     ]
-    SpecialVehicleMouseRecentreWeaponTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4604)
+    PhotoModeMaxDistanceSpace: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4614)]
+    PhotoModeMoveSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4618)]
+    PhotoModeRollSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x461C)]
+    PhotoModeTurnSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4620)]
+    PhotoModeVelocitySmoothTime: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4624)
     ]
-    ThirdPersonAfterIntroCamBlendTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4608)
-    ]
-    ThirdPersonBlendInTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x460C)]
-    ThirdPersonBlendOutTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4610)]
-    ThirdPersonCameraChangeBlendTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4614)
-    ]
-    ThirdPersonCameraChangeMinimumBlend: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4618)
-    ]
-    ThirdPersonCloseDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x461C)]
-    ThirdPersonCloseDistanceX: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4620)]
-    ThirdPersonClosePitch: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4624)]
-    ThirdPersonCollisionPushOffsetReducerStart: Annotated[
+    PilotDetailsLateralShiftAmount: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x4628)
     ]
-    ThirdPersonCombatFoV: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x462C)]
-    ThirdPersonDownhillAdjustMaxAngle: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4630)
+    RecruitmentLateralShiftAmount: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x462C)
     ]
-    ThirdPersonDownhillAdjustMaxAnglePrime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4634)
-    ]
-    ThirdPersonDownhillAdjustMinAngle: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4638)
-    ]
-    ThirdPersonDownhillAdjustMinAnglePrime: Annotated[
+    RevealedNPCHeadOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4630)]
+    RunningFoVAdjust: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4634)]
+    ScanCameraLookAtTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4638)]
+    SClassLandingShakeMultiplier: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x463C)
     ]
-    ThirdPersonDownhillAdjustSpringTimeMax: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4640)
+    ScreenshotBackDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4640)]
+    ScreenshotBendDownAmount: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4644)]
+    ScreenshotHorizonFaceFactor: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4648)
     ]
-    ThirdPersonDownhillAdjustSpringTimeMin: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4644)
-    ]
-    ThirdPersonFoV: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4648)]
-    ThirdPersonOffsetSpringTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x464C)
-    ]
-    ThirdPersonRotationBackAdjustAngleMax: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4650)
-    ]
-    ThirdPersonRotationBackAdjustAngleMin: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4654)
-    ]
-    ThirdPersonSkipIntroCamBlendTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4658)
-    ]
-    ThirdPersonUphillAdjustCrossSlopeMaxAngle: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x465C)
-    ]
-    ThirdPersonUphillAdjustCrossSlopeMinAngle: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4660)
-    ]
-    ThirdPersonUphillAdjustMaxAngle: Annotated[
+    ScreenshotHorizonHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x464C)]
+    ScreenshotInTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4650)]
+    ScreenshotOutTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4654)]
+    ScreenshotRightDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4658)]
+    ShipBuilderFoV: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x465C)]
+    ShipCamAimFOV: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4660)]
+    ShipCamFastSpringStrengthMax: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x4664)
     ]
-    ThirdPersonUphillAdjustMaxAnglePrime: Annotated[
+    ShipCamFastSpringStrengthMin: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x4668)
     ]
-    ThirdPersonUphillAdjustMinAngle: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x466C)
-    ]
-    ThirdPersonUphillAdjustMinAnglePrime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4670)
-    ]
-    ThirdPersonUphillAdjustSpringTimeMax: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4674)
-    ]
-    ThirdPersonUphillAdjustSpringTimeMin: Annotated[
+    ShipCamLookInterp: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x466C)]
+    ShipCamMinReturnTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4670)]
+    ShipCamMotionInterp: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4674)]
+    ShipCamMotionMaxLagPitchAngle: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x4678)
     ]
-    TogglePerspectiveBlendTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x467C)]
-    UnderwaterCameraExtraVertOffset: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4680)
+    ShipCamMotionMaxLagTurnAngle: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x467C)
     ]
-    VehicleExitFlashStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4684)]
-    VehicleExitFlashTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4688)]
-    VehicleFirstPersonFoV: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x468C)]
+    ShipCamMotionPitch: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4680)]
+    ShipCamMotionPitchMod: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4684)]
+    ShipCamMotionTurn: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4688)]
+    ShipCamPitch: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x468C)]
+    ShipCamPitchMod: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4690)]
+    ShipCamReturnTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4694)]
+    ShipCamRollAmountMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4698)]
+    ShipCamRollAmountMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x469C)]
+    ShipCamRollSpeedScaler: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x46A0)]
+    ShipCamSpringStrengthMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x46A4)]
+    ShipCamSpringStrengthMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x46A8)]
+    ShipCamTurn: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x46AC)]
+    ShipFirstPersonBlendOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x46B0)]
+    ShipFirstPersonBlendTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x46B4)]
+    ShipFoVBoost: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x46B8)]
+    ShipFoVMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x46BC)]
+    ShipFoVMax3rdPerson: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x46C0)]
+    ShipFoVMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x46C4)]
+    ShipFoVMin2: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x46C8)]
+    ShipFoVMin3rdPerson: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x46CC)]
+    ShipFoVMiniJump: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x46D0)]
+    ShipFoVSpring: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x46D4)]
+    ShipMiniJumpFoVSpring: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x46D8)]
+    ShipShakeDamper: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x46DC)]
+    ShipThirdPersonBlendOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x46E0)]
+    ShipThirdPersonBlendOutOffset: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x46E4)
+    ]
+    ShipThirdPersonBlendOutTime: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x46E8)
+    ]
+    ShipThirdPersonBlendTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x46EC)]
+    ShipThirdPersonBlendWithOffsetTime: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x46F0)
+    ]
+    ShipThirdPersonEnterBlendOffset: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x46F4)
+    ]
+    ShipThirdPersonEnterBlendTime: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x46F8)
+    ]
+    ShipWarpFoV: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x46FC)]
+    SpecialVehicleMouseRecentreTime: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4700)
+    ]
+    SpecialVehicleMouseRecentreWeaponTime: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4704)
+    ]
+    ThirdPersonAfterIntroCamBlendTime: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4708)
+    ]
+    ThirdPersonBlendInTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x470C)]
+    ThirdPersonBlendOutTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4710)]
+    ThirdPersonCameraChangeBlendTime: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4714)
+    ]
+    ThirdPersonCameraChangeMinimumBlend: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4718)
+    ]
+    ThirdPersonCloseDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x471C)]
+    ThirdPersonCloseDistanceX: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4720)]
+    ThirdPersonClosePitch: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4724)]
+    ThirdPersonCollisionPushOffsetReducerStart: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4728)
+    ]
+    ThirdPersonCombatFoV: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x472C)]
+    ThirdPersonDownhillAdjustMaxAngle: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4730)
+    ]
+    ThirdPersonDownhillAdjustMaxAnglePrime: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4734)
+    ]
+    ThirdPersonDownhillAdjustMinAngle: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4738)
+    ]
+    ThirdPersonDownhillAdjustMinAnglePrime: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x473C)
+    ]
+    ThirdPersonDownhillAdjustSpringTimeMax: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4740)
+    ]
+    ThirdPersonDownhillAdjustSpringTimeMin: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4744)
+    ]
+    ThirdPersonFoV: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4748)]
+    ThirdPersonOffsetSpringTime: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x474C)
+    ]
+    ThirdPersonRotationBackAdjustAngleMax: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4750)
+    ]
+    ThirdPersonRotationBackAdjustAngleMin: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4754)
+    ]
+    ThirdPersonSkipIntroCamBlendTime: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4758)
+    ]
+    ThirdPersonUphillAdjustCrossSlopeMaxAngle: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x475C)
+    ]
+    ThirdPersonUphillAdjustCrossSlopeMinAngle: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4760)
+    ]
+    ThirdPersonUphillAdjustMaxAngle: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4764)
+    ]
+    ThirdPersonUphillAdjustMaxAnglePrime: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4768)
+    ]
+    ThirdPersonUphillAdjustMinAngle: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x476C)
+    ]
+    ThirdPersonUphillAdjustMinAnglePrime: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4770)
+    ]
+    ThirdPersonUphillAdjustSpringTimeMax: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4774)
+    ]
+    ThirdPersonUphillAdjustSpringTimeMin: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4778)
+    ]
+    TogglePerspectiveBlendTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x477C)]
+    UnderwaterCameraExtraVertOffset: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x4780)
+    ]
+    VehicleExitFlashStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4784)]
+    VehicleExitFlashTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4788)]
+    VehicleFirstPersonFoV: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x478C)]
     VehicleFirstToThirdExitOffsetY: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4690)
+        ctypes.c_float, Field(ctypes.c_float, 0x4790)
     ]
     VehicleFirstToThirdExitOffsetZ: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4694)
+        ctypes.c_float, Field(ctypes.c_float, 0x4794)
     ]
     VehicleThirdPersonShootOffsetBlendOutTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x4698)
+        ctypes.c_float, Field(ctypes.c_float, 0x4798)
     ]
     VehicleThirdPersonShootOffsetReturnTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x469C)
+        ctypes.c_float, Field(ctypes.c_float, 0x479C)
     ]
     VRGravityChangeMaxFlashTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x46A0)
+        ctypes.c_float, Field(ctypes.c_float, 0x47A0)
     ]
     VRGravityChangeMinFlashTime: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x46A4)
+        ctypes.c_float, Field(ctypes.c_float, 0x47A4)
     ]
-    VRShakeMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x46A8)]
+    VRShakeMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x47A8)]
     AerialViewCurve: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x46AC)
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x47AC)
     ]
     CreatureInteractionInterpolateDuringHold: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x46AD)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x47AD)
     ]
-    DebugAICam: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x46AE)]
-    DebugMoveCam: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x46AF)]
-    FollowDrawCamProbes: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x46B0)]
-    LockFollowSpring: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x46B1)]
-    MaxBob: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x46B2)]
-    OffsetCombatCameraHorizontal: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x46B3)]
-    PauseThirdPersonCamInPause: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x46B4)]
-
-
-@partial_struct
-class cGcBuildableShipGlobals(Structure):
-    DefaultCorvette: Annotated[cGcRewardSpecificShip, Field(cGcRewardSpecificShip, 0x0)]
-    PartTagLocIDs: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x250)
-    ]
-    InitialLayouts: Annotated[
-        basic.cTkDynamicArray[basic.VariableSizeString],
-        Field(basic.cTkDynamicArray[basic.VariableSizeString], 0x3D0),
-    ]
-    PartFXLimits: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x3E0)]
-    InteriorVisibilityDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x410)]
-    ComplexityLimitWarning: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x420)]
-    ComplexityLimitWarningNX: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x424)]
-    SpawnOnRemoteCorvetteRequiredPartsRenderingDistance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x428)
-    ]
+    DebugAICam: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x47AE)]
+    DebugMoveCam: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x47AF)]
+    FollowDrawCamProbes: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x47B0)]
+    LockFollowSpring: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x47B1)]
+    MaxBob: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x47B2)]
+    OffsetCombatCameraHorizontal: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x47B3)]
+    PauseThirdPersonCamInPause: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x47B4)]
 
 
 @partial_struct
@@ -39037,30 +37886,13 @@ class cGcAudioGlobals(Structure):
 
 
 @partial_struct
-class cGcPlayerStatsGroup(Structure):
-    GroupId: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
-    Stats: Annotated[
-        basic.cTkDynamicArray[cGcPlayerStat],
-        Field(basic.cTkDynamicArray[cGcPlayerStat], 0x10),
-    ]
-    Address: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x20)]
-
-
-@partial_struct
-class cGcInteractionBuffer(Structure):
-    Interactions: Annotated[
-        basic.cTkDynamicArray[cGcInteractionData],
-        Field(basic.cTkDynamicArray[cGcInteractionData], 0x0),
-    ]
-    CurrentPos: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x10)]
-
-
-@partial_struct
-class cGcSquadronPilotData(Structure):
-    NPCResource: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x0)]
-    ShipResource: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x48)]
-    TraitsSeed: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x90)]
-    PilotRank: Annotated[ctypes.c_uint16, Field(ctypes.c_uint16, 0x98)]
+class cGcTerrainEditsBuffer(Structure):
+    BufferAnchors: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x0)]
+    GalacticAddresses: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x1000)]
+    Edits: Annotated[cGcTerrainEdit, Field(cGcTerrainEdit, 0x1800)]
+    BufferSizes: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x3C180)]
+    BufferAges: Annotated[ctypes.c_byte, Field(ctypes.c_byte, 0x3C580)]
+    BufferProtected: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3C680)]
 
 
 @partial_struct
@@ -39108,6 +37940,18 @@ class cGcUAProtectedLocations(Structure):
         Field(basic.cTkDynamicArray[cGcProtectedLocation], 0x0),
     ]
     UA: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x10)]
+
+
+@partial_struct
+class cGcSeasonalStage(Structure):
+    Description: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)
+    ]
+    Title: Annotated[basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x20)]
+    Milestones: Annotated[
+        basic.cTkDynamicArray[cGcSeasonalMilestone],
+        Field(basic.cTkDynamicArray[cGcSeasonalMilestone], 0x40),
+    ]
 
 
 @partial_struct
@@ -39242,35 +38086,6 @@ class cGcSeasonTransferInventoryData(Structure):
 
 
 @partial_struct
-class cGcSeasonalStage(Structure):
-    Description: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)
-    ]
-    Title: Annotated[basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x20)]
-    Milestones: Annotated[
-        basic.cTkDynamicArray[cGcSeasonalMilestone],
-        Field(basic.cTkDynamicArray[cGcSeasonalMilestone], 0x40),
-    ]
-
-
-@partial_struct
-class cGcPlayerOwnershipData(Structure):
-    Direction: Annotated[basic.Vector4f, Field(basic.Vector4f, 0x0)]
-    Position: Annotated[basic.Vector4f, Field(basic.Vector4f, 0x10)]
-    Inventory: Annotated[cGcInventoryContainer, Field(cGcInventoryContainer, 0x20)]
-    Inventory_Cargo: Annotated[
-        cGcInventoryContainer, Field(cGcInventoryContainer, 0x180)
-    ]
-    Inventory_TechOnly: Annotated[
-        cGcInventoryContainer, Field(cGcInventoryContainer, 0x2E0)
-    ]
-    Resource: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x440)]
-    InventoryLayout: Annotated[cGcInventoryLayout, Field(cGcInventoryLayout, 0x488)]
-    Location: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x4A0)]
-    Name: Annotated[basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x4A8)]
-
-
-@partial_struct
 class cGcMaintenanceContainer(Structure):
     InventoryContainer: Annotated[
         cGcInventoryContainer, Field(cGcInventoryContainer, 0x0)
@@ -39290,41 +38105,9 @@ class cGcMaintenanceContainer(Structure):
 
 
 @partial_struct
-class cGcMultitoolData(Structure):
-    ScreenData: Annotated[cGcInWorldUIScreenData, Field(cGcInWorldUIScreenData, 0x0)]
-    Store: Annotated[cGcInventoryContainer, Field(cGcInventoryContainer, 0x30)]
-    CustomisationData: Annotated[
-        cGcCharacterCustomisationData, Field(cGcCharacterCustomisationData, 0x190)
-    ]
-    Resource: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x1E8)]
-    Layout: Annotated[cGcInventoryLayout, Field(cGcInventoryLayout, 0x230)]
-    Seed: Annotated[basic.GcSeed, Field(basic.GcSeed, 0x248)]
-    PrimaryMode: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x258)]
-    SecondaryMode: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x25C)]
-    Name: Annotated[basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x260)]
-    IsLarge: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x280)]
-    UseLegacyColours: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x281)]
-
-
-@partial_struct
 class cGcPetCustomisationData(Structure):
     Data: Annotated[
         cGcCharacterCustomisationSaveData, Field(cGcCharacterCustomisationSaveData, 0x0)
-    ]
-
-
-@partial_struct
-class cGcArchivedMultitoolData(Structure):
-    MultitoolData: Annotated[cGcMultitoolData, Field(cGcMultitoolData, 0x0)]
-    ArchivedInventoryClass: Annotated[
-        c_enum32[enums.cGcInventoryClass],
-        Field(c_enum32[enums.cGcInventoryClass], 0x290),
-    ]
-    WeaponClass: Annotated[
-        c_enum32[enums.cGcWeaponClasses], Field(c_enum32[enums.cGcWeaponClasses], 0x294)
-    ]
-    ArchivedName: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x298)
     ]
 
 
@@ -39334,50 +38117,6 @@ class cGcCustomisationPreset(Structure):
         cGcCharacterCustomisationData, Field(cGcCharacterCustomisationData, 0x0)
     ]
     Name: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x58)]
-
-
-@partial_struct
-class cGcArchivedShipData(Structure):
-    Ownership: Annotated[cGcPlayerOwnershipData, Field(cGcPlayerOwnershipData, 0x0)]
-    Customisation: Annotated[
-        cGcCharacterCustomisationSaveData,
-        Field(cGcCharacterCustomisationSaveData, 0x4D0),
-    ]
-    ArchivedClass: Annotated[
-        c_enum32[enums.cGcSpaceshipClasses],
-        Field(c_enum32[enums.cGcSpaceshipClasses], 0x538),
-    ]
-    ArchivedInventoryClass: Annotated[
-        c_enum32[enums.cGcInventoryClass],
-        Field(c_enum32[enums.cGcInventoryClass], 0x53C),
-    ]
-    ArchivedName: Annotated[
-        basic.cTkFixedString0x80, Field(basic.cTkFixedString0x80, 0x540)
-    ]
-    UsesLegacyColours: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x5C0)]
-
-
-@partial_struct
-class cGcFreighterSaveData(Structure):
-    MatrixAt: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x0)]
-    MatrixPos: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x10)]
-    MatrixUp: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x20)]
-    Inventory: Annotated[cGcInventoryContainer, Field(cGcInventoryContainer, 0x30)]
-    Inventory_Cargo: Annotated[
-        cGcInventoryContainer, Field(cGcInventoryContainer, 0x190)
-    ]
-    Inventory_TechOnly: Annotated[
-        cGcInventoryContainer, Field(cGcInventoryContainer, 0x2F0)
-    ]
-    Resource: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x450)]
-    CargoLayout: Annotated[cGcInventoryLayout, Field(cGcInventoryLayout, 0x498)]
-    Layout: Annotated[cGcInventoryLayout, Field(cGcInventoryLayout, 0x4B0)]
-    HomeSystemSeed: Annotated[basic.GcSeed, Field(basic.GcSeed, 0x4C8)]
-    LastSpawnTime: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x4D8)]
-    UniverseAddress: Annotated[
-        cGcUniverseAddressData, Field(cGcUniverseAddressData, 0x4E0)
-    ]
-    Dismissed: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4F8)]
 
 
 @partial_struct
@@ -39410,16 +38149,6 @@ class cGcSnapPointCondition(Structure):
     SnapPoint: Annotated[
         basic.cTkFixedString0x80, Field(basic.cTkFixedString0x80, 0x18)
     ]
-
-
-@partial_struct
-class cGcNPCWorkerData(Structure):
-    BaseOffset: Annotated[basic.Vector4f, Field(basic.Vector4f, 0x0)]
-    ResourceElement: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x10)]
-    InteractionSeed: Annotated[basic.GcSeed, Field(basic.GcSeed, 0x58)]
-    BaseUA: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x68)]
-    FreighterBase: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x70)]
-    HiredWorker: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x71)]
 
 
 @partial_struct
@@ -39458,17 +38187,6 @@ class cGcBaseBuildingPartAudioLocationEntry(Structure):
 
 
 @partial_struct
-class cGcUniqueNPCSpawnData(Structure):
-    ResourceElement: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x0)]
-    Id: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x48)]
-    PresetId: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x58)]
-    Race: Annotated[
-        c_enum32[enums.cGcAlienRace], Field(c_enum32[enums.cGcAlienRace], 0x68)
-    ]
-    Scale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C)]
-
-
-@partial_struct
 class cGcSentinelSpawnWave(Structure):
     Id: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
     Spawns: Annotated[
@@ -39476,18 +38194,6 @@ class cGcSentinelSpawnWave(Structure):
         Field(basic.cTkDynamicArray[cGcSentinelSpawnData], 0x10),
     ]
     ReinforceAt: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x20)]
-
-
-@partial_struct
-class cGcFiendCrimeSpawnTable(Structure):
-    Spawns: Annotated[
-        basic.cTkDynamicArray[cGcFiendCrimeSpawnData],
-        Field(basic.cTkDynamicArray[cGcFiendCrimeSpawnData], 0x0),
-    ]
-    Crime: Annotated[
-        c_enum32[enums.cGcFiendCrime], Field(c_enum32[enums.cGcFiendCrime], 0x10)
-    ]
-    ResponseRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14)]
 
 
 @partial_struct
@@ -39549,6 +38255,18 @@ class cGcNPCPlacementInfo(Structure):
 
 
 @partial_struct
+class cGcFiendCrimeSpawnTable(Structure):
+    Spawns: Annotated[
+        basic.cTkDynamicArray[cGcFiendCrimeSpawnData],
+        Field(basic.cTkDynamicArray[cGcFiendCrimeSpawnData], 0x0),
+    ]
+    Crime: Annotated[
+        c_enum32[enums.cGcFiendCrime], Field(c_enum32[enums.cGcFiendCrime], 0x10)
+    ]
+    ResponseRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14)]
+
+
+@partial_struct
 class cGcImpactCombatEffectData(Structure):
     CombatEffectType: Annotated[
         c_enum32[enums.cGcCombatEffectType],
@@ -39578,28 +38296,6 @@ class cGcCombatEffectData(Structure):
         c_enum32[enums.cGcStatsTypes], Field(c_enum32[enums.cGcStatsTypes], 0x34)
     ]
     OverrideDamageNumberData: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x38)]
-
-
-@partial_struct
-class cGcCutSceneSpawnData(Structure):
-    Facing: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x0)]
-    Local: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x10)]
-    Offset: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x20)]
-    Up: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x30)]
-    ResourceElement: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x40)]
-    Group: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x88)]
-    Id: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x98)]
-    Modules: Annotated[
-        basic.cTkDynamicArray[basic.NMSTemplate],
-        Field(basic.cTkDynamicArray[basic.NMSTemplate], 0xA8),
-    ]
-    Seed: Annotated[basic.GcSeed, Field(basic.GcSeed, 0xB8)]
-    TrimmedPath: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0xC8)
-    ]
-    Guid: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0xD8)]
-    DebugDraw: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xDC)]
-    EnableAI: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xDD)]
 
 
 @partial_struct
@@ -40090,25 +38786,6 @@ class cGcDifficultyConfig(Structure):
 
 
 @partial_struct
-class cGcNPCSpawnTable(Structure):
-    NPCModelNames: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)
-    ]
-    NPCMannequinModelName: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0x90)
-    ]
-    PlacementInfos: Annotated[
-        basic.cTkDynamicArray[cGcNPCPlacementInfo],
-        Field(basic.cTkDynamicArray[cGcNPCPlacementInfo], 0xA0),
-    ]
-    UniqueNPCs: Annotated[
-        basic.cTkDynamicArray[cGcUniqueNPCSpawnData],
-        Field(basic.cTkDynamicArray[cGcUniqueNPCSpawnData], 0xB0),
-    ]
-    NPCRaceScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xC0)]
-
-
-@partial_struct
 class cGcPetBehaviourTable(Structure):
     Behaviours: Annotated[cGcPetBehaviourData, Field(cGcPetBehaviourData, 0x0)]
     MoodStaminaModifiers: Annotated[
@@ -40149,14 +38826,10 @@ class cGcPetBehaviourTable(Structure):
 
 
 @partial_struct
-class cGcExpeditionEventTable(Structure):
-    Events: Annotated[
-        basic.cTkDynamicArray[cGcExpeditionEventData],
-        Field(basic.cTkDynamicArray[cGcExpeditionEventData], 0x0),
-    ]
-    InterventionEvents: Annotated[
-        basic.cTkDynamicArray[cGcExpeditionInterventionEventData],
-        Field(basic.cTkDynamicArray[cGcExpeditionInterventionEventData], 0x10),
+class cGcExpeditionRewardTable(Structure):
+    Table: Annotated[
+        basic.cTkDynamicArray[cGcGenericRewardTableEntry],
+        Field(basic.cTkDynamicArray[cGcGenericRewardTableEntry], 0x0),
     ]
 
 
@@ -40169,10 +38842,14 @@ class cGcFrigateTraitTable(Structure):
 
 
 @partial_struct
-class cGcExpeditionRewardTable(Structure):
-    Table: Annotated[
-        basic.cTkDynamicArray[cGcGenericRewardTableEntry],
-        Field(basic.cTkDynamicArray[cGcGenericRewardTableEntry], 0x0),
+class cGcExpeditionEventTable(Structure):
+    Events: Annotated[
+        basic.cTkDynamicArray[cGcExpeditionEventData],
+        Field(basic.cTkDynamicArray[cGcExpeditionEventData], 0x0),
+    ]
+    InterventionEvents: Annotated[
+        basic.cTkDynamicArray[cGcExpeditionInterventionEventData],
+        Field(basic.cTkDynamicArray[cGcExpeditionInterventionEventData], 0x10),
     ]
 
 
@@ -40412,16 +39089,21 @@ class cGcAlienPuzzleTable(Structure):
 
 
 @partial_struct
-class cGcCombatEffectsTable(Structure):
-    EffectsData: Annotated[cGcCombatEffectData, Field(cGcCombatEffectData, 0x0)]
-
-
-@partial_struct
 class cGcPlayerWeaponPropertiesTable(Structure):
     PropertiesData: Annotated[
         cGcPlayerWeaponPropertiesData, Field(cGcPlayerWeaponPropertiesData, 0x0)
     ]
     CamouflageData: Annotated[cGcCamouflageData, Field(cGcCamouflageData, 0x1A40)]
+
+
+@partial_struct
+class cGcCombatEffectsTable(Structure):
+    EffectsData: Annotated[cGcCombatEffectData, Field(cGcCombatEffectData, 0x0)]
+
+
+@partial_struct
+class cGcMaintenanceGroupsTable(Structure):
+    Groups: Annotated[cGcMaintenanceGroup, Field(cGcMaintenanceGroup, 0x0)]
 
 
 @partial_struct
@@ -40431,11 +39113,6 @@ class cGcUnlockableTrees(Structure):
         basic.cTkDynamicArray[cGcUnlockableTreeCostType],
         Field(basic.cTkDynamicArray[cGcUnlockableTreeCostType], 0x2D0),
     ]
-
-
-@partial_struct
-class cGcMaintenanceGroupsTable(Structure):
-    Groups: Annotated[cGcMaintenanceGroup, Field(cGcMaintenanceGroup, 0x0)]
 
 
 @partial_struct
@@ -40491,14 +39168,6 @@ class cGcInventoryTable(Structure):
 @partial_struct
 class cGcStoriesTable(Structure):
     Table: Annotated[cGcStoryCategory, Field(cGcStoryCategory, 0x0)]
-
-
-@partial_struct
-class cGcRecipeTable(Structure):
-    Table: Annotated[
-        basic.cTkDynamicArray[cGcRefinerRecipe],
-        Field(basic.cTkDynamicArray[cGcRefinerRecipe], 0x0),
-    ]
 
 
 @partial_struct
@@ -40650,6 +39319,14 @@ class cGcRewardTable(Structure):
     WikiProgressTable: Annotated[
         basic.cTkDynamicArray[cGcGenericRewardTableEntry],
         Field(basic.cTkDynamicArray[cGcGenericRewardTableEntry], 0x240),
+    ]
+
+
+@partial_struct
+class cGcRecipeTable(Structure):
+    Table: Annotated[
+        basic.cTkDynamicArray[cGcRefinerRecipe],
+        Field(basic.cTkDynamicArray[cGcRefinerRecipe], 0x0),
     ]
 
 
@@ -40945,21 +39622,6 @@ class cGcHazardZoneComponentData(Structure):
 
 
 @partial_struct
-class cGcNPCInteractiveObjectComponentData(Structure):
-    States: Annotated[
-        basic.cTkDynamicArray[cGcNPCInteractiveObjectState],
-        Field(basic.cTkDynamicArray[cGcNPCInteractiveObjectState], 0x0),
-    ]
-    DurationMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x10)]
-    DurationMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14)]
-    InteractiveObjectType: Annotated[
-        c_enum32[enums.cGcNPCInteractiveObjectType],
-        Field(c_enum32[enums.cGcNPCInteractiveObjectType], 0x18),
-    ]
-    MaxCapacity: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1C)]
-
-
-@partial_struct
 class cGcMaintenanceComponentData(Structure):
     ModelRenderData: Annotated[cTkModelRendererData, Field(cTkModelRendererData, 0x0)]
     ModelRenderDataAlt: Annotated[
@@ -41077,11 +39739,11 @@ class cGcMaintenanceComponentData(Structure):
 
 
 @partial_struct
-class cGcEggMachineComponentData(Structure):
+class cGcCreatureHarvesterComponentData(Structure):
     MaintenanceData: Annotated[
         cGcMaintenanceComponentData, Field(cGcMaintenanceComponentData, 0x0)
     ]
-    NumInputs: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x410)]
+    NumSlots: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x410)]
 
 
 @partial_struct
@@ -41100,11 +39762,11 @@ class cGcCreatureFeederComponentData(Structure):
 
 
 @partial_struct
-class cGcCreatureHarvesterComponentData(Structure):
-    MaintenanceData: Annotated[
-        cGcMaintenanceComponentData, Field(cGcMaintenanceComponentData, 0x0)
+class cGcPetEggTraitModifierOverrideTable(Structure):
+    TraitModifiers: Annotated[
+        basic.cTkDynamicArray[cGcPetEggTraitModifierOverrideData],
+        Field(basic.cTkDynamicArray[cGcPetEggTraitModifierOverrideData], 0x0),
     ]
-    NumSlots: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x410)]
 
 
 @partial_struct
@@ -41129,14 +39791,6 @@ class cGcGeneratorUnitComponentData(Structure):
 
 
 @partial_struct
-class cGcPetEggTraitModifierOverrideTable(Structure):
-    TraitModifiers: Annotated[
-        basic.cTkDynamicArray[cGcPetEggTraitModifierOverrideData],
-        Field(basic.cTkDynamicArray[cGcPetEggTraitModifierOverrideData], 0x0),
-    ]
-
-
-@partial_struct
 class cGcRefinerUnitComponentData(Structure):
     MaintenanceData: Annotated[
         cGcMaintenanceComponentData, Field(cGcMaintenanceComponentData, 0x0)
@@ -41145,6 +39799,14 @@ class cGcRefinerUnitComponentData(Structure):
     OutputOffset: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x420)]
     NumInputs: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x430)]
     IsCooker: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x434)]
+
+
+@partial_struct
+class cGcEggMachineComponentData(Structure):
+    MaintenanceData: Annotated[
+        cGcMaintenanceComponentData, Field(cGcMaintenanceComponentData, 0x0)
+    ]
+    NumInputs: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x410)]
 
 
 @partial_struct
@@ -41202,42 +39864,6 @@ class cGcFreighterDungeonsTable(Structure):
         basic.cTkDynamicArray[cGcFreighterDungeonParams],
         Field(basic.cTkDynamicArray[cGcFreighterDungeonParams], 0x0),
     ]
-
-
-@partial_struct
-class cGcCreatureSpawnComponentData(Structure):
-    SpecificModel: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x0)]
-    Creature: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x48)]
-    Model: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x58)]
-    Seed: Annotated[basic.GcSeed, Field(basic.GcSeed, 0x68)]
-    SpawnOptionList: Annotated[
-        basic.cTkDynamicArray[cGcSpawnComponentOption],
-        Field(basic.cTkDynamicArray[cGcSpawnComponentOption], 0x78),
-    ]
-    TriggerID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x88)]
-    CreatureType: Annotated[
-        c_enum32[enums.cGcCreatureTypes], Field(c_enum32[enums.cGcCreatureTypes], 0x98)
-    ]
-    FunctionKey: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x9C)]
-    Scale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xA0)]
-    ShipAIOverride: Annotated[
-        c_enum32[enums.cGcAISpaceshipTypes],
-        Field(c_enum32[enums.cGcAISpaceshipTypes], 0xA4),
-    ]
-
-    class eSpawnerModeEnum(IntEnum):
-        Hidden = 0x0
-        Visible = 0x1
-        HideOnSpawn = 0x2
-        HiddenTimer = 0x3
-
-    SpawnerMode: Annotated[
-        c_enum32[eSpawnerModeEnum], Field(c_enum32[eSpawnerModeEnum], 0xA8)
-    ]
-    StartTimeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xAC)]
-    StartTimeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xB0)]
-    TriggerDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xB4)]
-    SpawnAlert: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xB8)]
 
 
 @partial_struct
@@ -41613,6 +40239,11 @@ class cGcNPCInteractionsDataTable(Structure):
 
 
 @partial_struct
+class cGcNPCWordReactionTable(Structure):
+    Races: Annotated[cGcNPCWordReactionCategory, Field(cGcNPCWordReactionCategory, 0x0)]
+
+
+@partial_struct
 class cGcNPCPropTable(Structure):
     Props: Annotated[cGcNPCPropInfo, Field(cGcNPCPropInfo, 0x0)]
 
@@ -41807,18 +40438,18 @@ class cGcSpaceshipComponentData(Structure):
 
 
 @partial_struct
-class cGcActionSetsHudLayers(Structure):
-    ActionSetHudLayers: Annotated[
-        basic.cTkDynamicArray[cGcActionSetHudLayer],
-        Field(basic.cTkDynamicArray[cGcActionSetHudLayer], 0x0),
-    ]
-
-
-@partial_struct
 class cGcInputBindings(Structure):
     InputBindingSets: Annotated[
         basic.cTkDynamicArray[cGcInputBindingSet],
         Field(basic.cTkDynamicArray[cGcInputBindingSet], 0x0),
+    ]
+
+
+@partial_struct
+class cGcActionSetsHudLayers(Structure):
+    ActionSetHudLayers: Annotated[
+        basic.cTkDynamicArray[cGcActionSetHudLayer],
+        Field(basic.cTkDynamicArray[cGcActionSetHudLayer], 0x0),
     ]
 
 
@@ -42038,6 +40669,22 @@ class cTkHeavyAirCollection(Structure):
 
 
 @partial_struct
+class cTkProceduralTextureChosenOptionSampler(Structure):
+    Options: Annotated[
+        basic.cTkDynamicArray[cTkProceduralTextureChosenOption],
+        Field(basic.cTkDynamicArray[cTkProceduralTextureChosenOption], 0x0),
+    ]
+
+
+@partial_struct
+class cTkProceduralTextureChosenOptionList(Structure):
+    Samplers: Annotated[
+        basic.cTkDynamicArray[cTkProceduralTextureChosenOptionSampler],
+        Field(basic.cTkDynamicArray[cTkProceduralTextureChosenOptionSampler], 0x0),
+    ]
+
+
+@partial_struct
 class cTkIOSPerDeviceSettings(Structure):
     DevicePresets: Annotated[
         basic.cTkDynamicArray[cTkIOSDevicePreset],
@@ -42096,6 +40743,18 @@ class cTkAnimStateMachineLayerData(Structure):
 
 
 @partial_struct
+class cGcResourceElement(Structure):
+    AltId: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
+    Filename: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x10)]
+    ProceduralTexture: Annotated[
+        cTkProceduralTextureChosenOptionList,
+        Field(cTkProceduralTextureChosenOptionList, 0x20),
+    ]
+    Seed: Annotated[basic.GcSeed, Field(basic.GcSeed, 0x30)]
+    ResHandle: Annotated[basic.GcResource, Field(basic.GcResource, 0x40)]
+
+
+@partial_struct
 class cGcDifficultyStateData(Structure):
     Settings: Annotated[
         cGcDifficultySettingsData, Field(cGcDifficultySettingsData, 0x0)
@@ -42127,6 +40786,13 @@ class cGcPulseEncounterSpawnFrigateFlyby(Structure):
         Field(c_enum32[enums.cGcFrigateFlybyType], 0x70),
     ]
     RangeOverride: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x74)]
+
+
+@partial_struct
+class cGcPulseEncounterSpawnSpaceHostiles(Structure):
+    CustomShipResource: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x0)]
+    AttackDefinition: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x48)]
+    NumberOfShips: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x58)]
 
 
 @partial_struct
@@ -42578,6 +41244,44 @@ class cGcLaserBeamData(Structure):
 
 
 @partial_struct
+class cGcNPCInteractiveObjectState(Structure):
+    Animations: Annotated[
+        basic.cTkDynamicArray[cGcNPCProbabilityAnimationData],
+        Field(basic.cTkDynamicArray[cGcNPCProbabilityAnimationData], 0x0),
+    ]
+    Name: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x10)]
+    Transitions: Annotated[
+        basic.cTkDynamicArray[cGcNPCInteractiveObjectStateTransition],
+        Field(basic.cTkDynamicArray[cGcNPCInteractiveObjectStateTransition], 0x20),
+    ]
+    BlendTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x30)]
+    EarlyOutTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x34)]
+    MaxAnims: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x38)]
+    MaxTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x3C)]
+    MinAnims: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x40)]
+    MinTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x44)]
+    Prop: Annotated[
+        c_enum32[enums.cGcNPCPropType], Field(c_enum32[enums.cGcNPCPropType], 0x48)
+    ]
+    SeatedPosture: Annotated[
+        c_enum32[enums.cGcNPCSeatedPosture],
+        Field(c_enum32[enums.cGcNPCSeatedPosture], 0x4C),
+    ]
+    SpineAdjustAmount: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x50)]
+    LookAtNode: Annotated[
+        basic.cTkFixedString0x40, Field(basic.cTkFixedString0x40, 0x54)
+    ]
+    CanConverse: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x94)]
+    FaceInvNodeDir: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x95)]
+    FaceLookAt: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x96)]
+    FaceNodeDir: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x97)]
+    FaceSpawnDir: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x98)]
+    LookAtModel: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x99)]
+    MaintainLookAt: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x9A)]
+    PlayIdles: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x9B)]
+
+
+@partial_struct
 class cGcNPCDebugSpawnData(Structure):
     Facing: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x0)]
     Position: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x10)]
@@ -42655,45 +41359,45 @@ class cGcScanEventData(Structure):
         cGcScanEventSolarSystemLookup, Field(cGcScanEventSolarSystemLookup, 0x0)
     ]
     SolarSystemAttributesFallback: Annotated[
-        cGcScanEventSolarSystemLookup, Field(cGcScanEventSolarSystemLookup, 0xA0)
+        cGcScanEventSolarSystemLookup, Field(cGcScanEventSolarSystemLookup, 0xB0)
     ]
-    ResourceOverride: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x140)]
-    ForceInteraction: Annotated[basic.TkID0x20, Field(basic.TkID0x20, 0x188)]
+    ResourceOverride: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x160)]
+    ForceInteraction: Annotated[basic.TkID0x20, Field(basic.TkID0x20, 0x1A8)]
     MustMatchStoryUtilityPuzzle: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x1A8)
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x1C8)
     ]
-    Name: Annotated[basic.TkID0x20, Field(basic.TkID0x20, 0x1C8)]
-    NextOption: Annotated[basic.TkID0x20, Field(basic.TkID0x20, 0x1E8)]
+    Name: Annotated[basic.TkID0x20, Field(basic.TkID0x20, 0x1E8)]
+    NextOption: Annotated[basic.TkID0x20, Field(basic.TkID0x20, 0x208)]
     PlanetLabelText: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x208)
-    ]
-    SurveyDiscoveryOSDMessage: Annotated[
         basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x228)
     ]
-    SurveyHUDName: Annotated[
+    SurveyDiscoveryOSDMessage: Annotated[
         basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x248)
     ]
-    MarkerIcon: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x268)]
-    TriggerActions: Annotated[cGcScanEventTriggers, Field(cGcScanEventTriggers, 0x280)]
-    ForceOverrideEncounter: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x298)]
-    HasReward: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x2A8)]
+    SurveyHUDName: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x268)
+    ]
+    MarkerIcon: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x288)]
+    TriggerActions: Annotated[cGcScanEventTriggers, Field(cGcScanEventTriggers, 0x2A0)]
+    ForceOverrideEncounter: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x2B8)]
+    HasReward: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x2C8)]
     InterstellarOSDMessage: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0x2B8)
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0x2D8)
     ]
     MarkerLabel: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0x2C8)
-    ]
-    MissionMessageOnInteract: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x2D8)]
-    OSDMessage: Annotated[
         basic.VariableSizeString, Field(basic.VariableSizeString, 0x2E8)
     ]
-    ReplacementMaintData: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x2F8)]
-    TooltipMessage: Annotated[
+    MissionMessageOnInteract: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x2F8)]
+    OSDMessage: Annotated[
         basic.VariableSizeString, Field(basic.VariableSizeString, 0x308)
+    ]
+    ReplacementMaintData: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x318)]
+    TooltipMessage: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0x328)
     ]
     UAsList: Annotated[
         basic.cTkDynamicArray[basic.VariableSizeString],
-        Field(basic.cTkDynamicArray[basic.VariableSizeString], 0x318),
+        Field(basic.cTkDynamicArray[basic.VariableSizeString], 0x338),
     ]
 
     class eBuildingLocationEnum(IntEnum):
@@ -42706,9 +41410,9 @@ class cGcScanEventData(Structure):
         PlayerSettlement = 0x6
 
     BuildingLocation: Annotated[
-        c_enum32[eBuildingLocationEnum], Field(c_enum32[eBuildingLocationEnum], 0x328)
+        c_enum32[eBuildingLocationEnum], Field(c_enum32[eBuildingLocationEnum], 0x348)
     ]
-    BuildingPreventionRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x32C)]
+    BuildingPreventionRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x34C)]
 
     class eEventEndTypeEnum(IntEnum):
         None_ = 0x0
@@ -42718,7 +41422,7 @@ class cGcScanEventData(Structure):
         TimedInteract = 0x4
 
     EventEndType: Annotated[
-        c_enum32[eEventEndTypeEnum], Field(c_enum32[eEventEndTypeEnum], 0x330)
+        c_enum32[eEventEndTypeEnum], Field(c_enum32[eEventEndTypeEnum], 0x350)
     ]
 
     class eEventPriorityEnum(IntEnum):
@@ -42726,7 +41430,7 @@ class cGcScanEventData(Structure):
         High = 0x1
 
     EventPriority: Annotated[
-        c_enum32[eEventPriorityEnum], Field(c_enum32[eEventPriorityEnum], 0x334)
+        c_enum32[eEventPriorityEnum], Field(c_enum32[eEventPriorityEnum], 0x354)
     ]
 
     class eEventStartTypeEnum(IntEnum):
@@ -42738,28 +41442,28 @@ class cGcScanEventData(Structure):
         LeaveBuilding = 0x5
 
     EventStartType: Annotated[
-        c_enum32[eEventStartTypeEnum], Field(c_enum32[eEventStartTypeEnum], 0x338)
+        c_enum32[eEventStartTypeEnum], Field(c_enum32[eEventStartTypeEnum], 0x358)
     ]
     ForceInteractionType: Annotated[
         c_enum32[enums.cGcInteractionType],
-        Field(c_enum32[enums.cGcInteractionType], 0x33C),
+        Field(c_enum32[enums.cGcInteractionType], 0x35C),
     ]
-    IconTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x340)]
+    IconTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x360)]
     MessageAudio: Annotated[
         c_enum32[enums.cGcAudioWwiseEvents],
-        Field(c_enum32[enums.cGcAudioWwiseEvents], 0x344),
+        Field(c_enum32[enums.cGcAudioWwiseEvents], 0x364),
     ]
-    MessageDisplayTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x348)]
-    MessageTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x34C)]
+    MessageDisplayTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x368)]
+    MessageTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x36C)]
     MissionMarkerHighlightStyleOverride: Annotated[
         c_enum32[enums.cGcScannerIconHighlightTypes],
-        Field(c_enum32[enums.cGcScannerIconHighlightTypes], 0x350),
+        Field(c_enum32[enums.cGcScannerIconHighlightTypes], 0x370),
     ]
     OverrideInteractionRace: Annotated[
-        c_enum32[enums.cGcAlienRace], Field(c_enum32[enums.cGcAlienRace], 0x354)
+        c_enum32[enums.cGcAlienRace], Field(c_enum32[enums.cGcAlienRace], 0x374)
     ]
     RequireInteractionRace: Annotated[
-        c_enum32[enums.cGcAlienRace], Field(c_enum32[enums.cGcAlienRace], 0x358)
+        c_enum32[enums.cGcAlienRace], Field(c_enum32[enums.cGcAlienRace], 0x378)
     ]
 
     class eSearchTypeEnum(IntEnum):
@@ -42792,7 +41496,7 @@ class cGcScanEventData(Structure):
         OwnedSettlementHub = 0x1A
 
     SearchType: Annotated[
-        c_enum32[eSearchTypeEnum], Field(c_enum32[eSearchTypeEnum], 0x35C)
+        c_enum32[eSearchTypeEnum], Field(c_enum32[eSearchTypeEnum], 0x37C)
     ]
 
     class eSolarSystemLocationEnum(IntEnum):
@@ -42806,49 +41510,49 @@ class cGcScanEventData(Structure):
 
     SolarSystemLocation: Annotated[
         c_enum32[eSolarSystemLocationEnum],
-        Field(c_enum32[eSolarSystemLocationEnum], 0x360),
+        Field(c_enum32[eSolarSystemLocationEnum], 0x380),
     ]
     SpecificBuildingClass: Annotated[
         c_enum32[enums.cGcBuildingClassification],
-        Field(c_enum32[enums.cGcBuildingClassification], 0x364),
+        Field(c_enum32[enums.cGcBuildingClassification], 0x384),
     ]
-    StartTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x368)]
-    SurveyDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x36C)]
+    StartTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x388)]
+    SurveyDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x38C)]
     TechShopType: Annotated[
         c_enum32[enums.cGcTechnologyCategory],
-        Field(c_enum32[enums.cGcTechnologyCategory], 0x370),
+        Field(c_enum32[enums.cGcTechnologyCategory], 0x390),
     ]
-    TooltipTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x374)]
-    AllowFriendsBases: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x378)]
-    AllowOverriddenBuildings: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x379)]
-    AlwaysShow: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x37A)]
-    BlockStartedOnUseEvents: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x37B)]
-    CanEndFromOutsideMission: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x37C)]
+    TooltipTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x394)]
+    AllowFriendsBases: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x398)]
+    AllowOverriddenBuildings: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x399)]
+    AlwaysShow: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x39A)]
+    BlockStartedOnUseEvents: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x39B)]
+    CanEndFromOutsideMission: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x39C)]
     ClearForcedInteractionOnCompletion: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x37D)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x39D)
     ]
-    DisableMultiplayerSync: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x37E)]
-    ForceBroken: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x37F)]
-    ForceFixed: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x380)]
-    ForceOverridesAll: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x381)]
-    ForceReplaceStoryPortalSeed: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x382)]
-    ForceResetPortal: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x383)]
-    ForceRestartInteraction: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x384)]
-    ForceWideRandom: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x385)]
-    IsCommunityPortalOverride: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x386)]
-    MustFindSystem: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x387)]
-    NeverShow: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x388)]
-    NPCReactsToPlayer: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x389)]
-    ReplaceEventIfAlreadyActive: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x38A)]
-    ShowEndTooltip: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x38B)]
-    ShowOnlyIfSequenceTarget: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x38C)]
-    TargetMustMatchMissionSeed: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x38D)]
-    TooltipRepeats: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x38E)]
+    DisableMultiplayerSync: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x39E)]
+    ForceBroken: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x39F)]
+    ForceFixed: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3A0)]
+    ForceOverridesAll: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3A1)]
+    ForceReplaceStoryPortalSeed: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3A2)]
+    ForceResetPortal: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3A3)]
+    ForceRestartInteraction: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3A4)]
+    ForceWideRandom: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3A5)]
+    IsCommunityPortalOverride: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3A6)]
+    MustFindSystem: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3A7)]
+    NeverShow: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3A8)]
+    NPCReactsToPlayer: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3A9)]
+    ReplaceEventIfAlreadyActive: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3AA)]
+    ShowEndTooltip: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3AB)]
+    ShowOnlyIfSequenceTarget: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3AC)]
+    TargetMustMatchMissionSeed: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3AD)]
+    TooltipRepeats: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3AE)]
     UseBuildingFromRendezvousStage: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x38F)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x3AF)
     ]
-    UseMissionTradingDataOverride: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x390)]
-    UseSeasonDataAsInteraction: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x391)]
+    UseMissionTradingDataOverride: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3B0)]
+    UseSeasonDataAsInteraction: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3B1)]
 
 
 @partial_struct
@@ -43022,69 +41726,206 @@ class cGcSettlementColourUpgradeTable(Structure):
 
 
 @partial_struct
-class cGcEnvironmentSpawnData(Structure):
-    Creatures: Annotated[
-        basic.cTkDynamicArray[cGcCreatureSpawnData],
-        Field(basic.cTkDynamicArray[cGcCreatureSpawnData], 0x0),
-    ]
-    DetailObjects: Annotated[
-        basic.cTkDynamicArray[cGcObjectSpawnData],
-        Field(basic.cTkDynamicArray[cGcObjectSpawnData], 0x10),
-    ]
-    DistantObjects: Annotated[
-        basic.cTkDynamicArray[cGcObjectSpawnData],
-        Field(basic.cTkDynamicArray[cGcObjectSpawnData], 0x20),
-    ]
-    Landmarks: Annotated[
-        basic.cTkDynamicArray[cGcObjectSpawnData],
-        Field(basic.cTkDynamicArray[cGcObjectSpawnData], 0x30),
-    ]
+class cGcSelectableObjectSpawnData(Structure):
+    Resource: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x0)]
+
+
+@partial_struct
+class cGcSelectableObjectSpawnList(Structure):
+    Name: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
     Objects: Annotated[
-        basic.cTkDynamicArray[cGcObjectSpawnData],
-        Field(basic.cTkDynamicArray[cGcObjectSpawnData], 0x40),
-    ]
-    SelectableObjects: Annotated[
-        basic.cTkDynamicArray[cGcSelectableObjectSpawnList],
-        Field(basic.cTkDynamicArray[cGcSelectableObjectSpawnList], 0x50),
+        basic.cTkDynamicArray[cGcSelectableObjectSpawnData],
+        Field(basic.cTkDynamicArray[cGcSelectableObjectSpawnData], 0x10),
     ]
 
 
 @partial_struct
-class cGcPlanetBuildingData(Structure):
-    Buildings: Annotated[
-        basic.cTkDynamicArray[cGcBuildingSpawnData],
-        Field(basic.cTkDynamicArray[cGcBuildingSpawnData], 0x0),
+class cGcObjectSpawnData(Structure):
+    QualityVariantData: Annotated[
+        cGcObjectSpawnDataVariant, Field(cGcObjectSpawnDataVariant, 0x0)
     ]
-    BuildingSlots: Annotated[
-        basic.cTkDynamicArray[cGcBuildingSpawnSlot],
-        Field(basic.cTkDynamicArray[cGcBuildingSpawnSlot], 0x10),
+    Resource: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x48)]
+    AltResources: Annotated[
+        basic.cTkDynamicArray[cGcResourceElement],
+        Field(basic.cTkDynamicArray[cGcResourceElement], 0x90),
     ]
-    OverrideBuildings: Annotated[
-        basic.cTkDynamicArray[cGcBuildingOverrideData],
-        Field(basic.cTkDynamicArray[cGcBuildingOverrideData], 0x20),
+    DebugName: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0xA0)]
+    DestroyedByVehicleEffect: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0xB0)]
+    ExtraTileTypes: Annotated[
+        basic.cTkDynamicArray[c_enum32[enums.cGcTerrainTileType]],
+        Field(basic.cTkDynamicArray[c_enum32[enums.cGcTerrainTileType]], 0xC0),
     ]
-    PlanetUA: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x30)]
-    PlanetRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x38)]
-    Spacing: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x3C)]
-    VoronoiPointDivisions: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x40)]
-    VoronoiPointSeed: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x44)]
-    VoronoiSectorSeed: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x48)]
-    InitialBuildingsPlaced: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4C)]
-    IsPrime: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4D)]
-    IsWaterworld: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4E)]
+    Placement: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0xD0)]
+    QualityVariants: Annotated[
+        basic.cTkDynamicArray[cGcObjectSpawnDataVariant],
+        Field(basic.cTkDynamicArray[cGcObjectSpawnDataVariant], 0xE0),
+    ]
+    Seed: Annotated[basic.GcSeed, Field(basic.GcSeed, 0xF0)]
+
+    class eGroundColourIndexEnum(IntEnum):
+        Auto = 0x0
+        Main = 0x1
+        Patch = 0x2
+
+    GroundColourIndex: Annotated[
+        c_enum32[eGroundColourIndexEnum], Field(c_enum32[eGroundColourIndexEnum], 0x100)
+    ]
+
+    class eLargeObjectCoverageEnum(IntEnum):
+        DoNotPlace = 0x0
+        DoNotPlaceIgnoreFootprint = 0x1
+        DoNotPlaceClose = 0x2
+        DoNotPlaceAnywhereNear = 0x3
+        OnlyPlaceAround = 0x4
+        OnlyPlaceAroundIgnoreFootprint = 0x5
+        AlwaysPlace = 0x6
+
+    LargeObjectCoverage: Annotated[
+        c_enum32[eLargeObjectCoverageEnum],
+        Field(c_enum32[eLargeObjectCoverageEnum], 0x104),
+    ]
+    MaxAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x108)]
+    MaxHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x10C)]
+    MaxLower: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x110)]
+    MaxRaise: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x114)]
+    MaxScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x118)]
+    MaxScaleY: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x11C)]
+    MaxXZRotation: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x120)]
+    MaxYRotation: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x124)]
+    MinAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x128)]
+    MinHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x12C)]
+    MinScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x130)]
+    MinScaleY: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x134)]
+    Order: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x138)]
+
+    class eOverlapStyleEnum(IntEnum):
+        None_ = 0x0
+        SameSeed = 0x1
+        All = 0x2
+
+    OverlapStyle: Annotated[
+        c_enum32[eOverlapStyleEnum], Field(c_enum32[eOverlapStyleEnum], 0x13C)
+    ]
+    PatchEdgeScaling: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x140)]
+
+    class ePlacementPriorityEnum(IntEnum):
+        Low = 0x0
+        Normal = 0x1
+        High = 0x2
+
+    PlacementPriority: Annotated[
+        c_enum32[ePlacementPriorityEnum], Field(c_enum32[ePlacementPriorityEnum], 0x144)
+    ]
+    ShearWindStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x148)]
+    SlopeScaling: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14C)]
+
+    class eTypeEnum(IntEnum):
+        Instanced = 0x0
+        Single = 0x1
+
+    Type: Annotated[c_enum32[eTypeEnum], Field(c_enum32[eTypeEnum], 0x150)]
+    AlignToNormal: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x154)]
+    AutoCollision: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x155)]
+    CollideWithPlayer: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x156)]
+    CollideWithPlayerVehicle: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x157)]
+    CreaturesCanEat: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x158)]
+    DestroyedByPlayerShip: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x159)]
+    DestroyedByPlayerVehicle: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x15A)]
+    DestroyedByTerrainEdit: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x15B)]
+    ImposterActivation: Annotated[
+        c_enum32[enums.cTkImposterActivation],
+        Field(c_enum32[enums.cTkImposterActivation], 0x15C),
+    ]
+    ImposterType: Annotated[
+        c_enum32[enums.cTkImposterType], Field(c_enum32[enums.cTkImposterType], 0x15D)
+    ]
+    InvisibleToCamera: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x15E)]
+    IsFloatingIsland: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x15F)]
+    MatchGroundColour: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x160)]
+    MoveToGroundOnUpgrade: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x161)]
+    RelativeToSeaLevel: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x162)]
+    SupportsScanToReveal: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x163)]
+    SwapPrimaryForRandomColour: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x164)]
+    SwapPrimaryForSecondaryColour: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x165)]
 
 
 @partial_struct
-class cGcObjectSpawnDataArray(Structure):
-    Objects: Annotated[
-        basic.cTkDynamicArray[cGcObjectSpawnData],
-        Field(basic.cTkDynamicArray[cGcObjectSpawnData], 0x0),
+class cGcBuildingSpawnData(Structure):
+    AABBMax: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x0)]
+    AABBMin: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x10)]
+    Resource: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x20)]
+    Seed: Annotated[basic.GcSeed, Field(basic.GcSeed, 0x68)]
+    ClusterLayouts: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x78)]
+    FlattenType: Annotated[cTkNoiseFlattenOptions, Field(cTkNoiseFlattenOptions, 0x98)]
+    Classification: Annotated[
+        c_enum32[enums.cGcBuildingClassification],
+        Field(c_enum32[enums.cGcBuildingClassification], 0xA0),
     ]
-    MaxObjectsToSpawn: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x10)]
+    ClusterLayoutCount: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0xA4)]
+    ClusterSpacing: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xA8)]
+    Density: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xAC)]
+    InstanceID: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0xB0)]
+    LSystemID: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0xB4)]
+    MaxHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xB8)]
+    MaxXZRotation: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xBC)]
+    MinHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xC0)]
+    Radius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xC4)]
+    Scale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xC8)]
+    WFCBuildingPreset: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0xCC)]
+    WFCModuleSet: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0xD0)]
+    AlignToNormal: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xD4)]
+    AutoCollision: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xD5)]
+    BuildingSizeCalculated: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xD6)]
+    GivesShelter: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xD7)]
+    IgnoreParticlesAABB: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xD8)]
+    LowerIntoGround: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xD9)]
+
+
+@partial_struct
+class cGcSpawnComponentOption(Structure):
+    SpecificModel: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x0)]
+    Name: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x48)]
+    Seed: Annotated[basic.GcSeed, Field(basic.GcSeed, 0x58)]
+
+
+@partial_struct
+class cGcCreatureSpawnData(Structure):
+    ExtraResource: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x0)]
+    FemaleResource: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x48)]
+    Resource: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x90)]
+    Filter: Annotated[basic.TkID0x20, Field(basic.TkID0x20, 0xD8)]
+    CreatureID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0xF8)]
+    CreatureActiveInDayChance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x108)]
+    CreatureActiveInNightChance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x10C)]
+    CreatureDespawnDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x110)]
+    CreatureGroupsPerSquareKm: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x114)]
+    CreatureMaxGroupSize: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x118)]
+    CreatureMinGroupSize: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x11C)]
+    CreatureRole: Annotated[
+        c_enum32[enums.cGcCreatureRoles], Field(c_enum32[enums.cGcCreatureRoles], 0x120)
+    ]
+    CreatureSpawnDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x124)]
+    CreatureType: Annotated[
+        c_enum32[enums.cGcCreatureTypes], Field(c_enum32[enums.cGcCreatureTypes], 0x128)
+    ]
+    HemiSphere: Annotated[
+        c_enum32[enums.cGcCreatureHemiSphere],
+        Field(c_enum32[enums.cGcCreatureHemiSphere], 0x12C),
+    ]
+    MaxScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x130)]
+    MinScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x134)]
+    Rarity: Annotated[
+        c_enum32[enums.cGcRarity], Field(c_enum32[enums.cGcRarity], 0x138)
+    ]
+    RoleDataIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x13C)]
     TileType: Annotated[
         c_enum32[enums.cGcTerrainTileType],
-        Field(c_enum32[enums.cGcTerrainTileType], 0x14),
+        Field(c_enum32[enums.cGcTerrainTileType], 0x140),
     ]
+    AllowFur: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x144)]
+    Herd: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x145)]
+    SwapPrimaryForRandomColour: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x146)]
+    SwapPrimaryForSecondaryColour: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x147)]
 
 
 @partial_struct
@@ -43125,19 +41966,77 @@ class cGcCreatureRoleDataTable(Structure):
 
 
 @partial_struct
-class cGcCustomisationDescriptorGroupOptions(Structure):
+class cGcCreaturePetEggData(Structure):
+    EggResource: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x0)]
+    HatchResource: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x48)]
+    IconResource: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x90)]
+    Id: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0xA8)]
+    HatchOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xB8)]
+    HatchScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xBC)]
+
+
+@partial_struct
+class cGcCustomisationGroup(Structure):
     GroupTitle: Annotated[
         basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)
     ]
-    DescriptorGroupOptions: Annotated[
-        basic.cTkDynamicArray[cGcCustomisationDescriptorGroupOption],
-        Field(basic.cTkDynamicArray[cGcCustomisationDescriptorGroupOption], 0x20),
+    BoneScales: Annotated[
+        basic.cTkDynamicArray[cGcCustomisationBoneScales],
+        Field(basic.cTkDynamicArray[cGcCustomisationBoneScales], 0x20),
     ]
-    PrerequisiteGroup: Annotated[
+    ColourGroups: Annotated[
+        basic.cTkDynamicArray[cGcCustomisationColourGroup],
+        Field(basic.cTkDynamicArray[cGcCustomisationColourGroup], 0x30),
+    ]
+    DescriptorOptions: Annotated[
+        basic.cTkDynamicArray[cGcCustomisationDescriptorGroupOptions],
+        Field(basic.cTkDynamicArray[cGcCustomisationDescriptorGroupOptions], 0x40),
+    ]
+    GroupID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x50)]
+    TextureGroups: Annotated[
+        basic.cTkDynamicArray[cGcCustomisationTextureGroup],
+        Field(basic.cTkDynamicArray[cGcCustomisationTextureGroup], 0x60),
+    ]
+    CameraData: Annotated[
+        cGcCustomisationCameraData, Field(cGcCustomisationCameraData, 0x70)
+    ]
+    ForceShowAllColourOptions: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xA4)]
+    IsBannerGroup: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xA5)]
+
+
+@partial_struct
+class cGcCustomisationGroups(Structure):
+    CustomisationGroups: Annotated[
+        basic.cTkDynamicArray[cGcCustomisationGroup],
+        Field(basic.cTkDynamicArray[cGcCustomisationGroup], 0x0),
+    ]
+
+
+@partial_struct
+class cGcCustomisationRace(Structure):
+    CustomisationGroups: Annotated[
+        basic.cTkDynamicArray[cGcCustomisationGroup],
+        Field(basic.cTkDynamicArray[cGcCustomisationGroup], 0x0),
+    ]
+    DescriptorGroupOption: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x10)]
+    Presets: Annotated[
         basic.cTkDynamicArray[basic.TkID0x10],
-        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x30),
+        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x20),
     ]
-    FirstOptionIsEmpty: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x40)]
+    Scale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x30)]
+    IsGek: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x34)]
+
+
+@partial_struct
+class cGcCustomisationUI(Structure):
+    Common: Annotated[cGcCustomisationGroups, Field(cGcCustomisationGroups, 0x0)]
+    Races: Annotated[
+        basic.cTkDynamicArray[cGcCustomisationRace],
+        Field(basic.cTkDynamicArray[cGcCustomisationRace], 0x10),
+    ]
+    RacesCameraData: Annotated[
+        cGcCustomisationCameraData, Field(cGcCustomisationCameraData, 0x20)
+    ]
 
 
 @partial_struct
@@ -43176,6 +42075,38 @@ class cGcSettlementStatChangeArray(Structure):
         basic.cTkDynamicArray[cGcSettlementStatChange],
         Field(basic.cTkDynamicArray[cGcSettlementStatChange], 0x0),
     ]
+
+
+@partial_struct
+class cGcRewardSpecificShip(Structure):
+    ShipInventory: Annotated[cGcInventoryContainer, Field(cGcInventoryContainer, 0x0)]
+    Customisation: Annotated[
+        cGcCharacterCustomisationData, Field(cGcCharacterCustomisationData, 0x160)
+    ]
+    ShipResource: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x1B8)]
+    NameOverride: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x200)
+    ]
+    ShipLayout: Annotated[cGcInventoryLayout, Field(cGcInventoryLayout, 0x220)]
+    CostAmount: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x238)]
+    CostCurrency: Annotated[
+        c_enum32[enums.cGcCurrency], Field(c_enum32[enums.cGcCurrency], 0x23C)
+    ]
+    ModelViewOverride: Annotated[
+        c_enum32[enums.cGcModelViews], Field(c_enum32[enums.cGcModelViews], 0x240)
+    ]
+    OverrideSizeType: Annotated[
+        c_enum32[enums.cGcInventoryLayoutSizeType],
+        Field(c_enum32[enums.cGcInventoryLayoutSizeType], 0x244),
+    ]
+    ShipType: Annotated[
+        c_enum32[enums.cGcSpaceshipClasses],
+        Field(c_enum32[enums.cGcSpaceshipClasses], 0x248),
+    ]
+    FormatAsSeasonal: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x24C)]
+    IsGift: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x24D)]
+    IsRewardShip: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x24E)]
+    UseOverrideSizeType: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x24F)]
 
 
 @partial_struct
@@ -44816,15 +43747,15 @@ class cGcDebugOptions(Structure):
         ctypes.c_uint64, Field(ctypes.c_uint64, 0x1A8)
     ]
     ToolkitGlobals: Annotated[cTkGlobals, Field(cTkGlobals, 0x1B0)]
-    _3dTextDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x698)]
-    _3dTextMinScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x69C)]
+    _3dTextDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x69C)]
+    _3dTextMinScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6A0)]
     AutomaticPartSpawnStyle: Annotated[
         c_enum32[enums.cGcBaseBuildingPartStyle],
-        Field(c_enum32[enums.cGcBaseBuildingPartStyle], 0x6A0),
+        Field(c_enum32[enums.cGcBaseBuildingPartStyle], 0x6A4),
     ]
-    BaseDownloadTimeout: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6A4)]
-    BasePayloadMultiplier: Annotated[ctypes.c_uint32, Field(ctypes.c_uint32, 0x6A8)]
-    BootDirectlyIntoSaveSlot: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x6AC)]
+    BaseDownloadTimeout: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6A8)]
+    BasePayloadMultiplier: Annotated[ctypes.c_uint32, Field(ctypes.c_uint32, 0x6AC)]
+    BootDirectlyIntoSaveSlot: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x6B0)]
 
     class eBootLoadDelayEnum(IntEnum):
         LoadAll = 0x0
@@ -44832,9 +43763,9 @@ class cGcDebugOptions(Structure):
         WaitForNothing = 0x2
 
     BootLoadDelay: Annotated[
-        c_enum32[eBootLoadDelayEnum], Field(c_enum32[eBootLoadDelayEnum], 0x6B0)
+        c_enum32[eBootLoadDelayEnum], Field(c_enum32[eBootLoadDelayEnum], 0x6B4)
     ]
-    BootLogoFadeRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B4)]
+    BootLogoFadeRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6B8)]
 
     class eBootModeEnum(IntEnum):
         MinimalSolarSystem = 0x0
@@ -44845,74 +43776,74 @@ class cGcDebugOptions(Structure):
         Scratchpad = 0x5
         UnitTest = 0x6
 
-    BootMode: Annotated[c_enum32[eBootModeEnum], Field(c_enum32[eBootModeEnum], 0x6B8)]
+    BootMode: Annotated[c_enum32[eBootModeEnum], Field(c_enum32[eBootModeEnum], 0x6BC)]
     DebugLanguage: Annotated[
-        c_enum32[enums.cTkLanguages], Field(c_enum32[enums.cTkLanguages], 0x6BC)
+        c_enum32[enums.cTkLanguages], Field(c_enum32[enums.cTkLanguages], 0x6C0)
     ]
-    DebugMenuAlpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C0)]
-    DebugTextLineHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C4)]
-    DebugTextSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C8)]
-    DebugTextureSize: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x6CC)]
+    DebugMenuAlpha: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C4)]
+    DebugTextLineHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C8)]
+    DebugTextSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6CC)]
+    DebugTextureSize: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x6D0)]
     DiscoveryAutoSyncIntervalSeconds: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x6D0)
+        ctypes.c_int32, Field(ctypes.c_int32, 0x6D4)
     ]
     ForceAnomalyTo: Annotated[
         c_enum32[enums.cGcGalaxyStarAnomaly],
-        Field(c_enum32[enums.cGcGalaxyStarAnomaly], 0x6D4),
+        Field(c_enum32[enums.cGcGalaxyStarAnomaly], 0x6D8),
     ]
-    ForceAsteroidSystemIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x6D8)]
+    ForceAsteroidSystemIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x6DC)]
     ForceBiomeSubTypeTo: Annotated[
-        c_enum32[enums.cGcBiomeSubType], Field(c_enum32[enums.cGcBiomeSubType], 0x6DC)
+        c_enum32[enums.cGcBiomeSubType], Field(c_enum32[enums.cGcBiomeSubType], 0x6E0)
     ]
     ForceBiomeTo: Annotated[
-        c_enum32[enums.cGcBiomeType], Field(c_enum32[enums.cGcBiomeType], 0x6E0)
+        c_enum32[enums.cGcBiomeType], Field(c_enum32[enums.cGcBiomeType], 0x6E4)
     ]
     ForceBuildingRaceTo: Annotated[
-        c_enum32[enums.cGcAlienRace], Field(c_enum32[enums.cGcAlienRace], 0x6E4)
+        c_enum32[enums.cGcAlienRace], Field(c_enum32[enums.cGcAlienRace], 0x6E8)
     ]
     ForceCreatureLifeLevelTo: Annotated[
-        c_enum32[enums.cGcPlanetLife], Field(c_enum32[enums.cGcPlanetLife], 0x6E8)
+        c_enum32[enums.cGcPlanetLife], Field(c_enum32[enums.cGcPlanetLife], 0x6EC)
     ]
-    ForceGrassColourIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x6EC)]
-    ForceInitialTimeOfDay: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F0)]
-    ForceInteractionIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x6F4)]
+    ForceGrassColourIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x6F0)]
+    ForceInitialTimeOfDay: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6F4)]
+    ForceInteractionIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x6F8)]
     ForceInteractionRaceTo: Annotated[
-        c_enum32[enums.cGcAlienRace], Field(c_enum32[enums.cGcAlienRace], 0x6F8)
+        c_enum32[enums.cGcAlienRace], Field(c_enum32[enums.cGcAlienRace], 0x6FC)
     ]
     ForceLifeLevelTo: Annotated[
-        c_enum32[enums.cGcPlanetLife], Field(c_enum32[enums.cGcPlanetLife], 0x6FC)
+        c_enum32[enums.cGcPlanetLife], Field(c_enum32[enums.cGcPlanetLife], 0x700)
     ]
     ForceNPCPuzzleCategory: Annotated[
         c_enum32[enums.cGcAlienPuzzleCategory],
-        Field(c_enum32[enums.cGcAlienPuzzleCategory], 0x700),
+        Field(c_enum32[enums.cGcAlienPuzzleCategory], 0x704),
     ]
     ForceScreenFilterTo: Annotated[
-        c_enum32[enums.cGcScreenFilters], Field(c_enum32[enums.cGcScreenFilters], 0x704)
+        c_enum32[enums.cGcScreenFilters], Field(c_enum32[enums.cGcScreenFilters], 0x708)
     ]
-    ForceSeaLevel: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x708)]
-    ForceSkyColourIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x70C)]
-    ForceSkyColourSeed: Annotated[ctypes.c_uint32, Field(ctypes.c_uint32, 0x710)]
-    ForceSpaceBattleLevel: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x714)]
-    ForceSpaceSkyColourIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x718)]
+    ForceSeaLevel: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x70C)]
+    ForceSkyColourIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x710)]
+    ForceSkyColourSeed: Annotated[ctypes.c_uint32, Field(ctypes.c_uint32, 0x714)]
+    ForceSpaceBattleLevel: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x718)]
+    ForceSpaceSkyColourIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x71C)]
     ForceStarTypeTo: Annotated[
         c_enum32[enums.cGcGalaxyStarTypes],
-        Field(c_enum32[enums.cGcGalaxyStarTypes], 0x71C),
+        Field(c_enum32[enums.cGcGalaxyStarTypes], 0x720),
     ]
-    ForceSunAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x720)]
+    ForceSunAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x724)]
     ForceTerrainSettings: Annotated[
-        c_enum32[enums.cGcPlanetLife], Field(c_enum32[enums.cGcPlanetLife], 0x724)
+        c_enum32[enums.cGcPlanetLife], Field(c_enum32[enums.cGcPlanetLife], 0x728)
     ]
     ForceTerrainTypeTo: Annotated[
         c_enum32[enums.cTkVoxelGeneratorSettingsTypes],
-        Field(c_enum32[enums.cTkVoxelGeneratorSettingsTypes], 0x728),
+        Field(c_enum32[enums.cTkVoxelGeneratorSettingsTypes], 0x72C),
     ]
-    ForceTimeOfDay: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x72C)]
-    ForceWaterColourIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x730)]
+    ForceTimeOfDay: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x730)]
+    ForceWaterColourIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x734)]
     ForceWaterConditionTo: Annotated[
         c_enum32[enums.cTkWaterCondition],
-        Field(c_enum32[enums.cTkWaterCondition], 0x734),
+        Field(c_enum32[enums.cTkWaterCondition], 0x738),
     ]
-    ForceWaterObjectFileIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x738)]
+    ForceWaterObjectFileIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x73C)]
 
     class eGameStateModeEnum(IntEnum):
         LoadPreset = 0x0
@@ -44920,26 +43851,26 @@ class cGcDebugOptions(Structure):
         FreshStart = 0x2
 
     GameStateMode: Annotated[
-        c_enum32[eGameStateModeEnum], Field(c_enum32[eGameStateModeEnum], 0x73C)
+        c_enum32[eGameStateModeEnum], Field(c_enum32[eGameStateModeEnum], 0x740)
     ]
-    GenerateCostAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x740)]
-    GenerateCostDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x744)]
-    GenerateCostLOD: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x748)]
-    GenerateCostWait: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x74C)]
-    GenerateFarLodBuildingDist: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x750)]
-    HavokVDBClientIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x754)]
-    MaxNumDebugMessages: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x758)]
-    MoveBaseIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x75C)]
+    GenerateCostAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x744)]
+    GenerateCostDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x748)]
+    GenerateCostLOD: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x74C)]
+    GenerateCostWait: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x750)]
+    GenerateFarLodBuildingDist: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x754)]
+    HavokVDBClientIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x758)]
+    MaxNumDebugMessages: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x75C)]
+    MoveBaseIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x760)]
     MultipleFingersSamePressFrameDelta: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x760)
+        ctypes.c_int32, Field(ctypes.c_int32, 0x764)
     ]
     NewSaveGameMode: Annotated[
-        c_enum32[enums.cGcGameMode], Field(c_enum32[enums.cGcGameMode], 0x764)
+        c_enum32[enums.cGcGameMode], Field(c_enum32[enums.cGcGameMode], 0x768)
     ]
-    OverrideMatchmakingVersion: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x768)]
-    OverrideServerSeasonEndTime: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x76C)]
-    OverrideServerSeasonNumber: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x770)]
-    PanDeadzone: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x774)]
+    OverrideMatchmakingVersion: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x76C)]
+    OverrideServerSeasonEndTime: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x770)]
+    OverrideServerSeasonNumber: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x774)]
+    PanDeadzone: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x778)]
 
     class ePlayerSpawnLocationOverrideEnum(IntEnum):
         None_ = 0x0
@@ -44952,19 +43883,19 @@ class cGcDebugOptions(Structure):
 
     PlayerSpawnLocationOverride: Annotated[
         c_enum32[ePlayerSpawnLocationOverrideEnum],
-        Field(c_enum32[ePlayerSpawnLocationOverrideEnum], 0x778),
+        Field(c_enum32[ePlayerSpawnLocationOverrideEnum], 0x77C),
     ]
-    ProceduralModelBatchSize: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x77C)]
+    ProceduralModelBatchSize: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x780)]
     ProceduralModelFilterMatchretryCount: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x780)
+        ctypes.c_int32, Field(ctypes.c_int32, 0x784)
     ]
-    ProceduralModelsShown: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x784)]
+    ProceduralModelsShown: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x788)]
     ProceduralModelsThumbnailSize: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x788)
+        ctypes.c_int32, Field(ctypes.c_int32, 0x78C)
     ]
-    ProfilerPartIndexPhase: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x78C)]
-    ProfilerPartIndexStride: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x790)]
-    ProfilerPartIteration: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x794)]
+    ProfilerPartIndexPhase: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x790)]
+    ProfilerPartIndexStride: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x794)]
+    ProfilerPartIteration: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x798)]
 
     class eProxyTypeEnum(IntEnum):
         None_ = 0x0
@@ -44972,7 +43903,7 @@ class cGcDebugOptions(Structure):
         InetProxy = 0x2
 
     ProxyType: Annotated[
-        c_enum32[eProxyTypeEnum], Field(c_enum32[eProxyTypeEnum], 0x798)
+        c_enum32[eProxyTypeEnum], Field(c_enum32[eProxyTypeEnum], 0x79C)
     ]
 
     class eRealityModeEnum(IntEnum):
@@ -44980,7 +43911,7 @@ class cGcDebugOptions(Structure):
         Generate = 0x1
 
     RealityMode: Annotated[
-        c_enum32[eRealityModeEnum], Field(c_enum32[eRealityModeEnum], 0x79C)
+        c_enum32[eRealityModeEnum], Field(c_enum32[eRealityModeEnum], 0x7A0)
     ]
 
     class eRecordSettingEnum(IntEnum):
@@ -44989,11 +43920,11 @@ class cGcDebugOptions(Structure):
         Playback = 0x2
 
     RecordSetting: Annotated[
-        c_enum32[eRecordSettingEnum], Field(c_enum32[eRecordSettingEnum], 0x7A0)
+        c_enum32[eRecordSettingEnum], Field(c_enum32[eRecordSettingEnum], 0x7A4)
     ]
-    RecurrenceTimeOffset: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7A4)]
-    ScreenshotForUploadHeight: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7A8)]
-    ScreenshotForUploadWidth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7AC)]
+    RecurrenceTimeOffset: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7A8)]
+    ScreenshotForUploadHeight: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7AC)]
+    ScreenshotForUploadWidth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7B0)]
 
     class eServerEnvEnum(IntEnum):
         default = 0x0
@@ -45007,7 +43938,7 @@ class cGcDebugOptions(Structure):
         local = 0x8
 
     ServerEnv: Annotated[
-        c_enum32[eServerEnvEnum], Field(c_enum32[eServerEnvEnum], 0x7B0)
+        c_enum32[eServerEnvEnum], Field(c_enum32[eServerEnvEnum], 0x7B4)
     ]
 
     class eShaderPreloadEnum(IntEnum):
@@ -45015,26 +43946,26 @@ class cGcDebugOptions(Structure):
         Full = 0x1
 
     ShaderPreload: Annotated[
-        c_enum32[eShaderPreloadEnum], Field(c_enum32[eShaderPreloadEnum], 0x7B4)
+        c_enum32[eShaderPreloadEnum], Field(c_enum32[eShaderPreloadEnum], 0x7B8)
     ]
-    ShowSpecificGraph: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7B8)]
+    ShowSpecificGraph: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7BC)]
     SmokeTestConfigCaptureCycles: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x7BC)
+        ctypes.c_int32, Field(ctypes.c_int32, 0x7C0)
     ]
     SmokeTestConfigCaptureDurationInSeconds: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7C0)
+        ctypes.c_float, Field(ctypes.c_float, 0x7C4)
     ]
     SmokeTestConfigCaptureFolderNameNumberOffset: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x7C4)
-    ]
-    SmokeTestConfigPlanetPositionCount: Annotated[
         ctypes.c_int32, Field(ctypes.c_int32, 0x7C8)
     ]
+    SmokeTestConfigPlanetPositionCount: Annotated[
+        ctypes.c_int32, Field(ctypes.c_int32, 0x7CC)
+    ]
     SmokeTestConfigScenarioLength: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7CC)
+        ctypes.c_float, Field(ctypes.c_float, 0x7D0)
     ]
     SmokeTestConfigScenarioPreambleLength: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7D0)
+        ctypes.c_float, Field(ctypes.c_float, 0x7D4)
     ]
 
     class eSmokeTestCycleModeEnum(IntEnum):
@@ -45048,7 +43979,7 @@ class cGcDebugOptions(Structure):
 
     SmokeTestCycleMode: Annotated[
         c_enum32[eSmokeTestCycleModeEnum],
-        Field(c_enum32[eSmokeTestCycleModeEnum], 0x7D4),
+        Field(c_enum32[eSmokeTestCycleModeEnum], 0x7D8),
     ]
 
     class eSmokeTestScenarioEnum(IntEnum):
@@ -45064,10 +43995,10 @@ class cGcDebugOptions(Structure):
         SettlementSnapshot = 0x9
 
     SmokeTestScenario: Annotated[
-        c_enum32[eSmokeTestScenarioEnum], Field(c_enum32[eSmokeTestScenarioEnum], 0x7D8)
+        c_enum32[eSmokeTestScenarioEnum], Field(c_enum32[eSmokeTestScenarioEnum], 0x7DC)
     ]
     SmokeTestSmokeBotTargetWarps: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x7DC)
+        ctypes.c_int32, Field(ctypes.c_int32, 0x7E0)
     ]
 
     class eSolarSystemBootEnum(IntEnum):
@@ -45075,491 +44006,1422 @@ class cGcDebugOptions(Structure):
         Generate = 0x1
 
     SolarSystemBoot: Annotated[
-        c_enum32[eSolarSystemBootEnum], Field(c_enum32[eSolarSystemBootEnum], 0x7E0)
+        c_enum32[eSolarSystemBootEnum], Field(c_enum32[eSolarSystemBootEnum], 0x7E4)
     ]
-    SunLightScaleGgx: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7E4)]
-    SwipeDetectionMaxFrames: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7E8)]
+    SunLightScaleGgx: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7E8)]
+    SwipeDetectionMaxFrames: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7EC)]
     SwipeDetectionNormalizedTravelThreshold: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x7EC)
+        ctypes.c_float, Field(ctypes.c_float, 0x7F0)
     ]
-    SynergyPort: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7F0)]
+    SynergyPort: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x7F4)]
 
     class eUseBanksEnum(IntEnum):
         False_ = 0x0
         True_ = 0x1
         Default = 0x2
 
-    UseBanks: Annotated[c_enum32[eUseBanksEnum], Field(c_enum32[eUseBanksEnum], 0x7F4)]
-    WeaponScale3P: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7F8)]
+    UseBanks: Annotated[c_enum32[eUseBanksEnum], Field(c_enum32[eUseBanksEnum], 0x7F8)]
+    WeaponScale3P: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x7FC)]
     RealityGenerationIteration: Annotated[
-        ctypes.c_uint16, Field(ctypes.c_uint16, 0x7FC)
+        ctypes.c_uint16, Field(ctypes.c_uint16, 0x800)
     ]
     AutoJoinUserNames: Annotated[
-        basic.cTkFixedString0x800, Field(basic.cTkFixedString0x800, 0x7FE)
+        basic.cTkFixedString0x800, Field(basic.cTkFixedString0x800, 0x802)
     ]
     DebugTwitchRewards: Annotated[
-        basic.cTkFixedString0x400, Field(basic.cTkFixedString0x400, 0xFFE)
+        basic.cTkFixedString0x400, Field(basic.cTkFixedString0x400, 0x1002)
     ]
     LoadToBase: Annotated[
-        basic.cTkFixedString0x200, Field(basic.cTkFixedString0x200, 0x13FE)
+        basic.cTkFixedString0x200, Field(basic.cTkFixedString0x200, 0x1402)
     ]
     SeasonalDataOverrideFile: Annotated[
-        basic.cTkFixedString0x200, Field(basic.cTkFixedString0x200, 0x15FE)
+        basic.cTkFixedString0x200, Field(basic.cTkFixedString0x200, 0x1602)
     ]
     ForceHgAccount: Annotated[
-        basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x17FE)
+        basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x1802)
     ]
     ForcePlayerPosition: Annotated[
-        basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x18FE)
+        basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x1902)
     ]
     ForceUniverseAddress: Annotated[
-        basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x19FE)
+        basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x1A02)
     ]
     GOGLogin: Annotated[
-        basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x1AFE)
+        basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x1B02)
     ]
     ShowUniverseAddressOnGalaxyMap: Annotated[
-        basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x1BFE)
+        basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x1C02)
     ]
     WorkingDirectory: Annotated[
-        basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x1CFE)
+        basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x1D02)
     ]
     AuthBaseUrl: Annotated[
-        basic.cTkFixedString0x80, Field(basic.cTkFixedString0x80, 0x1DFE)
+        basic.cTkFixedString0x80, Field(basic.cTkFixedString0x80, 0x1E02)
     ]
     ProxyURI: Annotated[
-        basic.cTkFixedString0x80, Field(basic.cTkFixedString0x80, 0x1E7E)
+        basic.cTkFixedString0x80, Field(basic.cTkFixedString0x80, 0x1E82)
     ]
     ForceBaseDownloadUser: Annotated[
-        basic.cTkFixedString0x40, Field(basic.cTkFixedString0x40, 0x1EFE)
+        basic.cTkFixedString0x40, Field(basic.cTkFixedString0x40, 0x1F02)
     ]
     OverrideSettlementOwnershipOnlineId: Annotated[
-        basic.cTkFixedString0x40, Field(basic.cTkFixedString0x40, 0x1F3E)
+        basic.cTkFixedString0x40, Field(basic.cTkFixedString0x40, 0x1F42)
     ]
     OverrideSettlementOwnershipUsername: Annotated[
-        basic.cTkFixedString0x40, Field(basic.cTkFixedString0x40, 0x1F7E)
+        basic.cTkFixedString0x40, Field(basic.cTkFixedString0x40, 0x1F82)
     ]
     ScreenshotForUploadName: Annotated[
-        basic.cTkFixedString0x40, Field(basic.cTkFixedString0x40, 0x1FBE)
+        basic.cTkFixedString0x40, Field(basic.cTkFixedString0x40, 0x1FC2)
     ]
     AllowedLanguagesFile: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x1FFE)
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x2002)
     ]
     AutomaticPartSpawnID: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x201E)
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x2022)
     ]
     BaseServerPlatform: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x203E)
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x2042)
     ]
     CrashDumpIdentifier: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x205E)
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x2062)
     ]
     OverrideUsernameForDev: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x207E)
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x2082)
     ]
     SaveTestingCommand: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x209E)
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x20A2)
     ]
     SmokeTestForcePlanetDetail: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x20BE)
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x20C2)
     ]
     SmokeTestRunFolder: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x20DE)
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x20E2)
     ]
     SynergyServer: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x20FE)
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x2102)
     ]
     ActiveMissionsIgnoreStartCancelConditions: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x211E)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x2122)
     ]
-    AllowGalaxyMapRequests: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x211F)]
-    AllowGlobalPartSnapping: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2120)]
+    AllowGalaxyMapRequests: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2123)]
+    AllowGlobalPartSnapping: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2124)]
     AllowMultiThreadedRenderingOnVulkan: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x2121)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x2125)
     ]
-    AllowNGuiVR: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2122)]
+    AllowNGuiVR: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2126)]
     AllowOverrideSettlementOwnership: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x2123)
-    ]
-    AllowPause: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2124)]
-    AllowRobotBehaviors: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2125)]
-    AllowSavingOnAbandonedFreighters: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x2126)
-    ]
-    AllSeasonMilestonesShowComplete: Annotated[
         ctypes.c_bool, Field(ctypes.c_bool, 0x2127)
     ]
-    AllSettlementsAreCompleted: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2128)]
-    AlternateControls: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2129)]
-    AlwaysAllowFreighterInventoryAccess: Annotated[
+    AllowPause: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2128)]
+    AllowRobotBehaviors: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2129)]
+    AllowSavingOnAbandonedFreighters: Annotated[
         ctypes.c_bool, Field(ctypes.c_bool, 0x212A)
     ]
-    AlwaysAllowShipOperations: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x212B)]
-    AlwaysAllowSpookFiends: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x212C)]
-    AlwaysAllowVehicleOperations: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x212D)]
-    AlwaysHaveFocus: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x212E)]
+    AllSeasonMilestonesShowComplete: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x212B)
+    ]
+    AllSettlementsAreCompleted: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x212C)]
+    AlternateControls: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x212D)]
+    AlwaysAllowFreighterInventoryAccess: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x212E)
+    ]
+    AlwaysAllowShipOperations: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x212F)]
+    AlwaysAllowSpookFiends: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2130)]
+    AlwaysAllowVehicleOperations: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2131)]
+    AlwaysHaveFocus: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2132)]
     AlwaysIncludeLocalPlayerInChatMessage: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x212F)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x2133)
     ]
-    AlwaysSaveGameAsClient: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2130)]
-    AlwaysShowSaveIds: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2131)]
-    AlwaysShowURI: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2132)]
-    AlwaysSpaceBattle: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2133)]
-    AutoJoinRandomGames: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2134)]
-    AutoJoinUserEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2135)]
-    AutomaticPartSpawnInactive: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2136)]
-    BaseAdmin: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2137)]
-    BlockCommunicatorSignals: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2138)]
-    BlockSettlementsNetwork: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2139)]
-    BlockSpaceBattle: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x213A)]
-    BodyTurning: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x213B)]
-    BootDirectlyIntoLastSave: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x213C)]
-    BootMusic: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x213D)]
-    CanLeaveDialogs: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x213E)]
-    CertificateSecurityBypass: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x213F)]
-    CheckForMissingLocStrings: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2140)]
-    ClothForceAsyncSimulationOff: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2141)]
-    ClothForceAsyncSimulationOn: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2142)]
+    AlwaysSaveGameAsClient: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2134)]
+    AlwaysShowSaveIds: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2135)]
+    AlwaysShowURI: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2136)]
+    AlwaysSpaceBattle: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2137)]
+    AutoJoinRandomGames: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2138)]
+    AutoJoinUserEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2139)]
+    AutomaticPartSpawnInactive: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x213A)]
+    BaseAdmin: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x213B)]
+    BlockCommunicatorSignals: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x213C)]
+    BlockSettlementsNetwork: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x213D)]
+    BlockSpaceBattle: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x213E)]
+    BodyTurning: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x213F)]
+    BootDirectlyIntoLastSave: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2140)]
+    BootMusic: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2141)]
+    CanLeaveDialogs: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2142)]
+    CertificateSecurityBypass: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2143)]
+    CheckForMissingLocStrings: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2144)]
+    ClothForceAsyncSimulationOff: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2145)]
+    ClothForceAsyncSimulationOn: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2146)]
     ClothForcePositionExtrapolationAntiSyncWithFpsLock: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x2143)
-    ]
-    ClothForcePositionExtrapolationBackOn: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x2144)
-    ]
-    ClothForcePositionExtrapolationOff: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x2145)
-    ]
-    ClothForcePositionExtrapolationOn: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x2146)
-    ]
-    ClothForcePositionExtrapolationSyncWithFpsLock: Annotated[
         ctypes.c_bool, Field(ctypes.c_bool, 0x2147)
     ]
-    ClothForcePositionExtrapolationUpdateOrderDependent: Annotated[
+    ClothForcePositionExtrapolationBackOn: Annotated[
         ctypes.c_bool, Field(ctypes.c_bool, 0x2148)
     ]
-    CompressTextures: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2149)]
-    CrashDumpFull: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x214A)]
-    CrashOnF10: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x214B)]
-    CreatureChatter: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x214C)]
-    CreatureDrawVocals: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x214D)]
-    CreatureErrors: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x214E)]
-    CrossPlatformFeaturedBases: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x214F)]
-    DChecksEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2150)]
-    DChecksOutputBinary: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2151)]
-    DChecksOutputFileLine: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2152)]
-    DChecksOutputJson: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2153)]
-    DebugBuildingSpawns: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2154)]
-    DebugDepthReprojection: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2155)]
-    DebugDrawPlayerInteract: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2156)]
-    DebugGalaxyMapInQuickMenu: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2157)]
-    DebugIBL: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2158)]
-    DebugNetworkLocks: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2159)]
-    DebugPersistentInteractions: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x215A)]
-    DebugRenderSpaceOffset: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x215B)]
-    DebugSpotlights: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x215C)]
-    DebugTerrainTextures: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x215D)]
-    DebugThreatLevels: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x215E)]
-    DeferRegionBodies: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x215F)]
+    ClothForcePositionExtrapolationOff: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x2149)
+    ]
+    ClothForcePositionExtrapolationOn: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x214A)
+    ]
+    ClothForcePositionExtrapolationSyncWithFpsLock: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x214B)
+    ]
+    ClothForcePositionExtrapolationUpdateOrderDependent: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x214C)
+    ]
+    CompressTextures: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x214D)]
+    CrashDumpFull: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x214E)]
+    CrashOnF10: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x214F)]
+    CreatureChatter: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2150)]
+    CreatureDrawVocals: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2151)]
+    CreatureErrors: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2152)]
+    CrossPlatformFeaturedBases: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2153)]
+    DChecksEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2154)]
+    DChecksOutputBinary: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2155)]
+    DChecksOutputFileLine: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2156)]
+    DChecksOutputJson: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2157)]
+    DebugBuildingSpawns: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2158)]
+    DebugDepthReprojection: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2159)]
+    DebugDrawPlayerInteract: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x215A)]
+    DebugGalaxyMapInQuickMenu: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x215B)]
+    DebugIBL: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x215C)]
+    DebugNetworkLocks: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x215D)]
+    DebugPersistentInteractions: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x215E)]
+    DebugRenderSpaceOffset: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x215F)]
+    DebugSpotlights: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2160)]
+    DebugTerrainTextures: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2161)]
+    DebugThreatLevels: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2162)]
+    DeferRegionBodies: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2163)]
     DisableAbandonedFreighterRoomsOptimisation: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x2160)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x2164)
     ]
-    DisableBaseBuilding: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2161)]
-    DisableBaseBuildingLimits: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2162)]
-    DisableBasePowerRequirements: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2163)]
-    DisableClouds: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2164)]
-    DisableContinuousSaving: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2165)]
-    DisableCorvetteSwapParts: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2166)]
-    DisableCorvetteValidation: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2167)]
-    DisableDebugControls: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2168)]
-    DisableDiscoveryNaming: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2169)]
-    DisableFileWatcher: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x216A)]
-    DisableHazards: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x216B)]
-    DisableHeadConstraints: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x216C)]
-    DisableInvalidSaveVersion: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x216D)]
-    DisableLeftHand: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x216E)]
-    DisableLimits: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x216F)]
-    DisableMissionShop: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2170)]
-    DisableMonumentDownloads: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2171)]
-    DisableNPCHiddenUntilScanned: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2172)]
-    DisableNPCs: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2173)]
-    DisableOldMissions: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2174)]
-    DisablePartialStories: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2175)]
-    DisableProfanityFilter: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2176)]
-    DisableSaveSlotSorting: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2177)]
-    DisableSaveUploadRateLimits: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2178)]
-    DisableSaving: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2179)]
-    DisableSettlements: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x217A)]
-    DisableShadowSwitching: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x217B)]
-    DisableShipSaveDataRecovery: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x217C)]
+    DisableBaseBuilding: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2165)]
+    DisableBaseBuildingLimits: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2166)]
+    DisableBasePowerRequirements: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2167)]
+    DisableClouds: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2168)]
+    DisableContinuousSaving: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2169)]
+    DisableCorvetteSwapParts: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x216A)]
+    DisableCorvetteValidation: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x216B)]
+    DisableDebugControls: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x216C)]
+    DisableDiscoveryNaming: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x216D)]
+    DisableFileWatcher: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x216E)]
+    DisableHazards: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x216F)]
+    DisableHeadConstraints: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2170)]
+    DisableInvalidSaveVersion: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2171)]
+    DisableLeftHand: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2172)]
+    DisableLimits: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2173)]
+    DisableMissionShop: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2174)]
+    DisableMonumentDownloads: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2175)]
+    DisableNPCHiddenUntilScanned: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2176)]
+    DisableNPCs: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2177)]
+    DisableOldMissions: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2178)]
+    DisablePartialStories: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2179)]
+    DisableProfanityFilter: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x217A)]
+    DisableSaveSlotSorting: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x217B)]
+    DisableSaveUploadRateLimits: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x217C)]
+    DisableSaving: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x217D)]
+    DisableSettlements: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x217E)]
+    DisableShadowSwitching: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x217F)]
+    DisableShipSaveDataRecovery: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2180)]
     DisableSpaceStationSpawnOnJoin: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x217D)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x2181)
     ]
-    DisableStorms: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x217E)]
-    DisableVibration: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x217F)]
-    DoAlienLanguage: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2180)]
-    DrawCreaturesInRoutines: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2181)]
-    DumpManifestContents: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2182)]
-    EnableAccessibleUI: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2183)]
+    DisableStorms: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2182)]
+    DisableVibration: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2183)]
+    DoAlienLanguage: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2184)]
+    DrawCreaturesInRoutines: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2185)]
+    DumpManifestContents: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2186)]
+    EnableAccessibleUI: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2187)]
     EnableBaseBuildingExpandables: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x2184)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x2188)
     ]
-    EnableBaseMovingOption: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2185)]
-    EnableCloudAnimation: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2186)]
-    EnableComputePost: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2187)]
-    EnableDayNightCycle: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2188)]
-    EnableDebugSceneAutoSave: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2189)]
-    EnableEvenOddRender: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x218A)]
-    EnableFrontendPreload: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x218B)]
-    EnableGalaxyRecolouring: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x218C)]
-    EnableGgx: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x218D)]
-    EnableMemoryPoolAllocPrint: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x218E)]
-    EnablePhotomodeVR: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x218F)]
-    EnableSynergy: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2190)]
-    EnableTouchScreenDebugging: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2191)]
-    EverythingIsFree: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2192)]
-    EverythingIsKnown: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2193)]
-    EverythingIsStar: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2194)]
-    FakeHandsInMultiplayer: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2195)]
+    EnableBaseMovingOption: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2189)]
+    EnableCloudAnimation: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x218A)]
+    EnableComputePost: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x218B)]
+    EnableDayNightCycle: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x218C)]
+    EnableDebugSceneAutoSave: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x218D)]
+    EnableEvenOddRender: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x218E)]
+    EnableFrontendPreload: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x218F)]
+    EnableGalaxyRecolouring: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2190)]
+    EnableGgx: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2191)]
+    EnableMemoryPoolAllocPrint: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2192)]
+    EnablePhotomodeVR: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2193)]
+    EnableSynergy: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2194)]
+    EnableTouchScreenDebugging: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2195)]
+    EverythingIsFree: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2196)]
+    EverythingIsKnown: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2197)]
+    EverythingIsStar: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2198)]
+    FakeHandsInMultiplayer: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2199)]
     FastAndFrequentFleetInterventions: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x2196)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x219A)
     ]
-    FastLoad: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2197)]
-    FixedFramerate: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2198)]
-    FleetDirectorAutoMode: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2199)]
-    ForceAllExhibitsToBeEditable: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x219A)]
-    ForceBasicLoadScreen: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x219B)]
-    ForceBinaryStar: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x219C)]
-    ForceBiome: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x219D)]
-    ForceBuildersAlwaysKnown: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x219E)]
-    ForceBuildingRace: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x219F)]
-    ForceCorruptSentinels: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21A0)]
-    ForceCreatureLifeLevel: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21A1)]
-    ForceDefaultCreatureFile: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21A2)]
-    ForceDisableClothComponent: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21A3)]
+    FastLoad: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x219B)]
+    FixedFramerate: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x219C)]
+    FleetDirectorAutoMode: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x219D)]
+    ForceAllExhibitsToBeEditable: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x219E)]
+    ForceBasicLoadScreen: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x219F)]
+    ForceBinaryStar: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21A0)]
+    ForceBiome: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21A1)]
+    ForceBuildersAlwaysKnown: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21A2)]
+    ForceBuildingRace: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21A3)]
+    ForceCorruptSentinels: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21A4)]
+    ForceCreatureLifeLevel: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21A5)]
+    ForceDefaultCreatureFile: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21A6)]
+    ForceDisableClothComponent: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21A7)]
     ForceDisableNonPlayerRagdollComponents: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x21A4)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x21A8)
     ]
-    ForceDisableRagdollComponent: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21A5)]
+    ForceDisableRagdollComponent: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21A9)]
     ForceDisableSeparatePhysicsWorlds: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x21A6)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x21AA)
     ]
     ForceDisableSplitIkOptimisation: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x21A7)
-    ]
-    ForceDisableSpringComponent: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21A8)]
-    ForceEnableClothComponent: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21A9)]
-    ForceEnableRagdollComponent: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21AA)]
-    ForceEnableSplitIkOptimisation: Annotated[
         ctypes.c_bool, Field(ctypes.c_bool, 0x21AB)
     ]
-    ForceEnableSpringComponent: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21AC)]
-    ForceExtremeSentinels: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21AD)]
-    ForceExtremeWeather: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21AE)]
-    ForceFullFeatureMode: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21AF)]
-    ForceGasGiantSystem: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21B0)]
-    ForceGiantSystem: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21B1)]
-    ForceInitialShip: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21B2)]
-    ForceInitialWeapon: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21B3)]
-    ForceInteractionToSettings: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21B4)]
-    ForceLifeLevel: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21B5)]
-    ForceLoadAllWeather: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21B6)]
-    ForceNexusInQuickMenu: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21B7)]
-    ForcePirateSystem: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21B8)]
-    ForcePlanetsToHaveNoCaves: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21B9)]
+    ForceDisableSpringComponent: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21AC)]
+    ForceEnableClothComponent: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21AD)]
+    ForceEnableRagdollComponent: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21AE)]
+    ForceEnableSplitIkOptimisation: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x21AF)
+    ]
+    ForceEnableSpringComponent: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21B0)]
+    ForceExtremeSentinels: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21B1)]
+    ForceExtremeWeather: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21B2)]
+    ForceFullFeatureMode: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21B3)]
+    ForceGasGiantSystem: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21B4)]
+    ForceGiantSystem: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21B5)]
+    ForceInitialShip: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21B6)]
+    ForceInitialWeapon: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21B7)]
+    ForceInteractionToSettings: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21B8)]
+    ForceLifeLevel: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21B9)]
+    ForceLoadAllWeather: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21BA)]
+    ForceNexusInQuickMenu: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21BB)]
+    ForcePirateSystem: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21BC)]
+    ForcePlanetsToHaveNoCaves: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21BD)]
     ForcePlanetsToHaveNoNoiseLayers: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x21BA)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x21BE)
     ]
     ForcePlanetsToHaveNoTerrainFeatures: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x21BB)
-    ]
-    ForcePlanetsToHaveNoWater: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21BC)]
-    ForcePlanetsToHaveWater: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21BD)]
-    ForcePrimeTerrain: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21BE)]
-    ForcePurpleSystemsToAlwaysBirth: Annotated[
         ctypes.c_bool, Field(ctypes.c_bool, 0x21BF)
     ]
+    ForcePlanetsToHaveNoWater: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21C0)]
+    ForcePlanetsToHaveWater: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21C1)]
+    ForcePrimeTerrain: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21C2)]
+    ForcePurpleSystemsToAlwaysBirth: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x21C3)
+    ]
     ForcePurpleSystemsVisibleOnLoad: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x21C0)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x21C4)
     ]
-    ForceRareAsteroidSystem: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21C1)]
-    ForceScanEventsToGoPrime: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21C2)]
-    ForceScreenFilter: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21C3)]
-    ForceSmallLobby: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21C4)]
-    ForceSpaceSkyColourRare: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21C5)]
-    ForceStarType: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21C6)]
+    ForceRareAsteroidSystem: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21C5)]
+    ForceScanEventsToGoPrime: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21C6)]
+    ForceScreenFilter: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21C7)]
+    ForceSmallLobby: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21C8)]
+    ForceSpaceSkyColourRare: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21C9)]
+    ForceStarType: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21CA)]
     ForceSunDirectionFromPhotoMode: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x21C7)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x21CB)
     ]
-    ForceTernaryStar: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21C8)]
-    ForceTerrainType: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21C9)]
-    ForceTgaDlc: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21CA)]
-    ForceTinyLobby: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21CB)]
-    ForceTranslateAllAlienText: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21CC)]
-    ForceWaterCondition: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21CD)]
+    ForceTernaryStar: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21CC)]
+    ForceTerrainType: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21CD)]
+    ForceTgaDlc: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21CE)]
+    ForceTinyLobby: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21CF)]
+    ForceTranslateAllAlienText: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21D0)]
+    ForceWaterCondition: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21D1)]
     FormatDownloadStorageAreaOnBoot: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x21CE)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x21D2)
     ]
-    GodMode: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21CF)]
-    GraphCommandBuffer: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21D0)]
-    GraphFPS: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21D1)]
-    GraphGeneration: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21D2)]
-    GraphTexStreaming: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21D3)]
-    HangOnCrash: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21D4)]
-    HmdFrameShiftEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21D5)]
-    HmdUseSolidGuiPointer: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21D6)]
-    HotReloadModGlobals: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21D7)]
+    GodMode: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21D3)]
+    GraphCommandBuffer: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21D4)]
+    GraphFPS: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21D5)]
+    GraphGeneration: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21D6)]
+    GraphTexStreaming: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21D7)]
+    HangOnCrash: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21D8)]
+    HmdFrameShiftEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21D9)]
+    HmdUseSolidGuiPointer: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21DA)]
+    HotReloadModGlobals: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21DB)]
     IgnoreFreighterSpawnWarpRequirement: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x21D8)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x21DC)
     ]
-    IgnoreMissionRank: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21D9)]
-    IgnoreSteamDev: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21DA)]
-    IgnoreTransactionTimeouts: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21DB)]
-    InfiniteInteractions: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21DC)]
-    InfiniteStamina: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21DD)]
-    InstanceCollision: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21DE)]
-    InteractionsAllwaysGivesTech: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21DF)]
-    LimitGlobalBodies: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21E0)]
-    LimitGlobalInstances: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21E1)]
-    LimitPerRegionBodies: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21E2)]
-    LimitPerRegionInstances: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21E3)]
-    LoadMissions: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21E4)]
+    IgnoreMissionRank: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21DD)]
+    IgnoreSteamDev: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21DE)]
+    IgnoreTransactionTimeouts: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21DF)]
+    InfiniteInteractions: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21E0)]
+    InfiniteStamina: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21E1)]
+    InstanceCollision: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21E2)]
+    InteractionsAllwaysGivesTech: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21E3)]
+    LimitGlobalBodies: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21E4)]
+    LimitGlobalInstances: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21E5)]
+    LimitPerRegionBodies: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21E6)]
+    LimitPerRegionInstances: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21E7)]
+    LoadMissions: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21E8)]
     LoadShaderSourceIfRenderdocEnabled: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x21E5)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x21E9)
     ]
-    LockAllTitles: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21E6)]
-    LogMissingLocalisedText: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21E7)]
-    MapWarpCheckIgnoreDrive: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21E8)]
-    MapWarpCheckIgnoreFuel: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21E9)]
-    MaximumFreighterSpawns: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21EA)]
-    MemCsv: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21EB)]
-    MissionMessageLoggingEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21EC)]
+    LockAllTitles: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21EA)]
+    LogMissingLocalisedText: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21EB)]
+    MapWarpCheckIgnoreDrive: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21EC)]
+    MapWarpCheckIgnoreFuel: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21ED)]
+    MaximumFreighterSpawns: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21EE)]
+    MemCsv: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21EF)]
+    MissionMessageLoggingEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21F0)]
     MissionNGUIShowsConditionResults: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x21ED)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x21F1)
     ]
-    MissionNGUIShowsTableNames: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21EE)]
-    MissionSurveyEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21EF)]
+    MissionNGUIShowsTableNames: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21F2)]
+    MissionSurveyEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21F3)]
     ModifyPlanetsInInitialSystems: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x21F0)
-    ]
-    MPMissions: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21F1)]
-    MPMissionsAlwaysEPIC: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21F2)]
-    MultiplePlayerFreightersInASystem: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x21F3)
-    ]
-    PlaceOnGroundWhenLeavingDebugCamera: Annotated[
         ctypes.c_bool, Field(ctypes.c_bool, 0x21F4)
     ]
-    PreloadToolbox: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21F5)]
-    PrintAvgFrameTimes: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21F6)]
-    ProceduralModelsDeterministicSequence: Annotated[
+    MPMissions: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21F5)]
+    MPMissionsAlwaysEPIC: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21F6)]
+    MultiplePlayerFreightersInASystem: Annotated[
         ctypes.c_bool, Field(ctypes.c_bool, 0x21F7)
     ]
-    Proto2DevKit: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21F8)]
-    RecordNetworkStatsOnBoot: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21F9)]
-    RenderCreatureDetails: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21FA)]
-    RenderHud: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21FB)]
-    RenderLowFramerate: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21FC)]
-    ResetForcedSaveSlotOnLoad: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21FD)]
-    ResetToSupportedResolution: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21FE)]
-    RevealAllTitles: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21FF)]
-    SaveOutModdedMetadata: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2200)]
-    ScratchpadPlanetEnvironment: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2201)]
-    ScreenshotMode: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2202)]
-    ShaderCaching: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2203)]
-    ShaderPreloadListExport: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2204)]
-    ShaderPreloadListImport: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2205)]
-    ShipSalvageGivesAllParts: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2206)]
-    ShowDebugMessages: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2207)]
-    ShowDynamicResScale: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2208)]
-    ShowEditorPlacementPreview: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2209)]
-    ShowFireteamMembersUA: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x220A)]
-    ShowFramerate: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x220B)]
-    ShowGPUMemory: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x220C)]
-    ShowGPURenderTime: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x220D)]
-    ShowGraphs: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x220E)]
-    ShowHmdHandControllers: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x220F)]
-    ShowLongestStrings: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2210)]
-    ShowMempoolOverlay: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2211)]
-    ShowMissionIdInTitle: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2212)]
-    ShowMouseSmoothing: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2213)]
-    ShowPositionDebug: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2214)]
-    ShowRenderStatsDisplay: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2215)]
-    ShowTeleportEffectLocally: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2216)]
+    PlaceOnGroundWhenLeavingDebugCamera: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x21F8)
+    ]
+    PreloadToolbox: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21F9)]
+    PrintAvgFrameTimes: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21FA)]
+    ProceduralModelsDeterministicSequence: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x21FB)
+    ]
+    Proto2DevKit: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21FC)]
+    RecordNetworkStatsOnBoot: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21FD)]
+    RenderCreatureDetails: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21FE)]
+    RenderHud: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x21FF)]
+    RenderLowFramerate: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2200)]
+    ResetForcedSaveSlotOnLoad: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2201)]
+    ResetToSupportedResolution: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2202)]
+    RevealAllTitles: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2203)]
+    SaveOutModdedMetadata: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2204)]
+    ScratchpadPlanetEnvironment: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2205)]
+    ScreenshotMode: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2206)]
+    ShaderCaching: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2207)]
+    ShaderPreloadListExport: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2208)]
+    ShaderPreloadListImport: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2209)]
+    ShipSalvageGivesAllParts: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x220A)]
+    ShowDebugMessages: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x220B)]
+    ShowDynamicResScale: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x220C)]
+    ShowEditorPlacementPreview: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x220D)]
+    ShowFireteamMembersUA: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x220E)]
+    ShowFramerate: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x220F)]
+    ShowGPUMemory: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2210)]
+    ShowGPURenderTime: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2211)]
+    ShowGraphs: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2212)]
+    ShowHmdHandControllers: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2213)]
+    ShowLongestStrings: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2214)]
+    ShowMempoolOverlay: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2215)]
+    ShowMissionIdInTitle: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2216)]
+    ShowMouseSmoothing: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2217)]
+    ShowPositionDebug: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2218)]
+    ShowRenderStatsDisplay: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2219)]
+    ShowTeleportEffectLocally: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x221A)]
     SimulateDisabledParticleRefractions: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x2217)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x221B)
     ]
-    SimulateNoNetworkConnection: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2218)]
+    SimulateNoNetworkConnection: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x221C)]
     SkipAbandonedFreighterUnlocking: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x2219)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x221D)
     ]
-    SkipIntro: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x221A)]
-    SkipLogos: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x221B)]
-    SkipPlanetDiscoverOnBoot: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x221C)]
-    SkipTutorial: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x221D)]
-    SkipUITimers: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x221E)]
-    SmokeTestCameraFly: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x221F)]
+    SkipIntro: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x221E)]
+    SkipLogos: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x221F)]
+    SkipPlanetDiscoverOnBoot: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2220)]
+    SkipTutorial: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2221)]
+    SkipUITimers: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2222)]
+    SmokeTestCameraFly: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2223)]
     SmokeTestConfigRandomizePlanetSeed: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x2220)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x2224)
     ]
-    SmokeTestDumpStatsMode: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2221)]
-    SmokeTestFastExit: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2222)]
-    SmokeTestLegacyOutput: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2223)]
-    SmokeTestOutputOnly: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2224)]
-    SmokeTestPostBandwidthStats: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2225)]
-    SmokeTestPureFlight: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2226)]
-    SmokeTestSmokeBotAutoStart: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2227)]
-    SmokeTestSmokeBotEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2228)]
-    SpawnPirates: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2229)]
-    SpawnPulseEncounters: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x222A)]
-    SpawnRobots: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x222B)]
-    SpawnShips: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x222C)]
-    SpecialsShop: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x222D)]
+    SmokeTestDumpStatsMode: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2225)]
+    SmokeTestFastExit: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2226)]
+    SmokeTestLegacyOutput: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2227)]
+    SmokeTestOutputOnly: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2228)]
+    SmokeTestPostBandwidthStats: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2229)]
+    SmokeTestPureFlight: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x222A)]
+    SmokeTestSmokeBotAutoStart: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x222B)]
+    SmokeTestSmokeBotEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x222C)]
+    SpawnPirates: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x222D)]
+    SpawnPulseEncounters: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x222E)]
+    SpawnRobots: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x222F)]
+    SpawnShips: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2230)]
+    SpecialsShop: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2231)]
     StopSwitchingToSecondaryInteractions: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x222E)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x2232)
     ]
-    StressTestLongNameDisplay: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x222F)]
-    SuperKillGuns: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2230)]
+    StressTestLongNameDisplay: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2233)]
+    SuperKillGuns: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2234)]
     SuppressSeasonalRewardReminders: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x2231)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x2235)
     ]
-    TakeNoDamage: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2232)]
+    TakeNoDamage: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2236)]
     ThirdPersonIsDefaultCameraForPlayer: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x2233)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x2237)
     ]
     ThirdPersonIsDefaultCameraForShipAndVehicles: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x2234)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x2238)
     ]
-    UnlockAllPlatformRewards: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2235)]
-    UnlockAllSeasonRewards: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2236)]
-    UnlockAllStories: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2237)]
-    UnlockAllTitles: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2238)]
-    UnlockAllTwitchRewards: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2239)]
-    UnlockAllWords: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x223A)]
-    UseBuildings: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x223B)]
-    UseClouds: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x223C)]
-    UseCreatures: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x223D)]
-    UseElevation: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x223E)]
-    UseGunImpactEffect: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x223F)]
-    UseHighlightedOptionStyle: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2240)]
-    UseImmediateModeFrontend: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2241)]
-    UseInstances: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2242)]
-    UseLegacyBuildingTable: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2243)]
-    UseLegacyFreighters: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2244)]
-    UseMovementStickForRun: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2245)]
-    UseObjects: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2246)]
-    UseOldTerrainMeshing: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2247)]
-    UsePadOnUnfocusedWindow: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2248)]
-    UseParticles: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2249)]
-    UseProcTextureDebugger: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x224A)]
-    UseSceneInfoWindow: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x224B)]
-    UseScreenEffects: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x224C)]
+    UnlockAllPlatformRewards: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2239)]
+    UnlockAllSeasonRewards: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x223A)]
+    UnlockAllStories: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x223B)]
+    UnlockAllTitles: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x223C)]
+    UnlockAllTwitchRewards: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x223D)]
+    UnlockAllWords: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x223E)]
+    UseBuildings: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x223F)]
+    UseClouds: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2240)]
+    UseCreatures: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2241)]
+    UseElevation: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2242)]
+    UseGunImpactEffect: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2243)]
+    UseHighlightedOptionStyle: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2244)]
+    UseImmediateModeFrontend: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2245)]
+    UseInstances: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2246)]
+    UseLegacyBuildingTable: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2247)]
+    UseLegacyFreighters: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2248)]
+    UseMovementStickForRun: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2249)]
+    UseObjects: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x224A)]
+    UseOldTerrainMeshing: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x224B)]
+    UsePadOnUnfocusedWindow: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x224C)]
+    UseParticles: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x224D)]
+    UseProcTextureDebugger: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x224E)]
+    UseSceneInfoWindow: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x224F)]
+    UseScreenEffects: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2250)]
     UseSeasonTransferInventoryConfigOverride: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x224D)
+        ctypes.c_bool, Field(ctypes.c_bool, 0x2251)
     ]
-    UseTerrain: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x224E)]
-    UseVolumetrics: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x224F)]
-    VideoCaptureMode: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2250)]
+    UseTerrain: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2252)]
+    UseVolumetrics: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2253)]
+    VideoCaptureMode: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2254)]
+
+
+@partial_struct
+class cGcCreatureGlobals(Structure):
+    PainShake: Annotated[cGcCameraShakeData, Field(cGcCameraShakeData, 0x0)]
+    PetOffPlanetEffect: Annotated[cGcScanEffectData, Field(cGcScanEffectData, 0xC0)]
+    AllCreaturesDiscoveredColour: Annotated[basic.Colour, Field(basic.Colour, 0x110)]
+    JellyBossBroodIdleColour: Annotated[basic.Colour, Field(basic.Colour, 0x120)]
+    JellyBossBroodProximityWarningColour: Annotated[
+        basic.Colour, Field(basic.Colour, 0x130)
+    ]
+    JellyBossIdleColour: Annotated[basic.Colour, Field(basic.Colour, 0x140)]
+    JellyBossProjectileAttackWarningColour: Annotated[
+        basic.Colour, Field(basic.Colour, 0x150)
+    ]
+    JellyBossSpawnBroodWarningColour: Annotated[
+        basic.Colour, Field(basic.Colour, 0x160)
+    ]
+    PetInteractionLightColour: Annotated[basic.Colour, Field(basic.Colour, 0x170)]
+    PetRadialBadColour: Annotated[basic.Colour, Field(basic.Colour, 0x180)]
+    PetRadialBoostColour: Annotated[basic.Colour, Field(basic.Colour, 0x190)]
+    PetRadialGoodColour: Annotated[basic.Colour, Field(basic.Colour, 0x1A0)]
+    PetRadialNeutralColour: Annotated[basic.Colour, Field(basic.Colour, 0x1B0)]
+    PetThrowArcColour: Annotated[basic.Colour, Field(basic.Colour, 0x1C0)]
+    SpookFiendAggressiveColour: Annotated[basic.Colour, Field(basic.Colour, 0x1D0)]
+    SpookFiendKamikazeColour: Annotated[basic.Colour, Field(basic.Colour, 0x1E0)]
+    SpookFiendPassiveColour: Annotated[basic.Colour, Field(basic.Colour, 0x1F0)]
+    SpookFiendSpitColour: Annotated[basic.Colour, Field(basic.Colour, 0x200)]
+    WeirdBiomeDescriptions: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x210)
+    ]
+    BiomeAirDescriptions: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x610)
+    ]
+    BiomeDescriptions: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x830)
+    ]
+    BiomeWaterDescriptions: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0xA50)
+    ]
+    DietMeat: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0xC70)
+    ]
+    DietVeg: Annotated[basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0xE90)]
+    PetBiomeClimates: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x10B0)
+    ]
+    WeirdKillingRewards: Annotated[
+        cGcWeirdCreatureRewardList, Field(cGcWeirdCreatureRewardList, 0x12D0)
+    ]
+    Temperments: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x14D0)
+    ]
+    Diets: Annotated[basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x1630)]
+    WaterDiets: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x16B0)
+    ]
+    CreatureFilter: Annotated[basic.TkID0x20, Field(basic.TkID0x20, 0x1730)]
+    PetCarePuzzleOverrideID: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x1750)
+    ]
+    AlertTable: Annotated[
+        basic.cTkDynamicArray[cGcCreatureAlertData],
+        Field(basic.cTkDynamicArray[cGcCreatureAlertData], 0x1770),
+    ]
+    AlienShipQuestCreatureWeapon: Annotated[
+        basic.TkID0x10, Field(basic.TkID0x10, 0x1780)
+    ]
+    AlienShipQuestKillingSubstance: Annotated[
+        basic.TkID0x10, Field(basic.TkID0x10, 0x1790)
+    ]
+    BasicFeedingProduct: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x17A0)]
+    CarnivoreFeedingProducts: Annotated[
+        basic.cTkDynamicArray[cGcCreatureFoodList],
+        Field(basic.cTkDynamicArray[cGcCreatureFoodList], 0x17B0),
+    ]
+    CreatureDeathEffectBig: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x17C0)]
+    CreatureDeathEffectMedium: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x17D0)]
+    CreatureDeathEffectSmall: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x17E0)]
+    CreatureHugeRunShake: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x17F0)]
+    CreatureHugeWalkShake: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x1800)]
+    CreatureLargeRunShake: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x1810)]
+    CreatureLargeWalkShake: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x1820)]
+    CreatureSeed: Annotated[basic.GcSeed, Field(basic.GcSeed, 0x1830)]
+    DefaultKillingSubstance: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x1840)]
+    FishDeathEffect: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x1850)]
+    HarvestingProducts: Annotated[
+        basic.cTkDynamicArray[cGcCreatureHarvestSubstanceList],
+        Field(basic.cTkDynamicArray[cGcCreatureHarvestSubstanceList], 0x1860),
+    ]
+    HerbivoreFeedingProducts: Annotated[
+        basic.cTkDynamicArray[cGcCreatureFoodList],
+        Field(basic.cTkDynamicArray[cGcCreatureFoodList], 0x1870),
+    ]
+    HorrorPetFeedingProduct: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x1880)]
+    KillingProducts: Annotated[
+        basic.cTkDynamicArray[cGcCreatureSubstanceList],
+        Field(basic.cTkDynamicArray[cGcCreatureSubstanceList], 0x1890),
+    ]
+    KillingSubstances: Annotated[
+        basic.cTkDynamicArray[basic.TkID0x10],
+        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x18A0),
+    ]
+    LootItems: Annotated[
+        basic.cTkDynamicArray[basic.TkID0x10],
+        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x18B0),
+    ]
+    PetEggMaxChangeProduct: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x18C0)]
+    PetEggs: Annotated[
+        basic.cTkDynamicArray[cGcCreaturePetEggData],
+        Field(basic.cTkDynamicArray[cGcCreaturePetEggData], 0x18D0),
+    ]
+    PetEggsplosionEffect: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x18E0)]
+    PetScan: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x18F0)]
+    RobotFeedingProduct: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x1900)]
+    RockTransformChanceModifiers: Annotated[
+        basic.cTkDynamicArray[ctypes.c_float],
+        Field(basic.cTkDynamicArray[ctypes.c_float], 0x1910),
+    ]
+    SpookFiendsSpawnData: Annotated[
+        basic.cTkDynamicArray[cGcSpookFiendSpawnData],
+        Field(basic.cTkDynamicArray[cGcSpookFiendSpawnData], 0x1920),
+    ]
+    FlyingSnakeData: Annotated[cGcFlyingSnakeData, Field(cGcFlyingSnakeData, 0x1930)]
+    SpherePusherOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1970)]
+    SpherePusherRadiusMul: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1980)]
+    SpherePusherWeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1990)]
+    JellyBossBroodMaxChaseTime: Annotated[basic.Vector2f, Field(basic.Vector2f, 0x19A0)]
+    SpookFiendsSpawnTimer: Annotated[basic.Vector2f, Field(basic.Vector2f, 0x19A8)]
+    AdultBabyKilledNoticeDistance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x19B0)
+    ]
+    AdultCorrelationValue: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19B4)]
+    AlertDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19B8)]
+    AllCreaturesDiscoveredBonusMul: Annotated[
+        ctypes.c_int32, Field(ctypes.c_int32, 0x19BC)
+    ]
+    AngryRockProportionNormal: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19C0)]
+    AngryRockProportionSurvival: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x19C4)
+    ]
+    AnimationStickToGroundSpeed: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x19C8)
+    ]
+    AnimChangeCoolDown: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19CC)]
+    AsteroidCreatureRichSystemSpawnPercent: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x19D0)
+    ]
+    AsteroidCreatureSpawnPercentOverride: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x19D4)
+    ]
+    AttackPlayerDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19D8)]
+    AttractedMaxAvoidCreaturesDist: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x19DC)
+    ]
+    AttractedMaxAvoidCreaturesStrength: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x19E0)
+    ]
+    AttractedMinAvoidCreaturesDist: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x19E4)
+    ]
+    AttractedMinAvoidCreaturesStrength: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x19E8)
+    ]
+    AttractMinDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19EC)]
+    AvoidCreaturesWeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19F0)]
+    AvoidImpassableWeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19F4)]
+    BadTurnPercent: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19F8)]
+    BadTurnWeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x19FC)]
+    BaseAndTerrainModImpassableStrength: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1A00)
+    ]
+    BrakingForce: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A04)]
+    BrakingForceY: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A08)]
+    BugFiendHealth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1A0C)]
+    BugQueenHealth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1A10)]
+    BugQueenSpitballExplosionRadius: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1A14)
+    ]
+    BugQueenSpitballSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A18)]
+    BugQueenSpitCount: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1A1C)]
+    BugQueenSpitRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A20)]
+    CreatureBlobRidingHugeMinSize: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1A24)
+    ]
+    CreatureBlobRidingLargeMinSize: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1A28)
+    ]
+    CreatureBlobRidingMedMinSize: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1A2C)
+    ]
+    CreatureBrakeForce: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A30)]
+    CreatureHarvestAmountHuge: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1A34)]
+    CreatureHarvestAmountLarge: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1A38)]
+    CreatureHarvestAmountMed: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1A3C)]
+    CreatureHarvestAmountSmall: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1A40)]
+    CreatureHearingRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A44)]
+    CreatureHugeHealth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1A48)]
+    CreatureHugeMinSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A4C)]
+    CreatureHugeRunMaxShakeDist: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1A50)
+    ]
+    CreatureHugeWalkMaxShakeDist: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1A54)
+    ]
+    CreatureIndoorSpeedMultiplier: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1A58)
+    ]
+    CreatureInteractBaseRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A5C)]
+    CreatureInteractionRangeBoostHuge: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1A60)
+    ]
+    CreatureInteractionRangeBoostLarge: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1A64)
+    ]
+    CreatureInteractionRangeBoostMedium: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1A68)
+    ]
+    CreatureInteractionRangeBoostRun: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1A6C)
+    ]
+    CreatureInteractionRangeBoostSmall: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1A70)
+    ]
+    CreatureInteractionRangeBoostSprint: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1A74)
+    ]
+    CreatureInteractionRangeReducePredator: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1A78)
+    ]
+    CreatureKillRewardAmountFiend: Annotated[
+        ctypes.c_int32, Field(ctypes.c_int32, 0x1A7C)
+    ]
+    CreatureKillRewardAmountHuge: Annotated[
+        ctypes.c_int32, Field(ctypes.c_int32, 0x1A80)
+    ]
+    CreatureKillRewardAmountLarge: Annotated[
+        ctypes.c_int32, Field(ctypes.c_int32, 0x1A84)
+    ]
+    CreatureKillRewardAmountMed: Annotated[
+        ctypes.c_int32, Field(ctypes.c_int32, 0x1A88)
+    ]
+    CreatureKillRewardAmountSmall: Annotated[
+        ctypes.c_int32, Field(ctypes.c_int32, 0x1A8C)
+    ]
+    CreatureLargeHealth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1A90)]
+    CreatureLargeMinSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1A94)]
+    CreatureLargeRunMaxShakeDist: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1A98)
+    ]
+    CreatureLargeWalkMaxShakeDist: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1A9C)
+    ]
+    CreatureLookBeforeFleeingIfShotTime: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1AA0)
+    ]
+    CreatureLookBeforeFleeingTime: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1AA4)
+    ]
+    CreatureLookBeforeGoingTime: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1AA8)
+    ]
+    CreatureLookPlayerForceLookTime: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1AAC)
+    ]
+    CreatureLookScaryThingTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1AB0)]
+    CreatureMedHealth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1AB4)]
+    CreatureMedMinSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1AB8)]
+    CreatureMinAlignSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1ABC)]
+    CreatureMinAnimMoveSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1AC0)]
+    CreatureMinRunTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1AC4)]
+    CreatureMoveIdle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1AC8)]
+    CreatureRidingHugeMinSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1ACC)]
+    CreatureRidingLargeMinSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1AD0)]
+    CreatureRidingMedMinSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1AD4)]
+    CreatureScaleMangle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1AD8)]
+    CreatureSightRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1ADC)]
+    CreatureSmallHealth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1AE0)]
+    CreatureSpeedMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1AE4)]
+    CreatureTurnMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1AE8)]
+    CreatureTurnMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1AEC)]
+    CreatureUpdateRateMultiplier: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1AF0)
+    ]
+    CreatureWaryTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1AF4)]
+    DefaultRunMoveSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1AF8)]
+    DefaultTrotMoveSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1AFC)]
+    DefaultWalkMoveSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B00)]
+    DelayAfterRespawnBeforeAttackable: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1B04)
+    ]
+    DespawnDistFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B08)]
+    DetailAnimBlendInTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B0C)]
+    DetailAnimBlendOutTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B10)]
+    DetailAnimMaxPauseTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B14)]
+    DetailAnimMinPauseTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B18)]
+    DroneExplodeRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B1C)]
+    EdgeClosenessPenalty: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B20)]
+    ExtraFollowFreq1: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B24)]
+    ExtraFollowFreq2: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B28)]
+    ExtraFollowStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B2C)]
+    FadeDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B30)]
+    FadeScaleMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B34)]
+    FadeScalePower: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B38)]
+    FastSwimSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B3C)]
+    FeedingFollowTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B40)]
+    FeedingNoticeDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B44)]
+    FeedingNoticeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B48)]
+    FeedingTaskAmount: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1B4C)]
+    FiendAggroDecreasePerSpawn: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B50)]
+    FiendAggroIncreaseDamageEgg: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1B54)
+    ]
+    FiendAggroIncreaseDestroyEgg: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1B58)
+    ]
+    FiendAggroTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B5C)]
+    FiendBeingShotMemoryTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B60)]
+    FiendCritAreaSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B64)]
+    FiendDespawnDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B68)]
+    FiendDistReduceForBeingShot: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1B6C)
+    ]
+    FiendDistToConsiderTargetSwtich: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1B70)
+    ]
+    FiendEggsToUnlockSpit: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1B74)]
+    FiendHealth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1B78)]
+    FiendHealthLevelMul: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B7C)]
+    FiendMaxAttackers: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1B80)]
+    FiendMaxEngaged: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1B84)]
+    FiendMaxSpawnTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B88)]
+    FiendMaxVerticalForPounce: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B8C)]
+    FiendMinSpawnTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B90)]
+    FiendPerceptionDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B94)]
+    FiendPounceDistanceModifier: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1B98)
+    ]
+    FiendReplicateEndDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1B9C)]
+    FiendReplicateStartDistance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1BA0)
+    ]
+    FiendSpawnDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1BA4)]
+    FiendZigZagSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1BA8)]
+    FiendZigZagStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1BAC)]
+    FishBobAmplitude: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1BB0)]
+    FishBobFrequency: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1BB4)]
+    FishDesiredDepth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1BB8)]
+    FishFiendBigBoostStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1BBC)]
+    FishFiendBigBoostTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1BC0)]
+    FishFiendBigHealth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1BC4)]
+    FishFiendBigScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1BC8)]
+    FishFiendSmallBoostStrength: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1BCC)
+    ]
+    FishFiendSmallBoostTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1BD0)]
+    FishFiendSmallHealth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1BD4)]
+    FishFiendSmallScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1BD8)]
+    FishMinHeightAboveSeaBed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1BDC)]
+    FishObstacleAvoidStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1BE0)]
+    FishPlayerAttractionAhead: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1BE4)]
+    FishPlayerAttractionFrontDist: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1BE8)
+    ]
+    FishPlayerAttractionMaxDist: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1BEC)
+    ]
+    FishPlayerAttractionMinDist: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1BF0)
+    ]
+    FishPlayerAttractionStrength: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1BF4)
+    ]
+    FishPredatorChargeDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1BF8)]
+    FishPredatorChargeDistScale: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1BFC)
+    ]
+    FishSeaBedAvoidStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C00)]
+    FishWaterSurfaceAnticipate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C04)]
+    FishWaterSurfaceAvoidStrength: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1C08)
+    ]
+    FloaterObstacleAvoidStrength: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1C0C)
+    ]
+    FloaterSteeringRayLength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C10)]
+    FloaterSteeringRaySphereSize: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1C14)
+    ]
+    FloaterSteeringRaySpread: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C18)]
+    FloaterSurfaceAnticipate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C1C)]
+    FloaterSurfaceAvoidStrength: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1C20)
+    ]
+    FlowFieldWeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C24)]
+    FollowLeaderAlignWeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C28)]
+    FollowLeaderCohereWeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C2C)]
+    FollowPlayerDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C30)]
+    FollowRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C34)]
+    FollowRunPlayerDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C38)]
+    FollowWeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C3C)]
+    FootDustGroundTintStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C40)]
+    FootParticleTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C44)]
+    FootPlantError: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C48)]
+    FreighterDespawnDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C4C)]
+    FreighterJellyBobAmplitude: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C50)]
+    FreighterJellyBobFrequency: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C54)]
+    FreighterSpawnDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C58)]
+    FriendlyCreatureLimit: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1C5C)]
+    GroundWormScaleMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C60)]
+    GroundWormScaleMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C64)]
+    GroundWormSpawnChance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C68)]
+    GroundWormSpawnerActivateRadius: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1C6C)
+    ]
+    GroundWormSpawnerDestroyRadiusActive: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1C70)
+    ]
+    GroundWormSpawnerDestroyRadiusInactive: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1C74)
+    ]
+    GroundWormSpawnMax: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1C78)]
+    GroundWormSpawnMin: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1C7C)]
+    GroundWormSpawnRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C80)]
+    GroundWormSpawnSpacing: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C84)]
+    GroundWormSpawnTimeOut: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C88)]
+    GroupBabyHealthMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C8C)]
+    GroupBabyProportion: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C90)]
+    GroupBabyRunProbability: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C94)]
+    GroupBabyScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C98)]
+    GroupFemaleProportion: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1C9C)]
+    GroupLookAtDurationMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CA0)]
+    GroupLookAtDurationMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CA4)]
+    GroupLookAtProbability: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CA8)]
+    GroupRunDurationMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CAC)]
+    GroupRunDurationMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CB0)]
+    GroupRunProbability: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CB4)]
+    GroupRunStormProbability: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CB8)]
+    HarvestCooldownMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CBC)]
+    HarvestCooldownMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CC0)]
+    HeightDiffPenalty: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CC4)]
+    HeightLookAhead: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CC8)]
+    HerdGroupSizeMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CCC)]
+    ImpassabilityBrakeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CD0)]
+    ImpassabilityTurnSpeedMultiplier: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1CD4)
+    ]
+    ImpassabilityUnbrakeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CD8)]
+    IndoorObstacleAvoidStrength: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1CDC)
+    ]
+    IndoorSteeringRayLength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CE0)]
+    IndoorSteeringRaySphereSize: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1CE4)
+    ]
+    IndoorSteeringRaySpread: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CE8)]
+    IndoorTurnTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CEC)]
+    InfluenceDeflect: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CF0)]
+    InfluenceForce: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CF4)]
+    InfluenceRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CF8)]
+    InfluenceThreshold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1CFC)]
+    JellyBossBroodColourInterpTime: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1D00)
+    ]
+    JellyBossBroodSeparateTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D04)]
+    JellyBossBroodWarningRadius: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1D08)
+    ]
+    JellyBossColourInterpTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D0C)]
+    JellyBossFastSwimSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D10)]
+    JellyBossLandAnticipate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D14)]
+    JellyBossLandAvoidStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D18)]
+    LargeCreatureAvoidPlayerDistance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1D1C)
+    ]
+    LargeCreatureFleePlayerDistance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1D20)
+    ]
+    largeCreaturePerceptionDistance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1D24)
+    ]
+    LookMaxPitchWhenMoving: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D28)]
+    LookMaxYawMoving: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D2C)]
+    LookMaxYawStatic: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D30)]
+    LookPitchAtMaxYaw: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D34)]
+    LookRollAtMaxYaw: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D38)]
+    LookRollWhenMoving: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D3C)]
+    LowPerfFlockReduce: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D40)]
+    MaxAdditionalEcosystemCreaturesForDiscovery: Annotated[
+        ctypes.c_int32, Field(ctypes.c_int32, 0x1D44)
+    ]
+    MaxBirdsProportion: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D48)]
+    MaxCreatureSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D4C)]
+    MaxEcosystemCreaturesLow: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1D50)]
+    MaxEcosystemCreaturesNormal: Annotated[
+        ctypes.c_int32, Field(ctypes.c_int32, 0x1D54)
+    ]
+    MaxFade: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D58)]
+    MaxFiendsToSpawn: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1D5C)]
+    MaxFiendsToSpawnCarnage: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1D60)]
+    MaxFishFiends: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1D64)]
+    MaxForce: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D68)]
+    MaxHeightTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D6C)]
+    MaxRagdollsBeforeDespawnOffscreen: Annotated[
+        ctypes.c_int32, Field(ctypes.c_int32, 0x1D70)
+    ]
+    MaxRagdollsBeforeDespawnOnscreen: Annotated[
+        ctypes.c_int32, Field(ctypes.c_int32, 0x1D74)
+    ]
+    MaxRideLeanCounterRotate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D78)]
+    MaxSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D7C)]
+    MaxTorque: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D80)]
+    MaxTurnRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D84)]
+    MinFade: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D88)]
+    MiniDroneEnergyRecoverRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D8C)]
+    MiniDroneEnergyUsePerShot: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D90)]
+    MiniDroneShotDelay: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D94)]
+    MiniDroneShotMaxAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D98)]
+    MiningRandomProbability: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1D9C)]
+    MinRideSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DA0)]
+    MinScaleForNavMap: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DA4)]
+    MinWaterSpawnDepth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DA8)]
+    NavMapLookAhead: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DAC)]
+    NumCreaturesRequiredForDiscoveryMission: Annotated[
+        ctypes.c_int32, Field(ctypes.c_int32, 0x1DB0)
+    ]
+    NumWeirdCreaturesRequiredForDiscoveryMission: Annotated[
+        ctypes.c_int32, Field(ctypes.c_int32, 0x1DB4)
+    ]
+    PassiveFleePlayerDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DB8)]
+    PathOverestimate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DBC)]
+    PatrolGradientFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DC0)]
+    PatrolHeightOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DC4)]
+    PatrolMaxDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DC8)]
+    PatrolMinDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DCC)]
+    PatrolSwitchMinTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DD0)]
+    PauseBetweenCreatureSpawnRequests: Annotated[
+        ctypes.c_int32, Field(ctypes.c_int32, 0x1DD4)
+    ]
+    PelvisIkStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DD8)]
+    PercentagePlayerPredators: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DDC)]
+    PerceptionUpdateRate: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1DE0)]
+    PetAccessoryMoodDisplayThreshold: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1DE4)
+    ]
+    PetAccessoryStateInterval: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DE8)]
+    PetAnimSpeedBoostSmallerThan: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1DEC)
+    ]
+    PetAnimSpeedBoostStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DF0)]
+    PetAnimSpeedMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DF4)]
+    PetAnimSpeedMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DF8)]
+    PetChatCooldown: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1DFC)]
+    PetChatUseTraitTemplateChance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1E00)
+    ]
+    PetEffectSpawnOffsetHuge: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E04)]
+    PetEffectSpawnOffsetLarge: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E08)]
+    PetEffectSpawnOffsetMed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E0C)]
+    PetEffectSpawnOffsetSmall: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E10)]
+    PetEggAccessoryChanceModifier: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1E14)
+    ]
+    PetEggColourChanceModifier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E18)]
+    PetEggFirstEggDelay: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1E1C)]
+    PetEggHatchColourChangeChance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1E20)
+    ]
+    PetEggHatchScaleChange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E24)]
+    PetEggHatchTraitChange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E28)]
+    PetEggLayingDuration: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E2C)]
+    PetEggLayingInterval: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1E30)]
+    PetEggMaxAccessoriesChangeChance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1E34)
+    ]
+    PetEggMaxColourChangeChance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1E38)
+    ]
+    PetEggMaxDistStep: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E3C)]
+    PetEggMaxHungry: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E40)]
+    PetEggMaxLonely: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E44)]
+    PetEggMaxOverdosage: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E48)]
+    PetEggMaxTopDescriptorChangeChance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1E4C)
+    ]
+    PetEggMinDistStep: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E50)]
+    PetEggMinGrowthToLay: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E54)]
+    PetEggModificationItemLimit: Annotated[
+        ctypes.c_int32, Field(ctypes.c_int32, 0x1E58)
+    ]
+    PetEggModificationTime: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1E5C)]
+    PetEggOverdosageModifier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E60)]
+    PetEggScaleRangeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E64)]
+    PetEggScaleRangeModifier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E68)]
+    PetEggSubstanceModifier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E6C)]
+    PetEggTraitRangeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E70)]
+    PetEggTraitRangeModifier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E74)]
+    PetFollowRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E78)]
+    PetFollowRunPlayerDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E7C)]
+    PetFootShakeModifier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E80)]
+    PetForceBehaviour: Annotated[
+        c_enum32[enums.cGcPetBehaviours],
+        Field(c_enum32[enums.cGcPetBehaviours], 0x1E84),
+    ]
+    PetGrowthTime: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1E88)]
+    PetHeartChangePerLayer: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E8C)]
+    PetHeartMaxSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E90)]
+    PetHeartResponseLoopTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E94)]
+    PetHeartResponseTotalTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E98)]
+    PetHeelDistSwitchTimeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1E9C)]
+    PetHeelDistSwitchTimeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1EA0)]
+    PetHeelLateralShiftTimeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1EA4)]
+    PetHeelLateralShiftTimeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1EA8)]
+    PetHeelPosSpringTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1EAC)]
+    PetIncubationTime: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1EB0)]
+    PetInteractBaseRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1EB4)]
+    PetInteractionLightHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1EB8)]
+    PetInteractionLightIntensityMax: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1EBC)
+    ]
+    PetInteractionLightIntensityMin: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1EC0)
+    ]
+    PetInteractTurnToFaceMinAngle: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1EC4)
+    ]
+    PetLastActionReportTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1EC8)]
+    PetMaxSizeOffPlanet: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1ECC)]
+    PetMaxSummonDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1ED0)]
+    PetMaxTurnRad: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1ED4)]
+    PetMinSummonDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1ED8)]
+    PetMinTrust: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1EDC)]
+    PetMinTurnRad: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1EE0)]
+    PetMoodCurvePower: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1EE4)]
+    PetMoodSmoothTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1EE8)]
+    PetNavRadForMaxTurn: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1EEC)]
+    PetNavRadForMinTurn: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1EF0)]
+    PetOrderMaxRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1EF4)]
+    PetOrderMinRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1EF8)]
+    PetPlayerSpeedSmoothTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1EFC)]
+    PetRadialCentre: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F00)]
+    PetRadialPulseMul: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F04)]
+    PetRadialPulseTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F08)]
+    PetRadialRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F0C)]
+    PetRadialWidth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F10)]
+    PetRunAtHeelDistMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F14)]
+    PetRunAtHeelDistMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F18)]
+    PetRunAtHeelLateralShiftMax: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1F1C)
+    ]
+    PetRunAtHeelLateralShiftMin: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1F20)
+    ]
+    PetSlotsUnlockedByDefault: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1F24)]
+    PetStickySideBiasAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F28)]
+    PetSummonRotation: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F2C)]
+    PetTeleportDistOffPlanet: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F30)]
+    PetTeleportDistOnPlanet: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F34)]
+    PetTeleportEffectTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F38)]
+    PetThrowArcRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F3C)]
+    PetTickleChatChance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F40)]
+    PetTreatChatChance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F44)]
+    PetTrustChangeInterval: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1F48)]
+    PetTrustDecreaseStep: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F4C)]
+    PetTrustDecreaseThreshold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F50)]
+    PetTrustIncreaseStep: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F54)]
+    PetTrustIncreaseThreshold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F58)]
+    PetTrustOnAdoption: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F5C)]
+    PetTrustOnHatch: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F60)]
+    PetWalkAtHeelChanceDevoted: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F64)]
+    PetWalkAtHeelChanceIndependent: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1F68)
+    ]
+    PetWalkAtHeelDistMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F6C)]
+    PetWalkAtHeelDistMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F70)]
+    PetWalkAtHeelLateralShift: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F74)]
+    PlayerBirdDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F78)]
+    PlayerDamageTransferScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F7C)]
+    PlayerPredatorBoredomDistance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1F80)
+    ]
+    PlayerPredatorHealthModifier: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1F84)
+    ]
+    PlayerPredatorRegainInterestTime: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1F88)
+    ]
+    PostRideMoveTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F8C)]
+    PredatorApproachTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F90)]
+    PredatorBoredomDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F94)]
+    PredatorChargeDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F98)]
+    PredatorChargeDistScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1F9C)]
+    PredatorEnergyRecoverRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FA0)]
+    PredatorEnergyUseChasing: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FA4)]
+    PredatorFishPerceptionDistance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1FA8)
+    ]
+    PredatorHugeHealth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1FAC)]
+    PredatorLargeHealth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1FB0)]
+    PredatorMedHealth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1FB4)]
+    PredatorNoticePauseTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FB8)]
+    PredatorPerceptionDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FBC)]
+    PredatorRegainInterestTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FC0)]
+    PredatorRoarProbAfterHit: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FC4)]
+    PredatorRoarProbAfterMiss: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FC8)]
+    PredatorRunAwayDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FCC)]
+    PredatorRunAwayHealthPercent: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1FD0)
+    ]
+    PredatorRunMoveSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FD4)]
+    PredatorSmallHealth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1FD8)]
+    PredatorSpeedMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FDC)]
+    PredatorStealthDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FE0)]
+    PredatorTrotMoveSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FE4)]
+    PredatorWalkMoveSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FE8)]
+    QueenHealthLevelMul: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FEC)]
+    RagdollConeLimit: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FF0)]
+    RagdollDamping: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FF4)]
+    RagdollMotorFadeEnd: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FF8)]
+    RagdollMotorFadeStart: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x1FFC)]
+    RagdollTau: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2000)]
+    RagdollTwistLimit: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2004)]
+    RecoverHealthTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2008)]
+    RemoteSpawnFadeInDelay: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x200C)]
+    RepelAmount: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2010)]
+    RepelRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2014)]
+    ResourceSpawnTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2018)]
+    RideIdleTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x201C)]
+    RiderLeanTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2020)]
+    RideSpeedChangeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2024)]
+    RideSpeedFast: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2028)]
+    RideSpeedSlow: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x202C)]
+    RidingFirstPersonOffsetFwd: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2030)]
+    RidingFirstPersonOffsetUp: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2034)]
+    RidingReplicationRangeMultiplier: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x2038)
+    ]
+    RidingRollAdjustMaxAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x203C)]
+    RidingRollMaxAngleAt: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2040)]
+    RidingSteerWeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2044)]
+    RockTransformGlobalChance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2048)]
+    RoutineOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x204C)]
+    RoutineSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2050)]
+    SandWormChangeDirectionTime: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x2054)
+    ]
+    SandWormDespawnDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2058)]
+    SandWormJumpHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x205C)]
+    SandWormJumpTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2060)]
+    SandWormMaxHeightAdjust: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2064)]
+    SandWormMaxJumps: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x2068)]
+    SandWormMaxSteer: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x206C)]
+    SandWormSpawnChanceInfested: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x2070)
+    ]
+    SandWormSpawnChanceMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2074)]
+    SandWormSpawnChanceMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2078)]
+    SandWormSpawnTimer: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x207C)]
+    SandWormSteerAdjustTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2080)]
+    SandWormSubmergeDepth: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2084)]
+    SandWormSubmergeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2088)]
+    SandWormSurfaceTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x208C)]
+    SceneTerrainSpawnMinDistance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x2090)
+    ]
+    ScuttlerHealth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x2094)]
+    ScuttlerIdleTimeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2098)]
+    ScuttlerIdleTimeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x209C)]
+    ScuttlerInitialNoAttackTime: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x20A0)
+    ]
+    ScuttlerMoveTimeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20A4)]
+    ScuttlerMoveTimeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20A8)]
+    ScuttlerSpitChargeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20AC)]
+    ScuttlerSpitDelay: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20B0)]
+    ScuttlerZigZagStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20B4)]
+    ScuttlerZigZagTimeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20B8)]
+    ScuttlerZigZagTimeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20BC)]
+    SearchItemDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20C0)]
+    SearchItemFrequency: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20C4)]
+    SearchItemGiveUpDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20C8)]
+    SearchItemGiveUpTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20CC)]
+    SearchItemNotifyTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20D0)]
+    SearchSpawnRandomItemProbability: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x20D4)
+    ]
+    SharkAlignSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20D8)]
+    SharkAlongPathSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20DC)]
+    SharkAttackAccel: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20E0)]
+    SharkAttackSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20E4)]
+    SharkGetToPathSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20E8)]
+    SharkPatrolEnd: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20EC)]
+    SharkPatrolRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20F0)]
+    SharkPatrolSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20F4)]
+    SharkToPathYDamp: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20F8)]
+    ShieldFadeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20FC)]
+    SmallCreatureAvoidPlayerDistance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x2100)
+    ]
+    SmallCreatureFleePlayerDistance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x2104)
+    ]
+    SmallCreaturePerceptionDistance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x2108)
+    ]
+    SoftenAvoidanceRadiusMod: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x210C)]
+    SpawnCameraAngleCos: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2110)]
+    SpawnDistanceModifierForUnderwater: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x2114)
+    ]
+    SpawnDistAtMaxSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2118)]
+    SpawnDistAtMinSize: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x211C)]
+    SpawnMinDistPercentage: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2120)]
+    SpawnOnscreenDist: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2124)]
+    SpawnsAvoidBaseMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2128)]
+    SpookBossHealth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x212C)]
+    SpookFiendColourInterpTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2130)]
+    SpookFiendFastSwimSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2134)]
+    SpookSquidHealth: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x2138)]
+    SteeringUpdateRate: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x213C)]
+    StickToGroundCastBegin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2140)]
+    StickToGroundCastEnd: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2144)]
+    StickToGroundSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2148)]
+    SwarmAttractEatDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x214C)]
+    SwarmAttractHeightForMaxGroundAvoid: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x2150)
+    ]
+    SwarmAttractHeightForMinGroundAvoid: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x2154)
+    ]
+    SwarmAttractSpeedLimit: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2158)]
+    SwarmBrakingForce: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x215C)]
+    SwarmMoveYFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2160)]
+    TargetReachedDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2164)]
+    TargetSearchTimeout: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2168)]
+    TrailHalfLife: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x216C)]
+    TurnInPlaceIdleTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2170)]
+    TurnInPlaceMaxAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2174)]
+    TurnInPlaceMaxSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2178)]
+    TurnInPlaceMaxSpeedIndoor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x217C)]
+    TurnInPlaceMinTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2180)]
+    TurnRadiusMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2184)]
+    TurnSlowAreaCos: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2188)]
+    VelocityAlignSpeed: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x218C)]
+    VelocityAlignStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2190)]
+    VelocityAlignYFactorMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2194)]
+    VelocityAlignYFactorMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2198)]
+    WaterDepthSizeScalingMaxDepth: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x219C)
+    ]
+    WaterDepthSizeScalingMaxScale: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x21A0)
+    ]
+    WaterDepthSizeScalingMinDepth: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x21A4)
+    ]
+    WaterDepthSizeScalingMinScale: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x21A8)
+    ]
+    WaterSpawnOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x21AC)]
+    WeaponRepelAmount: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x21B0)]
+    WeaponRepelRange: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x21B4)]
+    TempermentDescriptions: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x21B8)
+    ]
+    DietDescriptions: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x2318)
+    ]
+    WaterDietDescriptions: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x2398)
+    ]
+    AggressiveSharks: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2418)]
+    AllBaitIsBasic: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2419)]
+    AllowSleeping: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x241A)]
+    AllowSpawningOnscreen: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x241B)]
+    CanAlwaysLayEgg: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x241C)]
+    CreatureInteractWithoutRaycasts: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x241D)
+    ]
+    CreatureRideDirectControl: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x241E)]
+    DebugDrawTrails: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x241F)]
+    DebugSearch: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2420)]
+    DetailAnimPlayWhileWalking: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2421)]
+    DrawRoutineFollowDebug: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2422)]
+    DrawRoutineInfo: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2423)]
+    EnableFlyingSnakeTails: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2424)]
+    EnableMPCreatureRide: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2425)]
+    EnableNewStuff: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2426)]
+    EnableTrailIk: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2427)]
+    EnableVRCreatureRide: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2428)]
+    FiendOnscreenMarkers: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2429)]
+    FiendsCanAttack: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x242A)]
+    ForceShowDebugTrails: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x242B)]
+    ForceStatic: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x242C)]
+    InstantCreatureRide: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x242D)]
+    IsHurtingCreaturesACrime: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x242E)]
+    PetAnimTest: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x242F)]
+    PetCanSummonOnFreighter: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2430)]
+    PetForceSummonFromEgg: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2431)]
+    PetsShowTraitClassesAsWords: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2432)]
+    PiedPiper: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2433)]
+    ProcessPendingSpawnRequests: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2434)]
+    RidingPositionTest: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2435)]
+    ScuttlersCanAttack: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2436)]
+    ShowScale: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2437)]
+    StaticCreatureRide: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2438)]
+    UncapSpawningforVideo: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2439)]
+    UseCreatureAdoptOSD: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x243A)]
+    UsePetTeleportEffect: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x243B)]
+    WaterDepthSizeScalingCurve: Annotated[
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x243C)
+    ]
+
+
+@partial_struct
+class cGcBuildableShipGlobals(Structure):
+    DefaultCorvette: Annotated[cGcRewardSpecificShip, Field(cGcRewardSpecificShip, 0x0)]
+    PartTagLocIDs: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x250)
+    ]
+    InitialLayouts: Annotated[
+        basic.cTkDynamicArray[basic.VariableSizeString],
+        Field(basic.cTkDynamicArray[basic.VariableSizeString], 0x3F0),
+    ]
+    PartFXLimits: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x400)]
+    InteriorVisibilityDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x434)]
+    ComplexityLimitWarning: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x444)]
+    ComplexityLimitWarningNX: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x448)]
+    SpawnOnRemoteCorvetteRequiredPartsRenderingDistance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x44C)
+    ]
 
 
 @partial_struct
@@ -46257,6 +46119,14 @@ class cGcAISpaceshipGlobals(Structure):
 
 
 @partial_struct
+class cGcSquadronPilotData(Structure):
+    NPCResource: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x0)]
+    ShipResource: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x48)]
+    TraitsSeed: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x90)]
+    PilotRank: Annotated[ctypes.c_uint16, Field(ctypes.c_uint16, 0x98)]
+
+
+@partial_struct
 class cGcRepairTechData(Structure):
     MaintenanceContainer: Annotated[
         cGcMaintenanceContainer, Field(cGcMaintenanceContainer, 0x0)
@@ -46264,6 +46134,1053 @@ class cGcRepairTechData(Structure):
     InventoryIndex: Annotated[cGcInventoryIndex, Field(cGcInventoryIndex, 0x1A0)]
     InventorySubIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1A8)]
     InventoryType: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1AC)]
+
+
+@partial_struct
+class cGcPlayerOwnershipData(Structure):
+    Direction: Annotated[basic.Vector4f, Field(basic.Vector4f, 0x0)]
+    Position: Annotated[basic.Vector4f, Field(basic.Vector4f, 0x10)]
+    Inventory: Annotated[cGcInventoryContainer, Field(cGcInventoryContainer, 0x20)]
+    Inventory_Cargo: Annotated[
+        cGcInventoryContainer, Field(cGcInventoryContainer, 0x180)
+    ]
+    Inventory_TechOnly: Annotated[
+        cGcInventoryContainer, Field(cGcInventoryContainer, 0x2E0)
+    ]
+    Resource: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x440)]
+    InventoryLayout: Annotated[cGcInventoryLayout, Field(cGcInventoryLayout, 0x488)]
+    Location: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x4A0)]
+    Name: Annotated[basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x4A8)]
+
+
+@partial_struct
+class cGcMultitoolData(Structure):
+    ScreenData: Annotated[cGcInWorldUIScreenData, Field(cGcInWorldUIScreenData, 0x0)]
+    Store: Annotated[cGcInventoryContainer, Field(cGcInventoryContainer, 0x30)]
+    CustomisationData: Annotated[
+        cGcCharacterCustomisationData, Field(cGcCharacterCustomisationData, 0x190)
+    ]
+    Resource: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x1E8)]
+    Layout: Annotated[cGcInventoryLayout, Field(cGcInventoryLayout, 0x230)]
+    Seed: Annotated[basic.GcSeed, Field(basic.GcSeed, 0x248)]
+    PrimaryMode: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x258)]
+    SecondaryMode: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x25C)]
+    Name: Annotated[basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x260)]
+    IsLarge: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x280)]
+    UseLegacyColours: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x281)]
+
+
+@partial_struct
+class cGcArchivedMultitoolData(Structure):
+    MultitoolData: Annotated[cGcMultitoolData, Field(cGcMultitoolData, 0x0)]
+    ArchivedInventoryClass: Annotated[
+        c_enum32[enums.cGcInventoryClass],
+        Field(c_enum32[enums.cGcInventoryClass], 0x290),
+    ]
+    WeaponClass: Annotated[
+        c_enum32[enums.cGcWeaponClasses], Field(c_enum32[enums.cGcWeaponClasses], 0x294)
+    ]
+    ArchivedName: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x298)
+    ]
+
+
+@partial_struct
+class cGcArchivedShipData(Structure):
+    Ownership: Annotated[cGcPlayerOwnershipData, Field(cGcPlayerOwnershipData, 0x0)]
+    Customisation: Annotated[
+        cGcCharacterCustomisationSaveData,
+        Field(cGcCharacterCustomisationSaveData, 0x4D0),
+    ]
+    ArchivedClass: Annotated[
+        c_enum32[enums.cGcSpaceshipClasses],
+        Field(c_enum32[enums.cGcSpaceshipClasses], 0x538),
+    ]
+    ArchivedInventoryClass: Annotated[
+        c_enum32[enums.cGcInventoryClass],
+        Field(c_enum32[enums.cGcInventoryClass], 0x53C),
+    ]
+    ArchivedName: Annotated[
+        basic.cTkFixedString0x80, Field(basic.cTkFixedString0x80, 0x540)
+    ]
+    UsesLegacyColours: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x5C0)]
+
+
+@partial_struct
+class cGcFreighterSaveData(Structure):
+    MatrixAt: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x0)]
+    MatrixPos: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x10)]
+    MatrixUp: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x20)]
+    Inventory: Annotated[cGcInventoryContainer, Field(cGcInventoryContainer, 0x30)]
+    Inventory_Cargo: Annotated[
+        cGcInventoryContainer, Field(cGcInventoryContainer, 0x190)
+    ]
+    Inventory_TechOnly: Annotated[
+        cGcInventoryContainer, Field(cGcInventoryContainer, 0x2F0)
+    ]
+    Resource: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x450)]
+    CargoLayout: Annotated[cGcInventoryLayout, Field(cGcInventoryLayout, 0x498)]
+    Layout: Annotated[cGcInventoryLayout, Field(cGcInventoryLayout, 0x4B0)]
+    HomeSystemSeed: Annotated[basic.GcSeed, Field(basic.GcSeed, 0x4C8)]
+    LastSpawnTime: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x4D8)]
+    UniverseAddress: Annotated[
+        cGcUniverseAddressData, Field(cGcUniverseAddressData, 0x4E0)
+    ]
+    Dismissed: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4F8)]
+
+
+@partial_struct
+class cGcModBasePart(Structure):
+    ProductData: Annotated[cGcProductData, Field(cGcProductData, 0x0)]
+    PartData: Annotated[cGcBaseBuildingEntry, Field(cGcBaseBuildingEntry, 0x300)]
+    ID: Annotated[basic.cTkFixedString0x40, Field(basic.cTkFixedString0x40, 0x548)]
+
+
+@partial_struct
+class cGcNPCWorkerData(Structure):
+    BaseOffset: Annotated[basic.Vector4f, Field(basic.Vector4f, 0x0)]
+    ResourceElement: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x10)]
+    InteractionSeed: Annotated[basic.GcSeed, Field(basic.GcSeed, 0x58)]
+    BaseUA: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x68)]
+    FreighterBase: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x70)]
+    HiredWorker: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x71)]
+
+
+@partial_struct
+class cGcUniqueNPCSpawnData(Structure):
+    ResourceElement: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x0)]
+    Id: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x48)]
+    PresetId: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x58)]
+    Race: Annotated[
+        c_enum32[enums.cGcAlienRace], Field(c_enum32[enums.cGcAlienRace], 0x68)
+    ]
+    Scale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x6C)]
+
+
+@partial_struct
+class cGcCutSceneSpawnData(Structure):
+    Facing: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x0)]
+    Local: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x10)]
+    Offset: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x20)]
+    Up: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x30)]
+    ResourceElement: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x40)]
+    Group: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x88)]
+    Id: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x98)]
+    Modules: Annotated[
+        basic.cTkDynamicArray[basic.NMSTemplate],
+        Field(basic.cTkDynamicArray[basic.NMSTemplate], 0xA8),
+    ]
+    Seed: Annotated[basic.GcSeed, Field(basic.GcSeed, 0xB8)]
+    TrimmedPath: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0xC8)
+    ]
+    Guid: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0xD8)]
+    DebugDraw: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xDC)]
+    EnableAI: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xDD)]
+
+
+@partial_struct
+class cGcBaseBuildingPartsTable(Structure):
+    Parts: Annotated[
+        basic.cTkDynamicArray[cGcBaseBuildingPart],
+        Field(basic.cTkDynamicArray[cGcBaseBuildingPart], 0x0),
+    ]
+
+
+@partial_struct
+class cGcNPCSpawnTable(Structure):
+    NPCModelNames: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)
+    ]
+    NPCMannequinModelName: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0x90)
+    ]
+    PlacementInfos: Annotated[
+        basic.cTkDynamicArray[cGcNPCPlacementInfo],
+        Field(basic.cTkDynamicArray[cGcNPCPlacementInfo], 0xA0),
+    ]
+    UniqueNPCs: Annotated[
+        basic.cTkDynamicArray[cGcUniqueNPCSpawnData],
+        Field(basic.cTkDynamicArray[cGcUniqueNPCSpawnData], 0xB0),
+    ]
+    NPCRaceScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xC0)]
+
+
+@partial_struct
+class cGcCustomisationUIData(Structure):
+    CustomisationUIData: Annotated[cGcCustomisationUI, Field(cGcCustomisationUI, 0x0)]
+
+
+@partial_struct
+class cGcGenericMissionSequence(Structure):
+    MissionColourOverride: Annotated[basic.Colour, Field(basic.Colour, 0x0)]
+    TradingDataOverride: Annotated[cGcTradeData, Field(cGcTradeData, 0x10)]
+    MissionBoardOptions: Annotated[
+        cGcMissionBoardOptions, Field(cGcMissionBoardOptions, 0xF8)
+    ]
+    SeasonalLogTextOverrides: Annotated[
+        cGcSeasonalLogOverrides, Field(cGcSeasonalLogOverrides, 0x178)
+    ]
+    DefaultItems: Annotated[
+        cGcDefaultMissionItemsTable, Field(cGcDefaultMissionItemsTable, 0x1E8)
+    ]
+    MissionPageLocID: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x238)
+    ]
+    SettlementAbandonOSD: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x258)
+    ]
+    MissionDescriptions: Annotated[
+        cGcNumberedTextList, Field(cGcNumberedTextList, 0x278)
+    ]
+    MissionIcon: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x290)]
+    MissionIconNotSelected: Annotated[
+        cTkTextureResource, Field(cTkTextureResource, 0x2A8)
+    ]
+    MissionIconSelected: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x2C0)]
+    MissionProcDescriptionA: Annotated[
+        cGcNumberedTextList, Field(cGcNumberedTextList, 0x2D8)
+    ]
+    MissionProcDescriptionB: Annotated[
+        cGcNumberedTextList, Field(cGcNumberedTextList, 0x2F0)
+    ]
+    MissionProcDescriptionC: Annotated[
+        cGcNumberedTextList, Field(cGcNumberedTextList, 0x308)
+    ]
+    MissionProcDescriptionHeader: Annotated[
+        cGcNumberedTextList, Field(cGcNumberedTextList, 0x320)
+    ]
+    MissionSubtitles: Annotated[cGcNumberedTextList, Field(cGcNumberedTextList, 0x338)]
+    MissionTitles: Annotated[cGcNumberedTextList, Field(cGcNumberedTextList, 0x350)]
+    CancelingConditions: Annotated[
+        basic.cTkDynamicArray[basic.NMSTemplate],
+        Field(basic.cTkDynamicArray[basic.NMSTemplate], 0x368),
+    ]
+    Costs: Annotated[
+        basic.cTkDynamicArray[cGcCostTableEntry],
+        Field(basic.cTkDynamicArray[cGcCostTableEntry], 0x378),
+    ]
+    Dialog: Annotated[cGcAlienPuzzleTable, Field(cGcAlienPuzzleTable, 0x388)]
+    FinalStageVersions: Annotated[
+        basic.cTkDynamicArray[cGcGenericMissionVersionProgress],
+        Field(basic.cTkDynamicArray[cGcGenericMissionVersionProgress], 0x398),
+    ]
+    MissionBuildMenuHint: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x3A8)]
+    MissionID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x3B8)]
+    NextMissionHint: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x3C8)]
+    Rewards: Annotated[
+        basic.cTkDynamicArray[cGcGenericRewardTableEntry],
+        Field(basic.cTkDynamicArray[cGcGenericRewardTableEntry], 0x3D8),
+    ]
+    ScanEvents: Annotated[
+        basic.cTkDynamicArray[cGcScanEventData],
+        Field(basic.cTkDynamicArray[cGcScanEventData], 0x3E8),
+    ]
+    Stages: Annotated[
+        basic.cTkDynamicArray[cGcGenericMissionStage],
+        Field(basic.cTkDynamicArray[cGcGenericMissionStage], 0x3F8),
+    ]
+    StartingConditions: Annotated[
+        basic.cTkDynamicArray[basic.NMSTemplate],
+        Field(basic.cTkDynamicArray[basic.NMSTemplate], 0x408),
+    ]
+    UseCommunityMissionForLog: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x418)]
+    WikiMissionBlockedBySeasons: Annotated[
+        basic.cTkDynamicArray[ctypes.c_int32],
+        Field(basic.cTkDynamicArray[ctypes.c_int32], 0x428),
+    ]
+
+    class eAutoStartEnum(IntEnum):
+        None_ = 0x0
+        AllModes = 0x1
+        Seasonal = 0x2
+        OnSelected = 0x3
+
+    AutoStart: Annotated[
+        c_enum32[eAutoStartEnum], Field(c_enum32[eAutoStartEnum], 0x438)
+    ]
+    BeginCheckFrequency: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x43C)]
+    CancelConditionTest: Annotated[
+        c_enum32[enums.cGcMissionConditionTest],
+        Field(c_enum32[enums.cGcMissionConditionTest], 0x440),
+    ]
+
+    class eMessageCompleteEnum(IntEnum):
+        Default = 0x0
+        Always = 0x1
+        Never = 0x2
+
+    MessageComplete: Annotated[
+        c_enum32[eMessageCompleteEnum], Field(c_enum32[eMessageCompleteEnum], 0x444)
+    ]
+
+    class eMessageStartEnum(IntEnum):
+        Default = 0x0
+        Always = 0x1
+        Never = 0x2
+
+    MessageStart: Annotated[
+        c_enum32[eMessageStartEnum], Field(c_enum32[eMessageStartEnum], 0x448)
+    ]
+    MissionCategory: Annotated[
+        c_enum32[enums.cGcMissionCategory],
+        Field(c_enum32[enums.cGcMissionCategory], 0x44C),
+    ]
+
+    class eMissionClassEnum(IntEnum):
+        Primary = 0x0
+        Secondary = 0x1
+        ChainedSecondary = 0x2
+        Guide = 0x3
+        Wiki = 0x4
+        Seasonal = 0x5
+        Milestone = 0x6
+        Atlas = 0x7
+        BlackHole = 0x8
+        FleetSupport = 0x9
+        Settlement = 0xA
+
+    MissionClass: Annotated[
+        c_enum32[eMissionClassEnum], Field(c_enum32[eMissionClassEnum], 0x450)
+    ]
+    MissionPageHint: Annotated[
+        c_enum32[enums.cGcMissionPageHint],
+        Field(c_enum32[enums.cGcMissionPageHint], 0x454),
+    ]
+    MissionPriority: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x458)]
+    StartConditionTest: Annotated[
+        c_enum32[enums.cGcMissionConditionTest],
+        Field(c_enum32[enums.cGcMissionConditionTest], 0x45C),
+    ]
+    MissionDescSwitchOverride: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x460)
+    ]
+    MissionObjective: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x480)
+    ]
+    BlocksPinning: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4A0)]
+    CancelSetsComplete: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4A1)]
+    CanRenounce: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4A2)]
+    ForcesBuildMenuHint: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4A3)]
+    ForcesPageHint: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4A4)]
+    IsLegacy: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4A5)]
+    IsProceduralAllowed: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4A6)]
+    IsRecurring: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4A7)]
+    MissionHasColourOverride: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4A8)]
+    MissionIsCritical: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4A9)]
+    PrefixTitle: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4AA)]
+    RequiresSettlement: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4AB)]
+    RestartOnCompletion: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4AC)]
+    StartIsCancel: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4AD)]
+    TakeCommunityMissionIDFromSeasonData: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x4AE)
+    ]
+    TelemetryUpload: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4AF)]
+    UseFirstPurpleSystemDetailsInLogInfo: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x4B0)
+    ]
+    UseScanEventDetailsInLogInfo: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4B1)]
+    UseSeasonTitleOverride: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4B2)]
+
+
+@partial_struct
+class cGcMissionTable(Structure):
+    Missions: Annotated[
+        cGcGenericMissionSequence, Field(cGcGenericMissionSequence, 0x0)
+    ]
+
+
+@partial_struct
+class cGcProductTable(Structure):
+    Table: Annotated[
+        basic.cTkDynamicArray[cGcProductData],
+        Field(basic.cTkDynamicArray[cGcProductData], 0x0),
+    ]
+
+
+@partial_struct
+class cGcMaintenanceOverrideTable(Structure):
+    Table: Annotated[
+        basic.cTkDynamicArray[cGcMaintenanceOverride],
+        Field(basic.cTkDynamicArray[cGcMaintenanceOverride], 0x0),
+    ]
+
+
+@partial_struct
+class cGcSettlementPerksTable(Structure):
+    Table: Annotated[
+        basic.cTkDynamicArray[cGcSettlementPerkData],
+        Field(basic.cTkDynamicArray[cGcSettlementPerkData], 0x0),
+    ]
+
+
+@partial_struct
+class cGcProceduralProductTable(Structure):
+    Table: Annotated[cGcProceduralProductData, Field(cGcProceduralProductData, 0x0)]
+
+
+@partial_struct
+class cGcNPCInteractiveObjectComponentData(Structure):
+    States: Annotated[
+        basic.cTkDynamicArray[cGcNPCInteractiveObjectState],
+        Field(basic.cTkDynamicArray[cGcNPCInteractiveObjectState], 0x0),
+    ]
+    DurationMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x10)]
+    DurationMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14)]
+    InteractiveObjectType: Annotated[
+        c_enum32[enums.cGcNPCInteractiveObjectType],
+        Field(c_enum32[enums.cGcNPCInteractiveObjectType], 0x18),
+    ]
+    MaxCapacity: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x1C)]
+
+
+@partial_struct
+class cGcCreatureSpawnComponentData(Structure):
+    SpecificModel: Annotated[cGcResourceElement, Field(cGcResourceElement, 0x0)]
+    Creature: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x48)]
+    Model: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x58)]
+    Seed: Annotated[basic.GcSeed, Field(basic.GcSeed, 0x68)]
+    SpawnOptionList: Annotated[
+        basic.cTkDynamicArray[cGcSpawnComponentOption],
+        Field(basic.cTkDynamicArray[cGcSpawnComponentOption], 0x78),
+    ]
+    TriggerID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x88)]
+    CreatureType: Annotated[
+        c_enum32[enums.cGcCreatureTypes], Field(c_enum32[enums.cGcCreatureTypes], 0x98)
+    ]
+    FunctionKey: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x9C)]
+    Scale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xA0)]
+    ShipAIOverride: Annotated[
+        c_enum32[enums.cGcAISpaceshipTypes],
+        Field(c_enum32[enums.cGcAISpaceshipTypes], 0xA4),
+    ]
+
+    class eSpawnerModeEnum(IntEnum):
+        Hidden = 0x0
+        Visible = 0x1
+        HideOnSpawn = 0x2
+        HiddenTimer = 0x3
+
+    SpawnerMode: Annotated[
+        c_enum32[eSpawnerModeEnum], Field(c_enum32[eSpawnerModeEnum], 0xA8)
+    ]
+    StartTimeMax: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xAC)]
+    StartTimeMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xB0)]
+    TriggerDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xB4)]
+    SpawnAlert: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xB8)]
+
+
+@partial_struct
+class cGcScanEventTable(Structure):
+    Events: Annotated[
+        basic.cTkDynamicArray[cGcScanEventData],
+        Field(basic.cTkDynamicArray[cGcScanEventData], 0x0),
+    ]
+
+
+@partial_struct
+class cGcProjectileDataTable(Structure):
+    Lasers: Annotated[
+        basic.cTkDynamicArray[cGcLaserBeamData],
+        Field(basic.cTkDynamicArray[cGcLaserBeamData], 0x0),
+    ]
+    Table: Annotated[
+        basic.cTkDynamicArray[cGcProjectileData],
+        Field(basic.cTkDynamicArray[cGcProjectileData], 0x10),
+    ]
+
+
+@partial_struct
+class cGcShipOwnershipComponentData(Structure):
+    Data: Annotated[cGcSpaceshipComponentData, Field(cGcSpaceshipComponentData, 0x0)]
+
+
+@partial_struct
+class cTkParticleData(Structure):
+    SecondRotationInfo: Annotated[cTkEmitterRotation, Field(cTkEmitterRotation, 0x0)]
+    ColourEnd: Annotated[basic.Colour, Field(basic.Colour, 0x50)]
+    ColourMiddle: Annotated[basic.Colour, Field(basic.Colour, 0x60)]
+    ColourStart: Annotated[basic.Colour, Field(basic.Colour, 0x70)]
+    EmitterDirection: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x80)]
+    RotateAroundEmitterAxis: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x90)]
+    RotationAxis: Annotated[basic.Vector3f, Field(basic.Vector3f, 0xA0)]
+    RotationPivot: Annotated[basic.Vector3f, Field(basic.Vector3f, 0xB0)]
+    SpawnOffsetParams: Annotated[basic.Vector3f, Field(basic.Vector3f, 0xC0)]
+    ParticleSize: Annotated[cTkParticleSize, Field(cTkParticleSize, 0xD0)]
+    BurstData: Annotated[cTkParticleBurstData, Field(cTkParticleBurstData, 0x1E0)]
+    AlphaThreshold: Annotated[
+        cTkEmitterFloatProperty, Field(cTkEmitterFloatProperty, 0x258)
+    ]
+    EmissionRate: Annotated[
+        cTkEmitterFloatProperty, Field(cTkEmitterFloatProperty, 0x290)
+    ]
+    EmitterLife: Annotated[
+        cTkEmitterFloatProperty, Field(cTkEmitterFloatProperty, 0x2C8)
+    ]
+    ParticleDamping: Annotated[
+        cTkEmitterFloatProperty, Field(cTkEmitterFloatProperty, 0x300)
+    ]
+    ParticleDrag: Annotated[
+        cTkEmitterFloatProperty, Field(cTkEmitterFloatProperty, 0x338)
+    ]
+    ParticleGravity: Annotated[
+        cTkEmitterFloatProperty, Field(cTkEmitterFloatProperty, 0x370)
+    ]
+    ParticleLife: Annotated[
+        cTkEmitterFloatProperty, Field(cTkEmitterFloatProperty, 0x3A8)
+    ]
+    ParticleSizeY: Annotated[
+        cTkEmitterFloatProperty, Field(cTkEmitterFloatProperty, 0x3E0)
+    ]
+    ParticleSpeedMultiplier: Annotated[
+        cTkEmitterFloatProperty, Field(cTkEmitterFloatProperty, 0x418)
+    ]
+    Rotation: Annotated[cTkEmitterFloatProperty, Field(cTkEmitterFloatProperty, 0x450)]
+    _3DGeom: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x488)]
+    TrailPath: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0x498)
+    ]
+    UserColour: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x4A8)]
+    WindDrift: Annotated[cTkEmitterWindDrift, Field(cTkEmitterWindDrift, 0x4B8)]
+    BillboardAlignment: Annotated[
+        cTkEmitterBillboardAlignment, Field(cTkEmitterBillboardAlignment, 0x4D4)
+    ]
+    CameraDistanceFade: Annotated[cTkFloatRange, Field(cTkFloatRange, 0x4DC)]
+    EmitFromParticleInfo: Annotated[
+        cTkEmitFromParticleInfo, Field(cTkEmitFromParticleInfo, 0x4E4)
+    ]
+
+    class eAlignmentEnum(IntEnum):
+        Rotation = 0x0
+        Velocity = 0x1
+        VelocityScreenSpace = 0x2
+
+    Alignment: Annotated[
+        c_enum32[eAlignmentEnum], Field(c_enum32[eAlignmentEnum], 0x4EC)
+    ]
+    AlphaVariance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4F0)]
+    AudioEvent: Annotated[ctypes.c_uint32, Field(ctypes.c_uint32, 0x4F4)]
+    Delay: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4F8)]
+
+    class eDragTypeEnum(IntEnum):
+        IgnoreGravity = 0x0
+        PhysicallyBased = 0x1
+        ApplyWind = 0x2
+
+    DragType: Annotated[c_enum32[eDragTypeEnum], Field(c_enum32[eDragTypeEnum], 0x4FC)]
+    EmitterMidLifeRatio: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x500)]
+
+    class eEmitterQualityLevelEnum(IntEnum):
+        All = 0x0
+        Low = 0x1
+        High = 0x2
+
+    EmitterQualityLevel: Annotated[
+        c_enum32[eEmitterQualityLevelEnum],
+        Field(c_enum32[eEmitterQualityLevelEnum], 0x504),
+    ]
+    EmitterSpreadAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x508)]
+    EmitterSpreadAngleMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x50C)]
+
+    class eFlipbookPlaybackRateEnum(IntEnum):
+        Absolute = 0x0
+        RelativeToMax = 0x1
+        OnceToCompletion = 0x2
+        Random = 0x3
+
+    FlipbookPlaybackRate: Annotated[
+        c_enum32[eFlipbookPlaybackRateEnum],
+        Field(c_enum32[eFlipbookPlaybackRateEnum], 0x510),
+    ]
+    HueVariance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x514)]
+    LightnessVariance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x518)]
+    LimitLifetimeOnMove: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x51C)]
+    MaxCount: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x520)]
+    MaxRenderCameraHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x524)]
+    MaxRenderDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x528)]
+    MaxSpawnDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x52C)]
+
+    class eOnRefractionsDisabledEnum(IntEnum):
+        Hide = 0x0
+        AlphaBlend = 0x1
+
+    OnRefractionsDisabled: Annotated[
+        c_enum32[eOnRefractionsDisabledEnum],
+        Field(c_enum32[eOnRefractionsDisabledEnum], 0x530),
+    ]
+    RotateAroundEmitter: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x534)]
+    SaturationVariance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x538)]
+    SoftFadeStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x53C)]
+
+    class eSpawnOffsetTypeEnum(IntEnum):
+        Sphere = 0x0
+        Box = 0x1
+        Disc = 0x2
+        Cone = 0x3
+        Donut = 0x4
+        Point = 0x5
+
+    SpawnOffsetType: Annotated[
+        c_enum32[eSpawnOffsetTypeEnum], Field(c_enum32[eSpawnOffsetTypeEnum], 0x540)
+    ]
+    StartOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x544)]
+    StartRotationVariation: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x548)]
+    SurfaceDistanceFadeStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x54C)]
+    TrackEmitterPosition: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x550)]
+    TrailRatio: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x554)]
+    UCoordinate: Annotated[
+        c_enum32[enums.cTkCoordinateOrientation],
+        Field(c_enum32[enums.cTkCoordinateOrientation], 0x558),
+    ]
+    VCoordinate: Annotated[
+        c_enum32[enums.cTkCoordinateOrientation],
+        Field(c_enum32[enums.cTkCoordinateOrientation], 0x55C),
+    ]
+    Variation: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x560)]
+    VelocityInheritance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x564)]
+    EmitterLifeCurve1: Annotated[
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x568)
+    ]
+    EmitterLifeCurve2: Annotated[
+        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x569)
+    ]
+    EnableSecondRotation: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x56A)]
+    FadeRefractionsAtScreenEdge: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x56B)]
+    GPURender: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x56C)]
+    Oneshot: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x56D)]
+    StartEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x56E)]
+    TrailIsRibbon: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x56F)]
+
+
+@partial_struct
+class cMapping(Structure):
+    InfluencesOnMappedPoint: Annotated[
+        basic.cTkDynamicArray[cInfluencesOnMappedPoint],
+        Field(basic.cTkDynamicArray[cInfluencesOnMappedPoint], 0x0),
+    ]
+    NumMappedPoints: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x10)]
+    NumSimI: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x14)]
+    NumSimJ: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x18)]
+    Name: Annotated[basic.cTkFixedString0x40, Field(basic.cTkFixedString0x40, 0x1C)]
+
+
+@partial_struct
+class cTkVoxelGeneratorSettingsElement(Structure):
+    Max: Annotated[cTkVoxelGeneratorData, Field(cTkVoxelGeneratorData, 0x0)]
+    Min: Annotated[cTkVoxelGeneratorData, Field(cTkVoxelGeneratorData, 0x1150)]
+
+
+@partial_struct
+class cGcPlanetGenerationIntermediateData(Structure):
+    CreatureRoles: Annotated[
+        cGcCreatureRoleDataTable, Field(cGcCreatureRoleDataTable, 0x0)
+    ]
+    CreatureAirFile: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0x20)
+    ]
+    CreatureCaveFile: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0x30)
+    ]
+    CreatureExtraWaterFile: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0x40)
+    ]
+    CreatureLandFile: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0x50)
+    ]
+    CreatureRobotFile: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0x60)
+    ]
+    CreatureWaterFile: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0x70)
+    ]
+    ExternalObjectListIndices: Annotated[
+        basic.cTkDynamicArray[ctypes.c_int32],
+        Field(basic.cTkDynamicArray[ctypes.c_int32], 0x80),
+    ]
+    ExternalObjectLists: Annotated[
+        basic.cTkDynamicArray[cGcExternalObjectListOptions],
+        Field(basic.cTkDynamicArray[cGcExternalObjectListOptions], 0x90),
+    ]
+    Seed: Annotated[basic.GcSeed, Field(basic.GcSeed, 0xA0)]
+    TerrainFile: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0xB0)
+    ]
+    Terrain: Annotated[cGcTerrainControls, Field(cGcTerrainControls, 0xC0)]
+    Biome: Annotated[
+        c_enum32[enums.cGcBiomeType], Field(c_enum32[enums.cGcBiomeType], 0x138)
+    ]
+    BiomeSubType: Annotated[
+        c_enum32[enums.cGcBiomeSubType], Field(c_enum32[enums.cGcBiomeSubType], 0x13C)
+    ]
+    Class: Annotated[
+        c_enum32[enums.cGcPlanetClass], Field(c_enum32[enums.cGcPlanetClass], 0x140)
+    ]
+    Size: Annotated[
+        c_enum32[enums.cGcPlanetSize], Field(c_enum32[enums.cGcPlanetSize], 0x144)
+    ]
+    StarType: Annotated[
+        c_enum32[enums.cGcGalaxyStarTypes],
+        Field(c_enum32[enums.cGcGalaxyStarTypes], 0x148),
+    ]
+    TerrainSettingIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x14C)]
+    Prime: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x150)]
+
+
+@partial_struct
+class cGcEnvironmentSpawnData(Structure):
+    Creatures: Annotated[
+        basic.cTkDynamicArray[cGcCreatureSpawnData],
+        Field(basic.cTkDynamicArray[cGcCreatureSpawnData], 0x0),
+    ]
+    DetailObjects: Annotated[
+        basic.cTkDynamicArray[cGcObjectSpawnData],
+        Field(basic.cTkDynamicArray[cGcObjectSpawnData], 0x10),
+    ]
+    DistantObjects: Annotated[
+        basic.cTkDynamicArray[cGcObjectSpawnData],
+        Field(basic.cTkDynamicArray[cGcObjectSpawnData], 0x20),
+    ]
+    Landmarks: Annotated[
+        basic.cTkDynamicArray[cGcObjectSpawnData],
+        Field(basic.cTkDynamicArray[cGcObjectSpawnData], 0x30),
+    ]
+    Objects: Annotated[
+        basic.cTkDynamicArray[cGcObjectSpawnData],
+        Field(basic.cTkDynamicArray[cGcObjectSpawnData], 0x40),
+    ]
+    SelectableObjects: Annotated[
+        basic.cTkDynamicArray[cGcSelectableObjectSpawnList],
+        Field(basic.cTkDynamicArray[cGcSelectableObjectSpawnList], 0x50),
+    ]
+
+
+@partial_struct
+class cGcPlanetBuildingData(Structure):
+    Buildings: Annotated[
+        basic.cTkDynamicArray[cGcBuildingSpawnData],
+        Field(basic.cTkDynamicArray[cGcBuildingSpawnData], 0x0),
+    ]
+    BuildingSlots: Annotated[
+        basic.cTkDynamicArray[cGcBuildingSpawnSlot],
+        Field(basic.cTkDynamicArray[cGcBuildingSpawnSlot], 0x10),
+    ]
+    OverrideBuildings: Annotated[
+        basic.cTkDynamicArray[cGcBuildingOverrideData],
+        Field(basic.cTkDynamicArray[cGcBuildingOverrideData], 0x20),
+    ]
+    PlanetUA: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x30)]
+    PlanetRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x38)]
+    Spacing: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x3C)]
+    VoronoiPointDivisions: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x40)]
+    VoronoiPointSeed: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x44)]
+    VoronoiSectorSeed: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x48)]
+    InitialBuildingsPlaced: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4C)]
+    IsPrime: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4D)]
+    IsWaterworld: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4E)]
+
+
+@partial_struct
+class cGcObjectSpawnDataArray(Structure):
+    Objects: Annotated[
+        basic.cTkDynamicArray[cGcObjectSpawnData],
+        Field(basic.cTkDynamicArray[cGcObjectSpawnData], 0x0),
+    ]
+    MaxObjectsToSpawn: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x10)]
+    TileType: Annotated[
+        c_enum32[enums.cGcTerrainTileType],
+        Field(c_enum32[enums.cGcTerrainTileType], 0x14),
+    ]
+
+
+@partial_struct
+class cGcSeasonalGameModeData(Structure):
+    SpecificPets: Annotated[cGcPetData, Field(cGcPetData, 0x0)]
+    Inventory: Annotated[cGcInventoryContainer, Field(cGcInventoryContainer, 0x2490)]
+    Inventory_Cargo: Annotated[
+        cGcInventoryContainer, Field(cGcInventoryContainer, 0x25F0)
+    ]
+    Inventory_TechOnly: Annotated[
+        cGcInventoryContainer, Field(cGcInventoryContainer, 0x2750)
+    ]
+    ShipInventory: Annotated[
+        cGcInventoryContainer, Field(cGcInventoryContainer, 0x28B0)
+    ]
+    WeaponInventory: Annotated[
+        cGcInventoryContainer, Field(cGcInventoryContainer, 0x2A10)
+    ]
+    SeasonalUAStationTradeData: Annotated[cGcTradeData, Field(cGcTradeData, 0x2B70)]
+    InitialJoaoBox: Annotated[
+        cGcMissionSequenceDetailMessage, Field(cGcMissionSequenceDetailMessage, 0x2C58)
+    ]
+    InitialJoaoBoxNoMainSave: Annotated[
+        cGcMissionSequenceDetailMessage, Field(cGcMissionSequenceDetailMessage, 0x2CF0)
+    ]
+    AltBossRewards: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x2D88)]
+    SeasonTransferInventoryConfig: Annotated[
+        cGcSeasonTransferInventoryConfig,
+        Field(cGcSeasonTransferInventoryConfig, 0x2DB8),
+    ]
+    CommunityProgressTitle: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x2DE8)
+    ]
+    CommunityTierCompleteLabel: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x2E08)
+    ]
+    CommunityTierLabel: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x2E28)
+    ]
+    CommunityTierProgressLabel: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x2E48)
+    ]
+    FinalCantRewardMessage: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x2E68)
+    ]
+    FinalStageTitle: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x2E88)
+    ]
+    MainMissionMessage: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x2EA8)
+    ]
+    MainMissionTitle: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x2EC8)
+    ]
+    MilestoneWithStageLocId: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x2EE8)
+    ]
+    SeasonName: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x2F08)
+    ]
+    SeasonNameUpper: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x2F28)
+    ]
+    MainIcon: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x2F48)]
+    ShipInventoryLayout: Annotated[
+        cGcInventoryLayout, Field(cGcInventoryLayout, 0x2F60)
+    ]
+    ShipTechInventoryLayout: Annotated[
+        cGcInventoryLayout, Field(cGcInventoryLayout, 0x2F78)
+    ]
+    WeaponInventoryLayout: Annotated[
+        cGcInventoryLayout, Field(cGcInventoryLayout, 0x2F90)
+    ]
+    AdditionalTradeProducts: Annotated[
+        basic.cTkDynamicArray[basic.TkID0x10],
+        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x2FA8),
+    ]
+    CreateContextSaveDataMask: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x2FB8)]
+    FinalReward: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x2FC8)]
+    FinalRewardSwitchAlt: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x2FD8)]
+    ForceBlackHolesAtPartyUAs: Annotated[
+        basic.cTkDynamicArray[ctypes.c_int32],
+        Field(basic.cTkDynamicArray[ctypes.c_int32], 0x2FE8),
+    ]
+    ForgottenProducts: Annotated[
+        basic.cTkDynamicArray[basic.TkID0x10],
+        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x2FF8),
+    ]
+    FreighterBaseOverrideFilename: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0x3008)
+    ]
+    IntroSequencePOI: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x3018)]
+    NeverLearnableTech: Annotated[
+        basic.cTkDynamicArray[basic.TkID0x10],
+        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x3028),
+    ]
+    NeverTradeProducts: Annotated[
+        basic.cTkDynamicArray[basic.TkID0x10],
+        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x3038),
+    ]
+    OverrideFreighterFilename: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0x3048)
+    ]
+    OverrideMTFilename: Annotated[
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0x3058)
+    ]
+    ProductTable: Annotated[
+        basic.cTkDynamicArray[cGcProductData],
+        Field(basic.cTkDynamicArray[cGcProductData], 0x3068),
+    ]
+    RandomPetConstraints: Annotated[
+        basic.cTkDynamicArray[cGcSeasonPetConstraints],
+        Field(basic.cTkDynamicArray[cGcSeasonPetConstraints], 0x3078),
+    ]
+    SandwormOverrides: Annotated[
+        basic.cTkDynamicArray[cGcSandwormTimerAndFrequencyOverride],
+        Field(basic.cTkDynamicArray[cGcSandwormTimerAndFrequencyOverride], 0x3088),
+    ]
+    ScanEventTable: Annotated[cGcScanEventTable, Field(cGcScanEventTable, 0x3098)]
+    ShipSeed: Annotated[basic.GcSeed, Field(basic.GcSeed, 0x30A8)]
+    Stages: Annotated[
+        basic.cTkDynamicArray[cGcSeasonalStage],
+        Field(basic.cTkDynamicArray[cGcSeasonalStage], 0x30B8),
+    ]
+    StartPlanetRareSubstanceOverride: Annotated[
+        basic.TkID0x10, Field(basic.TkID0x10, 0x30C8)
+    ]
+    StatsToPersistOnReset: Annotated[
+        basic.cTkDynamicArray[cGcPersistedStatData],
+        Field(basic.cTkDynamicArray[cGcPersistedStatData], 0x30D8),
+    ]
+    SubstanceTable: Annotated[
+        basic.cTkDynamicArray[cGcRealitySubstanceData],
+        Field(basic.cTkDynamicArray[cGcRealitySubstanceData], 0x30E8),
+    ]
+    SwitchContextSaveDataMask: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x30F8)]
+    TechnologyTable: Annotated[
+        basic.cTkDynamicArray[cGcTechnology],
+        Field(basic.cTkDynamicArray[cGcTechnology], 0x3108),
+    ]
+    ValidSpawnBuildings: Annotated[
+        basic.cTkDynamicArray[c_enum32[enums.cGcBuildingClassification]],
+        Field(basic.cTkDynamicArray[c_enum32[enums.cGcBuildingClassification]], 0x3118),
+    ]
+    WeaponSeed: Annotated[basic.GcSeed, Field(basic.GcSeed, 0x3128)]
+    EndTimeUTC: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x3138)]
+    Hash: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x3140)]
+    StartTimeUTC: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x3148)]
+    UAOverrideValue: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x3150)]
+    DifficultyMinimums: Annotated[
+        cGcDifficultySettingsData, Field(cGcDifficultySettingsData, 0x3158)
+    ]
+    AbandonedFreighterHazardProtectionMul: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x31B8)
+    ]
+    BuildingRadiusShipOffsetMultiplier: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x31BC)
+    ]
+    DifficultySettingPreset: Annotated[
+        c_enum32[enums.cGcDifficultyPresetType],
+        Field(c_enum32[enums.cGcDifficultyPresetType], 0x31C0),
+    ]
+    DisplayNumber: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x31C4)]
+    DistanceFromShipAtStartOfGame: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x31C8)
+    ]
+    EnergyDrainMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x31CC)]
+    FarmPlantsTimerMul: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x31D0)]
+    FreighterBattleEarlyWarpsOverride: Annotated[
+        ctypes.c_int32, Field(ctypes.c_int32, 0x31D4)
+    ]
+    FreighterRace: Annotated[
+        c_enum32[enums.cGcAlienRace], Field(c_enum32[enums.cGcAlienRace], 0x31D8)
+    ]
+    GameMode: Annotated[
+        c_enum32[enums.cGcGameMode], Field(c_enum32[enums.cGcGameMode], 0x31DC)
+    ]
+    HazardProtectionDrainMultiplier: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x31E0)
+    ]
+    QuestSubstanceReducer: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x31E4)]
+    RemixNumber: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x31E8)]
+    SandwormGlobalOverrideSpawnChance: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x31EC)
+    ]
+    SandwormGlobalOverrideTimer: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x31F0)
+    ]
+    SeasonId: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x31F4)]
+    SeasonNumber: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x31F8)]
+    SeasonStartMusicOverride: Annotated[
+        c_enum32[enums.cGcAudioWwiseEvents],
+        Field(c_enum32[enums.cGcAudioWwiseEvents], 0x31FC),
+    ]
+    ShipType: Annotated[
+        c_enum32[enums.cGcSpaceshipClasses],
+        Field(c_enum32[enums.cGcSpaceshipClasses], 0x3200),
+    ]
+    StartingPetSlots: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x3204)]
+    StartingSuitCargoSlots: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x3208)]
+    StartingSuitSlots: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x320C)]
+    StartingSuitTechSlots: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x3210)]
+    StartingUAScreenFilter: Annotated[
+        c_enum32[enums.cGcScreenFilters],
+        Field(c_enum32[enums.cGcScreenFilters], 0x3214),
+    ]
+    TechCostMultiplier: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x3218)]
+    FinalRewardDescription: Annotated[
+        basic.cTkFixedString0x200, Field(basic.cTkFixedString0x200, 0x321C)
+    ]
+    Description: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x341C)
+    ]
+    SeasonalUAOverride: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x343C)
+    ]
+    Subtitle: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x345C)
+    ]
+    Summary: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x347C)
+    ]
+    Title: Annotated[basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x349C)]
+    AllowMissionDetailMessages: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x34BC)]
+    AllowOnlyCorvetteShipPurchases: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x34BD)
+    ]
+    AllowSaveContextMultitoolTransfer: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x34BE)
+    ]
+    AllowSaveContextShipTransfer: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x34BF)]
+    AlwaysStormy: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x34C0)]
+    AlwaysUseSeasonalStationTradeData: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x34C1)
+    ]
+    BlockAggressiveSentinelsInStartSystem: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x34C2)
+    ]
+    BlockExtremeWeatherInStartSystem: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x34C3)
+    ]
+    BlockFirstSpaceMusic: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x34C4)]
+    BlockStormsAtStart: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x34C5)]
+    CarnageMode: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x34C6)]
+    CompatibleWithState: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x34C7)]
+    DefaultToPvPOff: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x34C8)]
+    DoCommunityMissionTextSubstitutions: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x34C9)
+    ]
+    ForceAllSentinelsAggressive: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x34CA)]
+    ForceAllSystemsAbandoned: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x34CB)]
+    ForceDeepSpaceAmbientFrigatesOnInfested: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x34CC)
+    ]
+    ForceStartSystemAbandoned: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x34CD)]
+    ForceStartSystemTernary: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x34CE)]
+    HasBeenConverted: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x34CF)]
+    IncreaseXClassTechOddsWithCommTier: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x34D0)
+    ]
+    MustCraftInBases: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x34D1)]
+    OnlyCorvetteLauncherCanBeRepaired: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x34D2)
+    ]
+    OnlyCorvettesSpawnWhenPlayerTeleports: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x34D3)
+    ]
+    OverrideStartingUAScreenFilter: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x34D4)
+    ]
+    PlayStartMusicInIntro: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x34D5)]
+    PurpleSystemsUnlocked: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x34D6)]
+    ResetSaveOnDeath: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x34D7)]
+    SandwormGlobalOverride: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x34D8)]
+    ShipIsAtDifferentBuildingToPlayer: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x34D9)
+    ]
+    ShipStartsDamaged: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x34DA)]
+    StartAboardFreighter: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x34DB)]
+    StartNextToShip: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x34DC)]
+    StartWithFreighter: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x34DD)]
+    TrashInventoryOnGalaxyTravel: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x34DE)]
+    UseDefaultAppearance: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x34DF)]
+    UseRandomPet: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x34E0)]
+    UseSeasonalUAStationTradeData: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x34E1)
+    ]
+    UseSpookHazardOnly: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x34E2)]
+    UseStartPlanetObjectListOverrides: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x34E3)
+    ]
 
 
 @partial_struct
@@ -46803,869 +47720,36 @@ class cGcPlayerStateData(Structure):
 
 
 @partial_struct
-class cGcModBasePart(Structure):
-    ProductData: Annotated[cGcProductData, Field(cGcProductData, 0x0)]
-    PartData: Annotated[cGcBaseBuildingEntry, Field(cGcBaseBuildingEntry, 0x300)]
-    ID: Annotated[basic.cTkFixedString0x40, Field(basic.cTkFixedString0x40, 0x548)]
-
-
-@partial_struct
-class cGcDefaultSaveData(Structure):
-    State: Annotated[cGcPlayerStateData, Field(cGcPlayerStateData, 0x0)]
-    Spawn: Annotated[cGcPlayerSpawnStateData, Field(cGcPlayerSpawnStateData, 0x7F430)]
-
-
-@partial_struct
-class cGcBaseBuildingPartsTable(Structure):
-    Parts: Annotated[
-        basic.cTkDynamicArray[cGcBaseBuildingPart],
-        Field(basic.cTkDynamicArray[cGcBaseBuildingPart], 0x0),
-    ]
-
-
-@partial_struct
-class cGcGenericMissionSequence(Structure):
-    MissionColourOverride: Annotated[basic.Colour, Field(basic.Colour, 0x0)]
-    TradingDataOverride: Annotated[cGcTradeData, Field(cGcTradeData, 0x10)]
-    MissionBoardOptions: Annotated[
-        cGcMissionBoardOptions, Field(cGcMissionBoardOptions, 0xF8)
-    ]
-    SeasonalLogTextOverrides: Annotated[
-        cGcSeasonalLogOverrides, Field(cGcSeasonalLogOverrides, 0x178)
-    ]
-    DefaultItems: Annotated[
-        cGcDefaultMissionItemsTable, Field(cGcDefaultMissionItemsTable, 0x1E8)
-    ]
-    MissionPageLocID: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x238)
-    ]
-    SettlementAbandonOSD: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x258)
-    ]
-    MissionDescriptions: Annotated[
-        cGcNumberedTextList, Field(cGcNumberedTextList, 0x278)
-    ]
-    MissionIcon: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x290)]
-    MissionIconNotSelected: Annotated[
-        cTkTextureResource, Field(cTkTextureResource, 0x2A8)
-    ]
-    MissionIconSelected: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x2C0)]
-    MissionProcDescriptionA: Annotated[
-        cGcNumberedTextList, Field(cGcNumberedTextList, 0x2D8)
-    ]
-    MissionProcDescriptionB: Annotated[
-        cGcNumberedTextList, Field(cGcNumberedTextList, 0x2F0)
-    ]
-    MissionProcDescriptionC: Annotated[
-        cGcNumberedTextList, Field(cGcNumberedTextList, 0x308)
-    ]
-    MissionProcDescriptionHeader: Annotated[
-        cGcNumberedTextList, Field(cGcNumberedTextList, 0x320)
-    ]
-    MissionSubtitles: Annotated[cGcNumberedTextList, Field(cGcNumberedTextList, 0x338)]
-    MissionTitles: Annotated[cGcNumberedTextList, Field(cGcNumberedTextList, 0x350)]
-    CancelingConditions: Annotated[
-        basic.cTkDynamicArray[basic.NMSTemplate],
-        Field(basic.cTkDynamicArray[basic.NMSTemplate], 0x368),
-    ]
-    Costs: Annotated[
-        basic.cTkDynamicArray[cGcCostTableEntry],
-        Field(basic.cTkDynamicArray[cGcCostTableEntry], 0x378),
-    ]
-    Dialog: Annotated[cGcAlienPuzzleTable, Field(cGcAlienPuzzleTable, 0x388)]
-    FinalStageVersions: Annotated[
-        basic.cTkDynamicArray[cGcGenericMissionVersionProgress],
-        Field(basic.cTkDynamicArray[cGcGenericMissionVersionProgress], 0x398),
-    ]
-    MissionBuildMenuHint: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x3A8)]
-    MissionID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x3B8)]
-    NextMissionHint: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x3C8)]
-    Rewards: Annotated[
-        basic.cTkDynamicArray[cGcGenericRewardTableEntry],
-        Field(basic.cTkDynamicArray[cGcGenericRewardTableEntry], 0x3D8),
-    ]
-    ScanEvents: Annotated[
-        basic.cTkDynamicArray[cGcScanEventData],
-        Field(basic.cTkDynamicArray[cGcScanEventData], 0x3E8),
-    ]
-    Stages: Annotated[
-        basic.cTkDynamicArray[cGcGenericMissionStage],
-        Field(basic.cTkDynamicArray[cGcGenericMissionStage], 0x3F8),
-    ]
-    StartingConditions: Annotated[
-        basic.cTkDynamicArray[basic.NMSTemplate],
-        Field(basic.cTkDynamicArray[basic.NMSTemplate], 0x408),
-    ]
-    UseCommunityMissionForLog: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x418)]
-    WikiMissionBlockedBySeasons: Annotated[
-        basic.cTkDynamicArray[ctypes.c_int32],
-        Field(basic.cTkDynamicArray[ctypes.c_int32], 0x428),
-    ]
-
-    class eAutoStartEnum(IntEnum):
-        None_ = 0x0
-        AllModes = 0x1
-        Seasonal = 0x2
-        OnSelected = 0x3
-
-    AutoStart: Annotated[
-        c_enum32[eAutoStartEnum], Field(c_enum32[eAutoStartEnum], 0x438)
-    ]
-    BeginCheckFrequency: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x43C)]
-    CancelConditionTest: Annotated[
-        c_enum32[enums.cGcMissionConditionTest],
-        Field(c_enum32[enums.cGcMissionConditionTest], 0x440),
-    ]
-
-    class eMessageCompleteEnum(IntEnum):
-        Default = 0x0
-        Always = 0x1
-        Never = 0x2
-
-    MessageComplete: Annotated[
-        c_enum32[eMessageCompleteEnum], Field(c_enum32[eMessageCompleteEnum], 0x444)
-    ]
-
-    class eMessageStartEnum(IntEnum):
-        Default = 0x0
-        Always = 0x1
-        Never = 0x2
-
-    MessageStart: Annotated[
-        c_enum32[eMessageStartEnum], Field(c_enum32[eMessageStartEnum], 0x448)
-    ]
-    MissionCategory: Annotated[
-        c_enum32[enums.cGcMissionCategory],
-        Field(c_enum32[enums.cGcMissionCategory], 0x44C),
-    ]
-
-    class eMissionClassEnum(IntEnum):
-        Primary = 0x0
-        Secondary = 0x1
-        ChainedSecondary = 0x2
-        Guide = 0x3
-        Wiki = 0x4
-        Seasonal = 0x5
-        Milestone = 0x6
-        Atlas = 0x7
-        BlackHole = 0x8
-        FleetSupport = 0x9
-        Settlement = 0xA
-
-    MissionClass: Annotated[
-        c_enum32[eMissionClassEnum], Field(c_enum32[eMissionClassEnum], 0x450)
-    ]
-    MissionPageHint: Annotated[
-        c_enum32[enums.cGcMissionPageHint],
-        Field(c_enum32[enums.cGcMissionPageHint], 0x454),
-    ]
-    MissionPriority: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x458)]
-    StartConditionTest: Annotated[
-        c_enum32[enums.cGcMissionConditionTest],
-        Field(c_enum32[enums.cGcMissionConditionTest], 0x45C),
-    ]
-    MissionDescSwitchOverride: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x460)
-    ]
-    MissionObjective: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x480)
-    ]
-    BlocksPinning: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4A0)]
-    CancelSetsComplete: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4A1)]
-    CanRenounce: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4A2)]
-    ForcesBuildMenuHint: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4A3)]
-    ForcesPageHint: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4A4)]
-    IsLegacy: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4A5)]
-    IsProceduralAllowed: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4A6)]
-    IsRecurring: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4A7)]
-    MissionHasColourOverride: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4A8)]
-    MissionIsCritical: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4A9)]
-    PrefixTitle: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4AA)]
-    RequiresSettlement: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4AB)]
-    RestartOnCompletion: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4AC)]
-    StartIsCancel: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4AD)]
-    TakeCommunityMissionIDFromSeasonData: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x4AE)
-    ]
-    TelemetryUpload: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4AF)]
-    UseFirstPurpleSystemDetailsInLogInfo: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x4B0)
-    ]
-    UseScanEventDetailsInLogInfo: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4B1)]
-    UseSeasonTitleOverride: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x4B2)]
-
-
-@partial_struct
-class cGcMissionTable(Structure):
-    Missions: Annotated[
-        cGcGenericMissionSequence, Field(cGcGenericMissionSequence, 0x0)
-    ]
-
-
-@partial_struct
-class cGcProductTable(Structure):
-    Table: Annotated[
-        basic.cTkDynamicArray[cGcProductData],
-        Field(basic.cTkDynamicArray[cGcProductData], 0x0),
-    ]
-
-
-@partial_struct
-class cGcMaintenanceOverrideTable(Structure):
-    Table: Annotated[
-        basic.cTkDynamicArray[cGcMaintenanceOverride],
-        Field(basic.cTkDynamicArray[cGcMaintenanceOverride], 0x0),
-    ]
-
-
-@partial_struct
-class cGcSettlementPerksTable(Structure):
-    Table: Annotated[
-        basic.cTkDynamicArray[cGcSettlementPerkData],
-        Field(basic.cTkDynamicArray[cGcSettlementPerkData], 0x0),
-    ]
-
-
-@partial_struct
-class cGcProceduralProductTable(Structure):
-    Table: Annotated[cGcProceduralProductData, Field(cGcProceduralProductData, 0x0)]
-
-
-@partial_struct
-class cGcScanEventTable(Structure):
-    Events: Annotated[
-        basic.cTkDynamicArray[cGcScanEventData],
-        Field(basic.cTkDynamicArray[cGcScanEventData], 0x0),
-    ]
-
-
-@partial_struct
-class cGcProjectileDataTable(Structure):
-    Lasers: Annotated[
-        basic.cTkDynamicArray[cGcLaserBeamData],
-        Field(basic.cTkDynamicArray[cGcLaserBeamData], 0x0),
-    ]
-    Table: Annotated[
-        basic.cTkDynamicArray[cGcProjectileData],
-        Field(basic.cTkDynamicArray[cGcProjectileData], 0x10),
-    ]
-
-
-@partial_struct
-class cGcExternalObjectList(Structure):
-    Objects: Annotated[cGcEnvironmentSpawnData, Field(cGcEnvironmentSpawnData, 0x0)]
-
-
-@partial_struct
-class cGcShipOwnershipComponentData(Structure):
-    Data: Annotated[cGcSpaceshipComponentData, Field(cGcSpaceshipComponentData, 0x0)]
-
-
-@partial_struct
-class cTkParticleData(Structure):
-    SecondRotationInfo: Annotated[cTkEmitterRotation, Field(cTkEmitterRotation, 0x0)]
-    ColourEnd: Annotated[basic.Colour, Field(basic.Colour, 0x50)]
-    ColourMiddle: Annotated[basic.Colour, Field(basic.Colour, 0x60)]
-    ColourStart: Annotated[basic.Colour, Field(basic.Colour, 0x70)]
-    EmitterDirection: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x80)]
-    RotateAroundEmitterAxis: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x90)]
-    RotationAxis: Annotated[basic.Vector3f, Field(basic.Vector3f, 0xA0)]
-    RotationPivot: Annotated[basic.Vector3f, Field(basic.Vector3f, 0xB0)]
-    SpawnOffsetParams: Annotated[basic.Vector3f, Field(basic.Vector3f, 0xC0)]
-    ParticleSize: Annotated[cTkParticleSize, Field(cTkParticleSize, 0xD0)]
-    BurstData: Annotated[cTkParticleBurstData, Field(cTkParticleBurstData, 0x1E0)]
-    AlphaThreshold: Annotated[
-        cTkEmitterFloatProperty, Field(cTkEmitterFloatProperty, 0x258)
-    ]
-    EmissionRate: Annotated[
-        cTkEmitterFloatProperty, Field(cTkEmitterFloatProperty, 0x290)
-    ]
-    EmitterLife: Annotated[
-        cTkEmitterFloatProperty, Field(cTkEmitterFloatProperty, 0x2C8)
-    ]
-    ParticleDamping: Annotated[
-        cTkEmitterFloatProperty, Field(cTkEmitterFloatProperty, 0x300)
-    ]
-    ParticleDrag: Annotated[
-        cTkEmitterFloatProperty, Field(cTkEmitterFloatProperty, 0x338)
-    ]
-    ParticleGravity: Annotated[
-        cTkEmitterFloatProperty, Field(cTkEmitterFloatProperty, 0x370)
-    ]
-    ParticleLife: Annotated[
-        cTkEmitterFloatProperty, Field(cTkEmitterFloatProperty, 0x3A8)
-    ]
-    ParticleSizeY: Annotated[
-        cTkEmitterFloatProperty, Field(cTkEmitterFloatProperty, 0x3E0)
-    ]
-    ParticleSpeedMultiplier: Annotated[
-        cTkEmitterFloatProperty, Field(cTkEmitterFloatProperty, 0x418)
-    ]
-    Rotation: Annotated[cTkEmitterFloatProperty, Field(cTkEmitterFloatProperty, 0x450)]
-    _3DGeom: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x488)]
-    TrailPath: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0x498)
-    ]
-    UserColour: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x4A8)]
-    WindDrift: Annotated[cTkEmitterWindDrift, Field(cTkEmitterWindDrift, 0x4B8)]
-    BillboardAlignment: Annotated[
-        cTkEmitterBillboardAlignment, Field(cTkEmitterBillboardAlignment, 0x4D4)
-    ]
-    CameraDistanceFade: Annotated[cTkFloatRange, Field(cTkFloatRange, 0x4DC)]
-    EmitFromParticleInfo: Annotated[
-        cTkEmitFromParticleInfo, Field(cTkEmitFromParticleInfo, 0x4E4)
-    ]
-
-    class eAlignmentEnum(IntEnum):
-        Rotation = 0x0
-        Velocity = 0x1
-        VelocityScreenSpace = 0x2
-
-    Alignment: Annotated[
-        c_enum32[eAlignmentEnum], Field(c_enum32[eAlignmentEnum], 0x4EC)
-    ]
-    AlphaVariance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4F0)]
-    AudioEvent: Annotated[ctypes.c_uint32, Field(ctypes.c_uint32, 0x4F4)]
-    Delay: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4F8)]
-
-    class eDragTypeEnum(IntEnum):
-        IgnoreGravity = 0x0
-        PhysicallyBased = 0x1
-        ApplyWind = 0x2
-
-    DragType: Annotated[c_enum32[eDragTypeEnum], Field(c_enum32[eDragTypeEnum], 0x4FC)]
-    EmitterMidLifeRatio: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x500)]
-
-    class eEmitterQualityLevelEnum(IntEnum):
-        All = 0x0
-        Low = 0x1
-        High = 0x2
-
-    EmitterQualityLevel: Annotated[
-        c_enum32[eEmitterQualityLevelEnum],
-        Field(c_enum32[eEmitterQualityLevelEnum], 0x504),
-    ]
-    EmitterSpreadAngle: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x508)]
-    EmitterSpreadAngleMin: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x50C)]
-
-    class eFlipbookPlaybackRateEnum(IntEnum):
-        Absolute = 0x0
-        RelativeToMax = 0x1
-        OnceToCompletion = 0x2
-        Random = 0x3
-
-    FlipbookPlaybackRate: Annotated[
-        c_enum32[eFlipbookPlaybackRateEnum],
-        Field(c_enum32[eFlipbookPlaybackRateEnum], 0x510),
-    ]
-    HueVariance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x514)]
-    LightnessVariance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x518)]
-    LimitLifetimeOnMove: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x51C)]
-    MaxCount: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x520)]
-    MaxRenderCameraHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x524)]
-    MaxRenderDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x528)]
-    MaxSpawnDistance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x52C)]
-
-    class eOnRefractionsDisabledEnum(IntEnum):
-        Hide = 0x0
-        AlphaBlend = 0x1
-
-    OnRefractionsDisabled: Annotated[
-        c_enum32[eOnRefractionsDisabledEnum],
-        Field(c_enum32[eOnRefractionsDisabledEnum], 0x530),
-    ]
-    RotateAroundEmitter: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x534)]
-    SaturationVariance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x538)]
-    SoftFadeStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x53C)]
-
-    class eSpawnOffsetTypeEnum(IntEnum):
-        Sphere = 0x0
-        Box = 0x1
-        Disc = 0x2
-        Cone = 0x3
-        Donut = 0x4
-        Point = 0x5
-
-    SpawnOffsetType: Annotated[
-        c_enum32[eSpawnOffsetTypeEnum], Field(c_enum32[eSpawnOffsetTypeEnum], 0x540)
-    ]
-    StartOffset: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x544)]
-    StartRotationVariation: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x548)]
-    SurfaceDistanceFadeStrength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x54C)]
-    TrackEmitterPosition: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x550)]
-    TrailRatio: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x554)]
-    UCoordinate: Annotated[
-        c_enum32[enums.cTkCoordinateOrientation],
-        Field(c_enum32[enums.cTkCoordinateOrientation], 0x558),
-    ]
-    VCoordinate: Annotated[
-        c_enum32[enums.cTkCoordinateOrientation],
-        Field(c_enum32[enums.cTkCoordinateOrientation], 0x55C),
-    ]
-    Variation: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x560)]
-    VelocityInheritance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x564)]
-    EmitterLifeCurve1: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x568)
-    ]
-    EmitterLifeCurve2: Annotated[
-        c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x569)
-    ]
-    EnableSecondRotation: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x56A)]
-    FadeRefractionsAtScreenEdge: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x56B)]
-    GPURender: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x56C)]
-    Oneshot: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x56D)]
-    StartEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x56E)]
-    TrailIsRibbon: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x56F)]
-
-
-@partial_struct
-class cMapping(Structure):
-    InfluencesOnMappedPoint: Annotated[
-        basic.cTkDynamicArray[cInfluencesOnMappedPoint],
-        Field(basic.cTkDynamicArray[cInfluencesOnMappedPoint], 0x0),
-    ]
-    NumMappedPoints: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x10)]
-    NumSimI: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x14)]
-    NumSimJ: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x18)]
-    Name: Annotated[basic.cTkFixedString0x40, Field(basic.cTkFixedString0x40, 0x1C)]
-
-
-@partial_struct
-class cTkVoxelGeneratorSettingsElement(Structure):
-    Max: Annotated[cTkVoxelGeneratorData, Field(cTkVoxelGeneratorData, 0x0)]
-    Min: Annotated[cTkVoxelGeneratorData, Field(cTkVoxelGeneratorData, 0x1150)]
-
-
-@partial_struct
-class cGcPlanetGenerationIntermediateData(Structure):
-    CreatureRoles: Annotated[
-        cGcCreatureRoleDataTable, Field(cGcCreatureRoleDataTable, 0x0)
-    ]
-    CreatureAirFile: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0x20)
-    ]
-    CreatureCaveFile: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0x30)
-    ]
-    CreatureExtraWaterFile: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0x40)
-    ]
-    CreatureLandFile: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0x50)
-    ]
-    CreatureRobotFile: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0x60)
-    ]
-    CreatureWaterFile: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0x70)
-    ]
-    ExternalObjectListIndices: Annotated[
-        basic.cTkDynamicArray[ctypes.c_int32],
-        Field(basic.cTkDynamicArray[ctypes.c_int32], 0x80),
-    ]
-    ExternalObjectLists: Annotated[
-        basic.cTkDynamicArray[cGcExternalObjectListOptions],
-        Field(basic.cTkDynamicArray[cGcExternalObjectListOptions], 0x90),
-    ]
-    Seed: Annotated[basic.GcSeed, Field(basic.GcSeed, 0xA0)]
-    TerrainFile: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0xB0)
-    ]
-    Terrain: Annotated[cGcTerrainControls, Field(cGcTerrainControls, 0xC0)]
-    Biome: Annotated[
-        c_enum32[enums.cGcBiomeType], Field(c_enum32[enums.cGcBiomeType], 0x138)
-    ]
-    BiomeSubType: Annotated[
-        c_enum32[enums.cGcBiomeSubType], Field(c_enum32[enums.cGcBiomeSubType], 0x13C)
-    ]
-    Class: Annotated[
-        c_enum32[enums.cGcPlanetClass], Field(c_enum32[enums.cGcPlanetClass], 0x140)
-    ]
-    Size: Annotated[
-        c_enum32[enums.cGcPlanetSize], Field(c_enum32[enums.cGcPlanetSize], 0x144)
-    ]
-    StarType: Annotated[
-        c_enum32[enums.cGcGalaxyStarTypes],
-        Field(c_enum32[enums.cGcGalaxyStarTypes], 0x148),
-    ]
-    TerrainSettingIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x14C)]
-    Prime: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x150)]
-
-
-@partial_struct
-class cGcCustomisationGroup(Structure):
-    GroupTitle: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)
-    ]
-    BoneScales: Annotated[
-        basic.cTkDynamicArray[cGcCustomisationBoneScales],
-        Field(basic.cTkDynamicArray[cGcCustomisationBoneScales], 0x20),
-    ]
-    ColourGroups: Annotated[
-        basic.cTkDynamicArray[cGcCustomisationColourGroup],
-        Field(basic.cTkDynamicArray[cGcCustomisationColourGroup], 0x30),
-    ]
-    DescriptorOptions: Annotated[
-        basic.cTkDynamicArray[cGcCustomisationDescriptorGroupOptions],
-        Field(basic.cTkDynamicArray[cGcCustomisationDescriptorGroupOptions], 0x40),
-    ]
-    GroupID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x50)]
-    TextureGroups: Annotated[
-        basic.cTkDynamicArray[cGcCustomisationTextureGroup],
-        Field(basic.cTkDynamicArray[cGcCustomisationTextureGroup], 0x60),
-    ]
-    CameraData: Annotated[
-        cGcCustomisationCameraData, Field(cGcCustomisationCameraData, 0x70)
-    ]
-    ForceShowAllColourOptions: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xA4)]
-    IsBannerGroup: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xA5)]
-
-
-@partial_struct
-class cGcCustomisationGroups(Structure):
-    CustomisationGroups: Annotated[
-        basic.cTkDynamicArray[cGcCustomisationGroup],
-        Field(basic.cTkDynamicArray[cGcCustomisationGroup], 0x0),
-    ]
-
-
-@partial_struct
-class cGcCustomisationRace(Structure):
-    CustomisationGroups: Annotated[
-        basic.cTkDynamicArray[cGcCustomisationGroup],
-        Field(basic.cTkDynamicArray[cGcCustomisationGroup], 0x0),
-    ]
-    DescriptorGroupOption: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x10)]
-    Presets: Annotated[
-        basic.cTkDynamicArray[basic.TkID0x10],
-        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x20),
-    ]
-    Scale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x30)]
-    IsGek: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x34)]
-
-
-@partial_struct
-class cGcCustomisationUI(Structure):
-    Common: Annotated[cGcCustomisationGroups, Field(cGcCustomisationGroups, 0x0)]
-    Races: Annotated[
-        basic.cTkDynamicArray[cGcCustomisationRace],
-        Field(basic.cTkDynamicArray[cGcCustomisationRace], 0x10),
-    ]
-    RacesCameraData: Annotated[
-        cGcCustomisationCameraData, Field(cGcCustomisationCameraData, 0x20)
-    ]
-
-
-@partial_struct
-class cGcSeasonalGameModeData(Structure):
-    SpecificPets: Annotated[cGcPetData, Field(cGcPetData, 0x0)]
-    Inventory: Annotated[cGcInventoryContainer, Field(cGcInventoryContainer, 0x2490)]
-    Inventory_Cargo: Annotated[
-        cGcInventoryContainer, Field(cGcInventoryContainer, 0x25F0)
-    ]
-    Inventory_TechOnly: Annotated[
-        cGcInventoryContainer, Field(cGcInventoryContainer, 0x2750)
-    ]
-    ShipInventory: Annotated[
-        cGcInventoryContainer, Field(cGcInventoryContainer, 0x28B0)
-    ]
-    WeaponInventory: Annotated[
-        cGcInventoryContainer, Field(cGcInventoryContainer, 0x2A10)
-    ]
-    SeasonalUAStationTradeData: Annotated[cGcTradeData, Field(cGcTradeData, 0x2B70)]
-    InitialJoaoBox: Annotated[
-        cGcMissionSequenceDetailMessage, Field(cGcMissionSequenceDetailMessage, 0x2C58)
-    ]
-    InitialJoaoBoxNoMainSave: Annotated[
-        cGcMissionSequenceDetailMessage, Field(cGcMissionSequenceDetailMessage, 0x2CF0)
-    ]
-    SeasonTransferInventoryConfig: Annotated[
-        cGcSeasonTransferInventoryConfig,
-        Field(cGcSeasonTransferInventoryConfig, 0x2D88),
-    ]
-    CommunityProgressTitle: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x2DB8)
-    ]
-    CommunityTierCompleteLabel: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x2DD8)
-    ]
-    CommunityTierLabel: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x2DF8)
-    ]
-    CommunityTierProgressLabel: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x2E18)
-    ]
-    FinalCantRewardMessage: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x2E38)
-    ]
-    FinalStageTitle: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x2E58)
-    ]
-    MainMissionMessage: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x2E78)
-    ]
-    MainMissionTitle: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x2E98)
-    ]
-    MilestoneWithStageLocId: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x2EB8)
-    ]
-    SeasonName: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x2ED8)
-    ]
-    SeasonNameUpper: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x2EF8)
-    ]
-    MainIcon: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x2F18)]
-    ShipInventoryLayout: Annotated[
-        cGcInventoryLayout, Field(cGcInventoryLayout, 0x2F30)
-    ]
-    ShipTechInventoryLayout: Annotated[
-        cGcInventoryLayout, Field(cGcInventoryLayout, 0x2F48)
-    ]
-    WeaponInventoryLayout: Annotated[
-        cGcInventoryLayout, Field(cGcInventoryLayout, 0x2F60)
-    ]
-    AdditionalTradeProducts: Annotated[
-        basic.cTkDynamicArray[basic.TkID0x10],
-        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x2F78),
-    ]
-    CreateContextSaveDataMask: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x2F88)]
-    FinalReward: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x2F98)]
-    FinalRewardSwitchAlt: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x2FA8)]
-    ForgottenProducts: Annotated[
-        basic.cTkDynamicArray[basic.TkID0x10],
-        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x2FB8),
-    ]
-    FreighterBaseOverrideFilename: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0x2FC8)
-    ]
-    IntroSequencePOI: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x2FD8)]
-    NeverLearnableTech: Annotated[
-        basic.cTkDynamicArray[basic.TkID0x10],
-        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x2FE8),
-    ]
-    NeverTradeProducts: Annotated[
-        basic.cTkDynamicArray[basic.TkID0x10],
-        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x2FF8),
-    ]
-    OverrideFreighterFilename: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0x3008)
-    ]
-    OverrideMTFilename: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0x3018)
-    ]
-    ProductTable: Annotated[
-        basic.cTkDynamicArray[cGcProductData],
-        Field(basic.cTkDynamicArray[cGcProductData], 0x3028),
-    ]
-    RandomPetConstraints: Annotated[
-        basic.cTkDynamicArray[cGcSeasonPetConstraints],
-        Field(basic.cTkDynamicArray[cGcSeasonPetConstraints], 0x3038),
-    ]
-    SandwormOverrides: Annotated[
-        basic.cTkDynamicArray[cGcSandwormTimerAndFrequencyOverride],
-        Field(basic.cTkDynamicArray[cGcSandwormTimerAndFrequencyOverride], 0x3048),
-    ]
-    ScanEventTable: Annotated[cGcScanEventTable, Field(cGcScanEventTable, 0x3058)]
-    ShipSeed: Annotated[basic.GcSeed, Field(basic.GcSeed, 0x3068)]
-    Stages: Annotated[
-        basic.cTkDynamicArray[cGcSeasonalStage],
-        Field(basic.cTkDynamicArray[cGcSeasonalStage], 0x3078),
-    ]
-    StartPlanetRareSubstanceOverride: Annotated[
-        basic.TkID0x10, Field(basic.TkID0x10, 0x3088)
-    ]
-    StatsToPersistOnReset: Annotated[
-        basic.cTkDynamicArray[cGcPersistedStatData],
-        Field(basic.cTkDynamicArray[cGcPersistedStatData], 0x3098),
-    ]
-    SubstanceTable: Annotated[
-        basic.cTkDynamicArray[cGcRealitySubstanceData],
-        Field(basic.cTkDynamicArray[cGcRealitySubstanceData], 0x30A8),
-    ]
-    SwitchContextSaveDataMask: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x30B8)]
-    TechnologyTable: Annotated[
-        basic.cTkDynamicArray[cGcTechnology],
-        Field(basic.cTkDynamicArray[cGcTechnology], 0x30C8),
-    ]
-    ValidSpawnBuildings: Annotated[
-        basic.cTkDynamicArray[c_enum32[enums.cGcBuildingClassification]],
-        Field(basic.cTkDynamicArray[c_enum32[enums.cGcBuildingClassification]], 0x30D8),
-    ]
-    WeaponSeed: Annotated[basic.GcSeed, Field(basic.GcSeed, 0x30E8)]
-    EndTimeUTC: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x30F8)]
-    Hash: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x3100)]
-    StartTimeUTC: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x3108)]
-    UAOverrideValue: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x3110)]
-    DifficultyMinimums: Annotated[
-        cGcDifficultySettingsData, Field(cGcDifficultySettingsData, 0x3118)
-    ]
-    AbandonedFreighterHazardProtectionMul: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x3178)
-    ]
-    BuildingRadiusShipOffsetMultiplier: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x317C)
-    ]
-    DifficultySettingPreset: Annotated[
-        c_enum32[enums.cGcDifficultyPresetType],
-        Field(c_enum32[enums.cGcDifficultyPresetType], 0x3180),
-    ]
-    DisplayNumber: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x3184)]
-    DistanceFromShipAtStartOfGame: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x3188)
-    ]
-    EnergyDrainMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x318C)]
-    FarmPlantsTimerMul: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x3190)]
-    FreighterBattleEarlyWarpsOverride: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x3194)
-    ]
-    FreighterRace: Annotated[
-        c_enum32[enums.cGcAlienRace], Field(c_enum32[enums.cGcAlienRace], 0x3198)
-    ]
-    GameMode: Annotated[
-        c_enum32[enums.cGcGameMode], Field(c_enum32[enums.cGcGameMode], 0x319C)
-    ]
-    HazardProtectionDrainMultiplier: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x31A0)
-    ]
-    QuestSubstanceReducer: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x31A4)]
-    RemixNumber: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x31A8)]
-    SandwormGlobalOverrideSpawnChance: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x31AC)
-    ]
-    SandwormGlobalOverrideTimer: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x31B0)
-    ]
-    SeasonId: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x31B4)]
-    SeasonNumber: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x31B8)]
-    SeasonStartMusicOverride: Annotated[
-        c_enum32[enums.cGcAudioWwiseEvents],
-        Field(c_enum32[enums.cGcAudioWwiseEvents], 0x31BC),
-    ]
-    ShipType: Annotated[
-        c_enum32[enums.cGcSpaceshipClasses],
-        Field(c_enum32[enums.cGcSpaceshipClasses], 0x31C0),
-    ]
-    StartingPetSlots: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x31C4)]
-    StartingSuitCargoSlots: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x31C8)]
-    StartingSuitSlots: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x31CC)]
-    StartingSuitTechSlots: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x31D0)]
-    TechCostMultiplier: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x31D4)]
-    FinalRewardDescription: Annotated[
-        basic.cTkFixedString0x200, Field(basic.cTkFixedString0x200, 0x31D8)
-    ]
-    Description: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x33D8)
-    ]
-    SeasonalUAOverride: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x33F8)
-    ]
-    Subtitle: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x3418)
-    ]
-    Summary: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x3438)
-    ]
-    Title: Annotated[basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x3458)]
-    AllowMissionDetailMessages: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3478)]
-    AllowOnlyCorvetteShipPurchases: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x3479)
-    ]
-    AllowSaveContextMultitoolTransfer: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x347A)
-    ]
-    AllowSaveContextShipTransfer: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x347B)]
-    AlwaysStormy: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x347C)]
-    AlwaysUseSeasonalStationTradeData: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x347D)
-    ]
-    BlockAggressiveSentinelsInStartSystem: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x347E)
-    ]
-    BlockExtremeWeatherInStartSystem: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x347F)
-    ]
-    BlockFirstSpaceMusic: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3480)]
-    BlockStormsAtStart: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3481)]
-    CarnageMode: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3482)]
-    CompatibleWithState: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3483)]
-    DefaultToPvPOff: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3484)]
-    DoCommunityMissionTextSubstitutions: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x3485)
-    ]
-    ForceAllSentinelsAggressive: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3486)]
-    ForceAllSystemsAbandoned: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3487)]
-    ForceDeepSpaceAmbientFrigatesOnInfested: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x3488)
-    ]
-    ForceStartSystemAbandoned: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3489)]
-    ForceStartSystemTernary: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x348A)]
-    HasBeenConverted: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x348B)]
-    IncreaseXClassTechOddsWithCommTier: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x348C)
-    ]
-    MustCraftInBases: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x348D)]
-    OnlyCorvetteLauncherCanBeRepaired: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x348E)
-    ]
-    OnlyCorvettesSpawnWhenPlayerTeleports: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x348F)
-    ]
-    PlayStartMusicInIntro: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3490)]
-    PurpleSystemsUnlocked: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3491)]
-    ResetSaveOnDeath: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3492)]
-    SandwormGlobalOverride: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3493)]
-    ShipIsAtDifferentBuildingToPlayer: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x3494)
-    ]
-    ShipStartsDamaged: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3495)]
-    StartAboardFreighter: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3496)]
-    StartNextToShip: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3497)]
-    StartWithFreighter: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3498)]
-    TrashInventoryOnGalaxyTravel: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x3499)]
-    UseDefaultAppearance: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x349A)]
-    UseRandomPet: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x349B)]
-    UseSeasonalUAStationTradeData: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x349C)
-    ]
-    UseSpookHazardOnly: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x349D)]
-    UseStartPlanetObjectListOverrides: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x349E)
-    ]
-
-
-@partial_struct
 class cGcPlayerCommonStateData(Structure):
     PhotoModeSettings: Annotated[cGcPhotoModeSettings, Field(cGcPhotoModeSettings, 0x0)]
     SeasonData: Annotated[cGcSeasonalGameModeData, Field(cGcSeasonalGameModeData, 0x50)]
     ByteBeatLibrary: Annotated[
-        cGcByteBeatLibraryData, Field(cGcByteBeatLibraryData, 0x34F0)
+        cGcByteBeatLibraryData, Field(cGcByteBeatLibraryData, 0x3538)
     ]
-    SeasonState: Annotated[cGcSeasonStateData, Field(cGcSeasonStateData, 0x4EF8)]
+    SeasonState: Annotated[cGcSeasonStateData, Field(cGcSeasonStateData, 0x4F40)]
     SeasonTransferInventoryData: Annotated[
-        cGcSeasonTransferInventoryData, Field(cGcSeasonTransferInventoryData, 0x50C0)
+        cGcSeasonTransferInventoryData, Field(cGcSeasonTransferInventoryData, 0x5108)
     ]
     EarnedSeasonSpecialRewards: Annotated[
         basic.cTkDynamicArray[basic.TkID0x10],
-        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x5240),
+        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x5288),
     ]
     UsedDiscoveryOwnersV2: Annotated[
         basic.cTkDynamicArray[cGcDiscoveryOwner],
-        Field(basic.cTkDynamicArray[cGcDiscoveryOwner], 0x5250),
+        Field(basic.cTkDynamicArray[cGcDiscoveryOwner], 0x5298),
     ]
     UsedPlatforms: Annotated[
         basic.cTkDynamicArray[basic.cTkFixedString0x20],
-        Field(basic.cTkDynamicArray[basic.cTkFixedString0x20], 0x5260),
+        Field(basic.cTkDynamicArray[basic.cTkFixedString0x20], 0x52A8),
     ]
-    SaveUniversalId: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x5270)]
-    TotalPlayTime: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x5278)]
+    SaveUniversalId: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x52B8)]
+    TotalPlayTime: Annotated[ctypes.c_uint64, Field(ctypes.c_uint64, 0x52C0)]
     SaveName: Annotated[
-        basic.cTkFixedString0x80, Field(basic.cTkFixedString0x80, 0x5280)
+        basic.cTkFixedString0x80, Field(basic.cTkFixedString0x80, 0x52C8)
     ]
-    UsesThirdPersonCharacterCam: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x5300)]
-    UsesThirdPersonShipCam: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x5301)]
-    UsesThirdPersonVehicleCam: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x5302)]
+    UsesThirdPersonCharacterCam: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x5348)]
+    UsesThirdPersonShipCam: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x5349)]
+    UsesThirdPersonVehicleCam: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x534A)]
 
 
 @partial_struct
@@ -47765,8 +47849,9 @@ class cGcClothComponentData(Structure):
 
 
 @partial_struct
-class cGcCustomisationUIData(Structure):
-    CustomisationUIData: Annotated[cGcCustomisationUI, Field(cGcCustomisationUI, 0x0)]
+class cGcDefaultSaveData(Structure):
+    State: Annotated[cGcPlayerStateData, Field(cGcPlayerStateData, 0x0)]
+    Spawn: Annotated[cGcPlayerSpawnStateData, Field(cGcPlayerSpawnStateData, 0x7F430)]
 
 
 @partial_struct
@@ -47825,53 +47910,62 @@ class cGcPlanetData(Structure):
     BuildingData: Annotated[cGcPlanetBuildingData, Field(cGcPlanetBuildingData, 0x3258)]
     Clouds: Annotated[cGcPlanetCloudProperties, Field(cGcPlanetCloudProperties, 0x32A8)]
     CommonSubstanceID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x32F0)]
+    CreatureIDs: Annotated[
+        basic.cTkDynamicArray[basic.TkID0x10],
+        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x3300),
+    ]
     ExtraResourceHints: Annotated[
         basic.cTkDynamicArray[cGcPlanetDataResourceHint],
-        Field(basic.cTkDynamicArray[cGcPlanetDataResourceHint], 0x3300),
+        Field(basic.cTkDynamicArray[cGcPlanetDataResourceHint], 0x3310),
     ]
-    RareSubstanceID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x3310)]
+    RareSubstanceID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x3320)]
     TerrainFile: Annotated[
-        basic.VariableSizeString, Field(basic.VariableSizeString, 0x3320)
+        basic.VariableSizeString, Field(basic.VariableSizeString, 0x3330)
     ]
     TileTypeIndices: Annotated[
         basic.cTkDynamicArray[ctypes.c_int32],
-        Field(basic.cTkDynamicArray[ctypes.c_int32], 0x3330),
+        Field(basic.cTkDynamicArray[ctypes.c_int32], 0x3340),
     ]
-    UncommonSubstanceID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x3340)]
-    Hazard: Annotated[cGcPlanetHazardData, Field(cGcPlanetHazardData, 0x3350)]
+    UncommonSubstanceID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x3350)]
+    Hazard: Annotated[cGcPlanetHazardData, Field(cGcPlanetHazardData, 0x3360)]
     GroundCombatDataPerDifficulty: Annotated[
-        cGcPlanetGroundCombatData, Field(cGcPlanetGroundCombatData, 0x33C8)
+        cGcPlanetGroundCombatData, Field(cGcPlanetGroundCombatData, 0x33D8)
     ]
-    Water: Annotated[cGcPlanetWaterData, Field(cGcPlanetWaterData, 0x3428)]
+    Water: Annotated[cGcPlanetWaterData, Field(cGcPlanetWaterData, 0x3438)]
     BuildingLevel: Annotated[
         c_enum32[enums.cGcBuildingDensityLevels],
-        Field(c_enum32[enums.cGcBuildingDensityLevels], 0x3438),
+        Field(c_enum32[enums.cGcBuildingDensityLevels], 0x3448),
     ]
     CreatureLife: Annotated[
-        c_enum32[enums.cGcPlanetLife], Field(c_enum32[enums.cGcPlanetLife], 0x343C)
+        c_enum32[enums.cGcPlanetLife], Field(c_enum32[enums.cGcPlanetLife], 0x344C)
     ]
-    FuelMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x3440)]
+    FuelMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x3450)]
     InhabitingRace: Annotated[
-        c_enum32[enums.cGcAlienRace], Field(c_enum32[enums.cGcAlienRace], 0x3444)
+        c_enum32[enums.cGcAlienRace], Field(c_enum32[enums.cGcAlienRace], 0x3454)
     ]
     Life: Annotated[
-        c_enum32[enums.cGcPlanetLife], Field(c_enum32[enums.cGcPlanetLife], 0x3448)
+        c_enum32[enums.cGcPlanetLife], Field(c_enum32[enums.cGcPlanetLife], 0x3458)
     ]
-    PlanetIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x344C)]
+    PlanetIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x345C)]
 
     class eResourceLevelEnum(IntEnum):
         Low = 0x0
         High = 0x1
 
     ResourceLevel: Annotated[
-        c_enum32[eResourceLevelEnum], Field(c_enum32[eResourceLevelEnum], 0x3450)
+        c_enum32[eResourceLevelEnum], Field(c_enum32[eResourceLevelEnum], 0x3460)
     ]
-    TileTypeSet: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x3454)]
-    PlanetInfo: Annotated[cGcPlanetInfo, Field(cGcPlanetInfo, 0x3458)]
-    Name: Annotated[basic.cTkFixedString0x80, Field(basic.cTkFixedString0x80, 0x395E)]
-    InAbandonedSystem: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x39DE)]
-    InEmptySystem: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x39DF)]
-    InGasGiantSystem: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x39E0)]
+    TileTypeSet: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x3464)]
+    PlanetInfo: Annotated[cGcPlanetInfo, Field(cGcPlanetInfo, 0x3468)]
+    Name: Annotated[basic.cTkFixedString0x80, Field(basic.cTkFixedString0x80, 0x396E)]
+    InAbandonedSystem: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x39EE)]
+    InEmptySystem: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x39EF)]
+    InGasGiantSystem: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x39F0)]
+
+
+@partial_struct
+class cGcExternalObjectList(Structure):
+    Objects: Annotated[cGcEnvironmentSpawnData, Field(cGcEnvironmentSpawnData, 0x0)]
 
 
 @partial_struct

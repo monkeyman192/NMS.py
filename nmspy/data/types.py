@@ -103,7 +103,23 @@ class cTkAudioManager(Structure):
 
 
 @partial_struct
-class cGcNGuiLayer(Structure):
+class cGcNGuiElement(Structure):
+    mpElementData: Annotated[
+        ctypes._Pointer[nmse.cGcNGuiElementData],
+        Field(ctypes._Pointer[nmse.cGcNGuiElementData], 0x48),
+    ]
+
+    @function_hook("48 83 EC ? 4C 8B 59 ? 4C 8B C9")
+    def SetPosition(
+        self,
+        this: "ctypes._Pointer[cGcNGuiElement]",
+        lPosition: ctypes._Pointer[basic.Vector2f],
+        lType: ctypes.c_uint32,  # cGcNGuiElement::PositionType
+    ): ...
+
+
+@partial_struct
+class cGcNGuiLayer(cGcNGuiElement):
     @function_hook(
         "48 83 EC ? 4C 8B 02 4C 8B C9 0F 10 02 49 8B C0 48 B9 ? ? ? ? ? ? ? ? 48 33 42 ? 48 0F AF C1 0F 11 44"
         " 24 ? 48 8B D0 48 C1 EA ? 48 33 D0 49 33 D0 48 0F AF D1 4C 8B C2 49 C1 E8 ? 4C 33 C2 4C 0F AF C1 41 "
@@ -284,7 +300,7 @@ class cGcApplication(cTkFSM):
     @function_hook("40 53 48 83 EC 20 E8 ? ? ? ? 48 89")
     def Update(self, this: "ctypes._Pointer[cGcApplication]"): ...
 
-    @function_hook("48 89 5C 24 ? 57 48 83 EC ? 33 FF 48 89 74 24 ? 83 3D")
+    @function_hook("48 89 5C 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 45 33 F6 83 3D")
     def Construct(self, this: "ctypes._Pointer[cGcApplication]"): ...
 
 
@@ -601,7 +617,7 @@ class cGcSolarSystem(Structure):
     ): ...
 
     @function_hook(
-        "48 8B C4 48 89 58 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 41 BC"
+        "48 8B C4 48 89 58 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 4C 8D 3D"
     )
     def Generate(
         self,
@@ -642,17 +658,15 @@ class cTkDynamicGravityControl(Structure):
     miNumGravityPoints: int
     maGravityOBBs: bytes
 
-    @function_hook("33 C0 48 8D 91 ? ? ? ? 89 81")
+    @function_hook("33 C0 4C 8D 89 ? ? ? ? 89 81")
     def Construct(self, this: "ctypes._Pointer[cTkDynamicGravityControl]"): ...
 
-    @function_hook(
-        "0F 28 05 ? ? ? ? 4C 8B C1 48 8B C1 BA ? ? ? ? 0F 11 00 48 8D 40 ? 48 83 EA ? 75 ? 8D 4A"
-    )
+    @function_hook("0F 28 05 ? ? ? ? 4C 8B C9")
     def cTkDynamicGravityControl(
         self, this: "ctypes._Pointer[cTkDynamicGravityControl]"
     ): ...
 
-    @function_hook("48 8B C4 56 57 41 54 41 56")
+    @function_hook("48 8B C4 55 56 57 41 54 41 57 48 81 EC")
     def GetGravity(
         self,
         this: "ctypes._Pointer[cTkDynamicGravityControl]",
@@ -660,7 +674,7 @@ class cTkDynamicGravityControl(Structure):
         lPos: ctypes._Pointer[basic.Vector3f],
     ) -> ctypes.c_uint64: ...
 
-    @function_hook("40 57 48 83 EC ? 48 63 81 ? ? ? ? 45 33 D2")
+    @function_hook("48 83 EC ? 48 63 81 ? ? ? ? 0F 29 74 24")
     def UpdateGravityPoint(
         self,
         this: "ctypes._Pointer[cTkDynamicGravityControl]",
@@ -1095,7 +1109,7 @@ class cGcSpaceshipWeapons(Structure):
         ...
 
     @function_hook(
-        "40 53 48 83 EC ? 48 8B 41 ? 48 8B D9 0F BF 0D ? ? ? ? 48 8B 50 ? E8 ? ? ? ? 48 85 C0 74 ? 48 89 7C 24"
+        "40 53 48 83 EC ? 48 8B 41 ? 48 8B D9 0F BF 0D ? ? ? ? 48 8B 50 ? E8 ? ? ? ? 48 85 C0 0F 84"
     )
     def GetCurrentShootPoints(
         self,
@@ -1195,7 +1209,7 @@ class cGcPlanetGenerator(Structure):
     ): ...
 
     @function_hook(
-        "4C 89 4C 24 ? 48 89 54 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D AC 24"
+        "4C 89 4C 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 48 8B 0D"
     )
     def GenerateQueryInfo(
         self,
@@ -1413,6 +1427,20 @@ class cGcPlayerHUD(Structure):
         "48 8B C4 48 89 48 ? 55 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 83 B9"
     )
     def RenderWeaponPanel(self, this: "ctypes._Pointer[cGcPlayerHUD]"): ...
+
+    @function_hook(
+        "40 55 53 56 57 41 54 41 55 41 56 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 8B F1"
+    )
+    def RenderCrosshair(self, this: "ctypes._Pointer[cGcPlayerHUD]"): ...
+
+
+class cGcApplicationBootState(Structure):
+    @function_hook("48 89 5C 24 ? 55 56 57 41 56 41 57 48 81 EC ? ? ? ? 45 33 F6")
+    def Update(
+        self,
+        this: "ctypes._Pointer[cGcApplicationBootState]",
+        lfTimeStep: ctypes.c_float,
+    ): ...
 
 
 # Dummy values to copy and paste to make adding new things quicker...

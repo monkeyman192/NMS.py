@@ -31,7 +31,7 @@
  },
  {
   "name": "cGcApplication::Construct",
-  "signature": "48 89 5C 24 ? 57 48 83 EC ? 33 FF 48 89 74 24 ? 83 3D",
+  "signature": "48 89 5C 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 45 33 F6 83 3D",
   "mangled_name": "?Construct@cGcApplication@@QEAAXXZ"
  },
  {
@@ -176,7 +176,7 @@
  },
  {
   "name": "cGcSolarSystem::Generate",
-  "signature": "48 8B C4 48 89 58 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 41 BC",
+  "signature": "48 8B C4 48 89 58 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 4C 8D 3D",
   "mangled_name": "?Generate@cGcSolarSystem@@QEAAX_NVcTkSeed@@@Z"
  },
  {
@@ -186,17 +186,17 @@
  },
  {
   "name": "cTkDynamicGravityControl::Construct",
-  "signature": "33 C0 48 8D 91 ? ? ? ? 89 81",
+  "signature": "33 C0 4C 8D 89 ? ? ? ? 89 81",
   "mangled_name": "?Construct@cTkDynamicGravityControl@@QEAAXXZ"
  },
  {
   "name": "cTkDynamicGravityControl::cTkDynamicGravityControl",
-  "signature": "0F 28 05 ? ? ? ? 4C 8B C1 48 8B C1 BA ? ? ? ? 0F 11 00 48 8D 40 ? 48 83 EA ? 75 ? 8D 4A",
+  "signature": "0F 28 05 ? ? ? ? 4C 8B C9",
   "mangled_name": "??0cTkDynamicGravityControl@@QEAA@XZ"
  },
  {
   "name": "cTkDynamicGravityControl::GetGravity",
-  "signature": "48 8B C4 56 57 41 54 41 56",
+  "signature": "48 8B C4 55 56 57 41 54 41 57 48 81 EC",
   "mangled_name": "?GetGravity@cTkDynamicGravityControl@@QEBA?AUcTkGravityData@@AEBVcTkVector3@@@Z"
  },
  {
@@ -326,7 +326,7 @@
  },
  {
   "name": "cTkDynamicGravityControl::UpdateGravityPoint",
-  "signature": "40 57 48 83 EC ? 48 63 81 ? ? ? ? 45 33 D2",
+  "signature": "48 83 EC ? 48 63 81 ? ? ? ? 0F 29 74 24",
   "mangled_name": "?UpdateGravityPoint@cTkDynamicGravityControl@@QEAAXAEBVcTkVector3@@MM@Z"
  },
  {
@@ -396,7 +396,7 @@
  },
  {
   "name": "cGcSpaceshipWeapons::GetCurrentShootPoints",
-  "signature": "40 53 48 83 EC ? 48 8B 41 ? 48 8B D9 0F BF 0D ? ? ? ? 48 8B 50 ? E8 ? ? ? ? 48 85 C0 74 ? 48 89 7C 24",
+  "signature": "40 53 48 83 EC ? 48 8B 41 ? 48 8B D9 0F BF 0D ? ? ? ? 48 8B 50 ? E8 ? ? ? ? 48 85 C0 0F 84",
   "mangled_name": "?GetCurrentShootPoints@cGcSpaceshipWeapons@@IEAAPEAVcGcShootPoint@@XZ"
  },
  {
@@ -456,7 +456,7 @@
  },
  {
   "name": "cGcPlanetGenerator::GenerateQueryInfo",
-  "signature": "4C 89 4C 24 ? 48 89 54 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D AC 24",
+  "signature": "4C 89 4C 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 48 8B 0D",
   "mangled_name": "?GenerateQueryInfo@cGcPlanetGenerator@@QEAAXAEAVPlanetGenerationQuery@@AEBVcGcPlanetGenerationInputData@@_K_N@Z"
  },
  {
@@ -653,5 +653,30 @@
   "name": "cTkLanguageManager::GetInstance",
   "signature": "48 83 EC ? 65 48 8B 04 25 ? ? ? ? B9 ? ? ? ? 48 8B 00 8B 04 01 39 05 ? ? ? ? 0F 8F ? ? ? ? 48 8D 05 ? ? ? ? 48 83 C4 ? C3 4C 89 00",
   "mangled_name": "?GetInstance@cTkLanguageManager@@SAAEAV1@XZ"
+ },
+ {
+  "name": "nvgFill",
+  "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 48 63 81 ? ? ? ? 48 8B D9 48 69 F8",
+  "mangled_name": "nvgFill"
+ },
+ {
+  "name": "nvgRect",
+  "signature": "48 8B C4 48 83 EC ? 0F 28 E2",
+  "mangled_name": "nvgRect"
+ },
+ {
+  "name": "cGcPlayerHUD::RenderCrosshair",
+  "signature": "40 55 53 56 57 41 54 41 55 41 56 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 8B F1",
+  "mangled_name": "?RenderCrosshair@cGcPlayerHUD@@IEAAXXZ"
+ },
+ {
+  "name": "cGcNGuiElement::SetPosition",
+  "signature": "48 83 EC ? 4C 8B 59 ? 4C 8B C9",
+  "mangled_name": "?SetPosition@cGcNGuiElement@@QEAAXAEBVcTkVector2@@W4PositionType@1@@Z"
+ },
+ {
+  "name": "cGcApplicationBootState::Update",
+  "signature": "48 89 5C 24 ? 55 56 57 41 56 41 57 48 81 EC ? ? ? ? 45 33 F6",
+  "mangled_name": "?Update@cGcApplicationBootState@@MEAAXM@Z"
  }
 ]
