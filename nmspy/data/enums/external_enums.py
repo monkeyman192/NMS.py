@@ -5052,6 +5052,12 @@ class cGcHologramPivotType(IntEnum):
     CentreBounds = 0x1
 
 
+class cGcCharacterControlInputValidity(IntEnum):
+    Always = 0x0
+    PadOnly = 0x1
+    KeyboardAnMouseOnly = 0x2
+
+
 class cGcCharacterControlOutputSpace(IntEnum):
     CameraRelative = 0x0
     CameraRelativeTopDown = 0x1
@@ -5277,26 +5283,10 @@ class cGcWordCategoryTableEnum(IntEnum):
     THREAT = 0x6
 
 
-class cGcCharacterControlInputValidity(IntEnum):
-    Always = 0x0
-    PadOnly = 0x1
-    KeyboardAnMouseOnly = 0x2
-
-
 class cGcItemFilterMatchIDType(IntEnum):
     Exact = 0x0
     Prefix = 0x1
     Postfix = 0x2
-
-
-class cGcWeightingCurve(IntEnum):
-    NoWeighting = 0x0
-    MaxIsUncommon = 0x1
-    MaxIsRare = 0x2
-    MaxIsSuperRare = 0x3
-    MinIsUncommon = 0x4
-    MinIsRare = 0x5
-    MinIsSuperRare = 0x6
 
 
 class cGcUnlockableItemTreeGroups(IntEnum):
@@ -5317,16 +5307,14 @@ class cGcUnlockableItemTreeGroups(IntEnum):
     CorvetteParts = 0xE
 
 
-class cGcTradeCategory(IntEnum):
-    Mineral = 0x0
-    Tech = 0x1
-    Commodity = 0x2
-    Component = 0x3
-    Alloy = 0x4
-    Exotic = 0x5
-    Energy = 0x6
-    None_ = 0x7
-    SpecialShop = 0x8
+class cGcWeightingCurve(IntEnum):
+    NoWeighting = 0x0
+    MaxIsUncommon = 0x1
+    MaxIsRare = 0x2
+    MaxIsSuperRare = 0x3
+    MinIsUncommon = 0x4
+    MinIsRare = 0x5
+    MinIsSuperRare = 0x6
 
 
 class cGcTechnologyCategory(IntEnum):
@@ -5360,20 +5348,16 @@ class cGcTechnologyRarity(IntEnum):
     Always = 0x6
 
 
-class cGcSizeIndicator(IntEnum):
-    Small = 0x0
-    Medium = 0x1
-    Large = 0x2
-
-
-class cGcSettlementStatStrength(IntEnum):
-    PositiveWide = 0x0
-    PositiveLarge = 0x1
-    PositiveMedium = 0x2
-    PositiveSmall = 0x3
-    NegativeSmall = 0x4
-    NegativeMedium = 0x5
-    NegativeLarge = 0x6
+class cGcTradeCategory(IntEnum):
+    Mineral = 0x0
+    Tech = 0x1
+    Commodity = 0x2
+    Component = 0x3
+    Alloy = 0x4
+    Exotic = 0x5
+    Energy = 0x6
+    None_ = 0x7
+    SpecialShop = 0x8
 
 
 class cGcStatsEnum(IntEnum):
@@ -5404,6 +5388,22 @@ class cGcStatsEnum(IntEnum):
     RUINS_LOOTED = 0x18
     STONE_KILLS = 0x19
     BIGGSDEBRIS_POI = 0x1A
+
+
+class cGcSettlementStatStrength(IntEnum):
+    PositiveWide = 0x0
+    PositiveLarge = 0x1
+    PositiveMedium = 0x2
+    PositiveSmall = 0x3
+    NegativeSmall = 0x4
+    NegativeMedium = 0x5
+    NegativeLarge = 0x6
+
+
+class cGcSizeIndicator(IntEnum):
+    Small = 0x0
+    Medium = 0x1
+    Large = 0x2
 
 
 class cGcRewardTeleport(IntEnum):

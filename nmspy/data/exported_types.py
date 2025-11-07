@@ -2580,7 +2580,8 @@ class cTkNavModifierComponentData(Structure):
 
 @partial_struct
 class cTkPhysicsWorldComponentData(Structure):
-    SafeRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x0)]
+    MaximumNumberOfBodies: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x0)]
+    SafeRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4)]
 
 
 @partial_struct
@@ -11102,23 +11103,6 @@ class cGcCustomisationFreighterEngineEffect(Structure):
 
 
 @partial_struct
-class cGcRewardAction(Structure):
-    Reward: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
-
-
-@partial_struct
-class cGcCustomisationBoneScales(Structure):
-    GroupTitle: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)
-    ]
-    Positions: Annotated[
-        basic.cTkDynamicArray[ctypes.c_float],
-        Field(basic.cTkDynamicArray[ctypes.c_float], 0x20),
-    ]
-    ScaleBoneName: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x30)]
-
-
-@partial_struct
 class cGcScareCreaturesAction(Structure):
     FleeRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x0)]
     HearRadius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4)]
@@ -11167,52 +11151,6 @@ class cGcBeenShotEvent(Structure):
         PlayerOrRemotePlayer = 0x2
 
     ShotBy: Annotated[c_enum32[eShotByEnum], Field(c_enum32[eShotByEnum], 0x8)]
-
-
-@partial_struct
-class cGcCustomisationDescriptorGroupOption(Structure):
-    BoneScales: Annotated[
-        basic.cTkDynamicArray[cGcCustomisationBoneScales],
-        Field(basic.cTkDynamicArray[cGcCustomisationBoneScales], 0x0),
-    ]
-    ColourGroups: Annotated[
-        basic.cTkDynamicArray[cGcCustomisationColourGroup],
-        Field(basic.cTkDynamicArray[cGcCustomisationColourGroup], 0x10),
-    ]
-    DescriptorOption: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x20)]
-    HideIfGroupActive: Annotated[
-        basic.cTkDynamicArray[basic.TkID0x10],
-        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x30),
-    ]
-    SelectingAddsGroup: Annotated[
-        basic.cTkDynamicArray[basic.TkID0x10],
-        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x40),
-    ]
-    SelectingRemovesGroup: Annotated[
-        basic.cTkDynamicArray[basic.TkID0x10],
-        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x50),
-    ]
-    TextureGroups: Annotated[
-        basic.cTkDynamicArray[cGcCustomisationTextureGroup],
-        Field(basic.cTkDynamicArray[cGcCustomisationTextureGroup], 0x60),
-    ]
-    UnselectingAddsGroup: Annotated[
-        basic.cTkDynamicArray[basic.TkID0x10],
-        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x70),
-    ]
-    UnselectingRemovesGroup: Annotated[
-        basic.cTkDynamicArray[basic.TkID0x10],
-        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x80),
-    ]
-    InteractionCameraIndexOverride: Annotated[
-        ctypes.c_int32, Field(ctypes.c_int32, 0x90)
-    ]
-    InteracttionCameraFocusJointOverride: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x94)
-    ]
-    ForceDisableDoF: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xB4)]
-    ReplaceBaseBoneScales: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xB5)]
-    ReplaceBaseColours: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xB6)]
 
 
 @partial_struct
@@ -11286,15 +11224,6 @@ class cGcCustomisationBackpackData(Structure):
 
 
 @partial_struct
-class cGcPainAction(Structure):
-    Damage: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
-    Radius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x10)]
-    RetriggerTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14)]
-    AffectsPlayer: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x18)]
-    RadiusBasedDamage: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x19)]
-
-
-@partial_struct
 class cGcCustomisationBannerImageData(Structure):
     TipText: Annotated[basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)]
     BannerImage: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x20)]
@@ -11332,10 +11261,20 @@ class cGcCustomisationBobbleHead(Structure):
 
 
 @partial_struct
-class cGcDestroyAction(Structure):
-    PlayEffect: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
-    DestroyAll: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x10)]
-    UseDestructables: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x11)]
+class cGcRewardAction(Structure):
+    Reward: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
+
+
+@partial_struct
+class cGcCustomisationBoneScales(Structure):
+    GroupTitle: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)
+    ]
+    Positions: Annotated[
+        basic.cTkDynamicArray[ctypes.c_float],
+        Field(basic.cTkDynamicArray[ctypes.c_float], 0x20),
+    ]
+    ScaleBoneName: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x30)]
 
 
 @partial_struct
@@ -11424,9 +11363,12 @@ class cGcSpaceStormData(Structure):
 
 
 @partial_struct
-class cGcLootProbability(Structure):
-    LootModel: Annotated[cTkModelResource, Field(cTkModelResource, 0x0)]
-    Probability: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20)]
+class cGcPainAction(Structure):
+    Damage: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
+    Radius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x10)]
+    RetriggerTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14)]
+    AffectsPlayer: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x18)]
+    RadiusBasedDamage: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x19)]
 
 
 @partial_struct
@@ -11463,27 +11405,10 @@ class cGcCameraShakeAction(Structure):
 
 
 @partial_struct
-class cGcColourisePalette(Structure):
-    PrimaryColour: Annotated[basic.Colour, Field(basic.Colour, 0x0)]
-    QuaternaryColour: Annotated[basic.Colour, Field(basic.Colour, 0x10)]
-    SecondaryColour: Annotated[basic.Colour, Field(basic.Colour, 0x20)]
-    TernaryColour: Annotated[basic.Colour, Field(basic.Colour, 0x30)]
-
-
-@partial_struct
-class cGcInventoryTechProbability(Structure):
-    Tech: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
-
-    class eDesiredTechProbabilityEnum(IntEnum):
-        Never = 0x0
-        Rare = 0x1
-        Common = 0x2
-        Always = 0x3
-
-    DesiredTechProbability: Annotated[
-        c_enum32[eDesiredTechProbabilityEnum],
-        Field(c_enum32[eDesiredTechProbabilityEnum], 0x10),
-    ]
+class cGcDestroyAction(Structure):
+    PlayEffect: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
+    DestroyAll: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x10)]
+    UseDestructables: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x11)]
 
 
 @partial_struct
@@ -11505,6 +11430,12 @@ class cGcActionTrigger(Structure):
         Field(basic.cTkDynamicArray[basic.NMSTemplate], 0x0),
     ]
     Event: Annotated[basic.NMSTemplate, Field(basic.NMSTemplate, 0x10)]
+
+
+@partial_struct
+class cGcLootProbability(Structure):
+    LootModel: Annotated[cTkModelResource, Field(cTkModelResource, 0x0)]
+    Probability: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20)]
 
 
 @partial_struct
@@ -11535,6 +11466,30 @@ class cGcCameraShakeTriggerData(Structure):
 @partial_struct
 class cGcChainComponentData(Structure):
     StartBone: Annotated[basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)]
+
+
+@partial_struct
+class cGcColourisePalette(Structure):
+    PrimaryColour: Annotated[basic.Colour, Field(basic.Colour, 0x0)]
+    QuaternaryColour: Annotated[basic.Colour, Field(basic.Colour, 0x10)]
+    SecondaryColour: Annotated[basic.Colour, Field(basic.Colour, 0x20)]
+    TernaryColour: Annotated[basic.Colour, Field(basic.Colour, 0x30)]
+
+
+@partial_struct
+class cGcInventoryTechProbability(Structure):
+    Tech: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
+
+    class eDesiredTechProbabilityEnum(IntEnum):
+        Never = 0x0
+        Rare = 0x1
+        Common = 0x2
+        Always = 0x3
+
+    DesiredTechProbability: Annotated[
+        c_enum32[eDesiredTechProbabilityEnum],
+        Field(c_enum32[eDesiredTechProbabilityEnum], 0x10),
+    ]
 
 
 @partial_struct
@@ -11592,19 +11547,51 @@ class cGcCombatEffectsProperties(Structure):
 
 
 @partial_struct
+class cGcPlayerControlInput(Structure):
+    Inputs: Annotated[
+        basic.cTkDynamicArray[basic.NMSTemplate],
+        Field(basic.cTkDynamicArray[basic.NMSTemplate], 0x0),
+    ]
+    InterceptInputBlackList: Annotated[
+        basic.cTkDynamicArray[c_enum32[enums.cGcInputActions]],
+        Field(basic.cTkDynamicArray[c_enum32[enums.cGcInputActions]], 0x10),
+    ]
+    InterceptInputWhitelist: Annotated[
+        basic.cTkDynamicArray[c_enum32[enums.cGcInputActions]],
+        Field(basic.cTkDynamicArray[c_enum32[enums.cGcInputActions]], 0x20),
+    ]
+    InterceptAllInputs: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x30)]
+
+
+@partial_struct
+class cGcPlayerControlModeEntry(Structure):
+    ControlModeResource: Annotated[cTkModelResource, Field(cTkModelResource, 0x0)]
+    Id: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x20)]
+
+
+@partial_struct
+class cGcPlayerControlState(Structure):
+    OverrideInput: Annotated[cGcPlayerControlInput, Field(cGcPlayerControlInput, 0x0)]
+    Data: Annotated[
+        basic.cTkDynamicArray[basic.NMSTemplate],
+        Field(basic.cTkDynamicArray[basic.NMSTemplate], 0x38),
+    ]
+    Id: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x48)]
+    OverrideCamera: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x58)]
+    StickToGround: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x68)]
+
+
+@partial_struct
+class cGcCharacterAlternateAnimation(Structure):
+    Anim: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
+    Replacement: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x10)]
+
+
+@partial_struct
 class cGcCharacterJetpackEffect(Structure):
     Effect: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
     NodeName: Annotated[
         basic.cTkFixedString0x100, Field(basic.cTkFixedString0x100, 0x10)
-    ]
-
-
-@partial_struct
-class cGcStatsBonus(Structure):
-    Bonus: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x0)]
-    Level: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x4)]
-    Stat: Annotated[
-        c_enum32[enums.cGcStatsTypes], Field(c_enum32[enums.cGcStatsTypes], 0x8)
     ]
 
 
@@ -11626,78 +11613,6 @@ class cGcCharacterLookAtData(Structure):
 
 
 @partial_struct
-class cGcStatIconTable(Structure):
-    StatIcons: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
-
-
-@partial_struct
-class cGcPlayerControlInput(Structure):
-    Inputs: Annotated[
-        basic.cTkDynamicArray[basic.NMSTemplate],
-        Field(basic.cTkDynamicArray[basic.NMSTemplate], 0x0),
-    ]
-    InterceptInputBlackList: Annotated[
-        basic.cTkDynamicArray[c_enum32[enums.cGcInputActions]],
-        Field(basic.cTkDynamicArray[c_enum32[enums.cGcInputActions]], 0x10),
-    ]
-    InterceptInputWhitelist: Annotated[
-        basic.cTkDynamicArray[c_enum32[enums.cGcInputActions]],
-        Field(basic.cTkDynamicArray[c_enum32[enums.cGcInputActions]], 0x20),
-    ]
-    InterceptAllInputs: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x30)]
-
-
-@partial_struct
-class cGcInventoryValueData(Structure):
-    BaseCostPerSlot: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x0)]
-    BaseMaxValue: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4)]
-    BaseMinValue: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x8)]
-    ExponentialValue: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xC)]
-    SlotExponentialValue: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x10)]
-    SlotsPerLevel: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14)]
-    ValueToCost: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x18)]
-
-
-@partial_struct
-class cGcPlayerControlModeEntry(Structure):
-    ControlModeResource: Annotated[cTkModelResource, Field(cTkModelResource, 0x0)]
-    Id: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x20)]
-
-
-@partial_struct
-class cGcValueData(Structure):
-    pass
-
-
-@partial_struct
-class cGcPlayerControlState(Structure):
-    OverrideInput: Annotated[cGcPlayerControlInput, Field(cGcPlayerControlInput, 0x0)]
-    Data: Annotated[
-        basic.cTkDynamicArray[basic.NMSTemplate],
-        Field(basic.cTkDynamicArray[basic.NMSTemplate], 0x38),
-    ]
-    Id: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x48)]
-    OverrideCamera: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x58)]
-    StickToGround: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x68)]
-
-
-@partial_struct
-class cGcExactResource(Structure):
-    Filename: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
-    GenerationSeed: Annotated[basic.GcSeed, Field(basic.GcSeed, 0x10)]
-
-
-@partial_struct
-class cGcRewardDestructEntry(Structure):
-    HealthFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x0)]
-
-
-@partial_struct
-class cGcRewardDestructRarities(Structure):
-    Rarities: Annotated[cGcRewardDestructEntry, Field(cGcRewardDestructEntry, 0x0)]
-
-
-@partial_struct
 class cGcCharacterMove(Structure):
     Input: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
 
@@ -11707,13 +11622,6 @@ class cGcCharacterMove(Structure):
 
     Mode: Annotated[c_enum32[eModeEnum], Field(c_enum32[eModeEnum], 0x10)]
     Strength: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14)]
-
-
-@partial_struct
-class cGcRewardDestructTable(Structure):
-    Categories: Annotated[
-        cGcRewardDestructRarities, Field(cGcRewardDestructRarities, 0x0)
-    ]
 
 
 @partial_struct
@@ -11734,53 +11642,39 @@ class cGcRewardTableEntitlementItem(Structure):
 
 
 @partial_struct
-class cGcCharacterAlternateAnimation(Structure):
-    Anim: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
-    Replacement: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x10)]
+class cGcStatsBonus(Structure):
+    Bonus: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x0)]
+    Level: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x4)]
+    Stat: Annotated[
+        c_enum32[enums.cGcStatsTypes], Field(c_enum32[enums.cGcStatsTypes], 0x8)
+    ]
 
 
 @partial_struct
-class cGcUnlockableSeasonReward(Structure):
-    SpecificMilestoneLoc: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)
-    ]
-    ID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x20)]
-    SeasonIds: Annotated[
-        basic.cTkDynamicArray[ctypes.c_int32],
-        Field(basic.cTkDynamicArray[ctypes.c_int32], 0x30),
-    ]
-    StageIds: Annotated[
-        basic.cTkDynamicArray[ctypes.c_int32],
-        Field(basic.cTkDynamicArray[ctypes.c_int32], 0x40),
-    ]
-    MustBeUnlocked: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x50)]
-    SwitchExclusive: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x51)]
-    UniqueInventoryItem: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x52)]
+class cGcStatIconTable(Structure):
+    StatIcons: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
 
 
 @partial_struct
-class cGcItemFilterStageDataAcceptAll(Structure):
+class cGcInventoryValueData(Structure):
+    BaseCostPerSlot: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x0)]
+    BaseMaxValue: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4)]
+    BaseMinValue: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x8)]
+    ExponentialValue: Annotated[ctypes.c_float, Field(ctypes.c_float, 0xC)]
+    SlotExponentialValue: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x10)]
+    SlotsPerLevel: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14)]
+    ValueToCost: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x18)]
+
+
+@partial_struct
+class cGcValueData(Structure):
     pass
 
 
 @partial_struct
-class cGcItemFilterStageDataMatchID(Structure):
-    DisabledMessage: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)
-    ]
-    ValidIds: Annotated[
-        basic.cTkDynamicArray[basic.TkID0x10],
-        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x20),
-    ]
-    MatchType: Annotated[
-        c_enum32[enums.cGcItemFilterMatchIDType],
-        Field(c_enum32[enums.cGcItemFilterMatchIDType], 0x30),
-    ]
-
-
-@partial_struct
-class cGcItemFilterStageDataNegation(Structure):
-    Child: Annotated[basic.NMSTemplate, Field(basic.NMSTemplate, 0x0)]
+class cGcExactResource(Structure):
+    Filename: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
+    GenerationSeed: Annotated[basic.GcSeed, Field(basic.GcSeed, 0x10)]
 
 
 @partial_struct
@@ -11801,13 +11695,6 @@ class cGcItemFilterStageDataStageGroup(Structure):
 
 
 @partial_struct
-class cGcUnlockableTwitchReward(Structure):
-    LinkedGroupId: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
-    ProductId: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x10)]
-    TwitchId: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x20)]
-
-
-@partial_struct
 class cGcItemFilterStageDataTechPack(Structure):
     DisabledMessage: Annotated[
         basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)
@@ -11821,23 +11708,13 @@ class cGcWeaponTerminalInteractionData(Structure):
 
 
 @partial_struct
-class cGcWeaponInventoryMaxUpgradeCapacity(Structure):
-    MaxInventoryCapacity: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x0)]
+class cGcRewardDestructEntry(Structure):
+    HealthFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x0)]
 
 
 @partial_struct
-class cGcWeightedFilename(Structure):
-    Filename: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
-    Weight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x10)]
-
-
-@partial_struct
-class cGcUnlockableItemTreeNode(Structure):
-    Children: Annotated[
-        "basic.cTkDynamicArray[cGcUnlockableItemTreeNode]",
-        Field("basic.cTkDynamicArray[cGcUnlockableItemTreeNode]", 0x0),
-    ]
-    Unlockable: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x10)]
+class cGcRewardDestructRarities(Structure):
+    Rarities: Annotated[cGcRewardDestructEntry, Field(cGcRewardDestructEntry, 0x0)]
 
 
 @partial_struct
@@ -11863,10 +11740,101 @@ class cGcUnlockablePlatformReward(Structure):
 
 
 @partial_struct
+class cGcItemFilterStageDataAcceptAll(Structure):
+    pass
+
+
+@partial_struct
+class cGcUnlockableSeasonReward(Structure):
+    SpecificMilestoneLoc: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)
+    ]
+    ID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x20)]
+    SeasonIds: Annotated[
+        basic.cTkDynamicArray[ctypes.c_int32],
+        Field(basic.cTkDynamicArray[ctypes.c_int32], 0x30),
+    ]
+    StageIds: Annotated[
+        basic.cTkDynamicArray[ctypes.c_int32],
+        Field(basic.cTkDynamicArray[ctypes.c_int32], 0x40),
+    ]
+    MustBeUnlocked: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x50)]
+    SwitchExclusive: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x51)]
+    UniqueInventoryItem: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x52)]
+
+
+@partial_struct
+class cGcItemFilterStageDataMatchID(Structure):
+    DisabledMessage: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)
+    ]
+    ValidIds: Annotated[
+        basic.cTkDynamicArray[basic.TkID0x10],
+        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x20),
+    ]
+    MatchType: Annotated[
+        c_enum32[enums.cGcItemFilterMatchIDType],
+        Field(c_enum32[enums.cGcItemFilterMatchIDType], 0x30),
+    ]
+
+
+@partial_struct
+class cGcItemFilterStageDataNegation(Structure):
+    Child: Annotated[basic.NMSTemplate, Field(basic.NMSTemplate, 0x0)]
+
+
+@partial_struct
+class cGcUnlockableTwitchReward(Structure):
+    LinkedGroupId: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
+    ProductId: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x10)]
+    TwitchId: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x20)]
+
+
+@partial_struct
+class cGcWeaponInventoryMaxUpgradeCapacity(Structure):
+    MaxInventoryCapacity: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x0)]
+
+
+@partial_struct
+class cGcUnlockableItemTreeNode(Structure):
+    Children: Annotated[
+        "basic.cTkDynamicArray[cGcUnlockableItemTreeNode]",
+        Field("basic.cTkDynamicArray[cGcUnlockableItemTreeNode]", 0x0),
+    ]
+    Unlockable: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x10)]
+
+
+@partial_struct
 class cGcUnlockableItemTree(Structure):
     Root: Annotated[cGcUnlockableItemTreeNode, Field(cGcUnlockableItemTreeNode, 0x0)]
     Title: Annotated[basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x20)]
     CostTypeID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x40)]
+
+
+@partial_struct
+class cGcWeightedFilename(Structure):
+    Filename: Annotated[basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)]
+    Weight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x10)]
+
+
+@partial_struct
+class cGcTechList(Structure):
+    AvailableTech: Annotated[
+        basic.cTkDynamicArray[basic.TkID0x10],
+        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x0),
+    ]
+
+
+@partial_struct
+class cGcTradingCategoryData(Structure):
+    Icon: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x0)]
+    ProductMultiplierChangePer100: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x18)
+    ]
+    SubstanceMultiplierChangePer100: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1C)
+    ]
+    Name: Annotated[basic.cTkFixedString0x40, Field(basic.cTkFixedString0x40, 0x20)]
 
 
 @partial_struct
@@ -11927,74 +11895,11 @@ class cGcTradeData(Structure):
 
 
 @partial_struct
-class cGcTechList(Structure):
-    AvailableTech: Annotated[
-        basic.cTkDynamicArray[basic.TkID0x10],
-        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x0),
-    ]
-
-
-@partial_struct
-class cGcTradeSettings(Structure):
-    BiggsBarterShop: Annotated[cGcTradeData, Field(cGcTradeData, 0x0)]
-    BiggsBasicShop: Annotated[cGcTradeData, Field(cGcTradeData, 0xE8)]
-    BoneShop: Annotated[cGcTradeData, Field(cGcTradeData, 0x1D0)]
-    BuilderShop: Annotated[cGcTradeData, Field(cGcTradeData, 0x2B8)]
-    ExpShip: Annotated[cGcTradeData, Field(cGcTradeData, 0x3A0)]
-    IllegalProds: Annotated[cGcTradeData, Field(cGcTradeData, 0x488)]
-    LoneExp: Annotated[cGcTradeData, Field(cGcTradeData, 0x570)]
-    LoneTra: Annotated[cGcTradeData, Field(cGcTradeData, 0x658)]
-    LoneWar: Annotated[cGcTradeData, Field(cGcTradeData, 0x740)]
-    MapShop: Annotated[cGcTradeData, Field(cGcTradeData, 0x828)]
-    NexusTechSpecialist: Annotated[cGcTradeData, Field(cGcTradeData, 0x910)]
-    PirateTech: Annotated[cGcTradeData, Field(cGcTradeData, 0x9F8)]
-    PirateVisitor: Annotated[cGcTradeData, Field(cGcTradeData, 0xAE0)]
-    Scrap: Annotated[cGcTradeData, Field(cGcTradeData, 0xBC8)]
-    SeasonRewardsShop: Annotated[cGcTradeData, Field(cGcTradeData, 0xCB0)]
-    Ship: Annotated[cGcTradeData, Field(cGcTradeData, 0xD98)]
-    ShipTechSpecialist: Annotated[cGcTradeData, Field(cGcTradeData, 0xE80)]
-    Shop: Annotated[cGcTradeData, Field(cGcTradeData, 0xF68)]
-    SmugglerStation: Annotated[cGcTradeData, Field(cGcTradeData, 0x1050)]
-    SpaceStation: Annotated[cGcTradeData, Field(cGcTradeData, 0x1138)]
-    SuitTechSpecialist: Annotated[cGcTradeData, Field(cGcTradeData, 0x1220)]
-    TechShop: Annotated[cGcTradeData, Field(cGcTradeData, 0x1308)]
-    TraShip: Annotated[cGcTradeData, Field(cGcTradeData, 0x13F0)]
-    VehicleTechSpecialist: Annotated[cGcTradeData, Field(cGcTradeData, 0x14D8)]
-    WarShip: Annotated[cGcTradeData, Field(cGcTradeData, 0x15C0)]
-    WeapTechSpecialist: Annotated[cGcTradeData, Field(cGcTradeData, 0x16A8)]
-
-
-@partial_struct
-class cGcTradingCategoryData(Structure):
+class cGcTechBoxData(Structure):
     Icon: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x0)]
-    ProductMultiplierChangePer100: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x18)
-    ]
-    SubstanceMultiplierChangePer100: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1C)
-    ]
-    Name: Annotated[basic.cTkFixedString0x40, Field(basic.cTkFixedString0x40, 0x20)]
-
-
-@partial_struct
-class cGcTradingClassData(Structure):
-    Icon: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x0)]
-    MaxBuyingPriceMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x18)]
-    MaxBuyingPriceMultiplierSurge: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x1C)
-    ]
-    MaxSellingPriceMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20)]
-    MinBuyingPriceMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x24)]
-    MinBuyingPriceMultiplierSurge: Annotated[
-        ctypes.c_float, Field(ctypes.c_float, 0x28)
-    ]
-    MinSellingPriceMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2C)]
-    Needs: Annotated[
-        c_enum32[enums.cGcTradeCategory], Field(c_enum32[enums.cGcTradeCategory], 0x30)
-    ]
-    Sells: Annotated[
-        c_enum32[enums.cGcTradeCategory], Field(c_enum32[enums.cGcTradeCategory], 0x34)
-    ]
+    InstallTechID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x18)]
+    ProductID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x28)]
+    IsAlien: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x38)]
 
 
 @partial_struct
@@ -12035,24 +11940,16 @@ class cGcSettlementStatStrengthData(Structure):
 
 
 @partial_struct
+class cGcSettlementJudgementPerkOption(Structure):
+    Perk: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
+    PerkChance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x10)]
+
+
+@partial_struct
 class cGcShipInventoryMaxUpgradeCapacity(Structure):
     MaxCargoInventoryCapacity: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x0)]
     MaxInventoryCapacity: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x10)]
     MaxTechInventoryCapacity: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x20)]
-
-
-@partial_struct
-class cGcTechBoxData(Structure):
-    Icon: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x0)]
-    InstallTechID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x18)]
-    ProductID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x28)]
-    IsAlien: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x38)]
-
-
-@partial_struct
-class cGcSettlementJudgementPerkOption(Structure):
-    Perk: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
-    PerkChance: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x10)]
 
 
 @partial_struct
@@ -12083,6 +11980,17 @@ class cGcStats(Structure):
         basic.cTkDynamicArray[cGcStatsGroup],
         Field(basic.cTkDynamicArray[cGcStatsGroup], 0x0),
     ]
+
+
+@partial_struct
+class cGcRewardTrigger(Structure):
+    Trigger: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
+    UseMasterModel: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x10)]
+
+
+@partial_struct
+class cGcRewardTriggerMaintenance(Structure):
+    pass
 
 
 @partial_struct
@@ -12164,18 +12072,18 @@ class cGcRewardWeaponSlot(Structure):
 
 
 @partial_struct
+class cGcRewardWikiTopic(Structure):
+    Topic: Annotated[basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)]
+    CentreMessage: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x20)]
+
+
+@partial_struct
 class cGcRewardTechRecipe(Structure):
     RewardGroup: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
     Category: Annotated[
         c_enum32[enums.cGcTechnologyCategory],
         Field(c_enum32[enums.cGcTechnologyCategory], 0x10),
     ]
-
-
-@partial_struct
-class cGcRewardWikiTopic(Structure):
-    Topic: Annotated[basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)]
-    CentreMessage: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x20)]
 
 
 @partial_struct
@@ -12186,17 +12094,6 @@ class cGcRewardTimeWarp(Structure):
 @partial_struct
 class cGcRewardTraderFlyby(Structure):
     ExperienceSpawnIndex: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x0)]
-
-
-@partial_struct
-class cGcRewardTrigger(Structure):
-    Trigger: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
-    UseMasterModel: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x10)]
-
-
-@partial_struct
-class cGcRewardTriggerMaintenance(Structure):
-    pass
 
 
 @partial_struct
@@ -12217,7 +12114,7 @@ class cGcRewardStatCompareAndSet(Structure):
 
 @partial_struct
 class cGcRewardStationTeleportEndpoint(Structure):
-    pass
+    FailPeekIfCannotAdd: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x0)]
 
 
 @partial_struct
@@ -20276,18 +20173,18 @@ class cGcUserSettingsData(Structure):
 
 
 @partial_struct
-class cGcJourneyMilestoneTable(Structure):
-    JourneyMilestoneTable: Annotated[
-        basic.cTkDynamicArray[cGcJourneyMilestoneData],
-        Field(basic.cTkDynamicArray[cGcJourneyMilestoneData], 0x0),
-    ]
-
-
-@partial_struct
 class cGcLeveledStatTable(Structure):
     LeveledStatTable: Annotated[
         basic.cTkDynamicArray[cGcLeveledStatData],
         Field(basic.cTkDynamicArray[cGcLeveledStatData], 0x0),
+    ]
+
+
+@partial_struct
+class cGcJourneyMilestoneTable(Structure):
+    JourneyMilestoneTable: Annotated[
+        basic.cTkDynamicArray[cGcJourneyMilestoneData],
+        Field(basic.cTkDynamicArray[cGcJourneyMilestoneData], 0x0),
     ]
 
 
@@ -20361,6 +20258,11 @@ class cGcCustomInventoryComponentData(Structure):
     ]
     Size: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x10)]
     Cool: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x20)]
+
+
+@partial_struct
+class cGcScreenFilterTable(Structure):
+    Filters: Annotated[cGcScreenFilterData, Field(cGcScreenFilterData, 0x0)]
 
 
 @partial_struct
@@ -20455,11 +20357,6 @@ class cGcScannerIcons(Structure):
     TaggedPlanet: Annotated[cGcScannerIcon, Field(cGcScannerIcon, 0x5248)]
     TimedEvent: Annotated[cGcScannerIcon, Field(cGcScannerIcon, 0x5280)]
     VehicleGeneric: Annotated[cGcScannerIcon, Field(cGcScannerIcon, 0x52B8)]
-
-
-@partial_struct
-class cGcScreenFilterTable(Structure):
-    Filters: Annotated[cGcScreenFilterData, Field(cGcScreenFilterData, 0x0)]
 
 
 @partial_struct
@@ -20595,13 +20492,11 @@ class cGcDialogClearanceTable(Structure):
 
 
 @partial_struct
-class cGcTradingClassTable(Structure):
-    CategoryData: Annotated[cGcTradingCategoryData, Field(cGcTradingCategoryData, 0x0)]
-    TradingClassesData: Annotated[
-        cGcTradingClassData, Field(cGcTradingClassData, 0x360)
+class cGcUnlockablePlatformRewards(Structure):
+    Table: Annotated[
+        basic.cTkDynamicArray[cGcUnlockablePlatformReward],
+        Field(basic.cTkDynamicArray[cGcUnlockablePlatformReward], 0x0),
     ]
-    MaxTradingMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4E8)]
-    MinTradingMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4EC)]
 
 
 @partial_struct
@@ -20613,24 +20508,8 @@ class cGcUnlockableTwitchRewards(Structure):
 
 
 @partial_struct
-class cGcUnlockableSeasonRewards(Structure):
-    Table: Annotated[
-        basic.cTkDynamicArray[cGcUnlockableSeasonReward],
-        Field(basic.cTkDynamicArray[cGcUnlockableSeasonReward], 0x0),
-    ]
-
-
-@partial_struct
 class cGcItemCostTable(Structure):
     Items: Annotated[cGcItemCostData, Field(cGcItemCostData, 0x0)]
-
-
-@partial_struct
-class cGcUnlockablePlatformRewards(Structure):
-    Table: Annotated[
-        basic.cTkDynamicArray[cGcUnlockablePlatformReward],
-        Field(basic.cTkDynamicArray[cGcUnlockablePlatformReward], 0x0),
-    ]
 
 
 @partial_struct
@@ -20642,6 +20521,14 @@ class cGcPurchaseableBuildingBlueprints(Structure):
     Table: Annotated[
         basic.cTkDynamicArray[cGcBuildingBlueprint],
         Field(basic.cTkDynamicArray[cGcBuildingBlueprint], 0x10),
+    ]
+
+
+@partial_struct
+class cGcUnlockableSeasonRewards(Structure):
+    Table: Annotated[
+        basic.cTkDynamicArray[cGcUnlockableSeasonReward],
+        Field(basic.cTkDynamicArray[cGcUnlockableSeasonReward], 0x0),
     ]
 
 
@@ -20740,15 +20627,21 @@ class cGcAudioAreaTriggerComponentData(Structure):
 
 
 @partial_struct
+class cGcObjectSpawnerComponentData(Structure):
+    Object: Annotated[cTkModelResource, Field(cTkModelResource, 0x0)]
+    SpawnCooldown: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20)]
+    SpawnPowerCost: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x24)]
+
+
+@partial_struct
 class cGcSpawnedObjectComponentData(Structure):
     CanBeTeleported: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x0)]
 
 
 @partial_struct
-class cGcObjectSpawnerComponentData(Structure):
-    Object: Annotated[cTkModelResource, Field(cTkModelResource, 0x0)]
-    SpawnCooldown: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20)]
-    SpawnPowerCost: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x24)]
+class cGcDissolveEffectComponentData(Structure):
+    DissolveBeginHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x0)]
+    DissolveEndHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4)]
 
 
 @partial_struct
@@ -20783,12 +20676,6 @@ class cGcHologramComponentData(Structure):
 
 
 @partial_struct
-class cGcDissolveEffectComponentData(Structure):
-    DissolveBeginHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x0)]
-    DissolveEndHeight: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4)]
-
-
-@partial_struct
 class cGcModelExplosionRules(Structure):
     Rules: Annotated[
         basic.cTkDynamicArray[cGcModelExplosionRule],
@@ -20820,6 +20707,18 @@ class cGcAlienPodComponentData(Structure):
 
 
 @partial_struct
+class cGcBaseDefenceComponentData(Structure):
+    Triggers: Annotated[
+        basic.cTkDynamicArray[cGcBaseDefenceTrigger],
+        Field(basic.cTkDynamicArray[cGcBaseDefenceTrigger], 0x0),
+    ]
+    LaserRangeAnimateTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x10)]
+    LostUncertaintyThreshold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14)]
+    SearchTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x18)]
+    PrioritiseThreats: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1C)]
+
+
+@partial_struct
 class cGcAntagonistComponentData(Structure):
     Enemies: Annotated[cGcAntagonistEnemy, Field(cGcAntagonistEnemy, 0x0)]
     Friends: Annotated[cGcAntagonistFriend, Field(cGcAntagonistFriend, 0x90)]
@@ -20848,18 +20747,6 @@ class cGcAtmosphereEntryComponentData(Structure):
 
 
 @partial_struct
-class cGcBaseDefenceComponentData(Structure):
-    Triggers: Annotated[
-        basic.cTkDynamicArray[cGcBaseDefenceTrigger],
-        Field(basic.cTkDynamicArray[cGcBaseDefenceTrigger], 0x0),
-    ]
-    LaserRangeAnimateTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x10)]
-    LostUncertaintyThreshold: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14)]
-    SearchTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x18)]
-    PrioritiseThreats: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x1C)]
-
-
-@partial_struct
 class cGcChairComponentData(Structure):
     pass
 
@@ -20882,6 +20769,11 @@ class cGcDiscoveryDisplayComponentData(Structure):
 
 
 @partial_struct
+class cGcCustomSpaceStormComponentData(Structure):
+    StormId: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
+
+
+@partial_struct
 class cTkLODComponentData(Structure):
     LODModels: Annotated[
         basic.cTkDynamicArray[cTkLODModelResource],
@@ -20890,11 +20782,6 @@ class cTkLODComponentData(Structure):
     CrossFadeOverlap: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x10)]
     CrossFadeTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14)]
     UseMasterModel: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x18)]
-
-
-@partial_struct
-class cGcCustomSpaceStormComponentData(Structure):
-    StormId: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
 
 
 @partial_struct
@@ -21059,20 +20946,20 @@ class cGcExhibitAssemblyComponentData(Structure):
 
 
 @partial_struct
+class cGcFishableAreaComponentData(Structure):
+    Radius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x0)]
+    SourceFishBasedOnSettlementBuildingLevel: Annotated[
+        ctypes.c_bool, Field(ctypes.c_bool, 0x4)
+    ]
+
+
+@partial_struct
 class cGcExpeditionHologramComponentData(Structure):
     SpawnOffset: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x0)]
     CaptainScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x10)]
     FrigateScale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x14)]
     HologramRotationSpeedDegPerSec: Annotated[
         ctypes.c_float, Field(ctypes.c_float, 0x18)
-    ]
-
-
-@partial_struct
-class cGcFishableAreaComponentData(Structure):
-    Radius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x0)]
-    SourceFishBasedOnSettlementBuildingLevel: Annotated[
-        ctypes.c_bool, Field(ctypes.c_bool, 0x4)
     ]
 
 
@@ -21153,18 +21040,6 @@ class cGcLadderComponentData(Structure):
 
 
 @partial_struct
-class cGcLootComponentData(Structure):
-    Reward: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
-    TimeOutEffect: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x10)]
-    Timed: Annotated[basic.Vector2f, Field(basic.Vector2f, 0x20)]
-    FlashPercent: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x28)]
-    NumFlashes: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x2C)]
-    DeathPoint: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x30)]
-    KeepUpright: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x31)]
-    PhysicsControlled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x32)]
-
-
-@partial_struct
 class cGcLookAtComponentData(Structure):
     class eLookAtTypeEnum(IntEnum):
         Player = 0x0
@@ -21175,6 +21050,18 @@ class cGcLookAtComponentData(Structure):
     MinRotationRateDegrees: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4)]
     RotationRateFactor: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x8)]
     NodeName: Annotated[basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0xC)]
+
+
+@partial_struct
+class cGcLootComponentData(Structure):
+    Reward: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
+    TimeOutEffect: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x10)]
+    Timed: Annotated[basic.Vector2f, Field(basic.Vector2f, 0x20)]
+    FlashPercent: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x28)]
+    NumFlashes: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x2C)]
+    DeathPoint: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x30)]
+    KeepUpright: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x31)]
+    PhysicsControlled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x32)]
 
 
 @partial_struct
@@ -21645,19 +21532,6 @@ class cGcScanEffectComponentData(Structure):
 
 
 @partial_struct
-class cGcAbandonedFreighterComponentData(Structure):
-    DungeonRootScene: Annotated[cTkModelResource, Field(cTkModelResource, 0x0)]
-    MarkerLabel: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x20)
-    ]
-    MarkerIcon: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x40)]
-    DungeonOptions: Annotated[
-        basic.cTkDynamicArray[cGcFreighterDungeonChoice],
-        Field(basic.cTkDynamicArray[cGcFreighterDungeonChoice], 0x58),
-    ]
-
-
-@partial_struct
 class cGcWFCBuilding(Structure):
     DecorationSet: Annotated[
         basic.VariableSizeString, Field(basic.VariableSizeString, 0x0)
@@ -21712,6 +21586,19 @@ class cGcWFCBuilding(Structure):
     ImprovedCoherence: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xDD)]
     RemoveUnreachableBlocks: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xDE)]
     RequireNoUnreachableRooms: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xDF)]
+
+
+@partial_struct
+class cGcAbandonedFreighterComponentData(Structure):
+    DungeonRootScene: Annotated[cTkModelResource, Field(cTkModelResource, 0x0)]
+    MarkerLabel: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x20)
+    ]
+    MarkerIcon: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x40)]
+    DungeonOptions: Annotated[
+        basic.cTkDynamicArray[cGcFreighterDungeonChoice],
+        Field(basic.cTkDynamicArray[cGcFreighterDungeonChoice], 0x58),
+    ]
 
 
 @partial_struct
@@ -21770,14 +21657,6 @@ class cGcMultiTextureComponentData(Structure):
 
 
 @partial_struct
-class cGcMultiColouriseComponentData(Structure):
-    Palettes: Annotated[
-        basic.cTkDynamicArray[cGcColourisePalette],
-        Field(basic.cTkDynamicArray[cGcColourisePalette], 0x0),
-    ]
-
-
-@partial_struct
 class cGcMarkerComponentData(Structure):
     CustomName: Annotated[
         basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)
@@ -21802,6 +21681,14 @@ class cGcMarkerComponentData(Structure):
     Radius: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2C)]
     ShipScannable: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x30)]
     UseCustomIcon: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x31)]
+
+
+@partial_struct
+class cGcMultiColouriseComponentData(Structure):
+    Palettes: Annotated[
+        basic.cTkDynamicArray[cGcColourisePalette],
+        Field(basic.cTkDynamicArray[cGcColourisePalette], 0x0),
+    ]
 
 
 @partial_struct
@@ -22243,6 +22130,14 @@ class cGcTerrainTexture(Structure):
 
 
 @partial_struct
+class cGcSpawnDensityList(Structure):
+    DensityList: Annotated[
+        basic.cTkDynamicArray[cGcSpawnDensity],
+        Field(basic.cTkDynamicArray[cGcSpawnDensity], 0x0),
+    ]
+
+
+@partial_struct
 class cGcCreatureGenerationData(Structure):
     SubBiomeSpecific: Annotated[
         cGcCreatureGenerationOptionalWeightedList,
@@ -22328,14 +22223,6 @@ class cGcWeatherTable(Structure):
     DefaultSpookLevel: Annotated[cGcHazardValues, Field(cGcHazardValues, 0x140)]
     DefaultTemperature: Annotated[cGcHazardValues, Field(cGcHazardValues, 0x170)]
     DefaultToxicity: Annotated[cGcHazardValues, Field(cGcHazardValues, 0x1A0)]
-
-
-@partial_struct
-class cGcSpawnDensityList(Structure):
-    DensityList: Annotated[
-        basic.cTkDynamicArray[cGcSpawnDensity],
-        Field(basic.cTkDynamicArray[cGcSpawnDensity], 0x0),
-    ]
 
 
 @partial_struct
@@ -22538,16 +22425,16 @@ class cGcWaypointComponentData(Structure):
 
 
 @partial_struct
+class cGcInputActionInfoMap(Structure):
+    ActionMap: Annotated[cGcInputActionInfo, Field(cGcInputActionInfo, 0x0)]
+
+
+@partial_struct
 class cGcActionSets(Structure):
     ActionSets: Annotated[
         basic.cTkDynamicArray[cGcActionSet],
         Field(basic.cTkDynamicArray[cGcActionSet], 0x0),
     ]
-
-
-@partial_struct
-class cGcInputActionInfoMap(Structure):
-    ActionMap: Annotated[cGcInputActionInfo, Field(cGcInputActionInfo, 0x0)]
 
 
 @partial_struct
@@ -27526,19 +27413,49 @@ class cGcCreatureCrystalMovementData(Structure):
 
 
 @partial_struct
-class cGcCustomisationDescriptorGroupOptions(Structure):
-    GroupTitle: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)
+class cGcCustomisationDescriptorGroupOption(Structure):
+    BoneScales: Annotated[
+        basic.cTkDynamicArray[cGcCustomisationBoneScales],
+        Field(basic.cTkDynamicArray[cGcCustomisationBoneScales], 0x0),
     ]
-    DescriptorGroupOptions: Annotated[
-        basic.cTkDynamicArray[cGcCustomisationDescriptorGroupOption],
-        Field(basic.cTkDynamicArray[cGcCustomisationDescriptorGroupOption], 0x20),
+    ColourGroups: Annotated[
+        basic.cTkDynamicArray[cGcCustomisationColourGroup],
+        Field(basic.cTkDynamicArray[cGcCustomisationColourGroup], 0x10),
     ]
-    PrerequisiteGroup: Annotated[
+    DescriptorOption: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x20)]
+    HideIfGroupActive: Annotated[
         basic.cTkDynamicArray[basic.TkID0x10],
         Field(basic.cTkDynamicArray[basic.TkID0x10], 0x30),
     ]
-    FirstOptionIsEmpty: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x40)]
+    SelectingAddsGroup: Annotated[
+        basic.cTkDynamicArray[basic.TkID0x10],
+        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x40),
+    ]
+    SelectingRemovesGroup: Annotated[
+        basic.cTkDynamicArray[basic.TkID0x10],
+        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x50),
+    ]
+    TextureGroups: Annotated[
+        basic.cTkDynamicArray[cGcCustomisationTextureGroup],
+        Field(basic.cTkDynamicArray[cGcCustomisationTextureGroup], 0x60),
+    ]
+    UnselectingAddsGroup: Annotated[
+        basic.cTkDynamicArray[basic.TkID0x10],
+        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x70),
+    ]
+    UnselectingRemovesGroup: Annotated[
+        basic.cTkDynamicArray[basic.TkID0x10],
+        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x80),
+    ]
+    InteractionCameraIndexOverride: Annotated[
+        ctypes.c_int32, Field(ctypes.c_int32, 0x90)
+    ]
+    InteracttionCameraFocusJointOverride: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x94)
+    ]
+    ForceDisableDoF: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xB4)]
+    ReplaceBaseBoneScales: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xB5)]
+    ReplaceBaseColours: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xB6)]
 
 
 @partial_struct
@@ -27672,6 +27589,13 @@ class cGcPlayerControlInputRemap(Structure):
 
 
 @partial_struct
+class cGcRewardDestructTable(Structure):
+    Categories: Annotated[
+        cGcRewardDestructRarities, Field(cGcRewardDestructRarities, 0x0)
+    ]
+
+
+@partial_struct
 class cGcRewardTableItemList(Structure):
     IncrementStat: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x0)]
     List: Annotated[
@@ -27698,6 +27622,15 @@ class cGcRewardTableItemList(Structure):
     ]
     OverrideZeroSeed: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x24)]
     UseInventoryChoiceOverride: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x25)]
+
+
+@partial_struct
+class cGcUnlockableItemTrees(Structure):
+    Title: Annotated[basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)]
+    Trees: Annotated[
+        basic.cTkDynamicArray[cGcUnlockableItemTree],
+        Field(basic.cTkDynamicArray[cGcUnlockableItemTree], 0x20),
+    ]
 
 
 @partial_struct
@@ -27743,11 +27676,53 @@ class cGcItemFilterStageDataProductCategory(Structure):
 
 
 @partial_struct
-class cGcUnlockableItemTrees(Structure):
-    Title: Annotated[basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)]
-    Trees: Annotated[
-        basic.cTkDynamicArray[cGcUnlockableItemTree],
-        Field(basic.cTkDynamicArray[cGcUnlockableItemTree], 0x20),
+class cGcTradeSettings(Structure):
+    BiggsBarterShop: Annotated[cGcTradeData, Field(cGcTradeData, 0x0)]
+    BiggsBasicShop: Annotated[cGcTradeData, Field(cGcTradeData, 0xE8)]
+    BoneShop: Annotated[cGcTradeData, Field(cGcTradeData, 0x1D0)]
+    BuilderShop: Annotated[cGcTradeData, Field(cGcTradeData, 0x2B8)]
+    ExpShip: Annotated[cGcTradeData, Field(cGcTradeData, 0x3A0)]
+    IllegalProds: Annotated[cGcTradeData, Field(cGcTradeData, 0x488)]
+    LoneExp: Annotated[cGcTradeData, Field(cGcTradeData, 0x570)]
+    LoneTra: Annotated[cGcTradeData, Field(cGcTradeData, 0x658)]
+    LoneWar: Annotated[cGcTradeData, Field(cGcTradeData, 0x740)]
+    MapShop: Annotated[cGcTradeData, Field(cGcTradeData, 0x828)]
+    NexusTechSpecialist: Annotated[cGcTradeData, Field(cGcTradeData, 0x910)]
+    PirateTech: Annotated[cGcTradeData, Field(cGcTradeData, 0x9F8)]
+    PirateVisitor: Annotated[cGcTradeData, Field(cGcTradeData, 0xAE0)]
+    Scrap: Annotated[cGcTradeData, Field(cGcTradeData, 0xBC8)]
+    SeasonRewardsShop: Annotated[cGcTradeData, Field(cGcTradeData, 0xCB0)]
+    Ship: Annotated[cGcTradeData, Field(cGcTradeData, 0xD98)]
+    ShipTechSpecialist: Annotated[cGcTradeData, Field(cGcTradeData, 0xE80)]
+    Shop: Annotated[cGcTradeData, Field(cGcTradeData, 0xF68)]
+    SmugglerStation: Annotated[cGcTradeData, Field(cGcTradeData, 0x1050)]
+    SpaceStation: Annotated[cGcTradeData, Field(cGcTradeData, 0x1138)]
+    SuitTechSpecialist: Annotated[cGcTradeData, Field(cGcTradeData, 0x1220)]
+    TechShop: Annotated[cGcTradeData, Field(cGcTradeData, 0x1308)]
+    TraShip: Annotated[cGcTradeData, Field(cGcTradeData, 0x13F0)]
+    VehicleTechSpecialist: Annotated[cGcTradeData, Field(cGcTradeData, 0x14D8)]
+    WarShip: Annotated[cGcTradeData, Field(cGcTradeData, 0x15C0)]
+    WeapTechSpecialist: Annotated[cGcTradeData, Field(cGcTradeData, 0x16A8)]
+
+
+@partial_struct
+class cGcTradingClassData(Structure):
+    Icon: Annotated[cTkTextureResource, Field(cTkTextureResource, 0x0)]
+    MaxBuyingPriceMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x18)]
+    MaxBuyingPriceMultiplierSurge: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x1C)
+    ]
+    MaxSellingPriceMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x20)]
+    MinBuyingPriceMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x24)]
+    MinBuyingPriceMultiplierSurge: Annotated[
+        ctypes.c_float, Field(ctypes.c_float, 0x28)
+    ]
+    MinSellingPriceMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x2C)]
+    Needs: Annotated[
+        c_enum32[enums.cGcTradeCategory], Field(c_enum32[enums.cGcTradeCategory], 0x30)
+    ]
+    Sells: Annotated[
+        c_enum32[enums.cGcTradeCategory], Field(c_enum32[enums.cGcTradeCategory], 0x34)
     ]
 
 
@@ -27847,6 +27822,14 @@ class cGcTechnology(Structure):
     Upgrade: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2CF)]
     UsesAmmo: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2D0)]
     WikiEnabled: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x2D1)]
+
+
+@partial_struct
+class cGcTechnologyTypes(Structure):
+    Technology: Annotated[
+        basic.cTkDynamicArray[cGcTechnology],
+        Field(basic.cTkDynamicArray[cGcTechnology], 0x0),
+    ]
 
 
 @partial_struct
@@ -28057,6 +28040,20 @@ class cGcRewardUpgradeShipClass(Structure):
 
 
 @partial_struct
+class cGcRewardTeachWord(Structure):
+    AmountMax: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x0)]
+    AmountMin: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x4)]
+    Category: Annotated[
+        c_enum32[enums.cGcWordCategoryTableEnum],
+        Field(c_enum32[enums.cGcWordCategoryTableEnum], 0x8),
+    ]
+    Race: Annotated[
+        c_enum32[enums.cGcAlienRace], Field(c_enum32[enums.cGcAlienRace], 0xC)
+    ]
+    UseCategory: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x10)]
+
+
+@partial_struct
 class cGcRewardWorker(Structure):
     NPCHabitationType: Annotated[
         c_enum32[enums.cGcNPCHabitationType],
@@ -28132,22 +28129,6 @@ class cGcRewardStatDiff(Structure):
 
 
 @partial_struct
-class cGcRewardTeachSpecificWords(Structure):
-    CustomOSDMessage: Annotated[
-        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)
-    ]
-    SpecificWordGroups: Annotated[
-        basic.cTkDynamicArray[basic.cTkFixedString0x20],
-        Field(basic.cTkDynamicArray[basic.cTkFixedString0x20], 0x20),
-    ]
-    OSDMessageTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x30)]
-    Race: Annotated[
-        c_enum32[enums.cGcAlienRace], Field(c_enum32[enums.cGcAlienRace], 0x34)
-    ]
-    SuppressOSDMessage: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x38)]
-
-
-@partial_struct
 class cGcRewardSubstance(Structure):
     AmountMax: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x0)]
     AmountMin: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x4)]
@@ -28165,17 +28146,19 @@ class cGcRewardSubstance(Structure):
 
 
 @partial_struct
-class cGcRewardTeachWord(Structure):
-    AmountMax: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x0)]
-    AmountMin: Annotated[ctypes.c_int32, Field(ctypes.c_int32, 0x4)]
-    Category: Annotated[
-        c_enum32[enums.cGcWordCategoryTableEnum],
-        Field(c_enum32[enums.cGcWordCategoryTableEnum], 0x8),
+class cGcRewardTeachSpecificWords(Structure):
+    CustomOSDMessage: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)
     ]
+    SpecificWordGroups: Annotated[
+        basic.cTkDynamicArray[basic.cTkFixedString0x20],
+        Field(basic.cTkDynamicArray[basic.cTkFixedString0x20], 0x20),
+    ]
+    OSDMessageTime: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x30)]
     Race: Annotated[
-        c_enum32[enums.cGcAlienRace], Field(c_enum32[enums.cGcAlienRace], 0xC)
+        c_enum32[enums.cGcAlienRace], Field(c_enum32[enums.cGcAlienRace], 0x34)
     ]
-    UseCategory: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x10)]
+    SuppressOSDMessage: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x38)]
 
 
 @partial_struct
@@ -39089,6 +39072,11 @@ class cGcAlienPuzzleTable(Structure):
 
 
 @partial_struct
+class cGcCombatEffectsTable(Structure):
+    EffectsData: Annotated[cGcCombatEffectData, Field(cGcCombatEffectData, 0x0)]
+
+
+@partial_struct
 class cGcPlayerWeaponPropertiesTable(Structure):
     PropertiesData: Annotated[
         cGcPlayerWeaponPropertiesData, Field(cGcPlayerWeaponPropertiesData, 0x0)
@@ -39097,13 +39085,18 @@ class cGcPlayerWeaponPropertiesTable(Structure):
 
 
 @partial_struct
-class cGcCombatEffectsTable(Structure):
-    EffectsData: Annotated[cGcCombatEffectData, Field(cGcCombatEffectData, 0x0)]
+class cGcMaintenanceGroupsTable(Structure):
+    Groups: Annotated[cGcMaintenanceGroup, Field(cGcMaintenanceGroup, 0x0)]
 
 
 @partial_struct
-class cGcMaintenanceGroupsTable(Structure):
-    Groups: Annotated[cGcMaintenanceGroup, Field(cGcMaintenanceGroup, 0x0)]
+class cGcTradingClassTable(Structure):
+    CategoryData: Annotated[cGcTradingCategoryData, Field(cGcTradingCategoryData, 0x0)]
+    TradingClassesData: Annotated[
+        cGcTradingClassData, Field(cGcTradingClassData, 0x360)
+    ]
+    MaxTradingMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4E8)]
+    MinTradingMultiplier: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x4EC)]
 
 
 @partial_struct
@@ -39113,11 +39106,6 @@ class cGcUnlockableTrees(Structure):
         basic.cTkDynamicArray[cGcUnlockableTreeCostType],
         Field(basic.cTkDynamicArray[cGcUnlockableTreeCostType], 0x2D0),
     ]
-
-
-@partial_struct
-class cGcPlayerDamageTable(Structure):
-    DamageTable: Annotated[cGcPlayerDamageData, Field(cGcPlayerDamageData, 0x0)]
 
 
 @partial_struct
@@ -39163,6 +39151,11 @@ class cGcInventoryTable(Structure):
         cGcWeaponInventoryMaxUpgradeCapacity,
         Field(cGcWeaponInventoryMaxUpgradeCapacity, 0x1A24),
     ]
+
+
+@partial_struct
+class cGcPlayerDamageTable(Structure):
+    DamageTable: Annotated[cGcPlayerDamageData, Field(cGcPlayerDamageData, 0x0)]
 
 
 @partial_struct
@@ -39264,69 +39257,77 @@ class cGcRewardTable(Structure):
         basic.cTkDynamicArray[cGcGenericRewardTableEntry],
         Field(basic.cTkDynamicArray[cGcGenericRewardTableEntry], 0x160),
     ]
-    SeasonRewardTable3: Annotated[
+    SeasonRewardTable21: Annotated[
         basic.cTkDynamicArray[cGcGenericRewardTableEntry],
         Field(basic.cTkDynamicArray[cGcGenericRewardTableEntry], 0x170),
     ]
-    SeasonRewardTable4: Annotated[
+    SeasonRewardTable22: Annotated[
         basic.cTkDynamicArray[cGcGenericRewardTableEntry],
         Field(basic.cTkDynamicArray[cGcGenericRewardTableEntry], 0x180),
     ]
-    SeasonRewardTable5: Annotated[
+    SeasonRewardTable23: Annotated[
         basic.cTkDynamicArray[cGcGenericRewardTableEntry],
         Field(basic.cTkDynamicArray[cGcGenericRewardTableEntry], 0x190),
     ]
-    SeasonRewardTable6: Annotated[
+    SeasonRewardTable24: Annotated[
         basic.cTkDynamicArray[cGcGenericRewardTableEntry],
         Field(basic.cTkDynamicArray[cGcGenericRewardTableEntry], 0x1A0),
     ]
-    SeasonRewardTable7: Annotated[
+    SeasonRewardTable3: Annotated[
         basic.cTkDynamicArray[cGcGenericRewardTableEntry],
         Field(basic.cTkDynamicArray[cGcGenericRewardTableEntry], 0x1B0),
     ]
-    SeasonRewardTable8: Annotated[
+    SeasonRewardTable4: Annotated[
         basic.cTkDynamicArray[cGcGenericRewardTableEntry],
         Field(basic.cTkDynamicArray[cGcGenericRewardTableEntry], 0x1C0),
     ]
-    SeasonRewardTable9: Annotated[
+    SeasonRewardTable5: Annotated[
         basic.cTkDynamicArray[cGcGenericRewardTableEntry],
         Field(basic.cTkDynamicArray[cGcGenericRewardTableEntry], 0x1D0),
     ]
-    SettlementTable: Annotated[
+    SeasonRewardTable6: Annotated[
         basic.cTkDynamicArray[cGcGenericRewardTableEntry],
         Field(basic.cTkDynamicArray[cGcGenericRewardTableEntry], 0x1E0),
     ]
-    ShipSalvageTable: Annotated[
+    SeasonRewardTable7: Annotated[
         basic.cTkDynamicArray[cGcGenericRewardTableEntry],
         Field(basic.cTkDynamicArray[cGcGenericRewardTableEntry], 0x1F0),
     ]
-    SpecialRewardTable: Annotated[
+    SeasonRewardTable8: Annotated[
         basic.cTkDynamicArray[cGcGenericRewardTableEntry],
         Field(basic.cTkDynamicArray[cGcGenericRewardTableEntry], 0x200),
     ]
-    Table: Annotated[
-        basic.cTkDynamicArray[cGcRewardTableEntry],
-        Field(basic.cTkDynamicArray[cGcRewardTableEntry], 0x210),
+    SeasonRewardTable9: Annotated[
+        basic.cTkDynamicArray[cGcGenericRewardTableEntry],
+        Field(basic.cTkDynamicArray[cGcGenericRewardTableEntry], 0x210),
     ]
-    TechRewardOrder: Annotated[
-        basic.cTkDynamicArray[basic.TkID0x10],
-        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x220),
+    SettlementTable: Annotated[
+        basic.cTkDynamicArray[cGcGenericRewardTableEntry],
+        Field(basic.cTkDynamicArray[cGcGenericRewardTableEntry], 0x220),
     ]
-    TwitchRewardTable: Annotated[
+    ShipSalvageTable: Annotated[
         basic.cTkDynamicArray[cGcGenericRewardTableEntry],
         Field(basic.cTkDynamicArray[cGcGenericRewardTableEntry], 0x230),
     ]
-    WikiProgressTable: Annotated[
+    SpecialRewardTable: Annotated[
         basic.cTkDynamicArray[cGcGenericRewardTableEntry],
         Field(basic.cTkDynamicArray[cGcGenericRewardTableEntry], 0x240),
     ]
-
-
-@partial_struct
-class cGcRecipeTable(Structure):
     Table: Annotated[
-        basic.cTkDynamicArray[cGcRefinerRecipe],
-        Field(basic.cTkDynamicArray[cGcRefinerRecipe], 0x0),
+        basic.cTkDynamicArray[cGcRewardTableEntry],
+        Field(basic.cTkDynamicArray[cGcRewardTableEntry], 0x250),
+    ]
+    TechRewardOrder: Annotated[
+        basic.cTkDynamicArray[basic.TkID0x10],
+        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x260),
+    ]
+    TwitchRewardTable: Annotated[
+        basic.cTkDynamicArray[cGcGenericRewardTableEntry],
+        Field(basic.cTkDynamicArray[cGcGenericRewardTableEntry], 0x270),
+    ]
+    WikiProgressTable: Annotated[
+        basic.cTkDynamicArray[cGcGenericRewardTableEntry],
+        Field(basic.cTkDynamicArray[cGcGenericRewardTableEntry], 0x280),
     ]
 
 
@@ -39339,6 +39340,14 @@ class cGcConsumableItemTable(Structure):
 
 
 @partial_struct
+class cGcRecipeTable(Structure):
+    Table: Annotated[
+        basic.cTkDynamicArray[cGcRefinerRecipe],
+        Field(basic.cTkDynamicArray[cGcRefinerRecipe], 0x0),
+    ]
+
+
+@partial_struct
 class cGcSubstanceTable(Structure):
     Crafting: Annotated[
         basic.cTkDynamicArray[cGcRealityCraftingRecipeData],
@@ -39347,14 +39356,6 @@ class cGcSubstanceTable(Structure):
     Table: Annotated[
         basic.cTkDynamicArray[cGcRealitySubstanceData],
         Field(basic.cTkDynamicArray[cGcRealitySubstanceData], 0x10),
-    ]
-
-
-@partial_struct
-class cGcTechnologyTable(Structure):
-    Table: Annotated[
-        basic.cTkDynamicArray[cGcTechnology],
-        Field(basic.cTkDynamicArray[cGcTechnology], 0x0),
     ]
 
 
@@ -39590,6 +39591,14 @@ class cGcRealityManagerData(Structure):
     LoopInteractionPuzzles: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x794C)]
     WeightingCurves: Annotated[
         c_enum32[enums.cTkCurveType], Field(c_enum32[enums.cTkCurveType], 0x79E5)
+    ]
+
+
+@partial_struct
+class cGcTechnologyTable(Structure):
+    Table: Annotated[
+        basic.cTkDynamicArray[cGcTechnology],
+        Field(basic.cTkDynamicArray[cGcTechnology], 0x0),
     ]
 
 
@@ -41976,75 +41985,19 @@ class cGcCreaturePetEggData(Structure):
 
 
 @partial_struct
-class cGcCustomisationGroup(Structure):
+class cGcCustomisationDescriptorGroupOptions(Structure):
     GroupTitle: Annotated[
         basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)
     ]
-    BoneScales: Annotated[
-        basic.cTkDynamicArray[cGcCustomisationBoneScales],
-        Field(basic.cTkDynamicArray[cGcCustomisationBoneScales], 0x20),
+    DescriptorGroupOptions: Annotated[
+        basic.cTkDynamicArray[cGcCustomisationDescriptorGroupOption],
+        Field(basic.cTkDynamicArray[cGcCustomisationDescriptorGroupOption], 0x20),
     ]
-    ColourGroups: Annotated[
-        basic.cTkDynamicArray[cGcCustomisationColourGroup],
-        Field(basic.cTkDynamicArray[cGcCustomisationColourGroup], 0x30),
-    ]
-    DescriptorOptions: Annotated[
-        basic.cTkDynamicArray[cGcCustomisationDescriptorGroupOptions],
-        Field(basic.cTkDynamicArray[cGcCustomisationDescriptorGroupOptions], 0x40),
-    ]
-    GroupID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x50)]
-    TextureGroups: Annotated[
-        basic.cTkDynamicArray[cGcCustomisationTextureGroup],
-        Field(basic.cTkDynamicArray[cGcCustomisationTextureGroup], 0x60),
-    ]
-    CameraData: Annotated[
-        cGcCustomisationCameraData, Field(cGcCustomisationCameraData, 0x70)
-    ]
-    ForceShowAllColourOptions: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xA4)]
-    IsBannerGroup: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xA5)]
-
-
-@partial_struct
-class cGcCustomisationGroups(Structure):
-    CustomisationGroups: Annotated[
-        basic.cTkDynamicArray[cGcCustomisationGroup],
-        Field(basic.cTkDynamicArray[cGcCustomisationGroup], 0x0),
-    ]
-
-
-@partial_struct
-class cGcCustomisationRace(Structure):
-    CustomisationGroups: Annotated[
-        basic.cTkDynamicArray[cGcCustomisationGroup],
-        Field(basic.cTkDynamicArray[cGcCustomisationGroup], 0x0),
-    ]
-    DescriptorGroupOption: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x10)]
-    Presets: Annotated[
+    PrerequisiteGroup: Annotated[
         basic.cTkDynamicArray[basic.TkID0x10],
-        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x20),
+        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x30),
     ]
-    Scale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x30)]
-    IsGek: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x34)]
-
-
-@partial_struct
-class cGcCustomisationUI(Structure):
-    Common: Annotated[cGcCustomisationGroups, Field(cGcCustomisationGroups, 0x0)]
-    Races: Annotated[
-        basic.cTkDynamicArray[cGcCustomisationRace],
-        Field(basic.cTkDynamicArray[cGcCustomisationRace], 0x10),
-    ]
-    RacesCameraData: Annotated[
-        cGcCustomisationCameraData, Field(cGcCustomisationCameraData, 0x20)
-    ]
-
-
-@partial_struct
-class cGcTechnologyTypes(Structure):
-    Technology: Annotated[
-        basic.cTkDynamicArray[cGcTechnology],
-        Field(basic.cTkDynamicArray[cGcTechnology], 0x0),
-    ]
+    FirstOptionIsEmpty: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x40)]
 
 
 @partial_struct
@@ -46307,11 +46260,6 @@ class cGcNPCSpawnTable(Structure):
 
 
 @partial_struct
-class cGcCustomisationUIData(Structure):
-    CustomisationUIData: Annotated[cGcCustomisationUI, Field(cGcCustomisationUI, 0x0)]
-
-
-@partial_struct
 class cGcGenericMissionSequence(Structure):
     MissionColourOverride: Annotated[basic.Colour, Field(basic.Colour, 0x0)]
     TradingDataOverride: Annotated[cGcTradeData, Field(cGcTradeData, 0x10)]
@@ -46889,6 +46837,70 @@ class cGcObjectSpawnDataArray(Structure):
     TileType: Annotated[
         c_enum32[enums.cGcTerrainTileType],
         Field(c_enum32[enums.cGcTerrainTileType], 0x14),
+    ]
+
+
+@partial_struct
+class cGcCustomisationGroup(Structure):
+    GroupTitle: Annotated[
+        basic.cTkFixedString0x20, Field(basic.cTkFixedString0x20, 0x0)
+    ]
+    BoneScales: Annotated[
+        basic.cTkDynamicArray[cGcCustomisationBoneScales],
+        Field(basic.cTkDynamicArray[cGcCustomisationBoneScales], 0x20),
+    ]
+    ColourGroups: Annotated[
+        basic.cTkDynamicArray[cGcCustomisationColourGroup],
+        Field(basic.cTkDynamicArray[cGcCustomisationColourGroup], 0x30),
+    ]
+    DescriptorOptions: Annotated[
+        basic.cTkDynamicArray[cGcCustomisationDescriptorGroupOptions],
+        Field(basic.cTkDynamicArray[cGcCustomisationDescriptorGroupOptions], 0x40),
+    ]
+    GroupID: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x50)]
+    TextureGroups: Annotated[
+        basic.cTkDynamicArray[cGcCustomisationTextureGroup],
+        Field(basic.cTkDynamicArray[cGcCustomisationTextureGroup], 0x60),
+    ]
+    CameraData: Annotated[
+        cGcCustomisationCameraData, Field(cGcCustomisationCameraData, 0x70)
+    ]
+    ForceShowAllColourOptions: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xA4)]
+    IsBannerGroup: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0xA5)]
+
+
+@partial_struct
+class cGcCustomisationGroups(Structure):
+    CustomisationGroups: Annotated[
+        basic.cTkDynamicArray[cGcCustomisationGroup],
+        Field(basic.cTkDynamicArray[cGcCustomisationGroup], 0x0),
+    ]
+
+
+@partial_struct
+class cGcCustomisationRace(Structure):
+    CustomisationGroups: Annotated[
+        basic.cTkDynamicArray[cGcCustomisationGroup],
+        Field(basic.cTkDynamicArray[cGcCustomisationGroup], 0x0),
+    ]
+    DescriptorGroupOption: Annotated[basic.TkID0x10, Field(basic.TkID0x10, 0x10)]
+    Presets: Annotated[
+        basic.cTkDynamicArray[basic.TkID0x10],
+        Field(basic.cTkDynamicArray[basic.TkID0x10], 0x20),
+    ]
+    Scale: Annotated[ctypes.c_float, Field(ctypes.c_float, 0x30)]
+    IsGek: Annotated[ctypes.c_bool, Field(ctypes.c_bool, 0x34)]
+
+
+@partial_struct
+class cGcCustomisationUI(Structure):
+    Common: Annotated[cGcCustomisationGroups, Field(cGcCustomisationGroups, 0x0)]
+    Races: Annotated[
+        basic.cTkDynamicArray[cGcCustomisationRace],
+        Field(basic.cTkDynamicArray[cGcCustomisationRace], 0x10),
+    ]
+    RacesCameraData: Annotated[
+        cGcCustomisationCameraData, Field(cGcCustomisationCameraData, 0x20)
     ]
 
 
@@ -47852,6 +47864,11 @@ class cGcClothComponentData(Structure):
 class cGcDefaultSaveData(Structure):
     State: Annotated[cGcPlayerStateData, Field(cGcPlayerStateData, 0x0)]
     Spawn: Annotated[cGcPlayerSpawnStateData, Field(cGcPlayerSpawnStateData, 0x7F430)]
+
+
+@partial_struct
+class cGcCustomisationUIData(Structure):
+    CustomisationUIData: Annotated[cGcCustomisationUI, Field(cGcCustomisationUI, 0x0)]
 
 
 @partial_struct
