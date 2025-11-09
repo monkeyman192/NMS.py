@@ -274,6 +274,13 @@ class cTkFSM(Structure):
     ): ...
 
 
+class cGcSimulation(Structure):
+    @function_hook(
+        "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 45 33 FF"
+    )
+    def Construct(self, this: "ctypes._Pointer[cGcSimulation]"): ...
+
+
 @partial_struct
 class cGcApplication(cTkFSM):
     # There are tricky to get...
@@ -291,6 +298,7 @@ class cGcApplication(cTkFSM):
         # These are found in cGcApplication::Data::Data
         mRealityManager: Annotated[cGcRealityManager, 0x60]
         mGameState: Annotated[cGcGameState, 0xDB0]
+        mSimulation: Annotated[cGcSimulation, 0x3D4D00]
 
         @function_hook(
             "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 45 33 FF 48 C7 41 ? ? ? ? ? 4C 89 39"
@@ -332,8 +340,9 @@ class cGcMarkerPoint(Structure):
     mNode: Annotated[basic.TkHandle, 0x104]
     mModelNode: Annotated[basic.TkHandle, 0x108]
     meBuildingClass: Annotated[
-        int, Field(ctypes.c_uint32, 0x118)
-    ]  # cGcBuildingClassification
+        c_enum32[enums.cGcBuildingClassification],
+        Field(c_enum32[enums.cGcBuildingClassification], 0x118),
+    ]
 
     @static_function_hook("40 53 48 83 EC ? 33 C0 0F 57 C0 0F 11 01 48 8B D9")
     @staticmethod
@@ -540,13 +549,15 @@ class cGcPlanet(Structure):
     mPlanetData: Annotated[nmse.cGcPlanetData, 0x60]
     # TODO: This field follows directly after the above one. Once we have the cGcPlanetData struct mapped
     # correctly we can remove the offset to make it just be determined automatically.
-    mPlanetGenerationInputData: Annotated[cGcPlanetGenerationInputData, 0x3A50]
+    mPlanetGenerationInputData: Annotated[cGcPlanetGenerationInputData, 0x3A60]
     mRegionMap: Annotated[cGcTerrainRegionMap, 0x3B80]
-    mNode: Annotated[basic.TkHandle, 0xD73C8]
-    mPosition: Annotated[basic.Vector3f, 0xD73E0]
+    mNode: Annotated[basic.TkHandle, 0xD73D8]
+    mAtmosphereNode: Annotated[basic.TkHandle, 0xD73DC]
+    mRingNode: Annotated[basic.TkHandle, 0xD73E4]
+    mPosition: Annotated[basic.Vector3f, 0xD73F0]
 
-    mpEnvProperties: Annotated[ctypes._Pointer[GcEnvironmentProperties], 0xD9048]
-    mpSkyProperties: Annotated[ctypes._Pointer[GcPlanetSkyProperties], 0xD9050]
+    mpEnvProperties: Annotated[ctypes._Pointer[GcEnvironmentProperties], 0xD9058]
+    mpSkyProperties: Annotated[ctypes._Pointer[GcPlanetSkyProperties], 0xD9060]
 
     @function_hook(
         "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 45 33 FF 48 C7 41 ? ? ? ? ? 44 89 79"
@@ -589,6 +600,7 @@ class cGcPlanet(Structure):
 
 @partial_struct
 class cGcSolarSystem(Structure):
+    # These can be found in cGcSolarSystem::cGcSolarSystem
     mSolarSystemData: Annotated[nmse.cGcSolarSystemData, 0x0]
     maPlanets: Annotated[list["cGcPlanet"], Field(cGcPlanet * 6, 0x2630)]
 
@@ -689,13 +701,6 @@ cTkDynamicGravityControl._fields_ = [
     ("miNumGravityPoints", ctypes.c_int32),
     ("maGravityOBBs", basic.cTkClassPool[cTkDynamicGravityControl.cTkGravityOBB, 0x40]),
 ]
-
-
-class cGcSimulation(Structure):
-    @function_hook(
-        "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 45 33 FF"
-    )
-    def Construct(self, this: "ctypes._Pointer[cGcSimulation]"): ...
 
 
 @partial_struct
