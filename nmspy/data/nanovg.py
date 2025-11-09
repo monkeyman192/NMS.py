@@ -12,6 +12,32 @@ class NVGcontext(ctypes.Structure):
     pass
 
 
+class NVGcolor(ctypes.Structure):
+    _fields_ = [
+        ("r", ctypes.c_float),
+        ("g", ctypes.c_float),
+        ("b", ctypes.c_float),
+        ("a", ctypes.c_float),
+    ]
+    r: float
+    g: float
+    b: float
+    a: float
+
+
+class NVGpaint(ctypes.Structure):
+    _fields_ = [
+        ("xform", ctypes.c_float * 6),
+        ("extent", ctypes.c_float * 2),
+        ("radius", ctypes.c_float),
+        ("feather", ctypes.c_float),
+        ("innerColor", NVGcolor),
+        ("outerColor", NVGcolor),
+        ("image", ctypes.c_int32),
+        ("desaturation", ctypes.c_float),
+    ]
+
+
 @static_function_hook("48 8B C4 48 89 58 ? 48 89 68 ? F3 0F 11 50")
 def nvgArc(
     ctx: ctypes._Pointer[NVGcontext],
@@ -23,7 +49,7 @@ def nvgArc(
     dir: ctypes.c_int32,
 ):
     """Adds an arc segment at the corner defined by the last path point, and two specified points."""
-    pass
+    ...
 
 
 @static_function_hook(
@@ -38,7 +64,7 @@ def nvgText(
 ):
     """Draws text string at specified location.
     If end is specified only the sub-string up to the end is drawn."""
-    pass
+    ...
 
 
 @static_function_hook("4C 8B DC 53 56 57 41 54 48 81 EC")
@@ -57,4 +83,20 @@ def nvgTextBox(
     new-line characters are encountered.
     Words longer than the max width are slit at nearest character (i.e. no hyphenation).
     """
-    pass
+    ...
+
+
+@static_function_hook(
+    "48 89 5C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 48 63 81 ? ? ? ? 48 8B D9 48 69 F8"
+)
+def nvgFill(ctx: ctypes._Pointer[NVGcontext]): ...
+
+
+@static_function_hook("48 8B C4 48 83 EC ? 0F 28 E2")
+def nvgRect(
+    ctx: ctypes._Pointer[NVGcontext],
+    x: ctypes.c_float,
+    y: ctypes.c_float,
+    w: ctypes.c_float,
+    h: ctypes.c_float,
+): ...

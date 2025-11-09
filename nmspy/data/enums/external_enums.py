@@ -437,60 +437,6 @@ class cTkInputHandEnum(IntEnum):
     Right = 0x2
 
 
-class cTkInputAxisEnum(IntEnum):
-    None_ = 0x0
-    Invalid = 0x0
-    LeftStick = 0x1
-    LeftStickX = 0x2
-    LeftStickY = 0x3
-    RightStick = 0x4
-    RightStickX = 0x5
-    RightStickY = 0x6
-    LeftTrigger = 0x7
-    RightTrigger = 0x8
-    Mouse = 0x9
-    MouseX = 0xA
-    MouseY = 0xB
-    MousePositiveX = 0xC
-    MouseNegativeX = 0xD
-    MousePositiveY = 0xE
-    MouseNegativeY = 0xF
-    MouseWheel = 0x10
-    MouseWheelPositive = 0x11
-    MouseWheelNegative = 0x12
-    Touchpad = 0x13
-    TouchpadX = 0x14
-    TouchpadY = 0x15
-    TouchpadPositiveX = 0x16
-    TouchpadNegativeX = 0x17
-    TouchpadPositiveY = 0x18
-    TouchpadNegativeY = 0x19
-    LeftTouchpad = 0x1A
-    LeftTouchpadX = 0x1B
-    LeftTouchpadY = 0x1C
-    LeftTouchpadPositiveX = 0x1D
-    LeftTouchpadNegativeX = 0x1E
-    LeftTouchpadPositiveY = 0x1F
-    LeftTouchpadNegativeY = 0x20
-    LeftGrip = 0x21
-    RightGrip = 0x22
-    LeftStickPositiveX = 0x23
-    LeftStickNegativeX = 0x24
-    LeftStickPositiveY = 0x25
-    LeftStickNegativeY = 0x26
-    RightStickPositiveX = 0x27
-    RightStickNegativeX = 0x28
-    RightStickPositiveY = 0x29
-    RightStickNegativeY = 0x2A
-    DirectionalPadX = 0x2B
-    DirectionalPadY = 0x2C
-    DirectionalButtonsX = 0x2D
-    DirectionalButtonsY = 0x2E
-    ChordAD = 0x2F
-    FakeLeftStick = 0x30
-    FakeRightStick = 0x31
-
-
 class cTkInputEnum(IntEnum):
     None_ = 0x0
     Space = 0x20
@@ -681,6 +627,60 @@ class cTkInputEnum(IntEnum):
     GestureBinoculars_LeftHanded = 0x173
     GestureBackpack_LeftHanded = 0x174
     MaxEnumValue = 0x175
+
+
+class cTkInputAxisEnum(IntEnum):
+    None_ = 0x0
+    Invalid = 0x0
+    LeftStick = 0x1
+    LeftStickX = 0x2
+    LeftStickY = 0x3
+    RightStick = 0x4
+    RightStickX = 0x5
+    RightStickY = 0x6
+    LeftTrigger = 0x7
+    RightTrigger = 0x8
+    Mouse = 0x9
+    MouseX = 0xA
+    MouseY = 0xB
+    MousePositiveX = 0xC
+    MouseNegativeX = 0xD
+    MousePositiveY = 0xE
+    MouseNegativeY = 0xF
+    MouseWheel = 0x10
+    MouseWheelPositive = 0x11
+    MouseWheelNegative = 0x12
+    Touchpad = 0x13
+    TouchpadX = 0x14
+    TouchpadY = 0x15
+    TouchpadPositiveX = 0x16
+    TouchpadNegativeX = 0x17
+    TouchpadPositiveY = 0x18
+    TouchpadNegativeY = 0x19
+    LeftTouchpad = 0x1A
+    LeftTouchpadX = 0x1B
+    LeftTouchpadY = 0x1C
+    LeftTouchpadPositiveX = 0x1D
+    LeftTouchpadNegativeX = 0x1E
+    LeftTouchpadPositiveY = 0x1F
+    LeftTouchpadNegativeY = 0x20
+    LeftGrip = 0x21
+    RightGrip = 0x22
+    LeftStickPositiveX = 0x23
+    LeftStickNegativeX = 0x24
+    LeftStickPositiveY = 0x25
+    LeftStickNegativeY = 0x26
+    RightStickPositiveX = 0x27
+    RightStickNegativeX = 0x28
+    RightStickPositiveY = 0x29
+    RightStickNegativeY = 0x2A
+    DirectionalPadX = 0x2B
+    DirectionalPadY = 0x2C
+    DirectionalButtonsX = 0x2D
+    DirectionalButtonsY = 0x2E
+    ChordAD = 0x2F
+    FakeLeftStick = 0x30
+    FakeRightStick = 0x31
 
 
 class cTkSketchConditions(IntEnum):
@@ -3515,6 +3515,13 @@ class cGcSolarSystemClass(IntEnum):
     GameStart = 0x3
 
 
+class cGcPlanetSentinelLevel(IntEnum):
+    Low = 0x0
+    Default = 0x1
+    Aggressive = 0x2
+    Corrupt = 0x3
+
+
 class cGcPlanetSize(IntEnum):
     Large = 0x0
     Medium = 0x1
@@ -3527,13 +3534,6 @@ class cGcPlanetClass(IntEnum):
     Default = 0x0
     Initial = 0x1
     InInitialSystem = 0x2
-
-
-class cGcPlanetSentinelLevel(IntEnum):
-    Low = 0x0
-    Default = 0x1
-    Aggressive = 0x2
-    Corrupt = 0x3
 
 
 class cGcBiomeType(IntEnum):
@@ -3788,11 +3788,6 @@ class cGcPhotoShip(IntEnum):
     Corvette = 0xA
 
 
-class cGcNPCSettlementBehaviourAreaProperty(IntEnum):
-    ContainsPlayer = 0x0
-    ContainsNPCs = 0x1
-
-
 class cGcNPCInteractiveObjectType(IntEnum):
     Idle = 0x0
     Generic = 0x1
@@ -3810,6 +3805,11 @@ class cGcNPCSettlementBehaviourState(IntEnum):
     Productive = 0x2
     Tired = 0x3
     Afraid = 0x4
+
+
+class cGcNPCSettlementBehaviourAreaProperty(IntEnum):
+    ContainsPlayer = 0x0
+    ContainsNPCs = 0x1
 
 
 class cGcMissionCategory(IntEnum):
@@ -4527,6 +4527,11 @@ class cGcBuildingClassification(IntEnum):
     Settlement_Builders_RoboArm = 0x3B
 
 
+class cGcNPCSeatedPosture(IntEnum):
+    Sofa = 0x0
+    Sit = 0x1
+
+
 class cGcPetAccessoryType(IntEnum):
     None_ = 0x0
     CargoCylinder = 0x1
@@ -4625,11 +4630,6 @@ class cGcNPCPropType(IntEnum):
     Box = 0xC
     Cup = 0xD
     Staff = 0xE
-
-
-class cGcNPCSeatedPosture(IntEnum):
-    Sofa = 0x0
-    Sit = 0x1
 
 
 class cGcCreatureGroups(IntEnum):
@@ -5052,6 +5052,12 @@ class cGcHologramPivotType(IntEnum):
     CentreBounds = 0x1
 
 
+class cGcCharacterControlInputValidity(IntEnum):
+    Always = 0x0
+    PadOnly = 0x1
+    KeyboardAnMouseOnly = 0x2
+
+
 class cGcCharacterControlOutputSpace(IntEnum):
     CameraRelative = 0x0
     CameraRelativeTopDown = 0x1
@@ -5277,26 +5283,10 @@ class cGcWordCategoryTableEnum(IntEnum):
     THREAT = 0x6
 
 
-class cGcCharacterControlInputValidity(IntEnum):
-    Always = 0x0
-    PadOnly = 0x1
-    KeyboardAnMouseOnly = 0x2
-
-
 class cGcItemFilterMatchIDType(IntEnum):
     Exact = 0x0
     Prefix = 0x1
     Postfix = 0x2
-
-
-class cGcWeightingCurve(IntEnum):
-    NoWeighting = 0x0
-    MaxIsUncommon = 0x1
-    MaxIsRare = 0x2
-    MaxIsSuperRare = 0x3
-    MinIsUncommon = 0x4
-    MinIsRare = 0x5
-    MinIsSuperRare = 0x6
 
 
 class cGcUnlockableItemTreeGroups(IntEnum):
@@ -5317,16 +5307,14 @@ class cGcUnlockableItemTreeGroups(IntEnum):
     CorvetteParts = 0xE
 
 
-class cGcTradeCategory(IntEnum):
-    Mineral = 0x0
-    Tech = 0x1
-    Commodity = 0x2
-    Component = 0x3
-    Alloy = 0x4
-    Exotic = 0x5
-    Energy = 0x6
-    None_ = 0x7
-    SpecialShop = 0x8
+class cGcWeightingCurve(IntEnum):
+    NoWeighting = 0x0
+    MaxIsUncommon = 0x1
+    MaxIsRare = 0x2
+    MaxIsSuperRare = 0x3
+    MinIsUncommon = 0x4
+    MinIsRare = 0x5
+    MinIsSuperRare = 0x6
 
 
 class cGcTechnologyCategory(IntEnum):
@@ -5360,20 +5348,16 @@ class cGcTechnologyRarity(IntEnum):
     Always = 0x6
 
 
-class cGcSizeIndicator(IntEnum):
-    Small = 0x0
-    Medium = 0x1
-    Large = 0x2
-
-
-class cGcSettlementStatStrength(IntEnum):
-    PositiveWide = 0x0
-    PositiveLarge = 0x1
-    PositiveMedium = 0x2
-    PositiveSmall = 0x3
-    NegativeSmall = 0x4
-    NegativeMedium = 0x5
-    NegativeLarge = 0x6
+class cGcTradeCategory(IntEnum):
+    Mineral = 0x0
+    Tech = 0x1
+    Commodity = 0x2
+    Component = 0x3
+    Alloy = 0x4
+    Exotic = 0x5
+    Energy = 0x6
+    None_ = 0x7
+    SpecialShop = 0x8
 
 
 class cGcStatsEnum(IntEnum):
@@ -5403,6 +5387,23 @@ class cGcStatsEnum(IntEnum):
     SEAGLASS = 0x17
     RUINS_LOOTED = 0x18
     STONE_KILLS = 0x19
+    BIGGSDEBRIS_POI = 0x1A
+
+
+class cGcSettlementStatStrength(IntEnum):
+    PositiveWide = 0x0
+    PositiveLarge = 0x1
+    PositiveMedium = 0x2
+    PositiveSmall = 0x3
+    NegativeSmall = 0x4
+    NegativeMedium = 0x5
+    NegativeLarge = 0x6
+
+
+class cGcSizeIndicator(IntEnum):
+    Small = 0x0
+    Medium = 0x1
+    Large = 0x2
 
 
 class cGcRewardTeleport(IntEnum):
@@ -5936,17 +5937,17 @@ class cGcFossilCategory(IntEnum):
     Tail = 0x4
 
 
-class cGcCurrency(IntEnum):
-    Units = 0x0
-    Nanites = 0x1
-    Specials = 0x2
-
-
 class cGcCreatureRarity(IntEnum):
     Common = 0x0
     Uncommon = 0x1
     Rare = 0x2
     SuperRare = 0x3
+
+
+class cGcCurrency(IntEnum):
+    Units = 0x0
+    Nanites = 0x1
+    Specials = 0x2
 
 
 class cGcCorvettePartCategory(IntEnum):
@@ -5963,6 +5964,7 @@ class cGcCorvettePartCategory(IntEnum):
     Reactor = 0x200
     Connector = 0x400
     Decor = 0x800
+    Interior = 0x1000
 
 
 class cGcCatalogueGroups(IntEnum):
@@ -6565,6 +6567,12 @@ class cGcStatsValueTypes(IntEnum):
     DamageSustained = 0x3
 
 
+class cGcStatType(IntEnum):
+    Int = 0x0
+    Float = 0x1
+    AvgRate = 0x2
+
+
 class cGcStatTrackType(IntEnum):
     Set = 0x0
     Add = 0x1
@@ -6572,67 +6580,16 @@ class cGcStatTrackType(IntEnum):
     Min = 0x3
 
 
-class cGcStatType(IntEnum):
-    Int = 0x0
-    Float = 0x1
-    AvgRate = 0x2
+class cGcStatDisplayType(IntEnum):
+    None_ = 0x0
+    Sols = 0x1
+    Distance = 0x2
 
 
 class cGcStatModifyType(IntEnum):
     Set = 0x0
     Add = 0x1
     Subtract = 0x2
-
-
-class cGcPetVocabularyWords(IntEnum):
-    Attack = 0x0
-    Dislike = 0x1
-    Cute = 0x2
-    Good = 0x3
-    Happy = 0x4
-    Hostile = 0x5
-    Like = 0x6
-    Lonely = 0x7
-    Loved = 0x8
-    Noise = 0x9
-    OwnerLove = 0xA
-    SummonedTrait = 0xB
-    Hungry = 0xC
-    Tickles = 0xD
-    Yummy = 0xE
-
-
-class cGcSpecialPetChatType(IntEnum):
-    Monster = 0x0
-    Quad = 0x1
-    MiniRobo = 0x2
-
-
-class cGcStatusMessageMissionMarkup(IntEnum):
-    KillFiend = 0x0
-    KillPirate = 0x1
-    KillSentinel = 0x2
-    KillHazardousPlants = 0x3
-    KillTraders = 0x4
-    KillCreatures = 0x5
-    KillPredators = 0x6
-    KillDepot = 0x7
-    KillWorms = 0x8
-    KillSpookSquids = 0x9
-    FeedCreature = 0xA
-    CollectBones = 0xB
-    CollectScrap = 0xC
-    Discover = 0xD
-    CollectSubstanceProduct = 0xE
-    Build = 0xF
-    Always = 0x10
-    None_ = 0x11
-
-
-class cGcStatDisplayType(IntEnum):
-    None_ = 0x0
-    Sols = 0x1
-    Distance = 0x2
 
 
 class cGcFriendlyDroneChatType(IntEnum):
@@ -6667,6 +6624,24 @@ class cGcPetChatType(IntEnum):
     Unsummoned = 0x14
 
 
+class cGcPetVocabularyWords(IntEnum):
+    Attack = 0x0
+    Dislike = 0x1
+    Cute = 0x2
+    Good = 0x3
+    Happy = 0x4
+    Hostile = 0x5
+    Like = 0x6
+    Lonely = 0x7
+    Loved = 0x8
+    Noise = 0x9
+    OwnerLove = 0xA
+    SummonedTrait = 0xB
+    Hungry = 0xC
+    Tickles = 0xD
+    Yummy = 0xE
+
+
 class cGcInteractionBufferType(IntEnum):
     Distress_Signal = 0x0
     Crate = 0x1
@@ -6679,6 +6654,33 @@ class cGcInteractionBufferType(IntEnum):
     Personal = 0x8
     Personal_Maintenance = 0x9
     FireteamSync = 0xA
+
+
+class cGcSpecialPetChatType(IntEnum):
+    Monster = 0x0
+    Quad = 0x1
+    MiniRobo = 0x2
+
+
+class cGcStatusMessageMissionMarkup(IntEnum):
+    KillFiend = 0x0
+    KillPirate = 0x1
+    KillSentinel = 0x2
+    KillHazardousPlants = 0x3
+    KillTraders = 0x4
+    KillCreatures = 0x5
+    KillPredators = 0x6
+    KillDepot = 0x7
+    KillWorms = 0x8
+    KillSpookSquids = 0x9
+    FeedCreature = 0xA
+    CollectBones = 0xB
+    CollectScrap = 0xC
+    Discover = 0xD
+    CollectSubstanceProduct = 0xE
+    Build = 0xF
+    Always = 0x10
+    None_ = 0x11
 
 
 class cGcSynchronisedBufferType(IntEnum):
@@ -6701,6 +6703,13 @@ class cGcTeleporterType(IntEnum):
     Freighter = 0x9
 
 
+class cGcSettlementTowerPower(IntEnum):
+    EarnNavigationData = 0x0
+    ScanForBuildings = 0x1
+    ScanForAnomalies = 0x2
+    ScanForCrashedShips = 0x3
+
+
 class cGcSeasonEndRewardsRedemptionState(IntEnum):
     None_ = 0x0
     Available = 0x1
@@ -6713,13 +6722,6 @@ class cGcSeasonSaveStateOnDeath(IntEnum):
     ResetAndQuit = 0x1
     ResetPosSaveAndQuit = 0x2
     SaveAndQuit = 0x3
-
-
-class cGcSettlementTowerPower(IntEnum):
-    EarnNavigationData = 0x0
-    ScanForBuildings = 0x1
-    ScanForAnomalies = 0x2
-    ScanForCrashedShips = 0x3
 
 
 class cGcPlayerMissionParticipantType(IntEnum):
@@ -6909,6 +6911,15 @@ class cGcBaseBuildingPartStyle(IntEnum):
     BIGGS_STR_Q = 0x31
     BIGGS_STR_R = 0x32
     BIGGS_STR_S = 0x33
+    BIGGS_STR_T = 0x34
+    BIGGS_STR_U = 0x35
+    BIGGS_STR_V = 0x36
+    BIGGS_STR_W = 0x37
+    BIGGS_STR_X = 0x38
+    BIGGS_STR_Y = 0x39
+    BIGGS_STR_Z = 0x3A
+    BIGGS_STR_AA = 0x3B
+    BIGGS_STR_AB = 0x3C
 
 
 class cGcBaseBuildingMode(IntEnum):
@@ -6998,6 +7009,12 @@ class cGcEncounterType(IntEnum):
     DroneHiveGuards = 0x6
     CorruptDronePillar = 0x7
     Fossil = 0x8
+
+
+class cGcExperienceBossType(IntEnum):
+    BugQueen = 0x0
+    JellyBoss = 0x1
+    SpookBoss = 0x2
 
 
 class cGcFiendCrime(IntEnum):
@@ -9165,6 +9182,7 @@ class cGcAudioWwiseEvents(IntEnum):
     POI_RELAYBEACON = 0x1B7DE839
     POI_RELICGATE = 0x63E4FEA6
     POI_SPACE_EGG = 0x983E577A
+    POI_SPACE_SHOOTING = 0x2C0F5A20
     POI_SPACECLOCK = 0x38EF2B82
     POI_SPINNER = 0xF1CA2105
     POI_WEIRD_METAL = 0xFF2F4C51
