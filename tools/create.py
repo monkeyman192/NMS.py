@@ -87,6 +87,22 @@ CTYPES_MAPPING = {
     "uint64": "c_uint64",
 }
 
+PYTYPES_MAPPING = {
+    "byte": "bytes",
+    "char": "bytes",
+    "wchar": "bytes",
+    "float": "float",
+    "bool": "bool",
+    "int8": "int",
+    "int16": "int",
+    "int32": "int",
+    "int64": "int",
+    "uint8": "int",
+    "uint16": "int",
+    "uint32": "int",
+    "uint64": "int",
+}
+
 BASIC_TYPES = {
     "Colour",
     "Colour32",
@@ -119,10 +135,14 @@ BASIC_TYPES = {
 IGNORE_TYPES = {"ENUM"}
 
 
-def pythonise_type(class_name: str, field_info: FieldData) -> cst.BaseExpression:
+def pythonise_type(class_name: str, field_info: FieldData, force_ctypes: bool = True) -> cst.BaseExpression:
     type_ = field_info["Type"]
     generic_type_args = field_info.get("GenericTypeArgs")
     field_name = field_info["Name"]
+    if force_ctypes is False:
+        # In this case, we can return a python type
+        if (pytype_val := PYTYPES_MAPPING.get(type_)) is not None:
+            return cst.Name(value=pytype_val)
     if (ctype_val := CTYPES_MAPPING.get(type_)) is not None:
         return cst.Attribute(value=cst.Name(value="ctypes"), attr=cst.Name(value=ctype_val))
     elif type_ in BASIC_TYPES:
@@ -246,7 +266,7 @@ def convert_field(class_name: str, field: FieldData) -> Union[
                         slice=[
                             cst.SubscriptElement(
                                 slice=cst.Index(
-                                    value=pythonise_type(class_name, field)
+                                    value=pythonise_type(class_name, field, False)
                                 )
                             ),
                             cst.SubscriptElement(

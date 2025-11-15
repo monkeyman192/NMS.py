@@ -7,7 +7,7 @@ from pymhf.gui.decorators import no_gui
 from pymhf.core.hooking import one_shot, hook_manager
 from pymhf.core.memutils import map_struct, get_addressof
 from pymhf import ModState
-import nmspy.common as nms_state
+from nmspy.common import gameData
 import nmspy.data.types as nms
 import nmspy.data.basic_types as basic
 from pymhf import Mod
@@ -35,7 +35,7 @@ class _INTERNAL_LoadSingletons(Mod):
     def fsm_state_change(self, this: ctypes._Pointer[nms.cTkFSM], *args):
         # One shot to instantiate the cGcApplication object.
         # This logic looks funny, but it's because the cGcApplication has cTkFSM as a base class.
-        nms_state.GcApplication = map_struct(get_addressof(this), nms.cGcApplication)
+        gameData.GcApplication = map_struct(get_addressof(this), nms.cGcApplication)
 
     @nms.cTkFSMState.StateChange.after
     def state_change(

@@ -1,39 +1,30 @@
+from typing import Optional
+
 import nmspy.data.types as nms
 
-# TODO:
-# Store all the globals here like this so that we may access them easily and
-# from anywhere.
-GcAISpaceshipGlobals = None
-GcAtlasGlobals = None
-GcAudioGlobals = None
-GcBuildingGlobals = None
-GcCameraGlobals = None
-GcCharacterGlobals = None
-GcCreatureGlobals = None
-GcDebugOptions = None
-GcEffectsGlobals = None
-GcEnvironmentGlobals = None
-GcFleetGlobals = None
-GcFreighterBaseGlobals = None
-GcGalaxyGlobals = None
-GcGameplayGlobals = None
-GcGraphicsGlobals = None
-GcMultiplayerGlobals = None
-GcPlacementGlobals = None
-GcPlayerGlobals = None
-GcRichPresenceGlobals = None
-GcRobotGlobals = None
-GcSceneOptions = None
-GcScratchpadGlobals = None
-GcSettlementGlobals = None
-GcSimulationGlobals = None
-GcSkyGlobals = None
-GcSmokeTestOptions = None
-GcSolarGenerationGlobals = None
-GcSpaceshipGlobals = None
-GcTerrainGlobals = None
-GcUIGlobals = None
-GcVehicleGlobals = None
-GcWaterGlobals = None
 
-GcApplication: nms.cGcApplication = None  # type: ignore
+class GameData:
+    GcApplication: nms.cGcApplication = None  # type: ignore
+
+    @property
+    def game_state(self) -> Optional[nms.cGcGameState]:
+        if self.GcApplication is not None:
+            return self.GcApplication.mpData.contents.mGameState
+
+    @property
+    def simulation(self) -> Optional[nms.cGcSimulation]:
+        if self.GcApplication is not None:
+            return self.GcApplication.mpData.contents.mSimulation
+
+    @property
+    def player(self) -> Optional[nms.cGcPlayer]:
+        if (sim := self.simulation) is not None:
+            return sim.mPlayer
+
+    @property
+    def player_state(self) -> Optional[nms.cGcPlayerState]:
+        if (game_state := self.game_state) is not None:
+            return game_state.mPlayerState
+
+
+gameData = GameData()

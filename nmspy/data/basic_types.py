@@ -107,6 +107,11 @@ class Vector3f(ctypes.Structure):
         ("_padding", ctypes.c_byte * 0x4),
     ]
 
+    def __init__(self, x: float, y: float, z: float):
+        self.x = x
+        self.y = y
+        self.z = z
+
     def __iadd__(self, other: "Vector3f"):
         self.x += other.x
         self.y += other.y
@@ -207,6 +212,9 @@ class cTkPhysRelVec3(ctypes.Structure):
         ("local", Vector3f),
         ("offset", Vector3f),
     ]
+
+    def __str__(self):
+        return f"<{self.__qualname__}; local: {str(self.local)}, offset: {str(self.offset)}"
 
 
 class GcResource(ctypes.Structure):
@@ -593,3 +601,5 @@ cTkFixedString0x100 = cTkFixedString[0x100]
 cTkFixedString0x200 = cTkFixedString[0x200]
 cTkFixedString0x400 = cTkFixedString[0x400]
 cTkFixedString0x800 = cTkFixedString[0x800]
+# Vector type aliases
+cTkBigPos = cTkPhysRelVec3

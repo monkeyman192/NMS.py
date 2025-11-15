@@ -3515,13 +3515,6 @@ class cGcSolarSystemClass(IntEnum):
     GameStart = 0x3
 
 
-class cGcPlanetSentinelLevel(IntEnum):
-    Low = 0x0
-    Default = 0x1
-    Aggressive = 0x2
-    Corrupt = 0x3
-
-
 class cGcPlanetSize(IntEnum):
     Large = 0x0
     Medium = 0x1
@@ -3534,6 +3527,13 @@ class cGcPlanetClass(IntEnum):
     Default = 0x0
     Initial = 0x1
     InInitialSystem = 0x2
+
+
+class cGcPlanetSentinelLevel(IntEnum):
+    Low = 0x0
+    Default = 0x1
+    Aggressive = 0x2
+    Corrupt = 0x3
 
 
 class cGcBiomeType(IntEnum):
@@ -5675,6 +5675,21 @@ class cGcProductCategory(IntEnum):
     ExhibitBone = 0xA
 
 
+class cGcNameGeneratorSectorTypes(IntEnum):
+    Generic = 0x0
+    Elevated = 0x1
+    Low = 0x2
+    Trees = 0x3
+    LushTrees = 0x4
+    Lush = 0x5
+    Wet = 0x6
+    Cave = 0x7
+    Dead = 0x8
+    Buildings = 0x9
+    Water = 0xA
+    Ice = 0xB
+
+
 class cGcNameGeneratorTypes(IntEnum):
     Generic = 0x0
     Mineral = 0x1
@@ -5721,25 +5736,19 @@ class cGcMaintenanceElementGroups(IntEnum):
     RobotHeads = 0x9
 
 
-class cGcNameGeneratorSectorTypes(IntEnum):
-    Generic = 0x0
-    Elevated = 0x1
-    Low = 0x2
-    Trees = 0x3
-    LushTrees = 0x4
-    Lush = 0x5
-    Wet = 0x6
-    Cave = 0x7
-    Dead = 0x8
-    Buildings = 0x9
-    Water = 0xA
-    Ice = 0xB
-
-
 class cGcInventoryType(IntEnum):
     Substance = 0x0
     Technology = 0x1
     Product = 0x2
+
+
+class cGcItemNeedPurpose(IntEnum):
+    None_ = 0x0
+    Crafting = 0x1
+    Building = 0x2
+    Repairing = 0x3
+    Charging = 0x4
+    Paying = 0x5
 
 
 class cGcInventoryLayoutSizeType(IntEnum):
@@ -5788,15 +5797,6 @@ class cGcInventoryLayoutSizeType(IntEnum):
     FoodUnit = 0x2A
     Corvette = 0x2B
     CorvetteStorage = 0x2C
-
-
-class cGcItemNeedPurpose(IntEnum):
-    None_ = 0x0
-    Crafting = 0x1
-    Building = 0x2
-    Repairing = 0x3
-    Charging = 0x4
-    Paying = 0x5
 
 
 class cGcInventorySpecialSlotType(IntEnum):
@@ -5848,17 +5848,6 @@ class cGcDiscoveryTrimGroup(IntEnum):
     Boring = 0x3
 
 
-class cGcDiscoveryTrimScoringCategory(IntEnum):
-    IsNamedSystem = 0x0
-    RecentlyVisitedSystem = 0x1
-    RecentDiscoveryInSystem = 0x2
-    NumDiscoveredPlanetsInSystem = 0x3
-    IsNamedPlanet = 0x4
-    NumBasesOnPlanet = 0x5
-    NumWondersOnPlanet = 0x6
-    NumNamedDiscoveries = 0x7
-
-
 class cGcFrigateTraitStrength(IntEnum):
     NegativeLarge = 0x0
     NegativeMedium = 0x1
@@ -5870,6 +5859,17 @@ class cGcFrigateTraitStrength(IntEnum):
     SecondaryMedium = 0x7
     SecondaryLarge = 0x8
     Primary = 0x9
+
+
+class cGcDiscoveryTrimScoringCategory(IntEnum):
+    IsNamedSystem = 0x0
+    RecentlyVisitedSystem = 0x1
+    RecentDiscoveryInSystem = 0x2
+    NumDiscoveredPlanetsInSystem = 0x3
+    IsNamedPlanet = 0x4
+    NumBasesOnPlanet = 0x5
+    NumWondersOnPlanet = 0x6
+    NumNamedDiscoveries = 0x7
 
 
 class cGcDiscoveryType(IntEnum):
