@@ -238,15 +238,15 @@ class cGcRealityManager(Structure):
 
 @partial_struct
 class cGcPlayerState(Structure):
+    # We can find this in cGcPlayerState::GetPlayerUniverseAddress, which, while not mapped, can be found
+    # inside cGcQuickActionMenu::TriggerAction below the string QUICK_MENU_EMERGENCY_WARP_BAN.
+    mLocation: Annotated[nmse.cGcUniverseAddressData, 0x180]
     miShield: Annotated[int, Field(c_int32, 0x1B0)]
     miHealth: Annotated[int, Field(c_int32, 0x1B4)]
     miShipHealth: Annotated[int, Field(c_int32, 0x1B8)]
     muUnits: Annotated[int, Field(c_uint32, 0x1BC)]
     muNanites: Annotated[int, Field(c_uint32, 0x1C0)]
     muSpecials: Annotated[int, Field(c_uint32, 0x1C4)]
-    # We can find this in cGcPlayerState::GetPlayerUniverseAddress, which, while not mapped, can be found
-    # inside cGcQuickActionMenu::TriggerAction below the string QUICK_MENU_EMERGENCY_WARP_BAN.
-    mLocation: Annotated[nmse.cGcUniverseAddressData, 0x180]
 
     @function_hook(
         "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 44 8B 81 ? ? ? ? 48 8D 2D"
