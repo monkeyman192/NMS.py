@@ -275,8 +275,31 @@ class cGcPlayerState(Structure):
 
 
 @partial_struct
+class cGcPlayerShipOwnership(Structure):
+    # Both these found at the top of cGcPlayerShipOwnership::UpdateMeshRefresh
+    mbShouldRefreshMesh: Annotated[bool, Field(c_bool, 0xA690)]
+    mMeshRefreshState: Annotated[int, Field(c_uint32, 0xA694)]
+
+    @function_hook(
+        "48 89 5C 24 ? 55 56 57 41 54 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 45"
+    )
+    def UpdateMeshRefresh(self, this: "_Pointer[cGcPlayerShipOwnership]"): ...
+
+    @function_hook(
+        "48 8B C4 55 53 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 80 B9 ? ? ? ? ? 48 8B F1"
+    )
+    def Update(
+        self,
+        this: "_Pointer[cGcPlayerShipOwnership]",
+        lfTimestep: Annotated[float, c_float],
+    ): ...
+
+
+@partial_struct
 class cGcGameState(Structure):
     mPlayerState: Annotated[cGcPlayerState, 0xA950]
+    # Found in cGcGameState:: Update
+    mPlayerShipOwnership: Annotated[cGcPlayerShipOwnership, 0xA2BD0]
 
     @function_hook("48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 88 54 24")
     def OnSaveProgressCompleted(
@@ -292,10 +315,17 @@ class cGcGameState(Structure):
     def LoadFromPersistentStorage(
         self,
         this: "_Pointer[cGcGameState]",
-        leSlot: c_uint32,
+        leSlot: Annotated[int, c_uint32],
         a3: c_int32,
         lbNetworkClientLoad: Annotated[bool, c_bool],
     ) -> c_uint64: ...
+
+    @function_hook(
+        "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? F3 0F 10 91"
+    )
+    def Update(
+        self, this: "_Pointer[cGcGameState]", lfTimeStep: Annotated[float, c_float]
+    ): ...
 
 
 class cTkFSM(Structure):
