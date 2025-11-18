@@ -758,5 +758,15 @@
   "name": "cGcGameState::Update",
   "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? F3 0F 10 91",
   "mangled_name": "?Update@cGcGameState@@QEAAXM@Z"
+ },
+ {
+  "name": "cGcPlayerShipOwnership::SpawnNewShip",
+  "signature": "44 89 44 24 ? 48 89 54 24 ? 55 56 41 54 41 56 41 57 48 8D 6C 24",
+  "mangled_name": "?SpawnNewShip@cGcPlayerShipOwnership@@QEAA_NAEBVcTkMatrix34@@W4ShipSpawnLandingGearState@1@H_N@Z"
+ },
+ {
+  "name": "cGcPlayerShipOwnership::DestroyShip",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8B 35 ? ? ? ? 8B DA",
+  "mangled_name": "?DestroyShip@cGcPlayerShipOwnership@@QEAA_NH@Z"
  }
 ]

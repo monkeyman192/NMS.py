@@ -247,6 +247,8 @@ class cGcPlayerState(Structure):
     muUnits: Annotated[int, Field(c_uint32, 0x1BC)]
     muNanites: Annotated[int, Field(c_uint32, 0x1C0)]
     muSpecials: Annotated[int, Field(c_uint32, 0x1C4)]
+    # Found in cGcPlayerShipOwnership::SpawnNewShip
+    miPrimaryShip: Annotated[int, Field(c_uint32, 0xC4F0)]
 
     @function_hook(
         "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 44 8B 81 ? ? ? ? 48 8D 2D"
@@ -276,9 +278,12 @@ class cGcPlayerState(Structure):
 
 @partial_struct
 class cGcPlayerShipOwnership(Structure):
-    # Both these found at the top of cGcPlayerShipOwnership::UpdateMeshRefresh
-    mbShouldRefreshMesh: Annotated[bool, Field(c_bool, 0xA690)]
-    mMeshRefreshState: Annotated[int, Field(c_uint32, 0xA694)]
+
+    @partial_struct
+    class sGcShipData(Structure):
+        _total_size_ = 0x48
+
+        mPlayerShipSeed: Annotated[basic.cTkSeed, 0x0]
 
     @function_hook(
         "48 89 5C 24 ? 55 56 57 41 54 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 45"
@@ -293,6 +298,31 @@ class cGcPlayerShipOwnership(Structure):
         this: "_Pointer[cGcPlayerShipOwnership]",
         lfTimestep: Annotated[float, c_float],
     ): ...
+
+    @function_hook("44 89 44 24 ? 48 89 54 24 ? 55 56 41 54 41 56 41 57 48 8D 6C 24")
+    def SpawnNewShip(
+        self,
+        this: "_Pointer[cGcPlayerShipOwnership]",
+        lMatrix: _Pointer[basic.cTkMatrix34],
+        leLandingGearState: c_uint32,  # cGcPlayerShipOwnership::ShipSpawnLandingGearState
+        liShipIndex: c_int32,
+        lbSpawnShipOverride: c_bool,
+    ) -> c_bool:
+        ...
+    
+    @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8B 35 ? ? ? ? 8B DA")
+    def DestroyShip(
+        self,
+        this: "_Pointer[cGcPlayerShipOwnership]",
+        liShipIndex: c_int32,
+    ) -> c_bool:
+        ...
+
+    # Not sure about this...
+    mShips: Annotated[list[sGcShipData], Field(sGcShipData * 12, 0x58)]
+    # Both these found at the top of cGcPlayerShipOwnership::UpdateMeshRefresh
+    mbShouldRefreshMesh: Annotated[bool, Field(c_bool, 0xA690)]
+    mMeshRefreshState: Annotated[int, Field(c_uint32, 0xA694)]
 
 
 @partial_struct
