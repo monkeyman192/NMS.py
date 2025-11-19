@@ -614,7 +614,58 @@ class cGcSolarSystem(Structure):
 
 
 @partial_struct
+class cGcPlayerEnvironment(Structure):
+    mPlayerTM: Annotated[basic.cTkMatrix34, Field(basic.cTkMatrix34, 0x0)]
+    mUp: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x40)]
+
+    # Found below the call to cTkDynamicGravityControl::GetGravity in cGcPlayerEnvironment::Update
+    miNearestPlanetIndex: Annotated[int, Field(c_uint32, 0x2BC)]
+    mfDistanceFromPlanet: Annotated[float, Field(c_float, 0x2C0)]
+    mfNearestPlanetSealevel: Annotated[float, Field(c_float, 0x2C4)]
+    mNearestPlanetPos: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x2D0)]
+    mbInsidePlanetAtmosphere: Annotated[bool, Field(c_bool, 0x2EC)]
+    meLocation: Annotated[
+        enums.EnvironmentLocation.Enum,
+        Field(c_enum32[enums.EnvironmentLocation.Enum], 0x458)
+    ]
+    meLocationStable: Annotated[
+        enums.EnvironmentLocation.Enum,
+        Field(c_enum32[enums.EnvironmentLocation.Enum], 0x464)
+    ]
+
+    @function_hook("48 83 EC ? 80 B9 ? ? ? ? ? C6 04 24")
+    def IsOnboardOwnFreighter(
+        self, this: "_Pointer[cGcPlayerEnvironment]"
+    ) -> c_bool: ...
+
+    @function_hook("8B 81 ? ? ? ? 83 E8 ? 83 F8 ? 0F 96 C0 C3 48 83 EC")
+    def IsOnPlanet(self, this: "_Pointer[cGcPlayerEnvironment]") -> c_bool: ...
+
+    @function_hook("48 8B C4 F3 0F 11 48 ? 55 53 41 54")
+    def Update(
+        self,
+        this: "_Pointer[cGcPlayerEnvironment]",
+        lfTimeStep: Annotated[float, c_float],
+    ): ...
+
+
+@partial_struct
+class cGcEnvironment(Structure):
+    # Passed into multiple cGcPlayerEnvironment methods.
+    mPlayerEnvironment: Annotated[cGcPlayerEnvironment, 0x8A0]
+
+    @function_hook(
+        "48 8B C4 48 89 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 4C 8B E9"
+    )
+    def UpdateRender(self, this: "_Pointer[cGcEnvironment]"):
+        # TODO: There could be a few good functions to get which are called in here...
+        ...
+
+
+@partial_struct
 class cGcSimulation(Structure):
+    # Found in cGcSimulation::Update. Passed into cGcEnvironment::Update.
+    mEnvironment: Annotated[cGcEnvironment, 0xAF790]
     mPlayer: Annotated[cGcPlayer, 0x24DE40]
     # Found in cGcSimulation::Update. Passed into cGcSolarSystem::Update.
     mpSolarSystem: Annotated[_Pointer[cGcSolarSystem], 0x24C670]
@@ -885,34 +936,6 @@ cTkDynamicGravityControl._fields_ = [
 ]
 
 
-@partial_struct
-class cGcPlayerEnvironment(Structure):
-    mPlayerTM: Annotated[basic.cTkMatrix34, Field(basic.cTkMatrix34, 0x0)]
-    mUp: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x40)]
-
-    # Found below the call to cTkDynamicGravityControl::GetGravity in cGcPlayerEnvironment::Update
-    miNearestPlanetIndex: Annotated[int, Field(c_uint32, 0x2BC)]
-    mfDistanceFromPlanet: Annotated[float, Field(c_float, 0x2C0)]
-    mfNearestPlanetSealevel: Annotated[float, Field(c_float, 0x2C4)]
-    mNearestPlanetPos: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x2D0)]
-    mbInsidePlanetAtmosphere: Annotated[bool, Field(c_bool, 0x2EC)]
-
-    @function_hook("48 83 EC ? 80 B9 ? ? ? ? ? C6 04 24")
-    def IsOnboardOwnFreighter(
-        self, this: "_Pointer[cGcPlayerEnvironment]"
-    ) -> c_bool: ...
-
-    @function_hook("8B 81 ? ? ? ? 83 E8 ? 83 F8 ? 0F 96 C0 C3 48 83 EC")
-    def IsOnPlanet(self, this: "_Pointer[cGcPlayerEnvironment]") -> c_bool: ...
-
-    @function_hook("48 8B C4 F3 0F 11 48 ? 55 53 41 54")
-    def Update(
-        self,
-        this: "_Pointer[cGcPlayerEnvironment]",
-        lfTimeStep: Annotated[float, c_float],
-    ): ...
-
-
 class Engine:
     @static_function_hook("40 53 48 83 EC ? 44 8B D1 44 8B C1")
     @staticmethod
@@ -1154,15 +1177,6 @@ class cTkFSMState(Structure):
         lpUserData: c_void_p,
         lbForceRestart: Annotated[bool, c_bool],
     ): ...
-
-
-class cGcEnvironment(Structure):
-    @function_hook(
-        "48 8B C4 48 89 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 4C 8B E9"
-    )
-    def UpdateRender(self, this: "_Pointer[cGcEnvironment]"):
-        # TODO: There could be a few good functions to get which are called in here...
-        ...
 
 
 class cGcPlayerNotifications(Structure):

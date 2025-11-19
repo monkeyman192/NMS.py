@@ -7,6 +7,16 @@ class GameData:
     GcApplication: nms.cGcApplication = None  # type: ignore
 
     @property
+    def environment(self) -> Optional[nms.cGcEnvironment]:
+        if (sim := self.simulation) is not None:
+            return sim.mEnvironment
+
+    @property
+    def player_environment(self) -> Optional[nms.cGcPlayerEnvironment]:
+        if (env := self.environment) is not None:
+            return env.mPlayerEnvironment
+
+    @property
     def game_state(self) -> Optional[nms.cGcGameState]:
         if self.GcApplication is not None:
             return self.GcApplication.mpData.contents.mGameState

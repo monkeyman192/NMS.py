@@ -6,6 +6,7 @@ from .internal_enums import (
     StateEnum,
     eStormState,
     eLanguageRegion,
+    EnvironmentLocation,
 )
 
 # The following list is auto-generated.

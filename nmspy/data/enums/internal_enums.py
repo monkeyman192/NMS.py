@@ -77,3 +77,23 @@ class eLanguageRegion(IntEnum):
     SimplifiedChinese = 0xE
     TencentChinese = 0xF
     Korean = 0x10
+
+
+class EnvironmentLocation():
+    class Enum(IntEnum):
+        None_ = 0x0
+        Default = 0x1
+        SpaceStation = 0x2
+        PlanetOnFoot = 0x3
+        PlanetInShip = 0x4
+        PlanetInVehicle = 0x5
+        Underwater = 0x6
+        Cave = 0x7
+        IndoorInBase = 0x8
+        Freighter = 0x9
+        FreighterInternals = 0xA
+        AbandonedFreighter = 0xB
+        InFleet = 0xC
+        InSpaceObject = 0xD
+        Nexus = 0xE
+        Anomaly = 0xF
