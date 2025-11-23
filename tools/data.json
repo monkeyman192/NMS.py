@@ -768,5 +768,10 @@
   "name": "cGcPlayerShipOwnership::DestroyShip",
   "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8B 35 ? ? ? ? 8B DA",
   "mangled_name": "?DestroyShip@cGcPlayerShipOwnership@@QEAA_NH@Z"
+ },
+ {
+  "name": "cGcSpaceshipWeapons::GetHeatFactor",
+  "signature": "48 63 81 ? ? ? ? F3 0F 10 84 81",
+  "mangled_name": "?GetHeatFactor@cGcSpaceshipWeapons@@UEBAMXZ"
  }
 ]

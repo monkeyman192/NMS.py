@@ -79,7 +79,7 @@ class eLanguageRegion(IntEnum):
     Korean = 0x10
 
 
-class EnvironmentLocation():
+class EnvironmentLocation:
     class Enum(IntEnum):
         None_ = 0x0
         Default = 0x1

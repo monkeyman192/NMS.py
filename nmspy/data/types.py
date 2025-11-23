@@ -278,7 +278,6 @@ class cGcPlayerState(Structure):
 
 @partial_struct
 class cGcPlayerShipOwnership(Structure):
-
     @partial_struct
     class sGcShipData(Structure):
         _total_size_ = 0x48
@@ -307,16 +306,16 @@ class cGcPlayerShipOwnership(Structure):
         leLandingGearState: c_uint32,  # cGcPlayerShipOwnership::ShipSpawnLandingGearState
         liShipIndex: c_int32,
         lbSpawnShipOverride: c_bool,
-    ) -> c_bool:
-        ...
-    
-    @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8B 35 ? ? ? ? 8B DA")
+    ) -> c_bool: ...
+
+    @function_hook(
+        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8B 35 ? ? ? ? 8B DA"
+    )
     def DestroyShip(
         self,
         this: "_Pointer[cGcPlayerShipOwnership]",
         liShipIndex: c_int32,
-    ) -> c_bool:
-        ...
+    ) -> c_bool: ...
 
     # Not sure about this...
     mShips: Annotated[list[sGcShipData], Field(sGcShipData * 12, 0x58)]
@@ -328,7 +327,7 @@ class cGcPlayerShipOwnership(Structure):
 @partial_struct
 class cGcGameState(Structure):
     mPlayerState: Annotated[cGcPlayerState, 0xA950]
-    # Found in cGcGameState:: Update
+    # Found in cGcGameState::Update
     mPlayerShipOwnership: Annotated[cGcPlayerShipOwnership, 0xA2BD0]
 
     @function_hook("48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 88 54 24")
@@ -626,11 +625,11 @@ class cGcPlayerEnvironment(Structure):
     mbInsidePlanetAtmosphere: Annotated[bool, Field(c_bool, 0x2EC)]
     meLocation: Annotated[
         enums.EnvironmentLocation.Enum,
-        Field(c_enum32[enums.EnvironmentLocation.Enum], 0x458)
+        Field(c_enum32[enums.EnvironmentLocation.Enum], 0x458),
     ]
     meLocationStable: Annotated[
         enums.EnvironmentLocation.Enum,
-        Field(c_enum32[enums.EnvironmentLocation.Enum], 0x464)
+        Field(c_enum32[enums.EnvironmentLocation.Enum], 0x464),
     ]
 
     @function_hook("48 83 EC ? 80 B9 ? ? ? ? ? C6 04 24")
@@ -1310,7 +1309,15 @@ class cGcSpaceshipWarp(Structure):
     ) -> c_float: ...
 
 
+@partial_struct
 class cGcSpaceshipWeapons(Structure):
+    # These can be found in cGcSpaceshipWeapons::GetHeatFactor and cGcSpaceshipWeapons::GetOverheatProgress
+    # This enum corresponds to the element in the following 3 arrays by index.
+    meWeaponMode: Annotated[c_enum32[enums.cGcShipWeapons], 0xA4]
+    mafWeaponHeat: Annotated[list[float], Field(c_float * 7, 0x5FA4)]
+    mafWeaponOverheatTimer: Annotated[list[float], Field(c_float * 7, 0x5FC0)]
+    mabWeaponOverheated: Annotated[list[bool], Field(c_bool * 7, 0x5FDC)]
+
     @function_hook("48 63 81 ?? ?? 00 00 80 BC 08 ?? ?? 00 00 00 74 12")
     def GetOverheatProgress(self, this: "_Pointer[cGcSpaceshipWeapons]") -> c_float: ...
 
@@ -1330,6 +1337,9 @@ class cGcSpaceshipWeapons(Structure):
         this: "_Pointer[cGcSpaceshipWeapons]",
     ) -> c_uint64:  # cGcShootPoint *
         ...
+
+    @function_hook("48 63 81 ? ? ? ? F3 0F 10 84 81")
+    def GetHeatFactor(self, this: "_Pointer[cGcSpaceshipWeapons]") -> c_float: ...
 
 
 class cGcPlayerCharacterComponent(Structure):
