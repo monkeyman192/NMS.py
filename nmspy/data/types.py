@@ -247,6 +247,8 @@ class cGcPlayerState(Structure):
     muUnits: Annotated[int, Field(c_uint32, 0x1BC)]
     muNanites: Annotated[int, Field(c_uint32, 0x1C0)]
     muSpecials: Annotated[int, Field(c_uint32, 0x1C4)]
+    # Found in cGcPlayerShipOwnership::SpawnNewShip
+    miPrimaryShip: Annotated[int, Field(c_uint32, 0xC4F0)]
 
     @function_hook(
         "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 44 8B 81 ? ? ? ? 48 8D 2D"
@@ -275,8 +277,58 @@ class cGcPlayerState(Structure):
 
 
 @partial_struct
+class cGcPlayerShipOwnership(Structure):
+    @partial_struct
+    class sGcShipData(Structure):
+        _total_size_ = 0x48
+
+        mPlayerShipSeed: Annotated[basic.cTkSeed, 0x0]
+
+    @function_hook(
+        "48 89 5C 24 ? 55 56 57 41 54 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 45"
+    )
+    def UpdateMeshRefresh(self, this: "_Pointer[cGcPlayerShipOwnership]"): ...
+
+    @function_hook(
+        "48 8B C4 55 53 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 80 B9 ? ? ? ? ? 48 8B F1"
+    )
+    def Update(
+        self,
+        this: "_Pointer[cGcPlayerShipOwnership]",
+        lfTimestep: Annotated[float, c_float],
+    ): ...
+
+    @function_hook("44 89 44 24 ? 48 89 54 24 ? 55 56 41 54 41 56 41 57 48 8D 6C 24")
+    def SpawnNewShip(
+        self,
+        this: "_Pointer[cGcPlayerShipOwnership]",
+        lMatrix: _Pointer[basic.cTkMatrix34],
+        leLandingGearState: c_uint32,  # cGcPlayerShipOwnership::ShipSpawnLandingGearState
+        liShipIndex: c_int32,
+        lbSpawnShipOverride: c_bool,
+    ) -> c_bool: ...
+
+    @function_hook(
+        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8B 35 ? ? ? ? 8B DA"
+    )
+    def DestroyShip(
+        self,
+        this: "_Pointer[cGcPlayerShipOwnership]",
+        liShipIndex: c_int32,
+    ) -> c_bool: ...
+
+    # Not sure about this...
+    mShips: Annotated[list[sGcShipData], Field(sGcShipData * 12, 0x58)]
+    # Both these found at the top of cGcPlayerShipOwnership::UpdateMeshRefresh
+    mbShouldRefreshMesh: Annotated[bool, Field(c_bool, 0xA690)]
+    mMeshRefreshState: Annotated[int, Field(c_uint32, 0xA694)]
+
+
+@partial_struct
 class cGcGameState(Structure):
     mPlayerState: Annotated[cGcPlayerState, 0xA950]
+    # Found in cGcGameState::Update
+    mPlayerShipOwnership: Annotated[cGcPlayerShipOwnership, 0xA2BD0]
 
     @function_hook("48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 88 54 24")
     def OnSaveProgressCompleted(
@@ -292,10 +344,17 @@ class cGcGameState(Structure):
     def LoadFromPersistentStorage(
         self,
         this: "_Pointer[cGcGameState]",
-        leSlot: c_uint32,
+        leSlot: Annotated[int, c_uint32],
         a3: c_int32,
         lbNetworkClientLoad: Annotated[bool, c_bool],
     ) -> c_uint64: ...
+
+    @function_hook(
+        "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? F3 0F 10 91"
+    )
+    def Update(
+        self, this: "_Pointer[cGcGameState]", lfTimeStep: Annotated[float, c_float]
+    ): ...
 
 
 class cTkFSM(Structure):
@@ -554,7 +613,58 @@ class cGcSolarSystem(Structure):
 
 
 @partial_struct
+class cGcPlayerEnvironment(Structure):
+    mPlayerTM: Annotated[basic.cTkMatrix34, Field(basic.cTkMatrix34, 0x0)]
+    mUp: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x40)]
+
+    # Found below the call to cTkDynamicGravityControl::GetGravity in cGcPlayerEnvironment::Update
+    miNearestPlanetIndex: Annotated[int, Field(c_uint32, 0x2BC)]
+    mfDistanceFromPlanet: Annotated[float, Field(c_float, 0x2C0)]
+    mfNearestPlanetSealevel: Annotated[float, Field(c_float, 0x2C4)]
+    mNearestPlanetPos: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x2D0)]
+    mbInsidePlanetAtmosphere: Annotated[bool, Field(c_bool, 0x2EC)]
+    meLocation: Annotated[
+        enums.EnvironmentLocation.Enum,
+        Field(c_enum32[enums.EnvironmentLocation.Enum], 0x458),
+    ]
+    meLocationStable: Annotated[
+        enums.EnvironmentLocation.Enum,
+        Field(c_enum32[enums.EnvironmentLocation.Enum], 0x464),
+    ]
+
+    @function_hook("48 83 EC ? 80 B9 ? ? ? ? ? C6 04 24")
+    def IsOnboardOwnFreighter(
+        self, this: "_Pointer[cGcPlayerEnvironment]"
+    ) -> c_bool: ...
+
+    @function_hook("8B 81 ? ? ? ? 83 E8 ? 83 F8 ? 0F 96 C0 C3 48 83 EC")
+    def IsOnPlanet(self, this: "_Pointer[cGcPlayerEnvironment]") -> c_bool: ...
+
+    @function_hook("48 8B C4 F3 0F 11 48 ? 55 53 41 54")
+    def Update(
+        self,
+        this: "_Pointer[cGcPlayerEnvironment]",
+        lfTimeStep: Annotated[float, c_float],
+    ): ...
+
+
+@partial_struct
+class cGcEnvironment(Structure):
+    # Passed into multiple cGcPlayerEnvironment methods.
+    mPlayerEnvironment: Annotated[cGcPlayerEnvironment, 0x8A0]
+
+    @function_hook(
+        "48 8B C4 48 89 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 4C 8B E9"
+    )
+    def UpdateRender(self, this: "_Pointer[cGcEnvironment]"):
+        # TODO: There could be a few good functions to get which are called in here...
+        ...
+
+
+@partial_struct
 class cGcSimulation(Structure):
+    # Found in cGcSimulation::Update. Passed into cGcEnvironment::Update.
+    mEnvironment: Annotated[cGcEnvironment, 0xAF790]
     mPlayer: Annotated[cGcPlayer, 0x24DE40]
     # Found in cGcSimulation::Update. Passed into cGcSolarSystem::Update.
     mpSolarSystem: Annotated[_Pointer[cGcSolarSystem], 0x24C670]
@@ -825,34 +935,6 @@ cTkDynamicGravityControl._fields_ = [
 ]
 
 
-@partial_struct
-class cGcPlayerEnvironment(Structure):
-    mPlayerTM: Annotated[basic.cTkMatrix34, Field(basic.cTkMatrix34, 0x0)]
-    mUp: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x40)]
-
-    # Found below the call to cTkDynamicGravityControl::GetGravity in cGcPlayerEnvironment::Update
-    miNearestPlanetIndex: Annotated[int, Field(c_uint32, 0x2BC)]
-    mfDistanceFromPlanet: Annotated[float, Field(c_float, 0x2C0)]
-    mfNearestPlanetSealevel: Annotated[float, Field(c_float, 0x2C4)]
-    mNearestPlanetPos: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x2D0)]
-    mbInsidePlanetAtmosphere: Annotated[bool, Field(c_bool, 0x2EC)]
-
-    @function_hook("48 83 EC ? 80 B9 ? ? ? ? ? C6 04 24")
-    def IsOnboardOwnFreighter(
-        self, this: "_Pointer[cGcPlayerEnvironment]"
-    ) -> c_bool: ...
-
-    @function_hook("8B 81 ? ? ? ? 83 E8 ? 83 F8 ? 0F 96 C0 C3 48 83 EC")
-    def IsOnPlanet(self, this: "_Pointer[cGcPlayerEnvironment]") -> c_bool: ...
-
-    @function_hook("48 8B C4 F3 0F 11 48 ? 55 53 41 54")
-    def Update(
-        self,
-        this: "_Pointer[cGcPlayerEnvironment]",
-        lfTimeStep: Annotated[float, c_float],
-    ): ...
-
-
 class Engine:
     @static_function_hook("40 53 48 83 EC ? 44 8B D1 44 8B C1")
     @staticmethod
@@ -1096,15 +1178,6 @@ class cTkFSMState(Structure):
     ): ...
 
 
-class cGcEnvironment(Structure):
-    @function_hook(
-        "48 8B C4 48 89 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 4C 8B E9"
-    )
-    def UpdateRender(self, this: "_Pointer[cGcEnvironment]"):
-        # TODO: There could be a few good functions to get which are called in here...
-        ...
-
-
 class cGcPlayerNotifications(Structure):
     @function_hook("48 89 5C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 44 8B 81")
     def AddTimedMessage(
@@ -1236,7 +1309,15 @@ class cGcSpaceshipWarp(Structure):
     ) -> c_float: ...
 
 
+@partial_struct
 class cGcSpaceshipWeapons(Structure):
+    # These can be found in cGcSpaceshipWeapons::GetHeatFactor and cGcSpaceshipWeapons::GetOverheatProgress
+    # This enum corresponds to the element in the following 3 arrays by index.
+    meWeaponMode: Annotated[c_enum32[enums.cGcShipWeapons], 0xA4]
+    mafWeaponHeat: Annotated[list[float], Field(c_float * 7, 0x5FA4)]
+    mafWeaponOverheatTimer: Annotated[list[float], Field(c_float * 7, 0x5FC0)]
+    mabWeaponOverheated: Annotated[list[bool], Field(c_bool * 7, 0x5FDC)]
+
     @function_hook("48 63 81 ?? ?? 00 00 80 BC 08 ?? ?? 00 00 00 74 12")
     def GetOverheatProgress(self, this: "_Pointer[cGcSpaceshipWeapons]") -> c_float: ...
 
@@ -1256,6 +1337,9 @@ class cGcSpaceshipWeapons(Structure):
         this: "_Pointer[cGcSpaceshipWeapons]",
     ) -> c_uint64:  # cGcShootPoint *
         ...
+
+    @function_hook("48 63 81 ? ? ? ? F3 0F 10 84 81")
+    def GetHeatFactor(self, this: "_Pointer[cGcSpaceshipWeapons]") -> c_float: ...
 
 
 class cGcPlayerCharacterComponent(Structure):
