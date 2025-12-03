@@ -31,6 +31,7 @@ from .internal_enums import (
     StateEnum,
     eStormState,
     eLanguageRegion,
+    EnvironmentLocation,
 )
 
 # The following list is auto-generated.
@@ -439,6 +440,21 @@ if __name__ == "__main__":
                         cst.ImportAlias(
                             name=cst.Name(value="Field")
                         ),
+                    ]
+                )
+            ],
+        ),
+        cst.SimpleStatementLine(
+            body=[
+                cst.ImportFrom(
+                    module=cst.Attribute(
+                        value=cst.Attribute(
+                            value=cst.Name(value="pymhf"),
+                            attr=cst.Name("extensions")
+                        ),
+                        attr=cst.Name(value="ctypes")
+                    ),
+                    names=[
                         cst.ImportAlias(
                             name=cst.Name(value="c_enum32")
                         ),
