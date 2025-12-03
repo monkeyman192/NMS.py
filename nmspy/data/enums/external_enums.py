@@ -6750,6 +6750,14 @@ class cGcGameMode(IntEnum):
     Seasonal = 0x6
 
 
+class cGcFreighterNPCType(IntEnum):
+    SquadronPilot = 0x0
+    FrigateCaptain = 0x1
+    WorkerBio = 0x2
+    WorkerTech = 0x3
+    WorkerIndustry = 0x4
+
+
 class cGcNPCNavSubgraphNodeType(IntEnum):
     Path = 0x0
     Connection = 0x1
@@ -6772,12 +6780,28 @@ class cGcPersistentBaseTypes(IntEnum):
     ShipBaseScratch = 0xC
 
 
-class cGcFreighterNPCType(IntEnum):
-    SquadronPilot = 0x0
-    FrigateCaptain = 0x1
-    WorkerBio = 0x2
-    WorkerTech = 0x3
-    WorkerIndustry = 0x4
+class cGcBuildMenuOption(IntEnum):
+    Place = 0x0
+    ChangeColour = 0x1
+    FreeRotate = 0x2
+    Scale = 0x3
+    SnapRotate = 0x4
+    Move = 0x5
+    Duplicate = 0x6
+    Delete = 0x7
+    ToggleBuildCam = 0x8
+    ToggleSnappingAndCollision = 0x9
+    ToggleSelectionMode = 0xA
+    ToggleWiringMode = 0xB
+    ViewRelatives = 0xC
+    CyclePart = 0xD
+    PlaceWire = 0xE
+    CycleRotateMode = 0xF
+    Flip = 0x10
+    ToggleCatalogue = 0x11
+    Purchase = 0x12
+    FamiliesRotate = 0x13
+    YFlip = 0x14
 
 
 class cGcLinkNetworkTypes(IntEnum):
@@ -6823,30 +6847,6 @@ class cGcBuildingPlacementErrorTypes(IntEnum):
     ShipInside = 0x16
     PlayerInside = 0x17
     InvalidCorvettePosition = 0x18
-
-
-class cGcBuildMenuOption(IntEnum):
-    Place = 0x0
-    ChangeColour = 0x1
-    FreeRotate = 0x2
-    Scale = 0x3
-    SnapRotate = 0x4
-    Move = 0x5
-    Duplicate = 0x6
-    Delete = 0x7
-    ToggleBuildCam = 0x8
-    ToggleSnappingAndCollision = 0x9
-    ToggleSelectionMode = 0xA
-    ToggleWiringMode = 0xB
-    ViewRelatives = 0xC
-    CyclePart = 0xD
-    PlaceWire = 0xE
-    CycleRotateMode = 0xF
-    Flip = 0x10
-    ToggleCatalogue = 0x11
-    Purchase = 0x12
-    FamiliesRotate = 0x13
-    YFlip = 0x14
 
 
 class cGcBaseBuildingSecondaryMode(IntEnum):

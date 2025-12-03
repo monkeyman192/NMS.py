@@ -683,6 +683,27 @@ class cGcSimulation(Structure):
     ): ...
 
 
+class cGcPlayerHUD(Structure):
+    @function_hook("48 8B C4 55 57 48 8D 68 ? 48 81 EC ? ? ? ? 48 8B 91")
+    def RenderIndicatorPanel(self, this: "_Pointer[cGcPlayerHUD]"): ...
+
+    @function_hook(
+        "48 8B C4 48 89 48 ? 55 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 83 B9"
+    )
+    def RenderWeaponPanel(self, this: "_Pointer[cGcPlayerHUD]"): ...
+
+    @function_hook(
+        "40 55 53 56 57 41 54 41 55 41 56 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 8B F1"
+    )
+    def RenderCrosshair(self, this: "_Pointer[cGcPlayerHUD]"): ...
+
+
+@partial_struct
+class cGcHUDManager(Structure):
+    mPlayerHUD: Annotated[cGcPlayerHUD, 0xA0]
+    mShipHUD: Annotated[cGcShipHUD, 0xE5CC0]
+
+
 @partial_struct
 class cGcApplication(cTkFSM):
     @partial_struct
@@ -691,6 +712,7 @@ class cGcApplication(cTkFSM):
         mRealityManager: Annotated[cGcRealityManager, 0x60]
         mGameState: Annotated[cGcGameState, 0xDB0]
         mSimulation: Annotated[cGcSimulation, 0x3D4D00]
+        mHUDManager: Annotated[cGcHUDManager, 0x6286A0]
 
         @function_hook(
             "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 45 33 FF 48 C7 41 ? ? ? ? ? 4C 89 39"
@@ -1300,7 +1322,19 @@ class cGcSpaceshipComponent(Structure):
     ): ...
 
 
+@partial_struct
 class cGcSpaceshipWarp(Structure):
+    mfPulseDriveTimer: Annotated[float, Field(c_float, 0x1A8)]
+    mfPulseDriveFuelTimer: Annotated[float, Field(c_float, 0x1AC)]
+
+    @function_hook(
+        "F3 0F 11 4C 24 ? 55 57 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 80 3D"
+    )
+    def UpdatePulseDrive(
+        self,
+        this: "_Pointer[cGcSpaceshipWarp]",
+    ): ...
+
     @function_hook(
         "48 83 EC ? 48 8B 0D ? ? ? ? 41 B9 ? ? ? ? 48 81 C1 ? ? ? ? C7 44 24 ? ? ? ? ? BA ? ? ? ? 45 8D 41 ? E8 ? ? ? ? 48 85 C0 74 ? 66 0F 6E 40"
     )
@@ -1641,21 +1675,6 @@ class cEgSceneGraphResource(Structure):
         lData: c_uint64,  # std::string *
         lpParent: c_uint64,  # cEgSceneNodeTemplate *
     ) -> c_char: ...
-
-
-class cGcPlayerHUD(Structure):
-    @function_hook("48 8B C4 55 57 48 8D 68 ? 48 81 EC ? ? ? ? 48 8B 91")
-    def RenderIndicatorPanel(self, this: "_Pointer[cGcPlayerHUD]"): ...
-
-    @function_hook(
-        "48 8B C4 48 89 48 ? 55 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 83 B9"
-    )
-    def RenderWeaponPanel(self, this: "_Pointer[cGcPlayerHUD]"): ...
-
-    @function_hook(
-        "40 55 53 56 57 41 54 41 55 41 56 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 8B F1"
-    )
-    def RenderCrosshair(self, this: "_Pointer[cGcPlayerHUD]"): ...
 
 
 class cGcApplicationBootState(Structure):
