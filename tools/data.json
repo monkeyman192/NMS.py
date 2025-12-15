@@ -778,5 +778,85 @@
   "name": "cGcSpaceshipWarp::UpdatePulseDrive",
   "signature": "F3 0F 11 4C 24 ? 55 57 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 80 3D",
   "mangled_name": "?UpdatePulseEncounters@cGcPlayerExperienceDirector@@AEAAXM@Z"
+ },
+ {
+  "name": "cGcRealityManager::cGcRealityManager",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B F9 33 ED 48 89 A9",
+  "mangled_name": "??0cGcRealityManager@@QEAA@XZ"
+ },
+ {
+  "name": "cGcGameState::cGcGameState",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? C7 41",
+  "mangled_name": "??0cGcGameState@@QEAA@XZ"
+ },
+ {
+  "name": "cGcPlayerState::cGcPlayerState",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 4C 24 ? 57 41 54 41 55 41 56 41 57 48 83 EC ? 45 33 FF",
+  "mangled_name": "??0cGcPlayerState@@QEAA@XZ"
+ },
+ {
+  "name": "cGcInventoryStore::cGcInventoryStore",
+  "signature": "48 89 5C 24 ? 57 48 83 EC ? 33 FF 0F 57 C0 0F 11 01 48 8B D9 0F 11 41 ? 0F 11 41 ? 0F 11 41",
+  "mangled_name": "??0cGcInventoryStore@@QEAA@XZ"
+ },
+ {
+  "name": "cGcPlayerShipOwnership::cGcPlayerShipOwnership",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 54 41 56 41 57 48 83 EC ? 45 33 E4 48 C7 41",
+  "mangled_name": "??0cGcPlayerShipOwnership@@QEAA@XZ"
+ },
+ {
+  "name": "cGcPlayerVehicleOwnership::cGcPlayerVehicleOwnership",
+  "signature": "48 89 5C 24 ? 57 48 83 EC ? 33 FF 48 C7 41 ? ? ? ? ? 48 89 79 ? 48 B8",
+  "mangled_name": "??0cGcPlayerVehicleOwnership@@QEAA@XZ"
+ },
+ {
+  "name": "cGcPlayerCreatureOwnership::cGcPlayerCreatureOwnership",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 4C 24 ? 57 41 54 41 55 41 56 41 57 48 83 EC ? BB",
+  "mangled_name": "__ZN26cGcPlayerCreatureOwnershipC2Ev"
+ },
+ {
+  "name": "cGcPlayerMultitoolOwnership::cGcPlayerMultitoolOwnership",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 45 33 FF 0F 29 74 24 ? 44 89 39",
+  "mangled_name": "__ZN27cGcPlayerMultitoolOwnershipC2Ev"
+ },
+ {
+  "name": "cGcPlayerFreighterOwnership::cGcPlayerFreighterOwnership",
+  "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 F6 C7 41 ? ? ? ? ? 48 8D 05",
+  "mangled_name": "__ZN27cGcPlayerFreighterOwnershipC2Ev"
+ },
+ {
+  "name": "cGcPlayerFleetManager::cGcPlayerFleetManager",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8D 05 ? ? ? ? C7 41 ? ? ? ? ? 48 89 01 48 8B D9",
+  "mangled_name": "__ZN21cGcPlayerFleetManagerC1Ev"
+ },
+ {
+  "name": "cGcSimulation::cGcSimulation",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 0F 29 74 24 ? 48 8B F9 E8 ? ? ? ? 48 8D 8F",
+  "mangled_name": "??0cGcSimulation@@QEAA@XZ"
+ },
+ {
+  "name": "cGcHUDManager::cGcHUDManager",
+  "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 F6 48 8D 59 ? 48 89 71",
+  "mangled_name": "??0cGcHUDManager@@QEAA@XZ"
+ },
+ {
+  "name": "cGcPlayerHUD::cGcPlayerHUD",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 0F 29 74 24 ? 48 8B F9 E8 ? ? ? ? 48 8D 9F",
+  "mangled_name": "??0cGcPlayerHUD@@QEAA@XZ"
+ },
+ {
+  "name": "cGcHUD::cGcHUD",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 33 ED 4C 8B F1",
+  "mangled_name": "??0cGcHUD@@QEAA@XZ"
+ },
+ {
+  "name": "cGcHUDMarker::cGcHUDMarker",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8B F1 48 83 C1",
+  "mangled_name": "??0cGcHUDMarker@@QEAA@XZ"
+ },
+ {
+  "name": "cGcQuickMenu::cGcQuickMenu",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8D 79 ? 48 8B E9",
+  "mangled_name": "??0cGcQuickMenu@@QEAA@XZ"
  }
 ]

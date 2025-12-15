@@ -3,6 +3,7 @@ from ctypes import (
     c_uint32,
     c_int32,
     c_uint16,
+    c_int16,
     _Pointer,
     c_float,
     c_uint64,
@@ -82,6 +83,12 @@ class cGcNGuiText(Structure):
         "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 81 EC ? ? ? ? 0F 29 70 ? 0F 29 78 ? 48 8D A8 ? ? ? ? 48 83 E5 ? 48 8B 01 48 8B F9"
     )
     def EditElement(self, this: "_Pointer[cGcNGuiText]"): ...
+
+
+@partial_struct
+class cTkPersonalRNG(Structure):
+    mState0: Annotated[int, Field(c_uint32)]
+    mState1: Annotated[int, Field(c_uint32)]
 
 
 @partial_struct
@@ -180,7 +187,7 @@ class cGcNGuiLayer(cGcNGuiElement):
 
 @partial_struct
 class cGcNGui(Structure):
-    mRoot: Annotated[cGcNGuiLayer, Field(cGcNGuiLayer)]
+    mRoot: Annotated[cGcNGuiLayer, 0x0]
 
 
 @partial_struct
@@ -217,6 +224,11 @@ class cGcRealityManager(Structure):
     def Construct(self, this: "_Pointer[cGcRealityManager]"): ...
 
     @function_hook(
+        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B F9 33 ED 48 89 A9"
+    )
+    def cGcRealityManager(self, this: "_Pointer[cGcRealityManager]"): ...
+
+    @function_hook(
         "48 89 54 24 ? 48 89 4C 24 ? 55 53 41 54 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 48 8B DA 4C 8B E1"
     )
     def GenerateProceduralProduct(
@@ -237,6 +249,20 @@ class cGcRealityManager(Structure):
 
 
 @partial_struct
+class cGcInventoryStore(Structure):
+    _total_size_ = 0x248
+
+    miWidth: Annotated[int, Field(c_int16, 0x80)]
+    miHeight: Annotated[int, Field(c_int16, 0x82)]
+    miCapacity: Annotated[int, Field(c_int16, 0x84)]
+
+    @function_hook(
+        "48 89 5C 24 ? 57 48 83 EC ? 33 FF 0F 57 C0 0F 11 01 48 8B D9 0F 11 41 ? 0F 11 41 ? 0F 11 41"
+    )
+    def cGcInventoryStore(self, this: "_Pointer[cGcInventoryStore]"): ...
+
+
+@partial_struct
 class cGcPlayerState(Structure):
     # We can find this in cGcPlayerState::GetPlayerUniverseAddress, which, while not mapped, can be found
     # inside cGcQuickActionMenu::TriggerAction below the string QUICK_MENU_EMERGENCY_WARP_BAN.
@@ -249,6 +275,11 @@ class cGcPlayerState(Structure):
     muSpecials: Annotated[int, Field(c_uint32, 0x1C4)]
     # Found in cGcPlayerShipOwnership::SpawnNewShip
     miPrimaryShip: Annotated[int, Field(c_uint32, 0xC4F0)]
+
+    @function_hook(
+        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 4C 24 ? 57 41 54 41 55 41 56 41 57 48 83 EC ? 45 33 FF"
+    )
+    def cGcPlayerState(self, this: "_Pointer[cGcPlayerState]"): ...
 
     @function_hook(
         "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 44 8B 81 ? ? ? ? 48 8D 2D"
@@ -280,9 +311,19 @@ class cGcPlayerState(Structure):
 class cGcPlayerShipOwnership(Structure):
     @partial_struct
     class sGcShipData(Structure):
-        _total_size_ = 0x48
+        _total_size_ = 0x30
 
+        # Not sure about these...
+        # Mapping is found in cGcPlayerShipOwnership::cGcPlayerShipOwnership but they don't seem to line up
+        # with old data.
         mPlayerShipSeed: Annotated[basic.cTkSeed, 0x0]
+        mPlayerShipNode: Annotated[basic.TkHandle, 0x14]
+        mfUnknown0x20: Annotated[float, Field(c_float, 0x20)]
+
+    @function_hook(
+        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 54 41 56 41 57 48 83 EC ? 45 33 E4 48 C7 41"
+    )
+    def cGcPlayerShipOwnership(self, this: "_Pointer[cGcPlayerShipOwnership]"): ...
 
     @function_hook(
         "48 89 5C 24 ? 55 56 57 41 54 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 45"
@@ -317,18 +358,83 @@ class cGcPlayerShipOwnership(Structure):
         liShipIndex: c_int32,
     ) -> c_bool: ...
 
-    # Not sure about this...
-    mShips: Annotated[list[sGcShipData], Field(sGcShipData * 12, 0x58)]
+    # Found in cGcPlayerShipOwnership::cGcPlayerShipOwnership
+    mShips: Annotated[list[sGcShipData], Field(sGcShipData * 12, 0x60)]
     # Both these found at the top of cGcPlayerShipOwnership::UpdateMeshRefresh
     mbShouldRefreshMesh: Annotated[bool, Field(c_bool, 0xA690)]
     mMeshRefreshState: Annotated[int, Field(c_uint32, 0xA694)]
 
 
 @partial_struct
+class cGcPlayerVehicleOwnership(Structure):
+    # Found in cGcPlayerVehicleOwnership::cGcPlayerVehicleOwnership
+    mbShouldRefreshMesh: Annotated[bool, Field(c_bool, 0x740)]
+
+    @function_hook(
+        "48 89 5C 24 ? 57 48 83 EC ? 33 FF 48 C7 41 ? ? ? ? ? 48 89 79 ? 48 B8"
+    )
+    def cGcPlayerVehicleOwnership(
+        self, this: "_Pointer[cGcPlayerVehicleOwnership]"
+    ): ...
+
+
+class cGcPlayerCreatureOwnership(Structure):
+    @function_hook(
+        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 4C 24 ? 57 41 54 41 55 41 56 41 57 48 83 EC ? BB"
+    )
+    def cGcPlayerCreatureOwnership(
+        self, this: "_Pointer[cGcPlayerCreatureOwnership]"
+    ): ...
+
+
+class cGcPlayerMultitoolOwnership(Structure):
+    @function_hook(
+        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 45 33 FF 0F 29 74 24 ? 44 89 39"
+    )
+    def cGcPlayerMultitoolOwnership(
+        self, this: "_Pointer[cGcPlayerMultitoolOwnership]"
+    ): ...
+
+
+@partial_struct
+class cGcPlayerFreighterOwnership(Structure):
+    _total_size_ = 0x4A0
+
+    @function_hook(
+        "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 F6 C7 41 ? ? ? ? ? 48 8D 05"
+    )
+    def cGcPlayerFreighterOwnership(
+        self, this: "_Pointer[cGcPlayerFreighterOwnership]"
+    ): ...
+
+
+@partial_struct
+class cGcPlayerFleetManager(Structure):
+    _total_size_ = 0x3FB0
+
+    @function_hook(
+        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8D 05 ? ? ? ? C7 41 ? ? ? ? ? 48 89 01 48 8B D9"
+    )
+    def cGcPlayerFleetManager(self, this: "_Pointer[cGcPlayerFleetManager]"): ...
+
+
+@partial_struct
 class cGcGameState(Structure):
+    # Found in cGcGameState::cGcGameState
     mPlayerState: Annotated[cGcPlayerState, 0xA950]
-    # Found in cGcGameState::Update
+    mSavedSpawnState: Annotated[nmse.cGcPlayerSpawnStateData, 0xA2AF0]
     mPlayerShipOwnership: Annotated[cGcPlayerShipOwnership, 0xA2BD0]
+    mPlayerVehicleOwnership: Annotated[cGcPlayerVehicleOwnership, 0xAD270]
+    mPlayerCreatureOwnership: Annotated[cGcPlayerCreatureOwnership, 0xAD9C0]
+    mPlayerMultitoolOwnership: Annotated[cGcPlayerMultitoolOwnership, 0x1C7E20]
+    mPlayerFreighterOwnership: Annotated[cGcPlayerFreighterOwnership * 4, 0x1CDE60]
+    mPlayerFleetManager: Annotated[cGcPlayerFleetManager * 4, 0x1CF0E0]
+    mRNG: Annotated[cTkPersonalRNG, 0x1DEFA4]
+
+    @function_hook(
+        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? C7 41"
+    )
+    def cGcGameState(self, this: "_Pointer[cGcGameState]"): ...
 
     @function_hook("48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 88 54 24")
     def OnSaveProgressCompleted(
@@ -490,25 +596,17 @@ class cGcTerrainRegionMap(Structure):
 
 
 @partial_struct
-class GcEnvironmentProperties(Structure):
-    AtmosphereEndHeight: Annotated[float, Field(c_float, 0x1C)]
-    AtmosphereStartHeight: Annotated[float, Field(c_float, 0x20)]
-    SkyAtmosphereHeight: Annotated[float, Field(c_float, 0x5C)]
-    StratosphereHeight: Annotated[float, Field(c_float, 0x78)]
-
-
-@partial_struct
-class cGcDiscoveryData(Structure): ...
-
-
-@partial_struct
-class GcPlanetSkyProperties(Structure): ...
+class cGcDiscoveryData(Structure):
+    mUniverseAddress: Annotated[c_uint64, 0x0]
+    meType: Annotated[c_enum32[enums.cGcDiscoveryType], 0x40]
 
 
 @partial_struct
 class cGcPlanet(Structure):
-    _total_size_ = 0xD9060
+    # This is found in cGcSolarSystem::cGcSolarSystem near the call to cGcPlanet::cGcPlanet
+    _total_size_ = 0xD9070
     # Most of these found in cGcPlanet::Construct or cGcPlanet::cGcPlanet
+    mPlanetDiscoveryData: Annotated[cGcDiscoveryData, 0x8]
     miPlanetIndex: Annotated[int, Field(c_int32, 0x50)]
     mPlanetData: Annotated[nmse.cGcPlanetData, 0x60]
     # TODO: This field follows directly after the above one. Once we have the cGcPlanetData struct mapped
@@ -520,8 +618,8 @@ class cGcPlanet(Structure):
     mRingNode: Annotated[basic.TkHandle, 0xD73E4]
     mPosition: Annotated[basic.Vector3f, 0xD73F0]
 
-    mpEnvProperties: Annotated[_Pointer[GcEnvironmentProperties], 0xD9058]
-    mpSkyProperties: Annotated[_Pointer[GcPlanetSkyProperties], 0xD9060]
+    mpEnvProperties: Annotated[_Pointer[nmse.cGcEnvironmentProperties], 0xD9058]
+    mpSkyProperties: Annotated[_Pointer[nmse.cGcPlanetSkyProperties], 0xD9060]
 
     @function_hook(
         "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 45 33 FF 48 C7 41 ? ? ? ? ? 44 89 79"
@@ -566,7 +664,7 @@ class cGcPlanet(Structure):
 class cGcSolarSystem(Structure):
     # These can be found in cGcSolarSystem::cGcSolarSystem
     mSolarSystemData: Annotated[nmse.cGcSolarSystemData, 0x0]
-    maPlanets: Annotated[list["cGcPlanet"], Field(cGcPlanet * 6, 0x2630)]
+    maPlanets: Annotated[tuple[cGcPlanet, ...], Field(cGcPlanet * 6, 0x2630)]
     # Found in cGcPlayerState::StoreCurrentSystemSpaceStationEndpoint
     mSpaceStationNode: Annotated[basic.TkHandle, 0x51C068]
 
@@ -665,9 +763,14 @@ class cGcEnvironment(Structure):
 class cGcSimulation(Structure):
     # Found in cGcSimulation::Update. Passed into cGcEnvironment::Update.
     mEnvironment: Annotated[cGcEnvironment, 0xAF790]
-    mPlayer: Annotated[cGcPlayer, 0x24DE40]
     # Found in cGcSimulation::Update. Passed into cGcSolarSystem::Update.
     mpSolarSystem: Annotated[_Pointer[cGcSolarSystem], 0x24C670]
+    mPlayer: Annotated[cGcPlayer, 0x24DE40]
+
+    @function_hook(
+        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 0F 29 74 24 ? 48 8B F9 E8 ? ? ? ? 48 8D 8F"
+    )
+    def cGcSimulation(self, this: "_Pointer[cGcSimulation]"): ...
 
     @function_hook(
         "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 45 33 FF"
@@ -683,7 +786,104 @@ class cGcSimulation(Structure):
     ): ...
 
 
-class cGcPlayerHUD(Structure):
+@partial_struct
+class cGcHUDLayer(Structure):
+    # This is unchanged from 4.13
+    _total_size_ = 0xB0
+
+    mpData: Annotated[_Pointer[nmse.cGcHUDLayerData], 0xA0]
+
+
+@partial_struct
+class cGcHUDImage(Structure):
+    # This is unchanged from 4.13
+    _total_size_ = 0xD0
+
+    mpData: Annotated[_Pointer[nmse.cGcHUDImageData], 0x90]
+    mColourStart: Annotated[basic.Colour, 0xA0]
+    mColourEnd: Annotated[basic.Colour, 0xB0]
+
+
+@partial_struct
+class cGcHUDText(Structure):
+    # This is unchanged from 4.13
+    _total_size_ = 0x280
+
+    mBuffer: Annotated[basic.cTkFixedWString0x100, 0x0]
+    mpData: Annotated[_Pointer[nmse.cGcHUDTextData], 0x270]
+
+
+@partial_struct
+class cGcHUD(Structure):
+    # This is unchanged from 4.13
+    _total_size_ = 0x20040
+    maLayers: Annotated[cGcHUDLayer * 0x80, 0x10]
+    miNumLayers: Annotated[int, Field(c_int32, 0x5810)]
+    maImages: Annotated[cGcHUDImage * 0x80, 0x5820]
+    miNumImages: Annotated[int, Field(c_int32, 0xC020)]
+    maTexts: Annotated[cGcHUDText * 0x80, 0xC030]
+    miNumTexts: Annotated[int, Field(c_int32, 0x20030)]
+
+    @function_hook(
+        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 33 ED 4C 8B F1"
+    )
+    def cGcHUD(self, this: "_Pointer[cGcHUD]"): ...
+
+
+@partial_struct
+class cGcMarkerPoint(Structure):
+    # Size found in the vector allocator in cGcMarkerList::TryAddMarker
+    _total_size_ = 0x260
+    # Found in cGcMarkerPoint::Reset
+    mPosition: Annotated[basic.cTkPhysRelVec3, 0x0]
+    mCenterOffset: Annotated[basic.Vector3f, 0x20]
+    mCustomName: Annotated[basic.cTkFixedString[0x40], 0x38]
+    mCustomSubtitle: Annotated[basic.cTkFixedString[0x80], 0x78]
+    mNode: Annotated[basic.TkHandle, 0x104]
+    mModelNode: Annotated[basic.TkHandle, 0x108]
+    meBuildingClass: Annotated[
+        c_enum32[enums.cGcBuildingClassification],
+        Field(c_enum32[enums.cGcBuildingClassification], 0x118),
+    ]
+
+    @static_function_hook("40 53 48 83 EC ? 33 C0 0F 57 C0 0F 11 01 48 8B D9")
+    @staticmethod
+    def cGcMarkerPoint(address: c_uint64):
+        """Construct an instance of the cGcMarkerPoint at the provided address"""
+        ...
+
+    @function_hook(
+        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 28 05 ? ? ? ? 48 8D 79"
+    )
+    def Reset(self, this: "_Pointer[cGcMarkerPoint]"): ...
+
+
+@partial_struct
+class cGcHUDMarker(Structure):
+    _total_size_ = 0x1610
+
+    mColour: Annotated[basic.Colour, 0x0]
+    mData: Annotated[cGcMarkerPoint, 0x10]
+
+    @function_hook(
+        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8B F1 48 83 C1"
+    )
+    def cGcHUDMarker(self, this: "_Pointer[cGcHUDMarker]"): ...
+
+
+@partial_struct
+class cGcPlayerHUD(cGcHUD):
+    mHelmetGUI: Annotated[cGcNGui, 0x20040]
+    mCrosshairGui: Annotated[cGcNGui, 0x20498]
+    mHelmetLines: Annotated[cGcNGui, 0x208F0]
+    mQuickMenu: Annotated[cGcNGuiLayer, 0x20D50]
+    maMarkers: Annotated[cGcHUDMarker * 0x80, 0x20F50]
+
+    @function_hook(
+        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 0F 29 74 24 ? 48 8B F9 E8 ? ? ? ? 48 8D 9F"
+    )
+    def cGcPlayerHUD(self, this: "_Pointer[cGcPlayerHUD]"): ...
+
     @function_hook("48 8B C4 55 57 48 8D 68 ? 48 81 EC ? ? ? ? 48 8B 91")
     def RenderIndicatorPanel(self, this: "_Pointer[cGcPlayerHUD]"): ...
 
@@ -698,10 +898,25 @@ class cGcPlayerHUD(Structure):
     def RenderCrosshair(self, this: "_Pointer[cGcPlayerHUD]"): ...
 
 
+class cGcQuickMenu(Structure):
+    @function_hook(
+        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8D 79 ? 48 8B E9"
+    )
+    def cGcQuickMenu(self, this: "_Pointer[cGcQuickMenu]"): ...
+
+
 @partial_struct
 class cGcHUDManager(Structure):
+    # Found in cGcHUDManager::cGcHUDManager
     mPlayerHUD: Annotated[cGcPlayerHUD, 0xA0]
     mShipHUD: Annotated[cGcShipHUD, 0xE5CC0]
+    mQuickMenu: Annotated[cGcQuickMenu, 0x10E450]
+    mChargingInventory: Annotated[cGcInventoryStore, 0x11CDF0]
+
+    @function_hook(
+        "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 F6 48 8D 59 ? 48 89 71"
+    )
+    def cGcHUDManager(self, this: "_Pointer[cGcHUDManager]", a2: c_bool): ...
 
 
 @partial_struct
@@ -752,34 +967,6 @@ class cGcLaserBeam(Structure):
     def Fire(
         self, this: "_Pointer[cGcLaserBeam]", lbHitOnFirstFrame: Annotated[bool, c_bool]
     ): ...
-
-
-@partial_struct
-class cGcMarkerPoint(Structure):
-    # Size found in the vector allocator in cGcMarkerList::TryAddMarker
-    _total_size_ = 0x260
-    # Found in cGcMarkerPoint::Reset
-    mPosition: Annotated[basic.cTkPhysRelVec3, 0x0]
-    mCenterOffset: Annotated[basic.Vector3f, 0x20]
-    mCustomName: Annotated[basic.cTkFixedString[0x40], 0x38]
-    mCustomSubtitle: Annotated[basic.cTkFixedString[0x80], 0x78]
-    mNode: Annotated[basic.TkHandle, 0x104]
-    mModelNode: Annotated[basic.TkHandle, 0x108]
-    meBuildingClass: Annotated[
-        c_enum32[enums.cGcBuildingClassification],
-        Field(c_enum32[enums.cGcBuildingClassification], 0x118),
-    ]
-
-    @static_function_hook("40 53 48 83 EC ? 33 C0 0F 57 C0 0F 11 01 48 8B D9")
-    @staticmethod
-    def cGcMarkerPoint(address: c_uint64):
-        """Construct an instance of the cGcMarkerPoint at the provided address"""
-        ...
-
-    @function_hook(
-        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 28 05 ? ? ? ? 48 8D 79"
-    )
-    def Reset(self, this: "_Pointer[cGcMarkerPoint]"): ...
 
 
 @partial_struct
@@ -1324,6 +1511,9 @@ class cGcSpaceshipComponent(Structure):
 
 @partial_struct
 class cGcSpaceshipWarp(Structure):
+    mePulseDriveState: Annotated[c_enum32[enums.EPulseDriveState], 0xA4]
+    mfPulseDriveTimer: Annotated[float, Field(c_float, 0xB4)]
+    mfPulseDriveFuelTimer: Annotated[float, Field(c_float, 0xB8)]
     mfPulseDriveTimer: Annotated[float, Field(c_float, 0x1A8)]
     mfPulseDriveFuelTimer: Annotated[float, Field(c_float, 0x1AC)]
 

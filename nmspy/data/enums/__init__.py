@@ -7,6 +7,7 @@ from .internal_enums import (
     eStormState,
     eLanguageRegion,
     EnvironmentLocation,
+    EPulseDriveState,
 )
 
 # The following list is auto-generated.

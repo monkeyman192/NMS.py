@@ -24,7 +24,8 @@ class GameData:
     @property
     def simulation(self) -> Optional[nms.cGcSimulation]:
         if self.GcApplication is not None:
-            return self.GcApplication.mpData.contents.mSimulation
+            if self.GcApplication.mpData:
+                return self.GcApplication.mpData.contents.mSimulation
 
     @property
     def player(self) -> Optional[nms.cGcPlayer]:
