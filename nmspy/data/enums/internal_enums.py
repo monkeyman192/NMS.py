@@ -97,3 +97,11 @@ class EnvironmentLocation:
         InSpaceObject = 0xD
         Nexus = 0xE
         Anomaly = 0xF
+
+
+class EPulseDriveState(IntEnum):
+    None_ = 0x0
+    Charge = 0x1
+    Jumping = 0x2
+    CrashStop = 0x3
+    Cooldown = 0x4

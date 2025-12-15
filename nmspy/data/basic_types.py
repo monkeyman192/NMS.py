@@ -288,8 +288,37 @@ class TkID(ctypes.Structure):
         return fnv_1a(str(self), self._size)
 
 
+class cTkFixedWString(ctypes.Structure):
+    """Equivalent of cTkFixedString<N,wchar_t>"""
+
+    _size: int
+    value: bytes
+
+    def set(self, val: str):
+        """Set the value of the string."""
+        new_len = len(val)
+        self.value = val[: self._size].encode() + (self._size - new_len) * b"\x00"
+
+    def __class_getitem__(cls: type["cTkFixedWString"], key: int):
+        _cls: type["cTkFixedWString"] = types.new_class(
+            f"cTkFixedWString<0x{key:X}>", (cls,)
+        )
+        _cls._size = key
+        _cls._fields_ = [("value", ctypes.c_wchar * key)]
+        return _cls
+
+    def __str__(self) -> str:
+        return self.value.decode()
+
+    def __eq__(self, other: str) -> bool:
+        return str(self) == other
+
+    def __repr__(self) -> str:
+        return str(self)
+
+
 class cTkFixedString(ctypes.Structure):
-    """Equivalent of MBINCompilers' NMSString0xXXX. Specify the size in bytes."""
+    """Equivalent of cTkFixedString<N,char_t>"""
 
     _size: int
     value: bytes
@@ -601,5 +630,12 @@ cTkFixedString0x100 = cTkFixedString[0x100]
 cTkFixedString0x200 = cTkFixedString[0x200]
 cTkFixedString0x400 = cTkFixedString[0x400]
 cTkFixedString0x800 = cTkFixedString[0x800]
+cTkFixedWString0x20 = cTkFixedWString[0x20]
+cTkFixedWString0x40 = cTkFixedWString[0x40]
+cTkFixedWString0x80 = cTkFixedWString[0x80]
+cTkFixedWString0x100 = cTkFixedWString[0x100]
+cTkFixedWString0x200 = cTkFixedWString[0x200]
+cTkFixedWString0x400 = cTkFixedWString[0x400]
+cTkFixedWString0x800 = cTkFixedWString[0x800]
 # Vector type aliases
 cTkBigPos = cTkPhysRelVec3

@@ -11,6 +11,9 @@ from ruff.__main__ import (  # type: ignore[import-untyped]  # pyright: ignore[r
 )
 
 
+DRYRUN = False
+
+
 def ruff_format(source: str) -> str:
     result = subprocess.run(
         [find_ruff_bin(), "format", source],
@@ -32,6 +35,7 @@ from .internal_enums import (
     eStormState,
     eLanguageRegion,
     EnvironmentLocation,
+    EPulseDriveState,
 )
 
 # The following list is auto-generated.
@@ -140,12 +144,45 @@ def pythonise_type(class_name: str, field_info: FieldData, force_ctypes: bool = 
     type_ = field_info["Type"]
     generic_type_args = field_info.get("GenericTypeArgs")
     field_name = field_info["Name"]
+    array_size = field_info.get("Array_Size")
     if force_ctypes is False:
-        # In this case, we can return a python type
+        # In this case, we can return a python type.
+        # First check whether we have an array type. If so then return the type as a tuple with some
+        # unspecified number of elements.
         if (pytype_val := PYTYPES_MAPPING.get(type_)) is not None:
-            return cst.Name(value=pytype_val)
+            if array_size is not None:
+                return cst.Subscript(
+                    value=cst.Name(value="tuple"),
+                    slice=[
+                        cst.SubscriptElement(slice=cst.Index(value=cst.Name(value=pytype_val))),
+                        cst.SubscriptElement(slice=cst.Index(value=cst.Ellipsis())),
+                    ]
+                )
+            else:
+                return cst.Name(value=pytype_val)
+        elif array_size is not None:
+            if type_ in BASIC_TYPES:
+                first_element = cst.Attribute(value=cst.Name(value="basic"), attr=cst.Name(value=type_))
+            elif type_ in ENUM_STRUCTS:
+                first_element = cst.Attribute(value=cst.Name(value="enums"), attr=cst.Name(value=type_))
+            else:
+                first_element = cst.Name(value=type_)
+            return cst.Subscript(
+                value=cst.Name(value="tuple"),
+                slice=[
+                    cst.SubscriptElement(slice=cst.Index(value=first_element)),
+                    cst.SubscriptElement(slice=cst.Index(value=cst.Ellipsis())),
+                ]
+            )
     if (ctype_val := CTYPES_MAPPING.get(type_)) is not None:
-        return cst.Attribute(value=cst.Name(value="ctypes"), attr=cst.Name(value=ctype_val))
+        obj = cst.Attribute(value=cst.Name(value="ctypes"), attr=cst.Name(value=ctype_val))
+        if array_size is not None:
+            return cst.BinaryOperation(
+                left=obj,
+                operator=cst.Multiply(),
+                right=cst.Integer(value=str(array_size))
+            )
+        return obj
     elif type_ in BASIC_TYPES:
         if generic_type_args is not None:
             elements = []
@@ -186,15 +223,29 @@ def pythonise_type(class_name: str, field_info: FieldData, force_ctypes: bool = 
                             else:
                                 value = cst.Name(value=gtype)
                     elements.append(cst.SubscriptElement(slice=cst.Index(value=value)))
-            return cst.Subscript(
+            obj = cst.Subscript(
                 value=cst.Attribute(value=cst.Name(value="basic"), attr=cst.Name(value=type_)),
                 slice=elements,
             )
+            if array_size is not None:
+                return cst.BinaryOperation(
+                    left=obj,
+                    operator=cst.Multiply(),
+                    right=cst.Integer(value=str(array_size))
+                )
+            return obj
         else:
-            return cst.Attribute(value=cst.Name(value="basic"), attr=cst.Name(value=type_))
+            obj = cst.Attribute(value=cst.Name(value="basic"), attr=cst.Name(value=type_))
+            if array_size is not None:
+                return cst.BinaryOperation(
+                    left=obj,
+                    operator=cst.Multiply(),
+                    right=cst.Integer(value=str(array_size))
+                )
+            return obj
     elif type_ in ENUM_STRUCTS:
         # Enums need to be wrapped in a c_enum32 generic type.
-        return cst.Subscript(
+        obj = cst.Subscript(
             value=cst.Name(value="c_enum32"),
             slice=[
                 cst.SubscriptElement(
@@ -207,6 +258,13 @@ def pythonise_type(class_name: str, field_info: FieldData, force_ctypes: bool = 
                 )
             ]
         )
+        if array_size is not None:
+            return cst.BinaryOperation(
+                left=obj,
+                operator=cst.Multiply(),
+                right=cst.Integer(value=str(array_size))
+            )
+        return obj
     elif type_ == "ENUM":
         # For the inline enums, we need to create a c_enum32 like above, but with a
         # constructed name.
@@ -221,7 +279,14 @@ def pythonise_type(class_name: str, field_info: FieldData, force_ctypes: bool = 
             ]
         )
     # Must be another struct (hopefully) already defined.
-    return cst.Name(value=type_)
+    obj = cst.Name(value=type_)
+    if array_size is not None:
+        return cst.BinaryOperation(
+            left=obj,
+            operator=cst.Multiply(),
+            right=cst.Integer(value=str(array_size))
+        )
+    return obj
 
 
 def create_enum(enum_name: str, enum_fields: list[tuple[str, int]], inline: bool = False):
@@ -257,40 +322,68 @@ def convert_field(class_name: str, field: FieldData) -> Union[
     cst.SimpleStatementLine,
     tuple[cst.ClassDef, cst.SimpleStatementLine]
 ]:
-    field_line = cst.SimpleStatementLine(
-        body=[
-            cst.AnnAssign(
-                target=cst.Name(value=field["Name"]),
-                annotation=cst.Annotation(
-                    annotation=cst.Subscript(
-                        value=cst.Name(value="Annotated"),
-                        slice=[
-                            cst.SubscriptElement(
-                                slice=cst.Index(
-                                    value=pythonise_type(class_name, field, False)
-                                )
-                            ),
-                            cst.SubscriptElement(
-                                slice=cst.Index(
-                                    value=cst.Call(
-                                        func=cst.Name(value="Field"),
-                                        args=[
-                                            cst.Arg(
-                                                value=pythonise_type(class_name, field)
-                                            ),
-                                            cst.Arg(
-                                                value=cst.Integer(value=upper_hex(field["Offset"]))
-                                            )
-                                        ]
+    ctypetype = pythonise_type(class_name, field)
+    pytype = pythonise_type(class_name, field, False)
+    if pytype.deep_equals(ctypetype):
+        field_line = cst.SimpleStatementLine(
+            body=[
+                cst.AnnAssign(
+                    target=cst.Name(value=field["Name"]),
+                    annotation=cst.Annotation(
+                        annotation=cst.Subscript(
+                            value=cst.Name(value="Annotated"),
+                            slice=[
+                                cst.SubscriptElement(
+                                    slice=cst.Index(
+                                        value=ctypetype,
+                                    )
+                                ),
+                                cst.SubscriptElement(
+                                    slice=cst.Index(
+                                        value=cst.Integer(value=upper_hex(field["Offset"]))
                                     )
                                 )
-                            )
-                        ]
+                            ]
+                        )
                     )
                 )
-            )
-        ]
-    )
+            ]
+        )
+    else:
+        field_line = cst.SimpleStatementLine(
+            body=[
+                cst.AnnAssign(
+                    target=cst.Name(value=field["Name"]),
+                    annotation=cst.Annotation(
+                        annotation=cst.Subscript(
+                            value=cst.Name(value="Annotated"),
+                            slice=[
+                                cst.SubscriptElement(
+                                    slice=cst.Index(
+                                        value=pytype,
+                                    )
+                                ),
+                                cst.SubscriptElement(
+                                    slice=cst.Index(
+                                        value=cst.Call(
+                                            func=cst.Name(value="Field"),
+                                            args=[
+                                                cst.Arg(
+                                                    value=ctypetype,
+                                                ),
+                                                cst.Arg(
+                                                    value=cst.Integer(value=upper_hex(field["Offset"]))
+                                                )
+                                            ]
+                                        )
+                                    )
+                                )
+                            ]
+                        )
+                    )
+                )
+            ]
+        )
     if field["Type"] == "ENUM":
         # We need to also create an inline enum.
         return (create_enum(f"e{field['Name']}Enum", field.get("Enum_Values", []), True), field_line,)
@@ -520,24 +613,25 @@ if __name__ == "__main__":
             data_module_body.append(create_class(name, fields))
     enum_module = cst.Module(body=enum_module_body)
     data_module = cst.Module(body=data_module_body)
-    # Get the generated code
-    with open(op.join(NMSPY_DATA_DIR, "enums", "external_enums.py"), "w") as f:
-        f.write("# ruff: noqa: E741\n")
-        f.write(enum_module.code)
-    ruff_format(op.join(NMSPY_DATA_DIR, "enums", "external_enums.py"))
+    # Generate the code if not doing a dry run.
+    if not DRYRUN:
+        with open(op.join(NMSPY_DATA_DIR, "enums", "external_enums.py"), "w") as f:
+            f.write("# ruff: noqa: E741\n")
+            f.write(enum_module.code)
+        ruff_format(op.join(NMSPY_DATA_DIR, "enums", "external_enums.py"))
 
-    print("Wrote enum data")
-    with open(op.join(NMSPY_DATA_DIR, "exported_types.py"), "w") as f:
-        f.write(data_module.code)
-    ruff_format(op.join(NMSPY_DATA_DIR, "exported_types.py"))
+        print("Wrote enum data")
+        with open(op.join(NMSPY_DATA_DIR, "exported_types.py"), "w") as f:
+            f.write(data_module.code)
+        ruff_format(op.join(NMSPY_DATA_DIR, "exported_types.py"))
 
-    print("Wrote struct data")
-    with open(op.join(NMSPY_DATA_DIR, "enums", "__init__.py"), "w") as f:
-        f.write(ENUM_IMPORT_START)
-        f.write("from .external_enums import (\n")
-        for struct in struct_data:
-            if struct.get("EnumClass") is True:
-                f.write(f"    {struct['Name']},\n")
-        f.write(")\n")
-    ruff_format(op.join(NMSPY_DATA_DIR, "enums", "__init__.py"))
-    print("wrote enum imports")
+        print("Wrote struct data")
+        with open(op.join(NMSPY_DATA_DIR, "enums", "__init__.py"), "w") as f:
+            f.write(ENUM_IMPORT_START)
+            f.write("from .external_enums import (\n")
+            for struct in struct_data:
+                if struct.get("EnumClass") is True:
+                    f.write(f"    {struct['Name']},\n")
+            f.write(")\n")
+        ruff_format(op.join(NMSPY_DATA_DIR, "enums", "__init__.py"))
+        print("wrote enum imports")
