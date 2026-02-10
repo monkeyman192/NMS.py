@@ -1,4 +1,4 @@
-from typing import Optional, Callable
+from typing import Callable, Optional
 
 from pymhf.core._types import CustomTriggerProtocol, DetourTime
 
@@ -52,9 +52,7 @@ def terminal_command(
         func_name = func.__qualname__
         split_name = func_name.split(".")
         if len(split_name) != 2:
-            raise ValueError(
-                "@terminal_command can only be used as a decorator for bound methods."
-            )
+            raise ValueError("@terminal_command can only be used as a decorator for bound methods.")
         mod_name, command = split_name
         if mod_override is not None:
             mod_name = mod_override

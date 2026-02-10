@@ -4,6 +4,7 @@
 # This file exposes a number of functions as hooks so that they can be used directly if needed.
 
 import ctypes
+from typing import Annotated
 
 from pymhf.core.hooking import static_function_hook
 
@@ -53,7 +54,8 @@ def nvgArc(
 
 
 @static_function_hook(
-    "48 8B C4 48 89 58 ? 48 89 70 ? 55 57 41 54 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 48 8B F9 0F 29 78"
+    "48 8B C4 48 89 58 ? 48 89 70 ? 55 57 41 54 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 48 "
+    "8B F9 0F 29 78"
 )
 def nvgText(
     ctx: ctypes._Pointer[NVGcontext],
@@ -86,9 +88,7 @@ def nvgTextBox(
     ...
 
 
-@static_function_hook(
-    "48 89 5C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 48 63 81 ? ? ? ? 48 8B D9 48 69 F8"
-)
+@static_function_hook("48 89 5C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 48 63 81 ? ? ? ? 48 8B D9 48 69 F8")
 def nvgFill(ctx: ctypes._Pointer[NVGcontext]): ...
 
 
@@ -100,3 +100,12 @@ def nvgRect(
     w: ctypes.c_float,
     h: ctypes.c_float,
 ): ...
+
+
+@static_function_hook("48 89 6C 24 ? 48 89 74 24 ? 48 89 54 24 ? 57 41 56 41 57 48 83 EC ? 45 8B F9")
+def NVGRegisterTexture(
+    ctx: ctypes._Pointer[NVGcontext],
+    lpTkTexture: ctypes.c_uint64,  # cTkTexture *
+    liRenderBufferObject: Annotated[int, ctypes.c_uint32],
+    liImageFlags: Annotated[int, ctypes.c_int32],
+) -> ctypes.c_uint64: ...

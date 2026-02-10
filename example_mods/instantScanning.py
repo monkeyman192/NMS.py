@@ -15,12 +15,13 @@
 # window_name_override = "Instant scanning"
 # ///
 
-import logging
 import ctypes
+import logging
 
 from pymhf import Mod
 from pymhf.core.hooking import on_key_release
 from pymhf.gui.decorators import BOOLEAN
+
 import nmspy.data.types as nms
 
 logger = logging.getLogger("InstantScan")
@@ -49,8 +50,6 @@ class instantScan(Mod):
         self.should_be_instant = not self.should_be_instant
 
     @nms.cGcBinoculars.UpdateScanBarProgress.before
-    def set_no_scan(
-        self, this: ctypes._Pointer[nms.cGcBinoculars], lfScanProgress: float
-    ):
+    def set_no_scan(self, this: ctypes._Pointer[nms.cGcBinoculars], lfScanProgress: float):
         if self.should_be_instant and lfScanProgress < 1:
             return (this, 1)

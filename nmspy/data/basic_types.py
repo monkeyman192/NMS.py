@@ -1,10 +1,13 @@
 import ctypes
-from logging import getLogger
-from typing import Union, TypeVar, Generic, Generator, Any, Type
 import types
+from logging import getLogger
+from typing import TYPE_CHECKING, Any, Generator, Generic, Type, TypeVar, Union
 
+from pymhf.core.memutils import get_addressof, map_struct
 from pymhf.extensions.cpptypes import std
-from pymhf.core.memutils import map_struct, get_addressof
+
+if TYPE_CHECKING:
+    from ctypes import _Pointer
 
 
 logger = getLogger()
@@ -33,6 +36,9 @@ def fnv_1a(input: str, length: int):
 
 # TODO: Rewrite a bit?
 class cTkBitArray(ctypes.Structure, Generic[T, N]):
+    # Corresponds to cTkBitArray<T, 1, N>
+    # Total space taken up is ceil(N / 8) if N != 0, otherwise it's dynamic. (TODO)
+    # This object will have the same alignment considerations as T
     _size: int
     _template_type: T
     _type_size: int
@@ -40,20 +46,19 @@ class cTkBitArray(ctypes.Structure, Generic[T, N]):
 
     def __class_getitem__(cls: Type["cTkBitArray"], key: tuple[Type[T], int]):
         _type, _size = key
-        _cls: type[cTkBitArray] = types.new_class(
-            f"cTkBitArray<{_type}, {_size}>", (cls,)
-        )
+        _cls: type[cTkBitArray] = types.new_class(f"cTkBitArray<{_type}, {_size}>", (cls,))
         _cls._size = _size
         _cls._template_type = _type
         _cls._type_size = 8 * ctypes.sizeof(_type)
-        _cls._fields_ = [("array", _type * (_size // _cls._type_size))]
+        # We always need at least one copy of the data type.
+        _cls._fields_ = [("array", _type * max(_size // _cls._type_size, 1))]
         return _cls
 
     def __getitem__(self, key: int) -> bool:
         """Determine if the particular value is in the bitarray."""
         # Get the chunk the value lies in.
         if key >= self._size:
-            raise ValueError("key is too large for this datatype")
+            raise IndexError("key is too large for this datatype")
         idx = key // self._type_size
         subval = key & (self._type_size - 1)
         return (int(self.array[idx]) & (1 << subval)) != 0
@@ -84,7 +89,7 @@ class cTkBitArray(ctypes.Structure, Generic[T, N]):
         """
         res = ""
         for val in self.array:
-            res = bin(int(val))[2:].zfill(self._type_size) + " " + res
+            res = bin(int(val))[2:].zfill(self._size) + " " + res
         return res
 
 
@@ -126,9 +131,7 @@ class Vector3f(ctypes.Structure):
 
     def __mul__(self, other: Union[float, int]):
         if isinstance(other, Vector3f):
-            raise NotImplementedError(
-                "To multiply two vectors, use a @ b to compute the dot product"
-            )
+            raise NotImplementedError("To multiply two vectors, use a @ b to compute the dot product")
         return Vector3f(other * self.x, other * self.y, other * self.z)
 
     def __rmul__(self, other: Union[float, int]):
@@ -152,9 +155,7 @@ class Vector3f(ctypes.Structure):
 
     def normalise(self) -> "Vector3f":
         """Return a normalised version of the vector."""
-        return ((self.x**2 + self.y**2 + self.z**2) ** (-0.5)) * Vector3f(
-            self.x, self.y, self.z
-        )
+        return ((self.x**2 + self.y**2 + self.z**2) ** (-0.5)) * Vector3f(self.x, self.y, self.z)
 
     def __len__(self) -> float:
         return (self.x**2 + self.y**2 + self.z**2) ** (0.5)
@@ -250,6 +251,15 @@ class Colour(ctypes.Structure):
         ("a", ctypes.c_float),
     ]
 
+    def update(self, r: float, g: float, b: float, a: float):
+        self.r = r
+        self.g = g
+        self.b = b
+        self.a = a
+
+    def __str__(self):
+        return f"({self.r}, {self.g}, {self.b}, {self.a})"
+
 
 class Colour32(ctypes.Structure):
     r: int
@@ -300,9 +310,7 @@ class cTkFixedWString(ctypes.Structure):
         self.value = val[: self._size].encode() + (self._size - new_len) * b"\x00"
 
     def __class_getitem__(cls: type["cTkFixedWString"], key: int):
-        _cls: type["cTkFixedWString"] = types.new_class(
-            f"cTkFixedWString<0x{key:X}>", (cls,)
-        )
+        _cls: type["cTkFixedWString"] = types.new_class(f"cTkFixedWString<0x{key:X}>", (cls,))
         _cls._size = key
         _cls._fields_ = [("value", ctypes.c_wchar * key)]
         return _cls
@@ -329,9 +337,7 @@ class cTkFixedString(ctypes.Structure):
         self.value = val[: self._size].encode() + (self._size - new_len) * b"\x00"
 
     def __class_getitem__(cls: type["cTkFixedString"], key: int):
-        _cls: type["cTkFixedString"] = types.new_class(
-            f"cTkFixedString<0x{key:X}>", (cls,)
-        )
+        _cls: type["cTkFixedString"] = types.new_class(f"cTkFixedString<0x{key:X}>", (cls,))
         _cls._size = key
         _cls._fields_ = [("value", ctypes.c_char * key)]
         return _cls
@@ -437,9 +443,7 @@ class cTkClassPool(ctypes.Structure, Generic[T, N]):
 
     def __class_getitem__(cls: Type["cTkClassPool"], key: tuple[Type[T], int]):
         _type, _size = key
-        _cls: Type[cTkClassPool[T, N]] = types.new_class(
-            f"cTkClassPool<{_type}, {_size}>", (cls,)
-        )
+        _cls: Type[cTkClassPool[T, N]] = types.new_class(f"cTkClassPool<{_type}, {_size}>", (cls,))
         _cls._fields_ = [  # type: ignore
             ("pool", _type * _size),
             ("uniqueIds", ctypes.c_int32 * _size),
@@ -486,9 +490,7 @@ class cTkDynamicArray(ctypes.Structure, Generic[T]):
         return f"{self.__class__.__name__}({self.Size})"
 
     def __class_getitem__(cls: type["cTkDynamicArray"], key: Union[tuple[T], Any]):
-        _cls: type["cTkDynamicArray"] = types.new_class(
-            f"cTkDynamicArray<{key}>", (cls,)
-        )
+        _cls: type["cTkDynamicArray"] = types.new_class(f"cTkDynamicArray<{key}>", (cls,))
         _cls._template_type = key
         return _cls
 
@@ -525,9 +527,7 @@ class cTkListNode(ctypes.Structure, Generic[T1, T2]):
 
     def __class_getitem__(cls: Type["cTkListNode"], key: tuple[Type[T1], Type[T2]]):
         _type1, _type2 = key
-        _cls: type[cTkListNode] = types.new_class(
-            f"cTkListNode<{_type1}, {_type2}>", (cls,)
-        )
+        _cls: type[cTkListNode] = types.new_class(f"cTkListNode<{_type1}, {_type2}>", (cls,))
         _cls._template_type1 = _type1
         _cls._template_type2 = _type2
         _cls._fields_ = [
@@ -546,16 +546,12 @@ class cTkListNode(ctypes.Structure, Generic[T1, T2]):
     @property
     def next(self):
         if self._next:
-            return map_struct(
-                self._next, cTkListNode[self._template_type1, self._template_type2]
-            )
+            return map_struct(self._next, cTkListNode[self._template_type1, self._template_type2])
 
     @property
     def prev(self):
         if self._prev:
-            return map_struct(
-                self._prev, cTkListNode[self._template_type1, self._template_type2]
-            )
+            return map_struct(self._prev, cTkListNode[self._template_type1, self._template_type2])
 
 
 class cTkLinearHashTable(ctypes.Structure, Generic[T1, T2]):
@@ -563,13 +559,9 @@ class cTkLinearHashTable(ctypes.Structure, Generic[T1, T2]):
     size: int
     tableSize: int
 
-    def __class_getitem__(
-        cls: Type["cTkLinearHashTable"], key: tuple[Type[T1], Type[T2]]
-    ):
+    def __class_getitem__(cls: Type["cTkLinearHashTable"], key: tuple[Type[T1], Type[T2]]):
         _type1, _type2 = key
-        _cls: type[cTkLinearHashTable] = types.new_class(
-            f"cTkLinearHashTable<{_type1}, {_type2}>", (cls,)
-        )
+        _cls: type[cTkLinearHashTable] = types.new_class(f"cTkLinearHashTable<{_type1}, {_type2}>", (cls,))
         _cls._fields_ = [
             ("nodes", ctypes.POINTER(cTkListNode[_type1, _type2])),
             (
@@ -639,3 +631,36 @@ cTkFixedWString0x400 = cTkFixedWString[0x400]
 cTkFixedWString0x800 = cTkFixedWString[0x800]
 # Vector type aliases
 cTkBigPos = cTkPhysRelVec3
+
+
+# HG seems to have created their own version of c++ stdlib functions (I guess to assist with cross-platform
+# compiling so that they can reduce issues...)
+class TkStd:
+    class tk_vector(ctypes.Structure, Generic[T]):
+        _template_type: Type[T]
+        vector_size: int
+        if TYPE_CHECKING:
+            _ptr: _Pointer[Any]
+
+        def __class_getitem__(cls: Type["TkStd.tk_vector"], type_: Type[T]):
+            _cls: Type[TkStd.tk_vector[T]] = types.new_class(f"TkStd::tk_vector<{type_}>", (cls,))
+            _cls._template_type = type_
+            _cls._fields_ = [  # type: ignore
+                (
+                    "_flag",
+                    ctypes.c_uint32,
+                ),  # Not sure what this is... Often can match the size.
+                ("vector_size", ctypes.c_uint32),
+                ("_ptr", ctypes.POINTER(type_)),
+            ]
+            return _cls
+
+        def __len__(self) -> int:
+            return self.vector_size
+
+        def __getitem__(self, i: int) -> T:
+            return self._ptr[i]
+
+        def __iter__(self) -> Generator[T, None, None]:
+            for i in range(self.vector_size):
+                yield self[i]

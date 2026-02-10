@@ -1,6 +1,6 @@
 # These enums are "internal" ones. Ie. ones which are not serialized as part of the metaclass data.
 
-from enum import IntEnum, Enum
+from enum import Enum, IntEnum
 
 
 class ResourceTypes(IntEnum):
@@ -105,3 +105,16 @@ class EPulseDriveState(IntEnum):
     Jumping = 0x2
     CrashStop = 0x3
     Cooldown = 0x4
+
+
+class eFileOpenMode(IntEnum):
+    Read = 0x0
+    Write = 0x1
+    Append = 0x2
+
+
+class eGraphicsDetail(IntEnum):
+    Low = 0x0
+    Medium = 0x1
+    High = 0x2
+    Ultra = 0x3

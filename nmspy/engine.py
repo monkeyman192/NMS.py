@@ -1,6 +1,7 @@
 # This contains a collection of in-game engine related functions, modified to be easier to call directly.
 
 import ctypes
+
 import nmspy.data.basic_types as basic
 from nmspy.data.types import Engine
 
