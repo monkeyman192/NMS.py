@@ -1,14 +1,13 @@
 # A collection of functions which will hash and cache things.
 
 import hashlib
-from io import BufferedReader
 import json
 import os
 import os.path as op
+from io import BufferedReader
 from typing import Optional
 
 import pymhf.core._internal as _internal
-
 
 CACHE_DIR = ".cache"
 
@@ -35,9 +34,7 @@ class OffsetCache:
 
     @property
     def path(self) -> str:
-        return op.join(
-            _internal.CWD, CACHE_DIR, f"{self._binary_hash}_{self._path}.json"
-        )
+        return op.join(_internal.CWD, CACHE_DIR, f"{self._binary_hash}_{self._path}.json")
 
     def load(self, binary_hash: str):
         """Load the data."""

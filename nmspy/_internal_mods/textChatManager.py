@@ -2,18 +2,22 @@ import ctypes
 import logging
 
 from pymhf import Mod
-from pymhf.gui import no_gui
+from pymhf.core._types import CustomTriggerProtocol, DetourTime
 from pymhf.core.hooking import hook_manager
-from pymhf.core._types import DetourTime, CustomTriggerProtocol
-import nmspy.data.types as nms
+from pymhf.gui import no_gui
+
 import nmspy.data.basic_types as basic
-from nmspy.terminal_parser import TerminalCommand, generate_full_description, split_key
+import nmspy.data.types as nms
 from nmspy.decorators import terminal_command
+from nmspy.terminal_parser import TerminalCommand, generate_full_description, split_key
 
 logger = logging.getLogger("chat_bot")
 
 
-MOD_OPTION = "\n<TITLE>'/mod <><TITLE_BRIGHT>name option(s)<><TITLE>': configure a mod. Enter /mod <><TITLE_BRIGHT>name<><TITLE> to see options for each mod<>"
+MOD_OPTION = (
+    "\n<TITLE>'/mod <><TITLE_BRIGHT>name option(s)<><TITLE>': configure a mod. Enter /mod <><TITLE_BRIGHT>"
+    "name<><TITLE> to see options for each mod<>"
+)
 MOD_LIST_OPTION = "\n<TITLE>'/modlist: display list of mods which can be configured via the terminal<>"
 
 
@@ -41,9 +45,7 @@ class textChatManager(Mod):
             # List the available mods which have commands.
             # Filter the keys then generate a set
             mod_command_keys = list(
-                filter(
-                    lambda x: x.startswith("tc::"), hook_manager.custom_callbacks.keys()
-                )
+                filter(lambda x: x.startswith("tc::"), hook_manager.custom_callbacks.keys())
             )
             mod_names = list(set(split_key(x)[0] for x in mod_command_keys))
             mod_names.sort()
@@ -76,9 +78,7 @@ class textChatManager(Mod):
                     else:
                         command_funcs: dict[str, CustomTriggerProtocol] = {}
                         for key in mod_command_keys:
-                            funcs = hook_manager.custom_callbacks[key].get(
-                                DetourTime.NONE, []
-                            )
+                            funcs = hook_manager.custom_callbacks[key].get(DetourTime.NONE, [])
                             if len(funcs) > 1:
                                 logger.warning(
                                     f"Multiple terminal commands have been defined with the key {key}"
@@ -89,17 +89,13 @@ class textChatManager(Mod):
                         mod_desc = f"<TITLE>{mod_name!r} mod options:<>"
                         for key, func in command_funcs.items():
                             _, command = split_key(key)
-                            mod_desc += "\n" + generate_full_description(
-                                command, func._description
-                            )
+                            mod_desc += "\n" + generate_full_description(command, func._description)
                         lMessageText.contents.set(mod_desc)
                         return
                 elif len(split_msg) == 2:
                     parsed_command = TerminalCommand(split_msg[0], split_msg[1], [])
                 elif len(split_msg) > 2:
-                    parsed_command = TerminalCommand(
-                        split_msg[0], split_msg[1], split_msg[2:]
-                    )
+                    parsed_command = TerminalCommand(split_msg[0], split_msg[1], split_msg[2:])
                 try:
                     # Call the custom callback with the generated key.
                     # If it doesn't exist we raise an exception which we catch and then show a message in the
@@ -131,9 +127,7 @@ class textChatManager(Mod):
                     else:
                         command_funcs: dict[str, CustomTriggerProtocol] = {}
                         for key in mod_command_keys:
-                            funcs = hook_manager.custom_callbacks[key].get(
-                                DetourTime.NONE, []
-                            )
+                            funcs = hook_manager.custom_callbacks[key].get(DetourTime.NONE, [])
                             if len(funcs) > 1:
                                 logger.warning(
                                     f"Multiple terminal commands have been defined with the key {key}"
@@ -144,9 +138,7 @@ class textChatManager(Mod):
                         mod_desc = f"<TITLE>{parsed_command.mod_name!r} mod options:<>"
                         for key, func in command_funcs.items():
                             _, command = split_key(key)
-                            mod_desc += "\n" + generate_full_description(
-                                command, func._description
-                            )
+                            mod_desc += "\n" + generate_full_description(command, func._description)
                         lMessageText.contents.set(mod_desc)
 
     @nms.cGcTextChatManager.Say.before

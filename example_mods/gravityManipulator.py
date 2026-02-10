@@ -15,13 +15,14 @@
 # window_name_override = "NMS Example gravity manipulator"
 # ///
 
-import logging
 import ctypes
+import logging
 from dataclasses import dataclass, field
 
 from pymhf import Mod, ModState
 from pymhf.core.hooking import on_key_pressed
 from pymhf.gui import FLOAT
+
 import nmspy.data.types as nms
 
 # A quick mod used to change the gravity multiplier on all planets simultaneously, utilizing pyMHF's auto-gui.
@@ -82,6 +83,4 @@ class gravityManipulator(Mod):
             # Call an in-game function directly from your mod code.
             # You will need to provide the arguments for the in-game function
             planet.UpdateGravity(self.state.gravity)
-        logger.info(
-            f"Set Planetary Gravity Multiplier To {self.state.gravity} For All Planets"
-        )
+        logger.info(f"Set Planetary Gravity Multiplier To {self.state.gravity} For All Planets")

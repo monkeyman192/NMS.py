@@ -858,5 +858,385 @@
   "name": "cGcQuickMenu::cGcQuickMenu",
   "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8D 79 ? 48 8B E9",
   "mangled_name": "??0cGcQuickMenu@@QEAA@XZ"
+ },
+ {
+  "name": "cGcApplicationGameModeSelectorState::Update",
+  "signature": "48 8B C4 55 53 56 57 41 54 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 48 8B F9",
+  "mangled_name": "?Update@cGcApplicationGameModeSelectorState@@MEAAXM@Z"
+ },
+ {
+  "name": "cTkFileSystem::IsModded",
+  "signature": "48 8B 01 48 85 C0 74 ? 0F B6 80 ? ? ? ? C3 C3 CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 48 8B 01",
+  "mangled_name": "?IsModded@cTkFileSystem@@QEBA_NXZ"
+ },
+ {
+  "name": "cTkFileSystem::GetInstance",
+  "signature": "48 83 EC ? 65 48 8B 04 25 ? ? ? ? B9 ? ? ? ? 48 8B 00 8B 04 01 39 05 ? ? ? ? 7F ? 48 8D 05 ? ? ? ? 48 83 C4 ? C3 48 8D 0D ? ? ? ? E8 ? ? ? ? 83 3D ? ? ? ? ? 75 ? 48 8D 0D ? ? ? ? 48 C7 05",
+  "mangled_name": "?GetInstance@cTkFileSystem@@SAAEAV1@XZ"
+ },
+ {
+  "name": "cTkFileSystem::Data::Data",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 54 41 55 41 56 41 57 48 81 EC ? ? ? ? 4C 8D 35",
+  "mangled_name": "??0Data@cTkFileSystem@@QEAA@_N0@Z"
+ },
+ {
+  "name": "cTkFileSystem::EnumerateDirectory",
+  "signature": "40 55 53 56 57 41 55 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8D 45",
+  "mangled_name": "?EnumerateDirectory@cTkFileSystem@@QEAAHPEBDQEAPEADHH@Z"
+ },
+ {
+  "name": "cTkMemoryManager::Malloc",
+  "signature": "44 89 4C 24 ? 4C 89 44 24 ? 53",
+  "mangled_name": "?Malloc@cTkMemoryManager@@QEAAPEAXHPEBDH0HH@Z"
+ },
+ {
+  "name": "cGcOptionsPageUI::BeginList",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 33 DB 48 8D 79 ? 89 59",
+  "mangled_name": "__ZN16cGcOptionsPageUI9BeginListEPKcS1_iiRK14cGcListOptions"
+ },
+ {
+  "name": "cGcOptionsPageUI::ListOption",
+  "signature": "40 53 48 83 EC ? 48 63 41 ? 48 8D 59",
+  "mangled_name": "__ZN16cGcOptionsPageUI10ListOptionEPKci"
+ },
+ {
+  "name": "cTkMetaDataManager::GetInstance",
+  "signature": "48 83 EC ? 65 48 8B 04 25 ? ? ? ? B9 ? ? ? ? 48 8B 00 8B 04 01 39 05 ? ? ? ? 0F 8F ? ? ? ? 48 8D 05 ? ? ? ? 48 83 C4 ? C3 48 8D 0D",
+  "mangled_name": "?GetInstance@cTkMetaDataManager@@SAAEAV1@XZ"
+ },
+ {
+  "name": "cTkFileSystem::Data::MountAllArchives",
+  "signature": "4C 8B DC 45 88 43 ? 41 57",
+  "mangled_name": "__ZN13cTkFileSystem4Data16MountAllArchivesERKN5TkStd17TkVectorExtentionI11cTkBankInfoNS1_13DefaultConfigILin1EEENS1_9tk_vectorIS3_Lin1ENS1_17null_stack_bufferEEEEEb"
+ },
+ {
+  "name": "cTkMetaDataManager::LoadModdedData",
+  "signature": "40 55 53 56 57 41 55 41 57 48 8D AC 24 ? ? ? ? B8",
+  "mangled_name": "cTkMetaDataManager::LoadModdedData"
+ },
+ {
+  "name": "cTkFileSystem::DoesFileExist",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 81 EC ? ? ? ? 80 3A",
+  "mangled_name": "?DoesFileExist@cTkFileSystem@@QEAA_NPEBD@Z"
+ },
+ {
+  "name": "cTkFileSystem::LoadModDirectory",
+  "signature": "4C 89 44 24 ? 55 53 56 57 41 54 48 8D 6C 24",
+  "mangled_name": "cTkFileSystem::LoadModDirectory"
+ },
+ {
+  "name": "cTkFileSystem::LoadModSubdirectory",
+  "signature": "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 4C 89 74 24 ? 55 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B DA 48 8B F1",
+  "mangled_name": "cTkFileSystem::LoadModSubdirectory"
+ },
+ {
+  "name": "GenerateModdedFilepath",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 54 41 55 41 56 41 57 48 83 EC ? 33 FF 48 8D 59",
+  "mangled_name": "GenerateModdedFilepath"
+ },
+ {
+  "name": "cTkFileSystem::CreatePath",
+  "signature": "48 81 EC ? ? ? ? 41 B1",
+  "mangled_name": "?CreatePath@cTkFileSystem@@QEAAXPEBD@Z"
+ },
+ {
+  "name": "XMLNode::writeToFile",
+  "signature": "40 53 57 41 54 41 56 41 57 48 81 EC",
+  "mangled_name": "?writeToFile@XMLNode@@QEBA?AW4XMLError@@PEBD0D@Z"
+ },
+ {
+  "name": "cTkFileSystem::Write",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B 7C 24 ? 49 8B F0",
+  "mangled_name": "?Write@cTkFileSystem@@QEAA_JPEAX_J1PEAUFIOS2HANDLE@@@Z"
+ },
+ {
+  "name": "cTkFileSystem::Open",
+  "signature": "40 53 56 57 48 81 EC ? ? ? ? 45 85 C0",
+  "mangled_name": "?Open@cTkFileSystem@@QEAAPEAUFIOS2HANDLE@@PEBDW4eFileOpenMode@@@Z"
+ },
+ {
+  "name": "MiniDumpFunction",
+  "signature": "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? B8",
+  "mangled_name": "MiniDumpFunction"
+ },
+ {
+  "name": "cTkSystem::IntegratedGPUActive",
+  "signature": "80 B9 ? ? ? ? ? 75 ? 83 3D",
+  "mangled_name": "?IntegratedGPUActive@cTkSystem@@QEAA_NXZ"
+ },
+ {
+  "name": "cTkSystem::GetInstance",
+  "signature": "40 53 48 83 EC ? 65 48 8B 04 25 ? ? ? ? B9 ? ? ? ? 48 8B 00 8B 04 01 39 05 ? ? ? ? 7F ? 48 8D 05 ? ? ? ? 48 83 C4 ? 5B C3 90",
+  "mangled_name": "?GetInstance@cTkSystem@@SAAEAV1@XZ"
+ },
+ {
+  "name": "cGcOptionsPageUI::QualityOption",
+  "signature": "4C 89 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55 53 57 41 54 48 8D 6C 24",
+  "mangled_name": "__ZN16cGcOptionsPageUI13QualityOptionEPKcS1_14eGraphicDetailS2_"
+ },
+ {
+  "name": "cTkMetaDataXML::Register",
+  "signature": "4C 89 4C 24 ? 4C 89 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 53 48 83 EC",
+  "mangled_name": "?Register@cTkMetaDataXML@@SAXPEBDP6AXAEBVcTkClassPointer@@AEAUXMLNode@@_N@ZP6AXAEAV2@2PEAVcTkLinearMemoryPool@@@ZP6A_N10@Z@Z"
+ },
+ {
+  "name": "cTkMetaDataXML::GetLookup",
+  "signature": "48 89 5C 24 ? 48 89 7C 24 ? 48 8B 05",
+  "mangled_name": "?GetLookup@cTkMetaDataXML@@SAPEAVcTkMetaDataXMLFunctionLookup@@PEBD@Z"
+ },
+ {
+  "name": "cGcFrontendPageFunctions::DoEmptySlotPopup",
+  "signature": "4C 89 4C 24 ? 4C 89 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55 53 56 57 41 55 41 56 41 57 48 8D AC 24",
+  "mangled_name": "?DoEmptySlotPopup@cGcFrontendPageFunctions@@SAXPEAVcGcFrontendPage@@PEAVcGcNGuiLayer@@AEAV?$vector@W4ePopupAction@@V?$TkSTLAllocatorShim@W4ePopupAction@@$03$0?0@@@std@@AEBVcGcInventoryIndex@@PEAVcGcInventoryStore@@@Z"
+ },
+ {
+  "name": "cGcFrontendPageFunctions::SetEmptySlotBackground",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? BB",
+  "mangled_name": "?SetEmptySlotBackground@cGcFrontendPageFunctions@@SAXPEAVcGcFrontendPage@@PEAVcGcNGuiLayer@@W4InventoryChoice@@_N@Z"
+ },
+ {
+  "name": "cGcNGuiLayer::GetGraphic",
+  "signature": "48 89 5C 24 ? 57 48 83 EC ? 4C 8B 89 ? ? ? ? 41 0F B6 F8 48 8B 0A 49 BA ? ? ? ? ? ? ? ? 48 8B C1 48 33 42 ? 49 0F AF C2 48 8B D0 48 C1 EA ? 48 33 D0 48 33 D1 49 0F AF D2 4C 8B C2 49 C1 E8 ? 4C 33 C2 4D 0F AF C2 41 0F B7 D0 41 8B C8 81 C2 ? ? ? ? 49 C1 E8 ? 8B C2 C1 E9 ? C1 E0 ? 81 E1 ? ? ? ? 33 C8 33 D1 41 0F B7 C8 8B C2 41 C1 E8 ? C1 E8 ? 41 81 E0 ? ? ? ? 03 D0 03 D1 8B C2 C1 E0 ? 44 33 C0 41 33 D0 8B C2 C1 E8 ? 03 D0 8D 04 D5 ? ? ? ? 33 D0 8B C2 C1 E8 ? 03 D0 8B C2 C1 E0 ? 33 D0 8B C2 C1 E8 ? 03 D0 8B C2 C1 E0 ? 33 D0 8B C2 C1 E8 ? 03 C2 69 C0 ? ? ? ? C1 C8 ? 69 C0 ? ? ? ? 83 F0 ? C1 C8 ? 05 ? ? ? ? 41 83 79 ? ? 8D 04 80 8B D0 7E ? 49 63 49 ? 48 98 48 FF C9 48 23 C8 49 8B 41 ? 48 8B 04 C8 48 85 C0 74 ? 48 39 50 ? 75 ? 48 3B 50 ? 74 ? 48 8B 40 ? 48 85 C0 75 ? 33 C0 48 8D 0D ? ? ? ? 40 84 FF 48 0F 45 C1 48 8B 5C 24 ? 48 83 C4 ? 5F C3 48 8B 58 ? 48 85 DB 74 ? 48 8B 13 48 8B CB FF 52 ? 83 F8 ? 75 ? 48 8B C3 48 8B 5C 24 ? 48 83 C4 ? 5F C3 CC CC CC CC CC CC CC 48 89 54 24",
+  "mangled_name": "?SetEmptySlotBackground@cGcFrontendPageFunctions@@SAXPEAVcGcFrontendPage@@PEAVcGcNGuiLayer@@W4InventoryChoice@@_N@Z"
+ },
+ {
+  "name": "cGcFrontendPageFunctions::SetPopupBasics",
+  "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 55 57 41 54 41 55 41 56 48 8D 68 ? 48 81 EC ? ? ? ? 0F 29 78 ? 48 8D 1D",
+  "mangled_name": "?SetPopupBasics@cGcFrontendPageFunctions@@SAPEAVcGcNGuiLayer@@PEAV2@PEBDAEBVcTkColour@@11111_NHAEBT?$TkID@$0IA@@@@Z"
+ },
+ {
+  "name": "Engine::Initialise",
+  "signature": "48 8B C4 55 53 56 57 41 57 48 8D 68 ? 48 81 EC ? ? ? ? 80 3D",
+  "mangled_name": "?Initialise@Engine@@YA_NXZ"
+ },
+ {
+  "name": "cEgTextureResource::Load",
+  "signature": "40 53 57 41 56 48 81 EC ? ? ? ? 45 8B F0",
+  "mangled_name": "?Load@cEgTextureResource@@UEAA_NPEBDH@Z"
+ },
+ {
+  "name": "cTkResource::cTkResource",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? C6 41",
+  "mangled_name": "??0cTkResource@@QEAA@HAEBV?$basic_string@DU?$char_traits@D@std@@V?$TkSTLAllocatorShim@D$00$0?0@@@std@@H@Z"
+ },
+ {
+  "name": "cEgMeshNode::ParsingFunc",
+  "signature": "48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 4C 8B F9 41 8B E8",
+  "mangled_name": "?ParsingFunc@cEgMeshNode@@SAPEAUcEgSceneNodeTemplate@@AEBV?$cTkDynamicArray@VcTkSceneNodeAttributeData@@@@PEAVcTkResourceDescriptor@@H@Z"
+ },
+ {
+  "name": "cEgRenderer::DrawMeshes",
+  "signature": "48 8B C4 44 89 40 ? 48 89 48 ? 55 53 56 41 54",
+  "mangled_name": "?DrawMeshes@cEgRenderer@@SAXAEAVcEgRenderQueueBuffer@@AEBT?$TkID@$0IA@@@H_NW4List@RenderingOrder@@22AEBVcEgFrustum@@PEAVcEgThreadableRenderCall@@@Z"
+ },
+ {
+  "name": "cEgRenderer::SetupMeshMaterial",
+  "signature": "48 8B C4 48 89 58 ? 48 89 78 ? 4C 89 70 ? 55 48 8D 68",
+  "mangled_name": "?SetupMeshMaterial@cEgRenderer@@SA_NPEAVcEgMeshNode@@PEAVcEgMaterialResource@@AEBV?$TkIDHashed@$0IA@@@HAEBVcTkMatrix34@@3AEBVcTkMatrix44@@44MHPEAVcTkVector4@@5H_NPEAVcEgThreadableRenderCall@@_NPEAVcEgShaderUniformBufferBinding@@@Z"
+ },
+ {
+  "name": "cEgRenderer::DrawRenderables",
+  "signature": "4C 89 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 49 83 79",
+  "mangled_name": "?DrawRenderables@cEgRenderer@@KAXAEAVcEgRenderQueue@@AEBVcEgFrustum@@AEBT?$TkID@$0IA@@@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@2H_NW4List@RenderingOrder@@4HHPEAVcEgThreadableRenderCall@@44@Z"
+ },
+ {
+  "name": "cEgDrawGeometry::Draw",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 65 48 8B 04 25",
+  "mangled_name": "?Draw@cEgDrawGeometry@@SAXPEAX@Z"
+ },
+ {
+  "name": "cEgRenderer::SetupMeshGeometry",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 54 41 56 41 57 48 83 EC ? 49 8B F0",
+  "mangled_name": "?SetupMeshGeometry@cEgRenderer@@SA_NPEAVcEgMeshNode@@PEAVcEgGeometryResource@@AEAIAEAPEBVcTkVertexLayoutRT@@_NPEAVcTkRenderStateCache@@PEAVcEgThreadableRenderCall@@@Z"
+ },
+ {
+  "name": "cGcVisitedSystemsBuffer::VisitNewGalacticAddress",
+  "signature": "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 81 EC ? ? ? ? 48 8B 32",
+  "mangled_name": "?VisitNewGalacticAddress@cGcVisitedSystemsBuffer@@QEAAXAEB_K@Z"
+ },
+ {
+  "name": "cGcPersistentInteractionsManager::LoadGalacticAddressBuffers",
+  "signature": "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 83 EC ? 4C 8B E9",
+  "mangled_name": "?LoadGalacticAddressBuffers@cGcPersistentInteractionsManager@@QEAAXAEB_K@Z"
+ },
+ {
+  "name": "cGcPersistentInteractionBuffer::LoadGalacticAddressBuffers",
+  "signature": "40 53 56 57 41 56 48 81 EC",
+  "mangled_name": "?LoadGalacticAddressBuffers@cGcPersistentInteractionBuffer@@QEAAXAEB_K@Z"
+ },
+ {
+  "name": "cGcPlayerBasePersistentBuffer::LoadGalacticAddress",
+  "signature": "48 8B C4 53 48 83 EC ? 48 89 68 ? 48 8B D9",
+  "mangled_name": "?LoadGalacticAddress@cGcPlayerBasePersistentBuffer@@QEAAXAEB_KUBaseIndex@@@Z"
+ },
+ {
+  "name": "cGcPlayerCommunicator::Update",
+  "signature": "F3 0F 11 4C 24 ? 4C 8B DC 55 57 49 8D AB ? ? ? ? 48 81 EC ? ? ? ? 8B 81",
+  "mangled_name": "?Update@cGcPlayerCommunicator@@QEAAXM@Z"
+ },
+ {
+  "name": "cGcInteractionComponent::FindFirstTypedComponent",
+  "signature": "4C 8B DC 48 83 EC ? 49 C7 43 ? ? ? ? ? 41 C7 43 ? ? ? ? ? 83 FA ? 75 ? 48 8D 05 ? ? ? ? 45 33 C0 49 89 43 ? 4D 8D 4B ? 49 8D 43 ? 49 89 43 ? 48 8D 15 ? ? ? ? 49 8D 43 ? 49 89 43 ? E8 ? ? ? ? 48 8B 84 24 ? ? ? ? 48 83 C4 ? C3 48 8D 84 24 ? ? ? ? 48 89 44 24 ? 48 8D 54 24 ? 48 8D 84 24 ? ? ? ? 48 89 44 24 ? 0F 28 44 24 ? 66 0F 7F 44 24 ? E8 ? ? ? ? 48 8B 84 24 ? ? ? ? 48 83 C4 ? C3 CC CC CC CC CC CC CC CC CC CC CC CC CC 48 89 5C 24 ? 57 48 83 EC ? 33 FF",
+  "mangled_name": "?FindFirstTypedComponent@cGcInteractionComponent@@SAPEAV1@VTkHandle@@_N@Z"
+ },
+ {
+  "name": "cGcDestructableComponent::Destroy",
+  "signature": "4C 89 44 24 ? 89 54 24 ? 55 41 55",
+  "mangled_name": "?Destroy@cGcDestructableComponent@@QEAAXW4eDestroyedBy@@AEBU?$cTkUserIdBase@V?$cTkFixedString@$0EA@D@@@@@Z"
+ },
+ {
+  "name": "Engine::GetModelNode",
+  "signature": "48 89 5C 24 ? 57 48 83 EC ? 44 8B D2 44 8B C2",
+  "mangled_name": "?GetModelNode@Engine@@YA?AVTkHandle@@V2@@Z"
+ },
+ {
+  "name": "cGcPersistentInteractionBuffer::SaveInteraction",
+  "signature": "48 89 5C 24 ? 56 48 83 EC ? 0F 10 22",
+  "mangled_name": "?SaveInteraction@cGcPersistentInteractionBuffer@@QEAAXAEBVcTkVector3@@AEBVcGcInteractionData@@_NM@Z"
+ },
+ {
+  "name": "Engine::AddNodes",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 49 63 D8 44 8B CA 44 8B C2 41 C1 E9 ? 41 81 E0 ? ? ? ? 48 8B F1 45 85 C9 0F 84 ? ? ? ? 41 81 F8 ? ? ? ? 0F 84 ? ? ? ? 8B CA 48 8B 15 ? ? ? ? 81 E1 ? ? ? ? 48 8B 82 ? ? ? ? 48 63 0C 88 48 8B 82 ? ? ? ? 48 8B 2C C8 48 85 ED 0F 84 ? ? ? ? 8B 4D ? 8B C1 25 ? ? ? ? 41 3B C0 75",
+  "mangled_name": "?AddNodes@Engine@@YA?AVTkHandle@@V2@U?$TkStrongType@HUTkResHandleID@TkStrongTypeIDs@@@@@Z"
+ },
+ {
+  "name": "cGcPurchaseableItem::Update",
+  "signature": "F3 0F 11 4C 24 ? 55 53 41 54 41 56",
+  "mangled_name": "?Update@cGcPurchaseableItem@@QEAAXM@Z"
+ },
+ {
+  "name": "cGcPlayerShipOwnership::GetShipComponent",
+  "signature": "83 FA ? 75 ? 48 8B 05 ? ? ? ? 8B 90 ? ? ? ? 48 63 C2 48 8D 14 40 48 03 D2",
+  "mangled_name": "?GetShipComponent@cGcPlayerShipOwnership@@QEBAPEBVcGcSpaceshipComponent@@H@Z"
+ },
+ {
+  "name": "cGcPlayerCharacterComponent::Update",
+  "signature": "40 55 53 56 57 41 54 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 45 33 F6",
+  "mangled_name": "?Update@cGcPlayerCharacterComponent@@UEAAXM@Z"
+ },
+ {
+  "name": "cTkEngineUtils::GetMasterModelNode",
+  "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 41 8B F0 48 8B F9",
+  "mangled_name": "?GetMasterModelNode@cTkEngineUtils@@SA?AVTkHandle@@V2@W4eMasterModelNodeDistance@@@Z"
+ },
+ {
+  "name": "Engine::GetResourceHandleForNode",
+  "signature": "44 8B D2 44 8B CA 41 C1 EA ? 41 81 E1 ? ? ? ? 4C 8B C1 45 85 D2 74",
+  "mangled_name": "?GetResourceHandleForNode@Engine@@YA?AU?$TkStrongType@HUTkResHandleID@TkStrongTypeIDs@@@@VTkHandle@@@Z"
+ },
+ {
+  "name": "cEgGeometryResource::Load",
+  "signature": "40 53 55 48 83 EC ? 65 48 8B 04 25 ? ? ? ? 48 8B DA",
+  "mangled_name": "?Load@cEgGeometryResource@@UEAA_NPEBDH@Z"
+ },
+ {
+  "name": "Engine::GetTexture",
+  "signature": "40 53 48 83 EC ? 33 DB 85 C9",
+  "mangled_name": "?GetTexture@Engine@@YAPEAXU?$TkStrongType@HUTkResHandleID@TkStrongTypeIDs@@@@@Z"
+ },
+ {
+  "name": "cGcNGuiNodeInfo::Get",
+  "signature": "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 81 EC ? ? ? ? 4C 8B F9",
+  "mangled_name": "?Get@cGcNGuiNodeInfo@@QEAAXVTkHandle@@@Z"
+ },
+ {
+  "name": "Engine::GetNodeType",
+  "signature": "44 8B C9 44 8B C1 41 C1 E9 ? 41 81 E0 ? ? ? ? 45 85 C9 74 ? 41 81 F8 ? ? ? ? 74 ? 4C 8B 15 ? ? ? ? 81 E1 ? ? ? ? 4D 8B 9A ? ? ? ? 49 8B 82 ? ? ? ? 49 63 14 8B 48 8B 0C D0 48 85 C9 74 ? 8B 49 ? 8B C1 25 ? ? ? ? 8B D1 41 3B C0 75 ? C1 E9 ? 41 3B C9 75 ? 49 8B 82",
+  "mangled_name": "?GetNodeType@Engine@@YAHVTkHandle@@@Z"
+ },
+ {
+  "name": "Engine::GetNodeNumChildren",
+  "signature": "44 8B C9 44 8B C1 41 C1 E9 ? 41 81 E0 ? ? ? ? 45 85 C9 74 ? 41 81 F8 ? ? ? ? 74 ? 4C 8B 15 ? ? ? ? 81 E1 ? ? ? ? 4D 8B 9A ? ? ? ? 49 8B 82 ? ? ? ? 49 63 14 8B 48 8B 0C D0 48 85 C9 74 ? 8B 49 ? 8B C1 25 ? ? ? ? 8B D1 41 3B C0 75 ? C1 E9 ? 41 3B C9 75 ? 81 E2",
+  "mangled_name": "?GetNodeNumChildren@Engine@@YAHVTkHandle@@@Z"
+ },
+ {
+  "name": "cTkEngineUtils::GetMatricesFromNode",
+  "signature": "48 83 EC ? 49 8B C0 48 85 D2",
+  "mangled_name": "?GetMatricesFromNode@cTkEngineUtils@@SA_NVTkHandle@@PEAVcTkMatrix34@@1@Z"
+ },
+ {
+  "name": "cEgModules::Initialise",
+  "signature": "40 57 48 83 EC ? 33 FF 48 89 5C 24",
+  "mangled_name": "?Initialise@cEgModules@@SAXXZ"
+ },
+ {
+  "name": "Engine::GetNodeName",
+  "signature": "44 8B C9 44 8B C1 41 C1 E9 ? 41 81 E0 ? ? ? ? 45 85 C9 74 ? 41 81 F8 ? ? ? ? 74 ? 48 8B 15 ? ? ? ? 81 E1 ? ? ? ? 48 8B 82 ? ? ? ? 48 63 0C 88 48 8B 82 ? ? ? ? 48 8B 14 C8 48 85 D2 74 ? 8B 4A ? 8B C1 25 ? ? ? ? 41 3B C0 75 ? C1 E9 ? 41 3B C9 75 ? 48 8B 42 ? 48 85 C0",
+  "mangled_name": "??$GetNodeName@$0A@@Engine@@YAPEBDVTkHandle@@@Z"
+ },
+ {
+  "name": "cEgModelNode::UpdateGeometry",
+  "signature": "48 8B C4 55 53 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 83 B9",
+  "mangled_name": "?UpdateGeometry@cEgModelNode@@QEAA_NXZ"
+ },
+ {
+  "name": "cEgGeometryResource::CreateVertexInfoForHash",
+  "signature": "48 89 54 24 ? 55 57 41 57 48 8D AC 24 ? ? ? ? 48 81 EC",
+  "mangled_name": "?CreateVertexInfoForHash@cEgGeometryResource@@QEAAX_K@Z"
+ },
+ {
+  "name": "cEgGeometryResource::cEgGeometryResource",
+  "signature": "48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 48 89 78 ? 41 54 41 56 41 57 48 81 EC ? ? ? ? 49 8B E9",
+  "mangled_name": "??0cEgGeometryResource@@QEAA@AEBV?$basic_string@DU?$char_traits@D@std@@V?$TkSTLAllocatorShim@D$00$0?0@@@std@@HPEBVcTkResourceDescriptor@@@Z"
+ },
+ {
+  "name": "GeometryStreaming::cEgGeometryStreamer::GetVertexBufferByHash",
+  "signature": "48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 83 79 ? ? 41 0F B6 E8",
+  "mangled_name": "?GetVertexBufferByHash@cEgGeometryStreamer@GeometryStreaming@@QEAAI_K@Z"
+ },
+ {
+  "name": "cTkGraphicsAPI::GetVertexBufferData",
+  "signature": "48 89 5C 24 ? 57 48 83 EC ? 48 8B FA 48 8B D9 4D 85 C0",
+  "mangled_name": "?GetVertexBufferData@cTkGraphicsAPI@@SAXQEAUcTkBuffer@@PEAXPEAH@Z"
+ },
+ {
+  "name": "GeometryStreaming::cEgGeometryStreamer::RequestStream",
+  "signature": "40 55 53 56 57 41 54 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B FA",
+  "mangled_name": "?RequestStream@cEgGeometryStreamer@GeometryStreaming@@QEAAXPEBVcTkResourceDescriptor@@@Z"
+ },
+ {
+  "name": "cEgGeometryResource::CloneOriginalVertDataToIndex",
+  "signature": "40 57 48 83 EC ? 83 B9 ? ? ? ? ? 48 8B F9 0F 8F",
+  "mangled_name": "?CloneOriginalVertDataToIndex@cEgGeometryResource@@QEAAXH@Z"
+ },
+ {
+  "name": "cEgGeometryResource::CloneInternal",
+  "signature": "4C 8B DC 49 89 4B ? 55 57 41 57 48 81 EC ? ? ? ? 48 8B 29",
+  "mangled_name": "?CloneInternal@cEgGeometryResource@@MEAAXPEBVcTkResource@@@Z"
+ },
+ {
+  "name": "GeometryStreaming::cEgGeometryStreamer::OnBufferLoadFinish",
+  "signature": "40 55 53 56 57 41 54 41 56 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 8B FA",
+  "mangled_name": "?OnBufferLoadFinish@cEgGeometryStreamer@GeometryStreaming@@CAXPEAX@Z"
+ },
+ {
+  "name": "GeometryStreaming::cEgStreamRequests::ProcessOnlyStreamRequests",
+  "signature": "40 56 48 83 EC ? 83 79 ? ? 48 8B F1 0F 29 74 24",
+  "mangled_name": "?ProcessOnlyStreamRequests@cEgStreamRequests@GeometryStreaming@@QEAAXN@Z"
+ },
+ {
+  "name": "cTkEngineUtils::LoadResourcesFromDisk",
+  "signature": "89 4C 24 ? 53 55 41 55",
+  "mangled_name": "?LoadResourcesFromDisk@EngineUtils@@YA?AW4LoadResourcesResult@1@W4LoadResourcesBalancing@1@@Z"
+ },
+ {
+  "name": "EgInstancedModelExtension::cEgInstancedMeshNode::RenderAsync",
+  "signature": "48 8B C4 44 89 40 ? 48 89 50 ? 48 89 48 ? 55 56 48 8D A8",
+  "mangled_name": "?RenderAsync@cEgInstancedMeshNode@EgInstancedModelExtension@@CAXAEAVcEgRenderQueueBuffer@@AEBT?$TkID@$0IA@@@H_NW4List@RenderingOrder@@22PEBVcEgFrustum@@PEAVcEgThreadableRenderCall@@@Z"
+ },
+ {
+  "name": "cGcPlayerWeapon::GetChargeFactor",
+  "signature": "40 53 48 83 EC ? ? ? ? 48 8B D9 FF 90 ? ? ? ? 84 C0 74 ? 48 8B CB",
+  "mangled_name": "?GetChargeFactor@cGcPlayerWeapon@@UEBAMXZ"
+ },
+ {
+  "name": "cGcPlayerWeapon::GetChargeTime",
+  "signature": "48 83 EC ? 48 63 91 ? ? ? ? 8B CA",
+  "mangled_name": "?GetChargeTime@cGcPlayerWeapon@@QEBAMXZ"
+ },
+ {
+  "name": "cGcPlayerState::GetStatValue",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 54 41 55 41 56 41 57 48 83 EC ? 48 8B AC 24 ? ? ? ? 48 8B D9 4C 63 F2",
+  "mangled_name": "?GetStatValue@cGcPlayerState@@QEBAMW4eStatsType@@W4ItemLookupType@@0_N2PEBVcGcInventoryStore@@3@Z"
  }
 ]

@@ -24,9 +24,9 @@ classifiers = [
   "Programming Language :: Python :: 3 :: Only",
 ]
 dependencies = [
-  "pymhf[gui]>=0.2.1"
+  "pymhf[gui]==0.2.2"
 ]
-version = "157371.0"
+version = "159106.0"
 
 [dependency-groups]
 dev = [
@@ -55,11 +55,25 @@ Repository = "https://github.com/monkeyman192/NMS.py.git"
 [project.entry-points.pymhflib]
 "nmspy" = "nmspy"
 
+[project.entry-points.pymhf_rtfunc]
+"globals" = "nmspy.globals:globals.instantiate_globals"
+"engine_modules" = "nmspy.data.types:engine_modules.find_variables"
+
 [project.entry-points.pymhfcmd]
 check = "check"
 
 [tool.setuptools_scm]
 local_scheme = "no-local-version"
+
+[tool.ruff]
+line-length = 110
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+preview = true
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
 
 [build-system]
 requires = ["setuptools>=64", "wheel", "setuptools-scm>=8", "setuptools_scm_git_semver"]

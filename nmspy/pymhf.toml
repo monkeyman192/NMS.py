@@ -2,7 +2,7 @@
 exe = "NMS.exe"
 internal_mod_dir = "{CURR_DIR}/_internal_mods"
 steam_gameid = 275850
-start_paused = false
+start_paused = true
 default_mod_save_dir = "{EXE_DIR}"
 
 [pymhf.logging]

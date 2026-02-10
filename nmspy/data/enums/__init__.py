@@ -8,6 +8,8 @@ from .internal_enums import (
     eLanguageRegion,
     EnvironmentLocation,
     EPulseDriveState,
+    eFileOpenMode,
+    eGraphicsDetail,
 )
 
 # The following list is auto-generated.

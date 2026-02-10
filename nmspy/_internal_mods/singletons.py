@@ -2,17 +2,16 @@ import ctypes
 from dataclasses import dataclass
 from logging import getLogger
 
+from pymhf import Mod, ModState
 from pymhf.core._types import DetourTime
+from pymhf.core.hooking import hook_manager, one_shot
+from pymhf.core.memutils import get_addressof, map_struct
 from pymhf.gui.decorators import no_gui
-from pymhf.core.hooking import one_shot, hook_manager
-from pymhf.core.memutils import map_struct, get_addressof
-from pymhf import ModState
-from nmspy.common import gameData
-import nmspy.data.types as nms
-import nmspy.data.basic_types as basic
-from pymhf import Mod
-from nmspy.data.enums import StateEnum
 
+import nmspy.data.basic_types as basic
+import nmspy.data.types as nms
+from nmspy.common import gameData
+from nmspy.data.enums import StateEnum
 
 logger = getLogger()
 

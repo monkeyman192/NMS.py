@@ -12,9 +12,7 @@ from pymhf.core.hooking import Structure, static_function_hook
 
 class AK(Structure):
     class SoundEngine(Structure):
-        @static_function_hook(
-            exported_name="?RegisterGameObj@SoundEngine@AK@@YA?AW4AKRESULT@@_KPEBD@Z"
-        )
+        @static_function_hook(exported_name="?RegisterGameObj@SoundEngine@AK@@YA?AW4AKRESULT@@_KPEBD@Z")
         @staticmethod
         def RegisterGameObj(
             in_GameObj: ctypes.c_uint64,
