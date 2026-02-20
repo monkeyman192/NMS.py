@@ -2,6 +2,19 @@
 from enum import IntEnum
 
 
+class cTkNoiseVoxelTypeEnum(IntEnum):
+    Base = 0x0
+    Rock = 0x1
+    Mountain = 0x2
+    Sand = 0x3
+    Cave = 0x4
+    Substance_1 = 0x5
+    Substance_2 = 0x6
+    Substance_3 = 0x7
+    RandomRock = 0x8
+    RandomRockOrSubstance = 0x9
+
+
 class cTkVoxelGeneratorSettingsTypes(IntEnum):
     FloatingIslands = 0x0
     GrandCanyon = 0x1
@@ -34,19 +47,6 @@ class cTkVoxelGeneratorSettingsTypes(IntEnum):
     AlpinePurple = 0x1C
     LilyPadPurple = 0x1D
     DesertPurple = 0x1E
-
-
-class cTkNoiseVoxelTypeEnum(IntEnum):
-    Base = 0x0
-    Rock = 0x1
-    Mountain = 0x2
-    Sand = 0x3
-    Cave = 0x4
-    Substance_1 = 0x5
-    Substance_2 = 0x6
-    Substance_3 = 0x7
-    RandomRock = 0x8
-    RandomRockOrSubstance = 0x9
 
 
 class cTkNoiseLayersEnum(IntEnum):
@@ -93,14 +93,6 @@ class cTkNoiseOffsetEnum(IntEnum):
     SeaLevel = 0x3
 
 
-class cTkInputValidation(IntEnum):
-    Held = 0x0
-    Pressed = 0x1
-    HeldConfirm = 0x2
-    Released = 0x3
-    HeldOver = 0x4
-
-
 class cTkPadEnum(IntEnum):
     None_ = 0x0
     XInput = 0x1
@@ -119,6 +111,22 @@ class cTkPadEnum(IntEnum):
     SwitchDebugPad = 0xE
     SwitchJoyConDual = 0xF
     VirtualController = 0x10
+
+
+class cTkInputValidation(IntEnum):
+    Held = 0x0
+    Pressed = 0x1
+    HeldConfirm = 0x2
+    Released = 0x3
+    HeldOver = 0x4
+
+
+class cTkTestBitFieldEnum(IntEnum):
+    empty = 0x0
+    First = 0x1
+    Second = 0x2
+    Third = 0x4
+    Fourth = 0x8
 
 
 class cGcInputActions(IntEnum):
@@ -349,92 +357,79 @@ class cGcInputActions(IntEnum):
     GameMode_ChangeUser = 0xE0
     Binocs_NextMode = 0xE1
     Binocs_PrevMode = 0xE2
-    BaseBuilding_PinRecipe = 0xE3
-    BaseBuilding_SwitchBase = 0xE4
-    PhotoMode_CatLeft = 0xE5
-    PhotoMode_CatRight = 0xE6
-    PhotoMode_ValueIncrease = 0xE7
-    PhotoMode_ValueDecrease = 0xE8
-    PhotoMode_OptionUp = 0xE9
-    PhotoMode_OptionDown = 0xEA
-    PhotoMode_CameraRollLeft = 0xEB
-    PhotoMode_CameraRollRight = 0xEC
-    PhotoMode_PauseApplication = 0xED
-    PhotoMode_CopyLocation = 0xEE
-    PhotoMode_HideLocation = 0xEF
-    UI_Up_Sub_Discovery = 0xF0
-    UI_Down_Sub_Discovery = 0xF1
-    Fe_Upload_Discovery = 0xF2
-    Fe_Assign_Custom_Wonder = 0xF3
-    HMD_Recenter = 0xF4
-    HMD_Recenter2 = 0xF5
-    HMD_FEOpen = 0xF6
-    TextChatOpenClose = 0xF7
-    TextChatSend = 0xF8
-    TextChatPasteHold = 0xF9
-    TextChatPaste = 0xFA
-    TextChatAutocomplete = 0xFB
-    TextChatAutocompleteModifier = 0xFC
-    TextChatCursorLeft = 0xFD
-    TextChatCursorRight = 0xFE
-    TextChatCursorHome = 0xFF
-    TextChatCursorEnd = 0x100
-    TextChatDelete = 0x101
-    Player_InteractSecondary = 0x102
-    BaseBuilding_ToggleVisions = 0x103
-    BaseBuilding_Browse = 0x104
-    BaseBuilding_Pickup = 0x105
-    BaseBuilding_Duplicate = 0x106
-    BaseBuilding_Delete = 0x107
-    BaseBuilding_ToggleRotationAxis = 0x108
-    Build_AnalogRotateZ2 = 0x109
-    BaseBuilding_ToggleSnapping = 0x10A
-    BaseBuilding_ToggleWiring = 0x10B
-    BaseBuilding_Paint = 0x10C
-    BaseBuilding_NextPart = 0x10D
-    Player_TagMarker = 0x10E
-    TogglePause = 0x10F
-    TogglePlanet = 0x110
-    ToggleFreezeCulling = 0x111
-    Suicide = 0x112
-    Reset = 0x113
-    AddLastToolbox = 0x114
-    AddLastToolboxAtPos = 0x115
-    TerrainInvalidate = 0x116
-    TogglePipeline = 0x117
-    TakeScreenshot = 0x118
-    TakeExrScreenshot = 0x119
-    ToggleDebugStats = 0x11A
-    ToggleDebugSubpage = 0x11B
-    DumpNodeStats = 0x11C
-    ToggleTaa = 0x11D
-    DebugDropMeasurementAnchor = 0x11E
-    QuickWarp = 0x11F
-    DumpStats = 0x120
-    DiscoverOwnBase = 0x121
-    ClearTerrainEdits = 0x122
-    SelectRegion = 0x123
-    SwitchRegionRow = 0x124
-    SwitchRegionAxis = 0x125
-    OpenLog = 0x126
-    DumpVertStats = 0x127
-    ToggleDebugCamera = 0x128
-    ReturnToPlayer = 0x129
-    SetTimeOfDay = 0x12A
-
-
-class cTkTestBitFieldEnum(IntEnum):
-    empty = 0x0
-    First = 0x1
-    Second = 0x2
-    Third = 0x4
-    Fourth = 0x8
-
-
-class cTkInputHandEnum(IntEnum):
-    None_ = 0x0
-    Left = 0x1
-    Right = 0x2
+    Binocs_Scan = 0xE3
+    BaseBuilding_PinRecipe = 0xE4
+    BaseBuilding_SwitchBase = 0xE5
+    PhotoMode_CatLeft = 0xE6
+    PhotoMode_CatRight = 0xE7
+    PhotoMode_ValueIncrease = 0xE8
+    PhotoMode_ValueDecrease = 0xE9
+    PhotoMode_OptionUp = 0xEA
+    PhotoMode_OptionDown = 0xEB
+    PhotoMode_CameraRollLeft = 0xEC
+    PhotoMode_CameraRollRight = 0xED
+    PhotoMode_PauseApplication = 0xEE
+    PhotoMode_CopyLocation = 0xEF
+    PhotoMode_HideLocation = 0xF0
+    UI_Up_Sub_Discovery = 0xF1
+    UI_Down_Sub_Discovery = 0xF2
+    Fe_Upload_Discovery = 0xF3
+    Fe_Assign_Custom_Wonder = 0xF4
+    HMD_Recenter = 0xF5
+    HMD_Recenter2 = 0xF6
+    HMD_FEOpen = 0xF7
+    TextChatOpenClose = 0xF8
+    TextChatSend = 0xF9
+    TextChatPasteHold = 0xFA
+    TextChatPaste = 0xFB
+    TextChatAutocomplete = 0xFC
+    TextChatAutocompleteModifier = 0xFD
+    TextChatCursorLeft = 0xFE
+    TextChatCursorRight = 0xFF
+    TextChatCursorHome = 0x100
+    TextChatCursorEnd = 0x101
+    TextChatDelete = 0x102
+    Player_InteractSecondary = 0x103
+    BaseBuilding_ToggleVisions = 0x104
+    BaseBuilding_Browse = 0x105
+    BaseBuilding_Pickup = 0x106
+    BaseBuilding_Duplicate = 0x107
+    BaseBuilding_Delete = 0x108
+    BaseBuilding_ToggleRotationAxis = 0x109
+    Build_AnalogRotateZ2 = 0x10A
+    BaseBuilding_ToggleSnapping = 0x10B
+    BaseBuilding_ToggleWiring = 0x10C
+    BaseBuilding_Paint = 0x10D
+    BaseBuilding_NextPart = 0x10E
+    Player_TagMarker = 0x10F
+    TogglePause = 0x110
+    TogglePlanet = 0x111
+    ToggleFreezeCulling = 0x112
+    Suicide = 0x113
+    Reset = 0x114
+    AddLastToolbox = 0x115
+    AddLastToolboxAtPos = 0x116
+    TerrainInvalidate = 0x117
+    TogglePipeline = 0x118
+    TakeScreenshot = 0x119
+    TakeExrScreenshot = 0x11A
+    ToggleDebugStats = 0x11B
+    ToggleDebugSubpage = 0x11C
+    DumpNodeStats = 0x11D
+    ToggleTaa = 0x11E
+    DebugDropMeasurementAnchor = 0x11F
+    QuickWarp = 0x120
+    DumpStats = 0x121
+    DiscoverOwnBase = 0x122
+    ClearTerrainEdits = 0x123
+    SelectRegion = 0x124
+    SwitchRegionRow = 0x125
+    SwitchRegionAxis = 0x126
+    OpenLog = 0x127
+    DumpVertStats = 0x128
+    ToggleDebugCamera = 0x129
+    ReturnToPlayer = 0x12A
+    SetTimeOfDay = 0x12B
 
 
 class cTkInputEnum(IntEnum):
@@ -683,6 +678,17 @@ class cTkInputAxisEnum(IntEnum):
     FakeRightStick = 0x31
 
 
+class cTkInputHandEnum(IntEnum):
+    None_ = 0x0
+    Left = 0x1
+    Right = 0x2
+
+
+class cTkCoordinateOrientation(IntEnum):
+    None_ = 0x0
+    Random = 0x1
+
+
 class cTkSketchConditions(IntEnum):
     Equal = 0x0
     NotEqual = 0x1
@@ -699,20 +705,6 @@ class cTkTrophyEnum(IntEnum):
     Trophy2 = 0x2
     Trophy3 = 0x3
     Trophy4 = 0x4
-
-
-class cTkCoordinateOrientation(IntEnum):
-    None_ = 0x0
-    Random = 0x1
-
-
-class cTkMetadataReadMask(IntEnum):
-    empty = 0x0
-    Default = 0x1
-    SaveWhenMultiplayerClient = 0x2
-    SavePlayerPosition = 0x4
-    SavePlayerInventory = 0x8
-    SaveDifficultySettings = 0x10
 
 
 class cTkLanguages(IntEnum):
@@ -751,6 +743,23 @@ class cTkLightLayer(IntEnum):
     Interior = 0x8
 
 
+class cTkMetadataReadMask(IntEnum):
+    empty = 0x0
+    Default = 0x1
+    SaveWhenMultiplayerClient = 0x2
+    SavePlayerPosition = 0x4
+    SavePlayerInventory = 0x8
+    SaveDifficultySettings = 0x10
+
+
+class cTkEqualityEnum(IntEnum):
+    Equal = 0x0
+    Greater = 0x1
+    Less = 0x2
+    GreaterEqual = 0x3
+    LessEqual = 0x4
+
+
 class cTkUserServiceAuthProvider(IntEnum):
     Null = 0x0
     PSN = 0x1
@@ -762,12 +771,9 @@ class cTkUserServiceAuthProvider(IntEnum):
     GameCenter = 0x7
 
 
-class cTkEqualityEnum(IntEnum):
-    Equal = 0x0
-    Greater = 0x1
-    Less = 0x2
-    GreaterEqual = 0x3
-    LessEqual = 0x4
+class cTkPusherType(IntEnum):
+    Sphere = 0x0
+    HollowSphere = 0x1
 
 
 class cTkBlackboardCategory(IntEnum):
@@ -795,9 +801,22 @@ class cTkBlackboardType(IntEnum):
     Attachment = 0x6
 
 
-class cTkPusherType(IntEnum):
-    Sphere = 0x0
-    HollowSphere = 0x1
+class cTkNavMeshInclusionType(IntEnum):
+    Auto = 0x0
+    Ignore = 0x1
+    Obstacle = 0x2
+    Walkable = 0x3
+
+
+class cTkNavMeshPathingQuality(IntEnum):
+    Normal = 0x0
+    High = 0x1
+    Highest = 0x2
+
+
+class cTkNavMeshPolyFlags(IntEnum):
+    empty = 0x0
+    TestFlag = 0x1
 
 
 class cTkUnreachableNavDestBehaviour(IntEnum):
@@ -805,9 +824,18 @@ class cTkUnreachableNavDestBehaviour(IntEnum):
     ContinueOffMesh = 0x1
 
 
+class cTkNavMeshAgentFamily(IntEnum):
+    Small = 0x0
+    Medium = 0x1
+    Large = 0x2
+    VeryLarge = 0x3
+    WorldBoss = 0x4
+
+
 class cTkNavMeshAreaFlags(IntEnum):
     empty = 0x0
     Steep = 0x1
+    LowHeightClearance = 0x2
 
 
 class cTkNavMeshAreaType(IntEnum):
@@ -834,22 +862,78 @@ class cTkNavMeshAreaType(IntEnum):
     UseCollisionTileType = 0x14
 
 
-class cTkNavMeshInclusionType(IntEnum):
-    Auto = 0x0
-    Ignore = 0x1
-    Obstacle = 0x2
-    Walkable = 0x3
-
-
-class cTkNavMeshPathingQuality(IntEnum):
-    Normal = 0x0
-    High = 0x1
-    Highest = 0x2
-
-
-class cTkNavMeshPolyFlags(IntEnum):
-    empty = 0x0
-    TestFlag = 0x1
+class cTkMaterialClass(IntEnum):
+    Any = 0x0
+    Unknown = 0x1
+    Additive = 0x2
+    AdditiveHighQuality = 0x3
+    ASTEROID = 0x4
+    Atmosphere = 0x5
+    AtmosphereGasGiant = 0x6
+    AtmosphereNear = 0x7
+    BlackHoleBack = 0x8
+    Bloom = 0x9
+    BloomAndLensFlare = 0xA
+    Cutout = 0xB
+    Decal = 0xC
+    DecalTerrain = 0xD
+    DepthMaskUI = 0xE
+    DoubleSided = 0xF
+    DoublesidedAdditive = 0x10
+    Glow = 0x11
+    GlowTranslucent = 0x12
+    GreenOcclusionHighlight = 0x13
+    GreyOcclusionHighlight = 0x14
+    GunAdditive = 0x15
+    GunDecal = 0x16
+    GunGlow = 0x17
+    GunOpaque = 0x18
+    Highlight = 0x19
+    HighlightDoubleSided = 0x1A
+    HighlightOccluded = 0x1B
+    HighlightOverlay = 0x1C
+    HighlightOverlayDoubleSided = 0x1D
+    HighlightTrans = 0x1E
+    HighlightTransDoubleSided = 0x1F
+    HighlightTransOccluded = 0x20
+    LensFlare = 0x21
+    LOD0 = 0x22
+    LOD1 = 0x23
+    LOD2 = 0x24
+    LOD3 = 0x25
+    Map = 0x26
+    MapTrans = 0x27
+    MeshWater = 0x28
+    NoZPass = 0x29
+    NoZTest = 0x2A
+    Opaque = 0x2B
+    OpaqueBeforeUI = 0x2C
+    PlaneSpot = 0x2D
+    PLANET = 0x2E
+    PlayerGunLaser = 0x2F
+    PlayerGunLaserCore = 0x30
+    Rainbow = 0x31
+    RedOcclusionHighlight = 0x32
+    ReflectionProbe = 0x33
+    Rings = 0x34
+    RingsAbove = 0x35
+    RingsAmid = 0x36
+    RingsBelow = 0x37
+    ScreenSpaceReflections = 0x38
+    ShadowOnly = 0x39
+    Sky = 0x3A
+    TeleportTravelMarker = 0x3B
+    Translucent = 0x3C
+    TranslucentPostScene = 0x3D
+    UI = 0x3E
+    UIScreen = 0x3F
+    UISurface = 0x40
+    Warp = 0x41
+    WarpInShip = 0x42
+    WarpOnFoot = 0x43
+    ExclusionVolumeOutsideSurface = 0x44
+    ExclusionVolumeConnectorSurface = 0x45
+    WhiteOcclusionHighlight = 0x46
 
 
 class cTkMaterialFlags(IntEnum):
@@ -986,6 +1070,35 @@ class cTkMaterialFxFlags(IntEnum):
     _X64_RESERVED_FLAG_FOR_EARLY_Z_PATCHING_DO_NOT_USE = 0x3F
 
 
+class cTkVolumeMarkupType(IntEnum):
+    NavMeshGenerationBounds = 0x0
+
+
+class cTkVolumeTriggerType(IntEnum):
+    Open = 0x0
+    GenericInterior = 0x1
+    GenericGlassInterior = 0x2
+    Corridor = 0x3
+    SmallRoom = 0x4
+    LargeRoom = 0x5
+    OpenCovered = 0x6
+    HazardProtection = 0x7
+    Dungeon = 0x8
+    FieldBoundary = 0x9
+    Custom_Biodome = 0xA
+    Portal = 0xB
+    VehicleBoost = 0xC
+    NexusPlaza = 0xD
+    NexusCommunityHub = 0xE
+    NexusHangar = 0xF
+    RaceObstacle = 0x10
+    HazardProtectionCold = 0x11
+    SpaceStorm = 0x12
+    HazardProtectionNoRecharge = 0x13
+    HazardProtectionSpook = 0x14
+    ForceJetpackIgnition = 0x15
+
+
 class cGcPaletteColourAlt(IntEnum):
     Primary = 0x0
     Secondary = 0x1
@@ -1083,42 +1196,43 @@ class cTkNGuiEditorGraphicType(IntEnum):
     ToolbarGraphic = 0x38
     ToolbarOptions = 0x39
     Rectangle = 0x3A
-    TreeNodeBorder = 0x3B
-    Background = 0x3C
-    GroupTitle = 0x3D
-    TextLabelSeparator = 0x3E
-    AlignmentAnchor = 0x3F
-    MinimiseHighlight = 0x40
-    Table = 0x41
-    TableBorder = 0x42
-    TableFolderButton = 0x43
-    TableAddEntryButton = 0x44
-    TreeNode = 0x45
-    CategoryCollapsed = 0x46
-    CategoryExpanded = 0x47
-    WindowTitleBarDragTarget = 0x48
-    IconButtonSelected = 0x49
-    Line = 0x4A
-    LightLine = 0x4B
-    TreeNodeBackground = 0x4C
-    TreeNodeCategoryBackground = 0x4D
-    SceneNodeBackground = 0x4E
-    PinChildren = 0x4F
-    UnpinChildren = 0x50
-    DynamicPanel = 0x51
-    DynamicPanelTitle = 0x52
-    DynamicPanelCustomToolbar = 0x53
-    Favourite = 0x54
-    FavouriteSelected = 0x55
-    FavouriteValue = 0x56
-    FavouriteValueSelected = 0x57
-    RevertButton = 0x58
-    TreeNodeCustomPanel = 0x59
-    IconButtonBordered = 0x5A
-    IconButtonBorderedSelected = 0x5B
-    Tooltip = 0x5C
-    TooltipButton = 0x5D
-    ContextMenuButton = 0x5E
+    Background = 0x3B
+    GroupTitle = 0x3C
+    TextLabelSeparator = 0x3D
+    AlignmentAnchor = 0x3E
+    MinimiseHighlight = 0x3F
+    Table = 0x40
+    TableBorder = 0x41
+    TableFolderButton = 0x42
+    TableAddEntryButton = 0x43
+    TreeNode = 0x44
+    CategoryCollapsed = 0x45
+    CategoryExpanded = 0x46
+    WindowTitleBarDragTarget = 0x47
+    IconButtonSelected = 0x48
+    Line = 0x49
+    LightLine = 0x4A
+    TreeNodeBackground = 0x4B
+    TreeNodeCategoryBackground = 0x4C
+    SceneNodeBackground = 0x4D
+    PinChildren = 0x4E
+    UnpinChildren = 0x4F
+    DynamicPanel = 0x50
+    DynamicPanelTitle = 0x51
+    DynamicPanelCustomToolbar = 0x52
+    Favourite = 0x53
+    FavouriteSelected = 0x54
+    FavouriteValue = 0x55
+    FavouriteValueSelected = 0x56
+    RevertButton = 0x57
+    TreeNodeCustomPanel = 0x58
+    IconButtonBordered = 0x59
+    IconButtonBorderedSelected = 0x5A
+    Tooltip = 0x5B
+    TooltipButton = 0x5C
+    ContextMenuButton = 0x5D
+    TreeNodeBorder = 0x5E
+    CategoryBorder = 0x5F
 
 
 class cTKNGuiEditorComponentSize(IntEnum):
@@ -1187,6 +1301,7 @@ class cTKNGuiEditorComponentSize(IntEnum):
     ContextMenuWidth = 0x3E
     TooltipButtonSize = 0x3F
     TooltipMaxWidth = 0x40
+    TreeNodeBorderWidth = 0x41
 
 
 class cTkNGuiEditorIcons(IntEnum):
@@ -2746,13 +2861,6 @@ class cTkNGuiEditorIcons(IntEnum):
     z = 0x611
 
 
-class cTkGraphicsDetailTypes(IntEnum):
-    Low = 0x0
-    Medium = 0x1
-    High = 0x2
-    Ultra = 0x3
-
-
 class cTkEngineSettingTypes(IntEnum):
     FullScreen = 0x0
     Borderless = 0x1
@@ -2763,76 +2871,60 @@ class cTkEngineSettingTypes(IntEnum):
     Monitor = 0x6
     FoVOnFoot = 0x7
     FoVInShip = 0x8
-    VSync = 0x9
-    TextureQuality = 0xA
-    AnimationQuality = 0xB
-    ShadowQuality = 0xC
-    ReflectionProbesMultiplier = 0xD
-    ReflectionProbes = 0xE
-    ScreenSpaceReflections = 0xF
-    ReflectionsQuality = 0x10
-    PostProcessingEffects = 0x11
-    VolumetricsQuality = 0x12
-    TerrainTessellation = 0x13
-    PlanetQuality = 0x14
-    WaterQuality = 0x15
-    BaseQuality = 0x16
-    UIQuality = 0x17
-    DLSSQuality = 0x18
-    FFXSRQuality = 0x19
-    FFXSR2Quality = 0x1A
-    XESSQuality = 0x1B
-    DynamicResScaling = 0x1C
-    EnableTessellation = 0x1D
-    AntiAliasing = 0x1E
-    AnisotropyLevel = 0x1F
-    Brightness = 0x20
-    VignetteAndScanlines = 0x21
-    AvailableMonitors = 0x22
-    MaxFrameRate = 0x23
-    NumLowThreads = 0x24
-    NumHighThreads = 0x25
-    NumGraphicsThreads = 0x26
-    TextureStreaming = 0x27
-    TexturePageSizeKb = 0x28
-    MotionBlurStrength = 0x29
-    ShowRequirementsWarnings = 0x2A
-    AmbientOcclusion = 0x2B
-    MaxTextureMemoryMb = 0x2C
-    FixedTextureMemory = 0x2D
-    UseArbSparseTexture = 0x2E
-    UseTerrainTextureCache = 0x2F
-    AdapterIndex = 0x30
-    UseHDR = 0x31
-    MinGPUMode = 0x32
-    MetalFXQuality = 0x33
-    DLSSFrameGeneration = 0x34
-    NVIDIAReflexLowLatency = 0x35
+    FoVOnFootFP = 0x9
+    FoVInShipFP = 0xA
+    VSync = 0xB
+    TextureQuality = 0xC
+    AnimationQuality = 0xD
+    ShadowQuality = 0xE
+    ReflectionProbesMultiplier = 0xF
+    ReflectionProbes = 0x10
+    ScreenSpaceReflections = 0x11
+    ReflectionsQuality = 0x12
+    PostProcessingEffects = 0x13
+    VolumetricsQuality = 0x14
+    TerrainTessellation = 0x15
+    PlanetQuality = 0x16
+    WaterQuality = 0x17
+    BaseQuality = 0x18
+    UIQuality = 0x19
+    DLSSQuality = 0x1A
+    FFXSRQuality = 0x1B
+    FFXSR2Quality = 0x1C
+    XESSQuality = 0x1D
+    DynamicResScaling = 0x1E
+    EnableTessellation = 0x1F
+    AntiAliasing = 0x20
+    AnisotropyLevel = 0x21
+    Brightness = 0x22
+    VignetteAndScanlines = 0x23
+    AvailableMonitors = 0x24
+    MaxFrameRate = 0x25
+    NumLowThreads = 0x26
+    NumHighThreads = 0x27
+    NumGraphicsThreads = 0x28
+    TextureStreaming = 0x29
+    TexturePageSizeKb = 0x2A
+    MotionBlurStrength = 0x2B
+    ShowRequirementsWarnings = 0x2C
+    AmbientOcclusion = 0x2D
+    MaxTextureMemoryMb = 0x2E
+    FixedTextureMemory = 0x2F
+    UseArbSparseTexture = 0x30
+    UseTerrainTextureCache = 0x31
+    AdapterIndex = 0x32
+    UseHDR = 0x33
+    MinGPUMode = 0x34
+    MetalFXQuality = 0x35
+    DLSSFrameGeneration = 0x36
+    NVIDIAReflexLowLatency = 0x37
 
 
-class cTkVolumeTriggerType(IntEnum):
-    Open = 0x0
-    GenericInterior = 0x1
-    GenericGlassInterior = 0x2
-    Corridor = 0x3
-    SmallRoom = 0x4
-    LargeRoom = 0x5
-    OpenCovered = 0x6
-    HazardProtection = 0x7
-    Dungeon = 0x8
-    FieldBoundary = 0x9
-    Custom_Biodome = 0xA
-    Portal = 0xB
-    VehicleBoost = 0xC
-    NexusPlaza = 0xD
-    NexusCommunityHub = 0xE
-    NexusHangar = 0xF
-    RaceObstacle = 0x10
-    HazardProtectionCold = 0x11
-    SpaceStorm = 0x12
-    HazardProtectionNoRecharge = 0x13
-    HazardProtectionSpook = 0x14
-    ForceJetpackIgnition = 0x15
+class cTkGraphicsDetailTypes(IntEnum):
+    Low = 0x0
+    Medium = 0x1
+    High = 0x2
+    Ultra = 0x3
 
 
 class cTkCurveType(IntEnum):
@@ -2890,44 +2982,38 @@ class cTkAnimBlendType(IntEnum):
     OffsetByBlendTime = 0x3
 
 
-class cGcWonderType(IntEnum):
-    Treasure = 0x0
-    WeirdBasePart = 0x1
-    Planet = 0x2
-    Creature = 0x3
-    Flora = 0x4
-    Mineral = 0x5
-    Custom = 0x6
-
-
-class cGcWonderTreasureCategory(IntEnum):
-    Loot = 0x0
-    Document = 0x1
-    BioSample = 0x2
-    Fossil = 0x3
-    Plant = 0x4
-    Tool = 0x5
-    Farm = 0x6
-    SeaLoot = 0x7
-    SeaHorror = 0x8
-    Salvage = 0x9
-    Bones = 0xA
-    SpaceHorror = 0xB
-    SpaceBones = 0xC
-
-
-class cGcWonderWeirdBasePartCategory(IntEnum):
-    EngineOrb = 0x0
-    BeamStone = 0x1
-    BubbleCluster = 0x2
-    MedGeometric = 0x3
-    Shard = 0x4
-    StarJoint = 0x5
-    BoneGarden = 0x6
-    ContourPod = 0x7
-    HydroPod = 0x8
-    ShellWhite = 0x9
-    WeirdCube = 0xA
+class cGcWikiTopicType(IntEnum):
+    Substances = 0x0
+    CustomSubstanceList = 0x1
+    Products = 0x2
+    CustomProductList = 0x3
+    CustomItemList = 0x4
+    Technologies = 0x5
+    CustomTechnologyList = 0x6
+    BuildableTech = 0x7
+    Construction = 0x8
+    TradeCommodities = 0x9
+    Curiosities = 0xA
+    Cooking = 0xB
+    Fish = 0xC
+    StoneRunes = 0xD
+    Words = 0xE
+    RecipesAll = 0xF
+    RecipesCooker = 0x10
+    RecipesRefiner1 = 0x11
+    RecipesRefiner2 = 0x12
+    RecipesRefiner3 = 0x13
+    Guide = 0x14
+    Stories = 0x15
+    TreasureWonders = 0x16
+    WeirdBasePartWonders = 0x17
+    PlanetWonders = 0x18
+    CreatureWonders = 0x19
+    FloraWonders = 0x1A
+    MineralWonders = 0x1B
+    CustomWonders = 0x1C
+    ExhibitBones = 0x1D
+    DebugSweep = 0x1E
 
 
 class cGcWonderCreatureCategory(IntEnum):
@@ -2999,38 +3085,62 @@ class cGcWonderPlanetCategory(IntEnum):
     PerfectionMin = 0xA
 
 
-class cGcWikiTopicType(IntEnum):
-    Substances = 0x0
-    CustomSubstanceList = 0x1
-    Products = 0x2
-    CustomProductList = 0x3
-    CustomItemList = 0x4
-    Technologies = 0x5
-    CustomTechnologyList = 0x6
-    BuildableTech = 0x7
-    Construction = 0x8
-    TradeCommodities = 0x9
-    Curiosities = 0xA
-    Cooking = 0xB
-    Fish = 0xC
-    StoneRunes = 0xD
-    Words = 0xE
-    RecipesAll = 0xF
-    RecipesCooker = 0x10
-    RecipesRefiner1 = 0x11
-    RecipesRefiner2 = 0x12
-    RecipesRefiner3 = 0x13
-    Guide = 0x14
-    Stories = 0x15
-    TreasureWonders = 0x16
-    WeirdBasePartWonders = 0x17
-    PlanetWonders = 0x18
-    CreatureWonders = 0x19
-    FloraWonders = 0x1A
-    MineralWonders = 0x1B
-    CustomWonders = 0x1C
-    ExhibitBones = 0x1D
-    DebugSweep = 0x1E
+class cGcWonderType(IntEnum):
+    Treasure = 0x0
+    WeirdBasePart = 0x1
+    Planet = 0x2
+    Creature = 0x3
+    Flora = 0x4
+    Mineral = 0x5
+    Custom = 0x6
+
+
+class cGcWonderTreasureCategory(IntEnum):
+    Loot = 0x0
+    Document = 0x1
+    BioSample = 0x2
+    Fossil = 0x3
+    Plant = 0x4
+    Tool = 0x5
+    Farm = 0x6
+    SeaLoot = 0x7
+    SeaHorror = 0x8
+    Salvage = 0x9
+    Bones = 0xA
+    SpaceHorror = 0xB
+    SpaceBones = 0xC
+
+
+class cGcWonderWeirdBasePartCategory(IntEnum):
+    EngineOrb = 0x0
+    BeamStone = 0x1
+    BubbleCluster = 0x2
+    MedGeometric = 0x3
+    Shard = 0x4
+    StarJoint = 0x5
+    BoneGarden = 0x6
+    ContourPod = 0x7
+    HydroPod = 0x8
+    ShellWhite = 0x9
+    WeirdCube = 0xA
+
+
+class cGcHazardDrainDifficultyOption(IntEnum):
+    Slow = 0x0
+    Normal = 0x1
+    Fast = 0x2
+
+
+class cGcInventoryStackLimitsDifficultyOption(IntEnum):
+    High = 0x0
+    Normal = 0x1
+    Low = 0x2
+
+
+class cGcItemShopAvailabilityDifficultyOption(IntEnum):
+    High = 0x0
+    Normal = 0x1
+    Low = 0x2
 
 
 class cGcLaunchFuelCostDifficultyOption(IntEnum):
@@ -3080,22 +3190,24 @@ class cGcSubstanceCollectionDifficultyOption(IntEnum):
     Low = 0x2
 
 
-class cGcHazardDrainDifficultyOption(IntEnum):
+class cGcEnergyDrainDifficultyOption(IntEnum):
     Slow = 0x0
     Normal = 0x1
     Fast = 0x2
 
 
-class cGcInventoryStackLimitsDifficultyOption(IntEnum):
-    High = 0x0
-    Normal = 0x1
-    Low = 0x2
+class cGcFuelUseDifficultyOption(IntEnum):
+    Free = 0x0
+    Cheap = 0x1
+    Normal = 0x2
+    Expensive = 0x3
 
 
-class cGcItemShopAvailabilityDifficultyOption(IntEnum):
-    High = 0x0
-    Normal = 0x1
-    Low = 0x2
+class cGcFishingDifficultyOption(IntEnum):
+    AutoCatch = 0x0
+    LongCatchWindow = 0x1
+    NormalCatchWindow = 0x2
+    ShortCatchWindow = 0x3
 
 
 class cGcDifficultyOptionGroups(IntEnum):
@@ -3161,24 +3273,130 @@ class cGcDifficultySettingEditability(IntEnum):
     LockedHidden = 0x4
 
 
-class cGcEnergyDrainDifficultyOption(IntEnum):
-    Slow = 0x0
-    Normal = 0x1
-    Fast = 0x2
+class cGcActiveSurvivalBarsDifficultyOption(IntEnum):
+    None_ = 0x0
+    HealthOnly = 0x1
+    HealthAndHazard = 0x2
+    All = 0x3
 
 
-class cGcFuelUseDifficultyOption(IntEnum):
+class cGcBreakTechOnDamageDifficultyOption(IntEnum):
+    None_ = 0x0
+    Low = 0x1
+    High = 0x2
+
+
+class cGcChargingRequirementsDifficultyOption(IntEnum):
+    None_ = 0x0
+    Low = 0x1
+    Normal = 0x2
+    High = 0x3
+
+
+class cGcCombatTimerDifficultyOption(IntEnum):
+    Off = 0x0
+    Slow = 0x1
+    Normal = 0x2
+    Fast = 0x3
+
+
+class cGcCreatureHostilityDifficultyOption(IntEnum):
+    NeverAttack = 0x0
+    AttackIfProvoked = 0x1
+    FullEcosystem = 0x2
+
+
+class cGcCurrencyCostDifficultyOption(IntEnum):
     Free = 0x0
     Cheap = 0x1
     Normal = 0x2
     Expensive = 0x3
 
 
-class cGcFishingDifficultyOption(IntEnum):
-    AutoCatch = 0x0
-    LongCatchWindow = 0x1
-    NormalCatchWindow = 0x2
-    ShortCatchWindow = 0x3
+class cGcDamageGivenDifficultyOption(IntEnum):
+    High = 0x0
+    Normal = 0x1
+    Low = 0x2
+
+
+class cGcDamageReceivedDifficultyOption(IntEnum):
+    None_ = 0x0
+    Low = 0x1
+    Normal = 0x2
+    High = 0x3
+
+
+class cGcDeathConsequencesDifficultyOption(IntEnum):
+    None_ = 0x0
+    ItemGrave = 0x1
+    DestroyItems = 0x2
+    DestroySave = 0x3
+
+
+class cGcHotActionMenuTypes(IntEnum):
+    OnFoot = 0x0
+    InShip = 0x1
+    InExocraft = 0x2
+
+
+class cGcPlayerWeapons(IntEnum):
+    Bolt = 0x0
+    Shotgun = 0x1
+    Burst = 0x2
+    Rail = 0x3
+    Cannon = 0x4
+    Laser = 0x5
+    Grenade = 0x6
+    MineGrenade = 0x7
+    Scope = 0x8
+    FrontShield = 0x9
+    Melee = 0xA
+    TerrainEdit = 0xB
+    SunLaser = 0xC
+    Spawner = 0xD
+    SpawnerAlt = 0xE
+    SoulLaser = 0xF
+    Flamethrower = 0x10
+    StunGrenade = 0x11
+    Stealth = 0x12
+    FishLaser = 0x13
+    Gravity = 0x14
+
+
+class cGcRemoteWeapons(IntEnum):
+    Laser = 0x0
+    VehicleLaser = 0x1
+    AIMechLaser = 0x2
+    ShipLaser = 0x3
+    ShipLaser2 = 0x4
+    RailLaser = 0x5
+    NumLasers = 0x6
+    BoltCaster = 0x7
+    Shotgun = 0x8
+    Cannon = 0x9
+    Burst = 0xA
+    Flamethrower = 0xB
+    MineGrenade = 0xC
+    BounceGrenade = 0xD
+    StunGrenade = 0xE
+    VehicleCanon = 0xF
+    AIMechCanon = 0x10
+    ShipPhoton = 0x11
+    ShipShotgun = 0x12
+    ShipMinigun = 0x13
+    ShipPlasma = 0x14
+    ShipRocket = 0x15
+    None_ = 0x16
+
+
+class cGcShipWeapons(IntEnum):
+    Laser = 0x0
+    Projectile = 0x1
+    Shotgun = 0x2
+    Minigun = 0x3
+    Plasma = 0x4
+    Missile = 0x5
+    Rocket = 0x6
 
 
 class cGcQuickMenuActions(IntEnum):
@@ -3231,104 +3449,23 @@ class cGcQuickMenuActions(IntEnum):
     SummonPet = 0x2E
     SummonPetSubMenu = 0x2F
     WarpToNexus = 0x30
-    PetUI = 0x31
-    ByteBeatSubMenu = 0x32
-    ByteBeatPlay = 0x33
-    ByteBeatStop = 0x34
-    ByteBeatLibrary = 0x35
-    ReportBase = 0x36
-    CargoShield = 0x37
-    CallRocket = 0x38
-    SummonSkiff = 0x39
-    FishBaitBox = 0x3A
-    FoodUnit = 0x3B
-    SettlementOverview = 0x3C
-    CorvetteEject = 0x3D
-    CorvetteAutoPilotMenu = 0x3E
-    CorvetteAutoPilot = 0x3F
-    Invalid = 0x40
-
-
-class cGcHotActionMenuTypes(IntEnum):
-    OnFoot = 0x0
-    InShip = 0x1
-    InExocraft = 0x2
-
-
-class cGcActiveSurvivalBarsDifficultyOption(IntEnum):
-    None_ = 0x0
-    HealthOnly = 0x1
-    HealthAndHazard = 0x2
-    All = 0x3
-
-
-class cGcBreakTechOnDamageDifficultyOption(IntEnum):
-    None_ = 0x0
-    Low = 0x1
-    High = 0x2
-
-
-class cGcChargingRequirementsDifficultyOption(IntEnum):
-    None_ = 0x0
-    Low = 0x1
-    Normal = 0x2
-    High = 0x3
-
-
-class cGcShipWeapons(IntEnum):
-    Laser = 0x0
-    Projectile = 0x1
-    Shotgun = 0x2
-    Minigun = 0x3
-    Plasma = 0x4
-    Missile = 0x5
-    Rocket = 0x6
-
-
-class cGcCombatTimerDifficultyOption(IntEnum):
-    Off = 0x0
-    Slow = 0x1
-    Normal = 0x2
-    Fast = 0x3
-
-
-class cGcCreatureHostilityDifficultyOption(IntEnum):
-    NeverAttack = 0x0
-    AttackIfProvoked = 0x1
-    FullEcosystem = 0x2
-
-
-class cGcCurrencyCostDifficultyOption(IntEnum):
-    Free = 0x0
-    Cheap = 0x1
-    Normal = 0x2
-    Expensive = 0x3
-
-
-class cGcDamageGivenDifficultyOption(IntEnum):
-    High = 0x0
-    Normal = 0x1
-    Low = 0x2
-
-
-class cGcDamageReceivedDifficultyOption(IntEnum):
-    None_ = 0x0
-    Low = 0x1
-    Normal = 0x2
-    High = 0x3
-
-
-class cGcDeathConsequencesDifficultyOption(IntEnum):
-    None_ = 0x0
-    ItemGrave = 0x1
-    DestroyItems = 0x2
-    DestroySave = 0x3
-
-
-class cGcAIShipWeapons(IntEnum):
-    Projectile = 0x0
-    Laser = 0x1
-    MiningLaser = 0x2
+    SeasonRecovery = 0x31
+    PetUI = 0x32
+    ByteBeatSubMenu = 0x33
+    ByteBeatPlay = 0x34
+    ByteBeatStop = 0x35
+    ByteBeatLibrary = 0x36
+    ReportBase = 0x37
+    CargoShield = 0x38
+    CallRocket = 0x39
+    SummonSkiff = 0x3A
+    FishBaitBox = 0x3B
+    FoodUnit = 0x3C
+    SettlementOverview = 0x3D
+    CorvetteEject = 0x3E
+    CorvetteAutoPilotMenu = 0x3F
+    CorvetteAutoPilot = 0x40
+    Invalid = 0x41
 
 
 class cGcVehicleWeaponMode(IntEnum):
@@ -3337,6 +3474,22 @@ class cGcVehicleWeaponMode(IntEnum):
     TerrainEdit = 0x2
     StunGun = 0x3
     Flamethrower = 0x4
+
+
+class cGcAIShipWeapons(IntEnum):
+    Projectile = 0x0
+    Laser = 0x1
+    MiningLaser = 0x2
+
+
+class cGcVehicleType(IntEnum):
+    Buggy = 0x0
+    Bike = 0x1
+    Truck = 0x2
+    WheeledBike = 0x3
+    Hovercraft = 0x4
+    Submarine = 0x5
+    Mech = 0x6
 
 
 class cGcPlayerWeaponClass(IntEnum):
@@ -3350,65 +3503,15 @@ class cGcPlayerWeaponClass(IntEnum):
     Spawner = 0x7
     SpawnerAlt = 0x8
     Fishing = 0x9
+    Gravity = 0xA
 
 
-class cGcVehicleType(IntEnum):
-    Buggy = 0x0
-    Bike = 0x1
-    Truck = 0x2
-    WheeledBike = 0x3
-    Hovercraft = 0x4
-    Submarine = 0x5
-    Mech = 0x6
-
-
-class cGcRemoteWeapons(IntEnum):
-    Laser = 0x0
-    VehicleLaser = 0x1
-    AIMechLaser = 0x2
-    ShipLaser = 0x3
-    ShipLaser2 = 0x4
-    RailLaser = 0x5
-    NumLasers = 0x6
-    BoltCaster = 0x7
-    Shotgun = 0x8
-    Cannon = 0x9
-    Burst = 0xA
-    Flamethrower = 0xB
-    MineGrenade = 0xC
-    BounceGrenade = 0xD
-    StunGrenade = 0xE
-    VehicleCanon = 0xF
-    AIMechCanon = 0x10
-    ShipPhoton = 0x11
-    ShipShotgun = 0x12
-    ShipMinigun = 0x13
-    ShipPlasma = 0x14
-    ShipRocket = 0x15
-    None_ = 0x16
-
-
-class cGcPlayerWeapons(IntEnum):
-    Bolt = 0x0
-    Shotgun = 0x1
-    Burst = 0x2
-    Rail = 0x3
-    Cannon = 0x4
-    Laser = 0x5
-    Grenade = 0x6
-    MineGrenade = 0x7
-    Scope = 0x8
-    FrontShield = 0x9
-    Melee = 0xA
-    TerrainEdit = 0xB
-    SunLaser = 0xC
-    Spawner = 0xD
-    SpawnerAlt = 0xE
-    SoulLaser = 0xF
-    Flamethrower = 0x10
-    StunGrenade = 0x11
-    Stealth = 0x12
-    FishLaser = 0x13
+class cGcMechWeaponLocation(IntEnum):
+    TurretExocraft = 0x0
+    TurretSentinel = 0x1
+    ArmLeft = 0x2
+    ArmRight = 0x3
+    FlameThrower = 0x4
 
 
 class cGcMechMeshPart(IntEnum):
@@ -3426,17 +3529,10 @@ class cGcMechMeshType(IntEnum):
     Stone = 0x3
 
 
-class cGcMechWeaponLocation(IntEnum):
-    TurretExocraft = 0x0
-    TurretSentinel = 0x1
-    ArmLeft = 0x2
-    ArmRight = 0x3
-    FlameThrower = 0x4
-
-
-class cGcShipMessage(IntEnum):
-    Leave = 0x0
-    Fight = 0x1
+class cGcVehicleCollisionInertia(IntEnum):
+    FromScene = 0x0
+    FromBox = 0x1
+    InertiaFromBox = 0x2
 
 
 class cGcShipDialogueTreeEnum(IntEnum):
@@ -3447,6 +3543,21 @@ class cGcShipDialogueTreeEnum(IntEnum):
     Help = 0x4
     Goods = 0x5
     Hostile = 0x6
+
+
+class cGcShipMessage(IntEnum):
+    Leave = 0x0
+    Fight = 0x1
+
+
+class cGcAISpaceshipTypes(IntEnum):
+    None_ = 0x0
+    Pirate = 0x1
+    Police = 0x2
+    Trader = 0x3
+    Freighter = 0x4
+    PlayerSquadron = 0x5
+    DefenceForce = 0x6
 
 
 class cGcAISpaceshipRoles(IntEnum):
@@ -3460,14 +3571,14 @@ class cGcAISpaceshipRoles(IntEnum):
     Biggs = 0x7
 
 
-class cGcAISpaceshipTypes(IntEnum):
-    None_ = 0x0
-    Pirate = 0x1
-    Police = 0x2
-    Trader = 0x3
-    Freighter = 0x4
-    PlayerSquadron = 0x5
-    DefenceForce = 0x6
+class cGcTradingClass(IntEnum):
+    Mining = 0x0
+    HighTech = 0x1
+    Trading = 0x2
+    Manufacturing = 0x3
+    Fusion = 0x4
+    Scientific = 0x5
+    PowerGeneration = 0x6
 
 
 class cGcWaterEmissionBehaviourType(IntEnum):
@@ -3482,16 +3593,6 @@ class cGcWealthClass(IntEnum):
     Average = 0x1
     Wealthy = 0x2
     Pirate = 0x3
-
-
-class cGcTradingClass(IntEnum):
-    Mining = 0x0
-    HighTech = 0x1
-    Trading = 0x2
-    Manufacturing = 0x3
-    Fusion = 0x4
-    Scientific = 0x5
-    PowerGeneration = 0x6
 
 
 class cGcRainbowType(IntEnum):
@@ -3598,6 +3699,12 @@ class cGcSolarSystemLocatorTypes(IntEnum):
     Generic4 = 0x3
 
 
+class cGcDroneTypes(IntEnum):
+    Patrol = 0x0
+    Combat = 0x1
+    Corrupted = 0x2
+
+
 class cGcSentinelQuadWeaponMode(IntEnum):
     Laser = 0x0
     MiniCannon = 0x1
@@ -3621,12 +3728,6 @@ class cGcSentinelTypes(IntEnum):
     StoneFloater = 0xC
 
 
-class cGcDroneTypes(IntEnum):
-    Patrol = 0x0
-    Combat = 0x1
-    Corrupted = 0x2
-
-
 class cGcProjectileImpactType(IntEnum):
     Default = 0x0
     Terrain = 0x1
@@ -3646,6 +3747,14 @@ class cGcProjectileImpactType(IntEnum):
     SentinelShield = 0xF
     SpaceshipShield = 0x10
     FreighterShield = 0x11
+
+
+class cGcRecyclableType(IntEnum):
+    Scrap = 0x0
+    Toxic = 0x1
+    Radioactive = 0x2
+    Explosive = 0x3
+    TruckFurnace = 0x4
 
 
 class cGcDamageType(IntEnum):
@@ -3676,41 +3785,16 @@ class cGcDamageType(IntEnum):
     FreighterTorpedo = 0x18
 
 
-class cGcScanType(IntEnum):
-    Tool = 0x0
-    Beacon = 0x1
-    RadioTower = 0x2
-    Observatory = 0x3
-    DistressSignal = 0x4
-    Waypoint = 0x5
-    Ship = 0x6
-    DebugPlanet = 0x7
-    DebugSpace = 0x8
-    VisualOnly = 0x9
-    VisualOnlyAerial = 0xA
-
-
-class cGcPlayerCharacterStateType(IntEnum):
-    Idle = 0x0
-    Jog = 0x1
-    JogUphill = 0x2
-    JogDownhill = 0x3
-    SteepSlope = 0x4
-    Sliding = 0x5
-    Run = 0x6
-    Airborne = 0x7
-    JetpackBoost = 0x8
-    RocketBoots = 0x9
-    Riding = 0xA
-    Swimming = 0xB
-    SwimmingJetpack = 0xC
-    Death = 0xD
-    FullBodyOverride = 0xE
-    Spacewalk = 0xF
-    SpacewalkAtmosphere = 0x10
-    LowGWalk = 0x11
-    LowGRun = 0x12
-    Fishing = 0x13
+class cGcStaticTag(IntEnum):
+    empty = 0x0
+    GravityLaserGrabbable = 0x1
+    TruckCargoObject = 0x2
+    TruckCargoSpecial = 0x4
+    TruckFlatbed = 0x8
+    ScrapyardFurnace = 0x10
+    ScrapyardToxBin = 0x20
+    ScrapyardRadBin = 0x40
+    ScrapyardExpBin = 0x80
 
 
 class cGcPlayerHazardType(IntEnum):
@@ -3729,21 +3813,18 @@ class cGcPlayerSurvivalBarType(IntEnum):
     Energy = 0x2
 
 
-class cGcHand(IntEnum):
-    Right = 0x0
-    Left = 0x1
-
-
-class cGcHandType(IntEnum):
-    Offhand = 0x0
-    Dominant = 0x1
-
-
-class cGcMovementDirection(IntEnum):
-    WorldRelative = 0x0
-    BodyRelative = 0x1
-    HeadRelative = 0x2
-    NotSet = 0x3
+class cGcScanType(IntEnum):
+    Tool = 0x0
+    Beacon = 0x1
+    RadioTower = 0x2
+    Observatory = 0x3
+    DistressSignal = 0x4
+    Waypoint = 0x5
+    Ship = 0x6
+    DebugPlanet = 0x7
+    DebugSpace = 0x8
+    VisualOnly = 0x9
+    VisualOnlyAerial = 0xA
 
 
 class cGcPhotoBuilding(IntEnum):
@@ -3788,15 +3869,51 @@ class cGcPhotoShip(IntEnum):
     Corvette = 0xA
 
 
-class cGcNPCInteractiveObjectType(IntEnum):
+class cGcHand(IntEnum):
+    Right = 0x0
+    Left = 0x1
+
+
+class cGcHandType(IntEnum):
+    Offhand = 0x0
+    Dominant = 0x1
+
+
+class cGcMovementDirection(IntEnum):
+    WorldRelative = 0x0
+    BodyRelative = 0x1
+    HeadRelative = 0x2
+    NotSet = 0x3
+
+
+class cGcPlayerCharacterStateType(IntEnum):
     Idle = 0x0
-    Generic = 0x1
-    Chair = 0x2
-    Conversation = 0x3
-    WatchShip = 0x4
-    Shop = 0x5
-    Dance = 0x6
-    None_ = 0x7
+    Walk = 0x1
+    Jog = 0x2
+    JogUphill = 0x3
+    JogDownhill = 0x4
+    SteepSlope = 0x5
+    Sliding = 0x6
+    Run = 0x7
+    Airborne = 0x8
+    JetpackBoost = 0x9
+    RocketBoots = 0xA
+    Riding = 0xB
+    Swimming = 0xC
+    SwimmingJetpack = 0xD
+    Death = 0xE
+    FullBodyOverride = 0xF
+    Spacewalk = 0x10
+    SpacewalkAtmosphere = 0x11
+    LowGWalk = 0x12
+    LowGRun = 0x13
+    Fishing = 0x14
+    GravityGunGrab = 0x15
+
+
+class cGcNPCSettlementBehaviourAreaProperty(IntEnum):
+    ContainsPlayer = 0x0
+    ContainsNPCs = 0x1
 
 
 class cGcNPCSettlementBehaviourState(IntEnum):
@@ -3807,49 +3924,15 @@ class cGcNPCSettlementBehaviourState(IntEnum):
     Afraid = 0x4
 
 
-class cGcNPCSettlementBehaviourAreaProperty(IntEnum):
-    ContainsPlayer = 0x0
-    ContainsNPCs = 0x1
-
-
-class cGcMissionCategory(IntEnum):
-    Info = 0x0
-    SelectableHint = 0x1
-    Mission = 0x2
-    Danger = 0x3
-    Urgent = 0x4
-
-
-class cGcMissionConditionTest(IntEnum):
-    AnyFalse = 0x0
-    AllFalse = 0x1
-    AnyTrue = 0x2
-    AllTrue = 0x3
-
-
-class cGcMissionDifficulty(IntEnum):
-    Easy = 0x0
-    Normal = 0x1
-    Hard = 0x2
-
-
-class cGcMissionFaction(IntEnum):
-    Gek = 0x0
-    Korvax = 0x1
-    Vykeen = 0x2
-    TradeGuild = 0x3
-    WarriorGuild = 0x4
-    ExplorerGuild = 0x5
-    Nexus = 0x6
-    Pirates = 0x7
-    Builders = 0x8
-    None_ = 0x9
-
-
-class cGcMissionGalacticFeature(IntEnum):
-    Anomaly = 0x0
-    Atlas = 0x1
-    BlackHole = 0x2
+class cGcNPCInteractiveObjectType(IntEnum):
+    Idle = 0x0
+    Generic = 0x1
+    Chair = 0x2
+    Conversation = 0x3
+    WatchShip = 0x4
+    Shop = 0x5
+    Dance = 0x6
+    None_ = 0x7
 
 
 class cGcMissionGalacticPoint(IntEnum):
@@ -3928,6 +4011,46 @@ class cGcScanEventGPSHint(IntEnum):
     BuilderCorruption = 0x7
 
 
+class cGcMissionCategory(IntEnum):
+    Info = 0x0
+    SelectableHint = 0x1
+    Mission = 0x2
+    Danger = 0x3
+    Urgent = 0x4
+
+
+class cGcMissionConditionTest(IntEnum):
+    AnyFalse = 0x0
+    AllFalse = 0x1
+    AnyTrue = 0x2
+    AllTrue = 0x3
+
+
+class cGcMissionDifficulty(IntEnum):
+    Easy = 0x0
+    Normal = 0x1
+    Hard = 0x2
+
+
+class cGcMissionFaction(IntEnum):
+    Gek = 0x0
+    Korvax = 0x1
+    Vykeen = 0x2
+    TradeGuild = 0x3
+    WarriorGuild = 0x4
+    ExplorerGuild = 0x5
+    Nexus = 0x6
+    Pirates = 0x7
+    Builders = 0x8
+    None_ = 0x9
+
+
+class cGcMissionGalacticFeature(IntEnum):
+    Anomaly = 0x0
+    Atlas = 0x1
+    BlackHole = 0x2
+
+
 class cGcMonth(IntEnum):
     January = 0x0
     February = 0x1
@@ -3953,6 +4076,18 @@ class cGcDay(IntEnum):
     Saturday = 0x6
 
 
+class cGcDefaultMissionProductEnum(IntEnum):
+    None_ = 0x0
+    PrimaryProduct = 0x1
+    SecondaryProduct = 0x2
+
+
+class cGcDefaultMissionSubstanceEnum(IntEnum):
+    None_ = 0x0
+    PrimarySubstance = 0x1
+    SecondarySubstance = 0x2
+
+
 class cGcInteractionMissionState(IntEnum):
     Unused = 0x0
     Unlocked = 0x1
@@ -3968,36 +4103,16 @@ class cGcLocalSubstanceType(IntEnum):
     Plant = 0x4
 
 
-class cGcDefaultMissionSubstanceEnum(IntEnum):
-    None_ = 0x0
-    PrimarySubstance = 0x1
-    SecondarySubstance = 0x2
-
-
-class cGcDefaultMissionProductEnum(IntEnum):
-    None_ = 0x0
-    PrimaryProduct = 0x1
-    SecondaryProduct = 0x2
-
-
-class cGcMissionConditionUsingPortal(IntEnum):
-    Any = 0x0
-    Story = 0x1
-    NotStory = 0x2
-
-
 class cGcMissionConditionUsingThirdPersonCamera(IntEnum):
     OnFoot = 0x0
     Ship = 0x1
     Vehicle = 0x2
 
 
-class cGcMissionConditionSentinelLevel(IntEnum):
-    None_ = 0x0
-    Low = 0x1
-    Default = 0x2
-    Aggressive = 0x3
-    Corrupt = 0x4
+class cGcMissionConditionUsingPortal(IntEnum):
+    Any = 0x0
+    Story = 0x1
+    NotStory = 0x2
 
 
 class cGcMissionConditionShipEngineStatus(IntEnum):
@@ -4011,6 +4126,14 @@ class cGcMissionConditionShipEngineStatus(IntEnum):
     Inverted = 0x7
     EnginesRepaired = 0x8
     PulsingToPlanet = 0x9
+
+
+class cGcMissionConditionSentinelLevel(IntEnum):
+    None_ = 0x0
+    Low = 0x1
+    Default = 0x2
+    Aggressive = 0x3
+    Corrupt = 0x4
 
 
 class cGcMissionConditionPlatform(IntEnum):
@@ -4051,8 +4174,15 @@ class cGcMissionConditionLocation(IntEnum):
     AbandonedFreighterExterior = 0x1D
     AbandonedFreighterInterior = 0x1E
     AbandonedFreighterAirlock = 0x1F
-    AtlasStation = 0x20
-    AtlasStationFinal = 0x21
+    AbandonedFreighterDocked = 0x20
+    AtlasStation = 0x21
+    AtlasStationFinal = 0x22
+
+
+class cGcMissionConditionIsPlayerWeak(IntEnum):
+    ShipOrWeapon = 0x0
+    Ship = 0x1
+    Weapon = 0x2
 
 
 class cGcMissionConditionIsAbandFreighterDoorOpen(IntEnum):
@@ -4062,34 +4192,10 @@ class cGcMissionConditionIsAbandFreighterDoorOpen(IntEnum):
     Open = 0x3
 
 
-class cGcMissionConditionIsPlayerWeak(IntEnum):
-    ShipOrWeapon = 0x0
-    Ship = 0x1
-    Weapon = 0x2
-
-
 class cGcMissionConditionHasFreighter(IntEnum):
     DontCare = 0x0
     Yes = 0x1
     No = 0x2
-
-
-class cGcMissionConditionAbandonedOrEmptySystem(IntEnum):
-    Either = 0x0
-    Empty = 0x1
-    Abandoned = 0x2
-    SeasonForcedAbandoned = 0x3
-
-
-class cGcScanEventTableType(IntEnum):
-    Space = 0x0
-    Planet = 0x1
-    Missions = 0x2
-    Tutorial = 0x3
-    MissionsCreative = 0x4
-    Vehicle = 0x5
-    NPCPlanetSite = 0x6
-    Seasonal = 0x7
 
 
 class cGcSpaceshipClasses(IntEnum):
@@ -4125,6 +4231,106 @@ class cGcWeaponClasses(IntEnum):
     Staff = 0x9
 
 
+class cGcMissionConditionAbandonedOrEmptySystem(IntEnum):
+    Either = 0x0
+    Empty = 0x1
+    Abandoned = 0x2
+    SeasonForcedAbandoned = 0x3
+
+
+class cGcScanEventTableType(IntEnum):
+    Space = 0x0
+    Planet = 0x1
+    Missions = 0x2
+    Tutorial = 0x3
+    MissionsCreative = 0x4
+    Vehicle = 0x5
+    NPCPlanetSite = 0x6
+    Seasonal = 0x7
+
+
+class cGcPhysicsCollisionGroups(IntEnum):
+    Normal = 0x0
+    Terrain = 0x1
+    TerrainInstance = 0x2
+    TerrainActivated = 0x3
+    Trigger = 0x4
+    Water = 0x5
+    Substance = 0x6
+    Asteroid = 0x7
+    Player = 0x8
+    NetworkPlayer = 0x9
+    NPC = 0xA
+    Ragdoll = 0xB
+    Vehicle = 0xC
+    Vehicle_Piloted = 0xD
+    Vehicle_BedFloor = 0xE
+    Vehicle_BedWall = 0xF
+    Vehicle_Wheels = 0x10
+    VehicleToVehicle = 0x11
+    Creature = 0x12
+    Spaceship = 0x13
+    Spaceship_Landing = 0x14
+    Debris = 0x15
+    Shield = 0x16
+    Loot = 0x17
+    PlayerMovableObject = 0x18
+    CollidesWithNothing = 0x19
+    CollidesWithEverything = 0x1A
+    DefaultRaycast = 0x1B
+    Raycast = 0x1C
+    Raycast_Camera = 0x1D
+    Raycast_VehicleCamera = 0x1E
+    Raycast_SampleCollisionWithCamera = 0x1F
+    Raycast_PlayerInteract = 0x20
+    Raycast_PlayerInteract_Shoot = 0x21
+    Raycast_Projectile = 0x22
+    Raycast_LaserBeam = 0x23
+    Raycast_WeaponOfPlayer = 0x24
+    Raycast_WeaponOfAgent = 0x25
+    Raycast_Binoculars = 0x26
+    Raycast_TerrainEditingBeam = 0x27
+    Raycast_TerrainEditing_OverlappingObjects = 0x28
+    Raycast_PlayerClimb = 0x29
+    Raycast_PlayerAim = 0x2A
+    Raycast_PlayerThrow = 0x2B
+    Raycast_PlayerSpawn = 0x2C
+    Raycast_ObjectPlacement = 0x2D
+    Raycast_DroneControl = 0x2E
+    Raycast_PlanetHeightTest = 0x2F
+    Raycast_PlanetHeightTestIncludingStructures = 0x30
+    Raycast_LineOfSight = 0x31
+    Raycast_VehicleCanDriveOn = 0x32
+    Raycast_SpaceshipAvoidance = 0x33
+    Raycast_SpaceshipAvoidanceOnLeaving = 0x34
+    Raycast_HudPing = 0x35
+    Raycast_HudPingNoTerrain = 0x36
+    Raycast_ObstacleToAgentMovement = 0x37
+    Raycast_DebugEditor = 0x38
+    Raycast_PlayerIk = 0x39
+    Raycast_MechIk = 0x3A
+    Raycast_CreatureIk = 0x3B
+    Raycast_CreatureIk_Indoors = 0x3C
+    Raycast_NavigationLink = 0x3D
+    Raycast_AiShipAtack = 0x3E
+    Raycast_AiShipTravel = 0x3F
+    Raycast_ObstructionQuery = 0x40
+    Raycast_GeometryProbe = 0x41
+    Raycast_AirNavigationProbe = 0x42
+    Raycast_DroneTargetSensing_Friendly = 0x43
+    Raycast_DroneTargetSensing_Unfriendly = 0x44
+    Raycast_DroneTargetSensing_Friendly_NoShield = 0x45
+    Raycast_DroneTargetSensing_Unfriendly_NoShield = 0x46
+    Raycast_ObjectPlacementAddObject = 0x47
+    Raycast_CatchCreatures = 0x48
+    Raycast_CatchNormal = 0x49
+    Raycast_CatchTerrain = 0x4A
+    Raycast_CatchTerrainAndNormal = 0x4B
+    Raycast_CatchCreatureObstacles = 0x4C
+    Raycast_SpaceStationShipBuilderCamera = 0x4D
+    Raycast_GravLaserObjectBlocking = 0x4E
+
+
 class cGcRegionHotspotTypes(IntEnum):
     empty = 0x0
     Power = 0x1
@@ -4135,79 +4341,12 @@ class cGcRegionHotspotTypes(IntEnum):
     Gas2 = 0x20
 
 
-class cGcPhysicsCollisionGroups(IntEnum):
-    Normal = 0x0
-    Terrain = 0x1
-    TerrainInstance = 0x2
-    TerrainActivated = 0x3
-    Water = 0x4
-    Substance = 0x5
-    Asteroid = 0x6
-    Player = 0x7
-    NetworkPlayer = 0x8
-    NPC = 0x9
-    Ragdoll = 0xA
-    Vehicle = 0xB
-    Vehicle_Piloted = 0xC
-    Creature = 0xD
-    Spaceship = 0xE
-    Spaceship_Landing = 0xF
-    Debris = 0x10
-    Shield = 0x11
-    Loot = 0x12
-    Trigger = 0x13
-    CollidesWithNothing = 0x14
-    CollidesWithEverything = 0x15
-    DefaultRaycast = 0x16
-    Raycast = 0x17
-    Raycast_Camera = 0x18
-    Raycast_SampleCollisionWithCamera = 0x19
-    Raycast_PlayerInteract = 0x1A
-    Raycast_PlayerInteract_Shoot = 0x1B
-    Raycast_Projectile = 0x1C
-    Raycast_LaserBeam = 0x1D
-    Raycast_WeaponOfPlayer = 0x1E
-    Raycast_WeaponOfAgent = 0x1F
-    Raycast_Binoculars = 0x20
-    Raycast_TerrainEditingBeam = 0x21
-    Raycast_TerrainEditing_OverlappingObjects = 0x22
-    Raycast_PlayerClimb = 0x23
-    Raycast_PlayerAim = 0x24
-    Raycast_PlayerThrow = 0x25
-    Raycast_PlayerSpawn = 0x26
-    Raycast_ObjectPlacement = 0x27
-    Raycast_DroneControl = 0x28
-    Raycast_PlanetHeightTest = 0x29
-    Raycast_PlanetHeightTestIncludingStructures = 0x2A
-    Raycast_LineOfSight = 0x2B
-    Raycast_VehicleCanDriveOn = 0x2C
-    Raycast_SpaceshipAvoidance = 0x2D
-    Raycast_SpaceshipAvoidanceOnLeaving = 0x2E
-    Raycast_HudPing = 0x2F
-    Raycast_HudPingNoTerrain = 0x30
-    Raycast_ObstacleToAgentMovement = 0x31
-    Raycast_DebugEditor = 0x32
-    Raycast_PlayerIk = 0x33
-    Raycast_MechIk = 0x34
-    Raycast_CreatureIk = 0x35
-    Raycast_CreatureIk_Indoors = 0x36
-    Raycast_NavigationLink = 0x37
-    Raycast_AiShipAtack = 0x38
-    Raycast_AiShipTravel = 0x39
-    Raycast_ObstructionQuery = 0x3A
-    Raycast_GeometryProbe = 0x3B
-    Raycast_AirNavigationProbe = 0x3C
-    Raycast_DroneTargetSensing_Friendly = 0x3D
-    Raycast_DroneTargetSensing_Unfriendly = 0x3E
-    Raycast_DroneTargetSensing_Friendly_NoShield = 0x3F
-    Raycast_DroneTargetSensing_Unfriendly_NoShield = 0x40
-    Raycast_ObjectPlacementAddObject = 0x41
-    Raycast_CatchCreatures = 0x42
-    Raycast_CatchNormal = 0x43
-    Raycast_CatchTerrain = 0x44
-    Raycast_CatchTerrainAndNormal = 0x45
-    Raycast_CatchCreatureObstacles = 0x46
-    Raycast_SpaceStationShipBuilderCamera = 0x47
+class cGcItemQuality(IntEnum):
+    Junk = 0x0
+    Common = 0x1
+    Rare = 0x2
+    Epic = 0x3
+    Legendary = 0x4
 
 
 class cGcFrigateFlybyType(IntEnum):
@@ -4217,14 +4356,6 @@ class cGcFrigateFlybyType(IntEnum):
     DeepSpace = 0x3
     DeepSpaceCommon = 0x4
     GhostShip = 0x5
-
-
-class cGcItemQuality(IntEnum):
-    Junk = 0x0
-    Common = 0x1
-    Rare = 0x2
-    Epic = 0x3
-    Legendary = 0x4
 
 
 class cGcFishSize(IntEnum):
@@ -4238,15 +4369,6 @@ class cGcFishingTime(IntEnum):
     Day = 0x0
     Night = 0x1
     Both = 0x2
-
-
-class cGcGalaxyWaypointTypes(IntEnum):
-    User = 0x0
-    Gameplay_AtlasStation = 0x1
-    Gameplay_DistressBeacon = 0x2
-    Gameplay_BlackHole = 0x3
-    Gameplay_Mission = 0x4
-    Gameplay_SeasonParty = 0x5
 
 
 class cGcBuilderPadType(IntEnum):
@@ -4269,6 +4391,15 @@ class cGcGalaxyStarTypes(IntEnum):
     Blue = 0x2
     Red = 0x3
     Purple = 0x4
+
+
+class cGcGalaxyWaypointTypes(IntEnum):
+    User = 0x0
+    Gameplay_AtlasStation = 0x1
+    Gameplay_DistressBeacon = 0x2
+    Gameplay_BlackHole = 0x3
+    Gameplay_Mission = 0x4
+    Gameplay_SeasonParty = 0x5
 
 
 class cGcGalaxyMarkerTypes(IntEnum):
@@ -4296,6 +4427,14 @@ class cGcWFCDecorationTheme(IntEnum):
     Upgrade1 = 0x2
     Upgrade2 = 0x3
     Upgrade3 = 0x4
+
+
+class cGcObjectPlacementCategory(IntEnum):
+    None_ = 0x0
+    ResourceSmall = 0x1
+    ResourceMedium = 0x2
+    ResourceLarge = 0x3
+    ResourceDebris = 0x4
 
 
 class cGcWeatherOptions(IntEnum):
@@ -4336,26 +4475,6 @@ class cGcHazardValueTypes(IntEnum):
     DeepWater = 0x5
 
 
-class cGcObjectPlacementCategory(IntEnum):
-    None_ = 0x0
-    ResourceSmall = 0x1
-    ResourceMedium = 0x2
-    ResourceLarge = 0x3
-    ResourceDebris = 0x4
-
-
-class cGcTerrainTileType(IntEnum):
-    Air = 0x0
-    Base = 0x1
-    Rock = 0x2
-    Mountain = 0x3
-    Underwater = 0x4
-    Cave = 0x5
-    Dirt = 0x6
-    Liquid = 0x7
-    Substance = 0x8
-
-
 class cGcPlanetLife(IntEnum):
     Dead = 0x0
     Low = 0x1
@@ -4369,6 +4488,18 @@ class cGcResourceOrigin(IntEnum):
     Asteroid = 0x2
     Robot = 0x3
     Depot = 0x4
+
+
+class cGcTerrainTileType(IntEnum):
+    Air = 0x0
+    Base = 0x1
+    Rock = 0x2
+    Mountain = 0x3
+    Underwater = 0x4
+    Cave = 0x5
+    Dirt = 0x6
+    Liquid = 0x7
+    Substance = 0x8
 
 
 class cGcMarkerType(IntEnum):
@@ -4448,22 +4579,6 @@ class cGcMarkerType(IntEnum):
     NetworkPlayerFireTeamCorvetteTeleporter = 0x49
 
 
-class cGcBuildingDensityLevels(IntEnum):
-    Dead = 0x0
-    Low = 0x1
-    Mid = 0x2
-    Full = 0x3
-    Weird = 0x4
-    HalfWeird = 0x5
-    Waterworld = 0x6
-    GasGiant = 0x7
-
-
-class cGcBuildingSystemTypeEnum(IntEnum):
-    Normal = 0x0
-    AbandonedSystem = 0x1
-
-
 class cGcBuildingClassification(IntEnum):
     None_ = 0x0
     TerrainResource = 0x1
@@ -4525,6 +4640,90 @@ class cGcBuildingClassification(IntEnum):
     Settlement_Hub_Builders = 0x39
     Settlement_FishPond = 0x3A
     Settlement_Builders_RoboArm = 0x3B
+    CargoDrop = 0x3C
+    ScrapYard = 0x3D
+
+
+class cGcBuildingDensityLevels(IntEnum):
+    Dead = 0x0
+    Low = 0x1
+    Mid = 0x2
+    Full = 0x3
+    Weird = 0x4
+    HalfWeird = 0x5
+    Waterworld = 0x6
+    GasGiant = 0x7
+
+
+class cGcEnvironmentLocation(IntEnum):
+    Invalid = 0x0
+    Space = 0x1
+    Space_SpaceStation = 0x2
+    Planet = 0x3
+    Planet_InShip = 0x4
+    Planet_InVehicle = 0x5
+    Planet_Underwater = 0x6
+    Planet_Underground = 0x7
+    Planet_Building = 0x8
+    Corvette_OnFoot = 0x9
+    Freighter = 0xA
+    FreighterAbandoned = 0xB
+    Frigate = 0xC
+    Space_SpaceBase = 0xD
+    Space_Nexus = 0xE
+    Space_Anomaly = 0xF
+
+
+class cGcBuildingSystemTypeEnum(IntEnum):
+    Normal = 0x0
+    AbandonedSystem = 0x1
+
+
+class cGcCreatureSpawnEnum(IntEnum):
+    None_ = 0x0
+    Resource = 0x1
+    ResourceAway = 0x2
+    HeavyAir = 0x3
+    Drone = 0x4
+    Deer = 0x5
+    DeerScan = 0x6
+    DeerWords = 0x7
+    DeerWordsAway = 0x8
+    Diplo = 0x9
+    DiploScan = 0xA
+    DiploWords = 0xB
+    DiploWordsAway = 0xC
+    Flyby = 0xD
+    Beast = 0xE
+    Wingmen = 0xF
+    Scouts = 0x10
+    Fleet = 0x11
+    Attackers = 0x12
+    AttackersFromBehind = 0x13
+    Flee = 0x14
+    RemoveFleet = 0x15
+    Fighters = 0x16
+    PostFighters = 0x17
+    Escape = 0x18
+    Warp = 0x19
+
+
+class cGcNPCPropType(IntEnum):
+    None_ = 0x0
+    Default = 0x1
+    DontCare = 0x2
+    IPad = 0x3
+    RandomHologram = 0x4
+    HoloBlob = 0x5
+    HoloFrigate = 0x6
+    HoloShip = 0x7
+    HoloMultitool = 0x8
+    HoloSolarSystem = 0x9
+    HoloDrone = 0xA
+    Container = 0xB
+    Box = 0xC
+    Cup = 0xD
+    Staff = 0xE
 
 
 class cGcNPCSeatedPosture(IntEnum):
@@ -4585,53 +4784,6 @@ class cGcNPCTriggerTypes(IntEnum):
     OneShotMoodResponse = 0x10
 
 
-class cGcCreatureSpawnEnum(IntEnum):
-    None_ = 0x0
-    Resource = 0x1
-    ResourceAway = 0x2
-    HeavyAir = 0x3
-    Drone = 0x4
-    Deer = 0x5
-    DeerScan = 0x6
-    DeerWords = 0x7
-    DeerWordsAway = 0x8
-    Diplo = 0x9
-    DiploScan = 0xA
-    DiploWords = 0xB
-    DiploWordsAway = 0xC
-    Flyby = 0xD
-    Beast = 0xE
-    Wingmen = 0xF
-    Scouts = 0x10
-    Fleet = 0x11
-    Attackers = 0x12
-    AttackersFromBehind = 0x13
-    Flee = 0x14
-    RemoveFleet = 0x15
-    Fighters = 0x16
-    PostFighters = 0x17
-    Escape = 0x18
-    Warp = 0x19
-
-
-class cGcNPCPropType(IntEnum):
-    None_ = 0x0
-    Default = 0x1
-    DontCare = 0x2
-    IPad = 0x3
-    RandomHologram = 0x4
-    HoloBlob = 0x5
-    HoloFrigate = 0x6
-    HoloShip = 0x7
-    HoloMultitool = 0x8
-    HoloSolarSystem = 0x9
-    HoloDrone = 0xA
-    Container = 0xB
-    Box = 0xC
-    Cup = 0xD
-    Staff = 0xE
-
-
 class cGcCreatureGroups(IntEnum):
     Solo = 0x0
     Couple = 0x1
@@ -4659,13 +4811,6 @@ class cGcCreatureRoles(IntEnum):
     Pet = 0xA
 
 
-class cGcCreatureDiet(IntEnum):
-    Carnivore = 0x0
-    Omnivore = 0x1
-    Herbivore = 0x2
-    Robot = 0x3
-
-
 class cGcCreatureGenerationDensity(IntEnum):
     Sparse = 0x0
     Normal = 0x1
@@ -4679,6 +4824,13 @@ class cGcCreatureActiveTime(IntEnum):
     AnyTime = 0x2
     MostlyNight = 0x3
     OnlyNight = 0x4
+
+
+class cGcCreatureDiet(IntEnum):
+    Carnivore = 0x0
+    Omnivore = 0x1
+    Herbivore = 0x2
+    Robot = 0x3
 
 
 class cGcPetBehaviours(IntEnum):
@@ -4710,6 +4862,13 @@ class cGcPetBehaviours(IntEnum):
     Watch = 0x19
     Greet = 0x1A
     TeleportToPlayer = 0x1B
+
+
+class cGcCreatureSizeClasses(IntEnum):
+    Small = 0x0
+    Medium = 0x1
+    Large = 0x2
+    Huge = 0x3
 
 
 class cGcCreatureTypes(IntEnum):
@@ -4770,13 +4929,6 @@ class cGcCreatureTypes(IntEnum):
     Pet = 0x36
 
 
-class cGcCreatureSizeClasses(IntEnum):
-    Small = 0x0
-    Medium = 0x1
-    Large = 0x2
-    Huge = 0x3
-
-
 class cGcCreatureRoleFrequencyModifier(IntEnum):
     Never = 0x0
     Low = 0x1
@@ -4801,12 +4953,6 @@ class cGcCreaturePetRewardActions(IntEnum):
     HarvestSpecial = 0x8
 
 
-class cGcCreaturePetTraits(IntEnum):
-    Helpfulness = 0x0
-    Aggression = 0x1
-    Independence = 0x2
-
-
 class cGcCreatureParticleEffectTrigger(IntEnum):
     empty = 0x0
     Spawn = 0x1
@@ -4815,6 +4961,12 @@ class cGcCreatureParticleEffectTrigger(IntEnum):
     Ragdoll = 0x8
     Appear = 0x10
     Disappear = 0x20
+
+
+class cGcCreaturePetTraits(IntEnum):
+    Helpfulness = 0x0
+    Aggression = 0x1
+    Independence = 0x2
 
 
 class cGcCreatureIkType(IntEnum):
@@ -4861,6 +5013,12 @@ class cGcMultitoolPoolType(IntEnum):
     Sentinel = 0x2
     Atlas = 0x3
     SettlementRotational = 0x4
+
+
+class cGcObjectCounterVolumeType(IntEnum):
+    Vehicle = 0x0
+    ScrapYard = 0x1
+    ScrapYardFullBounds = 0x2
 
 
 class cGcBaseDefenceStatusType(IntEnum):
@@ -5031,6 +5189,8 @@ class cGcInteractionType(IntEnum):
     CorvetteTeleport = 0x96
     CorvetteTeleportReturn = 0x97
     CorvetteMissionBoard = 0x98
+    CargoDropTerminal = 0x99
+    ScrapyardTerminal = 0x9A
 
 
 class cGcHologramState(IntEnum):
@@ -5050,12 +5210,6 @@ class cGcHologramType(IntEnum):
 class cGcHologramPivotType(IntEnum):
     Origin = 0x0
     CentreBounds = 0x1
-
-
-class cGcCharacterControlInputValidity(IntEnum):
-    Always = 0x0
-    PadOnly = 0x1
-    KeyboardAnMouseOnly = 0x2
 
 
 class cGcCharacterControlOutputSpace(IntEnum):
@@ -5110,167 +5264,169 @@ class cGcStatsTypes(IntEnum):
     Weapon_Grenade_Homing = 0x2A
     Weapon_Grenade_Clusterbomb = 0x2B
     Weapon_TerrainEdit = 0x2C
-    Weapon_SunLaser = 0x2D
-    Weapon_SoulLaser = 0x2E
-    Weapon_MineGrenade = 0x2F
-    Weapon_FrontShield = 0x30
-    Weapon_Scope = 0x31
-    Weapon_Spawner = 0x32
-    Weapon_SpawnerAlt = 0x33
-    Weapon_Melee = 0x34
-    Weapon_StunGrenade = 0x35
-    Weapon_Stealth = 0x36
-    Weapon_Scan = 0x37
-    Weapon_Scan_Radius = 0x38
-    Weapon_Scan_Recharge_Time = 0x39
-    Weapon_Scan_Types = 0x3A
-    Weapon_Scan_Binoculars = 0x3B
-    Weapon_Scan_Discovery_Creature = 0x3C
-    Weapon_Scan_Discovery_Flora = 0x3D
-    Weapon_Scan_Discovery_Mineral = 0x3E
-    Weapon_Scan_Secondary = 0x3F
-    Weapon_Scan_Terrain_Resource = 0x40
-    Weapon_Scan_Surveying = 0x41
-    Weapon_Scan_BuilderReveal = 0x42
-    Weapon_Fish = 0x43
-    Weapon_Stun = 0x44
-    Weapon_Stun_Duration = 0x45
-    Weapon_Stun_Damage_Multiplier = 0x46
-    Weapon_FireDOT = 0x47
-    Weapon_FireDOT_Duration = 0x48
-    Weapon_FireDOT_DPS = 0x49
-    Weapon_FireDOT_Damage_Multiplier = 0x4A
-    Suit_Armour_Health = 0x4B
-    Suit_Armour_Shield = 0x4C
-    Suit_Armour_Shield_Strength = 0x4D
-    Suit_Energy = 0x4E
-    Suit_Energy_Regen = 0x4F
-    Suit_Protection = 0x50
-    Suit_Protection_Cold = 0x51
-    Suit_Protection_Heat = 0x52
-    Suit_Protection_Toxic = 0x53
-    Suit_Protection_Radiation = 0x54
-    Suit_Protection_Spook = 0x55
-    Suit_Protection_Pressure = 0x56
-    Suit_Underwater = 0x57
-    Suit_UnderwaterLifeSupport = 0x58
-    Suit_DamageReduce_Cold = 0x59
-    Suit_DamageReduce_Heat = 0x5A
-    Suit_DamageReduce_Toxic = 0x5B
-    Suit_DamageReduce_Radiation = 0x5C
-    Suit_Protection_HeatDrain = 0x5D
-    Suit_Protection_ColdDrain = 0x5E
-    Suit_Protection_ToxDrain = 0x5F
-    Suit_Protection_RadDrain = 0x60
-    Suit_Protection_WaterDrain = 0x61
-    Suit_Protection_SpookDrain = 0x62
-    Suit_Stamina_Strength = 0x63
-    Suit_Stamina_Speed = 0x64
-    Suit_Stamina_Recovery = 0x65
-    Suit_Jetpack = 0x66
-    Suit_Jetpack_Tank = 0x67
-    Suit_Jetpack_Drain = 0x68
-    Suit_Jetpack_Refill = 0x69
-    Suit_Jetpack_Ignition = 0x6A
-    Suit_Jetpack_DoubleJump = 0x6B
-    Suit_Jetpack_WaterEfficiency = 0x6C
-    Suit_Jetpack_MidairRefill = 0x6D
-    Suit_Refiner = 0x6E
-    Suit_AutoTranslator = 0x6F
-    Suit_Utility = 0x70
-    Suit_RocketLocker = 0x71
-    Suit_FishPlatform = 0x72
-    Suit_FoodUnit = 0x73
-    Suit_Denier = 0x74
-    Suit_Vehicle_Summon = 0x75
-    Ship_Weapons_Guns = 0x76
-    Ship_Weapons_Guns_Damage = 0x77
-    Ship_Weapons_Guns_Rate = 0x78
-    Ship_Weapons_Guns_HeatTime = 0x79
-    Ship_Weapons_Guns_CoolTime = 0x7A
-    Ship_Weapons_Guns_Scale = 0x7B
-    Ship_Weapons_Guns_BulletsPerShot = 0x7C
-    Ship_Weapons_Guns_Dispersion = 0x7D
-    Ship_Weapons_Guns_Range = 0x7E
-    Ship_Weapons_Guns_Damage_Radius = 0x7F
-    Ship_Weapons_Lasers = 0x80
-    Ship_Weapons_Lasers_Damage = 0x81
-    Ship_Weapons_Lasers_HeatTime = 0x82
-    Ship_Weapons_Missiles = 0x83
-    Ship_Weapons_Missiles_NumPerShot = 0x84
-    Ship_Weapons_Missiles_Speed = 0x85
-    Ship_Weapons_Missiles_Damage = 0x86
-    Ship_Weapons_Missiles_Size = 0x87
-    Ship_Weapons_Shotgun = 0x88
-    Ship_Weapons_MiniGun = 0x89
-    Ship_Weapons_Plasma = 0x8A
-    Ship_Weapons_Rockets = 0x8B
-    Ship_Weapons_ShieldLeech = 0x8C
-    Ship_Armour_Shield = 0x8D
-    Ship_Armour_Shield_Strength = 0x8E
-    Ship_Armour_Health = 0x8F
-    Ship_Scan = 0x90
-    Ship_Scan_EconomyFilter = 0x91
-    Ship_Scan_ConflictFilter = 0x92
-    Ship_Hyperdrive = 0x93
-    Ship_Hyperdrive_JumpDistance = 0x94
-    Ship_Hyperdrive_JumpsPerCell = 0x95
-    Ship_Hyperdrive_QuickWarp = 0x96
-    Ship_Launcher = 0x97
-    Ship_Launcher_TakeOffCost = 0x98
-    Ship_Launcher_AutoCharge = 0x99
-    Ship_PulseDrive = 0x9A
-    Ship_PulseDrive_MiniJumpFuelSpending = 0x9B
-    Ship_PulseDrive_MiniJumpSpeed = 0x9C
-    Ship_Boost = 0x9D
-    Ship_Maneuverability = 0x9E
-    Ship_BoostManeuverability = 0x9F
-    Ship_LifeSupport = 0xA0
-    Ship_Drift = 0xA1
-    Ship_Inventory = 0xA2
-    Ship_Tech_Slots = 0xA3
-    Ship_Cargo_Slots = 0xA4
-    Ship_Teleport = 0xA5
-    Ship_CargoShield = 0xA6
-    Ship_WaterLandingJet = 0xA7
-    Freighter_Hyperdrive = 0xA8
-    Freighter_Hyperdrive_JumpDistance = 0xA9
-    Freighter_Hyperdrive_JumpsPerCell = 0xAA
-    Freighter_MegaWarp = 0xAB
-    Freighter_Teleport = 0xAC
-    Freighter_Fleet_Boost = 0xAD
-    Freighter_Fleet_Speed = 0xAE
-    Freighter_Fleet_Fuel = 0xAF
-    Freighter_Fleet_Combat = 0xB0
-    Freighter_Fleet_Trade = 0xB1
-    Freighter_Fleet_Explore = 0xB2
-    Freighter_Fleet_Mine = 0xB3
-    Vehicle_Boost = 0xB4
-    Vehicle_Engine = 0xB5
-    Vehicle_Scan = 0xB6
-    Vehicle_EngineFuelUse = 0xB7
-    Vehicle_EngineTopSpeed = 0xB8
-    Vehicle_BoostSpeed = 0xB9
-    Vehicle_BoostTanks = 0xBA
-    Vehicle_Grip = 0xBB
-    Vehicle_SkidGrip = 0xBC
-    Vehicle_SubBoostSpeed = 0xBD
-    Vehicle_Laser = 0xBE
-    Vehicle_LaserDamage = 0xBF
-    Vehicle_LaserHeatTime = 0xC0
-    Vehicle_LaserStrongLaser = 0xC1
-    Vehicle_Gun = 0xC2
-    Vehicle_GunDamage = 0xC3
-    Vehicle_GunHeatTime = 0xC4
-    Vehicle_GunRate = 0xC5
-    Vehicle_StunGun = 0xC6
-    Vehicle_TerrainEdit = 0xC7
-    Vehicle_FuelRegen = 0xC8
-    Vehicle_AutoPilot = 0xC9
-    Vehicle_Flame = 0xCA
-    Vehicle_FlameDamage = 0xCB
-    Vehicle_FlameHeatTime = 0xCC
-    Vehicle_Refiner = 0xCD
+    Weapon_Gravity = 0x2D
+    Weapon_SunLaser = 0x2E
+    Weapon_SoulLaser = 0x2F
+    Weapon_MineGrenade = 0x30
+    Weapon_FrontShield = 0x31
+    Weapon_Scope = 0x32
+    Weapon_Spawner = 0x33
+    Weapon_SpawnerAlt = 0x34
+    Weapon_Melee = 0x35
+    Weapon_StunGrenade = 0x36
+    Weapon_Stealth = 0x37
+    Weapon_Scan = 0x38
+    Weapon_Scan_Radius = 0x39
+    Weapon_Scan_Recharge_Time = 0x3A
+    Weapon_Scan_Types = 0x3B
+    Weapon_Scan_Binoculars = 0x3C
+    Weapon_Scan_Discovery_Creature = 0x3D
+    Weapon_Scan_Discovery_Flora = 0x3E
+    Weapon_Scan_Discovery_Mineral = 0x3F
+    Weapon_Scan_Secondary = 0x40
+    Weapon_Scan_Terrain_Resource = 0x41
+    Weapon_Scan_Surveying = 0x42
+    Weapon_Scan_BuilderReveal = 0x43
+    Weapon_Fish = 0x44
+    Weapon_Stun = 0x45
+    Weapon_Stun_Duration = 0x46
+    Weapon_Stun_Damage_Multiplier = 0x47
+    Weapon_FireDOT = 0x48
+    Weapon_FireDOT_Duration = 0x49
+    Weapon_FireDOT_DPS = 0x4A
+    Weapon_FireDOT_Damage_Multiplier = 0x4B
+    Suit_Armour_Health = 0x4C
+    Suit_Armour_Shield = 0x4D
+    Suit_Armour_Shield_Strength = 0x4E
+    Suit_Energy = 0x4F
+    Suit_Energy_Regen = 0x50
+    Suit_Protection = 0x51
+    Suit_Protection_Cold = 0x52
+    Suit_Protection_Heat = 0x53
+    Suit_Protection_Toxic = 0x54
+    Suit_Protection_Radiation = 0x55
+    Suit_Protection_Spook = 0x56
+    Suit_Protection_Pressure = 0x57
+    Suit_Underwater = 0x58
+    Suit_UnderwaterLifeSupport = 0x59
+    Suit_DamageReduce_Cold = 0x5A
+    Suit_DamageReduce_Heat = 0x5B
+    Suit_DamageReduce_Toxic = 0x5C
+    Suit_DamageReduce_Radiation = 0x5D
+    Suit_Protection_HeatDrain = 0x5E
+    Suit_Protection_ColdDrain = 0x5F
+    Suit_Protection_ToxDrain = 0x60
+    Suit_Protection_RadDrain = 0x61
+    Suit_Protection_WaterDrain = 0x62
+    Suit_Protection_SpookDrain = 0x63
+    Suit_Stamina_Strength = 0x64
+    Suit_Stamina_Speed = 0x65
+    Suit_Stamina_Recovery = 0x66
+    Suit_Jetpack = 0x67
+    Suit_Jetpack_Tank = 0x68
+    Suit_Jetpack_Drain = 0x69
+    Suit_Jetpack_Refill = 0x6A
+    Suit_Jetpack_Ignition = 0x6B
+    Suit_Jetpack_DoubleJump = 0x6C
+    Suit_Jetpack_WaterEfficiency = 0x6D
+    Suit_Jetpack_MidairRefill = 0x6E
+    Suit_Refiner = 0x6F
+    Suit_AutoTranslator = 0x70
+    Suit_Utility = 0x71
+    Suit_RocketLocker = 0x72
+    Suit_FishPlatform = 0x73
+    Suit_FoodUnit = 0x74
+    Suit_Denier = 0x75
+    Suit_Vehicle_Summon = 0x76
+    Ship_Weapons_Guns = 0x77
+    Ship_Weapons_Guns_Damage = 0x78
+    Ship_Weapons_Guns_Rate = 0x79
+    Ship_Weapons_Guns_HeatTime = 0x7A
+    Ship_Weapons_Guns_CoolTime = 0x7B
+    Ship_Weapons_Guns_Scale = 0x7C
+    Ship_Weapons_Guns_BulletsPerShot = 0x7D
+    Ship_Weapons_Guns_Dispersion = 0x7E
+    Ship_Weapons_Guns_Range = 0x7F
+    Ship_Weapons_Guns_Damage_Radius = 0x80
+    Ship_Weapons_Lasers = 0x81
+    Ship_Weapons_Lasers_Damage = 0x82
+    Ship_Weapons_Lasers_HeatTime = 0x83
+    Ship_Weapons_Missiles = 0x84
+    Ship_Weapons_Missiles_NumPerShot = 0x85
+    Ship_Weapons_Missiles_Speed = 0x86
+    Ship_Weapons_Missiles_Damage = 0x87
+    Ship_Weapons_Missiles_Size = 0x88
+    Ship_Weapons_Shotgun = 0x89
+    Ship_Weapons_MiniGun = 0x8A
+    Ship_Weapons_Plasma = 0x8B
+    Ship_Weapons_Rockets = 0x8C
+    Ship_Weapons_ShieldLeech = 0x8D
+    Ship_Armour_Shield = 0x8E
+    Ship_Armour_Shield_Strength = 0x8F
+    Ship_Armour_Health = 0x90
+    Ship_Scan = 0x91
+    Ship_Scan_EconomyFilter = 0x92
+    Ship_Scan_ConflictFilter = 0x93
+    Ship_Hyperdrive = 0x94
+    Ship_Hyperdrive_JumpDistance = 0x95
+    Ship_Hyperdrive_JumpsPerCell = 0x96
+    Ship_Hyperdrive_QuickWarp = 0x97
+    Ship_Launcher = 0x98
+    Ship_Launcher_TakeOffCost = 0x99
+    Ship_Launcher_AutoCharge = 0x9A
+    Ship_PulseDrive = 0x9B
+    Ship_PulseDrive_MiniJumpFuelSpending = 0x9C
+    Ship_PulseDrive_MiniJumpSpeed = 0x9D
+    Ship_Boost = 0x9E
+    Ship_Maneuverability = 0x9F
+    Ship_BoostManeuverability = 0xA0
+    Ship_LifeSupport = 0xA1
+    Ship_Drift = 0xA2
+    Ship_Inventory = 0xA3
+    Ship_Tech_Slots = 0xA4
+    Ship_Cargo_Slots = 0xA5
+    Ship_Teleport = 0xA6
+    Ship_CargoShield = 0xA7
+    Ship_WaterLandingJet = 0xA8
+    Freighter_Hyperdrive = 0xA9
+    Freighter_Hyperdrive_JumpDistance = 0xAA
+    Freighter_Hyperdrive_JumpsPerCell = 0xAB
+    Freighter_MegaWarp = 0xAC
+    Freighter_Teleport = 0xAD
+    Freighter_Fleet_Boost = 0xAE
+    Freighter_Fleet_Speed = 0xAF
+    Freighter_Fleet_Fuel = 0xB0
+    Freighter_Fleet_Combat = 0xB1
+    Freighter_Fleet_Trade = 0xB2
+    Freighter_Fleet_Explore = 0xB3
+    Freighter_Fleet_Mine = 0xB4
+    Vehicle_Boost = 0xB5
+    Vehicle_Engine = 0xB6
+    Vehicle_Scan = 0xB7
+    Vehicle_EngineFuelUse = 0xB8
+    Vehicle_EngineTopSpeed = 0xB9
+    Vehicle_BoostSpeed = 0xBA
+    Vehicle_BoostTanks = 0xBB
+    Vehicle_Grip = 0xBC
+    Vehicle_SkidGrip = 0xBD
+    Vehicle_SubBoostSpeed = 0xBE
+    Vehicle_Laser = 0xBF
+    Vehicle_LaserDamage = 0xC0
+    Vehicle_LaserHeatTime = 0xC1
+    Vehicle_LaserStrongLaser = 0xC2
+    Vehicle_Gun = 0xC3
+    Vehicle_GunDamage = 0xC4
+    Vehicle_GunHeatTime = 0xC5
+    Vehicle_GunRate = 0xC6
+    Vehicle_StunGun = 0xC7
+    Vehicle_TerrainEdit = 0xC8
+    Vehicle_FuelRegen = 0xC9
+    Vehicle_AutoPilot = 0xCA
+    Vehicle_Flame = 0xCB
+    Vehicle_FlameDamage = 0xCC
+    Vehicle_FlameHeatTime = 0xCD
+    Vehicle_Refiner = 0xCE
+    Vehicle_Plough = 0xCF
 
 
 class cGcWordCategoryTableEnum(IntEnum):
@@ -5281,6 +5437,12 @@ class cGcWordCategoryTableEnum(IntEnum):
     LORE = 0x4
     TECH = 0x5
     THREAT = 0x6
+
+
+class cGcCharacterControlInputValidity(IntEnum):
+    Always = 0x0
+    PadOnly = 0x1
+    KeyboardAnMouseOnly = 0x2
 
 
 class cGcItemFilterMatchIDType(IntEnum):
@@ -5317,6 +5479,18 @@ class cGcWeightingCurve(IntEnum):
     MinIsSuperRare = 0x6
 
 
+class cGcTradeCategory(IntEnum):
+    Mineral = 0x0
+    Tech = 0x1
+    Commodity = 0x2
+    Component = 0x3
+    Alloy = 0x4
+    Exotic = 0x5
+    Energy = 0x6
+    None_ = 0x7
+    SpecialShop = 0x8
+
+
 class cGcTechnologyCategory(IntEnum):
     Ship = 0x0
     Weapon = 0x1
@@ -5348,16 +5522,20 @@ class cGcTechnologyRarity(IntEnum):
     Always = 0x6
 
 
-class cGcTradeCategory(IntEnum):
-    Mineral = 0x0
-    Tech = 0x1
-    Commodity = 0x2
-    Component = 0x3
-    Alloy = 0x4
-    Exotic = 0x5
-    Energy = 0x6
-    None_ = 0x7
-    SpecialShop = 0x8
+class cGcSettlementStatStrength(IntEnum):
+    PositiveWide = 0x0
+    PositiveLarge = 0x1
+    PositiveMedium = 0x2
+    PositiveSmall = 0x3
+    NegativeSmall = 0x4
+    NegativeMedium = 0x5
+    NegativeLarge = 0x6
+
+
+class cGcSizeIndicator(IntEnum):
+    Small = 0x0
+    Medium = 0x1
+    Large = 0x2
 
 
 class cGcStatsEnum(IntEnum):
@@ -5388,22 +5566,6 @@ class cGcStatsEnum(IntEnum):
     RUINS_LOOTED = 0x18
     STONE_KILLS = 0x19
     BIGGSDEBRIS_POI = 0x1A
-
-
-class cGcSettlementStatStrength(IntEnum):
-    PositiveWide = 0x0
-    PositiveLarge = 0x1
-    PositiveMedium = 0x2
-    PositiveSmall = 0x3
-    NegativeSmall = 0x4
-    NegativeMedium = 0x5
-    NegativeLarge = 0x6
-
-
-class cGcSizeIndicator(IntEnum):
-    Small = 0x0
-    Medium = 0x1
-    Large = 0x2
 
 
 class cGcRewardTeleport(IntEnum):
@@ -5452,14 +5614,6 @@ class cGcRewardRepairWholeInventory(IntEnum):
     Weapon = 0x7
 
 
-class cGcRewardJourneyThroughCentre(IntEnum):
-    Next = 0x0
-    Abandoned = 0x1
-    Vicious = 0x2
-    Lush = 0x3
-    Balanced = 0x4
-
-
 class cGcRewardFrigateDamageResponse(IntEnum):
     StayOut = 0x0
     ReturnHome = 0x1
@@ -5467,6 +5621,14 @@ class cGcRewardFrigateDamageResponse(IntEnum):
     ShowDamagedCaptain = 0x3
     ShowExpeditionCaptain = 0x4
     AbortExpedition = 0x5
+
+
+class cGcRewardJourneyThroughCentre(IntEnum):
+    Next = 0x0
+    Abandoned = 0x1
+    Vicious = 0x2
+    Lush = 0x3
+    Balanced = 0x4
 
 
 class cGcRewardEndSettlementExpedition(IntEnum):
@@ -5490,6 +5652,12 @@ class cGcRewardAtlasPathProgress(IntEnum):
     IncrementPathProgress = 0x0
     FinalStoryAtlas = 0x1
     StoreLoopingCompleteStations = 0x2
+
+
+class cGcRarity(IntEnum):
+    Common = 0x0
+    Uncommon = 0x1
+    Rare = 0x2
 
 
 class cGcRealityCommonFactions(IntEnum):
@@ -5624,12 +5792,6 @@ class cGcRealityGameIcons(IntEnum):
     InvalidShipBuild = 0x72
 
 
-class cGcRarity(IntEnum):
-    Common = 0x0
-    Uncommon = 0x1
-    Rare = 0x2
-
-
 class cGcProceduralProductCategory(IntEnum):
     Loot = 0x0
     Document = 0x1
@@ -5661,20 +5823,6 @@ class cGcProceduralProductCategory(IntEnum):
     ExhibitFossil = 0x1B
 
 
-class cGcProductCategory(IntEnum):
-    Component = 0x0
-    Consumable = 0x1
-    Tradeable = 0x2
-    Curiosity = 0x3
-    BuildingPart = 0x4
-    Procedural = 0x5
-    Emote = 0x6
-    CustomisationPart = 0x7
-    CreatureEgg = 0x8
-    Fish = 0x9
-    ExhibitBone = 0xA
-
-
 class cGcNameGeneratorSectorTypes(IntEnum):
     Generic = 0x0
     Elevated = 0x1
@@ -5690,6 +5838,14 @@ class cGcNameGeneratorSectorTypes(IntEnum):
     Ice = 0xB
 
 
+class cGcProceduralTechnologyCategory(IntEnum):
+    None_ = 0x0
+    Combat = 0x1
+    Mining = 0x2
+    Scanning = 0x3
+    Protection = 0x4
+
+
 class cGcNameGeneratorTypes(IntEnum):
     Generic = 0x0
     Mineral = 0x1
@@ -5701,12 +5857,36 @@ class cGcNameGeneratorTypes(IntEnum):
     Region_FL = 0x7
 
 
-class cGcProceduralTechnologyCategory(IntEnum):
-    None_ = 0x0
-    Combat = 0x1
-    Mining = 0x2
-    Scanning = 0x3
-    Protection = 0x4
+class cGcProductCategory(IntEnum):
+    Component = 0x0
+    Consumable = 0x1
+    Tradeable = 0x2
+    Curiosity = 0x3
+    BuildingPart = 0x4
+    Procedural = 0x5
+    Emote = 0x6
+    CustomisationPart = 0x7
+    CreatureEgg = 0x8
+    Fish = 0x9
+    ExhibitBone = 0xA
+
+
+class cGcLegality(IntEnum):
+    Legal = 0x0
+    Illegal = 0x1
+
+
+class cGcMaintenanceElementGroups(IntEnum):
+    Custom = 0x0
+    Farming = 0x1
+    Fuelling = 0x2
+    Repairing = 0x3
+    EasyRepairing = 0x4
+    Cleaning = 0x5
+    Frigate = 0x6
+    Sentinels = 0x7
+    Runes = 0x8
+    RobotHeads = 0x9
 
 
 class cGcModularCustomisationResourceType(IntEnum):
@@ -5723,17 +5903,11 @@ class cGcModularCustomisationResourceType(IntEnum):
     ExhibitBird = 0xA
 
 
-class cGcMaintenanceElementGroups(IntEnum):
-    Custom = 0x0
-    Farming = 0x1
-    Fuelling = 0x2
-    Repairing = 0x3
-    EasyRepairing = 0x4
-    Cleaning = 0x5
-    Frigate = 0x6
-    Sentinels = 0x7
-    Runes = 0x8
-    RobotHeads = 0x9
+class cGcInventoryClass(IntEnum):
+    C = 0x0
+    B = 0x1
+    A = 0x2
+    S = 0x3
 
 
 class cGcInventoryType(IntEnum):
@@ -5807,11 +5981,6 @@ class cGcInventorySpecialSlotType(IntEnum):
     TechBonus = 0x4
 
 
-class cGcLegality(IntEnum):
-    Legal = 0x0
-    Illegal = 0x1
-
-
 class cGcInventoryStackSizeGroup(IntEnum):
     Default = 0x0
     Personal = 0x1
@@ -5826,50 +5995,6 @@ class cGcInventoryStackSizeGroup(IntEnum):
     MaintenanceObject = 0xA
     UIPopup = 0xB
     SeasonTransfer = 0xC
-
-
-class cGcFrigateClass(IntEnum):
-    Combat = 0x0
-    Exploration = 0x1
-    Mining = 0x2
-    Diplomacy = 0x3
-    Support = 0x4
-    Normandy = 0x5
-    DeepSpace = 0x6
-    DeepSpaceCommon = 0x7
-    Pirate = 0x8
-    GhostShip = 0x9
-
-
-class cGcDiscoveryTrimGroup(IntEnum):
-    System = 0x0
-    Planet = 0x1
-    Interesting = 0x2
-    Boring = 0x3
-
-
-class cGcFrigateTraitStrength(IntEnum):
-    NegativeLarge = 0x0
-    NegativeMedium = 0x1
-    NegativeSmall = 0x2
-    TertiarySmall = 0x3
-    TertiaryMedium = 0x4
-    TertiaryLarge = 0x5
-    SecondarySmall = 0x6
-    SecondaryMedium = 0x7
-    SecondaryLarge = 0x8
-    Primary = 0x9
-
-
-class cGcDiscoveryTrimScoringCategory(IntEnum):
-    IsNamedSystem = 0x0
-    RecentlyVisitedSystem = 0x1
-    RecentDiscoveryInSystem = 0x2
-    NumDiscoveredPlanetsInSystem = 0x3
-    IsNamedPlanet = 0x4
-    NumBasesOnPlanet = 0x5
-    NumWondersOnPlanet = 0x6
-    NumNamedDiscoveries = 0x7
 
 
 class cGcDiscoveryType(IntEnum):
@@ -5890,13 +6015,6 @@ class cGcDiscoveryType(IntEnum):
     Control = 0xE
     HarvestPlant = 0xF
     FriendlyDrone = 0x10
-
-
-class cGcInventoryClass(IntEnum):
-    C = 0x0
-    B = 0x1
-    A = 0x2
-    S = 0x3
 
 
 class cGcExpeditionCategory(IntEnum):
@@ -5937,6 +6055,50 @@ class cGcFossilCategory(IntEnum):
     Tail = 0x4
 
 
+class cGcFrigateClass(IntEnum):
+    Combat = 0x0
+    Exploration = 0x1
+    Mining = 0x2
+    Diplomacy = 0x3
+    Support = 0x4
+    Normandy = 0x5
+    DeepSpace = 0x6
+    DeepSpaceCommon = 0x7
+    Pirate = 0x8
+    GhostShip = 0x9
+
+
+class cGcDiscoveryTrimGroup(IntEnum):
+    System = 0x0
+    Planet = 0x1
+    Interesting = 0x2
+    Boring = 0x3
+
+
+class cGcDiscoveryTrimScoringCategory(IntEnum):
+    IsNamedSystem = 0x0
+    RecentlyVisitedSystem = 0x1
+    RecentDiscoveryInSystem = 0x2
+    NumDiscoveredPlanetsInSystem = 0x3
+    IsNamedPlanet = 0x4
+    NumBasesOnPlanet = 0x5
+    NumWondersOnPlanet = 0x6
+    NumNamedDiscoveries = 0x7
+
+
+class cGcFrigateTraitStrength(IntEnum):
+    NegativeLarge = 0x0
+    NegativeMedium = 0x1
+    NegativeSmall = 0x2
+    TertiarySmall = 0x3
+    TertiaryMedium = 0x4
+    TertiaryLarge = 0x5
+    SecondarySmall = 0x6
+    SecondaryMedium = 0x7
+    SecondaryLarge = 0x8
+    Primary = 0x9
+
+
 class cGcCreatureRarity(IntEnum):
     Common = 0x0
     Uncommon = 0x1
@@ -5948,6 +6110,14 @@ class cGcCurrency(IntEnum):
     Units = 0x0
     Nanites = 0x1
     Specials = 0x2
+
+
+class cGcCatalogueGroups(IntEnum):
+    MaterialsAndItems = 0x0
+    CraftingAndTechnology = 0x1
+    Buildables = 0x2
+    Recipes = 0x3
+    Wonders = 0x4
 
 
 class cGcCorvettePartCategory(IntEnum):
@@ -5965,45 +6135,6 @@ class cGcCorvettePartCategory(IntEnum):
     Connector = 0x400
     Decor = 0x800
     Interior = 0x1000
-
-
-class cGcCatalogueGroups(IntEnum):
-    MaterialsAndItems = 0x0
-    CraftingAndTechnology = 0x1
-    Buildables = 0x2
-    Recipes = 0x3
-    Wonders = 0x4
-
-
-class cGcAlienRace(IntEnum):
-    Traders = 0x0
-    Warriors = 0x1
-    Explorers = 0x2
-    Robots = 0x3
-    Atlas = 0x4
-    Diplomats = 0x5
-    Exotics = 0x6
-    None_ = 0x7
-    Builders = 0x8
-
-
-class cGcAlienMood(IntEnum):
-    Neutral = 0x0
-    Positive = 0x1
-    VeryPositive = 0x2
-    Negative = 0x3
-    VeryNegative = 0x4
-    Pity = 0x5
-    Sad = 0x6
-    Dead = 0x7
-    Confused = 0x8
-    Busy = 0x9
-
-
-class cGcAlienPuzzleTableIndex(IntEnum):
-    Regular = 0x0
-    Seeded = 0x1
-    Random = 0x2
 
 
 class cGcAlienPuzzleCategory(IntEnum):
@@ -6066,6 +6197,54 @@ class cGcAlienPuzzleCategory(IntEnum):
     SpiderA = 0x38
     SpiderB = 0x39
     SpiderRenewed = 0x3A
+
+
+class cGcAlienRace(IntEnum):
+    Traders = 0x0
+    Warriors = 0x1
+    Explorers = 0x2
+    Robots = 0x3
+    Atlas = 0x4
+    Diplomats = 0x5
+    Exotics = 0x6
+    None_ = 0x7
+    Builders = 0x8
+
+
+class cGcAlienMood(IntEnum):
+    Neutral = 0x0
+    Positive = 0x1
+    VeryPositive = 0x2
+    Negative = 0x3
+    VeryNegative = 0x4
+    Pity = 0x5
+    Sad = 0x6
+    Dead = 0x7
+    Confused = 0x8
+    Busy = 0x9
+
+
+class cGcAlienPuzzleTableIndex(IntEnum):
+    Regular = 0x0
+    Seeded = 0x1
+    Random = 0x2
+
+
+class cGcNetworkOwnershipPriority(IntEnum):
+    Lowest = 0x0
+    CargoInScrapyard = 0x1
+    CargoOnTruckBed = 0x2
+    CargoGrabbedByGravLaser = 0x3
+    Highest = 0x4
+
+
+class cTkPlatformGroup(IntEnum):
+    empty = 0x0
+    Playfab = 0x1
+    Steam = 0x2
+    Playstation = 0x4
+    XBox = 0x8
+    Nintendo = 0x10
 
 
 class cTkUniqueContextTypes(IntEnum):
@@ -6137,13 +6316,16 @@ class cGcExperienceDebugTriggerActionTypes(IntEnum):
     WaterTransition = 0x37
 
 
-class cTkPlatformGroup(IntEnum):
-    empty = 0x0
-    Playfab = 0x1
-    Steam = 0x2
-    Playstation = 0x4
-    XBox = 0x8
-    Nintendo = 0x10
+class cGcJourneyCategoryType(IntEnum):
+    Journey = 0x0
+    SeasonHistory = 0x1
+    Race = 0x2
+    Guild = 0x3
+
+
+class cGcMessageSummonAndDismiss(IntEnum):
+    Summon = 0x0
+    Dismiss = 0x1
 
 
 class cGcJourneyMedalType(IntEnum):
@@ -6159,16 +6341,11 @@ class cGcJourneyMedalType(IntEnum):
     DistanceWarped = 0x9
 
 
-class cGcJourneyCategoryType(IntEnum):
-    Journey = 0x0
-    SeasonHistory = 0x1
-    Race = 0x2
-    Guild = 0x3
-
-
-class cGcMessageSummonAndDismiss(IntEnum):
-    Summon = 0x0
-    Dismiss = 0x1
+class cTkIKPropagationLimitMode(IntEnum):
+    RotationAndTranslation = 0x0
+    TranslationOnly = 0x1
+    RotationOnly = 0x2
+    Block = 0x3
 
 
 class cTkImposterActivation(IntEnum):
@@ -6324,6 +6501,26 @@ class cGcScannerIconTypes(IntEnum):
     StoneEnemy = 0x48
     BuriedFossil = 0x49
     BuriedFossilHazard = 0x4A
+    GravityGunCargo = 0x4B
+
+
+class cGcInventoryFilterOptions(IntEnum):
+    All = 0x0
+    Substance = 0x1
+    HighValue = 0x2
+    Consumable = 0x3
+    Deployable = 0x4
+
+
+class cGcFontTypesEnum(IntEnum):
+    Impact = 0x0
+    Bebas = 0x1
+    GeosansLightWide = 0x2
+    GeosansLight = 0x3
+    GeosansLightMedium = 0x4
+    GeosansLightSmall = 0x5
+    Segoeuib = 0x6
+    Segoeui32 = 0x7
 
 
 class cGcGenericIconTypes(IntEnum):
@@ -6349,51 +6546,53 @@ class cGcModelViews(IntEnum):
     SuitWithCape = 0x2
     Weapon = 0x3
     Ship = 0x4
-    Corvette = 0x5
-    SpookShip = 0x6
-    Vehicle = 0x7
-    DiscoveryMain = 0x8
-    DiscoveryThumbnail = 0x9
-    WonderThumbnail = 0xA
-    WonderThumbnailCreatureSmall = 0xB
-    WonderThumbnailCreatureMed = 0xC
-    WonderThumbnailCreatureLarge = 0xD
-    WonderThumbnailFloraSmall = 0xE
-    WonderThumbnailFloraLarge = 0xF
-    WonderThumbnailMineralSmall = 0x10
-    WonderThumbnailMineralLarge = 0x11
-    ToolboxMain = 0x12
-    ToolboxThumbnail = 0x13
-    TradeSuit = 0x14
-    TradeShip = 0x15
-    TradeCompareShips = 0x16
-    TradeCompareWeapons = 0x17
-    HUDThumbnail = 0x18
-    Interaction = 0x19
-    Freighter = 0x1A
-    TradeFreighter = 0x1B
-    TradeChest = 0x1C
-    TradeCapsule = 0x1D
-    TradeFrigate = 0x1E
-    TerrainBall = 0x1F
-    FreighterChest = 0x20
-    Submarine = 0x21
-    TradeCooker = 0x22
-    SuitRefiner = 0x23
-    SuitRefinerWithCape = 0x24
-    FreighterRepair = 0x25
-    DiscoveryPlanetaryMapping = 0x26
-    Mech = 0x27
-    PetThumbnail = 0x28
-    PetThumbnailUI = 0x29
-    PetLarge = 0x2A
-    SquadronPilotLarge = 0x2B
-    SquadronPilotThumbnail = 0x2C
-    SquadronSpaceshipThumbnail = 0x2D
-    VehicleRefiner = 0x2E
-    FishingFloat = 0x2F
-    ModelViewer = 0x30
-    None_ = 0x31
+    Dropship = 0x5
+    Corvette = 0x6
+    SpookShip = 0x7
+    Vehicle = 0x8
+    Truck = 0x9
+    DiscoveryMain = 0xA
+    DiscoveryThumbnail = 0xB
+    WonderThumbnail = 0xC
+    WonderThumbnailCreatureSmall = 0xD
+    WonderThumbnailCreatureMed = 0xE
+    WonderThumbnailCreatureLarge = 0xF
+    WonderThumbnailFloraSmall = 0x10
+    WonderThumbnailFloraLarge = 0x11
+    WonderThumbnailMineralSmall = 0x12
+    WonderThumbnailMineralLarge = 0x13
+    ToolboxMain = 0x14
+    ToolboxThumbnail = 0x15
+    TradeSuit = 0x16
+    TradeShip = 0x17
+    TradeCompareShips = 0x18
+    TradeCompareWeapons = 0x19
+    HUDThumbnail = 0x1A
+    Interaction = 0x1B
+    Freighter = 0x1C
+    TradeFreighter = 0x1D
+    TradeChest = 0x1E
+    TradeCapsule = 0x1F
+    TradeFrigate = 0x20
+    TerrainBall = 0x21
+    FreighterChest = 0x22
+    Submarine = 0x23
+    TradeCooker = 0x24
+    SuitRefiner = 0x25
+    SuitRefinerWithCape = 0x26
+    FreighterRepair = 0x27
+    DiscoveryPlanetaryMapping = 0x28
+    Mech = 0x29
+    PetThumbnail = 0x2A
+    PetThumbnailUI = 0x2B
+    PetLarge = 0x2C
+    SquadronPilotLarge = 0x2D
+    SquadronPilotThumbnail = 0x2E
+    SquadronSpaceshipThumbnail = 0x2F
+    VehicleRefiner = 0x30
+    FishingFloat = 0x31
+    ModelViewer = 0x32
+    None_ = 0x33
 
 
 class cGcScannerBuildingIconTypes(IntEnum):
@@ -6432,6 +6631,8 @@ class cGcScannerBuildingIconTypes(IntEnum):
     DroneHive = 0x20
     SentinelDistress = 0x21
     AbandonedRobotCamp = 0x22
+    ScrapYard = 0x23
+    Landfill = 0x24
 
 
 class cGcScannerIconHighlightTypes(IntEnum):
@@ -6440,25 +6641,6 @@ class cGcScannerIconHighlightTypes(IntEnum):
     Tag = 0x2
     Octagon = 0x3
     Circle = 0x4
-
-
-class cGcInventoryFilterOptions(IntEnum):
-    All = 0x0
-    Substance = 0x1
-    HighValue = 0x2
-    Consumable = 0x3
-    Deployable = 0x4
-
-
-class cGcFontTypesEnum(IntEnum):
-    Impact = 0x0
-    Bebas = 0x1
-    GeosansLightWide = 0x2
-    GeosansLight = 0x3
-    GeosansLightMedium = 0x4
-    GeosansLightSmall = 0x5
-    Segoeuib = 0x6
-    Segoeui32 = 0x7
 
 
 class cGcScreenFilters(IntEnum):
@@ -6548,6 +6730,12 @@ class cGcScreenFilters(IntEnum):
     DeepWater = 0x53
 
 
+class cGcStatModifyType(IntEnum):
+    Set = 0x0
+    Add = 0x1
+    Subtract = 0x2
+
+
 class cGcStatsAchievements(IntEnum):
     FirstWarp = 0x0
     FirstDiscovery = 0x1
@@ -6584,44 +6772,6 @@ class cGcStatDisplayType(IntEnum):
     None_ = 0x0
     Sols = 0x1
     Distance = 0x2
-
-
-class cGcStatModifyType(IntEnum):
-    Set = 0x0
-    Add = 0x1
-    Subtract = 0x2
-
-
-class cGcFriendlyDroneChatType(IntEnum):
-    Summoned = 0x0
-    Unsummoned = 0x1
-    BecomeWanted = 0x2
-    LoseWanted = 0x3
-    Idle = 0x4
-
-
-class cGcPetChatType(IntEnum):
-    Adopted = 0x0
-    Hatched = 0x1
-    Summoned = 0x2
-    Greeting = 0x3
-    Hazard = 0x4
-    Scanning = 0x5
-    PositiveEmote = 0x6
-    HungryEmote = 0x7
-    LonelyEmote = 0x8
-    Go_There = 0x9
-    Come_Here = 0xA
-    Planet = 0xB
-    Mine = 0xC
-    Attack = 0xD
-    Chase = 0xE
-    ReceivedTreat = 0xF
-    Tickled = 0x10
-    Ride = 0x11
-    Egg_Laid = 0x12
-    Customise = 0x13
-    Unsummoned = 0x14
 
 
 class cGcPetVocabularyWords(IntEnum):
@@ -6683,6 +6833,45 @@ class cGcStatusMessageMissionMarkup(IntEnum):
     None_ = 0x11
 
 
+class cGcFriendlyDroneChatType(IntEnum):
+    Summoned = 0x0
+    Unsummoned = 0x1
+    BecomeWanted = 0x2
+    LoseWanted = 0x3
+    Idle = 0x4
+
+
+class cGcPetChatType(IntEnum):
+    Adopted = 0x0
+    Hatched = 0x1
+    Summoned = 0x2
+    Greeting = 0x3
+    Hazard = 0x4
+    Scanning = 0x5
+    PositiveEmote = 0x6
+    HungryEmote = 0x7
+    LonelyEmote = 0x8
+    Go_There = 0x9
+    Come_Here = 0xA
+    Planet = 0xB
+    Mine = 0xC
+    Attack = 0xD
+    Chase = 0xE
+    ReceivedTreat = 0xF
+    Tickled = 0x10
+    Ride = 0x11
+    Egg_Laid = 0x12
+    Customise = 0x13
+    Unsummoned = 0x14
+
+
+class cGcSettlementTowerPower(IntEnum):
+    EarnNavigationData = 0x0
+    ScanForBuildings = 0x1
+    ScanForAnomalies = 0x2
+    ScanForCrashedShips = 0x3
+
+
 class cGcSynchronisedBufferType(IntEnum):
     Refiner = 0x0
     Example1 = 0x1
@@ -6701,13 +6890,6 @@ class cGcTeleporterType(IntEnum):
     SpacestationFixPosition = 0x7
     Settlement = 0x8
     Freighter = 0x9
-
-
-class cGcSettlementTowerPower(IntEnum):
-    EarnNavigationData = 0x0
-    ScanForBuildings = 0x1
-    ScanForAnomalies = 0x2
-    ScanForCrashedShips = 0x3
 
 
 class cGcSeasonEndRewardsRedemptionState(IntEnum):
@@ -6750,20 +6932,6 @@ class cGcGameMode(IntEnum):
     Seasonal = 0x6
 
 
-class cGcFreighterNPCType(IntEnum):
-    SquadronPilot = 0x0
-    FrigateCaptain = 0x1
-    WorkerBio = 0x2
-    WorkerTech = 0x3
-    WorkerIndustry = 0x4
-
-
-class cGcNPCNavSubgraphNodeType(IntEnum):
-    Path = 0x0
-    Connection = 0x1
-    PointOfInterest = 0x2
-
-
 class cGcPersistentBaseTypes(IntEnum):
     HomePlanetBase = 0x0
     FreighterBase = 0x1
@@ -6780,28 +6948,18 @@ class cGcPersistentBaseTypes(IntEnum):
     ShipBaseScratch = 0xC
 
 
-class cGcBuildMenuOption(IntEnum):
-    Place = 0x0
-    ChangeColour = 0x1
-    FreeRotate = 0x2
-    Scale = 0x3
-    SnapRotate = 0x4
-    Move = 0x5
-    Duplicate = 0x6
-    Delete = 0x7
-    ToggleBuildCam = 0x8
-    ToggleSnappingAndCollision = 0x9
-    ToggleSelectionMode = 0xA
-    ToggleWiringMode = 0xB
-    ViewRelatives = 0xC
-    CyclePart = 0xD
-    PlaceWire = 0xE
-    CycleRotateMode = 0xF
-    Flip = 0x10
-    ToggleCatalogue = 0x11
-    Purchase = 0x12
-    FamiliesRotate = 0x13
-    YFlip = 0x14
+class cGcFreighterNPCType(IntEnum):
+    SquadronPilot = 0x0
+    FrigateCaptain = 0x1
+    WorkerBio = 0x2
+    WorkerTech = 0x3
+    WorkerIndustry = 0x4
+
+
+class cGcNPCNavSubgraphNodeType(IntEnum):
+    Path = 0x0
+    Connection = 0x1
+    PointOfInterest = 0x2
 
 
 class cGcLinkNetworkTypes(IntEnum):
@@ -6819,6 +6977,11 @@ class cGcNPCHabitationType(IntEnum):
     Builder = 0x2
     Vehicles = 0x3
     Scientist = 0x4
+
+
+class cGcBaseSnapState(IntEnum):
+    IsSnapped = 0x0
+    NotSnapped = 0x1
 
 
 class cGcBuildingPlacementErrorTypes(IntEnum):
@@ -6847,15 +7010,31 @@ class cGcBuildingPlacementErrorTypes(IntEnum):
     ShipInside = 0x16
     PlayerInside = 0x17
     InvalidCorvettePosition = 0x18
+    DisallowedByProtectedArea = 0x19
 
 
-class cGcBaseBuildingSecondaryMode(IntEnum):
-    ShipStructural = 0x0
-
-
-class cGcBaseSnapState(IntEnum):
-    IsSnapped = 0x0
-    NotSnapped = 0x1
+class cGcBuildMenuOption(IntEnum):
+    Place = 0x0
+    ChangeColour = 0x1
+    FreeRotate = 0x2
+    Scale = 0x3
+    SnapRotate = 0x4
+    Move = 0x5
+    Duplicate = 0x6
+    Delete = 0x7
+    ToggleBuildCam = 0x8
+    ToggleSnappingAndCollision = 0x9
+    ToggleSelectionMode = 0xA
+    ToggleWiringMode = 0xB
+    ViewRelatives = 0xC
+    CyclePart = 0xD
+    PlaceWire = 0xE
+    CycleRotateMode = 0xF
+    Flip = 0x10
+    ToggleCatalogue = 0x11
+    Purchase = 0x12
+    FamiliesRotate = 0x13
+    YFlip = 0x14
 
 
 class cGcBaseBuildingPartStyle(IntEnum):
@@ -6922,6 +7101,10 @@ class cGcBaseBuildingPartStyle(IntEnum):
     BIGGS_STR_AB = 0x3C
 
 
+class cGcBaseBuildingSecondaryMode(IntEnum):
+    ShipStructural = 0x0
+
+
 class cGcBaseBuildingMode(IntEnum):
     Inactive = 0x0
     Selection = 0x1
@@ -6954,6 +7137,24 @@ class cGcBaseBuildingObjectDecorationTypes(IntEnum):
     WaterSurface = 0x7
 
 
+class cGcSentinelCoverState(IntEnum):
+    Deploying = 0x0
+    Deployed = 0x1
+    ShuttingDown = 0x2
+    ShutDown = 0x3
+
+
+class cGcSettlementStatType(IntEnum):
+    MaxPopulation = 0x0
+    Happiness = 0x1
+    Production = 0x2
+    Upkeep = 0x3
+    Sentinels = 0x4
+    Debt = 0x5
+    Alert = 0x6
+    BugAttack = 0x7
+
+
 class cGcSettlementConstructionLevel(IntEnum):
     Start = 0x0
     GroundStorey = 0x1
@@ -6979,24 +7180,6 @@ class cGcSettlementJudgementType(IntEnum):
     ProcPerkRelated = 0x9
     UpgradeBuilding = 0xA
     UpgradeBuildingChoice = 0xB
-
-
-class cGcSettlementStatType(IntEnum):
-    MaxPopulation = 0x0
-    Happiness = 0x1
-    Production = 0x2
-    Upkeep = 0x3
-    Sentinels = 0x4
-    Debt = 0x5
-    Alert = 0x6
-    BugAttack = 0x7
-
-
-class cGcSentinelCoverState(IntEnum):
-    Deploying = 0x0
-    Deployed = 0x1
-    ShuttingDown = 0x2
-    ShutDown = 0x3
 
 
 class cGcEncounterType(IntEnum):
@@ -7033,6 +7216,20 @@ class cGcFiendCrime(IntEnum):
     JellyBoss = 0xC
 
 
+class cGcTrackedPosition(IntEnum):
+    GameCamera = 0x0
+    ActiveCamera = 0x1
+    DebugCamera = 0x2
+    Frozen = 0x3
+
+
+class cGcFonts(IntEnum):
+    Body = 0x0
+    Title = 0x1
+    Console1 = 0x2
+    Console2 = 0x3
+
+
 class cGcAntagonistGroup(IntEnum):
     Player = 0x0
     Fiends = 0x1
@@ -7049,41 +7246,6 @@ class cGcCombatEffectType(IntEnum):
     Slow = 0x3
     ElectricDOT = 0x4
     SpookyLight = 0x5
-
-
-class cGcTrackedPosition(IntEnum):
-    GameCamera = 0x0
-    ActiveCamera = 0x1
-    DebugCamera = 0x2
-    Frozen = 0x3
-
-
-class cGcFonts(IntEnum):
-    Body = 0x0
-    Title = 0x1
-    Console1 = 0x2
-    Console2 = 0x3
-
-
-class cGcByteBeatToken(IntEnum):
-    T = 0x0
-    AND = 0x1
-    OR = 0x2
-    XOR = 0x3
-    Plus = 0x4
-    Minus = 0x5
-    Multiply = 0x6
-    Divide = 0x7
-    Modulo = 0x8
-    ShiftLeft = 0x9
-    ShiftRight = 0xA
-    Greater = 0xB
-    GreaterEqual = 0xC
-    Less = 0xD
-    LessEqual = 0xE
-    Number = 0xF
-    OpenParenthesis = 0x10
-    CloseParenthesis = 0x11
 
 
 class cGcAudioWwiseRTPCs(IntEnum):
@@ -7122,9 +7284,12 @@ class cGcAudioWwiseRTPCs(IntEnum):
     MOTION_DRIVER_A = 0x732F78BC
     MOTION_DRIVER_B = 0x732F78BF
     MUS_FISHING = 0x6999BC45
+    MUS_TRUCKINGALONG_MAIN = 0x375380AF
+    MUS_TRUCKINGALONG_ONTARGET = 0x76D8EFE4
     NPC_SHIP_DISTANCE = 0x810FD033
     NPC_SHIP_DOPPLER = 0xD8BAE8F6
     NPC_SHIP_SPEED = 0x925EFD57
+    PHYSICS_IMPACT_STRENGTH = 0xC35B0E37
     PL_AMB_HEIGHT = 0x12F4388A
     PL_ATLASGUN = 0xF17B2015
     PL_CAVE_ENCLOSED = 0x99475573
@@ -7184,6 +7349,7 @@ class cGcAudioWwiseRTPCs(IntEnum):
     VEHICLE_JUMP = 0x1E1DDD32
     VEHICLE_SKID = 0xA1303CF3
     VEHICLE_SPEED = 0x5979CECB
+    VEHICLE_SPEED_LARGE = 0x8DF74417
     VEHICLE_SUSPENSION = 0x3016F2FD
     VEHICLE_TORQUE = 0x480D482C
     WALKER_MOOD = 0xFB1B461B
@@ -7211,6 +7377,50 @@ class cGcByteBeatWave(IntEnum):
     Sine = 0x1
     Square = 0x2
     Triangle = 0x3
+
+
+class cGcByteBeatToken(IntEnum):
+    T = 0x0
+    AND = 0x1
+    OR = 0x2
+    XOR = 0x3
+    Plus = 0x4
+    Minus = 0x5
+    Multiply = 0x6
+    Divide = 0x7
+    Modulo = 0x8
+    ShiftLeft = 0x9
+    ShiftRight = 0xA
+    Greater = 0xB
+    GreaterEqual = 0xC
+    Less = 0xD
+    LessEqual = 0xE
+    Number = 0xF
+    OpenParenthesis = 0x10
+    CloseParenthesis = 0x11
+
+
+class cTkWaterCondition(IntEnum):
+    Absolutely_Tranquil = 0x0
+    Breezy_Lake = 0x1
+    Wavy_Lake = 0x2
+    Still_Pond = 0x3
+    Agitated_Pond = 0x4
+    Agitated_Lake = 0x5
+    Surf = 0x6
+    Big_Surf = 0x7
+    Chaotic_Sea = 0x8
+    Huge_Swell = 0x9
+    Choppy_Sea = 0xA
+    Very_Choppy_Sea = 0xB
+    White_Horses = 0xC
+    Ocean_Planet = 0xD
+    Wall_Of_Water = 0xE
+
+
+class cTkWaterRequirement(IntEnum):
+    NoStorm = 0x0
+    Storm = 0x1
 
 
 class cGcAudioWwiseEvents(IntEnum):
@@ -7881,6 +8091,7 @@ class cGcAudioWwiseEvents(IntEnum):
     IDENTIFY_SCAN_ON = 0xC5976489
     IMPACT_CREATURE_SQUISH = 0xAD1494AB
     IMPACTS_GROUND_GENERIC_SMALL = 0x785AA13A
+    INCINERATOR_RECYCLER_LP = 0x2F3A847C
     INTERACT_COLLECT = 0x2DB05350
     INTERACTION_CARGOBAY = 0x2153E9AE
     INTERACTION_CARGOBAYSTUCK = 0x8374264A
@@ -8109,6 +8320,8 @@ class cGcAudioWwiseEvents(IntEnum):
     MUS_STORYMODE_MUSICCUE_33 = 0xBE2BDD27
     MUS_STORYMODE_STOPALL = 0x5519D8C5
     MUS_THE_APPEARANCE_OF_A_STAR_SYSTEM = 0x5EC79C9C
+    MUS_TRUCKING = 0xD30E5DE
+    MUS_TRUCKING_STOP = 0xE445EBD
     MUS_UNKNOWN_SYSTEM_X349866 = 0x637CCD8
     MUS_XBOX_SPLASHSCREEN = 0x99AFDCA0
     MUS_XBOX_SPLASHSCREEN_STOP = 0x89EE888F
@@ -8467,6 +8680,7 @@ class cGcAudioWwiseEvents(IntEnum):
     OBJ_BARREL_MED = 0xC9953608
     OBJ_CRATE_LARGE = 0x613B2D40
     OBJ_CRATE_MED = 0xC5E4BAC7
+    OBJ_CRATE_SMALL_OPEN = 0xCA6D9663
     OBJ_CRATE_SMALLA = 0x6B9851E9
     OBJ_CRATE_SMALLB = 0x6B9851EA
     OBJ_CRUISER_WORKSHOP_LP = 0xC31DF9E3
@@ -8516,24 +8730,42 @@ class cGcAudioWwiseEvents(IntEnum):
     OILSTREAM = 0x607B82D7
     ORBIDLE = 0xE0625692
     ORBIDLE_LOOP = 0xAAD2AC93
+    PARTICLES_BIO_RECYCLE = 0xC173F983
+    PARTICLES_BIO_WRONG = 0xCFDCADA3
     PARTICLES_DUSTDEVIL = 0x73BA60C9
     PARTICLES_DUSTDEVIL_STOP = 0x88C0177C
     PARTICLES_ELECTRICAL_SPARKS = 0xFC91F6C0
     PARTICLES_ELECTRICAL_SPARKS_STOP = 0xE475E6EF
     PARTICLES_ELECTRICALANOMALY = 0x94FDA5E6
     PARTICLES_ELECTRICALANOMALY_STOP = 0x4736D7F5
+    PARTICLES_EXPLOSIVE_SHREDDERVENT = 0x4327148F
+    PARTICLES_EXPLOSIVE_WRONG = 0xA6AE8568
     PARTICLES_GEOTHERMAL = 0x3AC18629
     PARTICLES_GEOTHERMAL_EXPLODE = 0x2C5CFB0B
     PARTICLES_GEOTHERMAL_STOP = 0x509A891C
     PARTICLES_GRAVITYINVERSION = 0xCC383C04
     PARTICLES_GRAVITYINVERSION_STOP = 0x3D3A9E63
+    PARTICLES_INCINERATOR_MAIN = 0x3DD39CDD
     PARTICLES_LAVAVENT = 0xD8080D82
     PARTICLES_LAVAVENT_EXPLODE = 0xF72E024
     PARTICLES_LAVAVENT_STOP = 0xC2360C01
+    PARTICLES_RADIOACTIVE_EXPLOSION = 0x9C7178D0
     PARTICLES_RADIOANOMALY = 0x72F46861
     PARTICLES_RADIOANOMALY_STOP = 0x2609864
+    PARTICLES_RECYCLER_EXPLOSIVE = 0x8B38F54A
+    PARTICLES_RECYCLER_SHREDDER = 0x836C0D4A
+    PARTICLES_ROVER_AUTOCOLLECT = 0xD1558503
+    PARTICLES_ROVER_FOOTSTEP = 0xB43D440
+    PARTICLES_ROVER_FURNACE_FIRE = 0x4E33ED29
+    PARTICLES_ROVER_FURNACE_FIRE_END = 0x23ED62CB
+    PARTICLES_ROVER_FURNACE_JET = 0x66BE30EA
     PARTICLES_SPARKS_COMMON = 0x89739B49
     PARTICLES_SPARKS_COMMON_STOP = 0x9D9126FC
+    PARTICLES_TOXIC_ELEC = 0xF0FBD7DE
+    PARTICLES_TOXIC_EXPLOSION = 0xFEC59B1E
+    PARTICLES_TOXIC_EXPLOSIVE = 0xF7C5900E
+    PARTICLES_TOXIC_STREAM_SPLASH = 0xCAD235F1
+    PARTICLES_TOXIC_WRONG_RECYCLER = 0x26263C90
     PARTICLES_TOXICCLOUD = 0x1278E4D9
     PARTICLES_TOXICCLOUD_STOP = 0xB205BCAC
     PET_EGG_INDUCE = 0x979DE509
@@ -8550,6 +8782,8 @@ class cGcAudioWwiseEvents(IntEnum):
     PET_UI_PAT = 0xFEAFB237
     PET_UI_SUMMON = 0x716F5B99
     PET_UI_TREAT = 0x28CCAA60
+    PHYSICS_IMPACTS_GROUND = 0x7ADB6A
+    PHYSICS_IMPACTS_METAL = 0xFFC540D4
     PILGRIM_BOOST_START = 0x5D72659C
     PILGRIM_BOOST_STOP = 0xAB53D70
     PILGRIM_HORN_START = 0xEDE0C7A2
@@ -8593,6 +8827,7 @@ class cGcAudioWwiseEvents(IntEnum):
     PL_FOLEY_CLOTHING_EMOTE_FEED = 0x16F3DD78
     PL_FOLEY_CLOTHING_EMOTE_GREET_WAVE = 0x451D518D
     PL_FOLEY_CLOTHING_EMOTE_HEROICINTO = 0x6C7928E2
+    PL_FOLEY_CLOTHING_EMOTE_HONK_HORN = 0xE2F496AA
     PL_FOLEY_CLOTHING_EMOTE_LOOKDISTANCEINTO = 0xEC9B5CE
     PL_FOLEY_CLOTHING_EMOTE_MINDBLOWN = 0x8CC7D7CE
     PL_FOLEY_CLOTHING_EMOTE_NEG_FINGERWAG = 0xC74E5AF9
@@ -8769,6 +9004,16 @@ class cGcAudioWwiseEvents(IntEnum):
     PL_VEHICLE_REMOTE_STOP = 0xED8F65F8
     PL_VEHICLE_REMOTE_SURFACE = 0x3B76DFB9
     PL_VEHICLE_REMOTE_SUSPENSION = 0x3B127ED3
+    PL_WEAPON_GRAVITYGUN_DROP = 0x2DDAE3C1
+    PL_WEAPON_GRAVITYGUN_EQUIP = 0xE25A99C2
+    PL_WEAPON_GRAVITYGUN_GRAB = 0xE743D5CC
+    PL_WEAPON_GRAVITYGUN_GRAB_NOTHING = 0x945F09F2
+    PL_WEAPON_GRAVITYGUN_GRABIDLE = 0xE366AD7A
+    PL_WEAPON_GRAVITYGUN_IDLE = 0xAE81DC8
+    PL_WEAPON_GRAVITYGUN_PUSH = 0xCBF1B762
+    PL_WEAPON_GRAVITYGUN_TARGET_IDLE = 0xFB6A7D66
+    PL_WEAPON_GRAVITYGUN_THROW = 0x45B4912A
+    PL_WEAPON_GRAVITYGUN_THROW_NOTHING = 0xCEA0A5FC
     PL_WOUND = 0x82AA4045
     PL_WPN_SHIP_MISSILE_SHOOT = 0x404C8523
     PLACEMARKER_FLARE = 0xA539AE71
@@ -9263,6 +9508,7 @@ class cGcAudioWwiseEvents(IntEnum):
     RACING_DOME_NOTIFIER = 0x72791D60
     RADIO_CHATTER = 0x7E66279C
     RADIO_CHATTER_STOP = 0x66DF5E6B
+    RADIOACTIVE_RECYCLER_LP = 0xF1A46573
     RECIPE_RECEIVE = 0xDBD7DDFD
     RESOURCE_GATHER = 0x86333C19
     RIVER = 0xD6EBF401
@@ -9285,6 +9531,10 @@ class cGcAudioWwiseEvents(IntEnum):
     ROUNDTABLE_OPEN = 0xD3D76000
     ROVER_BOOST_START = 0xD22AAF8A
     ROVER_BOOST_STOP = 0x696003E2
+    ROVER_DUMP_DOWN = 0x5C70A42B
+    ROVER_DUMP_UP = 0x4A87F5EC
+    ROVER_FURNACE_CLOSE = 0xE85EC2EB
+    ROVER_FURNACE_OPEN = 0x12EDED2D
     ROVER_HORN_START = 0x4D72C430
     ROVER_HORN_STOP = 0x80EDB9C
     ROVER_IDLE_EXTERIOR = 0xCD1A7599
@@ -9305,6 +9555,9 @@ class cGcAudioWwiseEvents(IntEnum):
     SCAN_OFF = 0x70FDCEA8
     SCAN_ON = 0x8022EEB2
     SCRAP_DESTROY = 0x8ED2EF33
+    SCRAPYARD_ROBOARM01 = 0xDA03FD7E
+    SCRAPYARD_ROBOARM02 = 0xDA03FD7D
+    SCRAPYARD_ROBOARM03 = 0xDA03FD7C
     SEAHORSE_SWIM = 0x22E468
     SEAURCHINCLOSE = 0x39AEF411
     SEAURCHINEXTEND = 0x7A044893
@@ -9561,6 +9814,7 @@ class cGcAudioWwiseEvents(IntEnum):
     TORCH_ON = 0xABE43D67
     TORNADO = 0x9A2BAEE8
     TORNADO_STOP = 0xBAAC64C7
+    TOXIC_RECYCLER_LP = 0x30DBC7BD
     TREXATTACK = 0x4BDEEBF0
     TREXATTACK2 = 0x5FED6AE2
     TREXATTACK3 = 0x5FED6AE3
@@ -9982,29 +10236,6 @@ class cGcAudioWwiseEvents(IntEnum):
     WPN_TERRAIN_DESTROY_END = 0xC4E8D681
     WPN_TERRAIN_END = 0x33B1CD16
     WPN_TERRAIN_UNDO = 0x89B7D91D
-
-
-class cTkWaterCondition(IntEnum):
-    Absolutely_Tranquil = 0x0
-    Breezy_Lake = 0x1
-    Wavy_Lake = 0x2
-    Still_Pond = 0x3
-    Agitated_Pond = 0x4
-    Agitated_Lake = 0x5
-    Surf = 0x6
-    Big_Surf = 0x7
-    Chaotic_Sea = 0x8
-    Huge_Swell = 0x9
-    Choppy_Sea = 0xA
-    Very_Choppy_Sea = 0xB
-    White_Horses = 0xC
-    Ocean_Planet = 0xD
-    Wall_Of_Water = 0xE
-
-
-class cTkWaterRequirement(IntEnum):
-    NoStorm = 0x0
-    Storm = 0x1
 
 
 class cGcCustomisationComponentData(IntEnum):

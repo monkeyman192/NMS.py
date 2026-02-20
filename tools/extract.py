@@ -1,19 +1,18 @@
 # Extract all the class definitions from the NMS.exe
 
-from abc import ABC
 import json
+import keyword
 import os
 import os.path as op
 import re
-from signal import SIGTERM
 import struct
 import subprocess
 import time
+from abc import ABC
+from signal import SIGTERM
 from typing import Optional
-import keyword
 
 import pymem
-
 
 GUID_REGEX = re.compile(r'GUID = (0x[a-fA-F0-9]+)')
 
@@ -724,14 +723,14 @@ def find_classes(nms_path: str):
 
 if __name__ == '__main__':
     # First, handle the configuration loading.
-    binary_path = r"C:\Program Files (x86)\Steam\steamapps\common\No Man's Sky\Binaries\NMS.exe"
+    binary_path = r"D:\SteamLibrary\steamapps\common\No Man's Sky\Binaries\NMS.exe"
 
     nms_proc = subprocess.Popen(binary_path)
     print(f'Opened NMS with PID: {nms_proc.pid}')
 
     try:
         # Wait some time for the data to be written to memory.
-        time.sleep(2)
+        time.sleep(5)
         # Now find the process with pymem.
         # If there is for some reason multiple instances of NMS running this
         # will probably have issues...
