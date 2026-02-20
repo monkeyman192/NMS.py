@@ -2,14 +2,12 @@ import json
 import keyword
 import os.path as op
 import subprocess
-from typing import Union, TypedDict, Optional
+from typing import Optional, TypedDict, Union
 
 import libcst as cst
-
 from ruff.__main__ import (  # type: ignore[import-untyped]  # pyright: ignore[reportMissingTypeStubs]
     find_ruff_bin,  # noqa: PLC2701
 )
-
 
 DRYRUN = False
 
