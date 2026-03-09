@@ -19,6 +19,8 @@ T = TypeVar("T", bound=CTYPES)
 T1 = TypeVar("T1", bound=CTYPES)
 T2 = TypeVar("T2", bound=CTYPES)
 N = TypeVar("N", bound=int)
+# Unsigned numeric types
+TN = TypeVar("TN", bound=Union[ctypes.c_uint8, ctypes.c_uint16, ctypes.c_uint32, ctypes.c_uint64])
 
 
 FNV_offset_basis = 0xCBF29CE484222325
@@ -34,17 +36,16 @@ def fnv_1a(input: str, length: int):
     return _hash
 
 
-# TODO: Rewrite a bit?
-class cTkBitArray(ctypes.Structure, Generic[T, N]):
-    # Corresponds to cTkBitArray<T, 1, N>
+class cTkBitArray(ctypes.Structure, Generic[TN, N]):
+    # Corresponds to cTkBitArray<TN, 1, N>
     # Total space taken up is ceil(N / 8) if N != 0, otherwise it's dynamic. (TODO)
     # This object will have the same alignment considerations as T
     _size: int
-    _template_type: T
+    _template_type: TN
     _type_size: int
-    array: list[T]
+    array: list[TN]
 
-    def __class_getitem__(cls: Type["cTkBitArray"], key: tuple[Type[T], int]):
+    def __class_getitem__(cls: Type["cTkBitArray"], key: tuple[Type[TN], int]):
         _type, _size = key
         _cls: type[cTkBitArray] = types.new_class(f"cTkBitArray<{_type}, {_size}>", (cls,))
         _cls._size = _size
@@ -73,7 +74,7 @@ class cTkBitArray(ctypes.Structure, Generic[T, N]):
         else:
             # Remove the bit
             cval = cval & (~(1 << subval))
-        self.array[idx] = cval
+        self.array[idx] = cval  # type: ignore
 
     def ones(self) -> list[int]:
         return [i for i in range(self._size) if self[i]]
@@ -278,7 +279,7 @@ class Colour32(ctypes.Structure):
 class TkID(ctypes.Structure):
     """TkID<128> -> TkID[0x10], TkID<256> -> TkID[0x20]"""
 
-    _align_ = 0x10  # One day this will work...
+    _align_ = 0x8  # One day this will work...
     _size: int  # This should only ever be 0x10 or 0x20...
     value: bytes
 
@@ -576,6 +577,31 @@ class cTkLinearHashTable(ctypes.Structure, Generic[T1, T2]):
         return _cls
 
 
+class HashMap(ctypes.Structure, Generic[T]):
+    offset: int
+    _count: int
+    _end_padding_lshift: int
+
+    @property
+    def count(self):
+        return self._count
+
+    @property
+    def end_padding_lshift(self):
+        return self._end_padding_lshift
+
+    def __class_getitem__(cls: Type["HashMap"], key: tuple[Type[T]]):
+        _type = key
+        _cls: type[HashMap] = types.new_class(f"HashMap<{_type}>", (cls,))
+        _cls._fields_ = [
+            ("offset", ctypes.c_uint64),
+            ("_count", ctypes.c_uint32),
+            ("_end_padding_lshift", ctypes.c_uint32),
+            ("data", ctypes.c_ubyte * 0x20),
+        ]
+        return _cls
+
+
 class halfVector4(ctypes.Structure):
     pass
 
@@ -594,7 +620,7 @@ class LinkableNMSTemplate(ctypes.Structure):
 
 class VariableSizeString(cTkDynamicArray[ctypes.c_char]):
     @property
-    def value(self) -> str:
+    def value(self) -> str:  # type: ignore
         return super().value.value.decode()
 
     def __str__(self):
@@ -603,7 +629,7 @@ class VariableSizeString(cTkDynamicArray[ctypes.c_char]):
 
 class VariableSizeWString(cTkDynamicArray[ctypes.c_wchar]):
     @property
-    def value(self) -> str:
+    def value(self) -> str:  # type: ignore
         return super().value.value.decode()
 
     def __str__(self):
@@ -638,18 +664,26 @@ cTkBigPos = cTkPhysRelVec3
 class TkStd:
     class tk_vector(ctypes.Structure, Generic[T]):
         _template_type: Type[T]
+        _template_type_size: int
+        allocated_size: int
         vector_size: int
         if TYPE_CHECKING:
             _ptr: _Pointer[Any]
 
+        @property
+        def _next_empty_addr(self) -> int:
+            # Calculate the next address which is free to put an element.
+            # This will return 0 if it's not possible
+            if self.vector_size < self.allocated_size:
+                return get_addressof(self._ptr) + self._template_type_size * self.vector_size
+            return 0
+
         def __class_getitem__(cls: Type["TkStd.tk_vector"], type_: Type[T]):
             _cls: Type[TkStd.tk_vector[T]] = types.new_class(f"TkStd::tk_vector<{type_}>", (cls,))
             _cls._template_type = type_
+            _cls._template_type_size = ctypes.sizeof(type_)
             _cls._fields_ = [  # type: ignore
-                (
-                    "_flag",
-                    ctypes.c_uint32,
-                ),  # Not sure what this is... Often can match the size.
+                ("allocated_size", ctypes.c_uint32),
                 ("vector_size", ctypes.c_uint32),
                 ("_ptr", ctypes.POINTER(type_)),
             ]
@@ -659,7 +693,32 @@ class TkStd:
             return self.vector_size
 
         def __getitem__(self, i: int) -> T:
-            return self._ptr[i]
+            if i < self.vector_size:
+                return self._ptr[i]
+            else:
+                raise IndexError
+
+        def __delitem__(self, i: int):
+            if self.vector_size > 0:
+                # If we are deleting the last element, just decrement the vector size.
+                if i == self.vector_size - 1:
+                    self.vector_size -= 1
+                # Move the proceeding bytes after the index down by the size of the element and then decrement
+                # the vector size.
+                else:
+                    raise NotImplementedError("Coming soon!")
+
+        def add(self, other: T) -> bool:
+            # Add an extra item into the vector.
+            # NOTE: This checks to ensure that there is space for the item.
+            # If there is not this will raise an error.
+            if self.vector_size < self.allocated_size:
+                new_data = (ctypes.c_ubyte * self._template_type_size).from_address(self._next_empty_addr)
+                ctypes.memmove(ctypes.byref(new_data), ctypes.byref(other), self._template_type_size)
+                self.vector_size += 1
+                return True
+            else:
+                raise NotImplementedError("Vector already full. Cannot add another element yet...")
 
         def __iter__(self) -> Generator[T, None, None]:
             for i in range(self.vector_size):

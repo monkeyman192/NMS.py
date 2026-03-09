@@ -330,7 +330,6 @@ class CustomField(Field):
         return NAME_MAPPING.get(self._field_type, self._field_type)
 
 
-
 class HashMapField(Field):
     def __init__(self, data: bytes, nms_mem: pymem.Pymem):
         super().__init__(data, nms_mem)
@@ -369,9 +368,10 @@ class HashMapField(Field):
     def write(self) -> dict:
         return {
             "Name": self.field_name,
-            "Type": self.field_type,
+            "Type": "HashMap",
             "Offset": self._field_offset,
             "HashMap": True,
+            "GenericTypeArgs": [self.field_type],
         }
 
 
@@ -467,7 +467,7 @@ class ListField(Field):
             "Type": "cTkDynamicArray",
             "Offset": self._field_offset,
             "List": True,
-            "GenericTypeArgs": [self.field_type]
+            "GenericTypeArgs": [self.field_type],
         }
 
 
@@ -614,7 +614,6 @@ class NMSClass():
         if self.required_usings:
             self.usings = [x for x in self.required_usings]
             self.usings.sort(reverse=True)
-
 
     def write(self) -> dict:
         self.finalise()

@@ -11,6 +11,7 @@ from ctypes import (
     c_int16,
     c_int32,
     c_int64,
+    c_ubyte,
     c_uint8,
     c_uint16,
     c_uint32,
@@ -31,6 +32,7 @@ from pymhf.utils.winapi import get_filepath_from_handle
 import nmspy.data.basic_types as basic
 import nmspy.data.enums as enums
 import nmspy.data.exported_types as nmse
+import nmspy.data.vulkan as vulkan
 
 T = TypeVar("T", bound=basic.CTYPES)
 
@@ -54,6 +56,7 @@ class cTkTypedSmartResHandle(Structure, Generic[T]):
         _cls._template_type = type_
         _cls._fields_ = [  # type: ignore
             ("mHandle", cTkSmartResHandle),
+            ("_padding0x4", c_ubyte * 4),
             ("mpPointer", POINTER(type_)),
         ]
         return _cls
@@ -84,7 +87,7 @@ class cTkSharedPtr(Structure, Generic[T]):
         _cls: Type[cTkSharedPtr[T]] = types.new_class(f"cTkSharedPtr<{type_}>", (cls,))
         _cls._template_type = type_
         _cls._fields_ = [  # type: ignore
-            ("mRefCntr", POINTER(type_)),
+            ("mRefCntr", POINTER(cTkRefCntContainer[type_])),
         ]
         return _cls
 
@@ -171,8 +174,18 @@ class cEgRenderQueueBuffer(Structure):
 
 
 @partial_struct
+class TkGpuAddress(Structure):
+    mBuffer: Annotated[_Pointer[vulkan.VkBuffer_T], 0x0]
+    mOffset: Annotated[int, Field(c_uint64, 0x8)]
+
+
+@partial_struct
 class cTkRenderStateCache(Structure):
-    pass
+    # Offsets found in cEgRenderer::DrawMeshes above vkCmdBindIndexBuffer
+    mSetIndexBuffer: Annotated[_Pointer[vulkan.VkBuffer_T], 0x2F8]
+    mSetIndexOffset: Annotated[int, Field(c_uint64, 0x300)]
+    mSetIndexType: Annotated[int, Field(c_uint32, 0x308)]
+    mpBoundIndexData: Annotated[TkGpuAddress, 0x7E0]
 
 
 @partial_struct
@@ -182,8 +195,9 @@ class cEgThreadableRenderCall(Structure):
         _total_size_ = 0x290
 
     mRendererData: Annotated[cRendererData, 0x10]
+    # Found in cEgRenderer::DrawMeshes at the top.
+    mRenderStateCache: Annotated[cTkRenderStateCache, 0x290]
     _mpFunctionParams: Annotated[c_void_p, 0x2A0]
-    mRenderStateCache: Annotated[cTkRenderStateCache, 0x2B0]
 
     @property
     def mpFunctionParams(self):
@@ -429,7 +443,10 @@ class cGcRealityManager(Structure):
 class cGcInventoryStore(Structure):
     _total_size_ = 0x248
 
-    mxValidSlots: Annotated[basic.cTkBitArray[c_uint64, 16] * 16, 0x0]
+    mxValidSlots: Annotated[
+        tuple[basic.cTkBitArray[c_uint64, 16], ...],  # type: ignore
+        Field(basic.cTkBitArray[c_uint64, 16] * 16, 0x0),
+    ]
     miWidth: Annotated[int, Field(c_int16, 0x80)]
     miHeight: Annotated[int, Field(c_int16, 0x82)]
     miCapacity: Annotated[int, Field(c_int16, 0x84)]
@@ -451,13 +468,13 @@ class cGcInventoryStore(Structure):
 
 @partial_struct
 class cGcPlayerState(Structure):
+    # Found at the top of cGcPlayerState::cGcPlayerState
     mNameWithTitle: Annotated[basic.cTkFixedString0x100, 0x0]
     mGameStartLocation1: Annotated[nmse.cGcUniverseAddressData, 0x150]
     mGameStartLocation2: Annotated[nmse.cGcUniverseAddressData, 0x168]
-    # We can find this in cGcPlayerState::GetPlayerUniverseAddress, which, while not mapped, can be found
-    # inside cGcQuickActionMenu::TriggerAction below the string QUICK_MENU_EMERGENCY_WARP_BAN.
     mLocation: Annotated[nmse.cGcUniverseAddressData, 0x180]
     mPrevLocation: Annotated[nmse.cGcUniverseAddressData, 0x198]
+
     miShield: Annotated[int, Field(c_int32, 0x1B0)]
     miHealth: Annotated[int, Field(c_int32, 0x1B4)]
     miShipHealth: Annotated[int, Field(c_int32, 0x1B8)]
@@ -465,21 +482,24 @@ class cGcPlayerState(Structure):
     muNanites: Annotated[int, Field(c_uint32, 0x1C0)]
     muSpecials: Annotated[int, Field(c_uint32, 0x1C4)]
     # Found in cGcPlayerState::cGcPlayerState
-    mInventories: Annotated[cGcInventoryStore * 0x21, 0x218]
-    mVehicleInventories: Annotated[cGcInventoryStore * 0x7, 0x4D78]
-    mVehicleTechInventories: Annotated[cGcInventoryStore * 0x7, 0x5D70]
+    mInventories: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0x21, 0x228)]
+    mVehicleInventories: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0x7, 0x4D88)]
+    mVehicleTechInventories: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0x7, 0x5D80)]
 
-    mShipInventories: Annotated[cGcInventoryStore * 0xC, 0x6F00]
-    mShipInventoriesCargo: Annotated[cGcInventoryStore * 0xC, 0x8A70]
-    mShipInventoriesTechOnly: Annotated[cGcInventoryStore * 0xC, 0xA5D0]
+    mShipInventories: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0xC, 0x6F20)]
+    mShipInventoriesCargo: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0xC, 0x8A90)]
+    mShipInventoriesTechOnly: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0xC, 0xA5F0)]
 
     # Found in cGcPlayerShipOwnership::SpawnNewShip
-    miPrimaryShip: Annotated[int, Field(c_uint32, 0xC4F0)]
+    miPrimaryShip: Annotated[int, Field(c_uint32, 0xC510)]
 
     # Found in cGcPlayerState::cGcPlayerState above the loop over something 5 times. Around line 220.
-    mPhotoModeSettings: Annotated[nmse.cGcPhotoModeSettings, 0xE630]
-    maTeleportEndpoints: Annotated[std.vector[nmse.cGcTeleportEndpoint], 0xE680]
-    maCustomShipNames: Annotated[basic.cTkFixedString0x20 * 0xC, 0xE903]
+    mPhotoModeSettings: Annotated[nmse.cGcPhotoModeSettings, 0xE6D0]
+    maTeleportEndpoints: Annotated[std.vector[nmse.cGcTeleportEndpoint], 0xE720]
+    maCustomShipNames: Annotated[
+        tuple[basic.cTkFixedString0x20, ...],
+        Field(basic.cTkFixedString0x20 * 0xC, 0xE9A3),
+    ]
 
     @function_hook(
         "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 54 41 55 41 56 41 57 48 83 EC ? 45 33 FF C6 01"
@@ -591,9 +611,9 @@ class cGcPlayerShipOwnership(Structure):
     # Found in cGcPlayerShipOwnership::cGcPlayerShipOwnership
     mShips: Annotated[list[sGcShipData], Field(sGcShipData * 12, 0x60)]
     # Both these found at the top of cGcPlayerShipOwnership::UpdateMeshRefresh
-    mbShouldRefreshMesh: Annotated[bool, Field(c_bool, 0xA690)]
-    mMeshRefreshState: Annotated[int, Field(c_uint32, 0xA694)]
-    mRefreshSwapRes: Annotated[cTkSmartResHandle, 0xA698]
+    mbShouldRefreshMesh: Annotated[bool, Field(c_bool, 0xA7A0)]
+    mMeshRefreshState: Annotated[int, Field(c_uint32, 0xA7A4)]
+    mRefreshSwapRes: Annotated[cTkSmartResHandle, 0xA7A8]
 
 
 @partial_struct
@@ -1152,11 +1172,11 @@ class cGcHUDText(Structure):
 class cGcHUD(Structure):
     # This is unchanged from 4.13
     _total_size_ = 0x20040
-    maLayers: Annotated[cGcHUDLayer * 0x80, 0x10]
+    maLayers: Annotated[tuple[cGcHUDLayer, ...], Field(cGcHUDLayer * 0x80, 0x10)]
     miNumLayers: Annotated[int, Field(c_int32, 0x5810)]
-    maImages: Annotated[cGcHUDImage * 0x80, 0x5820]
+    maImages: Annotated[tuple[cGcHUDImage, ...], Field(cGcHUDImage * 0x80, 0x5820)]
     miNumImages: Annotated[int, Field(c_int32, 0xC020)]
-    maTexts: Annotated[cGcHUDText * 0x80, 0xC030]
+    maTexts: Annotated[tuple[cGcHUDText, ...], Field(cGcHUDText * 0x80, 0xC030)]
     miNumTexts: Annotated[int, Field(c_int32, 0x20030)]
 
     @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 33 ED 4C 8B F1")
@@ -1208,7 +1228,7 @@ class cGcPlayerHUD(cGcHUD):
     mCrosshairGui: Annotated[cGcNGui, 0x20498]
     mHelmetLines: Annotated[cGcNGui, 0x208F0]
     mQuickMenu: Annotated[cGcNGuiLayer, 0x20D50]
-    maMarkers: Annotated[cGcHUDMarker * 0x80, 0x20F50]
+    maMarkers: Annotated[tuple[cGcHUDMarker, ...], Field(cGcHUDMarker * 0x80, 0x20F50)]
 
     @function_hook(
         "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 0F 29 74 24 ? 48 8B F9 E8 "
@@ -1629,10 +1649,26 @@ class cEgTextureResource(cEgResource):
     ) -> c_char: ...
 
 
+class cTkAsyncIOManager:
+    @static_function_hook("48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B 3D ? ? ? ? 0F B6 F2")
+    @staticmethod
+    def GetOpDataSize(
+        lOpHandle: Annotated[int, c_int32], lbTakeLock: Annotated[bool, c_bool]
+    ) -> c_uint64: ...
+
+    @static_function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B 35 ? ? ? ? 0F B6 EA")
+    @staticmethod
+    def GetOpData(lOpHandle: Annotated[int, c_int32], lbTakeLock: Annotated[bool, c_bool]) -> c_void_p: ...
+
+
 class GeometryStreaming:
-    # @partial_struct
+    @partial_struct
     class cEgGeometryStreamer(Structure):
         _mpGeometry: Annotated[int, Field(c_uint64, 0x10)]  # cEgGeometryResource*
+        miNumMeshes: Annotated[int, Field(c_int32, 0x18)]
+        maMeshNames: Annotated[basic.TkStd.tk_vector[basic.cTkFixedString0x80], 0x28]
+        maMeshNameHashes: Annotated[basic.TkStd.tk_vector[c_uint64], 0x40]
+        mabIsMeshProcedural: Annotated[basic.TkStd.tk_vector[c_bool], 0xA0]
 
         @property
         def mpGeometry(self):
@@ -1641,14 +1677,29 @@ class GeometryStreaming:
 
         @partial_struct
         class cBufferData(Structure):
-            meState: Annotated[int, Field(c_int32, 0x24)]
+            _total_size_ = 0x28
+
+            mu64NameHash: Annotated[int, Field(c_uint64, 0x0)]
+            # For the following 2 tuples, the element 0 is for non-double buffered meshes, and element 1 is
+            # for double buffered meshes.
+            mauVertexBufferHandle: Annotated[tuple[int, int], Field(c_uint32 * 2, 0x8)]
+            mauIndexBufferHandle: Annotated[tuple[int, int], Field(c_uint32 * 2, 0x10)]
+            meState: Annotated[int, Field(c_uint8, 0x24)]
+            mb16bitIndices: Annotated[bool, Field(c_bool, 0x25)]
 
         @function_hook("48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 83 79 ? ? 41 0F B6 E8")
-        def GetVertexBufferByHash(
+        def GetVertexBufferByIndex(
             self,
             this: "_Pointer[GeometryStreaming.cEgGeometryStreamer]",
-            liNameHash: Annotated[int, c_int32],
+            liIndex: Annotated[int, c_int32],
             a3: Annotated[bool, c_bool],
+        ) -> c_int64: ...
+
+        @function_hook("48 83 EC ? 8B 41 ? 4C 8B DA 85 C0")
+        def FindVertexBufferIndexByHash(
+            self,
+            this: "_Pointer[GeometryStreaming.cEgGeometryStreamer]",
+            liHash: Annotated[int, c_int64],
         ) -> c_int64: ...
 
         @function_hook("40 55 53 56 57 41 54 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B FA")
@@ -1661,6 +1712,15 @@ class GeometryStreaming:
         @static_function_hook("4C 8B DC 49 89 4B ? 55 57 41 57 48 81 EC ? ? ? ? 48 8B 29")
         @staticmethod
         def OnBufferLoadFinish(lpData: c_void_p): ...
+
+        # Found in GeometryStreaming::cEgGeometryStreamer::Prepare
+        mauIndexBufferOffsets: Annotated[basic.TkStd.tk_vector[c_int32], 0x100]
+        mauVertexBufferOffsets: Annotated[basic.TkStd.tk_vector[c_int32], 0x110]
+        mauIndexBufferSizes: Annotated[basic.TkStd.tk_vector[c_int32], 0x120]
+        mauVertexBufferSizes: Annotated[basic.TkStd.tk_vector[c_int32], 0x130]
+        mauVertexPositionBufferOffsets: Annotated[basic.TkStd.tk_vector[c_int32], 0x140]
+        mauVertexPositionBufferSizes: Annotated[basic.TkStd.tk_vector[c_int32], 0x150]
+        mBufferLookup: Annotated[basic.TkStd.tk_vector[cBufferData], 0x160]
 
     class cEgStreamRequests(Structure):
         @function_hook("40 56 48 83 EC ? 83 79 ? ? 48 8B F1 0F 29 74 24")
@@ -1675,7 +1735,7 @@ class GeometryStreaming:
 class cTkBuffer(Structure):
     _total_size_ = 0x30
     muSize: Annotated[int, Field(c_uint32, 0x0)]
-    # 00000008     struct VkBuffer_T *mpD3D12Resource;
+    mpD3D12Resource: Annotated[_Pointer[vulkan.VkBuffer_T], 0x8]
     # 00000010     TkDeviceMemory mpDeviceMemory;
     mpBufferData: Annotated[c_void_p, 0x28]
 
@@ -1689,6 +1749,23 @@ class cTkGraphicsAPI(Structure):
         lpiVertexBufferSize: _Pointer[c_uint32],
     ): ...
 
+    @static_function_hook("48 8B C4 4C 89 48 ? 4C 89 40 ? 48 89 50 ? 48 89 48 ? 55 53 48 8D 68")
+    @staticmethod
+    def createVertexBuffer(
+        lpVertexBuffer: c_uint64,  # _Pointer[_Pointer[VkBuffer_T]],
+    ): ...
+
+    @static_function_hook("44 89 4C 24 ? 4C 89 44 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 57")
+    @staticmethod
+    def CreateIndexBuffer(
+        lpIndexBuffer: c_uint64,  # _Pointer[_Pointer[VkBuffer_T]],
+        lMemory: c_uint64,  # TkDeviceMemory *
+        lpInitialData: c_void_p,
+        liSizeBytes: Annotated[int, c_int32],
+        lbMappable: Annotated[bool, c_bool],
+        lbPersistent: Annotated[bool, c_bool],
+    ) -> c_uint64: ...
+
 
 @partial_struct
 class cTkVertexLayoutRT(Structure):
@@ -1701,21 +1778,22 @@ class cEgGeometryResource(cEgResource):
     _total_size_ = 0x770
 
     # Lots of this found in cEgGeometryResource::CloneOriginalVertDataToIndex and other methods
-    muIndexCount: Annotated[int, Field(c_uint32, 0x1F8)]
-    muVertexCount: Annotated[int, Field(c_uint32, 0x1FC)]
-    muBvVertexCount: Annotated[int, Field(c_uint32, 0x200)]
-    mb16BitIndices: Annotated[bool, Field(c_bool, 0x204)]
-    mbUnknown0x205: Annotated[bool, Field(c_bool, 0x205)]  # Looks related to cTkGeometryData.ProcGenNodeNames
+    muIndexCount: Annotated[int, Field(c_uint32, 0x200)]
+    muVertexCount: Annotated[int, Field(c_uint32, 0x204)]
+    muBvVertexCount: Annotated[int, Field(c_uint32, 0x208)]
+    mb16BitIndices: Annotated[bool, Field(c_bool, 0x20C)]
+    mbUnknown0x20D: Annotated[bool, Field(c_bool, 0x20D)]  # Looks related to cTkGeometryData.ProcGenNodeNames
     # Looks like if the above is False (the default), then maybe cTkGeometryData.ProcGenNodeNames is written
     # to this + 0x350?
-    mpIndexData: Annotated[c_void_p, 0x208]
-    mpaVertPositionData: Annotated[basic.TkStd.tk_vector[_Pointer[basic.cTkVector3]], 0x220]
+    mpIndexData: Annotated[c_void_p, 0x210]
+    mpaVertPositionData: Annotated[basic.TkStd.tk_vector[_Pointer[basic.cTkVector3]], 0x228]
     mpaVertStreams: Annotated[
         basic.TkStd.tk_vector[c_void_p], 0x2A0
     ]  # This is actually in a cTkStackVector maybe....
     mMeshVertRStart: Annotated[basic.TkStd.tk_vector[c_int32], 0x2F8]  # maybe?
     mSkinMatOrder: Annotated[basic.TkStd.tk_vector[c_int32], 0x440]
-    mVertexLayout: Annotated[cTkVertexLayoutRT, 0x488]  # Maybe?
+    mVertexLayout: Annotated[cTkVertexLayoutRT, 0x488]  # Maybe? Maybe a pointer...
+    mPositionVertexLayout: Annotated[cTkVertexLayoutRT, 0x528]  # Maybe? Maybe a pointer...
     mStreamManager: Annotated[GeometryStreaming.cEgGeometryStreamer, 0x5D8]
 
     @function_hook(
@@ -1761,6 +1839,13 @@ class cEgGeometryResource(cEgResource):
 
     @function_hook("48 89 5C 24 ? 55 56 57 41 54 41 56 48 81 EC ? ? ? ? 48 8B FA")
     def CloneInternal(self, this: "_Pointer[cEgGeometryResource]", lpRhsRes: _Pointer[cTkResource]): ...
+
+    @function_hook("40 55 56 57 41 56 48 8D 6C 24 ? 48 81 EC ? ? ? ? 44 8B 82")
+    def ParseData(
+        self,
+        this: "_Pointer[cEgGeometryResource]",
+        lData: _Pointer[nmse.cTkGeometryData],
+    ) -> c_bool: ...
 
 
 class cTkResourceManager(Structure):
@@ -2917,21 +3002,28 @@ class cEgMeshNode(cEgSceneNode):
 
     mpMaterialResource: Annotated[cTkTypedSmartResHandle[cEgMaterialResource], 0x38]
     mpParentModel: Annotated[_Pointer[cEgModelNode], 0x48]
-    muBatchStart: Annotated[int, Field(c_uint32, 0x60)]
-    muBatchCount: Annotated[int, Field(c_uint32, 0x64)]
-    muBatchStartPhysics: Annotated[int, Field(c_uint32, 0x68)]
-    muVertRStart: Annotated[int, Field(c_uint32, 0x6C)]
-    muVertREnd: Annotated[int, Field(c_uint32, 0x70)]
-    muVertRStartPhysics: Annotated[int, Field(c_uint32, 0x74)]
-    muVertREndPhysics: Annotated[int, Field(c_uint32, 0x78)]
-    muBvVertStart: Annotated[int, Field(c_uint32, 0x7C)]
-    muBvVertEnd: Annotated[int, Field(c_uint32, 0x80)]
-    muLodLevel: Annotated[int, Field(c_uint32, 0x84)]
+    miNodeIndex: Annotated[int, Field(c_int32, 0x58)]
+    miNodeLOD: Annotated[int, Field(c_int32, 0x5C)]
 
-    mfLodFade: Annotated[float, Field(c_float, 0x94)]
-    mUserData: Annotated[basic.Vector4f, 0xA0]
-    mpMasterParentModel: Annotated[_Pointer[cEgModelNode], 0xB0]
-    miGeometryBufferIndex: Annotated[int, Field(c_int32, 0xB8)]
+    mAABBMinBox: Annotated[basic.Vector4f, 0x60]
+    mAABBMaxBox: Annotated[basic.Vector4f, 0x70]
+    unknownVector: Annotated[basic.Vector4f, 0x80]
+    # mUserData: Annotated[basic.Vector4f, 0xA0]  # Where does this go?
+
+    muBatchStart: Annotated[int, Field(c_uint32, 0x98)]
+    muBatchCount: Annotated[int, Field(c_uint32, 0x9C)]
+    muBatchStartPhysics: Annotated[int, Field(c_uint32, 0xA0)]
+    muVertRStart: Annotated[int, Field(c_uint32, 0xA4)]
+    muVertREnd: Annotated[int, Field(c_uint32, 0xA8)]
+    muVertRStartPhysics: Annotated[int, Field(c_uint32, 0xAC)]
+    muVertREndPhysics: Annotated[int, Field(c_uint32, 0xB0)]
+    muBvVertStart: Annotated[int, Field(c_uint32, 0xB4)]
+    muBvVertEnd: Annotated[int, Field(c_uint32, 0xB8)]
+    muFirstSkinMat: Annotated[int, Field(c_uint32, 0xBC)]
+    muLastSkinMat: Annotated[int, Field(c_uint32, 0xC0)]
+    mfLodFade: Annotated[float, Field(c_float, 0xC4)]
+    muLodLevel: Annotated[int, Field(c_uint32, 0xCC)]
+    miGeometryBufferIndex: Annotated[int, Field(c_int32, 0xD0)]
 
     @static_function_hook("48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 4C 8B F9 49 8B E8")
     @staticmethod
@@ -2948,7 +3040,64 @@ class cEgRenderQueue(Structure):
     pass
 
 
-class cEgRenderer(Structure):
+@partial_struct
+class cTkVertexBufferSlot(Structure):
+    # Assuming this hasn't changed since 4.13 other than the last 2 fields which can be seen in
+    # cEgRenderer::cEgRenderer
+    _total_size_ = 0x20
+    muVertexBufferObject: Annotated[int, Field(c_uint32, 0x0)]
+    muOffset: Annotated[int, Field(c_uint32, 0x4)]
+    muStride: Annotated[int, Field(c_uint32, 0x8)]
+    miLayoutElementCount: Annotated[int, Field(c_int32, 0xC)]
+    mbIsDirty: Annotated[bool, Field(c_bool, 0x10)]
+    miHash: Annotated[int, Field(c_uint64, 0x18)]
+
+
+@partial_struct
+class cEgRBObjects_cTkBuffer(Structure):
+    _total_size_ = 0x90
+    mObjects: Annotated[basic.TkStd.tk_vector[cTkBuffer], 0x0]
+    mFreeList: Annotated[basic.TkStd.tk_vector[c_uint32], 0x10]
+    mUsedBits: Annotated[basic.TkStd.tk_vector[c_uint64], 0x20]
+    # _RTL_CRITICAL_SECTION mAllocCriticalSection
+    mDebugName: Annotated[basic.cTkFixedString0x40, 0x58]
+
+
+@partial_struct
+class cEgRendererBase(Structure):
+    mVertexBufferSlots: Annotated[tuple[cTkVertexBufferSlot, ...], Field(cTkVertexBufferSlot * 0x10, 0x8)]
+    mBuffers: Annotated[cEgRBObjects_cTkBuffer, 0x208]
+
+    @function_hook(
+        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8B F9 49 8B E9 48 81 C1"
+    )
+    def CreateVertexBuffer(
+        self,
+        this: "_Pointer[cEgRendererBase]",
+        luSize: Annotated[int, c_int32],
+        lpData: c_void_p,
+        lVertexDecl: _Pointer[cTkVertexLayoutRT],
+        luVertexCount: Annotated[int, c_uint32],
+        a6: Annotated[bool, c_bool],
+        lbMappable: Annotated[bool, c_bool],
+        lbPersistent: Annotated[bool, c_bool],
+    ) -> c_uint64: ...
+
+    @function_hook("44 89 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 53 55 56")
+    def ApplyVertexLayout(
+        self,
+        this: "_Pointer[cEgRendererBase]",
+        lVertexLayout: _Pointer[cTkVertexLayoutRT],
+        lShader: c_uint64,  # cTkShader *
+        lpRenderData: _Pointer[cEgThreadableRenderCall],
+        liSlot: Annotated[int, c_int32],
+    ) -> c_char: ...
+
+
+@partial_struct
+class cEgRenderer(cEgRendererBase):
+    _total_size_ = 0x145A0
+
     @static_function_hook("48 8B C4 44 89 40 ? 48 89 48 ? 55 57")
     @staticmethod
     def DrawMeshes(
@@ -3009,10 +3158,10 @@ class cEgRenderer(Structure):
     @static_function_hook("48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 54 41 56 41 57 48 83 EC ? 49 8B F0")
     @staticmethod
     def SetupMeshGeometry(
-        a1: c_uint32,
-        a2: c_uint64,
-        a3: c_uint64,
-        a4: c_uint64,
+        lu64Hash: c_uint64,
+        lpMeshNode: _Pointer[cEgMeshNode],
+        lpGeometryResource: _Pointer[cEgGeometryResource],
+        lpRenderStateCache: _Pointer[cTkRenderStateCache],
     ) -> c_bool: ...
 
 
@@ -3030,24 +3179,8 @@ class cEgSceneNodeData(Structure):
 
 @partial_struct
 class cEgSceneManager(Structure):
+    _total_size_ = 0x14460
     mData: Annotated[cEgSceneNodeData, 0x0]
-
-
-class cEgRendererBase(Structure):
-    @function_hook(
-        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8B F9 49 8B E9 48 81 C1"
-    )
-    def CreateVertexBuffer(
-        self,
-        this: "_Pointer[cEgRendererBase]",
-        luSize: Annotated[int, c_int32],
-        lpData: c_void_p,
-        lVertexDecl: _Pointer[cTkVertexLayoutRT],
-        luVertexCount: Annotated[int, c_uint32],
-        a6: Annotated[bool, c_bool],
-        lbMappable: Annotated[bool, c_bool],
-        lbPersistent: Annotated[bool, c_bool],
-    ) -> c_uint64: ...
 
 
 class EgInstancedModelExtension:
@@ -3081,20 +3214,28 @@ class cTkModelResourceRenderer(Structure):
 
 
 class cEgModules:
-    PATT = (
+    patt_mgpSceneManager = (
         "48 89 05 ? ? ? ? E8 ? ? ? ? 48 39 3D ? ? ? ? 75 ? B9 ? ? ? ? E8 ? ? ? ? 48 85 C0 74 ? 48 89 78 ? 40 "
         "88 78 ? 48 89 78 ? 40 88 78"
     )
+    patt_mgpRenderer = "48 89 3D ? ? ? ? 48 83 C4 ? 5F C3 CC 89 54 24"
     mgpSceneManager: _Pointer[cEgSceneManager]
-    mgpResourceManager: cTkResourceManager
+    mgpResourceManager: _Pointer[cTkResourceManager]
+    mgpRenderer: _Pointer[cEgRenderer]
 
     def find_variables(self):
-        patt_addr = find_pattern_in_binary(self.PATT, False)
+        patt_addr = find_pattern_in_binary(self.patt_mgpSceneManager, False)
         if patt_addr:
             start_addr = BASE_ADDRESS + patt_addr
             offset = c_uint32.from_address(start_addr + 3)
             mgpSceneManager_offset = start_addr + offset.value + 7
             self.mgpSceneManager = map_struct(mgpSceneManager_offset, _Pointer[cEgSceneManager])
+        patt_addr = find_pattern_in_binary(self.patt_mgpRenderer, False)
+        if patt_addr:
+            start_addr = BASE_ADDRESS + patt_addr
+            offset = c_uint32.from_address(start_addr + 3)
+            mgpRenderer_offset = start_addr + offset.value + 7
+            self.mgpRenderer = map_struct(mgpRenderer_offset, _Pointer[cEgRenderer])
 
     @static_function_hook("40 57 48 83 EC ? 33 FF 48 89 5C 24")
     @staticmethod
