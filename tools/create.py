@@ -23,6 +23,106 @@ def ruff_format(source: str) -> str:
     return result.stdout
 
 
+SIZE_MAPPING = {
+    "undefined": 0,
+    "bool": 1,
+    "byte": 1,
+    "CUSTOM": 0,  # Custom -> size of child
+    "NMSTemplate": 0x10,
+    "LinkableNMSTemplate": 0x20,
+    "Colour": 0x10,
+    "cTkDynamicArray": 0x10,
+    "VariableSizeString": 0x10,
+    "VariableSizeWString": 0x10,
+    "HashedString": 0x18,
+    "ENUM": 4,
+    "FLAGENUM": 4,
+    "float": 4,
+    "double": 8,
+    "TkID0x10": 0x10,
+    "TkID0x20": 0x20,
+    "cTkFixedString0x20": 0x20,
+    "int8": 1,
+    "int16": 2,
+    "int32": 4,
+    "int64": 8,
+    "GcNodeID": 4,
+    "GcResource": 4,
+    "GcSeed": 0x10,
+    "ARRAY": 0,  # Array -> size of array * size of array type
+    "cTkFixedString0x40": 0x40,
+    "cTkFixedString0x80": 0x80,
+    "cTkFixedString0x100": 0x100,
+    "cTkFixedString0x200": 0x200,
+    "cTkFixedString0x400": 0x400,
+    "cTkFixedString0x800": 0x800,
+    "uint8": 1,
+    "uint16": 2,
+    "uint32": 4,
+    "uint64": 8,
+    "UniqueId": 0x20,
+    "Vector2f": 8,
+    "Vector3f": 0x10,
+    "Vector4f": 0x10,
+    "wchar": 2,
+    "halfVector4": 8,
+    "Vector4i": 0x10,
+    "TkPhysRelVec3": 0x20,
+    "HashMap": 0x30,
+    "Colour32": 4,
+}
+
+
+ALIGNMENT_MAPPING = {
+    "undefined": 1,
+    "bool": 1,
+    "byte": 1,
+    "CUSTOM": -1,  # Custom -> Alignment of first field of type
+    "NMSTemplate": 8,
+    "LinkableNMSTemplate": 8,
+    "Colour": 0x10,
+    "cTkDynamicArray": 8,
+    "VariableSizeString": 8,
+    "VariableSizeWString": 8,
+    "HashedString": 8,
+    "ENUM": 4,
+    "FLAGENUM": 4,
+    "float": 4,
+    "double": 8,
+    "TkID0x10": 8,
+    "TkID0x20": 8,
+    "int8": 1,
+    "int16": 2,
+    "int32": 4,
+    "int64": 8,
+    "GcNodeID": 4,
+    "GcResource": 4,
+    "GcSeed": 8,
+    "ARRAY": -1,  # Array -> Alignment of type of array
+    "cTkFixedString0x20": 8,
+    "cTkFixedString0x40": 1,
+    "cTkFixedString0x80": 1,
+    "cTkFixedString0x100": 1,
+    "cTkFixedString0x200": 1,
+    "cTkFixedString0x400": 1,
+    "cTkFixedString0x800": 1,
+    "uint8": 1,
+    "uint16": 2,
+    "uint32": 4,
+    "uint64": 8,
+    "UniqueId": 8,
+    "Vector2f": 4,
+    "Vector3f": 0x10,
+    "Vector4f": 0x10,
+    "wchar": 2,
+    "halfVector4": 4,  # Temp value for now...
+    "Vector4i": 0x10,
+    "TkPhysRelVec3": 0x10,
+    "HashMap": 8,
+    "Colour32": 4,
+}
+
+
 # TODO: Parse the internal_enums.py file to get the names and then write this all dynamically.
 ENUM_IMPORT_START = """# flake8: noqa
 # ruff: noqa
@@ -124,6 +224,7 @@ BASIC_TYPES = {
     "Vector4f",
     "Vector4i",
     "cTkDynamicArray",
+    "HashMap",
     "VariableSizeString",
     "VariableSizeWString",
     "NMSTemplate",
@@ -391,8 +492,24 @@ def convert_field(class_name: str, field: FieldData) -> Union[
         return field_line
 
 
-def create_class(class_name: str, class_fields: list[FieldData]):
+def create_class(class_name: str, class_fields: list[FieldData], total_size: int):
     body_fields = []
+    body_fields.append(
+        cst.SimpleStatementLine(
+            body=[
+                cst.Assign(
+                    targets=[
+                        cst.AssignTarget(
+                            target=cst.Name("_total_size_")
+                        )
+                    ],
+                    value=cst.Integer(
+                        value=upper_hex(total_size)
+                    ),
+                )
+            ]
+        )
+    )
     for field in class_fields:
         converted_field = convert_field(class_name, field)
         if isinstance(converted_field, tuple):
@@ -430,6 +547,7 @@ def _extract_dependencies(fields: list[FieldData]) -> set[str]:
 def handle_dependencies(data: list[dict]) -> list[dict]:
     # Keep track of the structs we need to still do.
     total_count = len(data)
+    data.sort(key=lambda x: x["Name"])
     curr_todo_list = data
     next_todo_list = []
     placed_dependencies: set[str] = set()
@@ -442,12 +560,12 @@ def handle_dependencies(data: list[dict]) -> list[dict]:
             deps = _extract_dependencies(struct.get("Fields", [{}]))
             # If all the dependencies are satisfied, then we add it to the array in the "new order".
             # Exclude the struct name from it's list of dependencies since we can resolve that.
-            if (deps - {name,}) <= placed_dependencies:
+            if (deps - {name, }) <= placed_dependencies:
                 new_order.append(struct)
                 placed_dependencies.add(name)
             else:
                 next_todo_list.append(struct)
-        print(f"After attempt {i}: {len(new_order)} / {total_count} placed")
+        print(f"[DEPENDENCIES] After attempt {i}: {len(new_order)} / {total_count} placed")
         if prev_count == len(new_order):
             break
         else:
@@ -461,9 +579,131 @@ def handle_dependencies(data: list[dict]) -> list[dict]:
     return new_order
 
 
+def calculate_alignments(data: list[dict]):
+    # Read in the data and calculate alignments of all the classes.
+    total_count = len(data)
+    curr_todo_list = data
+    next_todo_list = []
+    calculated_alignments: set[str] = set()
+    class_alignments: dict[str, int] = {}
+    prev_count = 0
+    i = 1
+    while True:
+        for struct in curr_todo_list:
+            name = struct["Name"]
+            if len(struct["Fields"]) == 0:
+                alignment = 1
+            else:
+                field_type = struct["Fields"][0]["Type"]
+                # First, see if we are an enum which lets us get the alignment directly as it is the same as
+                # the size.
+                if (alignment := struct["Fields"][0].get("Enum_DataSize")) is not None:
+                    pass
+                # Check to see if we just know the alignment from basic types.
+                elif (alignment := ALIGNMENT_MAPPING.get(field_type)) is not None:
+                    pass
+                # Then check to see if we have already found the class with the alignment.
+                elif (alignment := class_alignments.get(field_type)) is not None:
+                    pass
+                else:
+                    next_todo_list.append(struct)
+            if alignment is not None:
+                calculated_alignments.add(name)
+                class_alignments[name] = alignment
+        print(f"[ALIGNMENTS] After attempt {i}: {len(class_alignments)} / {total_count} placed")
+        if prev_count == len(class_alignments):
+            break
+        else:
+            prev_count = len(class_alignments)
+            # Swap todo lists so that we only process the unplaced structs.
+            curr_todo_list = next_todo_list
+            next_todo_list = []
+            i += 1
+
+    for struct in data:
+        struct["Alignment"] = class_alignments[struct["Name"]]
+
+    with open("struct_data_aligned.json", "w") as f:
+        f.write(json.dumps(data, indent=1))
+
+
+def calculate_sizes(data: list[dict]):
+    # Read in the data and calculate sizes of all the classes.
+    total_count = len(data)
+    curr_todo_list = data
+    next_todo_list = []
+    calculated_sizes: set[str] = set()
+    class_sizes: dict[str, int] = {}
+    prev_count = 0
+    i = 1
+    while True:
+        for struct in curr_todo_list:
+            alignment = struct["Alignment"]
+            name = struct["Name"]
+            if len(struct["Fields"]) == 0:
+                last_field_offset = 0
+                last_field_size = 1
+                last_field_array_size = 1
+            else:
+                last_field: dict = struct["Fields"][-1]
+                last_field_offset = last_field["Offset"]
+                last_field_type = last_field["Type"]
+                last_field_size = None
+                last_field_array_size = last_field.get("Array_Size", 1)
+                if (last_field_size := last_field.get("Enum_DataSize")) is not None:
+                    pass
+                # Check to see if we just know the size from basic types.
+                elif (last_field_size := SIZE_MAPPING.get(last_field_type)) is not None:
+                    pass
+                # Then check to see if we have already found the class with the alignment.
+                elif (last_field_size := class_sizes.get(last_field_type)) is not None:
+                    pass
+                else:
+                    next_todo_list.append(struct)
+            if last_field_size is not None:
+                temp_end_addr = last_field_offset + last_field_size * last_field_array_size
+                additional_bytes = 0
+                if temp_end_addr % alignment != 0:
+                    additional_bytes = alignment - (temp_end_addr % alignment)
+                total_size = temp_end_addr + additional_bytes
+                calculated_sizes.add(name)
+                class_sizes[name] = total_size
+        print(f"[SIZES] After attempt {i}: {len(class_sizes)} / {total_count} placed")
+        if prev_count == len(class_sizes):
+            break
+        else:
+            prev_count = len(class_sizes)
+            # Swap todo lists so that we only process the unplaced structs.
+            curr_todo_list = next_todo_list
+            next_todo_list = []
+            i += 1
+
+    for struct in data:
+        struct["TotalSize"] = class_sizes[struct["Name"]]
+
+    with open("struct_data_sized.json", "w") as f:
+        f.write(json.dumps(data, indent=1))
+
+    # Let's validate the data in a simple way.
+    # Loop over the fields in the classes, and check that the differences between fields which have a class
+    # as a type aren't bigger than the difference.
+    for struct in data:
+        name = struct["Name"]
+        fields = struct["Fields"]
+        for i, field in enumerate(fields):
+            if field["Type"] in class_sizes:
+                if len(fields) >= i + 2:
+                    next_field = fields[i + 1]
+                    assert field["Offset"] + class_sizes[field["Type"]] <= next_field["Offset"], (
+                        f"The type of {name}.{field['Name']} has an invalid size."
+                    )
+
+
 if __name__ == "__main__":
     with open(struct_data, "r") as f:
         struct_data = json.load(f)
+    calculate_alignments(struct_data)
+    calculate_sizes(struct_data)
     # Re-order structs so that any struct which depends on another is placed after it.
     struct_data = handle_dependencies(struct_data)
     enum_module_body: list[Union[cst.SimpleStatementLine, cst.BaseCompoundStatement]] = [
@@ -528,10 +768,10 @@ if __name__ == "__main__":
                     ),
                     names=[
                         cst.ImportAlias(
-                            name=cst.Name(value="partial_struct")
+                            name=cst.Name(value="Field")
                         ),
                         cst.ImportAlias(
-                            name=cst.Name(value="Field")
+                            name=cst.Name(value="partial_struct")
                         ),
                     ]
                 )
@@ -610,7 +850,7 @@ if __name__ == "__main__":
             members = fields[0].get("Enum_Values", [])
             enum_module_body.append(create_enum(name, members))
         else:
-            data_module_body.append(create_class(name, fields))
+            data_module_body.append(create_class(name, fields, struct["TotalSize"]))
     enum_module = cst.Module(body=enum_module_body)
     data_module = cst.Module(body=data_module_body)
     # Generate the code if not doing a dry run.
@@ -618,14 +858,16 @@ if __name__ == "__main__":
         with open(op.join(NMSPY_DATA_DIR, "enums", "external_enums.py"), "w") as f:
             f.write("# ruff: noqa: E741\n")
             f.write(enum_module.code)
-        ruff_format(op.join(NMSPY_DATA_DIR, "enums", "external_enums.py"))
-
+        enum_ruff_res = ruff_format(op.join(NMSPY_DATA_DIR, "enums", "external_enums.py"))
+        print(f"Ruff result from external_enums.py: {enum_ruff_res}")
         print("Wrote enum data")
+
         with open(op.join(NMSPY_DATA_DIR, "exported_types.py"), "w") as f:
             f.write(data_module.code)
-        ruff_format(op.join(NMSPY_DATA_DIR, "exported_types.py"))
-
+        exported_ruff_res = ruff_format(op.join(NMSPY_DATA_DIR, "exported_types.py"))
+        print(f"Ruff result from exported_types.py: {exported_ruff_res}")
         print("Wrote struct data")
+
         with open(op.join(NMSPY_DATA_DIR, "enums", "__init__.py"), "w") as f:
             f.write(ENUM_IMPORT_START)
             f.write("from .external_enums import (\n")
@@ -633,5 +875,6 @@ if __name__ == "__main__":
                 if struct.get("EnumClass") is True:
                     f.write(f"    {struct['Name']},\n")
             f.write(")\n")
-        ruff_format(op.join(NMSPY_DATA_DIR, "enums", "__init__.py"))
+        init_ruff_res = ruff_format(op.join(NMSPY_DATA_DIR, "enums", "__init__.py"))
+        print(f"Ruff result from __init__.py: {init_ruff_res}")
         print("wrote enum imports")
