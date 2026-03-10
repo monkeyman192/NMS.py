@@ -1500,6 +1500,59 @@ cTkDynamicGravityControl._fields_ = [
 ]
 
 
+@partial_struct
+class cTkTextureBase(Structure):
+    meType: Annotated[int, Field(c_uint8, 0x0)]
+    miWidth: Annotated[int, Field(c_int32, 0x10)]
+    miHeight: Annotated[int, Field(c_int32, 0x14)]
+    miDepth: Annotated[int, Field(c_int32, 0x14)]
+    miNumMips: Annotated[int, Field(c_uint16, 0x1C)]
+    miDataSize: Annotated[int, Field(c_int32, 0x20)]
+    miMemorySize: Annotated[int, Field(c_int32, 0x24)]
+
+    @static_function_hook("0F B6 C1 45 8B D0")
+    @staticmethod
+    def CalculateTextureSize(
+        leFormat: c_uint32,
+        liWidth: c_int32,
+        liHeight: c_int32,
+        liDepth: c_int32,
+    ) -> c_uint64: ...
+
+
+@partial_struct
+class cTkTexture(cTkTextureBase):
+    @function_hook("48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B FA 48 8B F1 33 D2 48 8D 0D")
+    def CopyPixelDataToBuffer(
+        self,
+        this: "_Pointer[cTkTexture]",
+        lpBuffer: c_void_p,
+        lbCompressed: Annotated[bool, c_bool],
+        liMipLevel: Annotated[int, c_uint32],
+        liCubeFace: Annotated[int, c_uint32],
+    ): ...
+
+    @function_hook("48 8B C4 44 89 48 ? 44 89 40 ? 88 50 ? 48 89 48")
+    def CreateEmptyTexture(
+        self,
+        this: "_Pointer[cTkTexture]",
+        leType: Annotated[int, c_uint8],  # eTkTextureType
+        liWidth: Annotated[int, c_uint32],
+        liHeight: Annotated[int, c_uint32],
+        liDepth: Annotated[int, c_uint32],
+        liFormat: Annotated[int, c_char],
+        liNumMipLevels: Annotated[int, c_uint32],
+        leTextureAddressMode: c_enum32[nmse.cTkMaterialSampler.eTextureAddressModeEnum],
+        leTextureFilterMode: c_enum32[nmse.cTkMaterialSampler.eTextureFilterModeEnum],
+        liAnisotropy: Annotated[int, c_uint32],
+        lbIsSrgb: Annotated[bool, c_bool],
+        lbCommit: Annotated[bool, c_bool],
+        lbIsPartiallyResident: Annotated[bool, c_bool],
+        lbEvictAllEvictable: Annotated[bool, c_bool],
+        lbAllowUnorderedAccess: Annotated[bool, c_bool],
+    ): ...
+
+
 class Engine:
     @static_function_hook("40 53 44 8B D1 44 8B C9 41 C1 EA ? 41 81 E1 ? ? ? ? 48 8B DA")
     @staticmethod
@@ -1602,7 +1655,8 @@ class Engine:
     @staticmethod
     def GetTexture(
         targetRes: Annotated[int, c_int32],  # TkStrongType<int,TkStrongTypeIDs::TkResHandleID>
-    ) -> c_char_p64: ...
+    ) -> c_uint64:  # typed as "char *", but is actually cTkTexture *
+        ...
 
     @static_function_hook(
         "44 8B C9 44 8B C1 41 C1 E9 ? 41 81 E0 ? ? ? ? 45 85 C9 74 ? 41 81 F8 ? ? ? ? 74 ? 4C 8B 15 ? ? ? ? "
@@ -1627,6 +1681,18 @@ class Engine:
     )
     @staticmethod
     def GetNodeName(node: basic.TkHandle) -> c_char_p64: ...
+
+    @static_function_hook(
+        "40 53 48 83 EC ? 8B DA 85 C9 74 ? 4C 8B 0D ? ? ? ? 8D 41 ? 41 3B 41 ? 73 ? 49 8B 41 ? 4C 63 C1 4A "
+        "8B 44 C0 ? 48 85 C0 74 ? 80 B8 ? ? ? ? ? 74 ? 4C 8B 80 ? ? ? ? 49 8B C9 8B 50 ? E8 ? ? ? ? EB ? 33 "
+        "C0 48 85 C0 74 ? 83 78 ? ? 75 ? 8B 90"
+    )
+    @staticmethod
+    def GetRenderBufferTexture(
+        targetRes: Annotated[int, c_int32],
+        liIndex: c_uint32,
+    ) -> c_uint64:  # cTkTexture *
+        ...
 
 
 class cEgResource(cTkResource):
@@ -2992,14 +3058,23 @@ class cEgModelNode(cEgSceneNode):
     def UpdateGeometry(self, this: "_Pointer[cEgModelNode]") -> c_char: ...
 
 
-class cEgMaterialResource(cEgResource):
+@partial_struct
+class cEgShaderResource(cEgResource):
     pass
+
+
+@partial_struct
+class cEgMaterialResource(cEgResource):
+    # Found by inspecting cEgMaterialResource in memory.
+    mpShaderResource: Annotated[cTkTypedSmartResHandle[cEgShaderResource], 0x1D8]
 
 
 @partial_struct
 class cEgMeshNode(cEgSceneNode):
     _total_size_ = 0xE0
 
+    # These top two are found in cEgRenderableSceneNode::cEgRenderableSceneNode.
+    # Most of the remaining fields are found in cEgMeshNode::cEgMeshNode.
     mpMaterialResource: Annotated[cTkTypedSmartResHandle[cEgMaterialResource], 0x38]
     mpParentModel: Annotated[_Pointer[cEgModelNode], 0x48]
     miNodeIndex: Annotated[int, Field(c_int32, 0x58)]
@@ -3211,6 +3286,13 @@ class cTkModelResourceRenderer(Structure):
         lbForceAnimUpdate: Annotated[bool, c_bool],
         a4: c_uint64,  # unknown
     ): ...
+
+
+class cGcPhotoModeUI(Structure):
+    @static_function_hook("48 89 4C 24 ? 55 53 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 8B 49")
+    @staticmethod
+    def OnRenderScreenshotFinished(lpData: c_void_p):  # Unknown data type...
+        ...
 
 
 class cEgModules:
