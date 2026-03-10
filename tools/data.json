@@ -1308,5 +1308,30 @@
   "name": "cEgRendererBase::ApplyVertexLayout",
   "signature": "44 89 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 53 55 56",
   "mangled_name": "?ApplyVertexLayout@cEgRendererBase@@QEAA_NAEBVcTkVertexLayoutRT@@AEBVcTkShader@@PEAVcEgThreadableRenderCall@@H@Z"
+ },
+ {
+  "name": "cGcPhotoModeUI::OnRenderScreenshotFinished",
+  "signature": "48 89 4C 24 ? 55 53 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 8B 49",
+  "mangled_name": "?OnRenderScreenshotFinished@cGcPhotoModeUI@@CAXPEAX@Z"
+ },
+ {
+  "name": "Engine::GetRenderBufferTexture",
+  "signature": "40 53 48 83 EC ? 8B DA 85 C9 74 ? 4C 8B 0D ? ? ? ? 8D 41 ? 41 3B 41 ? 73 ? 49 8B 41 ? 4C 63 C1 4A 8B 44 C0 ? 48 85 C0 74 ? 80 B8 ? ? ? ? ? 74 ? 4C 8B 80 ? ? ? ? 49 8B C9 8B 50 ? E8 ? ? ? ? EB ? 33 C0 48 85 C0 74 ? 83 78 ? ? 75 ? 8B 90",
+  "mangled_name": "?GetRenderBufferTexture@Engine@@YAPEAXU?$TkStrongType@HUTkResHandleID@TkStrongTypeIDs@@@@H@Z"
+ },
+ {
+  "name": "cTkTextureBase::CalculateTextureSize",
+  "signature": "0F B6 C1 45 8B D0",
+  "mangled_name": "?CalculateTextureSize@cTkTextureBase@@SAIW4eTexFormat@1@HHH@Z"
+ },
+ {
+  "name": "cTkTexture::CopyPixelDataToBuffer",
+  "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B FA 48 8B F1 33 D2 48 8D 0D",
+  "mangled_name": "?CopyPixelDataToBuffer@cTkTexture@@QEAAXPEAD_NII@Z"
+ },
+ {
+  "name": "cTkTexture::CreateEmptyTexture",
+  "signature": "48 8B C4 44 89 48 ? 44 89 40 ? 88 50 ? 48 89 48",
+  "mangled_name": "?CreateEmptyTexture@cTkTexture@@QEAAXW4eTkTextureType@@IIIIIW4eTextureAddressMode@@W4eTextureFilterMode@@I_N3333@Z"
  }
 ]
