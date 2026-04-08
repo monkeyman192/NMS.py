@@ -694,7 +694,7 @@ wheels = [
 
 [[package]]
 name = "nmspy"
-version = "161765.2"
+version = "161765.3"
 source = { editable = "." }
 dependencies = [
     { name = "pymhf", extra = ["gui"] },
@@ -712,7 +712,7 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "pymhf", extras = ["gui"], specifier = ">=0.2.2" }]
+requires-dist = [{ name = "pymhf", extras = ["gui"], specifier = ">=0.2.3" }]
 
 [package.metadata.requires-dev]
 dev = [
@@ -827,7 +827,7 @@ speed = [
 
 [[package]]
 name = "pymhf"
-version = "0.2.2"
+version = "0.2.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cyminhook" },
@@ -846,9 +846,9 @@ dependencies = [
     { name = "tomlkit" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/d6/30/74a7520bcb0b24d3d59a4dab4c19c435ead9ac22170af1e34dd73ed32813/pymhf-0.2.2.tar.gz", hash = "sha256:2d266db4daeed9974ff30a452a0a2180271655e7fd48af73f9f4e7f7ac44d706", size = 346477, upload-time = "2026-02-10T21:54:06.688Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/75/2c/277eb0deb7fe3e88a43d3679ba664e9057141f5e801d1be81b2c862703ed/pymhf-0.2.3.tar.gz", hash = "sha256:bc39b07994fd918237ef322d32364a7d1e3f3bd8d3b260e5f6610aeec82e3299", size = 350004, upload-time = "2026-04-08T06:04:23.098Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/8b/30/bdd3720d762f255b6284580174e3238e56ad2614bc52e8e3d78329e6a759/pymhf-0.2.2-py3-none-any.whl", hash = "sha256:d378f3ef07d61e609346de74a897fa71e52021d03e4f3cfd8d6bf1b2dcb8a265", size = 247048, upload-time = "2026-02-10T21:54:04.9Z" },
+    { url = "https://files.pythonhosted.org/packages/2f/4b/0cd4e5b9a244c98cd6875fa49305160cb9d578098b12b312c68ab7d38fc0/pymhf-0.2.3-py3-none-any.whl", hash = "sha256:94893a1974b80a308e921ff118811aef377700bc4c064b4a0b0f2904cbbc3e4f", size = 247700, upload-time = "2026-04-08T06:04:21.576Z" },
 ]
 
 [package.optional-dependencies]
