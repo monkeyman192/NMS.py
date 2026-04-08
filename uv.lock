@@ -624,7 +624,7 @@ wheels = [
 
 [[package]]
 name = "nmspy"
-version = "161765.1"
+version = "161765.2"
 source = { editable = "." }
 dependencies = [
     { name = "pymhf", extra = ["gui"] },
@@ -641,7 +641,7 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "pymhf", extras = ["gui"], specifier = "==0.2.2" }]
+requires-dist = [{ name = "pymhf", extras = ["gui"], specifier = ">=0.2.2" }]
 
 [package.metadata.requires-dev]
 dev = [

@@ -144,10 +144,11 @@ class cTkResource(Structure):
     # Found in cTkResource::cTkResource and cEgGeometryResource::cEgGeometryResource
     miType: Annotated[c_enum32[enums.ResourceTypes], 0x8]
     msName: Annotated[basic.cTkFixedString[0x100], 0xC]
-    mxFlags: Annotated[int, Field(c_int32, 0x10C)]
+    mxFlags: Annotated[int, Field(c_int32, 0x110)]
     mHandle: Annotated[int, Field(c_int32, 0x128)]
     muRefCount: Annotated[int, Field(c_int32, 0x12C)]
     mbNoQuery: Annotated[bool, Field(c_bool, 0x131)]
+    mbReplaceWithDefault: Annotated[bool, Field(c_bool, 0x13B)]
     mDescriptor: Annotated[cTkResourceDescriptor, 0x188]  # TODO: Test
     muHotRequestNumber: Annotated[int, Field(c_uint16, 0x1B8)]
 
@@ -645,6 +646,9 @@ class cGcPlayerFreighterOwnership(Structure):
 
     @function_hook("48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 F6 C7 41 ? ? ? ? ? 48 8D 05")
     def cGcPlayerFreighterOwnership(self, this: "_Pointer[cGcPlayerFreighterOwnership]"): ...
+
+    @function_hook("48 89 5C 24 ? 48 89 74 24 ? 55 48 8D AC 24")
+    def ResetPlayerFreighterBase(self, this: "_Pointer[cGcPlayerFreighterOwnership]") -> c_bool: ...
 
 
 @partial_struct
@@ -1502,26 +1506,34 @@ cTkDynamicGravityControl._fields_ = [
 
 @partial_struct
 class cTkTextureBase(Structure):
-    meType: Annotated[int, Field(c_uint8, 0x0)]
+    meType: Annotated[int, Field(c_uint8, 0x0)]  # eTkTextureType - 8bit enum
+    # This has a somewhat complex mapping to the dds header format.
+    # It will be partially described here:
+    # 42 -> DXGI_FORMAT_BC7_UNORM (98)
+    # 43 -> DXT1
+    meFormat: Annotated[int, Field(c_ubyte, 0x1)]
     miWidth: Annotated[int, Field(c_int32, 0x10)]
     miHeight: Annotated[int, Field(c_int32, 0x14)]
     miDepth: Annotated[int, Field(c_int32, 0x14)]
     miNumMips: Annotated[int, Field(c_uint16, 0x1C)]
+    miAnisotropy: Annotated[int, Field(c_uint16, 0x1E)]
     miDataSize: Annotated[int, Field(c_int32, 0x20)]
     miMemorySize: Annotated[int, Field(c_int32, 0x24)]
 
     @static_function_hook("0F B6 C1 45 8B D0")
     @staticmethod
     def CalculateTextureSize(
-        leFormat: c_uint32,
-        liWidth: c_int32,
-        liHeight: c_int32,
-        liDepth: c_int32,
+        leFormat: Annotated[int, c_uint8],
+        liWidth: Annotated[int, c_int32],
+        liHeight: Annotated[int, c_int32],
+        liDepth: Annotated[int, c_int32],
     ) -> c_uint64: ...
 
 
 @partial_struct
 class cTkTexture(cTkTextureBase):
+    miUltraMips: Annotated[int, Field(c_uint16, 0x20)]
+
     @function_hook("48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B FA 48 8B F1 33 D2 48 8D 0D")
     def CopyPixelDataToBuffer(
         self,
@@ -1694,6 +1706,17 @@ class Engine:
     ) -> c_uint64:  # cTkTexture *
         ...
 
+    @static_function_hook("48 89 5C 24 ? 48 89 7C 24 ? 44 8B DA")
+    @staticmethod
+    def GetNodeParent(result: _Pointer[basic.TkHandle], node: basic.TkHandle) -> c_uint64:  # TkHandle *
+        ...
+
+    @static_function_hook("48 89 5C 24 ? 55 56 57 48 83 EC ? 4C 8B 0D")
+    @staticmethod
+    def SetMaterialSampler(
+        materialRes: Annotated[int, c_int32], name: c_char_p64, texRes: Annotated[int, c_int32]
+    ) -> c_bool: ...
+
 
 class cEgResource(cTkResource):
     @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 56 48 83 EC ? 48 8B 01 41 8B F0")
@@ -1705,7 +1728,14 @@ class cEgResource(cTkResource):
     ) -> c_char: ...
 
 
+@partial_struct
 class cEgTextureResource(cEgResource):
+    meTextureType: Annotated[int, Field(c_ubyte, 0x1E4)]  # eTkTextureType - 8bit enum
+    meTextureFormat: Annotated[int, Field(c_ubyte, 0x1E5)]  # Technically an array of 2 bytes...
+    mbIsSRGB: Annotated[bool, Field(c_bool, 0x1F8)]
+    mbHasMipMaps: Annotated[bool, Field(c_bool, 0x1F9)]
+    mTexture: Annotated[cTkTexture, 0x200]
+
     @function_hook("40 53 57 41 56 48 81 EC ? ? ? ? 45 8B F0")
     def Load(
         self,
@@ -1713,6 +1743,33 @@ class cEgTextureResource(cEgResource):
         lpcData: c_char_p64,
         liSize: Annotated[int, c_int32],
     ) -> c_char: ...
+
+    @function_hook("44 89 4C 24 ? 48 89 54 24 ? 55 53 41 54")
+    def LoadFromDds(
+        self,
+        this: "_Pointer[cEgTextureResource]",
+        lpcHeader: c_uint64,  # Pointer to the 0x80 byte dds header.
+        lpPixelData: c_uint64,  # Pointer to the rest of the dds data.
+        liStartMip: Annotated[int, c_int32],
+        liSkippedSize: Annotated[int, c_int32],
+        liPixelDataSize: Annotated[int, c_uint32],
+        lpPackedAverageColor: _Pointer[c_uint32],
+        liSelectMip: Annotated[int, c_int32],
+        liSelectMipCount: Annotated[int, c_int32],
+    ) -> c_bool: ...
+
+
+class cEgCodeResource(cEgResource):
+    @function_hook(
+        "48 89 5C 24 ? 48 89 4C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? "
+        "49 63 F8"
+    )
+    def Load(
+        self,
+        this: "_Pointer[cEgCodeResource]",
+        lpcData: c_char_p64,
+        liSize: Annotated[int, c_int32],
+    ) -> c_bool: ...
 
 
 class cTkAsyncIOManager:
@@ -1835,8 +1892,11 @@ class cTkGraphicsAPI(Structure):
 
 @partial_struct
 class cTkVertexLayoutRT(Structure):
-    # TODO: Assumuming the same as 4.13. This is possibly untrue as the exported version has changed.
+    _total_size_ = 0xA0
+    miElementCount: Annotated[int, Field(c_int32, 0x0)]
     miStride: Annotated[int, Field(c_int32, 0x4)]
+    miHash: Annotated[int, Field(c_int64, 0x8)]
+    maElementsBuffer: Annotated[tuple[nmse.cTkVertexElement, ...], Field(nmse.cTkVertexElement * 0xC, 0x10)]
 
 
 @partial_struct
@@ -1858,8 +1918,8 @@ class cEgGeometryResource(cEgResource):
     ]  # This is actually in a cTkStackVector maybe....
     mMeshVertRStart: Annotated[basic.TkStd.tk_vector[c_int32], 0x2F8]  # maybe?
     mSkinMatOrder: Annotated[basic.TkStd.tk_vector[c_int32], 0x440]
-    mVertexLayout: Annotated[cTkVertexLayoutRT, 0x488]  # Maybe? Maybe a pointer...
-    mPositionVertexLayout: Annotated[cTkVertexLayoutRT, 0x528]  # Maybe? Maybe a pointer...
+    mVertexLayout: Annotated[cTkVertexLayoutRT, 0x488]
+    mPositionVertexLayout: Annotated[cTkVertexLayoutRT, 0x528]
     mStreamManager: Annotated[GeometryStreaming.cEgGeometryStreamer, 0x5D8]
 
     @function_hook(
@@ -1914,7 +1974,11 @@ class cEgGeometryResource(cEgResource):
     ) -> c_bool: ...
 
 
+@partial_struct
 class cTkResourceManager(Structure):
+    _total_size_ = 0x210
+    mResources: Annotated[basic.TkStd.tk_vector[_Pointer[cTkResource]], 0x58]
+
     @function_hook("44 89 44 24 ? 55 57 41 54 41 55")
     def AddResource(
         self,
@@ -1942,6 +2006,14 @@ class cTkResourceManager(Structure):
         a8: Annotated[bool, c_bool],
     ) -> c_uint64:  # cTkSmartResHandle *
         ...
+
+    @function_hook("4C 89 44 24 ? 89 54 24 ? 53 55 56 57")
+    def GetDefaultResource(
+        self,
+        this: "_Pointer[cTkResourceManager]",
+        liType: Annotated[int, c_int32],
+        liFlags: Annotated[int, c_int32],
+    ) -> _Pointer[cTkResource]: ...
 
 
 class cGcRewardManager(Structure):
@@ -2172,6 +2244,36 @@ class sTerrainEditData(Structure):
     ]
 
 
+class cTkRigidBody(Structure):
+    @function_hook(
+        "48 89 5C 24 ? 57 48 83 EC ? 41 0F B6 F8 48 8B D9 4C 8B 81 ? ? ? ? 49 83 B8 ? ? ? ? ? 75 ? 48 8B 81 "
+        "? ? ? ? 48 85 C0 0F 84 ? ? ? ? 80 08"
+    )
+    def SetLinearVelocity(
+        self,
+        this: "_Pointer[cTkRigidBody]",
+        lVelocity: _Pointer[basic.cTkVector3],
+        a3: Annotated[bool, c_bool],
+    ): ...
+
+    @function_hook(
+        "48 89 5C 24 ? 57 48 83 EC ? 41 0F B6 F8 48 8B D9 4C 8B 81 ? ? ? ? 49 83 B8 ? ? ? ? ? 75 ? 48 8B 81 "
+        "? ? ? ? 48 85 C0 0F 84 ? ? ? ? 0F 28 02"
+    )
+    def SetAngularVelocity(
+        self,
+        this: "_Pointer[cTkRigidBody]",
+        lAngularVelocity: _Pointer[basic.cTkVector3],
+        a3: Annotated[bool, c_bool],
+    ): ...
+
+
+@partial_struct
+class cTkPhysicsComponent(Structure):
+    # Found in cGcSpaceshipComponent::Update near
+    mRigidBody: Annotated[cTkRigidBody, 0x50]
+
+
 class cGcTerrainEditorBeam(Structure):
     @function_hook(
         "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? "
@@ -2181,7 +2283,7 @@ class cGcTerrainEditorBeam(Structure):
         self,
         this: "_Pointer[cGcTerrainEditorBeam]",
         lvTargetPos: _Pointer[basic.cTkPhysRelVec3],
-        lpTargetBody: c_uint64,  # cTkRigidBody *
+        lpTargetBody: _Pointer[cTkRigidBody],
         lpOwnerConcept: c_uint64,  # cGcOwnerConcept *
         leStatType: c_enum32[enums.cGcStatsTypes],
         lbVehicle: Annotated[bool, c_bool],
@@ -2215,7 +2317,13 @@ class cGcLocalPlayerCharacterInterface(Structure):
     def IsJetpacking(self, this: "_Pointer[cGcLocalPlayerCharacterInterface]") -> c_bool: ...
 
 
+@partial_struct
 class cGcSpaceshipComponent(Structure):
+    mpController: Annotated[_Pointer[cGcPlayerController], 0x5F20]
+    mbControllerActive: Annotated[bool, Field(c_bool, 0x5F28)]
+    mpPhysics: Annotated[_Pointer[cTkPhysicsComponent], 0x60A8]
+    meLandState: Annotated[int, Field(c_uint32, 0x7040)]  # cGcSpaceshipComponent::eLanding
+
     @function_hook("48 89 5C 24 18 48 89 54 24 10 57 48 83 EC 70 41 0F B6 F8")
     def Eject(
         self,
@@ -2224,6 +2332,24 @@ class cGcSpaceshipComponent(Structure):
         lbAnimate: Annotated[bool, c_bool],
         lbForceDuringCommunicator: Annotated[bool, c_bool],
     ): ...
+
+    @function_hook("F3 0F 11 4C 24 ? 55 53 56 41 54 41 55")
+    def Update(self, this: "_Pointer[cGcSpaceshipComponent]", lfTimeStep: Annotated[float, c_float]): ...
+
+    @function_hook("F3 0F 11 4C 24 ? 55 53 56 57 41 54 41 57")
+    def UpdateControlled(
+        self,
+        this: "_Pointer[cGcSpaceshipComponent]",
+        lfTimeStep: Annotated[float, c_float],
+    ): ...
+
+    @function_hook("40 53 48 83 EC ? 48 8B 89 ? ? ? ? 48 8B DA 48 83 C1")
+    def GetVelocity(
+        self,
+        this: "_Pointer[cGcSpaceshipComponent]",
+        result: _Pointer[basic.cTkVector3],
+    ) -> c_uint64:  # cTkVector3 *
+        ...
 
 
 @partial_struct
@@ -2864,14 +2990,21 @@ class cTkMemoryManager(Structure):
         self,
         this: "_Pointer[cTkMemoryManager]",
         liSize: Annotated[int, c_int32],
-        lpacFile: c_char_p64,
+        lpacFile: c_uint64,
         liLine: Annotated[int, c_int32],
-        lpacFunction: c_char_p64,
+        lpacFunction: c_uint64,
         liAlign: Annotated[int, c_int32],
         liPool: Annotated[int, c_int32],
-    ):
+    ) -> c_void_p:
         """Hello Games' internal memory allocation function. This is used extensively.
         Hook with extreme caution! Doing so may easily crash the game or cause it to run VERY slow."""
+        ...
+
+    @function_hook("48 85 D2 0F 84 ? ? ? ? 53 55")
+    def Free(self, this: "_Pointer[cTkMemoryManager]", lpPointer: c_void_p, liPool: Annotated[int, c_int32]):
+        """Hello Games' internal memory freeing function. Never ucall this function with an lpPointer value
+        that was not generated by a Malloc call previously from NMS.py, and never try and clear memory
+        allocated by the game itself otherwise you will almost certainly crash the game."""
         ...
 
 
@@ -3063,10 +3196,46 @@ class cEgShaderResource(cEgResource):
     pass
 
 
+# The following 2 structs are essentially the same as the exported versions, however there seems to be a hash
+# at the start. Theoretically the uniform data itself is probably inlined, but we'll map it as a field so that
+# if the structure of the exported versions changes then this will too automatically.
+
+
+@partial_struct
+class cTkMaterialUniform_Float(Structure):
+    mu64Hash: Annotated[int, Field(c_uint64, 0x0)]
+    mMaterialUniform: Annotated[nmse.cTkMaterialUniform_Float, 0x10]
+
+
+@partial_struct
+class cTkMaterialUniform_UInt(Structure):
+    mu64Hash: Annotated[int, Field(c_uint64, 0x0)]
+    mMaterialUniform: Annotated[nmse.cTkMaterialUniform_UInt, 0x8]
+
+
+@partial_struct
+class cEgMaterialSampler(Structure):
+    _total_size_ = 0x68
+    msName: Annotated[basic.cTkFixedString0x20, 0x0]
+    mpTextureResource: Annotated[cTkTypedSmartResHandle[cEgTextureResource], 0x40]
+
+
 @partial_struct
 class cEgMaterialResource(cEgResource):
-    # Found by inspecting cEgMaterialResource in memory.
+    _total_size_ = 0x2C8
+    # Found in cEgMaterialResource::ParseNode
+    mShaderFlags: Annotated[int, Field(c_int16, 0x1CC)]
+    mMaterialClass: Annotated[int, Field(c_uint8, 0x1CF)]  # Technically enums.cTkMaterialClass
     mpShaderResource: Annotated[cTkTypedSmartResHandle[cEgShaderResource], 0x1D8]
+    # NOTE: The following types are actually ankerl::unordered_dense::table
+    # The data is stored in a std::vector but it looks like there is extra data afterwards for this type.
+    # DO NOT modify this vector as it will certainly break this data type.
+    maUniforms_float: Annotated[std.vector[cTkMaterialUniform_Float], 0x1F8]
+    maUniforms_uint: Annotated[std.vector[cTkMaterialUniform_UInt], 0x230]
+    mSamplers: Annotated[std.vector[cEgMaterialSampler], 0x268]
+
+    @function_hook("48 89 54 24 ? 48 89 4C 24 ? 55 41 54 41 55 41 56 48 8D AC 24")
+    def ParseNode(self, this: "_Pointer[cEgMaterialResource]", lData: nmse.cTkMaterialData) -> c_bool: ...
 
 
 @partial_struct
@@ -3240,14 +3409,78 @@ class cEgRenderer(cEgRendererBase):
     ) -> c_bool: ...
 
 
+class cEgStructureIndex(Structure):
+    miNumChildren: int
+    mbIsFirstChild: bool
+    mParentHandle: basic.TkHandle
+    miFirstChildIdx: int
+    miPrevSiblingIdx: int
+    miNextSiblingIdx: int
+
+    _fields_ = [
+        ("miNumChildren", c_uint32, 31),
+        ("mbIsFirstChild", c_uint32, 1),
+        ("mParentHandle", basic.TkHandle),
+        ("miFirstChildIdx", c_int32),
+        ("miPrevSiblingIdx", c_int32),
+        ("miNextSiblingIdx", c_int32),
+    ]
+
+
+class cEgSceneNodeFlags(Structure):
+    mbActive: bool
+    mbRenderable: bool
+    mbRenderableDescendents: bool
+    mbShadowOnly: bool
+    muShadowCascade: bool
+    mbRemoved: bool
+    mbShouldCull: bool
+    mbInstance: bool
+    mbSelfOrAncestorTransformDirty: bool
+    mbSelfOrDescendentAABBDirty: bool
+    mbUpdates: bool
+    mbAsyncUpdateRequested: bool
+    mbUpdatesAsync: bool
+    # mbLodUpdatesRequested: bool
+
+    # NOTE: This is the 4.13 representation and is no longer valid.
+    _fields_ = [
+        # bit      mask
+        ("mbActive", c_uint8, 1),  # 0.0 -> & 0x1
+        ("mbRenderable", c_uint8, 1),  # 0.1 -> & 0x2
+        ("mbRenderableDescendents", c_uint8, 1),  # 0.2 -> & 0x4
+        ("mbShadowOnly", c_uint8, 1),  # 0.3 -> & 0x8
+        ("muShadowCascade", c_uint8, 1),  # 0.4 -> & 0x10
+        ("mbRemoved", c_uint8, 1),  # 0.5 -> & 0x20
+        ("mbShouldCull", c_uint8, 1),  # 0.6 -> & 0x40
+        ("mbInstance", c_uint8, 1),  # 0.7 -> & 0x80
+        ("unknown1_0", c_uint8, 1),  # 1.0 -> & 0x1
+        ("unknown1_1", c_uint8, 1),  # 1.1 -> & 0x2
+        ("unknown1_2", c_uint8, 1),  # 1.2 -> & 0x4
+        # Found in cGcPlayerFreighterOwnership::ResetPlayerFreighterBase
+        ("mbSelfOrAncestorTransformDirty", c_uint8, 1),  # 1.3 -> & 0x8
+        # Found in cEgSceneNodeData::MarkSelfOrDescendentsAABBDirty
+        ("mbSelfOrDescendentAABBDirty", c_uint8, 1),  # 1.4 -> & 0x10
+        ("mbUpdates", c_uint8, 1),  # 1.5 -> & 0x20
+        ("mbAsyncUpdateRequested", c_uint8, 1),  # 1.6 -> & 0x40
+        ("mbUpdatesAsync", c_uint8, 1),  # 1.7 -> & 0x80
+        # ("mbLodUpdatesRequested", c_uint8, 1),           # 1.8 -> & 0x20
+    ]
+
+
 @partial_struct
 class cEgSceneNodeData(Structure):
     # These are found in a few Engine:: functions.
     mpRelativeTransformBuffer: Annotated[_Pointer[basic.cTkMatrix34], 0x48]
     mpPrevRelativeTransformBuffer: Annotated[_Pointer[basic.cTkMatrix34], 0x48]
+    # mpLocalBoundingBoxBuffer: Annotated[_Pointer[cEgBoundingBox], 0x58]
     mpAbsoluteTransformBuffer: Annotated[_Pointer[basic.cTkMatrix34], 0x60]
+    mpStructureBuffer: Annotated[_Pointer[cEgStructureIndex], 0x70]
+    # Found in cGcNGuiNodeInfo::Get just above the string " - Hidden"
+    mpFlagsBuffer: Annotated[_Pointer[cEgSceneNodeFlags], 0x78]
     mpSceneNodeBuffer: Annotated[_Pointer[_Pointer[cEgSceneNode]], 0x88]
     mpTypeBuffer: Annotated[_Pointer[c_uint8], 0x98]
+    mpMaterialPtrBuffer: Annotated[_Pointer[c_void_p], 0xC8]
     mpHandleToIndexBuffer: Annotated[_Pointer[c_int32], 0xD8]
     miCurFrame: Annotated[int, Field(c_int32, 0x210)]
 
@@ -3296,14 +3529,22 @@ class cGcPhotoModeUI(Structure):
 
 
 class cEgModules:
+    # Found in cEgModules::Initialise
     patt_mgpSceneManager = (
         "48 89 05 ? ? ? ? E8 ? ? ? ? 48 39 3D ? ? ? ? 75 ? B9 ? ? ? ? E8 ? ? ? ? 48 85 C0 74 ? 48 89 78 ? 40 "
         "88 78 ? 48 89 78 ? 40 88 78"
     )
     patt_mgpRenderer = "48 89 3D ? ? ? ? 48 83 C4 ? 5F C3 CC 89 54 24"
+    patt_mgpResourceManager = (
+        "48 89 05 ? ? ? ? 48 39 3D ? ? ? ? 75 ? B9 ? ? ? ? E8 ? ? ? ? 48 85 C0 74 ? 48 8B C8 E8 ? ? ? ? 48 "
+        "8B F8"
+    )
+    # The following isn't actually in here, but  will here for now...
+    patt_cTkMemoryManager = "48 8D 0D ? ? ? ? E8 ? ? ? ? E8 ? ? ? ? 80 3D"
     mgpSceneManager: _Pointer[cEgSceneManager]
     mgpResourceManager: _Pointer[cTkResourceManager]
     mgpRenderer: _Pointer[cEgRenderer]
+    mgpMemoryManager: _Pointer[cTkMemoryManager]
 
     def find_variables(self):
         patt_addr = find_pattern_in_binary(self.patt_mgpSceneManager, False)
@@ -3318,6 +3559,14 @@ class cEgModules:
             offset = c_uint32.from_address(start_addr + 3)
             mgpRenderer_offset = start_addr + offset.value + 7
             self.mgpRenderer = map_struct(mgpRenderer_offset, _Pointer[cEgRenderer])
+        patt_addr = find_pattern_in_binary(self.patt_mgpResourceManager, False)
+        if patt_addr:
+            start_addr = BASE_ADDRESS + patt_addr
+            offset = c_uint32.from_address(start_addr + 3)
+            mgpResourceManager_offset = start_addr + offset.value + 7
+            self.mgpResourceManager = map_struct(mgpResourceManager_offset, _Pointer[cTkResourceManager])
+
+        self.mgpMemoryManager = map_struct(BASE_ADDRESS + 0x4B7FAE0, _Pointer[cTkMemoryManager])
 
     @static_function_hook("40 57 48 83 EC ? 33 FF 48 89 5C 24")
     @staticmethod

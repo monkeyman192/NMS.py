@@ -1333,5 +1333,70 @@
   "name": "cTkTexture::CreateEmptyTexture",
   "signature": "48 8B C4 44 89 48 ? 44 89 40 ? 88 50 ? 48 89 48",
   "mangled_name": "?CreateEmptyTexture@cTkTexture@@QEAAXW4eTkTextureType@@IIIIIW4eTextureAddressMode@@W4eTextureFilterMode@@I_N3333@Z"
+ },
+ {
+  "name": "cTkRigidBody::SetLinearVelocity",
+  "signature": "48 89 5C 24 ? 57 48 83 EC ? 41 0F B6 F8 48 8B D9 4C 8B 81 ? ? ? ? 49 83 B8 ? ? ? ? ? 75 ? 48 8B 81 ? ? ? ? 48 85 C0 0F 84 ? ? ? ? 80 08",
+  "mangled_name": "?SetLinearVelocity@cTkRigidBody@@QEAAXAEBVcTkVector3@@@Z"
+ },
+ {
+  "name": "cTkRigidBody::SetAngularVelocity",
+  "signature": "48 89 5C 24 ? 57 48 83 EC ? 41 0F B6 F8 48 8B D9 4C 8B 81 ? ? ? ? 49 83 B8 ? ? ? ? ? 75 ? 48 8B 81 ? ? ? ? 48 85 C0 0F 84 ? ? ? ? 0F 28 02",
+  "mangled_name": "?SetAngularVelocity@cTkRigidBody@@QEAAXAEBVcTkVector3@@@Z"
+ },
+ {
+  "name": "cGcSpaceshipComponent::Update",
+  "signature": "F3 0F 11 4C 24 ? 55 53 56 41 54 41 55",
+  "mangled_name": "?Update@cGcSpaceshipComponent@@UEAAXM@Z"
+ },
+ {
+  "name": "cGcSpaceshipComponent::UpdateControlled",
+  "signature": "F3 0F 11 4C 24 ? 55 53 56 57 41 54 41 57",
+  "mangled_name": "?UpdateControlled@cGcSpaceshipComponent@@AEAAXM@Z"
+ },
+ {
+  "name": "cGcSpaceshipComponent::GetVelocity",
+  "signature": "40 53 48 83 EC ? 48 8B 89 ? ? ? ? 48 8B DA 48 83 C1",
+  "mangled_name": "?GetVelocity@cGcSpaceshipComponent@@QEBA?AVcTkVector3@@XZ"
+ },
+ {
+  "name": "cEgMaterialResource::ParseNode",
+  "signature": "48 89 54 24 ? 48 89 4C 24 ? 55 41 54 41 55 41 56 48 8D AC 24",
+  "mangled_name": "?ParseNode@cEgMaterialResource@@EEAA_NAEAVcTkMaterialData@@@Z"
+ },
+ {
+  "name": "Engine::GetNodeParent",
+  "signature": "48 89 5C 24 ? 48 89 7C 24 ? 44 8B DA",
+  "mangled_name": "?GetNodeParent@Engine@@YA?AVTkHandle@@V2@@Z"
+ },
+ {
+  "name": "cTkResourceManager::GetDefaultResource",
+  "signature": "4C 89 44 24 ? 89 54 24 ? 53 55 56 57",
+  "mangled_name": "?GetDefaultResource@cTkResourceManager@@QEBAPEAVcTkResource@@HH@Z"
+ },
+ {
+  "name": "Engine::SetMaterialSampler",
+  "signature": "48 89 5C 24 ? 55 56 57 48 83 EC ? 4C 8B 0D",
+  "mangled_name": "?SetMaterialSampler@Engine@@YA_NU?$TkStrongType@HUTkResHandleID@TkStrongTypeIDs@@@@PEBD0@Z"
+ },
+ {
+  "name": "cEgTextureResource::LoadFromDds",
+  "signature": "44 89 4C 24 ? 48 89 54 24 ? 55 53 41 54",
+  "mangled_name": "?LoadFromDds@cEgTextureResource@@QEAA_NPEBD0HHHPEAIHH@Z"
+ },
+ {
+  "name": "cTkMemoryManager::Free",
+  "signature": "48 85 D2 0F 84 ? ? ? ? 53 55",
+  "mangled_name": "?Free@cTkMemoryManager@@QEAAXPEAXH@Z"
+ },
+ {
+  "name": "cGcPlayerFreighterOwnership::ResetPlayerFreighterBase",
+  "signature": "48 89 5C 24 ? 48 89 74 24 ? 55 48 8D AC 24",
+  "mangled_name": "?ResetPlayerFreighterBase@cGcPlayerFreighterOwnership@@QEAA_NXZ"
+ },
+ {
+  "name": "cEgCodeResource::Load",
+  "signature": "48 89 5C 24 ? 48 89 4C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 49 63 F8",
+  "mangled_name": "?Load@cEgCodeResource@@UEAA_NPEBDH@Z"
  }
 ]

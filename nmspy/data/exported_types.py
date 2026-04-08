@@ -15065,10 +15065,10 @@ class cTkVertexElement(Structure):
 
     Instancing: Annotated[c_enum32[eInstancingEnum], 0x0]
     Type: Annotated[int, Field(ctypes.c_int32, 0x4)]
-    Normalise: Annotated[bytes, Field(ctypes.c_byte, 0x8)]
-    Offset: Annotated[bytes, Field(ctypes.c_byte, 0x9)]
-    SemanticID: Annotated[bytes, Field(ctypes.c_byte, 0xA)]
-    Size: Annotated[bytes, Field(ctypes.c_byte, 0xB)]
+    Normalise: Annotated[int, Field(ctypes.c_byte, 0x8)]
+    Offset: Annotated[int, Field(ctypes.c_byte, 0x9)]
+    SemanticID: Annotated[int, Field(ctypes.c_byte, 0xA)]
+    Size: Annotated[int, Field(ctypes.c_byte, 0xB)]
 
 
 @partial_struct
