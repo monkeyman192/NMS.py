@@ -23,6 +23,13 @@ def ruff_format(source: str) -> str:
     return result.stdout
 
 
+ENUM_SIZE_MAPPING = {
+    1: "c_enum8",
+    2: "c_enum16",
+    4: "c_enum32",
+}
+
+
 SIZE_MAPPING = {
     "undefined": 0,
     "bool": 1,
@@ -151,11 +158,14 @@ class FieldData(TypedDict):
     Array_Enum: Optional[list]
     HashMap: Optional[bool]
     GenericTypeArgs: Optional[list[Union[str, int]]]
+    Enum_DataSize: Optional[int]
+    Enum_IsFlag: Optional[bool]
+    Enum_Values: Optional[list]
 
 
 dirname = op.dirname(__file__)
 struct_data = op.join(dirname, "struct_data.json")
-ENUM_STRUCTS = []
+ENUM_STRUCTS = {}
 NMSPY_DATA_DIR = op.realpath(op.join(dirname, "..", "nmspy", "data"))
 
 
@@ -304,13 +314,17 @@ def pythonise_type(class_name: str, field_info: FieldData, force_ctypes: bool = 
                                 # Just return because there can't be more than one generic arg in this case.
                                 return cst.SimpleString(value=f'"basic.{type_}[{gtype}]"')
                             if (ctype_val := CTYPES_MAPPING.get(gtype)) is not None:
-                                value = cst.Attribute(value=cst.Name(value="ctypes"), attr=cst.Name(value=ctype_val))
+                                value = cst.Attribute(
+                                    value=cst.Name(value="ctypes"), attr=cst.Name(value=ctype_val)
+                                )
                             elif gtype in BASIC_TYPES:
-                                value = cst.Attribute(value=cst.Name(value="basic"), attr=cst.Name(value=gtype))
+                                value = cst.Attribute(
+                                    value=cst.Name(value="basic"), attr=cst.Name(value=gtype)
+                                )
                             elif gtype in ENUM_STRUCTS:
-                                # Enums need to be wrapped in a c_enum32 generic type.
+                                # Enums need to be wrapped in a c_enum generic type.
                                 value = cst.Subscript(
-                                    value=cst.Name(value="c_enum32"),
+                                    value=cst.Name(value=ENUM_SIZE_MAPPING[ENUM_STRUCTS[gtype]]),
                                     slice=[
                                         cst.SubscriptElement(
                                             slice=cst.Index(
@@ -345,9 +359,9 @@ def pythonise_type(class_name: str, field_info: FieldData, force_ctypes: bool = 
                 )
             return obj
     elif type_ in ENUM_STRUCTS:
-        # Enums need to be wrapped in a c_enum32 generic type.
+        # Enums need to be wrapped in a c_enum generic type.
         obj = cst.Subscript(
-            value=cst.Name(value="c_enum32"),
+            value=cst.Name(value=ENUM_SIZE_MAPPING[ENUM_STRUCTS[type_]]),
             slice=[
                 cst.SubscriptElement(
                     slice=cst.Index(
@@ -367,10 +381,12 @@ def pythonise_type(class_name: str, field_info: FieldData, force_ctypes: bool = 
             )
         return obj
     elif type_ == "ENUM":
-        # For the inline enums, we need to create a c_enum32 like above, but with a
+        # For the inline enums, we need to create a c_enum like above, but with a
         # constructed name.
+        if (enum_size := field_info["Enum_DataSize"]) is None:
+            raise ValueError
         return cst.Subscript(
-            value=cst.Name(value="c_enum32"),
+            value=cst.Name(value=ENUM_SIZE_MAPPING[enum_size]),
             slice=[
                 cst.SubscriptElement(
                     slice=cst.Index(
@@ -539,7 +555,11 @@ def _extract_dependencies(fields: list[FieldData]) -> set[str]:
         if (gen_args := field.get("GenericTypeArgs")) is not None:
             for gen_arg in gen_args:
                 if isinstance(gen_arg, str):
-                    if gen_arg not in CTYPES_MAPPING and gen_arg not in BASIC_TYPES and gen_arg not in IGNORE_TYPES:
+                    if (
+                        gen_arg not in CTYPES_MAPPING
+                        and gen_arg not in BASIC_TYPES
+                        and gen_arg not in IGNORE_TYPES
+                    ):
                         dependencies.add(gen_arg)
     return dependencies
 
@@ -762,16 +782,19 @@ if __name__ == "__main__":
                     module=cst.Attribute(
                         value=cst.Attribute(
                             value=cst.Name(value="pymhf"),
-                            attr=cst.Name("utils")
+                            attr=cst.Name("extensions")
                         ),
-                        attr=cst.Name(value="partial_struct")
+                        attr=cst.Name(value="ctypes")
                     ),
                     names=[
                         cst.ImportAlias(
-                            name=cst.Name(value="Field")
+                            name=cst.Name(value="c_enum8")
                         ),
                         cst.ImportAlias(
-                            name=cst.Name(value="partial_struct")
+                            name=cst.Name(value="c_enum16")
+                        ),
+                        cst.ImportAlias(
+                            name=cst.Name(value="c_enum32")
                         ),
                     ]
                 )
@@ -783,13 +806,16 @@ if __name__ == "__main__":
                     module=cst.Attribute(
                         value=cst.Attribute(
                             value=cst.Name(value="pymhf"),
-                            attr=cst.Name("extensions")
+                            attr=cst.Name("utils")
                         ),
-                        attr=cst.Name(value="ctypes")
+                        attr=cst.Name(value="partial_struct")
                     ),
                     names=[
                         cst.ImportAlias(
-                            name=cst.Name(value="c_enum32")
+                            name=cst.Name(value="Field")
+                        ),
+                        cst.ImportAlias(
+                            name=cst.Name(value="partial_struct")
                         ),
                     ]
                 )
@@ -841,7 +867,7 @@ if __name__ == "__main__":
     # Extract the list of structs which are in the enums module
     for struct in struct_data:
         if struct.get("EnumClass") is True:
-            ENUM_STRUCTS.append(struct["Name"])
+            ENUM_STRUCTS[struct["Name"]] = struct["Fields"][0]["Enum_DataSize"]
 
     for struct in struct_data:
         name = struct["Name"]

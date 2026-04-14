@@ -88,7 +88,9 @@ def nvgTextBox(
     ...
 
 
-@static_function_hook("48 89 5C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 48 63 81 ? ? ? ? 48 8B D9 48 69 F8")
+@static_function_hook(
+    "48 89 5C 24 ? 57 48 81 EC ? ? ? ? 48 63 81 ? ? ? ? 48 8B D9 48 69 F8 ? ? ? ? 0F 10 44 0F"
+)
 def nvgFill(ctx: ctypes._Pointer[NVGcontext]): ...
 
 

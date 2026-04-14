@@ -813,6 +813,64 @@ class cGcAudioWwiseEvents(IntEnum):
     FRIGATE_LIVING_REVEAL = 0x4045C9B3
     FRIGATE_LIVING_TALK = 0x1E4E7B6
     FRIGATE_LIVING_WARPIN = 0x195615B7
+    GAMETABLE_BASIC_BARREN = 0xAAE6135B
+    GAMETABLE_BASIC_COLD = 0x5C91FCCF
+    GAMETABLE_BASIC_FIRE = 0x91C65F4D
+    GAMETABLE_BASIC_LUSH = 0xF518CFA1
+    GAMETABLE_BASIC_MECH = 0x80726EBA
+    GAMETABLE_BASIC_NORMAL = 0xC7504E2C
+    GAMETABLE_BASIC_RADIOACTIVE = 0x12FA0688
+    GAMETABLE_BASIC_TOXIC = 0x227BFD3A
+    GAMETABLE_BASIC_WEIRD = 0xCD277E50
+    GAMETABLE_BEGIN = 0x924B6617
+    GAMETABLE_BUFF_BARREN = 0x780D2454
+    GAMETABLE_BUFF_COLD = 0x68F7F6E4
+    GAMETABLE_BUFF_FIRE = 0xBE96DDDA
+    GAMETABLE_BUFF_LUSH = 0x2FFCEC4A
+    GAMETABLE_BUFF_MECH = 0x8454FBB1
+    GAMETABLE_BUFF_RADIOACTIVE = 0x5ED96C29
+    GAMETABLE_BUFF_TOXIC = 0x7035D777
+    GAMETABLE_BUFF_WEIRD = 0xB06D5779
+    GAMETABLE_DEBUFF_BARREN = 0xF517EFB
+    GAMETABLE_DEBUFF_COLD = 0xF139BA6F
+    GAMETABLE_DEBUFF_FIRE = 0x266E1CED
+    GAMETABLE_DEBUFF_LUSH = 0x89C08D41
+    GAMETABLE_DEBUFF_MECH = 0x151A2C5A
+    GAMETABLE_DEBUFF_RADIOACTIVE = 0x7DEE02A8
+    GAMETABLE_DEBUFF_TOXIC = 0xDFD6A25A
+    GAMETABLE_DEBUFF_WEIRD = 0x6EBB0570
+    GAMETABLE_DESTROYED = 0xE224A1D9
+    GAMETABLE_END = 0x101B4A17
+    GAMETABLE_HEAL = 0xBD172CAE
+    GAMETABLE_KO = 0x3360A92E
+    GAMETABLE_LAUNCH_BARREN = 0xC657B9A
+    GAMETABLE_LAUNCH_COLD = 0x26D531C2
+    GAMETABLE_LAUNCH_FIRE = 0x243998A8
+    GAMETABLE_LAUNCH_LUSH = 0xA0BFE634
+    GAMETABLE_LAUNCH_MECH = 0x2579E853
+    GAMETABLE_LAUNCH_NORMAL = 0x97D197AD
+    GAMETABLE_LAUNCH_RADIOACTIVE = 0x6D9FB3CB
+    GAMETABLE_LAUNCH_TOXIC = 0xD1355461
+    GAMETABLE_LAUNCH_WEIRD = 0x946A910B
+    GAMETABLE_PETSWAP = 0xBA211016
+    GAMETABLE_PROJECTILE_BARREN = 0x4DED2E6
+    GAMETABLE_PROJECTILE_COLD = 0x97F674F6
+    GAMETABLE_PROJECTILE_FIRE = 0xF454EFC4
+    GAMETABLE_PROJECTILE_LUSH = 0xB0F6F500
+    GAMETABLE_PROJECTILE_MECH = 0x3561450F
+    GAMETABLE_PROJECTILE_NORMAL = 0xBDADAE79
+    GAMETABLE_PROJECTILE_RADIOACTIVE = 0xCFED3F67
+    GAMETABLE_PROJECTILE_TOXIC = 0xD6FD45C5
+    GAMETABLE_PROJECTILE_WEIRD = 0xB7689AF7
+    GAMETABLE_REST = 0x5553A70A
+    GAMETABLE_SHIELD = 0x3EF51E53
+    GAMETABLE_SHIELDBREAK = 0x88C17964
+    GAMETABLE_START = 0x2BA66204
+    GAMETABLE_STING_LOSE = 0x8FAAE729
+    GAMETABLE_STING_WIN = 0x3624B094
+    GAMETABLE_STUN = 0xB8233A48
+    GAMETABLE_WIN = 0x10F8B9AA
+    GAMETABLE_YOURMOVE = 0x147A08E6
     GAS_BASTARD_POP = 0x3EA92568
     GEMCRYSTAL_COLLECT = 0xAC4DFF83
     GLITCHY_MONITOR = 0x1E04A85C
@@ -3033,9 +3091,11 @@ class cGcAudioWwiseRTPCs(IntEnum):
     COMMS_CHATTER_PIRATES = 0x54E82B11
     COMMS_CHATTER_POLICE = 0xD547E7BB
     CREATURE_EXISTENCE = 0xBBAE19A3
+    CREATURE_SIZE_PET_BATTLE = 0xB2C4DB29
     CREATURES_STEP_SIZE = 0xE1067D02
     DOPPLER_DROID_SMALL = 0x1F092F38
     GAMEOBJECT_DISTANCE = 0x8EB54518
+    GAMETABLE_DISTANCE_SCALE = 0x6C5F29D2
     GLOBAL_HAZARD_LEVEL = 0xFDD1B808
     GLOBAL_HEALTH_LEVEL = 0x2A61033E
     GLOBAL_SHIELD_LEVEL = 0xEA9FE763
@@ -3647,6 +3707,7 @@ class cGcCreaturePetRewardActions(IntEnum):
     Adopt = 0x6
     Milk = 0x7
     HarvestSpecial = 0x8
+    AddUnspentPetBattleLevel = 0x9
 
 
 class cGcCreaturePetTraits(IntEnum):
@@ -4112,6 +4173,8 @@ class cGcExperienceDebugTriggerActionTypes(IntEnum):
     SpawnBugQueen = 0x35
     RemoveAllFiendsAndBugs = 0x36
     WaterTransition = 0x37
+    HideUI = 0x38
+    ShowUI = 0x39
 
 
 class cGcFiendCrime(IntEnum):
@@ -4300,6 +4363,90 @@ class cGcGameMode(IntEnum):
     Ambient = 0x4
     Permadeath = 0x5
     Seasonal = 0x6
+
+
+class cGcGameTableAIDifficulty(IntEnum):
+    Easy = 0x0
+    Medium = 0x1
+    Hard = 0x2
+
+
+class cGcGameTableMode(IntEnum):
+    Undecided = 0x0
+    DiceGame = 0x1
+    PetBattler = 0x2
+
+
+class cGcGameTableNPCEventTrigger(IntEnum):
+    PlayerVictory = 0x0
+    PlayerResign = 0x1
+    PetKO = 0x2
+    PetSwitch = 0x3
+    PetRest = 0x4
+    PetUseMove = 0x5
+    PetAbilityCrit = 0x6
+    PetAbilityMiss = 0x7
+    PetDamaged = 0x8
+    PetHealed = 0x9
+
+
+class cGcGameTableNPCEventTriggerOwner(IntEnum):
+    Self = 0x0
+    Opponent = 0x1
+    AsSpectator = 0x2
+
+
+class cGcGameTablePetBattlerEvent(IntEnum):
+    OnBeforeTurnStart = 0x0
+    OnBeforeAction = 0x1
+    OnAfterAction = 0x2
+    OnAfterTurnEnd = 0x3
+    OnBuffAdded = 0x4
+    OnBuffRemoved = 0x5
+    OnBuffRemovedByHeal = 0x6
+    OnPetDied = 0x7
+    OnPetHealthChange = 0x8
+    OnPetReceivedPayload = 0x9
+
+
+class cGcGameTablePetStat(IntEnum):
+    Health = 0x0
+    MaxHealth = 0x1
+
+
+class cGcGameTablePetTag(IntEnum):
+    empty = 0x0
+    Arachnid = 0x1
+    Arthropod = 0x2
+    Biped = 0x4
+    Blob = 0x8
+    Bone = 0x10
+    Building = 0x20
+    Carnivore = 0x40
+    Claws = 0x80
+    Detritivore = 0x100
+    Eye = 0x200
+    Feline = 0x400
+    Flying = 0x800
+    Glowing = 0x1000
+    Ground = 0x2000
+    HasTail = 0x4000
+    Herbivore = 0x8000
+    Hexapod = 0x10000
+    Pincers = 0x20000
+    Plant = 0x40000
+    Pollinator = 0x80000
+    Quadruped = 0x100000
+    Reptile = 0x200000
+    Robotic = 0x400000
+    Roller = 0x800000
+    Saurian = 0x1000000
+    Shell = 0x2000000
+    Spike = 0x4000000
+    Stinger = 0x8000000
+    Stone = 0x10000000
+    Weird = 0x20000000
+    Worm = 0x40000000
 
 
 class cGcGenericIconTypes(IntEnum):
@@ -4850,6 +4997,7 @@ class cGcInteractionType(IntEnum):
     CorvetteMissionBoard = 0x98
     CargoDropTerminal = 0x99
     ScrapyardTerminal = 0x9A
+    GameTable = 0x9B
 
 
 class cGcInventoryClass(IntEnum):
@@ -5316,6 +5464,7 @@ class cGcMissionPageHint(IntEnum):
     Journey = 0xA
     Expedition = 0xB
     Options = 0xC
+    Pets = 0xD
 
 
 class cGcMissionType(IntEnum):
@@ -5475,7 +5624,8 @@ class cGcNPCInteractiveObjectType(IntEnum):
     WatchShip = 0x4
     Shop = 0x5
     Dance = 0x6
-    None_ = 0x7
+    SpectateGameTable = 0x7
+    None_ = 0x8
 
 
 class cGcNPCNavSubgraphNodeType(IntEnum):
@@ -5660,6 +5810,131 @@ class cGcPetAccessoryType(IntEnum):
     RightMechanicalPaw = 0x1B
     LeftMechanicalPaw = 0x1C
     MechanicalPaw = 0x1D
+
+
+class cGcPetBattlerAffinity(IntEnum):
+    Normal = 0x0
+    Lush = 0x1
+    Cold = 0x2
+    Fire = 0x3
+    Toxic = 0x4
+    Barren = 0x5
+    Radioactive = 0x6
+    Weird = 0x7
+    Mech = 0x8
+
+
+class cGcPetBattlerAffinityEffectiveness(IntEnum):
+    Ineffective = 0x0
+    Normal = 0x1
+    Effective = 0x2
+
+
+class cGcPetBattlerCoreStat(IntEnum):
+    MaxHealth = 0x0
+    Speed = 0x1
+    CombatPotential = 0x2
+
+
+class cGcPetBattlerHitQuality(IntEnum):
+    Miss = 0x0
+    Dodge = 0x1
+    Hit = 0x2
+
+
+class cGcPetBattlerIconStyle(IntEnum):
+    Speed = 0x0
+    Power = 0x1
+    Heal = 0x2
+    Accuracy = 0x3
+    Stealth = 0x4
+    Shield = 0x5
+    Attack = 0x6
+    Cooldown = 0x7
+
+
+class cGcPetBattlerMoveEffect(IntEnum):
+    None_ = 0x0
+    DamageNoProjectile = 0x1
+    Projectile = 0x2
+    Buff = 0x3
+    Debuff = 0x4
+    DoTDamage = 0x5
+    Heal = 0x6
+    Shield = 0x7
+    SwapPet = 0x8
+    Stun = 0x9
+
+
+class cGcPetBattlerMoveState(IntEnum):
+    None_ = 0x0
+    Idle = 0x1
+    KnockedOut = 0x2
+    PerformingMoveIntro = 0x3
+    PerformingMove = 0x4
+    PerformingMoveOutro = 0x5
+    PerformingMoveOutroMultiMove = 0x6
+    PostMovePause = 0x7
+    PostMovePauseMultiMove = 0x8
+
+
+class cGcPetBattlerPayloadBenefit(IntEnum):
+    Positive = 0x0
+    Negative = 0x1
+
+
+class cGcPetBattlerPayloadStrength(IntEnum):
+    VeryLight = 0x0
+    Light = 0x1
+    Medium = 0x2
+    Heavy = 0x3
+    VeryHeavy = 0x4
+
+
+class cGcPetBattlerProjectilePath(IntEnum):
+    Line = 0x0
+    Arc = 0x1
+    Instant = 0x2
+
+
+class cGcPetBattlerStat(IntEnum):
+    Health = 0x0
+    MaxHealth = 0x1
+    Speed = 0x2
+    Dodge = 0x3
+    CritChance = 0x4
+    HitChance = 0x5
+    DamageApplied = 0x6
+    DamageReduction = 0x7
+    DamageReflection = 0x8
+    DamageAbsorption = 0x9
+    CompleteDamageReduction = 0xA
+    CompleteDamageReflection = 0xB
+    CompleteDamageAbsorption = 0xC
+    BonusMoveChance = 0xD
+    RampDamageCharges = 0xE
+
+
+class cGcPetBattlerTarget(IntEnum):
+    Self = 0x0
+    TeamBenchMember = 0x1
+    RandomTeamBenchMember = 0x2
+    SplitAcrossTeamBench = 0x3
+    SplitAcrossAllTeam = 0x4
+    ActiveEnemy = 0x5
+    RandomEnemyBenchMember = 0x6
+    SplitAcrossEnemyBench = 0x7
+    SplitAcrossAllEnemies = 0x8
+
+
+class cGcPetBattlerVRPanel(IntEnum):
+    CombatLog = 0x0
+    LocalPlayer = 0x1
+    Opponent = 0x2
+    Actions = 0x3
+    OpponentActions = 0x4
+    MatchInfo = 0x5
+    Popup = 0x6
 
 
 class cGcPetBehaviours(IntEnum):
@@ -6284,6 +6559,16 @@ class cGcRealityGameIcons(IntEnum):
     StaffWeapon = 0x70
     CorvetteShip = 0x71
     InvalidShipBuild = 0x72
+    GeneIcon = 0x73
+    PetShop = 0x74
+    CClassBinocs = 0x75
+    BClassBinocs = 0x76
+    AClassBinocs = 0x77
+    SClassBinocs = 0x78
+    CClassSmall = 0x79
+    BClassSmall = 0x7A
+    AClassSmall = 0x7B
+    SClassSmall = 0x7C
 
 
 class cGcRealitySubstanceCategory(IntEnum):
@@ -6645,55 +6930,56 @@ class cGcScreenFilters(IntEnum):
     GBGrey = 0x20
     Binoculars = 0x21
     Surveying = 0x22
-    Nexus = 0x23
-    SpaceStation = 0x24
-    Freighter = 0x25
-    FreighterAbandoned = 0x26
-    Frigate = 0x27
-    MissionSurvey = 0x28
-    NewVibrant = 0x29
-    NewVibrantBright = 0x2A
-    NewVibrantWarm = 0x2B
-    NewVintageBright = 0x2C
-    NewVintageWash = 0x2D
-    Drama = 0x2E
-    MemoryBold = 0x2F
-    Memory = 0x30
-    MemoryWash = 0x31
-    Autumn = 0x32
-    AutumnFade = 0x33
-    ClassicBright = 0x34
-    Classic = 0x35
-    ClassicWash = 0x36
-    BlackAndWhiteDream = 0x37
-    ColourTouchB = 0x38
-    ColourTouchC = 0x39
-    NegativePrint = 0x3A
-    SepiaExtreme = 0x3B
-    Solarise = 0x3C
-    TwoToneStrong = 0x3D
-    TwoTone = 0x3E
-    Dramatic = 0x3F
-    Fuchsia = 0x40
-    Violet = 0x41
-    Cyan = 0x42
-    GreenNew = 0x43
-    AmberNew = 0x44
-    Red = 0x45
-    HueShiftA = 0x46
-    HueShiftB = 0x47
-    HueShiftC = 0x48
-    HueShiftD = 0x49
-    WarmStripe = 0x4A
-    NMSRetroA = 0x4B
-    NMSRetroB = 0x4C
-    NMSRetroC = 0x4D
-    NMSRetroD = 0x4E
-    NMSRetroE = 0x4F
-    NMSRetroF = 0x50
-    NMSRetroG = 0x51
-    CorruptSentinels = 0x52
-    DeepWater = 0x53
+    PetSurvey = 0x23
+    Nexus = 0x24
+    SpaceStation = 0x25
+    Freighter = 0x26
+    FreighterAbandoned = 0x27
+    Frigate = 0x28
+    MissionSurvey = 0x29
+    NewVibrant = 0x2A
+    NewVibrantBright = 0x2B
+    NewVibrantWarm = 0x2C
+    NewVintageBright = 0x2D
+    NewVintageWash = 0x2E
+    Drama = 0x2F
+    MemoryBold = 0x30
+    Memory = 0x31
+    MemoryWash = 0x32
+    Autumn = 0x33
+    AutumnFade = 0x34
+    ClassicBright = 0x35
+    Classic = 0x36
+    ClassicWash = 0x37
+    BlackAndWhiteDream = 0x38
+    ColourTouchB = 0x39
+    ColourTouchC = 0x3A
+    NegativePrint = 0x3B
+    SepiaExtreme = 0x3C
+    Solarise = 0x3D
+    TwoToneStrong = 0x3E
+    TwoTone = 0x3F
+    Dramatic = 0x40
+    Fuchsia = 0x41
+    Violet = 0x42
+    Cyan = 0x43
+    GreenNew = 0x44
+    AmberNew = 0x45
+    Red = 0x46
+    HueShiftA = 0x47
+    HueShiftB = 0x48
+    HueShiftC = 0x49
+    HueShiftD = 0x4A
+    WarmStripe = 0x4B
+    NMSRetroA = 0x4C
+    NMSRetroB = 0x4D
+    NMSRetroC = 0x4E
+    NMSRetroD = 0x4F
+    NMSRetroE = 0x50
+    NMSRetroF = 0x51
+    NMSRetroG = 0x52
+    CorruptSentinels = 0x53
+    DeepWater = 0x54
 
 
 class cGcSeasonEndRewardsRedemptionState(IntEnum):
@@ -8163,51 +8449,52 @@ class cTkMaterialClass(IntEnum):
     GunGlow = 0x17
     GunOpaque = 0x18
     Highlight = 0x19
-    HighlightDoubleSided = 0x1A
-    HighlightOccluded = 0x1B
-    HighlightOverlay = 0x1C
-    HighlightOverlayDoubleSided = 0x1D
-    HighlightTrans = 0x1E
-    HighlightTransDoubleSided = 0x1F
-    HighlightTransOccluded = 0x20
-    LensFlare = 0x21
-    LOD0 = 0x22
-    LOD1 = 0x23
-    LOD2 = 0x24
-    LOD3 = 0x25
-    Map = 0x26
-    MapTrans = 0x27
-    MeshWater = 0x28
-    NoZPass = 0x29
-    NoZTest = 0x2A
-    Opaque = 0x2B
-    OpaqueBeforeUI = 0x2C
-    PlaneSpot = 0x2D
-    PLANET = 0x2E
-    PlayerGunLaser = 0x2F
-    PlayerGunLaserCore = 0x30
-    Rainbow = 0x31
-    RedOcclusionHighlight = 0x32
-    ReflectionProbe = 0x33
-    Rings = 0x34
-    RingsAbove = 0x35
-    RingsAmid = 0x36
-    RingsBelow = 0x37
-    ScreenSpaceReflections = 0x38
-    ShadowOnly = 0x39
-    Sky = 0x3A
-    TeleportTravelMarker = 0x3B
-    Translucent = 0x3C
-    TranslucentPostScene = 0x3D
-    UI = 0x3E
-    UIScreen = 0x3F
-    UISurface = 0x40
-    Warp = 0x41
-    WarpInShip = 0x42
-    WarpOnFoot = 0x43
-    ExclusionVolumeOutsideSurface = 0x44
-    ExclusionVolumeConnectorSurface = 0x45
-    WhiteOcclusionHighlight = 0x46
+    HighlightAdditive = 0x1A
+    HighlightDoubleSided = 0x1B
+    HighlightOccluded = 0x1C
+    HighlightOverlay = 0x1D
+    HighlightOverlayDoubleSided = 0x1E
+    HighlightTrans = 0x1F
+    HighlightTransDoubleSided = 0x20
+    HighlightTransOccluded = 0x21
+    LensFlare = 0x22
+    LOD0 = 0x23
+    LOD1 = 0x24
+    LOD2 = 0x25
+    LOD3 = 0x26
+    Map = 0x27
+    MapTrans = 0x28
+    MeshWater = 0x29
+    NoZPass = 0x2A
+    NoZTest = 0x2B
+    Opaque = 0x2C
+    OpaqueBeforeUI = 0x2D
+    PlaneSpot = 0x2E
+    PLANET = 0x2F
+    PlayerGunLaser = 0x30
+    PlayerGunLaserCore = 0x31
+    Rainbow = 0x32
+    RedOcclusionHighlight = 0x33
+    ReflectionProbe = 0x34
+    Rings = 0x35
+    RingsAbove = 0x36
+    RingsAmid = 0x37
+    RingsBelow = 0x38
+    ScreenSpaceReflections = 0x39
+    ShadowOnly = 0x3A
+    Sky = 0x3B
+    TeleportTravelMarker = 0x3C
+    Translucent = 0x3D
+    TranslucentPostScene = 0x3E
+    UI = 0x3F
+    UIScreen = 0x40
+    UISurface = 0x41
+    Warp = 0x42
+    WarpInShip = 0x43
+    WarpOnFoot = 0x44
+    ExclusionVolumeOutsideSurface = 0x45
+    ExclusionVolumeConnectorSurface = 0x46
+    WhiteOcclusionHighlight = 0x47
 
 
 class cTkMaterialFlags(IntEnum):

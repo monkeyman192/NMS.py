@@ -1,0 +1,4 @@
+Could not rename cGcPersistentInteractionBuffer::SaveInteraction
+Could not rename cEgSceneGraphResource::ParseData
+Could not rename XMLNode::writeToFile
+Could not rename cTkFileSystem::Write
