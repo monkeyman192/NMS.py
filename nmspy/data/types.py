@@ -1260,15 +1260,17 @@ class cGcMarkerPoint(Structure):
     # Size found in the vector allocator in cGcMarkerList::TryAddMarker
     _total_size_ = 0x270
     # Found in cGcMarkerPoint::Reset
-    mPosition: Annotated[basic.cTkPhysRelVec3, 0x0]
-    mCenterOffset: Annotated[basic.Vector3f, 0x20]
-    mCustomName: Annotated[basic.cTkFixedString0x40, 0x38]
-    mCustomSubtitle: Annotated[basic.cTkFixedString0x80, 0x78]
-    mNode: Annotated[basic.TkHandle, 0x104]
-    mModelNode: Annotated[basic.TkHandle, 0x108]
+    # Note: These first 2 I'm not sure about...
+    mPosition: Annotated[basic.cTkPhysRelVec3, 0x20]
+    mCenterOffset: Annotated[basic.Vector3f, 0x40]
+    mCustomName: Annotated[basic.cTkFixedString0x40, 0x58]
+    mCustomSubtitle: Annotated[basic.cTkFixedString0x80, 0x98]
+    mNode: Annotated[basic.TkHandle, 0x124]
+    mModelNode: Annotated[basic.TkHandle, 0x128]
+    mEntranceNode: Annotated[basic.TkHandle, 0x12C]
     meBuildingClass: Annotated[
         c_enum32[enums.cGcBuildingClassification],
-        Field(c_enum32[enums.cGcBuildingClassification], 0x118),
+        Field(c_enum32[enums.cGcBuildingClassification], 0x138),
     ]
 
     @static_function_hook("40 53 48 83 EC ? 33 C0 0F 57 C0 0F 11 01 48 8B D9")
@@ -1340,18 +1342,26 @@ class cGcHUDManager(Structure):
 
 @partial_struct
 class cGcPlayerWeapon(Structure):
-    # Found in cGcPlayerWeapon::GetChargeFactor
-    mfChargeTime: Annotated[float, Field(c_float, 0x2338)]
-    # TODO: Fix these. They are wrong...
-    mfHeatTime: Annotated[float, Field(c_float, 0x24E0)]
-    maiAmmo: Annotated[list[int], Field(c_int32 * 19, 0x2590)]
-    mbCharging: Annotated[bool, Field(c_bool, 0x268E)]
+    # Found in cGcPlayerWeapon::GetChargeTime
+    meWeaponMode: Annotated[int, Field(c_uint32, 0xF6C)]
+    # Found in cGcPlayerWeapon::Update below the call to cGcPlayerState::GetStatValue with leStat = 6
+    mfHeatTime: Annotated[float, Field(c_float, 0x2310)]
+    mfCoolSpeed: Annotated[float, Field(c_float, 0x2318)]
+    mbOverheat: Annotated[bool, Field(c_bool, 0x231C)]
+    # The number here has probably changed...
+    maiAmmo: Annotated[list[int], Field(c_int32 * 19, 0x23F0)]
+    mbCharging: Annotated[bool, Field(c_bool, 0x24F6)]
+    mfChargeTime: Annotated[float, Field(c_float, 0x24F8)]
+    # Found above the call to cGcPlayerWeapon::GetChargeTime in cGcPlayerWeapon::Update
 
     @function_hook("48 83 EC ? 48 63 81 ? ? ? ? 83 F8")
     def GetChargeFactor(self, this: "_Pointer[cGcPlayerWeapon]") -> c_float: ...
 
     @function_hook("48 83 EC ? 48 63 91 ? ? ? ? 8B CA")
     def GetChargeTime(self, this: "_Pointer[cGcPlayerWeapon]") -> c_float: ...
+
+    @function_hook("F3 0F 11 4C 24 ? 55 56 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 80 79")
+    def Update(self, this: "_Pointer[cGcPlayerWeapon]", lfTimeStep: Annotated[float, c_float]): ...
 
 
 @partial_struct
@@ -2797,7 +2807,10 @@ class cGcNameGenerator(Structure):
     ): ...
 
 
+@partial_struct
 class cGcCreatureComponent(Structure):
+    mMarkerPoint: Annotated[cGcMarkerPoint, 0x170]
+
     @function_hook("48 8B C4 55 56 41 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 51")
     def Prepare(self, this: "_Pointer[cGcCreatureComponent]"): ...
 
@@ -2871,7 +2884,10 @@ class cGcPurchaseableItem(Structure):
     ): ...
 
 
+@partial_struct
 class cGcApplicationGameModeSelectorState(Structure):
+    mPhase: Annotated[int, Field(c_uint32, 0xA60)]  # ModeSelectorPhase::Enum
+
     @function_hook(
         "48 8B C4 55 53 56 57 41 54 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 48 8B F9"
     )
@@ -3267,7 +3283,7 @@ class cEgSceneNode(Structure):
     muNameHash: Annotated[int, Field(c_uint32, 0xC)]
     mResHandle: Annotated[cTkSmartResHandle, 0x10]
     muNetworkId: Annotated[int, Field(c_uint32, 0x14)]
-    msName: Annotated[cTkSharedPtr[c_char_p64], 0x18]
+    msName: Annotated[cTkSharedPtr[c_char_p64], 0x18]  # TODO: This should maybe be a basic.TkStd.tk_string?
     mpAltId: Annotated[cTkSharedPtr[cTkResourceDescriptor], 0x20]
 
 
@@ -3305,7 +3321,7 @@ class cTkMaterialUniform_UInt(Structure):
 @partial_struct
 class cEgMaterialSampler(Structure):
     _total_size_ = 0x68
-    msName: Annotated[basic.cTkFixedString0x20, 0x0]
+    msName: Annotated[basic.TkStd.tk_string, 0x0]
     mpTextureResource: Annotated[cTkTypedSmartResHandle[cEgTextureResource], 0x40]
 
 
@@ -3427,6 +3443,10 @@ class cEgRendererBase(Structure):
     ) -> c_char: ...
 
 
+class cEgPipelineCommand(Structure):
+    pass
+
+
 @partial_struct
 class cEgRenderer(cEgRendererBase):
     _total_size_ = 0x145A0
@@ -3484,7 +3504,7 @@ class cEgRenderer(cEgRendererBase):
         a17: c_void_p,  # unknown
         a18: Annotated[int, c_uint8],
         lbIsStereo: Annotated[bool, c_bool],
-        lpThreadRenderData: c_void_p,  # cEgThreadableRenderCall *
+        lpThreadRenderData: _Pointer[cEgThreadableRenderCall],
         lpShaderBinding: c_void_p,  # cEgShaderUniformBufferBinding *
     ) -> c_char: ...
 
@@ -3496,6 +3516,19 @@ class cEgRenderer(cEgRendererBase):
         lpGeometryResource: _Pointer[cEgGeometryResource],
         lpRenderStateCache: _Pointer[cTkRenderStateCache],
     ) -> c_bool: ...
+
+    @function_hook("4C 89 4C 24 ? 4C 89 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55 56 41 54 41 55")
+    def ExecutePipelineCommand(
+        self,
+        this: "_Pointer[cEgRenderer]",
+        lPipelineCommand: _Pointer[cEgPipelineCommand],
+        lpThreadRenderCall: _Pointer[cEgThreadableRenderCall],
+        lpcPipelineName: c_char_p64,
+        lpcPipelineStageName: c_char_p64,
+        lpFlowRunStack: c_void_p,  # cEgFlowRunStack *
+        lpOutCommandIdx: _Pointer[c_uint32],
+        lpOutRenderStateCache: _Pointer[cTkRenderStateCache],
+    ) -> c_uint64: ...
 
 
 class cEgStructureIndex(Structure):
@@ -3592,7 +3625,7 @@ class EgInstancedModelExtension:
             lbUseLightweightGeometry: Annotated[bool, c_bool],
             lbRenderStereo: Annotated[bool, c_bool],
             lpFrustum: c_void_p,  # const cEgFrustum *
-            lpThreadRenderData: c_void_p,  # cEgThreadableRenderCall *
+            lpThreadRenderData: _Pointer[cEgThreadableRenderCall],
         ): ...
 
 

@@ -790,9 +790,10 @@ if __name__ == "__main__":
                         cst.ImportAlias(
                             name=cst.Name(value="c_enum8")
                         ),
-                        cst.ImportAlias(
-                            name=cst.Name(value="c_enum16")
-                        ),
+                        # This is only needed if any of the 16bit enums are used. Currently none are.
+                        # cst.ImportAlias(
+                        #     name=cst.Name(value="c_enum16")
+                        # ),
                         cst.ImportAlias(
                             name=cst.Name(value="c_enum32")
                         ),

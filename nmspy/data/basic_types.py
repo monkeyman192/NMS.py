@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING, Any, Generator, Generic, Type, TypeVar, Union
 
 from pymhf.core.memutils import get_addressof, map_struct
 from pymhf.extensions.cpptypes import std
+from pymhf.extensions.ctypes import c_char_p64
 
 if TYPE_CHECKING:
     from ctypes import _Pointer
@@ -662,6 +663,36 @@ cTkBigPos = cTkPhysRelVec3
 # HG seems to have created their own version of c++ stdlib functions (I guess to assist with cross-platform
 # compiling so that they can reduce issues...)
 class TkStd:
+    # This should really be a std::string in pymhf.cpptypes. Putting it here for now until it can be added.
+    class tk_string(ctypes.Structure):
+        class _data(ctypes.Union):
+            class _ptr(ctypes.Structure):
+                _fields_ = [("value", c_char_p64), ("_padding", ctypes.c_ubyte * 0x8)]
+                value: c_char_p64
+
+            _fields_ = [("value", ctypes.c_char * 0x10), ("ptr", _ptr)]
+
+            value: bytes
+            ptr: _ptr
+
+        _fields_ = [
+            ("value", _data),
+            ("size", ctypes.c_uint64),
+            ("max_size", ctypes.c_uint64),
+        ]
+
+        value: _data
+        size: int
+        max_size: int
+
+        def __str__(self):
+            if self.size < 0x10:
+                # With SSO, the value is stored directly.
+                return self.value.value.decode()
+            else:
+                # In this case the string was too long so we follow the ptr.
+                return str(self.value.ptr.value)
+
     class tk_vector(ctypes.Structure, Generic[T]):
         _template_type: Type[T]
         _template_type_size: int
