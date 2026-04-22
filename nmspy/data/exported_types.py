@@ -5446,8 +5446,7 @@ class cGcMissionConditionIsDepotDestroyed(Structure):
 
 @partial_struct
 class cGcMissionConditionIsFirstPurpleSystemLocal(Structure):
-    _total_size_ = 0x10
-    DifferentGalaxyTeleporterMessage: Annotated[basic.VariableSizeString, 0x0]
+    _total_size_ = 0x1
 
 
 @partial_struct
