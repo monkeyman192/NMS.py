@@ -83,6 +83,10 @@ def extract_global_offsets(global_names: set[str]) -> dict[str, int]:
 
     offsets = {}
 
+    # TODO: Need to re-write this to get the globals in a different way.
+    # We can use the list of globals names and find them in memory, and then get the address of the global
+    # based on this as it's passed into a function just below a location where the string is referenced.
+
     # Unfortunately HG are not consistent with naming. This seems to get all of them though.
     re_strings = [
         rb"/(\w+)\.global\.mbin\x00",
@@ -149,7 +153,9 @@ class Globals:
     GcFreighterBaseGlobals: nms_types.cGcFreighterBaseGlobals
     GcGalaxyGlobals: nms_types.cGcGalaxyGlobals
     GcGameplayGlobals: nms_types.cGcGameplayGlobals
+    # GcGameTableGlobals: nms_types.cGcGameTableGlobals
     GcGraphicsGlobals: nms_types.cGcGraphicsGlobals
+    GcGravityGunGlobals: nms_types.cGcGravityGunGlobals
     GcMultiplayerGlobals: nms_types.cGcMultiplayerGlobals
     GcNavigationGlobals: nms_types.cGcNavigationGlobals
     GcPlacementGlobals: nms_types.cGcPlacementGlobals
@@ -196,7 +202,9 @@ class Globals:
         self.GcFreighterBaseGlobals = _map_struct(offsets, nms_types.cGcFreighterBaseGlobals)
         self.GcGalaxyGlobals = _map_struct(offsets, nms_types.cGcGalaxyGlobals)
         self.GcGameplayGlobals = _map_struct(offsets, nms_types.cGcGameplayGlobals)
+        # self.GcGameTableGlobals = _map_struct(offsets, nms_types.cGcGameTableGlobals)
         self.GcGraphicsGlobals = _map_struct(offsets, nms_types.cGcGraphicsGlobals)
+        self.GcGravityGunGlobals = _map_struct(offsets, nms_types.cGcGravityGunGlobals)
         self.GcMultiplayerGlobals = _map_struct(offsets, nms_types.cGcMultiplayerGlobals)
         self.GcNavigationGlobals = _map_struct(offsets, nms_types.cGcNavigationGlobals)
         self.GcPlacementGlobals = _map_struct(offsets, nms_types.cGcPlacementGlobals)
