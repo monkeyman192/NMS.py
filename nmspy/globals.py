@@ -6,6 +6,7 @@ from typing import Type, TypeVar, Union
 
 import pymhf.core.caching as cache
 from pymhf.core._internal import BASE_ADDRESS, BINARY_PATH
+from pymhf.core.memutils import map_struct
 from typing_extensions import get_type_hints
 
 import nmspy.data.exported_types as nms_types
@@ -202,7 +203,7 @@ class Globals:
         self.GcFreighterBaseGlobals = _map_struct(offsets, nms_types.cGcFreighterBaseGlobals)
         self.GcGalaxyGlobals = _map_struct(offsets, nms_types.cGcGalaxyGlobals)
         self.GcGameplayGlobals = _map_struct(offsets, nms_types.cGcGameplayGlobals)
-        # self.GcGameTableGlobals = _map_struct(offsets, nms_types.cGcGameTableGlobals)
+        self.GcGameTableGlobals = map_struct(BASE_ADDRESS + 0x4EB5ED0, nms_types.cGcGameTableGlobals)
         self.GcGraphicsGlobals = _map_struct(offsets, nms_types.cGcGraphicsGlobals)
         self.GcGravityGunGlobals = _map_struct(offsets, nms_types.cGcGravityGunGlobals)
         self.GcMultiplayerGlobals = _map_struct(offsets, nms_types.cGcMultiplayerGlobals)

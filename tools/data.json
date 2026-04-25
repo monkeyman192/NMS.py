@@ -1437,5 +1437,10 @@
   "name": "cGcEnvironment::Update",
   "signature": "40 56 48 81 EC ? ? ? ? 66 0F 6F 05",
   "mangled_name": "__ZN14cGcEnvironment6UpdateEf"
+ },
+ {
+  "name": "cGcPlayerState::LoadFromData",
+  "signature": "44 88 4C 24 ? 4C 89 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55 41 55",
+  "mangled_name": "?LoadFromData@cGcPlayerState@@QEAAXAEBVcGcPlayerStateData@@_N1@Z"
  }
 ]
