@@ -514,6 +514,13 @@ class cGcPlayerState(Structure):
     mShipInventoriesCargo: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0xC, 0x8BC8)]
     mShipInventoriesTechOnly: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0xC, 0xA728)]
 
+    # Found in cGcPlayerState::LoadFromData a little bit above the  POLICESHIP.SCENE.MBIN, a few lines above
+    # the assignment of something to 12LL.
+    mShipResources: Annotated[
+        tuple[nmse.cGcResourceElement, ...],
+        Field(nmse.cGcResourceElement * 0xC, 0x17A10),
+    ]
+
     # Found in cGcPlayerShipOwnership::SpawnNewShip
     miPrimaryShip: Annotated[int, Field(c_uint32, 0x17DC0)]
 
@@ -580,6 +587,18 @@ class cGcPlayerState(Structure):
         "? 4C 89 60"
     )
     def SaveToData(self, this: "_Pointer[cGcPlayerState]", lData: _Pointer[nmse.cGcPlayerStateData]): ...
+
+    @function_hook("44 88 4C 24 ? 4C 89 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55 41 55")
+    def LoadFromData(
+        self,
+        this: "_Pointer[cGcPlayerState]",
+        lData: _Pointer[nmse.cGcPlayerStateData],
+        a3: c_uint64,
+        lbNetworkClientLoad: Annotated[bool, c_bool],
+        lbIsLoadingForReset: Annotated[bool, c_bool],
+        a6: c_uint32,
+    ):
+        ...
 
 
 @partial_struct
