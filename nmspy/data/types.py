@@ -436,8 +436,7 @@ class cTkStopwatch(Structure):
 
 class cGcRealityManager(Structure):
     @function_hook(
-        "48 8B C4 48 89 48 ? 55 53 56 57 41 54 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 4C 89 68 ? 4C "
-        "8B F1"
+        "40 55 53 56 57 41 54 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 4C 8B F1"
     )
     def Construct(self, this: "_Pointer[cGcRealityManager]"): ...
 
@@ -452,7 +451,7 @@ class cGcRealityManager(Structure):
     ) -> c_uint64:  # cGcProductData *
         ...
 
-    @function_hook("4C 89 4C 24 ? 44 88 44 24 ? 48 89 4C 24")
+    @function_hook("4C 89 4C 24 ? 44 88 44 24 ? 48 89 4C 24 ? 55 56")
     def GenerateProceduralTechnology(
         self,
         this: "_Pointer[cGcRealityManager]",
@@ -514,7 +513,7 @@ class cGcPlayerState(Structure):
     mShipInventoriesCargo: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0xC, 0x8BC8)]
     mShipInventoriesTechOnly: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0xC, 0xA728)]
 
-    # Found in cGcPlayerState::LoadFromData a little bit above the  POLICESHIP.SCENE.MBIN, a few lines above
+    # Found in cGcPlayerState::LoadFromData a little bit above the POLICESHIP.SCENE.MBIN, a few lines above
     # the assignment of something to 12LL.
     mShipResources: Annotated[
         tuple[nmse.cGcResourceElement, ...],
@@ -525,8 +524,8 @@ class cGcPlayerState(Structure):
     miPrimaryShip: Annotated[int, Field(c_uint32, 0x17DC0)]
 
     # Found in cGcPlayerState::cGcPlayerState above the loop over something 5 times. Around line 220.
-    mPhotoModeSettings: Annotated[nmse.cGcPhotoModeSettings, 0x19FB0]
-    maTeleportEndpoints: Annotated[std.vector[nmse.cGcTeleportEndpoint], 0x1A000]
+    mPhotoModeSettings: Annotated[nmse.cGcPhotoModeSettings, 0x1A0D0]
+    maTeleportEndpoints: Annotated[std.vector[nmse.cGcTeleportEndpoint], 0x1A120]
     maCustomShipNames: Annotated[
         tuple[basic.cTkFixedString0x20, ...],
         Field(basic.cTkFixedString0x20 * 0xC, 0x1A283),
@@ -597,8 +596,7 @@ class cGcPlayerState(Structure):
         lbNetworkClientLoad: Annotated[bool, c_bool],
         lbIsLoadingForReset: Annotated[bool, c_bool],
         a6: c_uint32,
-    ):
-        ...
+    ): ...
 
 
 @partial_struct
@@ -662,9 +660,9 @@ class cGcPlayerShipOwnership(Structure):
     # Found in cGcPlayerShipOwnership::cGcPlayerShipOwnership
     mShips: Annotated[list[sGcShipData], Field(sGcShipData * 12, 0x60)]
     # Both these found at the top of cGcPlayerShipOwnership::UpdateMeshRefresh
-    mbShouldRefreshMesh: Annotated[bool, Field(c_bool, 0xA860)]
-    mMeshRefreshState: Annotated[int, Field(c_uint32, 0xA864)]
-    mRefreshSwapRes: Annotated[cTkSmartResHandle, 0xA868]
+    mbShouldRefreshMesh: Annotated[bool, Field(c_bool, 0xA870)]
+    mMeshRefreshState: Annotated[int, Field(c_uint32, 0xA874)]
+    mRefreshSwapRes: Annotated[cTkSmartResHandle, 0xA878]
 
 
 @partial_struct
@@ -864,24 +862,24 @@ class cGcPlayerSquadronOwnership(Structure):
 class cGcGameState(Structure):
     # Found in cGcGameState::cGcGameState
     mPlayerState: Annotated[cGcPlayerState, 0xAAD0]
-    mSavedSpawnState: Annotated[nmse.cGcPlayerSpawnStateData, 0xCE990]
-    mPlayerShipOwnership: Annotated[cGcPlayerShipOwnership, 0xCEA70]
-    mPlayerVehicleOwnership: Annotated[cGcPlayerVehicleOwnership, 0xD92E0]
-    mPlayerCreatureOwnership: Annotated[cGcPlayerCreatureOwnership, 0xD9A20]
-    mPlayerMultitoolOwnership: Annotated[cGcPlayerMultitoolOwnership, 0x29EBA0]
+    mSavedSpawnState: Annotated[nmse.cGcPlayerSpawnStateData, 0xCEAC0]
+    mPlayerShipOwnership: Annotated[cGcPlayerShipOwnership, 0xCEBA0]
+    mPlayerVehicleOwnership: Annotated[cGcPlayerVehicleOwnership, 0xD9420]
+    mPlayerCreatureOwnership: Annotated[cGcPlayerCreatureOwnership, 0xD9B60]
+    mPlayerMultitoolOwnership: Annotated[cGcPlayerMultitoolOwnership, 0x29ECE0]
     mPlayerFreighterOwnership: Annotated[
         tuple[cGcPlayerFreighterOwnership, ...],
-        Field(cGcPlayerFreighterOwnership * 4, 0x2A4C40),
+        Field(cGcPlayerFreighterOwnership * 4, 0x2A4D80),
     ]
     mPlayerFleetManager: Annotated[
         tuple[cGcPlayerFleetManager, ...],
-        Field(cGcPlayerFleetManager * 4, 0x2A5F40),
+        Field(cGcPlayerFleetManager * 4, 0x2A6080),
     ]
-    mPlayerSquadronOwnership: Annotated[cGcPlayerSquadronOwnership, 0x2B5E04]
+    mPlayerSquadronOwnership: Annotated[cGcPlayerSquadronOwnership, 0x2B5F44]
     # Found passed into cGcPersistentInteractionsManager::LoadGalacticAddressBuffers wherever it is called.
     # Need to subtract the offset of cGcGamestate from the address in the exe which is the pointer to the
     # start of cGcApplication::Data
-    mSavedInteractionsManager: Annotated[cGcPersistentInteractionsManager, 0x2FDC30]
+    mSavedInteractionsManager: Annotated[cGcPersistentInteractionsManager, 0x2FDD70]
 
     @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? C7 41")
     def cGcGameState(self, this: "_Pointer[cGcGameState]"): ...
@@ -947,16 +945,17 @@ class cGcPlayerController(Structure): ...
 @partial_struct
 class cGcPlayer(Structure):
     mRootNode: Annotated[basic.TkHandle, 0xE0]
+    mEquipmentNode: Annotated[basic.TkHandle, 0xE0]
     mPhysicsController: Annotated[_Pointer[cTkHavokCharacterController], 0x160]
     # Found in cGcPlayer::Prepare around where the number 0xFA83126E / -92073362 is
-    mbSpawned: Annotated[bool, Field(c_bool, 0x2F80)]
-    mbIsRunning: Annotated[bool, Field(c_bool, 0x2F82)]
-    mbIsAutoWalking: Annotated[bool, Field(c_bool, 0x2F88)]
-    mfJetpackTank: Annotated[float, Field(c_float, 0x3334)]
+    mbSpawned: Annotated[bool, Field(c_bool, 0x2FC0)]
+    mbIsRunning: Annotated[bool, Field(c_bool, 0x2FC2)]
+    mbIsAutoWalking: Annotated[bool, Field(c_bool, 0x2FC8)]
+    mfJetpackTank: Annotated[float, Field(c_float, 0x3374)]
     # Found Above the cGcPlayer::UpdateGraphics call in cGcPlayer::CheckFallenThroughFloor
-    mfAirTimer: Annotated[float, Field(c_float, 0x3370)]
-    mfStamina: Annotated[float, Field(c_float, 0x5110)]
-    mbIsDying: Annotated[bool, Field(c_bool, 0x51F0)]
+    mfAirTimer: Annotated[float, Field(c_float, 0x33B0)]
+    mfStamina: Annotated[float, Field(c_float, 0x5160)]
+    mbIsDying: Annotated[bool, Field(c_bool, 0x5240)]
 
     @function_hook("40 55 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B F9 48 8B 0D ? ? ? ? 83 B9")
     def CheckFallenThroughFloor(self, this: "_Pointer[cGcPlayer]"): ...
@@ -979,7 +978,7 @@ class cGcPlayer(Structure):
     @function_hook("40 53 48 83 EC 20 48 8B 1D ?? ?? ?? ?? E8 ?? ?? ?? ?? 83 78 10 05 75 ?? 48 8B")
     def GetDominantHand(self, this: "_Pointer[cGcPlayer]") -> c_int64: ...
 
-    @function_hook("48 8B C4 55 53 56 41 55")
+    @function_hook("48 8B C4 55 53 56 41 55 41 57")
     def Update(self, this: "_Pointer[cGcPlayer]", lfStep: Annotated[float, c_float]): ...
 
     @function_hook("48 8B C4 48 89 58 ? 48 89 70 ? 57 48 81 EC ? ? ? ? 0F 29 70 ? 0F B6 F2")
@@ -1079,7 +1078,7 @@ class cGcPlanet(Structure):
     @function_hook("48 8B C4 53 57 48 81 EC ? ? ? ? F3 0F 10 15")
     def UpdateClouds(self, this: "_Pointer[cGcPlanet]", lfTimeStep: Annotated[float, c_float]): ...
 
-    @function_hook("40 53 48 83 EC ? 83 B9 ? ? ? ? ? 48 8B D9 0F 29 74 24")
+    @function_hook("40 53 48 83 EC ? 83 B9 ? ? ? ? ? 48 8B D9 0F 29 74 24 ? 75")
     def UpdateGravity(
         self,
         this: "_Pointer[cGcPlanet]",
@@ -1124,8 +1123,7 @@ class cGcSolarSystem(Structure):
     ): ...
 
     @function_hook(
-        "48 8B C4 48 89 58 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? "
-        "4C 8D 35"
+        "48 8B C4 55 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 58 ? 48 89 70 ? 48 8B F1 48 89 78 ? 49 8B F8"
     )
     def Generate(
         self,
@@ -1134,7 +1132,7 @@ class cGcSolarSystem(Structure):
         lSeed: _Pointer[basic.GcSeed],
     ): ...
 
-    @function_hook("48 8B C4 55 53 56 41 54 41 56 48 8D 6C 24")
+    @function_hook("48 8B C4 55 53 56 41 55 41 56")
     def Update(self, this: "_Pointer[cGcSolarSystem]", lfTimeStep: Annotated[float, c_float]): ...
 
 
@@ -1177,7 +1175,7 @@ class cGcPlayerEnvironment(Structure):
 @partial_struct
 class cGcEnvironment(Structure):
     # Passed into cGcPlayerEnvironment::Update
-    mPlayerEnvironment: Annotated[cGcPlayerEnvironment, 0x8A0]
+    mPlayerEnvironment: Annotated[cGcPlayerEnvironment, 0x8B0]
 
     @function_hook(
         "48 8B C4 48 89 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 "
@@ -1206,12 +1204,12 @@ class cGcPlayerExperienceDirector(Structure):
 @partial_struct
 class cGcSimulation(Structure):
     # Found in cGcSimulation::Update. Passed into cGcEnvironment::Update.
-    mEnvironment: Annotated[cGcEnvironment, 0xAE100]
+    mEnvironment: Annotated[cGcEnvironment, 0xAC810]
     # Found in cGcSimulation::Update. Passed into cGcSolarSystem::Update.
-    mpSolarSystem: Annotated[_Pointer[cGcSolarSystem], 0x24F7F8]
-    mPlayerExperienceDirector: Annotated[cGcPlayerExperienceDirector, 0x24FE50]
+    mpSolarSystem: Annotated[_Pointer[cGcSolarSystem], 0x24DFE0]
+    mPlayerExperienceDirector: Annotated[cGcPlayerExperienceDirector, 0x24E640]
     # Found in cGcSimulation::Update. Passed into cGcPlayer::Update
-    mPlayer: Annotated[cGcPlayer, 0x250FE0]
+    mPlayer: Annotated[cGcPlayer, 0x24F590]
     # Found in cGcSimulation::Construct
     mSimulationRootNode: Annotated[basic.TkHandle, 0x256CA0]
 
@@ -1387,12 +1385,12 @@ class cGcPlayerWeapon(Structure):
 class cGcApplication(cTkFSM):
     @partial_struct
     class Data(Structure):
-        _total_size_ = 0x92AB10
+        _total_size_ = 0x92BD70
         # These are found in cGcApplication::Data::Data
         mRealityManager: Annotated[cGcRealityManager, 0x60]
-        mGameState: Annotated[cGcGameState, 0xE10]
-        mSimulation: Annotated[cGcSimulation, 0x4B2580]
-        mHUDManager: Annotated[cGcHUDManager, 0x7092E0]
+        mGameState: Annotated[cGcGameState, 0xE20]
+        mSimulation: Annotated[cGcSimulation, 0x4B28D0]
+        mHUDManager: Annotated[cGcHUDManager, 0x707C30]
 
         @function_hook(
             "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 33 ED 48 C7 41 ? ? ? ? "
@@ -1416,8 +1414,8 @@ class cGcApplication(cTkFSM):
     muPlayerSaveSlot: Annotated[int, Field(c_uint32, 0x40)]
     meGameMode: Annotated[int, Field(c_uint32, 0x44)]  # ePresetGameMode
     mbSavingEnabled: Annotated[bool, Field(c_bool, 0x4C)]
-    mbPaused: Annotated[bool, Field(c_bool, 0xB475)]
-    mbMultiplayerActive: Annotated[bool, Field(c_bool, 0xB478)]
+    mbPaused: Annotated[bool, Field(c_bool, 0xB4A5)]
+    mbMultiplayerActive: Annotated[bool, Field(c_bool, 0xB4A8)]
 
 
 class cGcBeamEffect(Structure):
@@ -3715,6 +3713,22 @@ class cEgModules:
 
 
 engine_modules = cEgModules()
+
+
+class cGcGalaxyMap(Structure):
+    class Data(Structure):
+        @function_hook(
+            "40 55 53 41 54 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 48 89 B4 24 ? ? ? ? 48 8B F1 "
+            "48 8B 0D"
+        )
+        def RenderNVG(
+            self,
+            this: "_Pointer[cGcGalaxyMap.Data]",
+            a2: c_int64,  # cTkNGuiInput *
+            a3: Annotated[bool, c_bool],
+        ):
+            pass
+
 
 # Dummy values to copy and paste to make adding new things quicker...
 # class name(Structure):
