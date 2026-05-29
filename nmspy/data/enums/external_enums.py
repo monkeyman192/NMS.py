@@ -24,6 +24,7 @@ class cGcAISpaceshipRoles(IntEnum):
     TinyFreighter = 0x5
     Frigate = 0x6
     Biggs = 0x7
+    SwarmDrone = 0x8
 
 
 class cGcAISpaceshipTypes(IntEnum):
@@ -34,6 +35,7 @@ class cGcAISpaceshipTypes(IntEnum):
     Freighter = 0x4
     PlayerSquadron = 0x5
     DefenceForce = 0x6
+    SwarmDrone = 0x7
 
 
 class cGcActionSetType(IntEnum):
@@ -553,6 +555,7 @@ class cGcAudioWwiseEvents(IntEnum):
     COWPOUNCE1 = 0x31C0A479
     COWROAR = 0xE2F1E4D6
     CRASHED_FREIGHTER = 0xA672C68C
+    CRASHED_SWARMDRONE_LP = 0xDE068FA9
     CRATE_WEAPON = 0x144B7049
     CRATE_WEAPON_CLOSE = 0x7ACC6D60
     CRATELOCKOPEN = 0xF7DED48F
@@ -663,6 +666,8 @@ class cGcAudioWwiseEvents(IntEnum):
     ENGINEREACTOR_OFF_IDLE = 0xF322160A
     EQUIP_DAMAGED = 0xF56C53BB
     EXOCRAFT_SUMMONING_STATION = 0x29EF00E2
+    EXPL_ATLAS = 0x621B0CCE
+    EXPL_ATLAS_BUILD = 0xF50A60A7
     EXPL_DEPOT = 0x14D13D39
     EXPL_ELECTRICAL_STUN = 0xCEDE2742
     EXPL_ELECTRICAL_STUN_STOP = 0x50AC08C1
@@ -678,6 +683,9 @@ class cGcAudioWwiseEvents(IntEnum):
     EXPL_FREIGHTER_CONTAINER_SMALL = 0x8ED7A637
     EXPL_FREIGHTER_ONE_SHOTS = 0x39897238
     EXPL_FREIGHTER_ROD = 0xFE15D955
+    EXPL_HIVE = 0x435FF09F
+    EXPL_HIVE_ARM = 0x597277C8
+    EXPL_HIVE_BUILDUP = 0x62FD8D1
     EXPL_NEWSTARSYSTEM = 0xD468363A
     EXPL_ROCK = 0xB5CC968E
     EXPL_SHIELD_GENERATOR = 0xA6A5B3D4
@@ -911,6 +919,17 @@ class cGcAudioWwiseEvents(IntEnum):
     HEATER_OFF = 0xD57B9408
     HEATER_ON = 0x4E481692
     HEXAGON = 0x66DC42F
+    HIVE_ARM_LASER_END = 0x1643EB26
+    HIVE_ARM_LASER_START = 0x4F4DD30D
+    HIVE_CLOSE = 0x18D150FA
+    HIVE_LASER_END = 0x1ECCFC1D
+    HIVE_LASER_START = 0xC14EC556
+    HIVE_OPEN = 0xBD83017E
+    HIVE_PREWARPIN = 0x7DC35F8A
+    HIVE_SMALL_WARPIN = 0xC1EFD785
+    HIVE_WARPIN = 0x9C10DBED
+    HIVE_WARPOUT = 0xA097B5F4
+    HIVE_WARPOUT_ELEC = 0xAC17FF94
     HOLOHUB_END = 0xCF84178C
     HOLOHUB_LADDER_END = 0x372BBD97
     HOLOHUB_LADDER_START = 0xEF70C184
@@ -1159,6 +1178,7 @@ class cGcAudioWwiseEvents(IntEnum):
     MUS_STORYMODE_MUSICCUE_32 = 0xBE2BDD26
     MUS_STORYMODE_MUSICCUE_33 = 0xBE2BDD27
     MUS_STORYMODE_STOPALL = 0x5519D8C5
+    MUS_SWARM_EXPEDITION = 0xF4D14C2F
     MUS_THE_APPEARANCE_OF_A_STAR_SYSTEM = 0x5EC79C9C
     MUS_TRUCKING = 0xD30E5DE
     MUS_TRUCKING_STOP = 0xE445EBD
@@ -1572,6 +1592,12 @@ class cGcAudioWwiseEvents(IntEnum):
     ORBIDLE_LOOP = 0xAAD2AC93
     PARTICLES_BIO_RECYCLE = 0xC173F983
     PARTICLES_BIO_WRONG = 0xCFDCADA3
+    PARTICLES_CRASHDRONE_JET_LP_STOP = 0x28CB8E1A
+    PARTICLES_CRASHDRONE_SMALLLIGHTGLOW = 0x27BB82B3
+    PARTICLES_CRASHDRONEDAMAGE = 0xC6F8D7B
+    PARTICLES_CRASHDRONEFIRE = 0x4C7CEE3C
+    PARTICLES_CRASHDRONEJET = 0x363900A5
+    PARTICLES_CRASHDRONESPARKS = 0x2C9D482E
     PARTICLES_DUSTDEVIL = 0x73BA60C9
     PARTICLES_DUSTDEVIL_STOP = 0x88C0177C
     PARTICLES_ELECTRICAL_SPARKS = 0xFC91F6C0
@@ -1583,8 +1609,10 @@ class cGcAudioWwiseEvents(IntEnum):
     PARTICLES_GEOTHERMAL = 0x3AC18629
     PARTICLES_GEOTHERMAL_EXPLODE = 0x2C5CFB0B
     PARTICLES_GEOTHERMAL_STOP = 0x509A891C
+    PARTICLES_GRAVITYGUN_ELECTRICAL = 0x5CE4B37E
     PARTICLES_GRAVITYINVERSION = 0xCC383C04
     PARTICLES_GRAVITYINVERSION_STOP = 0x3D3A9E63
+    PARTICLES_HIVE_ARM_ELEC = 0x22F384F8
     PARTICLES_INCINERATOR_MAIN = 0x3DD39CDD
     PARTICLES_LAVAVENT = 0xD8080D82
     PARTICLES_LAVAVENT_EXPLODE = 0xF72E024
@@ -2625,6 +2653,9 @@ class cGcAudioWwiseEvents(IntEnum):
     SUITBOOT_WEAPON = 0x19BC0505
     SUMMONSHIPBEACON_CLOSE = 0x8A5AA3F3
     SUMMONSHIPBEACON_OPEN = 0x96E60D05
+    SWARM_EXPEDITION_INITIALISATION_END = 0x28BCC0BB
+    SWARM_EXPEDITION_INITIALISATION_START = 0x92EFDE0
+    SWARM_HIVE_LP = 0xA0E3FB17
     TELEPORT = 0x1F992208
     TELEPORT_ACTIVATED_LOOP = 0xB794E78D
     TELEPORT_END = 0xDDE9F36E
@@ -2646,6 +2677,7 @@ class cGcAudioWwiseEvents(IntEnum):
     TERRAIN_CREATE = 0xA095FDCF
     TERRAIN_DESTROY = 0xD6350E47
     TERRAIN_UNDO = 0x1EEA9A75
+    TEST = 0xBC2C0BE9
     TIMBER_DOOR1_SETTLEMENT_CLOSE = 0x43A6512B
     TIMBER_DOOR1_SETTLEMENT_OPEN = 0x18A8586D
     TIMBER_DOOR2_SETTLEMENT_CLOSE = 0xCD38E81A
@@ -2745,6 +2777,7 @@ class cGcAudioWwiseEvents(IntEnum):
     UI_GAMEMODE_WARNING = 0x2FB112AC
     UI_GLITCHED_MEMORY = 0x608D8720
     UI_HEALTH_INCREASE = 0xD2D6DFE3
+    UI_HOSTILE_SWARM_APPROACHING = 0xAAA79D64
     UI_INCOMING_FRIGATE_LIVING_WARNING = 0xF9E01984
     UI_INCOMING_MESSAGE = 0x6A39A46E
     UI_INCOMING_NORMANDY_WARNING = 0x1EE13682
@@ -2811,6 +2844,7 @@ class cGcAudioWwiseEvents(IntEnum):
     UI_NPC_SHIP_INTERACTION = 0x3BAC3D09
     UI_OXYGEN_REPLENISHED = 0xBDCC5A4E
     UI_PAGE_CHANGE = 0xCC61961E
+    UI_PERSONALITYTEST_PAGECHANGE = 0x5C271198
     UI_PHOTOMODE_CAMERAPLACE_END = 0x84F4E2DA
     UI_PHOTOMODE_CAMERAPLACE_START = 0x48E446C9
     UI_PHOTOMODE_IN = 0x3C4C263
@@ -3173,6 +3207,7 @@ class cGcAudioWwiseRTPCs(IntEnum):
     SQUADRON_SHIPS = 0x199ACEC2
     STORM = 0x648999E0
     SUITVOICE_RMS = 0x8843E23
+    SWARM_INTRO_TONE = 0x56938EE7
     THEREMIN_PITCH = 0xD774D3B8
     THEREMIN_VOLUME = 0x26294964
     UI_VR_MENU = 0x2C7EDD8C
@@ -3483,6 +3518,7 @@ class cGcBuildingClassification(IntEnum):
     Settlement_Builders_RoboArm = 0x3B
     CargoDrop = 0x3C
     ScrapYard = 0x3D
+    Crashed_Swarm = 0x3E
 
 
 class cGcBuildingDensityLevels(IntEnum):
@@ -3610,6 +3646,12 @@ class cGcCombatTimerDifficultyOption(IntEnum):
     Slow = 0x1
     Normal = 0x2
     Fast = 0x3
+
+
+class cGcCommunityTeam(IntEnum):
+    Red = 0x0
+    Green = 0x1
+    Blue = 0x2
 
 
 class cGcCorvettePartCategory(IntEnum):
@@ -4067,6 +4109,7 @@ class cGcEncounterType(IntEnum):
     DroneHiveGuards = 0x6
     CorruptDronePillar = 0x7
     Fossil = 0x8
+    OnFootSwarm = 0x9
 
 
 class cGcEnergyDrainDifficultyOption(IntEnum):
@@ -4130,51 +4173,52 @@ class cGcExperienceDebugTriggerActionTypes(IntEnum):
     Mechs = 0xA
     SpaceBattle = 0xB
     PirateSpaceBattle = 0xC
-    ClearPirateSpaceBattle = 0xD
-    RespawnInShip = 0xE
-    DebugWalker = 0xF
-    DebugWalkerTitanFall = 0x10
-    SpawnNexus = 0x11
-    Freighters = 0x12
-    NPCs = 0x13
-    Sandworm = 0x14
-    SpacePOI = 0x15
-    BackgroundSpaceEncounter = 0x16
-    Creatures = 0x17
-    CameraPath = 0x18
-    SummonFleet = 0x19
-    SummonSquadron = 0x1A
-    ResetScene = 0x1B
-    ResetPlayerPos = 0x1C
-    CameraSpin = 0x1D
-    SpawnEnemyShips = 0x1E
-    PetHappy = 0x1F
-    PetSad = 0x20
-    PetFollow = 0x21
-    PetFollowClose = 0x22
-    PetRest = 0x23
-    PetNatural = 0x24
-    PetMine = 0x25
-    PetMineAndDeposit = 0x26
-    RidePet = 0x27
-    GhostShip = 0x28
-    Normandy = 0x29
-    LivingFrigate = 0x2A
-    UpgradeSettlement = 0x2B
-    SentinelFreighter = 0x2C
-    ClearSpacePolice = 0x2D
-    SpawnQuad = 0x2E
-    SpawnSpiderQuad = 0x2F
-    SpawnSpiderQuadMini = 0x30
-    SpawnDockedShips = 0x31
-    LaunchDockedShips = 0x32
-    StartStorm = 0x33
-    EndStorm = 0x34
-    SpawnBugQueen = 0x35
-    RemoveAllFiendsAndBugs = 0x36
-    WaterTransition = 0x37
-    HideUI = 0x38
-    ShowUI = 0x39
+    SwarmSpaceBattle = 0xD
+    ClearPirateSpaceBattle = 0xE
+    RespawnInShip = 0xF
+    DebugWalker = 0x10
+    DebugWalkerTitanFall = 0x11
+    SpawnNexus = 0x12
+    Freighters = 0x13
+    NPCs = 0x14
+    Sandworm = 0x15
+    SpacePOI = 0x16
+    BackgroundSpaceEncounter = 0x17
+    Creatures = 0x18
+    CameraPath = 0x19
+    SummonFleet = 0x1A
+    SummonSquadron = 0x1B
+    ResetScene = 0x1C
+    ResetPlayerPos = 0x1D
+    CameraSpin = 0x1E
+    SpawnEnemyShips = 0x1F
+    PetHappy = 0x20
+    PetSad = 0x21
+    PetFollow = 0x22
+    PetFollowClose = 0x23
+    PetRest = 0x24
+    PetNatural = 0x25
+    PetMine = 0x26
+    PetMineAndDeposit = 0x27
+    RidePet = 0x28
+    GhostShip = 0x29
+    Normandy = 0x2A
+    LivingFrigate = 0x2B
+    UpgradeSettlement = 0x2C
+    SentinelFreighter = 0x2D
+    ClearSpacePolice = 0x2E
+    SpawnQuad = 0x2F
+    SpawnSpiderQuad = 0x30
+    SpawnSpiderQuadMini = 0x31
+    SpawnDockedShips = 0x32
+    LaunchDockedShips = 0x33
+    StartStorm = 0x34
+    EndStorm = 0x35
+    SpawnBugQueen = 0x36
+    RemoveAllFiendsAndBugs = 0x37
+    WaterTransition = 0x38
+    HideUI = 0x39
+    ShowUI = 0x3A
 
 
 class cGcFiendCrime(IntEnum):
@@ -4266,6 +4310,7 @@ class cGcFrigateClass(IntEnum):
     DeepSpaceCommon = 0x7
     Pirate = 0x8
     GhostShip = 0x9
+    Swarm = 0xA
 
 
 class cGcFrigateFlybyType(IntEnum):
@@ -4336,6 +4381,7 @@ class cGcGalaxyStarAnomaly(IntEnum):
     AtlasStationFinal = 0x2
     BlackHole = 0x3
     MiniStation = 0x4
+    BackgroundSwarmHive = 0x5
 
 
 class cGcGalaxyStarTypes(IntEnum):
@@ -4509,6 +4555,36 @@ class cGcHologramType(IntEnum):
     PlayerCharacter = 0x1
     PlayerShip = 0x2
     PlayerMultiTool = 0x3
+
+
+class cGcHostileShipEncounterPhase(IntEnum):
+    Invalid = 0x0
+    PendingSpawn = 0x1
+    SpawnedPassive = 0x2
+    Engaged = 0x3
+    Retreating = 0x4
+    Resolved = 0x5
+    Complete = 0x6
+
+
+class cGcHostileShipEncounterResolution(IntEnum):
+    None_ = 0x0
+    HostilesDefeated = 0x1
+    HostilesEscaped = 0x2
+    HostilesDespawned = 0x3
+    HostilesSurrendered = 0x4
+    Aborted = 0x5
+
+
+class cGcHostileShipEncounterType(IntEnum):
+    None_ = 0x0
+    CargoAttack = 0x1
+    FreighterBattle = 0x2
+    Bounty = 0x3
+    PlanetaryRaid = 0x4
+    PlanetaryFlyBy = 0x5
+    SwarmDroneAttack = 0x6
+    Any = 0x7
 
 
 class cGcHotActionMenuTypes(IntEnum):
@@ -4998,6 +5074,7 @@ class cGcInteractionType(IntEnum):
     CargoDropTerminal = 0x99
     ScrapyardTerminal = 0x9A
     GameTable = 0x9B
+    CommunityTeamTrophy = 0x9C
 
 
 class cGcInventoryClass(IntEnum):
@@ -5399,6 +5476,13 @@ class cGcMissionConditionShipEngineStatus(IntEnum):
     Inverted = 0x7
     EnginesRepaired = 0x8
     PulsingToPlanet = 0x9
+    TakingOff = 0xA
+
+
+class cGcMissionConditionSwarmDroneEncounterStatus(IntEnum):
+    IsActive = 0x0
+    HasEngaged = 0x1
+    IsInactive = 0x2
 
 
 class cGcMissionConditionTest(IntEnum):
@@ -5501,6 +5585,9 @@ class cGcMissionType(IntEnum):
     CorvetteFeeding = 0x1E
     CorvetteGroundCombat = 0x1F
     CorvetteFiendKill = 0x20
+    SwarmCombat = 0x21
+    SwarmClean = 0x22
+    SwarmIntel = 0x23
 
 
 class cGcModelViews(IntEnum):
@@ -6050,6 +6137,7 @@ class cGcPhotoShip(IntEnum):
     Sail = 0x8
     Robot = 0x9
     Corvette = 0xA
+    SwarmDrone = 0xB
 
 
 class cGcPhysicsCollisionGroups(IntEnum):
@@ -6441,6 +6529,7 @@ class cGcRealityCommonFactions(IntEnum):
     Pirate = 0x2
     Police = 0x3
     Creature = 0x4
+    Swarm = 0x5
 
 
 class cGcRealityGameIcons(IntEnum):
@@ -6569,6 +6658,7 @@ class cGcRealityGameIcons(IntEnum):
     BClassSmall = 0x7A
     AClassSmall = 0x7B
     SClassSmall = 0x7C
+    SwarmDrone = 0x7D
 
 
 class cGcRealitySubstanceCategory(IntEnum):
@@ -6714,6 +6804,7 @@ class cGcRewardTeleport(IntEnum):
     ToBase = 0x1
     Station = 0x2
     Atlas = 0x3
+    WeirdPortalWarp = 0x4
 
 
 class cGcSaveContextQuery(IntEnum):
@@ -6885,6 +6976,8 @@ class cGcScannerIconTypes(IntEnum):
     BuriedFossil = 0x49
     BuriedFossilHazard = 0x4A
     GravityGunCargo = 0x4B
+    Swarm = 0x4C
+    SwarmHive = 0x4D
 
 
 class cGcScannerRechargeDifficultyOption(IntEnum):
@@ -7024,6 +7117,7 @@ class cGcSentinelTypes(IntEnum):
     FriendlyDrone = 0xA
     StoneMech = 0xB
     StoneFloater = 0xC
+    SwarmDrone = 0xD
 
 
 class cGcSettlementConstructionLevel(IntEnum):
@@ -7130,6 +7224,22 @@ class cGcSolarSystemLocatorTypes(IntEnum):
     Generic4 = 0x3
 
 
+class cGcSpaceBattleFlagshipType(IntEnum):
+    None_ = 0x0
+    Freighter = 0x1
+    AtlasStation = 0x2
+
+
+class cGcSpaceBattleType(IntEnum):
+    None_ = 0x0
+    PirateShipsEasy = 0x1
+    PirateShipsStandard = 0x2
+    PirateShipsHard = 0x3
+    PirateFreighter = 0x4
+    SwarmHiveAtlasScripted = 0x5
+    SwarmHiveAtlas = 0x6
+
+
 class cGcSpaceshipClasses(IntEnum):
     Freighter = 0x0
     Dropship = 0x1
@@ -7142,6 +7252,7 @@ class cGcSpaceshipClasses(IntEnum):
     Sail = 0x8
     Robot = 0x9
     Corvette = 0xA
+    SwarmDrone = 0xB
 
 
 class cGcSpaceshipSize(IntEnum):
@@ -7197,6 +7308,7 @@ class cGcStaticTag(IntEnum):
     ScrapyardToxBin = 0x20
     ScrapyardRadBin = 0x40
     ScrapyardExpBin = 0x80
+    TruckCargoSwarm = 0x100
 
 
 class cGcStatsAchievements(IntEnum):
@@ -7232,6 +7344,7 @@ class cGcStatsEnum(IntEnum):
     RUINS_LOOTED = 0x18
     STONE_KILLS = 0x19
     BIGGSDEBRIS_POI = 0x1A
+    SWARM_DEBRIS = 0x1B
 
 
 class cGcStatsOneShotTypes(IntEnum):
@@ -7470,14 +7583,15 @@ class cGcStatusMessageMissionMarkup(IntEnum):
     KillDepot = 0x7
     KillWorms = 0x8
     KillSpookSquids = 0x9
-    FeedCreature = 0xA
-    CollectBones = 0xB
-    CollectScrap = 0xC
-    Discover = 0xD
-    CollectSubstanceProduct = 0xE
-    Build = 0xF
-    Always = 0x10
-    None_ = 0x11
+    KillSwarm = 0xA
+    FeedCreature = 0xB
+    CollectBones = 0xC
+    CollectScrap = 0xD
+    Discover = 0xE
+    CollectSubstanceProduct = 0xF
+    Build = 0x10
+    Always = 0x11
+    None_ = 0x12
 
 
 class cGcSubstanceCollectionDifficultyOption(IntEnum):

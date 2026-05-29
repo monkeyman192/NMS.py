@@ -39,6 +39,7 @@ class NVGpaint(ctypes.Structure):
     ]
 
 
+# NOTE: Pattern not correct
 @static_function_hook("48 8B C4 48 89 58 ? 48 89 68 ? F3 0F 11 50")
 def nvgArc(
     ctx: ctypes._Pointer[NVGcontext],
@@ -92,6 +93,16 @@ def nvgTextBox(
     "48 89 5C 24 ? 57 48 81 EC ? ? ? ? 48 63 81 ? ? ? ? 48 8B D9 48 69 F8 ? ? ? ? 0F 10 44 0F"
 )
 def nvgFill(ctx: ctypes._Pointer[NVGcontext]): ...
+
+
+@static_function_hook("48 8B C4 55 48 8D 68 ? 48 81 EC ? ? ? ? F3 0F 10 6D")
+def nvgEllipse(
+    ctx: ctypes._Pointer[NVGcontext],
+    cx: ctypes.c_float,
+    cy: ctypes.c_float,
+    rx: ctypes.c_float,
+    ry: ctypes.c_float,
+): ...
 
 
 @static_function_hook("48 8B C4 48 83 EC ? 0F 28 E2")
