@@ -26,7 +26,7 @@ classifiers = [
 dependencies = [
   "pymhf[gui]>=0.2.3"
 ]
-version = "169265.0"
+version = "169922.0"
 
 [dependency-groups]
 dev = [
@@ -39,6 +39,9 @@ dev = [
 
 [tool.uv]
 python-preference = "only-system"
+environments = [
+  "sys_platform == 'win32'",
+]
 
 [[tool.uv.index]]
 name = "pypi_test"

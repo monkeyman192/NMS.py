@@ -74,7 +74,8 @@ class gravityManipulator(Mod):
         planet = this.contents
         self.state.planets.append(this.contents)
         biome = planet.mPlanetGenerationInputData.Biome
-        logger.info(f"Generated a {biome.name} Planet!")
+        pos = planet.mPosition
+        logger.info(f"Generated a {biome.name} Planet at ({pos.x}, {pos.y}, {pos.z})")
         logger.debug(f"Found {len(self.state.planets)} Planets So Far")
 
     @on_key_pressed("o")

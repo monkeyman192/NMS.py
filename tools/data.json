@@ -252,7 +252,7 @@
  },
  {
   "name": "cGcInteractionComponent::GiveReward",
-  "signature": "44 88 4C 24 ? 48 89 54 24 ? 53",
+  "signature": "44 88 4C 24 ? 44 88 44 24 ? 48 89 54 24 ? 53",
   "mangled_name": "?GiveReward@cGcInteractionComponent@@QEAA_NAEBVcGcAlienPuzzleOption@@_N1@Z"
  },
  {
@@ -1074,7 +1074,7 @@
  },
  {
   "name": "cGcPlayerCommunicator::Update",
-  "signature": "48 8B C4 55 53 56 41 55 41 56",
+  "signature": "F3 0F 11 4C 24 ? 4C 8B DC 55 56 49 8D AB",
   "mangled_name": "?Update@cGcPlayerCommunicator@@QEAAXM@Z"
  },
  {
@@ -1453,5 +1453,32 @@
   "name": "nvgEllipse",
   "signature": "48 8B C4 55 48 8D 68 ? 48 81 EC ? ? ? ? F3 0F 10 6D",
   "mangled_name": "nvgEllipse"
+ },
+ {
+  "name": "cGcInteractionComponent::DoInteractionEvent",
+  "signature": "40 55 41 55 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B F1",
+  "mangled_name": "?DoInteractionEvent@cGcInteractionComponent@@QEAAXW4eInteractionEvent@@@Z",
+  "unique_string": "INTRCT_BLOCK_USER_HEADER"
+ },
+ {
+  "name": "cGcInteractionComponent::GetInteractionData",
+  "signature": "40 53 48 83 EC ? 48 8B D9 48 8B 0D ? ? ? ? 8B 93",
+  "mangled_name": "?GetInteractionData@cGcInteractionComponent@@AEAAPEBVcGcInteractionData@@XZ"
+ },
+ {
+  "name": "cGcPlayerWanted::Update",
+  "signature": "48 8B C4 F3 0F 11 50 ? 48 89 50 ? 55 53",
+  "mangled_name": "?Update@cGcPlayerWanted@@QEAAXAEBVcTkVector3@@M@Z",
+  "unique_string": "LAST KNOWN PLAYER POS"
+ },
+ {
+  "name": "cGcGalaxyAttributeGenerator::ClassifyStarKeyAttributes",
+  "signature": "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 8B F9",
+  "mangled_name": "?ClassifyStarKeyAttributes@cGcGalaxyAttributeGenerator@@SAX_KAEAUStarSystemKeyAttributes@1@@Z"
+ },
+ {
+  "name": "cGcGalaxyAttributeGenerator::ClassifyStarKeyAttributes",
+  "signature": "48 89 5C 24 ? 66 89 54 24",
+  "mangled_name": "?ClassifyStarKeyAttributes@cGcGalaxyAttributeGenerator@@SAXAEAVcTkParallelRNG@@GAEAVcGcGalaxyVoxelAttributesData@@AEAUStarSystemKeyAttributes@1@_K@Z"
  }
 ]

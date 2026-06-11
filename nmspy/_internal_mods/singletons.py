@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from logging import getLogger
 
 from pymhf import Mod, ModState
+from pymhf.core._internal import BASE_ADDRESS
 from pymhf.core._types import DetourTime
 from pymhf.core.hooking import hook_manager, one_shot
 from pymhf.core.memutils import get_addressof, map_struct
@@ -34,7 +35,9 @@ class _INTERNAL_LoadSingletons(Mod):
     def fsm_state_change(self, this: ctypes._Pointer[nms.cTkFSM], *args):
         # One shot to instantiate the cGcApplication object.
         # This logic looks funny, but it's because the cGcApplication has cTkFSM as a base class.
-        gameData.GcApplication = map_struct(get_addressof(this), nms.cGcApplication)
+        addr = get_addressof(this)
+        logger.debug(f"cGcApplication found at 0x{addr:X} -> NMS+0x{addr - BASE_ADDRESS:X}")
+        gameData.GcApplication = map_struct(addr, nms.cGcApplication)
 
     @nms.cTkFSMState.StateChange.after
     def state_change(
