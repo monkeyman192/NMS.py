@@ -203,7 +203,7 @@ class Globals:
         self.GcFreighterBaseGlobals = _map_struct(offsets, nms_types.cGcFreighterBaseGlobals)
         self.GcGalaxyGlobals = _map_struct(offsets, nms_types.cGcGalaxyGlobals)
         self.GcGameplayGlobals = _map_struct(offsets, nms_types.cGcGameplayGlobals)
-        self.GcGameTableGlobals = map_struct(BASE_ADDRESS + 0x4EB5ED0, nms_types.cGcGameTableGlobals)
+        self.GcGameTableGlobals = map_struct(BASE_ADDRESS + 0x4F52C40, nms_types.cGcGameTableGlobals)
         self.GcGraphicsGlobals = _map_struct(offsets, nms_types.cGcGraphicsGlobals)
         self.GcGravityGunGlobals = _map_struct(offsets, nms_types.cGcGravityGunGlobals)
         self.GcMultiplayerGlobals = _map_struct(offsets, nms_types.cGcMultiplayerGlobals)

@@ -488,6 +488,26 @@ class cGcInventoryStore(Structure):
     def cGcInventoryStore(self, this: "_Pointer[cGcInventoryStore]"): ...
 
 
+class cGcUniverseAddressData(nmse.cGcUniverseAddressData):
+    @classmethod
+    def from_UA(cls, ua: int):
+        # TODO: Add
+        pass
+
+    def to_UA(self) -> int:
+        # Generate the Universe address 64 bit representation of this address.
+        iteration = min(self.RealityIndex, 0xFF)
+        solar_index = min(self.GalacticAddress.SolarSystemIndex, 0xFFF)
+        return (
+            (self.GalacticAddress.VoxelX & 0xFFF)
+            | ((self.GalacticAddress.VoxelZ & 0xFFF) << 12)
+            | ((self.GalacticAddress.VoxelY & 0xFF) << 24)
+            | (iteration << 32)
+            | (solar_index << 40)
+            | (self.GalacticAddress.PlanetIndex) << 52
+        )
+
+
 @partial_struct
 class cGcPlayerState(Structure):
     # Found at the top of cGcPlayerState::cGcPlayerState
@@ -712,16 +732,25 @@ class cGcPlayerFleetManager(Structure):
 
 @partial_struct
 class cGcGalacticVoxelCoordinate(Structure):
-    mX: Annotated[int, Field(c_uint16)]
-    mZ: Annotated[int, Field(c_uint16)]
-    mY: Annotated[int, Field(c_uint16)]
+    mX: Annotated[int, Field(c_int16)]
+    mZ: Annotated[int, Field(c_int16)]
+    mY: Annotated[int, Field(c_int16)]
     mbValid: Annotated[bool, Field(c_bool)]
+
+
+@partial_struct
+class cGcGalacticSolarSystemAddress(Structure):
+    mVoxelCoordinate: Annotated[cGcGalacticVoxelCoordinate, Field(cGcGalacticVoxelCoordinate)]
+    mSolarIndex: Annotated[int, Field(c_uint16)]
+    mIteration: Annotated[int, Field(c_uint16)]
 
 
 @partial_struct
 class sVisitedSystem(Structure):
     mVoxel: Annotated[cGcGalacticVoxelCoordinate, 0x0]
     miSystemIndex: Annotated[int, Field(c_int16, 0x8)]
+    # This value is actually storing the indexes of the planets.
+    # So a value of 0b1101 would mean you have visited planets 0, 2 and 3 (by index).
     miPlanetsVisited: Annotated[int, Field(c_uint16, 0xA)]
 
 
@@ -862,24 +891,24 @@ class cGcPlayerSquadronOwnership(Structure):
 class cGcGameState(Structure):
     # Found in cGcGameState::cGcGameState
     mPlayerState: Annotated[cGcPlayerState, 0xAAD0]
-    mSavedSpawnState: Annotated[nmse.cGcPlayerSpawnStateData, 0xCEAC0]
-    mPlayerShipOwnership: Annotated[cGcPlayerShipOwnership, 0xCEBA0]
-    mPlayerVehicleOwnership: Annotated[cGcPlayerVehicleOwnership, 0xD9420]
-    mPlayerCreatureOwnership: Annotated[cGcPlayerCreatureOwnership, 0xD9B60]
-    mPlayerMultitoolOwnership: Annotated[cGcPlayerMultitoolOwnership, 0x29ECE0]
+    mSavedSpawnState: Annotated[nmse.cGcPlayerSpawnStateData, 0xCEAD0]
+    mPlayerShipOwnership: Annotated[cGcPlayerShipOwnership, 0xCEBB0]
+    mPlayerVehicleOwnership: Annotated[cGcPlayerVehicleOwnership, 0xD9430]
+    mPlayerCreatureOwnership: Annotated[cGcPlayerCreatureOwnership, 0xD9B70]
+    mPlayerMultitoolOwnership: Annotated[cGcPlayerMultitoolOwnership, 0x29ECF0]
     mPlayerFreighterOwnership: Annotated[
         tuple[cGcPlayerFreighterOwnership, ...],
-        Field(cGcPlayerFreighterOwnership * 4, 0x2A4D80),
+        Field(cGcPlayerFreighterOwnership * 4, 0x2A4D90),
     ]
     mPlayerFleetManager: Annotated[
         tuple[cGcPlayerFleetManager, ...],
-        Field(cGcPlayerFleetManager * 4, 0x2A6080),
+        Field(cGcPlayerFleetManager * 4, 0x2A6090),
     ]
-    mPlayerSquadronOwnership: Annotated[cGcPlayerSquadronOwnership, 0x2B5F44]
+    mPlayerSquadronOwnership: Annotated[cGcPlayerSquadronOwnership, 0x2B5F54]
     # Found passed into cGcPersistentInteractionsManager::LoadGalacticAddressBuffers wherever it is called.
     # Need to subtract the offset of cGcGamestate from the address in the exe which is the pointer to the
     # start of cGcApplication::Data
-    mSavedInteractionsManager: Annotated[cGcPersistentInteractionsManager, 0x2FDD70]
+    mSavedInteractionsManager: Annotated[cGcPersistentInteractionsManager, 0x2FDD80]
 
     @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? C7 41")
     def cGcGameState(self, this: "_Pointer[cGcGameState]"): ...
@@ -943,6 +972,19 @@ class cGcPlayerController(Structure): ...
 
 
 @partial_struct
+class cGcPlayerCommunicator(Structure):
+    # Found in cGcPlayerCommunicator::Update passed into cGcInteractionComponent::FindFirstTypedComponent
+    mActiveNode: Annotated[basic.TkHandle, 0x78]
+
+    @function_hook("F3 0F 11 4C 24 ? 4C 8B DC 55 56 49 8D AB")
+    def Update(
+        self,
+        this: "_Pointer[cGcPlayerCommunicator]",
+        lfTimeStep: Annotated[float, c_float],
+    ): ...
+
+
+@partial_struct
 class cGcPlayer(Structure):
     mRootNode: Annotated[basic.TkHandle, 0xE0]
     mEquipmentNode: Annotated[basic.TkHandle, 0xE0]
@@ -956,6 +998,7 @@ class cGcPlayer(Structure):
     mfAirTimer: Annotated[float, Field(c_float, 0x33B0)]
     mfStamina: Annotated[float, Field(c_float, 0x5160)]
     mbIsDying: Annotated[bool, Field(c_bool, 0x5240)]
+    mCommunicator: Annotated[cGcPlayerCommunicator, 0x5420]
 
     @function_hook("40 55 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B F9 48 8B 0D ? ? ? ? 83 B9")
     def CheckFallenThroughFloor(self, this: "_Pointer[cGcPlayer]"): ...
@@ -1173,7 +1216,32 @@ class cGcPlayerEnvironment(Structure):
 
 
 @partial_struct
+class cGcSky(Structure):
+    eStormState = enums.eStormState
+
+    # Found in cGcSky::SetSunAngle
+    mSunDirection: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x500)]
+
+    @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 54 41 56 41 57 48 83 EC ? 4C 8B 15")
+    def SetStormState(self, this: "_Pointer[cGcSky]", leNewState: c_enum32[eStormState]): ...
+
+    @function_hook("40 53 48 83 EC ? 0F 28 C1 0F 29 7C 24 ? F3 0F 5E 05")
+    def SetSunAngle(self, this: "_Pointer[cGcSky]", lfAngle: Annotated[float, c_float]): ...
+
+    @function_hook(
+        "48 8B C4 48 89 58 ? 48 89 70 ? 55 57 41 54 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? "
+        "48 8B D9 0F 29 78 ? 44 0F 29 40"
+    )
+    def Update(self, this: "_Pointer[cGcSky]", lfTimeStep: Annotated[float, c_float]): ...
+
+    @function_hook("48 8B C4 53 48 81 EC ? ? ? ? 4C 8B 05 ? ? ? ? 48 8B D9")
+    def UpdateSunPosition(self, this: "_Pointer[cGcSky]", lfAngle: Annotated[float, c_float]): ...
+
+
+@partial_struct
 class cGcEnvironment(Structure):
+    # Passed into cGcSky::Update but offset includes the offset of cGcEnvironment.
+    mSky: Annotated[cGcSky, 0x10]
     # Passed into cGcPlayerEnvironment::Update
     mPlayerEnvironment: Annotated[cGcPlayerEnvironment, 0x8B0]
 
@@ -1206,10 +1274,10 @@ class cGcSimulation(Structure):
     # Found in cGcSimulation::Update. Passed into cGcEnvironment::Update.
     mEnvironment: Annotated[cGcEnvironment, 0xAC810]
     # Found in cGcSimulation::Update. Passed into cGcSolarSystem::Update.
-    mpSolarSystem: Annotated[_Pointer[cGcSolarSystem], 0x24DFE0]
-    mPlayerExperienceDirector: Annotated[cGcPlayerExperienceDirector, 0x24E640]
+    mpSolarSystem: Annotated[_Pointer[cGcSolarSystem], 0x24DFD0]
+    mPlayerExperienceDirector: Annotated[cGcPlayerExperienceDirector, 0x24E630]
     # Found in cGcSimulation::Update. Passed into cGcPlayer::Update
-    mPlayer: Annotated[cGcPlayer, 0x24F590]
+    mPlayer: Annotated[cGcPlayer, 0x24F580]
     # Found in cGcSimulation::Construct
     mSimulationRootNode: Annotated[basic.TkHandle, 0x256CA0]
 
@@ -1389,7 +1457,7 @@ class cGcApplication(cTkFSM):
         # These are found in cGcApplication::Data::Data
         mRealityManager: Annotated[cGcRealityManager, 0x60]
         mGameState: Annotated[cGcGameState, 0xE20]
-        mSimulation: Annotated[cGcSimulation, 0x4B28D0]
+        mSimulation: Annotated[cGcSimulation, 0x4B28E0]
         mHUDManager: Annotated[cGcHUDManager, 0x707C30]
 
         @function_hook(
@@ -2187,7 +2255,7 @@ class cGcDestructableComponent(Structure):
 class cGcInteractionComponent(Structure):
     mpData: Annotated[_Pointer[nmse.cGcInteractionComponentData], 0x30]
 
-    @function_hook("44 88 4C 24 ? 48 89 54 24 ? 53")
+    @function_hook("44 88 4C 24 ? 44 88 44 24 ? 48 89 54 24 ? 53")
     def GiveReward(
         self,
         this: "_Pointer[cGcInteractionComponent]",
@@ -2216,6 +2284,20 @@ class cGcInteractionComponent(Structure):
         lNodeHandle: basic.TkHandle,
         lbSameModelOnly: Annotated[bool, c_bool],
     ) -> c_uint64:  # cGcInteractionComponent *
+        ...
+
+    @function_hook("40 55 41 55 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B F1")
+    def DoInteractionEvent(
+        self,
+        this: "_Pointer[cGcInteractionComponent]",
+        leEvent: Annotated[int, c_uint32],  # eInteractionEvent
+    ): ...
+
+    @function_hook("40 53 48 83 EC ? 48 8B D9 48 8B 0D ? ? ? ? 8B 93")
+    def GetInteractionData(
+        self,
+        this: "_Pointer[cGcInteractionComponent]",
+    ) -> c_uint64:  # cGcInteractionData *
         ...
 
 
@@ -2327,29 +2409,6 @@ class cGcPlayerNotifications(Structure):
         lbShowMessageBackground: Annotated[bool, c_bool],
         lbShowIconGlow: Annotated[bool, c_bool],
     ): ...
-
-
-@partial_struct
-class cGcSky(Structure):
-    eStormState = enums.eStormState
-
-    # Found in cGcSky::SetSunAngle
-    mSunDirection: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x500)]
-
-    @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 54 41 56 41 57 48 83 EC ? 4C 8B 15")
-    def SetStormState(self, this: "_Pointer[cGcSky]", leNewState: c_enum32[eStormState]): ...
-
-    @function_hook("40 53 48 83 EC ? 0F 28 C1 0F 29 7C 24 ? F3 0F 5E 05")
-    def SetSunAngle(self, this: "_Pointer[cGcSky]", lfAngle: Annotated[float, c_float]): ...
-
-    @function_hook(
-        "48 8B C4 48 89 58 ? 48 89 70 ? 55 57 41 54 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? "
-        "48 8B D9 0F 29 78 ? 44 0F 29 40"
-    )
-    def Update(self, this: "_Pointer[cGcSky]", lfTimeStep: Annotated[float, c_float]): ...
-
-    @function_hook("48 8B C4 53 48 81 EC ? ? ? ? 4C 8B 05 ? ? ? ? 48 8B D9")
-    def UpdateSunPosition(self, this: "_Pointer[cGcSky]", lfAngle: Annotated[float, c_float]): ...
 
 
 class sTerrainEditData(Structure):
@@ -2754,7 +2813,41 @@ class cGcGalaxyStarAttributesData(nmse.cGcGalaxyStarAttributesData):
     def SetDefaults(self, this: "_Pointer[cGcGalaxyStarAttributesData]"): ...
 
 
+@partial_struct
+class cTkParallelRNG(Structure):
+    _k: Annotated[tuple[int, ...], Field(c_uint64 * 4, 0x0)]
+    _s: Annotated[tuple[int, ...], Field(c_uint64 * 4, 0x20)]
+    _o: Annotated[tuple[int, ...], Field(c_uint64 * 4, 0x40)]
+    _o_counter: Annotated[int, Field(c_uint16, 0x60)]
+
+
 class cGcGalaxyAttributeGenerator(Structure):
+    @partial_struct
+    class StarSystemKeyAttributes(Structure):
+        _total_size_ = 0x30
+        # These can all be found in cGcGalaxyAttributeGenerator::ClassifyStarKeyAttributes
+        meTradingClass: Annotated[
+            c_enum32[enums.cGcTradingClass],
+            Field(c_enum32[enums.cGcTradingClass], 0x0),
+        ]
+        meWealthClass: Annotated[c_enum32[enums.cGcWealthClass], Field(c_enum32[enums.cGcWealthClass], 0x4)]
+        meConflictLevel: Annotated[
+            c_enum32[enums.cGcPlayerConflictData],
+            Field(c_enum32[enums.cGcPlayerConflictData], 0x8),
+        ]
+        meRace: Annotated[c_enum32[enums.cGcAlienRace], Field(c_enum32[enums.cGcAlienRace], 0xC)]
+        meType: Annotated[c_enum32[enums.cGcGalaxyStarTypes], Field(c_enum32[enums.cGcGalaxyStarTypes], 0x10)]
+        # cGcGalaxyAttributeGenerator::StarSystemKeyAttributes::Tag
+        meTag: Annotated[int, Field(c_int32, 0x14)]
+        meAnomaly: Annotated[int, Field(c_uint32, 0x18)]  # Actually _BYTE[4]
+        muPlanetCount: Annotated[int, Field(c_uint32, 0x1C)]
+        muSafeStartPlanet: Annotated[int, Field(c_uint32, 0x20)]
+        mbAbandonedSystem: Annotated[bool, Field(c_bool, 0x24)]
+        mbIsPirateSystem: Annotated[bool, Field(c_bool, 0x25)]
+        muPrimePlanetCount: Annotated[int, Field(c_uint32, 0x28)]
+        mbUnknown0x2C: Annotated[bool, Field(c_bool, 0x2C)]
+        mbUnknown0x2D: Annotated[bool, Field(c_bool, 0x2D)]
+
     @static_function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F BF 41")
     @staticmethod
     def ClassifyVoxel(
@@ -2765,6 +2858,25 @@ class cGcGalaxyAttributeGenerator(Structure):
     @static_function_hook("48 89 54 24 ? 55 53 56 57 41 54 41 55 41 56 48 8B EC")
     @staticmethod
     def ClassifyStarSystem(lUA: c_uint64, lOutput: _Pointer[cGcGalaxyStarAttributesData]): ...
+
+    @static_function_hook(
+        "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 8B F9"
+    )
+    @staticmethod
+    def ClassifyStarKeyAttributes_Prep(lUA: c_uint64, lKeyAttributes: _Pointer[StarSystemKeyAttributes]):
+        # Prep function for the below one.
+        pass
+
+    @static_function_hook("48 89 5C 24 ? 66 89 54 24")
+    @staticmethod
+    def ClassifyStarKeyAttributes(
+        lIndexPrimedPRNG: _Pointer[cTkParallelRNG],
+        liSolarIndexInVoxel: Annotated[int, c_uint16],
+        lVoxelAttributes: _Pointer[cGcGalaxyVoxelAttributesData],
+        lKeyAttributes: _Pointer[StarSystemKeyAttributes],
+        lUA: Annotated[int, c_uint64],
+    ):
+        pass
 
 
 class cGcGalaxyVoxelData(Structure): ...
@@ -3269,19 +3381,6 @@ class cTkMetaDataXML(Structure):
 
 
 @partial_struct
-class cGcPlayerCommunicator(Structure):
-    # Found in cGcPlayerCommunicator::Update passed into cGcInteractionComponent::FindFirstTypedComponent
-    mActiveNode: Annotated[basic.TkHandle, 0x78]
-
-    @function_hook("F3 0F 11 4C 24 ? 4C 8B DC 55 57 49 8D AB ? ? ? ? 48 81 EC ? ? ? ? 8B 81")
-    def Update(
-        self,
-        this: "_Pointer[cGcPlayerCommunicator]",
-        lfTimeStep: Annotated[float, c_float],
-    ): ...
-
-
-@partial_struct
 class cGcNGuiNodeInfo(Structure):
     # Found in cGcNGuiNodeInfo::Get. It's the same as 4.13 other than the maChildren type...
     mNode: Annotated[basic.TkHandle, 0x8]
@@ -3728,6 +3827,16 @@ class cGcGalaxyMap(Structure):
             a3: Annotated[bool, c_bool],
         ):
             pass
+
+
+class cGcPlayerWanted(Structure):
+    @function_hook("48 8B C4 F3 0F 11 50 ? 48 89 50 ? 55 53")
+    def Update(
+        self,
+        this: "_Pointer[cGcPlayerWanted]",
+        lPlayerPos: _Pointer[basic.cTkVector3],
+        lfTimeStep: Annotated[float, c_float],
+    ): ...
 
 
 # Dummy values to copy and paste to make adding new things quicker...

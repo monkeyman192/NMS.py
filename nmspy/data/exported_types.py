@@ -5134,18 +5134,6 @@ class cGcMissionConditionFirstPurpleSystemValid(Structure):
 
 
 @partial_struct
-class cGcMissionConditionFlagshipBattleState(Structure):
-    _total_size_ = 0x8
-    AlliesBelowHealthPercentage: Annotated[int, Field(ctypes.c_int32, 0x0)]
-
-    class eBattleStateEnum(IntEnum):
-        AlliesDead = 0x0
-        AlliesBelowHealthPercentage = 0x1
-
-    BattleState: Annotated[c_enum32[eBattleStateEnum], 0x4]
-
-
-@partial_struct
 class cGcMissionConditionForceHideMultiplayer(Structure):
     _total_size_ = 0x1
 
@@ -5386,6 +5374,12 @@ class cGcMissionConditionHasSubstance(Structure):
 
 
 @partial_struct
+class cGcMissionConditionHasSwarmMissionsAvailable(Structure):
+    _total_size_ = 0x10
+    HasMainContextMessage: Annotated[basic.VariableSizeString, 0x0]
+
+
+@partial_struct
 class cGcMissionConditionHasTechnology(Structure):
     _total_size_ = 0x18
     Technology: Annotated[basic.TkID0x10, 0x0]
@@ -5497,8 +5491,9 @@ class cGcMissionConditionInventoryOpen(Structure):
 
 @partial_struct
 class cGcMissionConditionIsAnomalyLoaded(Structure):
-    _total_size_ = 0x4
+    _total_size_ = 0x8
     Anomaly: Annotated[c_enum32[enums.cGcGalaxyStarAnomaly], 0x0]
+    RequireCurrentlyInWorld: Annotated[bool, Field(ctypes.c_bool, 0x4)]
 
 
 @partial_struct
@@ -7185,13 +7180,14 @@ class cGcMissionSequenceWaitForSettlementMiniMission(Structure):
 
 @partial_struct
 class cGcMissionSequenceWaitForStat(Structure):
-    _total_size_ = 0x48
+    _total_size_ = 0x50
     DebugText: Annotated[basic.VariableSizeString, 0x0]
     Message: Annotated[basic.VariableSizeString, 0x10]
     Stat: Annotated[basic.TkID0x10, 0x20]
     StatGroup: Annotated[basic.TkID0x10, 0x30]
     Amount: Annotated[int, Field(ctypes.c_int32, 0x40)]
     AmountMax: Annotated[int, Field(ctypes.c_int32, 0x44)]
+    WriteProgressToMissionStat: Annotated[bool, Field(ctypes.c_bool, 0x48)]
 
 
 @partial_struct
@@ -9623,6 +9619,24 @@ class cGcRewardCompleteMission(Structure):
 class cGcRewardCompleteMultiMission(Structure):
     _total_size_ = 0x10
     Missions: Annotated[basic.cTkDynamicArray[basic.TkID0x10], 0x0]
+
+
+@partial_struct
+class cGcRewardConditionalUnlockSpecial(Structure):
+    _total_size_ = 0x60
+    Message: Annotated[basic.cTkFixedString0x20, 0x0]
+    MilestoneRewardOverrideText: Annotated[basic.cTkFixedString0x20, 0x20]
+    ID: Annotated[basic.TkID0x10, 0x40]
+
+    class eUnlockSpecialConditionEnum(IntEnum):
+        CommunityTeamWinner = 0x0
+
+    UnlockSpecialCondition: Annotated[c_enum32[eUnlockSpecialConditionEnum], 0x50]
+    FailIfAlreadyKnown: Annotated[bool, Field(ctypes.c_bool, 0x54)]
+    HideInSeasonRewards: Annotated[bool, Field(ctypes.c_bool, 0x55)]
+    ShowSpecialProductPopup: Annotated[bool, Field(ctypes.c_bool, 0x56)]
+    UnlockSeasonReward: Annotated[bool, Field(ctypes.c_bool, 0x57)]
+    UseSpecialFormatting: Annotated[bool, Field(ctypes.c_bool, 0x58)]
 
 
 @partial_struct
@@ -12126,6 +12140,11 @@ class cGcSwarmMonumentComponentData(Structure):
 
 
 @partial_struct
+class cGcSwarmWinnersStatueComponentData(Structure):
+    _total_size_ = 0x1
+
+
+@partial_struct
 class cGcSyncBufferSaveData(Structure):
     _total_size_ = 0x70
     SpaceAddress: Annotated[int, Field(ctypes.c_uint64, 0x0)]
@@ -12396,14 +12415,14 @@ class cGcTradingSupplyData(Structure):
 
 @partial_struct
 class cGcTriggerActionComponentData(Structure):
-    _total_size_ = 0x28
-    PersistentState: Annotated[basic.TkID0x10, 0x0]
-    States: Annotated[basic.cTkDynamicArray[cGcActionTriggerState], 0x10]
-    HideModel: Annotated[bool, Field(ctypes.c_bool, 0x20)]
-    LinkStateToBaseGrid: Annotated[bool, Field(ctypes.c_bool, 0x21)]
-    Persistent: Annotated[bool, Field(ctypes.c_bool, 0x22)]
-    ResetShotTimeOnStateChange: Annotated[bool, Field(ctypes.c_bool, 0x23)]
-    StartInactive: Annotated[bool, Field(ctypes.c_bool, 0x24)]
+    _total_size_ = 0x48
+    States: Annotated[basic.HashMap[cGcActionTriggerState], 0x0]
+    PersistentState: Annotated[basic.TkID0x10, 0x30]
+    HideModel: Annotated[bool, Field(ctypes.c_bool, 0x40)]
+    LinkStateToBaseGrid: Annotated[bool, Field(ctypes.c_bool, 0x41)]
+    Persistent: Annotated[bool, Field(ctypes.c_bool, 0x42)]
+    ResetShotTimeOnStateChange: Annotated[bool, Field(ctypes.c_bool, 0x43)]
+    StartInactive: Annotated[bool, Field(ctypes.c_bool, 0x44)]
 
 
 @partial_struct
@@ -20468,8 +20487,21 @@ class cGcMissionConditionFactionRank(Structure):
 
 
 @partial_struct
+class cGcMissionConditionFlagshipBattleState(Structure):
+    _total_size_ = 0xC
+    AlliesBelowHealthPercentage: Annotated[int, Field(ctypes.c_int32, 0x0)]
+
+    class eBattleStateEnum(IntEnum):
+        AlliesDead = 0x0
+        AlliesBelowHealthPercentage = 0x1
+
+    BattleState: Annotated[c_enum32[eBattleStateEnum], 0x4]
+    RequireSpecificSpaceBattleType: Annotated[c_enum32[enums.cGcSpaceBattleType], 0x8]
+
+
+@partial_struct
 class cGcMissionConditionFreighterBattle(Structure):
-    _total_size_ = 0x10
+    _total_size_ = 0x14
     FreighterBattleDistance: Annotated[int, Field(ctypes.c_int32, 0x0)]
 
     class eFreighterBattleStatusEnum(IntEnum):
@@ -20480,7 +20512,7 @@ class cGcMissionConditionFreighterBattle(Structure):
 
     FreighterBattleStatus: Annotated[c_enum32[eFreighterBattleStatusEnum], 0x4]
     FreighterBattleTest: Annotated[c_enum32[enums.cTkEqualityEnum], 0x8]
-    HostileFreighter: Annotated[bool, Field(ctypes.c_bool, 0xC)]
+    AllowedSpaceBattleTypes: Annotated[tuple[bool, ...], Field(ctypes.c_bool * 7, 0xC)]
 
 
 @partial_struct
@@ -22092,6 +22124,7 @@ class cGcPlayerDamageData(Structure):
     Damage: Annotated[float, Field(ctypes.c_float, 0xF0)]
     HazardDrain: Annotated[int, Field(ctypes.c_int32, 0xF4)]
     HitMessageAudio: Annotated[c_enum32[enums.cGcAudioWwiseEvents], 0xF8]
+    PlayerDamageMultiplier: Annotated[float, Field(ctypes.c_float, 0xFC)]
 
     class ePlayerDamageTypeEnum(IntEnum):
         Normal = 0x0
@@ -22100,13 +22133,13 @@ class cGcPlayerDamageData(Structure):
         Freeze = 0x3
         Scorch = 0x4
 
-    PlayerDamageType: Annotated[c_enum32[ePlayerDamageTypeEnum], 0xFC]
-    PushForce: Annotated[float, Field(ctypes.c_float, 0x100)]
-    TechDamageChance: Annotated[float, Field(ctypes.c_float, 0x104)]
-    AllowDeathInInteraction: Annotated[bool, Field(ctypes.c_bool, 0x108)]
-    DoFullDamageToSelf: Annotated[bool, Field(ctypes.c_bool, 0x109)]
-    ForceDamageInInteraction: Annotated[bool, Field(ctypes.c_bool, 0x10A)]
-    ShowTrackIcon: Annotated[bool, Field(ctypes.c_bool, 0x10B)]
+    PlayerDamageType: Annotated[c_enum32[ePlayerDamageTypeEnum], 0x100]
+    PushForce: Annotated[float, Field(ctypes.c_float, 0x104)]
+    TechDamageChance: Annotated[float, Field(ctypes.c_float, 0x108)]
+    AllowDeathInInteraction: Annotated[bool, Field(ctypes.c_bool, 0x10C)]
+    DoFullDamageToSelf: Annotated[bool, Field(ctypes.c_bool, 0x10D)]
+    ForceDamageInInteraction: Annotated[bool, Field(ctypes.c_bool, 0x10E)]
+    ShowTrackIcon: Annotated[bool, Field(ctypes.c_bool, 0x10F)]
 
 
 @partial_struct
@@ -22539,48 +22572,48 @@ class cGcRealityIcon(Structure):
 
 @partial_struct
 class cGcRealityIconTable(Structure):
-    _total_size_ = 0x1C80
-    GameIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 126, 0x0)]
-    BinocularDiscoveryIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 17, 0xBD0)]
-    ProductCategoryIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 11, 0xD68)]
-    MissionFactionIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 10, 0xE70)]
-    DiscoveryPageRaceIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 9, 0xF60)]
+    _total_size_ = 0x1C98
+    GameIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 127, 0x0)]
+    BinocularDiscoveryIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 17, 0xBE8)]
+    ProductCategoryIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 11, 0xD80)]
+    MissionFactionIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 10, 0xE88)]
+    DiscoveryPageRaceIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 9, 0xF78)]
     PetBattlerAffinityBinocsIcons: Annotated[
-        tuple[cTkTextureResource, ...], Field(cTkTextureResource * 9, 0x1038)
+        tuple[cTkTextureResource, ...], Field(cTkTextureResource * 9, 0x1050)
     ]
     PetBattlerAffinityBuffIcons: Annotated[
-        tuple[cTkTextureResource, ...], Field(cTkTextureResource * 9, 0x1110)
+        tuple[cTkTextureResource, ...], Field(cTkTextureResource * 9, 0x1128)
     ]
     PetBattlerAffinityDebuffIcons: Annotated[
-        tuple[cTkTextureResource, ...], Field(cTkTextureResource * 9, 0x11E8)
+        tuple[cTkTextureResource, ...], Field(cTkTextureResource * 9, 0x1200)
     ]
-    PetBattlerAffinityIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 9, 0x12C0)]
-    SubstanceCategoryIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 9, 0x1398)]
-    PetBattlerBGMoveIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 8, 0x1470)]
-    PetBattlerBuffMoveIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 8, 0x1530)]
-    PetBattlerCoreBuffIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 8, 0x15F0)]
+    PetBattlerAffinityIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 9, 0x12D8)]
+    SubstanceCategoryIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 9, 0x13B0)]
+    PetBattlerBGMoveIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 8, 0x1488)]
+    PetBattlerBuffMoveIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 8, 0x1548)]
+    PetBattlerCoreBuffIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 8, 0x1608)]
     PetBattlerCoreDebuffIcons: Annotated[
-        tuple[cTkTextureResource, ...], Field(cTkTextureResource * 8, 0x16B0)
+        tuple[cTkTextureResource, ...], Field(cTkTextureResource * 8, 0x16C8)
     ]
-    DifficultyPresetIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 7, 0x1770)]
+    DifficultyPresetIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 7, 0x1788)]
     DiscoveryPageTradingIcons: Annotated[
-        tuple[cTkTextureResource, ...], Field(cTkTextureResource * 7, 0x1818)
+        tuple[cTkTextureResource, ...], Field(cTkTextureResource * 7, 0x1830)
     ]
-    HazardIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 7, 0x18C0)]
-    HazardIconsHUD: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 7, 0x1968)]
-    OptionsUIHeaderIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 6, 0x1A10)]
-    InventoryFilterIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 5, 0x1AA0)]
-    DifficultyUIOptionIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 4, 0x1B18)]
+    HazardIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 7, 0x18D8)]
+    HazardIconsHUD: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 7, 0x1980)]
+    OptionsUIHeaderIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 6, 0x1A28)]
+    InventoryFilterIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 5, 0x1AB8)]
+    DifficultyUIOptionIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 4, 0x1B30)]
     DiscoveryPageConflictIcons: Annotated[
-        tuple[cTkTextureResource, ...], Field(cTkTextureResource * 4, 0x1B78)
+        tuple[cTkTextureResource, ...], Field(cTkTextureResource * 4, 0x1B90)
     ]
-    MissionDetailIcons: Annotated[basic.HashMap[cGcRealityIcon], 0x1BD8]
-    DiscoveryPageConflictUnknown: Annotated[cTkTextureResource, 0x1C08]
-    DiscoveryPageRaceUnknown: Annotated[cTkTextureResource, 0x1C20]
-    DiscoveryPageTradingUnknown: Annotated[cTkTextureResource, 0x1C38]
-    PlanetResourceIconLookups: Annotated[basic.cTkDynamicArray[cGcPlanetResourceIconLookup], 0x1C50]
-    RepairTechIcons: Annotated[basic.cTkDynamicArray[cTkTextureResource], 0x1C60]
-    TerrainIconLookups: Annotated[basic.cTkDynamicArray[cGcPlanetResourceIconLookup], 0x1C70]
+    MissionDetailIcons: Annotated[basic.HashMap[cGcRealityIcon], 0x1BF0]
+    DiscoveryPageConflictUnknown: Annotated[cTkTextureResource, 0x1C20]
+    DiscoveryPageRaceUnknown: Annotated[cTkTextureResource, 0x1C38]
+    DiscoveryPageTradingUnknown: Annotated[cTkTextureResource, 0x1C50]
+    PlanetResourceIconLookups: Annotated[basic.cTkDynamicArray[cGcPlanetResourceIconLookup], 0x1C68]
+    RepairTechIcons: Annotated[basic.cTkDynamicArray[cTkTextureResource], 0x1C78]
+    TerrainIconLookups: Annotated[basic.cTkDynamicArray[cGcPlanetResourceIconLookup], 0x1C88]
 
 
 @partial_struct
@@ -22725,8 +22758,10 @@ class cGcRewardOpenUnlockTree(Structure):
 
 @partial_struct
 class cGcRewardRepairTech(Structure):
-    _total_size_ = 0x4
-    Category: Annotated[c_enum32[enums.cGcTechnologyCategory], 0x0]
+    _total_size_ = 0x18
+    SpecificTechToRepair: Annotated[basic.TkID0x10, 0x0]
+    Category: Annotated[c_enum32[enums.cGcTechnologyCategory], 0x10]
+    ShowRepairMessage: Annotated[bool, Field(ctypes.c_bool, 0x14)]
 
 
 @partial_struct
@@ -22960,7 +22995,7 @@ class cGcScannerIcon(Structure):
 
 @partial_struct
 class cGcScannerIcons(Structure):
-    _total_size_ = 0x55C0
+    _total_size_ = 0x5600
     ScannableColours: Annotated[tuple[basic.Colour, ...], Field(basic.Colour * 78, 0x0)]
     NetworkFSPlayerColours: Annotated[tuple[basic.Colour, ...], Field(basic.Colour * 4, 0x4E0)]
     BuildingColour: Annotated[basic.Colour, 0x520]
@@ -23047,10 +23082,11 @@ class cGcScannerIcons(Structure):
     SettlementNPC: Annotated[cGcScannerIcon, 0x5438]
     Ship: Annotated[cGcScannerIcon, 0x5470]
     ShipSmall: Annotated[cGcScannerIcon, 0x54A8]
-    TaggedBuilding: Annotated[cGcScannerIcon, 0x54E0]
-    TaggedPlanet: Annotated[cGcScannerIcon, 0x5518]
-    TimedEvent: Annotated[cGcScannerIcon, 0x5550]
-    VehicleGeneric: Annotated[cGcScannerIcon, 0x5588]
+    SwarmHiveBattle: Annotated[cGcScannerIcon, 0x54E0]
+    TaggedBuilding: Annotated[cGcScannerIcon, 0x5518]
+    TaggedPlanet: Annotated[cGcScannerIcon, 0x5550]
+    TimedEvent: Annotated[cGcScannerIcon, 0x5588]
+    VehicleGeneric: Annotated[cGcScannerIcon, 0x55C0]
 
 
 @partial_struct
@@ -31853,18 +31889,19 @@ class cGcScanEventTable(Structure):
 
 @partial_struct
 class cGcSeasonStateData(Structure):
-    _total_size_ = 0x1C8
+    _total_size_ = 0x1D8
     SeasonTransferInventory: Annotated[cGcInventoryContainer, 0x0]
-    MilestoneValues: Annotated[basic.cTkDynamicArray[ctypes.c_float], 0x160]
-    ProtectedEvents: Annotated[basic.cTkDynamicArray[cGcUAProtectedLocations], 0x170]
-    RendezvousParticipants: Annotated[basic.cTkDynamicArray[cGcPlayerMissionParticipant], 0x180]
-    RendezvousUAs: Annotated[basic.cTkDynamicArray[ctypes.c_uint64], 0x190]
-    RewardCollected: Annotated[basic.cTkDynamicArray[ctypes.c_int16], 0x1A0]
-    EndRewardsRedemptionState: Annotated[c_enum32[enums.cGcSeasonEndRewardsRedemptionState], 0x1B0]
-    PinnedMilestone: Annotated[int, Field(ctypes.c_int32, 0x1B4)]
-    PinnedStage: Annotated[int, Field(ctypes.c_int32, 0x1B8)]
-    StateOnDeath: Annotated[c_enum32[enums.cGcSeasonSaveStateOnDeath], 0x1BC]
-    HasCollectedFinalReward: Annotated[bool, Field(ctypes.c_bool, 0x1C0)]
+    AdditionalProtectedUAs: Annotated[basic.cTkDynamicArray[ctypes.c_uint64], 0x160]
+    MilestoneValues: Annotated[basic.cTkDynamicArray[ctypes.c_float], 0x170]
+    ProtectedEvents: Annotated[basic.cTkDynamicArray[cGcUAProtectedLocations], 0x180]
+    RendezvousParticipants: Annotated[basic.cTkDynamicArray[cGcPlayerMissionParticipant], 0x190]
+    RendezvousUAs: Annotated[basic.cTkDynamicArray[ctypes.c_uint64], 0x1A0]
+    RewardCollected: Annotated[basic.cTkDynamicArray[ctypes.c_int16], 0x1B0]
+    EndRewardsRedemptionState: Annotated[c_enum32[enums.cGcSeasonEndRewardsRedemptionState], 0x1C0]
+    PinnedMilestone: Annotated[int, Field(ctypes.c_int32, 0x1C4)]
+    PinnedStage: Annotated[int, Field(ctypes.c_int32, 0x1C8)]
+    StateOnDeath: Annotated[c_enum32[enums.cGcSeasonSaveStateOnDeath], 0x1CC]
+    HasCollectedFinalReward: Annotated[bool, Field(ctypes.c_bool, 0x1D0)]
 
 
 @partial_struct
@@ -35771,107 +35808,107 @@ class cGcPulseEncounterSpawnTrader(Structure):
 
 @partial_struct
 class cGcRealityManagerData(Structure):
-    _total_size_ = 0x83F0
+    _total_size_ = 0x8400
     SubstanceCategoryColours: Annotated[tuple[basic.Colour, ...], Field(basic.Colour * 9, 0x0)]
     HazardColours: Annotated[tuple[basic.Colour, ...], Field(basic.Colour * 7, 0x90)]
     RarityColours: Annotated[tuple[basic.Colour, ...], Field(basic.Colour * 3, 0x100)]
     Icons: Annotated[cGcRealityIconTable, 0x130]
-    TradeSettings: Annotated[cGcTradeSettings, 0x1DB0]
-    StatCategoryIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 208, 0x3628)]
-    StatTechPackageIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 208, 0x49A8)]
-    MissionNameAdjectives: Annotated[tuple[cGcNumberedTextList, ...], Field(cGcNumberedTextList * 36, 0x5D28)]
-    MissionNameFormats: Annotated[tuple[cGcNumberedTextList, ...], Field(cGcNumberedTextList * 36, 0x6088)]
-    MissionNameNouns: Annotated[tuple[cGcNumberedTextList, ...], Field(cGcNumberedTextList * 36, 0x63E8)]
-    SubstanceSecondaryBiome: Annotated[cGcSubstanceSecondaryBiome, 0x6748]
-    ShipWeapons: Annotated[tuple[cGcShipWeaponData, ...], Field(cGcShipWeaponData * 7, 0x6968)]
-    PlayerWeapons: Annotated[tuple[cGcPlayerWeaponData, ...], Field(cGcPlayerWeaponData * 21, 0x6B28)]
+    TradeSettings: Annotated[cGcTradeSettings, 0x1DC8]
+    StatCategoryIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 208, 0x3640)]
+    StatTechPackageIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 208, 0x49C0)]
+    MissionNameAdjectives: Annotated[tuple[cGcNumberedTextList, ...], Field(cGcNumberedTextList * 36, 0x5D40)]
+    MissionNameFormats: Annotated[tuple[cGcNumberedTextList, ...], Field(cGcNumberedTextList * 36, 0x60A0)]
+    MissionNameNouns: Annotated[tuple[cGcNumberedTextList, ...], Field(cGcNumberedTextList * 36, 0x6400)]
+    SubstanceSecondaryBiome: Annotated[cGcSubstanceSecondaryBiome, 0x6760]
+    ShipWeapons: Annotated[tuple[cGcShipWeaponData, ...], Field(cGcShipWeaponData * 7, 0x6980)]
+    PlayerWeapons: Annotated[tuple[cGcPlayerWeaponData, ...], Field(cGcPlayerWeaponData * 21, 0x6B40)]
     FactionNames: Annotated[
-        tuple[basic.cTkFixedString0x20, ...], Field(basic.cTkFixedString0x20 * 10, 0x6C78)
+        tuple[basic.cTkFixedString0x20, ...], Field(basic.cTkFixedString0x20 * 10, 0x6C90)
     ]
-    RepShops: Annotated[tuple[cGcRepShopData, ...], Field(cGcRepShopData * 10, 0x6DB8)]
-    PlanetTechShops: Annotated[tuple[cGcTechList, ...], Field(cGcTechList * 17, 0x6EF8)]
-    FactionClients: Annotated[tuple[cGcNumberedTextList, ...], Field(cGcNumberedTextList * 10, 0x7008)]
-    SubstanceChargeIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 9, 0x70F8)]
-    MissionBoardRewardOptions: Annotated[tuple[cTkIdArray, ...], Field(cTkIdArray * 11, 0x71D0)]
-    FactionStandingIDs: Annotated[tuple[basic.TkID0x10, ...], Field(basic.TkID0x10 * 10, 0x7280)]
-    DefaultVehicleLoadout: Annotated[tuple[cTkIdArray, ...], Field(cTkIdArray * 7, 0x7320)]
-    Catalogues: Annotated[tuple[basic.VariableSizeString, ...], Field(basic.VariableSizeString * 5, 0x7390)]
-    Stats: Annotated[tuple[cGcStats, ...], Field(cGcStats * 5, 0x73E0)]
+    RepShops: Annotated[tuple[cGcRepShopData, ...], Field(cGcRepShopData * 10, 0x6DD0)]
+    PlanetTechShops: Annotated[tuple[cGcTechList, ...], Field(cGcTechList * 17, 0x6F10)]
+    FactionClients: Annotated[tuple[cGcNumberedTextList, ...], Field(cGcNumberedTextList * 10, 0x7020)]
+    SubstanceChargeIcons: Annotated[tuple[cTkTextureResource, ...], Field(cTkTextureResource * 9, 0x7110)]
+    MissionBoardRewardOptions: Annotated[tuple[cTkIdArray, ...], Field(cTkIdArray * 11, 0x71E8)]
+    FactionStandingIDs: Annotated[tuple[basic.TkID0x10, ...], Field(basic.TkID0x10 * 10, 0x7298)]
+    DefaultVehicleLoadout: Annotated[tuple[cTkIdArray, ...], Field(cTkIdArray * 7, 0x7338)]
+    Catalogues: Annotated[tuple[basic.VariableSizeString, ...], Field(basic.VariableSizeString * 5, 0x73A8)]
+    Stats: Annotated[tuple[cGcStats, ...], Field(cGcStats * 5, 0x73F8)]
     ProductTables: Annotated[
-        tuple[basic.VariableSizeString, ...], Field(basic.VariableSizeString * 3, 0x7430)
+        tuple[basic.VariableSizeString, ...], Field(basic.VariableSizeString * 3, 0x7448)
     ]
-    ShipCargoOnlyStartingLayout: Annotated[cGcInventoryLayout, 0x7460]
-    ShipStartingLayout: Annotated[cGcInventoryLayout, 0x7478]
-    ShipTechOnlyStartingLayout: Annotated[cGcInventoryLayout, 0x7490]
-    SuitCargoStartingSlotLayout: Annotated[cGcInventoryLayout, 0x74A8]
-    SuitStartingSlotLayout: Annotated[cGcInventoryLayout, 0x74C0]
-    SuitTechOnlyStartingSlotLayout: Annotated[cGcInventoryLayout, 0x74D8]
-    AlienPuzzleTables: Annotated[basic.cTkDynamicArray[basic.VariableSizeString], 0x74F0]
-    AlienWordsTable: Annotated[basic.VariableSizeString, 0x7500]
-    BaitDataTable: Annotated[basic.VariableSizeString, 0x7510]
-    BuilderMissionRewardOverrides: Annotated[basic.cTkDynamicArray[cGcRewardMissionOverride], 0x7520]
-    CombatEffectsTable: Annotated[basic.VariableSizeString, 0x7530]
-    ConsumableItemTable: Annotated[basic.VariableSizeString, 0x7540]
-    CostTable: Annotated[basic.VariableSizeString, 0x7550]
-    DamageMultiplierTable: Annotated[basic.cTkDynamicArray[cGcDamageMultiplierLookup], 0x7560]
-    DamageTable: Annotated[basic.VariableSizeString, 0x7570]
-    DialogClearanceTable: Annotated[basic.VariableSizeString, 0x7580]
-    DiscoveryRewardTable: Annotated[basic.VariableSizeString, 0x7590]
-    FiendCrimeSpawnTable: Annotated[basic.cTkDynamicArray[cGcFiendCrimeSpawnTable], 0x75A0]
-    FishDataTable: Annotated[basic.VariableSizeString, 0x75B0]
-    FreighterBaseItemPairs: Annotated[basic.cTkDynamicArray[cGcIDPair], 0x75C0]
-    FreighterCargoOptions: Annotated[basic.cTkDynamicArray[cGcFreighterCargoOption], 0x75D0]
-    GameTableDiceDataTable: Annotated[basic.VariableSizeString, 0x75E0]
-    HistoricalSeasonDataTable: Annotated[basic.VariableSizeString, 0x75F0]
-    InventoryTable: Annotated[basic.VariableSizeString, 0x7600]
-    ItemDescriptionOverrideTable: Annotated[basic.VariableSizeString, 0x7610]
-    LegacyItemConversionTable: Annotated[basic.VariableSizeString, 0x7620]
-    LegacyRepairTable: Annotated[basic.cTkDynamicArray[cTkRawID], 0x7630]
-    MaintenanceGroupsTable: Annotated[basic.VariableSizeString, 0x7640]
-    MaintenanceOverrideTable: Annotated[basic.VariableSizeString, 0x7650]
-    NeverOfferedForSale: Annotated[basic.cTkDynamicArray[basic.TkID0x10], 0x7660]
-    NeverSellableItems: Annotated[basic.cTkDynamicArray[basic.TkID0x10], 0x7670]
-    PetBattlerMoveSetsTable: Annotated[basic.VariableSizeString, 0x7680]
-    PetBattlerMovesTable: Annotated[basic.VariableSizeString, 0x7690]
-    PetShopItemTable: Annotated[basic.VariableSizeString, 0x76A0]
-    PirateStationExtraProds: Annotated[basic.cTkDynamicArray[basic.TkID0x10], 0x76B0]
-    PlayerWeaponPropertiesTable: Annotated[basic.VariableSizeString, 0x76C0]
-    ProceduralProductTable: Annotated[basic.VariableSizeString, 0x76D0]
-    ProceduralTechnologyTable: Annotated[basic.VariableSizeString, 0x76E0]
-    PurchaseableBuildingBlueprintsTable: Annotated[basic.VariableSizeString, 0x76F0]
-    PurchaseableSpecialsTable: Annotated[basic.VariableSizeString, 0x7700]
-    RecipeTable: Annotated[basic.VariableSizeString, 0x7710]
-    RewardTable: Annotated[basic.VariableSizeString, 0x7720]
-    SettlementPerksTable: Annotated[basic.VariableSizeString, 0x7730]
-    StationTechShops: Annotated[cGcTechList, 0x7740]
-    StatRewardsTable: Annotated[basic.VariableSizeString, 0x7750]
-    StoriesTable: Annotated[basic.VariableSizeString, 0x7760]
-    SubstanceSecondaryLookups: Annotated[basic.cTkDynamicArray[cGcSubstanceSecondaryLookup], 0x7770]
-    SubstanceTable: Annotated[basic.VariableSizeString, 0x7780]
-    SuitCargoUpgradePrices: Annotated[basic.cTkDynamicArray[ctypes.c_int32], 0x7790]
-    SuitTechOnlyUpgradePrices: Annotated[basic.cTkDynamicArray[ctypes.c_int32], 0x77A0]
-    SuitUpgradePrices: Annotated[basic.cTkDynamicArray[ctypes.c_int32], 0x77B0]
-    TechBoxTable: Annotated[basic.VariableSizeString, 0x77C0]
-    TechnologyTable: Annotated[basic.VariableSizeString, 0x77D0]
-    TradingClassDataTable: Annotated[basic.VariableSizeString, 0x77E0]
-    TradingCostTable: Annotated[basic.VariableSizeString, 0x77F0]
-    UnlockableItemTrees: Annotated[basic.VariableSizeString, 0x7800]
-    UnlockablePlatformRewardsTable: Annotated[basic.VariableSizeString, 0x7810]
-    UnlockableSeasonRewardsTable: Annotated[basic.VariableSizeString, 0x7820]
-    UnlockableTwitchRewardsTable: Annotated[basic.VariableSizeString, 0x7830]
-    FoodStatValues: Annotated[tuple[cGcMinMaxFloat, ...], Field(cGcMinMaxFloat * 208, 0x7840)]
+    ShipCargoOnlyStartingLayout: Annotated[cGcInventoryLayout, 0x7478]
+    ShipStartingLayout: Annotated[cGcInventoryLayout, 0x7490]
+    ShipTechOnlyStartingLayout: Annotated[cGcInventoryLayout, 0x74A8]
+    SuitCargoStartingSlotLayout: Annotated[cGcInventoryLayout, 0x74C0]
+    SuitStartingSlotLayout: Annotated[cGcInventoryLayout, 0x74D8]
+    SuitTechOnlyStartingSlotLayout: Annotated[cGcInventoryLayout, 0x74F0]
+    AlienPuzzleTables: Annotated[basic.cTkDynamicArray[basic.VariableSizeString], 0x7508]
+    AlienWordsTable: Annotated[basic.VariableSizeString, 0x7518]
+    BaitDataTable: Annotated[basic.VariableSizeString, 0x7528]
+    BuilderMissionRewardOverrides: Annotated[basic.cTkDynamicArray[cGcRewardMissionOverride], 0x7538]
+    CombatEffectsTable: Annotated[basic.VariableSizeString, 0x7548]
+    ConsumableItemTable: Annotated[basic.VariableSizeString, 0x7558]
+    CostTable: Annotated[basic.VariableSizeString, 0x7568]
+    DamageMultiplierTable: Annotated[basic.cTkDynamicArray[cGcDamageMultiplierLookup], 0x7578]
+    DamageTable: Annotated[basic.VariableSizeString, 0x7588]
+    DialogClearanceTable: Annotated[basic.VariableSizeString, 0x7598]
+    DiscoveryRewardTable: Annotated[basic.VariableSizeString, 0x75A8]
+    FiendCrimeSpawnTable: Annotated[basic.cTkDynamicArray[cGcFiendCrimeSpawnTable], 0x75B8]
+    FishDataTable: Annotated[basic.VariableSizeString, 0x75C8]
+    FreighterBaseItemPairs: Annotated[basic.cTkDynamicArray[cGcIDPair], 0x75D8]
+    FreighterCargoOptions: Annotated[basic.cTkDynamicArray[cGcFreighterCargoOption], 0x75E8]
+    GameTableDiceDataTable: Annotated[basic.VariableSizeString, 0x75F8]
+    HistoricalSeasonDataTable: Annotated[basic.VariableSizeString, 0x7608]
+    InventoryTable: Annotated[basic.VariableSizeString, 0x7618]
+    ItemDescriptionOverrideTable: Annotated[basic.VariableSizeString, 0x7628]
+    LegacyItemConversionTable: Annotated[basic.VariableSizeString, 0x7638]
+    LegacyRepairTable: Annotated[basic.cTkDynamicArray[cTkRawID], 0x7648]
+    MaintenanceGroupsTable: Annotated[basic.VariableSizeString, 0x7658]
+    MaintenanceOverrideTable: Annotated[basic.VariableSizeString, 0x7668]
+    NeverOfferedForSale: Annotated[basic.cTkDynamicArray[basic.TkID0x10], 0x7678]
+    NeverSellableItems: Annotated[basic.cTkDynamicArray[basic.TkID0x10], 0x7688]
+    PetBattlerMoveSetsTable: Annotated[basic.VariableSizeString, 0x7698]
+    PetBattlerMovesTable: Annotated[basic.VariableSizeString, 0x76A8]
+    PetShopItemTable: Annotated[basic.VariableSizeString, 0x76B8]
+    PirateStationExtraProds: Annotated[basic.cTkDynamicArray[basic.TkID0x10], 0x76C8]
+    PlayerWeaponPropertiesTable: Annotated[basic.VariableSizeString, 0x76D8]
+    ProceduralProductTable: Annotated[basic.VariableSizeString, 0x76E8]
+    ProceduralTechnologyTable: Annotated[basic.VariableSizeString, 0x76F8]
+    PurchaseableBuildingBlueprintsTable: Annotated[basic.VariableSizeString, 0x7708]
+    PurchaseableSpecialsTable: Annotated[basic.VariableSizeString, 0x7718]
+    RecipeTable: Annotated[basic.VariableSizeString, 0x7728]
+    RewardTable: Annotated[basic.VariableSizeString, 0x7738]
+    SettlementPerksTable: Annotated[basic.VariableSizeString, 0x7748]
+    StationTechShops: Annotated[cGcTechList, 0x7758]
+    StatRewardsTable: Annotated[basic.VariableSizeString, 0x7768]
+    StoriesTable: Annotated[basic.VariableSizeString, 0x7778]
+    SubstanceSecondaryLookups: Annotated[basic.cTkDynamicArray[cGcSubstanceSecondaryLookup], 0x7788]
+    SubstanceTable: Annotated[basic.VariableSizeString, 0x7798]
+    SuitCargoUpgradePrices: Annotated[basic.cTkDynamicArray[ctypes.c_int32], 0x77A8]
+    SuitTechOnlyUpgradePrices: Annotated[basic.cTkDynamicArray[ctypes.c_int32], 0x77B8]
+    SuitUpgradePrices: Annotated[basic.cTkDynamicArray[ctypes.c_int32], 0x77C8]
+    TechBoxTable: Annotated[basic.VariableSizeString, 0x77D8]
+    TechnologyTable: Annotated[basic.VariableSizeString, 0x77E8]
+    TradingClassDataTable: Annotated[basic.VariableSizeString, 0x77F8]
+    TradingCostTable: Annotated[basic.VariableSizeString, 0x7808]
+    UnlockableItemTrees: Annotated[basic.VariableSizeString, 0x7818]
+    UnlockablePlatformRewardsTable: Annotated[basic.VariableSizeString, 0x7828]
+    UnlockableSeasonRewardsTable: Annotated[basic.VariableSizeString, 0x7838]
+    UnlockableTwitchRewardsTable: Annotated[basic.VariableSizeString, 0x7848]
+    FoodStatValues: Annotated[tuple[cGcMinMaxFloat, ...], Field(cGcMinMaxFloat * 208, 0x7858)]
     InteractionPuzzlesIndexTypes: Annotated[
         tuple[enums.cGcAlienPuzzleTableIndex, ...],
-        Field(c_enum32[enums.cGcAlienPuzzleTableIndex] * 157, 0x7EC0),
+        Field(c_enum32[enums.cGcAlienPuzzleTableIndex] * 157, 0x7ED8),
     ]
-    DiscoveryWorth: Annotated[tuple[cGcDiscoveryWorth, ...], Field(cGcDiscoveryWorth * 17, 0x8134)]
-    NormalisedPriceLimits: Annotated[tuple[float, ...], Field(ctypes.c_float * 5, 0x8310)]
-    CreatureDiscoverySizeMultiplier: Annotated[tuple[float, ...], Field(ctypes.c_float * 4, 0x8324)]
-    WeightedTextWeights: Annotated[tuple[float, ...], Field(ctypes.c_float * 3, 0x8334)]
-    HomeRealityIteration: Annotated[int, Field(ctypes.c_uint16, 0x8340)]
-    RealityIteration: Annotated[int, Field(ctypes.c_uint16, 0x8342)]
-    LoopInteractionPuzzles: Annotated[tuple[bool, ...], Field(ctypes.c_bool * 157, 0x8344)]
-    WeightingCurves: Annotated[tuple[enums.cTkCurveType, ...], Field(c_enum8[enums.cTkCurveType] * 7, 0x83E1)]
+    DiscoveryWorth: Annotated[tuple[cGcDiscoveryWorth, ...], Field(cGcDiscoveryWorth * 17, 0x814C)]
+    NormalisedPriceLimits: Annotated[tuple[float, ...], Field(ctypes.c_float * 5, 0x8328)]
+    CreatureDiscoverySizeMultiplier: Annotated[tuple[float, ...], Field(ctypes.c_float * 4, 0x833C)]
+    WeightedTextWeights: Annotated[tuple[float, ...], Field(ctypes.c_float * 3, 0x834C)]
+    HomeRealityIteration: Annotated[int, Field(ctypes.c_uint16, 0x8358)]
+    RealityIteration: Annotated[int, Field(ctypes.c_uint16, 0x835A)]
+    LoopInteractionPuzzles: Annotated[tuple[bool, ...], Field(ctypes.c_bool * 157, 0x835C)]
+    WeightingCurves: Annotated[tuple[enums.cTkCurveType, ...], Field(c_enum8[enums.cTkCurveType] * 7, 0x83F9)]
 
 
 @partial_struct
@@ -37254,21 +37291,21 @@ class cGcPlanetData(Structure):
 
 @partial_struct
 class cGcPlayerCommonStateData(Structure):
-    _total_size_ = 0x89A0
+    _total_size_ = 0x89B0
     PhotoModeSettings: Annotated[cGcPhotoModeSettings, 0x0]
     SeasonData: Annotated[cGcSeasonalGameModeData, 0x50]
     ByteBeatLibrary: Annotated[cGcByteBeatLibraryData, 0x6B88]
     SeasonState: Annotated[cGcSeasonStateData, 0x8590]
-    SeasonTransferInventoryData: Annotated[cGcSeasonTransferInventoryData, 0x8758]
-    EarnedSeasonSpecialRewards: Annotated[basic.cTkDynamicArray[basic.TkID0x10], 0x88D8]
-    UsedDiscoveryOwnersV2: Annotated[basic.cTkDynamicArray[cGcDiscoveryOwner], 0x88E8]
-    UsedPlatforms: Annotated[basic.cTkDynamicArray[basic.cTkFixedString0x20], 0x88F8]
-    SaveUniversalId: Annotated[int, Field(ctypes.c_uint64, 0x8908)]
-    TotalPlayTime: Annotated[int, Field(ctypes.c_uint64, 0x8910)]
-    SaveName: Annotated[basic.cTkFixedString0x80, 0x8918]
-    UsesThirdPersonCharacterCam: Annotated[bool, Field(ctypes.c_bool, 0x8998)]
-    UsesThirdPersonShipCam: Annotated[bool, Field(ctypes.c_bool, 0x8999)]
-    UsesThirdPersonVehicleCam: Annotated[bool, Field(ctypes.c_bool, 0x899A)]
+    SeasonTransferInventoryData: Annotated[cGcSeasonTransferInventoryData, 0x8768]
+    EarnedSeasonSpecialRewards: Annotated[basic.cTkDynamicArray[basic.TkID0x10], 0x88E8]
+    UsedDiscoveryOwnersV2: Annotated[basic.cTkDynamicArray[cGcDiscoveryOwner], 0x88F8]
+    UsedPlatforms: Annotated[basic.cTkDynamicArray[basic.cTkFixedString0x20], 0x8908]
+    SaveUniversalId: Annotated[int, Field(ctypes.c_uint64, 0x8918)]
+    TotalPlayTime: Annotated[int, Field(ctypes.c_uint64, 0x8920)]
+    SaveName: Annotated[basic.cTkFixedString0x80, 0x8928]
+    UsesThirdPersonCharacterCam: Annotated[bool, Field(ctypes.c_bool, 0x89A8)]
+    UsesThirdPersonShipCam: Annotated[bool, Field(ctypes.c_bool, 0x89A9)]
+    UsesThirdPersonVehicleCam: Annotated[bool, Field(ctypes.c_bool, 0x89AA)]
 
 
 @partial_struct
