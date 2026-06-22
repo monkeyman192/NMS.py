@@ -20,6 +20,7 @@ from ctypes import (
     cast,
 )
 from enum import IntEnum
+from logging import getLogger
 from typing import TYPE_CHECKING, Annotated, Generic, Optional, Type, TypeVar
 
 from pymhf.core._internal import BASE_ADDRESS
@@ -38,6 +39,14 @@ import nmspy.data.vulkan as vulkan
 T = TypeVar("T", bound=basic.CTYPES)
 
 # Exported functions
+
+
+logger = getLogger(__name__)
+
+
+class cGcInteractionData(nmse.cGcInteractionData):
+    @function_hook("66 0F 6F 05 ? ? ? ? 33 C0 0F 11 01 48 89 41 ? 48 89 41 ? C3")
+    def SetDefaults(self, this: "_Pointer[cGcInteractionData]"): ...
 
 
 @partial_struct
@@ -509,6 +518,40 @@ class cGcUniverseAddressData(nmse.cGcUniverseAddressData):
 
 
 @partial_struct
+class CustomisationData(Structure):
+    # All found in cGcResourceCustomisation::CreateGenerationTask
+    mResourceSeed: Annotated[basic.cTkSeed, 0x0]
+    mDescriptors: Annotated[basic.TkStd.tk_vector[basic.TkID0x20], 0x10]
+    mTextureOptions: Annotated[nmse.cTkProceduralTextureChosenOptionList, 0x20]
+
+    mbUseLegacyColourPalettes: Annotated[bool, Field(c_bool, 0x70)]
+    mbEditedColours: Annotated[bool, Field(c_bool, 0x71)]
+    mEditColours: Annotated[nmse.cGcPlanetColourData, 0x90]
+    mFinalColours: Annotated[nmse.cGcPlanetColourData, 0x1C90]
+    mfScale: Annotated[float, Field(c_float, 0x3890)]
+
+
+@partial_struct
+class cGcResourceCustomisation(Structure):
+    _total_size_ = 0x3920
+
+    mResourceCustomisation: Annotated[CustomisationData, 0x0]
+    mForcedTextureName: Annotated[basic.TkID0x20, 0x3900]
+
+    @function_hook(
+        "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 4C 89 74 24 ? 55 48 8D 6C 24 ? 48 81 EC ? ? ? ? 66 0F 6F "
+        "05 ? ? ? ? 45 33 F6"
+    )
+    def CreateGenerationTask(
+        self,
+        this: "_Pointer[cGcResourceCustomisation]",
+        lpResourceHandle: _Pointer[cTkSmartResHandle],
+        lpResourceFilename: c_char_p64,
+        lbCopyOptions: Annotated[bool, c_bool],
+    ) -> c_uint64: ...
+
+
+@partial_struct
 class cGcPlayerState(Structure):
     # Found at the top of cGcPlayerState::cGcPlayerState
     mNameWithTitle: Annotated[basic.cTkFixedString0x100, 0x0]
@@ -535,9 +578,10 @@ class cGcPlayerState(Structure):
 
     # Found in cGcPlayerState::LoadFromData a little bit above the POLICESHIP.SCENE.MBIN, a few lines above
     # the assignment of something to 12LL.
+    # The actual value is this one found - 0x10
     mShipResources: Annotated[
         tuple[nmse.cGcResourceElement, ...],
-        Field(nmse.cGcResourceElement * 0xC, 0x17A10),
+        Field(nmse.cGcResourceElement * 0xC, 0x17A00),
     ]
 
     # Found in cGcPlayerShipOwnership::SpawnNewShip
@@ -546,9 +590,21 @@ class cGcPlayerState(Structure):
     # Found in cGcPlayerState::cGcPlayerState above the loop over something 5 times. Around line 220.
     mPhotoModeSettings: Annotated[nmse.cGcPhotoModeSettings, 0x1A0D0]
     maTeleportEndpoints: Annotated[std.vector[nmse.cGcTeleportEndpoint], 0x1A120]
+
+    mHoloExplorerInteraction: Annotated[cGcInteractionData, 0x1A310]
+    mHoloScepticInteraction: Annotated[cGcInteractionData, 0x1A330]
+    mHoloNooneInteraction: Annotated[cGcInteractionData, 0x1A350]
+    mNetworkPlayerInteraction: Annotated[cGcInteractionData, 0x1A370]
+    # Directly below the calls to cGcInteractionData::SetDefaults in cGcPlayerState::cGcPlayerState
     maCustomShipNames: Annotated[
         tuple[basic.cTkFixedString0x20, ...],
-        Field(basic.cTkFixedString0x20 * 0xC, 0x1A283),
+        Field(basic.cTkFixedString0x20 * 0xC, 0x1A3A3),
+    ]
+
+    # This can be found in cGcPlayerShipOwnership::UpdateMeshRefresh
+    mCustomisationData: Annotated[
+        tuple[cGcResourceCustomisation, ...],
+        Field(cGcResourceCustomisation * 0x1A, 0x1A790),
     ]
 
     @function_hook(
@@ -634,6 +690,11 @@ class cGcPlayerShipOwnership(Structure):
         mfUnknown0x20: Annotated[float, Field(c_float, 0x20)]
         mbUnknown0x28: Annotated[bool, Field(c_bool, 0x28)]  # Looks like "is valid/data"
 
+    class eMeshRefreshState(IntEnum):
+        ReadyForRefresh = 0x0
+        Generating = 0x1
+        SwapMesh = 0x2
+
     @function_hook(
         "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 54 41 56 41 57 48 83 EC ? 45 33 E4 48 C7 "
         "41"
@@ -681,7 +742,7 @@ class cGcPlayerShipOwnership(Structure):
     mShips: Annotated[list[sGcShipData], Field(sGcShipData * 12, 0x60)]
     # Both these found at the top of cGcPlayerShipOwnership::UpdateMeshRefresh
     mbShouldRefreshMesh: Annotated[bool, Field(c_bool, 0xA870)]
-    mMeshRefreshState: Annotated[int, Field(c_uint32, 0xA874)]
+    mMeshRefreshState: Annotated[c_enum32[eMeshRefreshState], 0xA874]
     mRefreshSwapRes: Annotated[cTkSmartResHandle, 0xA878]
 
 
@@ -743,6 +804,23 @@ class cGcGalacticSolarSystemAddress(Structure):
     mVoxelCoordinate: Annotated[cGcGalacticVoxelCoordinate, Field(cGcGalacticVoxelCoordinate)]
     mSolarIndex: Annotated[int, Field(c_uint16)]
     mIteration: Annotated[int, Field(c_uint16)]
+
+
+@partial_struct
+class SolarQueryResult(Structure):
+    mu64UA: Annotated[int, Field(c_uint64, 0x0)]
+    mSolarSystemAddress: Annotated[cGcGalacticSolarSystemAddress, 0x8]
+    mLocalPoint: Annotated[basic.cTkVector3, 0x20]
+    mGlobalPoint: Annotated[basic.cTkVector3, 0x30]
+
+    @static_function_hook(
+        "48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 54 41 56 41 57 48 83 EC ? 44 0F B7 41"
+    )
+    @staticmethod
+    def ComputeLightyearDistanceBetweenSolarSystems(
+        lFrom: "_Pointer[SolarQueryResult]",
+        lTo: "_Pointer[SolarQueryResult]",
+    ) -> c_float: ...
 
 
 @partial_struct
@@ -2242,7 +2320,7 @@ class cGcDestructableComponent(Structure):
     mbDestroyed: Annotated[bool, Field(c_bool, 0x154)]
     mpBuilding: Annotated[_Pointer[cGcBuilding], 0x1B8]
 
-    @function_hook("4C 89 44 24 ? 89 54 24 ? 55 53 56 41 55")
+    @function_hook("4C 89 44 24 ? 48 89 4C 24 ? 55 53 57 41 55")
     def Destroy(
         self,
         this: "_Pointer[cGcDestructableComponent]",
@@ -2931,8 +3009,17 @@ class cGcNameGenerator(Structure):
         self,
         this: "_Pointer[cGcNameGenerator]",
         lu64Seed: Annotated[int, c_uint64],
-        lResult: _Pointer[basic.cTkFixedString[0x79]],
-        lLocResult: _Pointer[basic.cTkFixedString[0x79]],
+        lResult: _Pointer[basic.cTkFixedString[0x7F]],
+        lLocResult: _Pointer[basic.cTkFixedString[0x7F]],
+    ): ...
+
+    @function_hook("48 89 5C 24 ? 55 56 57 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 8B F9")
+    def GenerateGalacticRegionName(
+        self,
+        this: "_Pointer[cGcNameGenerator]",
+        lu64Seed: Annotated[int, c_uint64],
+        lResult: _Pointer[basic.cTkFixedString[0x7F]],
+        lLocResult: _Pointer[basic.cTkFixedString[0x7F]],
     ): ...
 
 
@@ -3225,9 +3312,9 @@ class cTkMemoryManager(Structure):
         self,
         this: "_Pointer[cTkMemoryManager]",
         liSize: Annotated[int, c_int32],
-        lpacFile: c_uint64,
+        lpacFile: Annotated[int, c_uint64],  # const char *
         liLine: Annotated[int, c_int32],
-        lpacFunction: c_uint64,
+        lpacFunction: Annotated[int, c_uint64],  # const char *
         liAlign: Annotated[int, c_int32],
         liPool: Annotated[int, c_int32],
     ) -> c_void_p:
@@ -3777,12 +3864,11 @@ class cEgModules:
         "48 89 05 ? ? ? ? 48 39 3D ? ? ? ? 75 ? B9 ? ? ? ? E8 ? ? ? ? 48 85 C0 74 ? 48 8B C8 E8 ? ? ? ? 48 "
         "8B F8"
     )
-    # The following isn't actually in here, but  will here for now...
     patt_cTkMemoryManager = "48 8D 0D ? ? ? ? E8 ? ? ? ? E8 ? ? ? ? 80 3D"
     mgpSceneManager: _Pointer[cEgSceneManager]
     mgpResourceManager: _Pointer[cTkResourceManager]
     mgpRenderer: _Pointer[cEgRenderer]
-    mgpMemoryManager: _Pointer[cTkMemoryManager]
+    mgMemoryManager: cTkMemoryManager
 
     def find_variables(self):
         patt_addr = find_pattern_in_binary(self.patt_mgpSceneManager, False)
@@ -3804,7 +3890,12 @@ class cEgModules:
             mgpResourceManager_offset = start_addr + offset.value + 7
             self.mgpResourceManager = map_struct(mgpResourceManager_offset, _Pointer[cTkResourceManager])
 
-        self.mgpMemoryManager = map_struct(BASE_ADDRESS + 0x4B7FAE0, _Pointer[cTkMemoryManager])
+        patt_addr = find_pattern_in_binary(self.patt_cTkMemoryManager, False)
+        if patt_addr:
+            start_addr = BASE_ADDRESS + patt_addr
+            offset = c_uint32.from_address(start_addr + 3)
+            mgMemoryManager_offset = start_addr + offset.value + 7
+            self.mgMemoryManager = map_struct(mgMemoryManager_offset, cTkMemoryManager)
 
     @static_function_hook("40 57 48 83 EC ? 33 FF 48 89 5C 24")
     @staticmethod
@@ -3815,7 +3906,13 @@ engine_modules = cEgModules()
 
 
 class cGcGalaxyMap(Structure):
+    @partial_struct
     class Data(Structure):
+        mCurrentGalacticCoordinate: Annotated[cGcGalacticVoxelCoordinate, 0x1504]
+        # Passed into SolarQueryResult::ComputeLightyearDistanceBetweenSolarSystems in
+        # cGcGalaxyMap::Data::DoSolarPopup
+        mInitialLocationAssignment: Annotated[SolarQueryResult, 0x1590]
+
         @function_hook(
             "40 55 53 41 54 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 48 89 B4 24 ? ? ? ? 48 8B F1 "
             "48 8B 0D"
@@ -3827,6 +3924,17 @@ class cGcGalaxyMap(Structure):
             a3: Annotated[bool, c_bool],
         ):
             pass
+
+        @function_hook(
+            "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 55 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 44 0F "
+            "B7 72"
+        )
+        def DoSolarPopup(
+            self, this: "_Pointer[cGcGalaxyMap.Data]", lQueryResult: _Pointer[SolarQueryResult]
+        ): ...
+
+        @function_hook("40 55 53 56 57 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 4C 89 A4 24")
+        def Update(self, this: "_Pointer[cGcGalaxyMap.Data]", lfTimeStep: Annotated[float, c_float]): ...
 
 
 class cGcPlayerWanted(Structure):
