@@ -1084,8 +1084,9 @@
  },
  {
   "name": "cGcDestructableComponent::Destroy",
-  "signature": "4C 89 44 24 ? 89 54 24 ? 55 53 56 41 55",
-  "mangled_name": "?Destroy@cGcDestructableComponent@@QEAAXW4eDestroyedBy@@AEBU?$cTkUserIdBase@V?$cTkFixedString@$0EA@D@@@@@Z"
+  "signature": "4C 89 44 24 ? 48 89 4C 24 ? 55 53 57 41 55",
+  "mangled_name": "?Destroy@cGcDestructableComponent@@QEAAXW4eDestroyedBy@@AEBU?$cTkUserIdBase@V?$cTkFixedString@$0EA@D@@@@@Z",
+  "unique_string": "C_SENT_KILLS"
  },
  {
   "name": "Engine::GetModelNode",
@@ -1480,5 +1481,37 @@
   "name": "cGcGalaxyAttributeGenerator::ClassifyStarKeyAttributes",
   "signature": "48 89 5C 24 ? 66 89 54 24",
   "mangled_name": "?ClassifyStarKeyAttributes@cGcGalaxyAttributeGenerator@@SAXAEAVcTkParallelRNG@@GAEAVcGcGalaxyVoxelAttributesData@@AEAUStarSystemKeyAttributes@1@_K@Z"
+ },
+ {
+  "name": "cGcInteractionData::SetDefaults",
+  "signature": "66 0F 6F 05 ? ? ? ? 33 C0 0F 11 01 48 89 41 ? 48 89 41 ? C3",
+  "mangled_name": "?SetDefaults@cGcInteractionData@@QEAAXXZ"
+ },
+ {
+  "name": "cGcResourceCustomisation::CreateGenerationTask",
+  "signature": "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 4C 89 74 24 ? 55 48 8D 6C 24 ? 48 81 EC ? ? ? ? 66 0F 6F 05 ? ? ? ? 45 33 F6",
+  "mangled_name": "?CreateGenerationTask@cGcResourceCustomisation@@QEAAPEAUTaskContext@cGcProceduralTextureManager@@PEAVcTkSmartResHandle@@PEBD_N@Z"
+ },
+ {
+  "name": "cGcNameGenerator::GenerateGalacticRegionName",
+  "signature": "48 89 5C 24 ? 55 56 57 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 8B F9",
+  "mangled_name": "?GenerateGalacticRegionName@cGcNameGenerator@@QEBAX_KAEAV?$cTkFixedString@$0HP@D@@PEAV2@@Z",
+  "unique_string": "NAMEGEN_SUFFIX_REGION_%i"
+ },
+ {
+  "name": "cGcGalaxyMap::Data::DoSolarPopup",
+  "signature": "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 55 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 44 0F B7 72",
+  "mangled_name": "?DoSolarPopup@Data@cGcGalaxyMap@@QEAAXAEBUSolarQueryResult@@@Z"
+ },
+ {
+  "name": "SolarQueryResult::ComputeLightyearDistanceBetweenSolarSystems",
+  "signature": "48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 54 41 56 41 57 48 83 EC ? 44 0F B7 41",
+  "mangled_name": "?ComputeLightyearDistanceBetweenSolarSystems@SolarQueryResult@@SAMAEBU1@0@Z"
+ },
+ {
+  "name": "cGcGalaxyMap::Data::Update",
+  "signature": "40 55 53 56 57 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 4C 89 A4 24",
+  "mangled_name": "?Update@Data@cGcGalaxyMap@@QEAAXM@Z",
+  "unique_string": "NEW_GALAXY%i"
  }
 ]

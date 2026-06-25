@@ -459,25 +459,25 @@ class cTkClassPool(ctypes.Structure, Generic[T, N]):
 class cTkDynamicArray(ctypes.Structure, Generic[T]):
     _template_type: Type[T]
     _fields_ = [
-        ("Array", ctypes.c_uint64),
+        ("ArrayPointer", ctypes.c_uint64),
         ("Size", ctypes.c_uint32),
         ("AllocatedFromData", ctypes.c_ubyte),
         ("_magicPad", ctypes.c_char * 0x3),
     ]
 
-    Array: int
+    ArrayPointer: int
     Size: int
     allocatedFromData: bool
 
     @property
     def value(self) -> ctypes.Array[T]:
-        if self.Array == 0 or self.Size == 0:
+        if self.ArrayPointer == 0 or self.Size == 0:
             # Empty lists are stored with an empty pointer in mem.
             return (self._template_type * 0)()
-        return map_struct(self.Array, self._template_type * self.Size)
+        return map_struct(self.ArrayPointer, self._template_type * self.Size)
 
     def set(self, data: ctypes.Array[T]):
-        self.Array = get_addressof(data)
+        self.ArrayPointer = get_addressof(data)
         self.Size = len(data) + 1
 
     def __iter__(self) -> Generator[T, None, None]:
@@ -622,7 +622,35 @@ class LinkableNMSTemplate(ctypes.Structure):
 class VariableSizeString(cTkDynamicArray[ctypes.c_char]):
     @property
     def value(self) -> str:  # type: ignore
-        return super().value.value.decode()
+        # Don't use the underlying dynamic array .value get since we can be a
+        # bit more efficient by knowing we'll be reading a string.
+        if self.ArrayPointer == 0 or self.Size == 0:
+            return ""
+        else:
+            return ctypes.string_at(self.ArrayPointer, self.Size - 1).decode()
+
+    @value.setter
+    def value(self, value: str):
+        new_value = value.encode() + b"\x00"
+        new_size = len(new_value)
+        buf = ctypes.create_string_buffer(new_value, new_size)
+        if len(value) > self.Size:
+            from nmspy.data.types import engine_modules
+
+            gMemoryManager = engine_modules.mgMemoryManager
+            try:
+                if (new_addr := gMemoryManager.Malloc(new_size, 0, 0, 0, 16, -1)) is not None:
+                    ctypes.memmove(int(new_addr), ctypes.addressof(buf), new_size)
+                    gMemoryManager.Free(self.ArrayPointer, -1)
+                    self.ArrayPointer = int(new_addr)
+                    self.Size = new_size
+                else:
+                    logger.error("Unable to alloccate memory for the new string. Nothing allocated...")
+            except Exception:
+                logger.exception("Could not write the new string for some reason:")
+        else:
+            ctypes.memmove(self.ArrayPointer, ctypes.addressof(buf), new_size)
+            self.Size = new_size
 
     def __str__(self):
         return self.value
