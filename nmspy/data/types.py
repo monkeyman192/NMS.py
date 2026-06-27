@@ -2368,7 +2368,7 @@ class cGcInteractionComponent(Structure):
     def DoInteractionEvent(
         self,
         this: "_Pointer[cGcInteractionComponent]",
-        leEvent: Annotated[int, c_uint32],  # eInteractionEvent
+        leEvent: c_enum32[enums.cGcInteractionType],
     ): ...
 
     @function_hook("40 53 48 83 EC ? 48 8B D9 48 8B 0D ? ? ? ? 8B 93")
