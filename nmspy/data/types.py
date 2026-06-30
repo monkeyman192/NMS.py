@@ -404,9 +404,9 @@ class cGcShipHUD(Structure):
 
     # The following offset is found by searching for "UI\\HUD\\SHIP\\MAINSCREEN.MXML"
     # (It's above the below entry.)
-    mMainScreenGUI: Annotated[cGcNGui, Field(cGcNGui, offset=0x275D8)]
+    mMainScreenGUI: Annotated[cGcNGui, Field(cGcNGui, offset=0x27630)]
     # The following offset is found by searching for "UI\\HUD\\SHIP\\HEADSUP.MXML"
-    mHeadsUpGUI: Annotated[cGcNGui, Field(cGcNGui, offset=0x27B90)]
+    mHeadsUpGUI: Annotated[cGcNGui, Field(cGcNGui, offset=0x27BF0)]
 
     # hud_root: Annotated[int, Field(c_ulonglong, 0x27F70)]  # TODO: Fix
 
@@ -966,6 +966,102 @@ class cGcPlayerSquadronOwnership(Structure):
 
 
 @partial_struct
+class WarpCapabilityResult(Structure):
+    pass
+
+
+class cGcGalaxyVoxelAttributesData(nmse.cGcGalaxyVoxelAttributesData):
+    @function_hook("33 C0 0F 57 C0 0F 11 01 0F 11 41 ? 0F 11 41 ? 48 89 41 ? 48 89 41 ? 48 89 41 ? 48 89 41")
+    def SetDefaults(self, this: "_Pointer[cGcGalaxyVoxelAttributesData]"): ...
+
+
+class cGcGalaxyStarAttributesData(nmse.cGcGalaxyStarAttributesData):
+    @function_hook(
+        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 ED 48 8D B9 ? ? ? ? 48 89 6C 24"
+    )
+    def SetDefaults(self, this: "_Pointer[cGcGalaxyStarAttributesData]"): ...
+
+
+@partial_struct
+class cTkParallelRNG(Structure):
+    _k: Annotated[tuple[int, ...], Field(c_uint64 * 4, 0x0)]
+    _s: Annotated[tuple[int, ...], Field(c_uint64 * 4, 0x20)]
+    _o: Annotated[tuple[int, ...], Field(c_uint64 * 4, 0x40)]
+    _o_counter: Annotated[int, Field(c_uint16, 0x60)]
+
+
+class cGcGalaxyVoxelData(Structure): ...
+
+
+class cGcGalaxyVoxelGenerator(nmse.cGcGalaxyStarAttributesData):
+    @static_function_hook("48 8B C4 4C 89 40 ? 48 89 48 ? 55 53 56 57 41 57")
+    @staticmethod
+    def Populate(
+        lu64UniverseAddress: c_uint64,
+        lVoxelData: _Pointer[cGcGalaxyVoxelData],
+        lRootOffset: _Pointer[basic.Vector3f],
+    ): ...
+
+
+class cGcGalaxyAttributeGenerator(Structure):
+    @partial_struct
+    class StarSystemKeyAttributes(Structure):
+        _total_size_ = 0x30
+        # These can all be found in cGcGalaxyAttributeGenerator::ClassifyStarKeyAttributes
+        meTradingClass: Annotated[
+            c_enum32[enums.cGcTradingClass],
+            Field(c_enum32[enums.cGcTradingClass], 0x0),
+        ]
+        meWealthClass: Annotated[c_enum32[enums.cGcWealthClass], Field(c_enum32[enums.cGcWealthClass], 0x4)]
+        meConflictLevel: Annotated[
+            c_enum32[enums.cGcPlayerConflictData],
+            Field(c_enum32[enums.cGcPlayerConflictData], 0x8),
+        ]
+        meRace: Annotated[c_enum32[enums.cGcAlienRace], Field(c_enum32[enums.cGcAlienRace], 0xC)]
+        meType: Annotated[c_enum32[enums.cGcGalaxyStarTypes], Field(c_enum32[enums.cGcGalaxyStarTypes], 0x10)]
+        # cGcGalaxyAttributeGenerator::StarSystemKeyAttributes::Tag
+        meTag: Annotated[int, Field(c_int32, 0x14)]
+        meAnomaly: Annotated[int, Field(c_uint32, 0x18)]  # Actually _BYTE[4]
+        muPlanetCount: Annotated[int, Field(c_uint32, 0x1C)]
+        muSafeStartPlanet: Annotated[int, Field(c_uint32, 0x20)]
+        mbAbandonedSystem: Annotated[bool, Field(c_bool, 0x24)]
+        mbIsPirateSystem: Annotated[bool, Field(c_bool, 0x25)]
+        muPrimePlanetCount: Annotated[int, Field(c_uint32, 0x28)]
+        mbUnknown0x2C: Annotated[bool, Field(c_bool, 0x2C)]
+        mbUnknown0x2D: Annotated[bool, Field(c_bool, 0x2D)]
+
+    @static_function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F BF 41")
+    @staticmethod
+    def ClassifyVoxel(
+        lCoordinate: _Pointer[cGcGalacticVoxelCoordinate],
+        lOutput: _Pointer[cGcGalaxyVoxelAttributesData],
+    ): ...
+
+    @static_function_hook("48 89 54 24 ? 55 53 56 57 41 54 41 55 41 56 48 8B EC")
+    @staticmethod
+    def ClassifyStarSystem(lUA: c_uint64, lOutput: _Pointer[cGcGalaxyStarAttributesData]): ...
+
+    @static_function_hook(
+        "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 8B F9"
+    )
+    @staticmethod
+    def ClassifyStarKeyAttributes_Prep(lUA: c_uint64, lKeyAttributes: _Pointer[StarSystemKeyAttributes]):
+        # Prep function for the below one.
+        pass
+
+    @static_function_hook("48 89 5C 24 ? 66 89 54 24")
+    @staticmethod
+    def ClassifyStarKeyAttributes(
+        lIndexPrimedPRNG: _Pointer[cTkParallelRNG],
+        liSolarIndexInVoxel: Annotated[int, c_uint16],
+        lVoxelAttributes: _Pointer[cGcGalaxyVoxelAttributesData],
+        lKeyAttributes: _Pointer[StarSystemKeyAttributes],
+        lUA: Annotated[int, c_uint64],
+    ):
+        pass
+
+
+@partial_struct
 class cGcGameState(Structure):
     # Found in cGcGameState::cGcGameState
     mPlayerState: Annotated[cGcPlayerState, 0xAAD0]
@@ -1014,6 +1110,18 @@ class cGcGameState(Structure):
         "48 8B C4 48 89 58 ? 48 89 70 ? 55 57 41 54 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? F3 0F 10 91"
     )
     def Update(self, this: "_Pointer[cGcGameState]", lfTimeStep: Annotated[float, c_float]): ...
+
+    @function_hook("40 53 56 41 54 41 55 41 56")
+    def ComputeWarpCapability(
+        self,
+        this: "_Pointer[cGcGameState]",
+        result: _Pointer[WarpCapabilityResult],
+        lfLightyearDistance: Annotated[float, c_float],
+        lbIsCenter: Annotated[bool, c_bool],
+        lJumpTargetPackedUA: Annotated[int, c_uint64],
+        lStarData: _Pointer[cGcGalaxyAttributeGenerator.StarSystemKeyAttributes],
+    ) -> c_uint64:  # WarpCapabilityResult *
+        ...
 
 
 class cTkFSM(Structure):
@@ -1222,6 +1330,7 @@ class cGcSolarSystem(Structure):
     mSolarSystemData: Annotated[nmse.cGcSolarSystemData, 0x0]
     mGalaxyAttributes: Annotated[cGcGalaxyAttributesAtAddress, 0x23D0]
     maPlanets: Annotated[tuple[cGcPlanet, ...], Field(cGcPlanet * 6, 0x2630)]
+    miPrimaryPlanet: Annotated[int, Field(c_int32, 0x5188D0)]
     # Found in cGcPlayerState::StoreCurrentSystemSpaceStationEndpoint
     mSpaceStationNode: Annotated[basic.TkHandle, 0x51C088]
 
@@ -1347,15 +1456,23 @@ class cGcPlayerExperienceDirector(Structure):
     ): ...
 
 
+class cGcEcosystem(Structure):
+    @function_hook("48 8B C4 48 89 48 ? 55 41 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 58 ? 48 8B 1D")
+    def Update(self, this: "_Pointer[cGcEcosystem]", lfTimeStep: Annotated[float, c_float]): ...
+
+
 @partial_struct
 class cGcSimulation(Structure):
     # Found in cGcSimulation::Update. Passed into cGcEnvironment::Update.
     mEnvironment: Annotated[cGcEnvironment, 0xAC810]
+    mEcosystem: Annotated[cGcEcosystem, 0xB3B50]
     # Found in cGcSimulation::Update. Passed into cGcSolarSystem::Update.
     mpSolarSystem: Annotated[_Pointer[cGcSolarSystem], 0x24DFD0]
     mPlayerExperienceDirector: Annotated[cGcPlayerExperienceDirector, 0x24E630]
     # Found in cGcSimulation::Update. Passed into cGcPlayer::Update
     mPlayer: Annotated[cGcPlayer, 0x24F580]
+    # In cGcSimulation::Update
+    mCurrentUA: Annotated[int, Field(c_uint64, 0x255300)]
     # Found in cGcSimulation::Construct
     mSimulationRootNode: Annotated[basic.TkHandle, 0x256CA0]
 
@@ -1596,7 +1713,17 @@ class cGcMarkerList(Structure):
     ) -> c_char: ...
 
 
+# TODO: Need to add the offset of this struct to the globals.
+@partial_struct
 class cGcBaseBuildingManager(Structure):
+    # Found by subtracting the offset of the field in cGcFrontendPageClaimBase::DoClaimBaseInteraction (which
+    # references cGcFrontendPageClaimBase::DoBaseClaimOptions) compared to the offset of
+    # cGcBaseBuildingManager::mBaseBuildingManager
+    mPlanetPositions: Annotated[tuple[basic.cTkVector3, ...], Field(basic.cTkVector3 * 8, 0x2E0)]
+    # Found in cGcBaseBuildingManager::GetBaseRootNode
+    mBaseRootNodes: Annotated[basic.TkStd.tk_vector[basic.TkHandle], 0x360]
+    mBaseBuildingNode: Annotated[basic.TkHandle, 0x370]
+
     @function_hook("40 55 56 57 41 56 41 57 48 81 EC ? ? ? ? 49 8B F8")
     def GetBaseRootNode(
         self,
@@ -1616,6 +1743,11 @@ class cGcBaseBuildingManager(Structure):
         liColourIndex: c_int32,
         lpacName: _Pointer[basic.cTkFixedString0x40],
     ): ...
+
+    @function_hook(
+        "48 8B C4 F3 0F 11 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 80 79"
+    )
+    def Update(self, this: "_Pointer[cGcBaseBuildingManager]", lfTimeStep: Annotated[float, c_float]): ...
 
 
 class cGcBaseSearch(Structure):
@@ -1822,7 +1954,7 @@ class cTkTexture(cTkTextureBase):
 
 
 class Engine:
-    @static_function_hook("40 53 48 83 EC ? 44 8B C9 0F B6 DA 41 C1 E9 ? 45 85 C9 0F 84")
+    @static_function_hook("40 53 44 8B D1")
     @staticmethod
     def ShiftAllTransformsForNode(node: basic.TkHandle, lShift: _Pointer[basic.Vector3f]): ...
 
@@ -2879,97 +3011,6 @@ class cGcFrontendPagePortalRunes(Structure):
     ): ...
 
 
-class cGcGalaxyVoxelAttributesData(nmse.cGcGalaxyVoxelAttributesData):
-    @function_hook("33 C0 0F 57 C0 0F 11 01 0F 11 41 ? 0F 11 41 ? 48 89 41 ? 48 89 41 ? 48 89 41 ? 48 89 41")
-    def SetDefaults(self, this: "_Pointer[cGcGalaxyVoxelAttributesData]"): ...
-
-
-class cGcGalaxyStarAttributesData(nmse.cGcGalaxyStarAttributesData):
-    @function_hook(
-        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 ED 48 8D B9 ? ? ? ? 48 89 6C 24"
-    )
-    def SetDefaults(self, this: "_Pointer[cGcGalaxyStarAttributesData]"): ...
-
-
-@partial_struct
-class cTkParallelRNG(Structure):
-    _k: Annotated[tuple[int, ...], Field(c_uint64 * 4, 0x0)]
-    _s: Annotated[tuple[int, ...], Field(c_uint64 * 4, 0x20)]
-    _o: Annotated[tuple[int, ...], Field(c_uint64 * 4, 0x40)]
-    _o_counter: Annotated[int, Field(c_uint16, 0x60)]
-
-
-class cGcGalaxyAttributeGenerator(Structure):
-    @partial_struct
-    class StarSystemKeyAttributes(Structure):
-        _total_size_ = 0x30
-        # These can all be found in cGcGalaxyAttributeGenerator::ClassifyStarKeyAttributes
-        meTradingClass: Annotated[
-            c_enum32[enums.cGcTradingClass],
-            Field(c_enum32[enums.cGcTradingClass], 0x0),
-        ]
-        meWealthClass: Annotated[c_enum32[enums.cGcWealthClass], Field(c_enum32[enums.cGcWealthClass], 0x4)]
-        meConflictLevel: Annotated[
-            c_enum32[enums.cGcPlayerConflictData],
-            Field(c_enum32[enums.cGcPlayerConflictData], 0x8),
-        ]
-        meRace: Annotated[c_enum32[enums.cGcAlienRace], Field(c_enum32[enums.cGcAlienRace], 0xC)]
-        meType: Annotated[c_enum32[enums.cGcGalaxyStarTypes], Field(c_enum32[enums.cGcGalaxyStarTypes], 0x10)]
-        # cGcGalaxyAttributeGenerator::StarSystemKeyAttributes::Tag
-        meTag: Annotated[int, Field(c_int32, 0x14)]
-        meAnomaly: Annotated[int, Field(c_uint32, 0x18)]  # Actually _BYTE[4]
-        muPlanetCount: Annotated[int, Field(c_uint32, 0x1C)]
-        muSafeStartPlanet: Annotated[int, Field(c_uint32, 0x20)]
-        mbAbandonedSystem: Annotated[bool, Field(c_bool, 0x24)]
-        mbIsPirateSystem: Annotated[bool, Field(c_bool, 0x25)]
-        muPrimePlanetCount: Annotated[int, Field(c_uint32, 0x28)]
-        mbUnknown0x2C: Annotated[bool, Field(c_bool, 0x2C)]
-        mbUnknown0x2D: Annotated[bool, Field(c_bool, 0x2D)]
-
-    @static_function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F BF 41")
-    @staticmethod
-    def ClassifyVoxel(
-        lCoordinate: _Pointer[cGcGalacticVoxelCoordinate],
-        lOutput: _Pointer[cGcGalaxyVoxelAttributesData],
-    ): ...
-
-    @static_function_hook("48 89 54 24 ? 55 53 56 57 41 54 41 55 41 56 48 8B EC")
-    @staticmethod
-    def ClassifyStarSystem(lUA: c_uint64, lOutput: _Pointer[cGcGalaxyStarAttributesData]): ...
-
-    @static_function_hook(
-        "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 8B F9"
-    )
-    @staticmethod
-    def ClassifyStarKeyAttributes_Prep(lUA: c_uint64, lKeyAttributes: _Pointer[StarSystemKeyAttributes]):
-        # Prep function for the below one.
-        pass
-
-    @static_function_hook("48 89 5C 24 ? 66 89 54 24")
-    @staticmethod
-    def ClassifyStarKeyAttributes(
-        lIndexPrimedPRNG: _Pointer[cTkParallelRNG],
-        liSolarIndexInVoxel: Annotated[int, c_uint16],
-        lVoxelAttributes: _Pointer[cGcGalaxyVoxelAttributesData],
-        lKeyAttributes: _Pointer[StarSystemKeyAttributes],
-        lUA: Annotated[int, c_uint64],
-    ):
-        pass
-
-
-class cGcGalaxyVoxelData(Structure): ...
-
-
-class cGcGalaxyVoxelGenerator(nmse.cGcGalaxyStarAttributesData):
-    @static_function_hook("48 8B C4 4C 89 40 ? 48 89 48 ? 55 53 56 57 41 57")
-    @staticmethod
-    def Populate(
-        lu64UniverseAddress: c_uint64,
-        lVoxelData: _Pointer[cGcGalaxyVoxelData],
-        lRootOffset: _Pointer[basic.Vector3f],
-    ): ...
-
-
 class cTkLanguageManager(Structure):
     @static_function_hook(
         "48 83 EC ? 65 48 8B 04 25 ? ? ? ? B9 ? ? ? ? 48 8B 00 8B 04 01 39 05 ? ? ? ? 0F 8F ? ? ? ? 48 8D 05 "
@@ -3449,6 +3490,10 @@ class cTkEngineUtils(Structure):
     @staticmethod
     def LoadResourcesFromDisk(lBalancing: Annotated[int, c_int32]) -> c_uint64: ...
 
+    @static_function_hook("40 53 48 81 EC ? ? ? ? 66 0F 6F 05 ? ? ? ? 8B D9")
+    @staticmethod
+    def RepositionGroupNode(lGroupNode: basic.TkHandle, lDesiredPosition: _Pointer[basic.cTkVector3]): ...
+
 
 class cTkMetaDataXML(Structure):
     @static_function_hook("4C 89 4C 24 ? 4C 89 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 53 48 83 EC")
@@ -3905,9 +3950,22 @@ class cEgModules:
 engine_modules = cEgModules()
 
 
+class cGcGalaxyVoxelCache(Structure):
+    @function_hook("4C 8B DC 49 89 53 ? 55 57 41 54")
+    def SpatialQueryFindNearestAlongDir(
+        self,
+        this: "_Pointer[cGcGalaxyVoxelCache]",
+        lFromGCoord: _Pointer[cGcGalacticVoxelCoordinate],
+        lvQueryStartPos: _Pointer[basic.cTkVector3],
+        lvQueryTraceDir: _Pointer[basic.cTkVector3],
+        lQueryResult: _Pointer[SolarQueryResult],
+    ) -> c_char: ...
+
+
 class cGcGalaxyMap(Structure):
     @partial_struct
     class Data(Structure):
+        mVoxelCache: Annotated[cGcGalaxyVoxelCache, 0x50]
         mCurrentGalacticCoordinate: Annotated[cGcGalacticVoxelCoordinate, 0x1504]
         # Passed into SolarQueryResult::ComputeLightyearDistanceBetweenSolarSystems in
         # cGcGalaxyMap::Data::DoSolarPopup
@@ -3937,6 +3995,12 @@ class cGcGalaxyMap(Structure):
         def Update(self, this: "_Pointer[cGcGalaxyMap.Data]", lfTimeStep: Annotated[float, c_float]): ...
 
 
+class cGcGalaxyMapUI(Structure):
+    class SolarInfoPanel(Structure):
+        @function_hook("48 89 4C 24 ? 55 53 41 54 41 55 48 8D AC 24 ? ? ? ? B8")
+        def UpdatePanelUI(self, this: "_Pointer[cGcGalaxyMapUI.SolarInfoPanel]"): ...
+
+
 class cGcPlayerWanted(Structure):
     @function_hook("48 8B C4 F3 0F 11 50 ? 48 89 50 ? 55 53")
     def Update(
@@ -3944,6 +4008,18 @@ class cGcPlayerWanted(Structure):
         this: "_Pointer[cGcPlayerWanted]",
         lPlayerPos: _Pointer[basic.cTkVector3],
         lfTimeStep: Annotated[float, c_float],
+    ): ...
+
+
+class cGcFrontendPageClaimBase(Structure):
+    @static_function_hook("48 89 5C 24 ? 48 89 54 24 ? 55 57 41 54 41 56")
+    @staticmethod
+    def DoBaseClaimOptions(
+        lpPage: _Pointer[cGcFrontendPage],
+        lapResponses: c_uint64,  # std::array<cGcNGuiLayer *,5> *
+        leBaseType: Annotated[int, c_uint32],
+        lbInsideOtherBase: Annotated[bool, c_bool],
+        luiLegacyBase: _Pointer[c_uint16],
     ): ...
 
 

@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 logger = getLogger()
 
 
-CTYPES = Union[ctypes._SimpleCData, ctypes.Structure, ctypes._Pointer]
+CTYPES = Union[ctypes._SimpleCData, ctypes.Structure, ctypes._Pointer, ctypes.Union]
 
 T = TypeVar("T", bound=CTYPES)
 T1 = TypeVar("T1", bound=CTYPES)
@@ -627,7 +627,12 @@ class VariableSizeString(cTkDynamicArray[ctypes.c_char]):
         if self.ArrayPointer == 0 or self.Size == 0:
             return ""
         else:
-            return ctypes.string_at(self.ArrayPointer, self.Size - 1).decode()
+            if _val := ctypes.string_at(self.ArrayPointer, self.Size - 1).decode():
+                # Split on a null byte and strip anything after it *just in case*.
+                val = _val.split("\x00", maxsplit=1)
+                return val[0]
+            else:
+                return ""
 
     @value.setter
     def value(self, value: str):
