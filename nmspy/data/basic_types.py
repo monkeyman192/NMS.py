@@ -150,7 +150,7 @@ class Vector3f(ctypes.Structure):
         return f"Vector3f({self.x}, {self.y}, {self.z})"
 
     def __str__(self) -> str:
-        return f"<{self.x, self.y, self.z}>"
+        return f"<{self.x}, {self.y}, {self.z}>"
 
     def __json__(self) -> dict:
         return {"x": self.x, "y": self.y, "z": self.z}
@@ -159,7 +159,10 @@ class Vector3f(ctypes.Structure):
         """Return a normalised version of the vector."""
         return ((self.x**2 + self.y**2 + self.z**2) ** (-0.5)) * Vector3f(self.x, self.y, self.z)
 
-    def __len__(self) -> float:
+    @property
+    def length(self) -> float:
+        # The length of the vector.
+        # Note: We couldn't use __len__ because ctypes disallows it.
         return (self.x**2 + self.y**2 + self.z**2) ** (0.5)
 
 
@@ -178,6 +181,9 @@ class Vector4f(ctypes.Structure):
         ("z", ctypes.c_float),
         ("w", ctypes.c_float),
     ]
+
+    def __str__(self) -> str:
+        return f"<{self.x}, {self.y}, {self.z}, {self.w}>"
 
 
 class Vector4i(ctypes.Structure):
@@ -787,3 +793,6 @@ class TkStd:
         def __iter__(self) -> Generator[T, None, None]:
             for i in range(self.vector_size):
                 yield self[i]
+
+        def to_list(self) -> list[T]:
+            return [x for x in self]

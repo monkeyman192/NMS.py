@@ -1318,9 +1318,80 @@ class cGcPlanet(Structure):
     def UpdateWeather(self, this: "_Pointer[cGcPlanet]", lfTimeStep: Annotated[float, c_float]): ...
 
 
+@partial_struct
 class cGcGalaxyAttributesAtAddress(Structure):
+    # Looks the same as 4.13
+    mVoxel: Annotated[cGcGalaxyVoxelAttributesData, 0x0]
+    mVoxelPrimaryColour: Annotated[basic.Colour, 0x90]
+    mVoxelSecondaryColour: Annotated[basic.Colour, 0x90]
+    mStar: Annotated[cGcGalaxyStarAttributesData, 0xB0]
+    mbValid: Annotated[bool, Field(c_bool, 0x258)]
+
     @function_hook("48 89 5C 24 ? 57 48 83 EC ? 44 8B C2 C6 44 24")
     def Classify(self, this: "_Pointer[cGcGalaxyAttributesAtAddress]", lUA: c_uint64): ...
+
+
+class cGcSolarSystemGeometry(Structure): ...
+
+
+@partial_struct
+class cGcSolarSystemGenerator(Structure):
+    mRNG: Annotated[cTkPersonalRNG, 0x510]
+
+    @partial_struct
+    class GenerationData(Structure):
+        _mpSolarSystem: Annotated[int, Field(c_uint64, 0x0)]
+        mMetaData: Annotated[_Pointer[nmse.cGcSolarSystemData], 0x8]
+
+        @property
+        def mpSolarSystem(self):
+            return cGcSolarSystem.from_address(self._mpSolarSystem)
+
+    @function_hook(
+        "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? "
+        "E8 ? ? ? ? 48 2B E0 33 F6 0F 29 B4 24"
+    )
+    def GenerateQueryInfo(
+        self,
+        this: "_Pointer[cGcSolarSystemGenerator]",
+        lSeed: _Pointer[basic.cTkSeed],
+        lAttributes: _Pointer[cGcGalaxyAttributesAtAddress],
+        lData: "_Pointer[cGcSolarSystemGenerator.GenerationData]",
+    ): ...
+
+    @function_hook(
+        "48 8B C4 4C 89 48 ? 4C 89 40 ? 48 89 50 ? 48 89 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? "
+        "? ? ? 48 81 EC ? ? ? ? 44 0F 29 B8"
+    )
+    def GeneratePlanetPositions(
+        self,
+        this: "_Pointer[cGcSolarSystemGenerator]",
+        lAttributes: _Pointer[cGcGalaxyAttributesAtAddress],
+        lData: "_Pointer[cGcSolarSystemGenerator.GenerationData]",
+        lpGeometry: _Pointer[cGcSolarSystemGeometry],
+    ): ...
+
+    @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B FA 49 8B D9")
+    def GenerateBasics(
+        self,
+        this: "_Pointer[cGcSolarSystemGenerator]",
+        lSeed: _Pointer[basic.cTkSeed],
+        lAttributes: _Pointer[cGcGalaxyAttributesAtAddress],
+        lStarKeyAttributes: _Pointer[cGcGalaxyAttributeGenerator.StarSystemKeyAttributes],
+        lData: "_Pointer[cGcSolarSystemGenerator.GenerationData]",
+    ): ...
+
+    @function_hook(
+        "48 8B C4 4C 89 48 ? 4C 89 40 ? 48 89 50 ? 48 89 48 ? 53 55 56 57 41 54 41 55 41 56 41 57 48 81 EC ? "
+        "? ? ? 4C 63 9A"
+    )
+    def GeneratePlanetBiomes(
+        self,
+        this: "_Pointer[cGcSolarSystemGenerator]",
+        lAttributes: _Pointer[cGcGalaxyAttributesAtAddress],
+        lData: "_Pointer[cGcSolarSystemGenerator.GenerationData]",
+        lStarKeyAttributes: _Pointer[cGcGalaxyAttributeGenerator.StarSystemKeyAttributes],
+    ): ...
 
 
 @partial_struct
@@ -1331,6 +1402,7 @@ class cGcSolarSystem(Structure):
     mGalaxyAttributes: Annotated[cGcGalaxyAttributesAtAddress, 0x23D0]
     maPlanets: Annotated[tuple[cGcPlanet, ...], Field(cGcPlanet * 6, 0x2630)]
     miPrimaryPlanet: Annotated[int, Field(c_int32, 0x5188D0)]
+    mSolarSystemGenerator: Annotated[cGcSolarSystemGenerator, 0x51B9A0]
     # Found in cGcPlayerState::StoreCurrentSystemSpaceStationEndpoint
     mSpaceStationNode: Annotated[basic.TkHandle, 0x51C088]
 
@@ -2292,6 +2364,19 @@ class cTkVertexLayoutRT(Structure):
 
 
 @partial_struct
+class cEgJoint(Structure):
+    mInverseBindMatrix: Annotated[basic.cTkMatrix34, 0x0]
+
+
+@partial_struct
+class AnimTransform(Structure):
+    _total_size_ = 0x40
+    mNodeScale: Annotated[basic.cTkVector3, 0x0]
+    mNodeRotationQuat: Annotated[basic.Vector4f, 0x10]  # Actually a quaternion but this is the same.
+    mNodeTranslation: Annotated[basic.cTkVector3, 0x20]
+
+
+@partial_struct
 class cEgGeometryResource(cEgResource):
     _total_size_ = 0x770
 
@@ -2309,7 +2394,10 @@ class cEgGeometryResource(cEgResource):
         basic.TkStd.tk_vector[c_void_p], 0x2A0
     ]  # This is actually in a cTkStackVector maybe....
     mMeshVertRStart: Annotated[basic.TkStd.tk_vector[c_int32], 0x2F8]  # maybe?
-    mSkinMatOrder: Annotated[basic.TkStd.tk_vector[c_int32], 0x440]
+    mJoints: Annotated[basic.TkStd.tk_vector[cEgJoint], 0x350]
+    mBindPose: Annotated[basic.TkStd.tk_vector[AnimTransform], 0x360]
+    mSkinMatOrder: Annotated[basic.TkStd.tk_vector[c_int32], 0x410]
+    mMeshBaseSkinMat: Annotated[basic.TkStd.tk_vector[c_int32], 0x420]
     mVertexLayout: Annotated[cTkVertexLayoutRT, 0x488]
     mPositionVertexLayout: Annotated[cTkVertexLayoutRT, 0x528]
     mStreamManager: Annotated[GeometryStreaming.cEgGeometryStreamer, 0x5D8]
@@ -2937,22 +3025,6 @@ class cGcSolarSystemQuery(Structure):
     ): ...
 
 
-class cGcSolarSystemGenerator(Structure):
-    class GenerationData(Structure): ...
-
-    @function_hook(
-        "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? "
-        "E8 ? ? ? ? 48 2B E0 33 F6 0F 29 B4 24"
-    )
-    def GenerateQueryInfo(
-        self,
-        this: "_Pointer[cGcSolarSystemGenerator]",
-        lSeed: _Pointer[basic.cTkSeed],
-        lAttributes: _Pointer[cGcGalaxyAttributesAtAddress],
-        lData: "_Pointer[cGcSolarSystemGenerator.GenerationData]",
-    ): ...
-
-
 class cGcDiscoveryPageData(Structure): ...
 
 
@@ -3536,15 +3608,6 @@ class cEgSceneNode(Structure):
 
 
 @partial_struct
-class cEgModelNode(cEgSceneNode):
-    mpGeometryResource: Annotated[cTkTypedSmartResHandle[cEgGeometryResource], 0x38]
-    muVertBufferIndex: Annotated[int, Field(c_uint32, 0x60)]
-
-    @function_hook("48 8B C4 55 53 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 83 B9")
-    def UpdateGeometry(self, this: "_Pointer[cEgModelNode]") -> c_char: ...
-
-
-@partial_struct
 class cEgShaderResource(cEgResource):
     pass
 
@@ -3591,6 +3654,74 @@ class cEgMaterialResource(cEgResource):
     def ParseNode(self, this: "_Pointer[cEgMaterialResource]", lData: nmse.cTkMaterialData) -> c_bool: ...
 
 
+# @partial_struct
+# class cEgRenderableSceneNode(cEgSceneNode):
+#     mpMaterialResource: Annotated[cTkTypedSmartResHandle[cEgMaterialResource], 0x38]
+#     _mpParentModel: Annotated[int, Field(c_uint64, 0x48)]
+
+#     @property
+#     def mpParentModel(self) -> "_Pointer[cEgModelNode]":
+#         return map_struct(get_addressof(self._mpParentModel), _Pointer[cEgModelNode])
+
+
+@partial_struct
+class cEgJointNode(cEgSceneNode):
+    _total_size = 0xA0
+
+    _mpParentModel: Annotated[int, Field(c_uint64, 0x48)]
+    mBaseMatrix: Annotated[basic.cTkMatrix34, 0x50]
+    muJointIndex: Annotated[int, Field(c_uint32, 0x90)]
+
+    @property
+    def mParentModel(self) -> "cEgModelNode":
+        return cEgModelNode.from_address(self._mpParentModel)
+
+
+@partial_struct
+class cEgBoundingBox(Structure):
+    mMin: Annotated[basic.Vector3f, 0x0]
+    mMax: Annotated[basic.Vector3f, 0x0]
+
+
+@partial_struct
+class cEgAnimationController(Structure):
+    # Padded into cEgAnimationController::EvalCommandListInternal in cEgModelNode::Animate
+    mAdditivePose: Annotated[basic.TkStd.tk_vector[AnimTransform], 0xB0]
+    maNodeToJoint: Annotated[basic.TkStd.tk_vector[c_int32], 0xC0]
+    maJointToNode: Annotated[basic.TkStd.tk_vector[c_int32], 0xD0]
+    mabIgnoreAnimation: Annotated[basic.TkStd.tk_vector[c_bool], 0xE0]
+    mbDirty: Annotated[bool, Field(c_bool, 0x184)]
+
+
+@partial_struct
+class cEgModelNode(cEgSceneNode):
+    @partial_struct
+    class AnimationWorkBuffer(Structure):
+        maPose: Annotated[_Pointer[basic.cTkMatrix34], 0x0]
+        maRelativeModelMatrix: Annotated[_Pointer[basic.cTkMatrix34], 0x8]
+        mLocalAabb: Annotated[cEgBoundingBox, 0x10]
+
+    mpGeometryResource: Annotated[cTkTypedSmartResHandle[cEgGeometryResource], 0x38]
+    muVertBufferIndex: Annotated[int, Field(c_uint32, 0x60)]
+    # mRenderableList: Annotated[basic.TkStd.tk_vector[_Pointer[cEgRenderableSceneNode]], 0x70]
+    # Found at the top of cEgModelNode::UpdateGeometry and cEgModelNode::PrepAnimate
+    mSkinMatrixInds: Annotated[basic.TkStd.tk_vector[c_uint16], 0x80]
+    mAnimationController: Annotated[cEgAnimationController, 0xA0]
+    mSkinMatrixRows: Annotated[basic.TkStd.tk_vector[basic.Vector4f], 0x258]
+    mJointList: Annotated[basic.TkStd.tk_vector[_Pointer[cEgJointNode]], 0x280]
+    maJointIndex: Annotated[basic.TkStd.tk_vector[c_int32], 0x290]
+    maJointParentIndex: Annotated[basic.TkStd.tk_vector[c_int32], 0x2A0]
+    miMaxJointIndex: Annotated[int, Field(c_int32, 0x2B0)]
+    # Found at the top of cEgModelNode::Animate
+    mAnimWorkBuf: Annotated[AnimationWorkBuffer, 0x370]
+
+    @function_hook("4C 8B DC 55 53 49 8D AB ? ? ? ? 48 81 EC ? ? ? ? 48 8D 81")
+    def UpdateGeometry(self, this: "_Pointer[cEgModelNode]") -> c_char: ...
+
+    @function_hook("40 53 48 81 EC ? ? ? ? 48 83 B9 ? ? ? ? ? 48 8B D9 0F 84 ? ? ? ? 48 83 B9")
+    def Animate(self, this: "_Pointer[cEgModelNode]"): ...
+
+
 @partial_struct
 class cEgMeshNode(cEgSceneNode):
     _total_size_ = 0xE0
@@ -3616,6 +3747,7 @@ class cEgMeshNode(cEgSceneNode):
     muVertREndPhysics: Annotated[int, Field(c_uint32, 0xB0)]
     muBvVertStart: Annotated[int, Field(c_uint32, 0xB4)]
     muBvVertEnd: Annotated[int, Field(c_uint32, 0xB8)]
+    # Note: This first and last skin mat refer to the index in the cEgModelNode.mSkinMatrixInds field.
     muFirstSkinMat: Annotated[int, Field(c_uint32, 0xBC)]
     muLastSkinMat: Annotated[int, Field(c_uint32, 0xC0)]
     mfLodFade: Annotated[float, Field(c_float, 0xC4)]
@@ -3843,7 +3975,7 @@ class cEgSceneNodeData(Structure):
     # These are found in a few Engine:: functions.
     mpRelativeTransformBuffer: Annotated[_Pointer[basic.cTkMatrix34], 0x48]
     mpPrevRelativeTransformBuffer: Annotated[_Pointer[basic.cTkMatrix34], 0x48]
-    # mpLocalBoundingBoxBuffer: Annotated[_Pointer[cEgBoundingBox], 0x58]
+    mpLocalBoundingBoxBuffer: Annotated[_Pointer[cEgBoundingBox], 0x58]
     mpAbsoluteTransformBuffer: Annotated[_Pointer[basic.cTkMatrix34], 0x60]
     mpStructureBuffer: Annotated[_Pointer[cEgStructureIndex], 0x70]
     # Found in cGcNGuiNodeInfo::Get just above the string " - Hidden"
@@ -3853,6 +3985,14 @@ class cEgSceneNodeData(Structure):
     mpMaterialPtrBuffer: Annotated[_Pointer[c_void_p], 0xC8]
     mpHandleToIndexBuffer: Annotated[_Pointer[c_int32], 0xD8]
     miCurFrame: Annotated[int, Field(c_int32, 0x210)]
+
+    @function_hook("48 8B 81 ? ? ? ? 81 E2 ? ? ? ? 4C 8B C9")
+    def SetRelativeTransform(
+        self,
+        this: "_Pointer[cEgSceneNodeData]",
+        lHandle: basic.TkHandle,
+        lValue: _Pointer[basic.cTkMatrix34],
+    ): ...
 
 
 @partial_struct
