@@ -27,7 +27,7 @@ from pymhf.core._internal import BASE_ADDRESS
 from pymhf.core.hooking import Structure, function_hook, static_function_hook
 from pymhf.core.memutils import find_pattern_in_binary, map_struct
 from pymhf.extensions.cpptypes import std
-from pymhf.extensions.ctypes import c_char_p64, c_enum16, c_enum32
+from pymhf.extensions.ctypes import c_char_p64, c_enum8, c_enum16, c_enum32
 from pymhf.utils.partial_struct import Field, partial_struct
 from pymhf.utils.winapi import get_filepath_from_handle
 
@@ -264,21 +264,6 @@ class AK(Structure):
 
 
 @partial_struct
-class cGcNGuiText(Structure):
-    # Found in cGcNGuiText::EditElement
-    mpTextData: Annotated[
-        _Pointer[nmse.cGcNGuiTextData],
-        Field(_Pointer[nmse.cGcNGuiTextData], 0x180),
-    ]
-
-    @function_hook(
-        "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 81 EC ? ? ? ? 0F 29 70 ? 48 "
-        "8D A8 ? ? ? ? 48 83 E5 ? 48 8B 01"
-    )
-    def EditElement(self, this: "_Pointer[cGcNGuiText]"): ...
-
-
-@partial_struct
 class cTkPersonalRNG(Structure):
     mState0: Annotated[int, Field(c_uint32)]
     mState1: Annotated[int, Field(c_uint32)]
@@ -314,10 +299,29 @@ class cTkAudioManager(Structure):
 
 @partial_struct
 class cGcNGuiElement(Structure):
-    mpElementData: Annotated[
-        _Pointer[nmse.cGcNGuiElementData],
-        Field(_Pointer[nmse.cGcNGuiElementData], 0x48),
-    ]
+    class eLayoutChangeEvent(IntEnum):
+        Nothing = 0x0
+        PositionMode = 0x1
+        WidthMode = 0x2
+        HeightMode = 0x3
+        ConstrainMode = 0x4
+        Size = 0x5
+        Width = 0x6
+        Height = 0x7
+        Value = 0x8
+        ColourPreset = 0x9
+
+    mpElementData: Annotated[_Pointer[nmse.cGcNGuiElementData], 0x48]
+    meLayoutChangeEvent: Annotated[c_enum8[eLayoutChangeEvent], 0x51]
+
+    @function_hook("48 83 EC ? 48 8B 41 ? 45 85 C0")
+    def GetPosition(
+        self,
+        this: "_Pointer[cGcNGuiElement]",
+        result: _Pointer[basic.Vector2f],
+        lType: c_uint32,  # cGcNGuiElement::PositionType
+    ) -> c_uint64:  # cTkVector2 *
+        ...
 
     @function_hook("48 83 EC ? 4C 8B 59 ? 4C 8B D1")
     def SetPosition(
@@ -327,9 +331,31 @@ class cGcNGuiElement(Structure):
         lType: c_uint32,  # cGcNGuiElement::PositionType
     ): ...
 
+    @function_hook("4C 8B DC 53 48 81 EC ? ? ? ? 49 89 6B ? 48 8B D9")
+    def Render(self, this: "_Pointer[cGcNGuiElement]"): ...
+
+
+@partial_struct
+class cGcNGuiText(cGcNGuiElement):
+    # Found in cGcNGuiText::EditElement
+    mpTextData: Annotated[
+        _Pointer[nmse.cGcNGuiTextData],
+        Field(_Pointer[nmse.cGcNGuiTextData], 0x180),
+    ]
+
+    @function_hook(
+        "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 81 EC ? ? ? ? 0F 29 70 ? 48 "
+        "8D A8 ? ? ? ? 48 83 E5 ? 48 8B 01"
+    )
+    def EditElement(self, this: "_Pointer[cGcNGuiText]"): ...
+
 
 @partial_struct
 class cGcNGuiLayer(cGcNGuiElement):
+    mapElements: Annotated[basic.TkStd.tk_vector[_Pointer[cGcNGuiElement]], 0x58]
+    # mapLayerElements: Annotated[basic.TkStd.tk_vector[_Pointer[cGcNGuiLayer]], 0x58]
+    mpLayerData: Annotated[_Pointer[nmse.cGcNGuiLayerData], 0x148]
+
     @function_hook(
         "48 83 EC ? 4C 8B 02 4C 8B C9 0F 10 02 49 8B C0 48 B9 ? ? ? ? ? ? ? ? 48 33 42 ? 48 0F AF C1 0F 11 "
         "44 24 ? 48 8B D0 48 C1 EA ? 48 33 D0 49 33 D0 48 0F AF D1 4C 8B C2 49 C1 E8 ? 4C 33 C2 4C 0F AF C1 "
@@ -389,10 +415,70 @@ class cGcNGuiLayer(cGcNGuiElement):
     ) -> c_uint64:  # cGcNGuiGraphic *
         ...
 
+    @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B F9 E8 ? ? ? ? 33 ED")
+    def cGcNGuiLayer(self, this: "_Pointer[cGcNGuiLayer]"): ...
+
 
 @partial_struct
 class cGcNGui(Structure):
     mRoot: Annotated[cGcNGuiLayer, 0x0]
+
+
+@partial_struct
+class cTkNGuiElementID(Structure):
+    # Assuming the same as 4.13
+    miCounter: Annotated[int, Field(c_int64, 0x0)]
+    miBase: Annotated[int, Field(c_uint64, 0x8)]
+    miFrameRenderTracker: Annotated[int, Field(c_int32, 0x10)]
+    miPerFrameUseCount: Annotated[int, Field(c_int32, 0x10)]
+
+
+# class cTkUiDataMap(Structure, Generic[T]):
+#     _template_type: Type[T]
+
+#     maUiData: basic.TkStd.tk_vector[T]
+#     maElementIndices: basic.TkStd.tk_vector[cTkNGuiElementID]
+
+#     def __class_getitem__(cls: type["cTkUiDataMap"], key: T):
+#         _cls: type["cTkUiDataMap"] = types.new_class(f"cTkUiDataMap<{key}>", (cls,))
+#         _cls._template_type = key
+#         _cls._fields_ = [
+#             ("maUiData", basic.TkStd.tk_vector[key]),
+#             ("maElementIndices", basic.TkStd.tk_vector[cTkNGuiElementID]),
+#         ]
+#         return _cls
+
+
+class cTkNGuiElementData(Structure):
+    pass
+
+
+@partial_struct
+class cTkNGui(Structure):
+    # mElementDataMap: Annotated[cTkUiDataMap[cTkNGuiElementData], 0x70]
+    # maLayerStack: Annotated[basic.TkStd.tk_vector[cTkNGuiLayer], 0xB8]
+
+    @function_hook(
+        "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 81 EC ? ? ? ? 0F 29 70 ? 0F "
+        "29 78 ? 48 8D A8 ? ? ? ? 48 83 E5 ? F3 0F 10 0D"
+    )
+    def DoElement(
+        self,
+        this: "_Pointer[cTkNGui]",
+        liTextType: Annotated[int, c_int32],
+        liGraphicType: Annotated[int, c_int32],
+        lpacText: c_char_p64,
+        leSize: Annotated[int, c_int32],  # eNGuiSizeType
+        lfSizeX: Annotated[float, c_float],
+        lfSizeY: Annotated[float, c_float],
+        lbBeginLayer: Annotated[bool, c_bool],
+        lfMaxSizeX: Annotated[float, c_float],
+    ) -> c_uint64: ...
+
+
+@partial_struct
+class cGcNGuiGame(cTkNGui):
+    pass
 
 
 @partial_struct
@@ -1062,6 +1148,23 @@ class cGcGalaxyAttributeGenerator(Structure):
 
 
 @partial_struct
+class cGcDiscoveryData(Structure):
+    mUniverseAddress: Annotated[c_uint64, 0x0]
+    meType: Annotated[c_enum32[enums.cGcDiscoveryType], 0x40]
+
+
+@partial_struct
+class cGcDiscoveryManager(Structure):
+    @function_hook("48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B 59 ? 49 8B F8 48 8B F2")
+    def SubmitDiscoveryData(
+        self,
+        this: "_Pointer[cGcDiscoveryManager]",
+        lDiscoveryData: _Pointer[cGcDiscoveryData],
+        lpbLocallyNew: _Pointer[c_bool],
+    ): ...
+
+
+@partial_struct
 class cGcGameState(Structure):
     # Found in cGcGameState::cGcGameState
     mPlayerState: Annotated[cGcPlayerState, 0xAAD0]
@@ -1079,6 +1182,7 @@ class cGcGameState(Structure):
         Field(cGcPlayerFleetManager * 4, 0x2A6090),
     ]
     mPlayerSquadronOwnership: Annotated[cGcPlayerSquadronOwnership, 0x2B5F54]
+    mDiscoveryManager: Annotated[cGcDiscoveryManager, 0x2BA3B8]
     # Found passed into cGcPersistentInteractionsManager::LoadGalacticAddressBuffers wherever it is called.
     # Need to subtract the offset of cGcGamestate from the address in the exe which is the pointer to the
     # start of cGcApplication::Data
@@ -1256,12 +1360,6 @@ class cGcTerrainRegionMap(Structure):
         liRadius: c_int32,
         liBorderRegions: c_int32,
     ): ...
-
-
-@partial_struct
-class cGcDiscoveryData(Structure):
-    mUniverseAddress: Annotated[c_uint64, 0x0]
-    meType: Annotated[c_enum32[enums.cGcDiscoveryType], 0x40]
 
 
 @partial_struct
@@ -1671,6 +1769,9 @@ class cGcPlayerHUD(cGcHUD):
     @function_hook("48 8B C4 55 53 56 41 54 41 55 41 56")
     def RenderCrosshair(self, this: "_Pointer[cGcPlayerHUD]"): ...
 
+    @function_hook("F3 0F 11 4C 24 ? 48 89 4C 24 ? 55 41 57")
+    def Update(self, this: "_Pointer[cGcPlayerHUD]", lfTimeStep: Annotated[float, c_float]): ...
+
 
 class cGcQuickMenu(Structure):
     @function_hook(
@@ -1717,6 +1818,91 @@ class cGcPlayerWeapon(Structure):
 
 
 @partial_struct
+class cGcAlienPuzzleOption(Structure):
+    _total_size_ = 0xF8
+    Name: Annotated[basic.cTkFixedString[0x20], Field(basic.cTkFixedString[0x20], 0x20)]
+    Rewards: Annotated[
+        list[basic.cTkFixedString[0x10]],
+        Field(basic.cTkDynamicArray[basic.cTkFixedString[0x10]], 0xC0),
+    ]
+
+
+@partial_struct
+class cGcInteractionComponent(Structure):
+    mpData: Annotated[_Pointer[nmse.cGcInteractionComponentData], 0x30]
+
+    @function_hook("44 88 4C 24 ? 44 88 44 24 ? 48 89 54 24 ? 53")
+    def GiveReward(
+        self,
+        this: "_Pointer[cGcInteractionComponent]",
+        lOption: _Pointer[cGcAlienPuzzleOption],
+        lbPeek: Annotated[bool, c_bool],
+        lbForceShowMessage: Annotated[bool, c_bool],
+        lbForceSilent: Annotated[bool, c_bool],
+    ) -> c_uint64: ...
+
+    @function_hook("48 8B 81 ? ? ? ? 48 85 C0 74 ? 48 83 B9 ? ? ? ? ? 75 ? 48 83 B9")
+    def GetPuzzle(
+        self,
+        this: "_Pointer[cGcInteractionComponent]",
+    ) -> c_uint64:  # cGcAlienPuzzleEntry *
+        ...
+
+    @static_function_hook(
+        "4C 8B DC 48 83 EC ? 49 C7 43 ? ? ? ? ? 41 C7 43 ? ? ? ? ? 83 FA ? 75 ? 48 8D 05 ? ? ? ? 45 33 C0 49 "
+        "89 43 ? 4D 8D 4B ? 49 8D 43 ? 49 89 43 ? 48 8D 15 ? ? ? ? 49 8D 43 ? 49 89 43 ? E8 ? ? ? ? 48 8B 84 "
+        "24 ? ? ? ? 48 83 C4 ? C3 48 8D 84 24 ? ? ? ? 48 89 44 24 ? 48 8D 54 24 ? 48 8D 84 24 ? ? ? ? 48 89 "
+        "44 24 ? 0F 28 44 24 ? 66 0F 7F 44 24 ? E8 ? ? ? ? 48 8B 84 24 ? ? ? ? 48 83 C4 ? C3 CC CC CC CC CC "
+        "CC CC CC CC CC CC CC CC 48 89 5C 24 ? 57 48 83 EC ? 33 FF"
+    )
+    @staticmethod
+    def FindFirstTypedComponent(
+        lNodeHandle: basic.TkHandle,
+        lbSameModelOnly: Annotated[bool, c_bool],
+    ) -> c_uint64:  # cGcInteractionComponent *
+        ...
+
+    @function_hook("40 55 41 55 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B F1")
+    def DoInteractionEvent(
+        self,
+        this: "_Pointer[cGcInteractionComponent]",
+        leEvent: c_enum32[enums.cGcInteractionType],
+    ): ...
+
+    @function_hook("40 53 48 83 EC ? 48 8B D9 48 8B 0D ? ? ? ? 8B 93")
+    def GetInteractionData(
+        self,
+        this: "_Pointer[cGcInteractionComponent]",
+    ) -> c_uint64:  # cGcInteractionData *
+        ...
+
+
+@partial_struct
+class cGcFrontendManager(Structure):
+    # Found in cGcFrontendManager::cGcFrontendManager
+    mFrontendRoot: Annotated[cGcNGuiLayer, 0x2468]
+
+    @function_hook(
+        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 54 41 56 41 57 48 83 EC ? 48 8D 05"
+    )
+    def cGcFrontendManager(self, this: "_Pointer[cGcFrontendManager]"): ...
+
+    @function_hook("48 63 81 ? ? ? ? 48 03 C0 83 BC C1 ? ? ? ? ? 75 ? 89 94 C1")
+    def QueueFrontendPage(
+        self,
+        this: "_Pointer[cGcFrontendManager]",
+        lPageToQueue: Annotated[int, c_uint32],
+        lfStartDelay: Annotated[float, c_float],
+        lpInteraction: _Pointer[cGcInteractionComponent],
+    ): ...
+
+
+@partial_struct
+class cGcNGuiManager(Structure):
+    pass
+
+
+@partial_struct
 class cGcApplication(cTkFSM):
     @partial_struct
     class Data(Structure):
@@ -1726,6 +1912,8 @@ class cGcApplication(cTkFSM):
         mGameState: Annotated[cGcGameState, 0xE20]
         mSimulation: Annotated[cGcSimulation, 0x4B28E0]
         mHUDManager: Annotated[cGcHUDManager, 0x707C30]
+        mFrontendManager: Annotated[cGcFrontendManager, 0x82B680]
+        mNGuiManager: Annotated[cGcNGuiManager, 0x902AD0]
 
         @function_hook(
             "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 33 ED 48 C7 41 ? ? ? ? "
@@ -2516,16 +2704,6 @@ class cGcRewardManager(Structure):
 
 
 @partial_struct
-class cGcAlienPuzzleOption(Structure):
-    _total_size_ = 0xF8
-    Name: Annotated[basic.cTkFixedString[0x20], Field(basic.cTkFixedString[0x20], 0x20)]
-    Rewards: Annotated[
-        list[basic.cTkFixedString[0x10]],
-        Field(basic.cTkDynamicArray[basic.cTkFixedString[0x10]], 0xC0),
-    ]
-
-
-@partial_struct
 class cGcAlienPuzzleEntry(Structure):
     Id: Annotated[str, Field(basic.cTkFixedString[0x20], 0x0)]
     Options: Annotated[
@@ -2547,56 +2725,6 @@ class cGcDestructableComponent(Structure):
         leDestroyedBy: c_uint32,  # eDestroyedBy
         lDestroyedByPlayerId: c_uint64,  # const cTkUserIdBase<cTkFixedString<64,char> > *
     ): ...
-
-
-@partial_struct
-class cGcInteractionComponent(Structure):
-    mpData: Annotated[_Pointer[nmse.cGcInteractionComponentData], 0x30]
-
-    @function_hook("44 88 4C 24 ? 44 88 44 24 ? 48 89 54 24 ? 53")
-    def GiveReward(
-        self,
-        this: "_Pointer[cGcInteractionComponent]",
-        lOption: _Pointer[cGcAlienPuzzleOption],
-        lbPeek: Annotated[bool, c_bool],
-        lbForceShowMessage: Annotated[bool, c_bool],
-        lbForceSilent: Annotated[bool, c_bool],
-    ) -> c_uint64: ...
-
-    @function_hook("48 8B 81 ? ? ? ? 48 85 C0 74 ? 48 83 B9 ? ? ? ? ? 75 ? 48 83 B9")
-    def GetPuzzle(
-        self,
-        this: "_Pointer[cGcInteractionComponent]",
-    ) -> c_uint64:  # cGcAlienPuzzleEntry *
-        ...
-
-    @static_function_hook(
-        "4C 8B DC 48 83 EC ? 49 C7 43 ? ? ? ? ? 41 C7 43 ? ? ? ? ? 83 FA ? 75 ? 48 8D 05 ? ? ? ? 45 33 C0 49 "
-        "89 43 ? 4D 8D 4B ? 49 8D 43 ? 49 89 43 ? 48 8D 15 ? ? ? ? 49 8D 43 ? 49 89 43 ? E8 ? ? ? ? 48 8B 84 "
-        "24 ? ? ? ? 48 83 C4 ? C3 48 8D 84 24 ? ? ? ? 48 89 44 24 ? 48 8D 54 24 ? 48 8D 84 24 ? ? ? ? 48 89 "
-        "44 24 ? 0F 28 44 24 ? 66 0F 7F 44 24 ? E8 ? ? ? ? 48 8B 84 24 ? ? ? ? 48 83 C4 ? C3 CC CC CC CC CC "
-        "CC CC CC CC CC CC CC CC 48 89 5C 24 ? 57 48 83 EC ? 33 FF"
-    )
-    @staticmethod
-    def FindFirstTypedComponent(
-        lNodeHandle: basic.TkHandle,
-        lbSameModelOnly: Annotated[bool, c_bool],
-    ) -> c_uint64:  # cGcInteractionComponent *
-        ...
-
-    @function_hook("40 55 41 55 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B F1")
-    def DoInteractionEvent(
-        self,
-        this: "_Pointer[cGcInteractionComponent]",
-        leEvent: c_enum32[enums.cGcInteractionType],
-    ): ...
-
-    @function_hook("40 53 48 83 EC ? 48 8B D9 48 8B 0D ? ? ? ? 8B 93")
-    def GetInteractionData(
-        self,
-        this: "_Pointer[cGcInteractionComponent]",
-    ) -> c_uint64:  # cGcInteractionData *
-        ...
 
 
 @partial_struct
@@ -4038,6 +4166,62 @@ class cGcPhotoModeUI(Structure):
         ...
 
 
+@partial_struct
+class cTkClock(Structure):
+    # This is unchanged since 4.13
+    mu64StartTime: Annotated[int, Field(c_uint64, 0x0)]
+    mu64CurrentTime: Annotated[int, Field(c_uint64, 0x8)]
+    muLastWaitTicksFinish: Annotated[int, Field(c_uint64, 0x10)]
+    mfTimeStep: Annotated[float, Field(c_float, 0x18)]
+    mfTotalTime: Annotated[float, Field(c_float, 0x1C)]
+    mfPrevTotalTime: Annotated[float, Field(c_float, 0x20)]
+    mfSlowMotionFactor: Annotated[float, Field(c_float, 0x24)]
+    muFrameCount: Annotated[int, Field(c_uint64, 0x28)]
+    mbMinFrameTimeSynced: Annotated[bool, Field(c_bool, 0x30)]
+    mbPaused: Annotated[bool, Field(c_bool, 0x31)]
+    mbRealtime: Annotated[bool, Field(c_bool, 0x32)]
+
+
+class cTkTimeManager:
+    patt_mLocalClock = "48 8D 0D ? ? ? ? 44 88 35 ? ? ? ? C7 05"
+    patt_mGlobalClock = (
+        "48 8D 0D ? ? ? ? E8 ? ? ? ? B2 ? 48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8D 0D ? ? ? ? 44 88 35"
+    )
+    patt_mRealtimeClock = "48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8D 0D ? ? ? ? 44 88 35 ? ? ? ? 44 89 35"
+
+    mLocalClock: cTkClock
+    mGlobalClock: cTkClock
+    mRealtimeClock: cTkClock
+
+    def find_variables(self):
+        # mLocalClock
+        patt_addr = find_pattern_in_binary(self.patt_mLocalClock, False)
+        if patt_addr:
+            start_addr = BASE_ADDRESS + patt_addr
+            offset = c_uint32.from_address(start_addr + 3)
+            mLocalClock_offset = start_addr + offset.value + 7
+            self.mLocalClock = map_struct(mLocalClock_offset, cTkClock)
+
+        # mGlobalClock
+        patt_addr = find_pattern_in_binary(self.patt_mGlobalClock, False)
+        if patt_addr:
+            start_addr = BASE_ADDRESS + patt_addr
+            offset = c_uint32.from_address(start_addr + 3)
+            mGlobalClock_offset = start_addr + offset.value + 7
+            self.mGlobalClock = map_struct(mGlobalClock_offset, cTkClock)
+
+        # mRealtimeClock
+        patt_addr = find_pattern_in_binary(self.patt_mRealtimeClock, False)
+        if patt_addr:
+            start_addr = BASE_ADDRESS + patt_addr
+            offset = c_uint32.from_address(start_addr + 3)
+            mRealtimeClock_offset = start_addr + offset.value + 7
+            self.mRealtimeClock = map_struct(mRealtimeClock_offset, cTkClock)
+
+
+time_manager = cTkTimeManager()
+
+
 class cEgModules:
     # Found in cEgModules::Initialise
     patt_mgpSceneManager = (
@@ -4050,10 +4234,13 @@ class cEgModules:
         "8B F8"
     )
     patt_cTkMemoryManager = "48 8D 0D ? ? ? ? E8 ? ? ? ? E8 ? ? ? ? 80 3D"
+    patt_gGameGui = "48 8D 0D ? ? ? ? F3 0F 11 44 24 ? BA"
     mgpSceneManager: _Pointer[cEgSceneManager]
     mgpResourceManager: _Pointer[cTkResourceManager]
     mgpRenderer: _Pointer[cEgRenderer]
+    # These are just globals, but we'll store them here for now.
     mgMemoryManager: cTkMemoryManager
+    gGameGui: cGcNGuiGame
 
     def find_variables(self):
         patt_addr = find_pattern_in_binary(self.patt_mgpSceneManager, False)
@@ -4081,6 +4268,13 @@ class cEgModules:
             offset = c_uint32.from_address(start_addr + 3)
             mgMemoryManager_offset = start_addr + offset.value + 7
             self.mgMemoryManager = map_struct(mgMemoryManager_offset, cTkMemoryManager)
+
+        patt_addr = find_pattern_in_binary(self.patt_gGameGui, False)
+        if patt_addr:
+            start_addr = BASE_ADDRESS + patt_addr
+            offset = c_uint32.from_address(start_addr + 3)
+            gGameGui_offset = start_addr + offset.value + 7
+            self.gGameGui = map_struct(gGameGui_offset, cGcNGuiGame)
 
     @static_function_hook("40 57 48 83 EC ? 33 FF 48 89 5C 24")
     @staticmethod
@@ -4161,6 +4355,22 @@ class cGcFrontendPageClaimBase(Structure):
         lbInsideOtherBase: Annotated[bool, c_bool],
         luiLegacyBase: _Pointer[c_uint16],
     ): ...
+
+
+@partial_struct
+class cTkComponent(Structure):
+    _total_size_ = 0x30
+
+
+@partial_struct
+class cGcSimpleInteractionComponent(cTkComponent):
+    mpData: Annotated[_Pointer[nmse.cGcSimpleInteractionComponentData], 0x30]
+    mfActionTimer: Annotated[float, Field(c_float, 0x4C)]
+
+    @function_hook(
+        "48 8B C4 55 41 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 58 ? 4C 8B F1 48 89 70 ? 48 8D 8D"
+    )
+    def DoAction(self, this: "_Pointer[cGcSimpleInteractionComponent]"): ...
 
 
 # Dummy values to copy and paste to make adding new things quicker...

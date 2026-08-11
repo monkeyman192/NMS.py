@@ -1569,5 +1569,45 @@
   "name": "cEgSceneNodeData::SetRelativeTransform",
   "signature": "48 8B 81 ? ? ? ? 81 E2 ? ? ? ? 4C 8B C9",
   "mangled_name": "?SetRelativeTransform@cEgSceneNodeData@@QEAAXVTkHandle@@AEBVcTkMatrix34@@@Z"
+ },
+ {
+  "name": "cGcPlayerHUD::Update",
+  "signature": "F3 0F 11 4C 24 ? 48 89 4C 24 ? 55 41 57",
+  "mangled_name": "?Update@cGcPlayerHUD@@QEAAXM@Z"
+ },
+ {
+  "name": "cGcNGuiElement::GetPosition",
+  "signature": "48 83 EC ? 48 8B 41 ? 45 85 C0",
+  "mangled_name": "?GetPosition@cGcNGuiElement@@QEBA?AVcTkVector2@@W4PositionType@1@@Z"
+ },
+ {
+  "name": "cGcNGuiElement::Render",
+  "signature": "4C 8B DC 53 48 81 EC ? ? ? ? 49 89 6B ? 48 8B D9",
+  "mangled_name": "?Render@cGcNGuiElement@@UEAAXXZ"
+ },
+ {
+  "name": "cGcFrontendManager::cGcFrontendManager",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 54 41 56 41 57 48 83 EC ? 48 8D 05",
+  "mangled_name": "??0cGcFrontendManager@@QEAA@XZ"
+ },
+ {
+  "name": "cGcNGuiLayer::cGcNGuiLayer",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B F9 E8 ? ? ? ? 33 ED",
+  "mangled_name": "??0cGcNGuiLayer@@QEAA@XZ"
+ },
+ {
+  "name": "cGcSimpleInteractionComponent::DoAction",
+  "signature": "48 8B C4 55 41 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 58 ? 4C 8B F1 48 89 70 ? 48 8D 8D",
+  "mangled_name": "?DoAction@cGcSimpleInteractionComponent@@AEAAXXZ"
+ },
+ {
+  "name": "cGcDiscoveryManager::SubmitDiscoveryData",
+  "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B 59 ? 49 8B F8 48 8B F2",
+  "mangled_name": "?SubmitDiscoveryData@cGcDiscoveryManager@@QEAA_NAEBVcGcDiscoveryData@@PEA_N@Z"
+ },
+ {
+  "name": "cGcFrontendManager::QueueFrontendPage",
+  "signature": "48 63 81 ? ? ? ? 48 03 C0 83 BC C1 ? ? ? ? ? 75 ? 89 94 C1",
+  "mangled_name": "?QueueFrontendPage@cGcFrontendManager@@QEAAXW4eFrontendPage@@MPEAVcGcInteractionComponent@@@Z"
  }
 ]
