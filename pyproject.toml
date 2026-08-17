@@ -24,7 +24,7 @@ classifiers = [
   "Programming Language :: Python :: 3 :: Only",
 ]
 dependencies = [
-  "pymhf[gui]>=0.2.3"
+  "pymhf[http_api,gui]>=0.2.4"
 ]
 version = "170671.3"
 
@@ -60,8 +60,6 @@ Repository = "https://github.com/monkeyman192/NMS.py.git"
 
 [project.entry-points.pymhf_rtfunc]
 "globals" = "nmspy.globals:globals.instantiate_globals"
-"engine_modules" = "nmspy.data.types:engine_modules.find_variables"
-"cTkTimeManager" = "nmspy.data.types:time_manager.find_variables"
 
 [project.entry-points.pymhfcmd]
 check = "check"

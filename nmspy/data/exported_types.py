@@ -3,8 +3,8 @@ from enum import IntEnum
 from typing import Annotated
 
 from pymhf.core.hooking import Structure
+from pymhf.core.structs import Field, partial_struct
 from pymhf.extensions.ctypes import c_enum8, c_enum32
-from pymhf.utils.partial_struct import Field, partial_struct
 
 import nmspy.data.basic_types as basic
 import nmspy.data.enums as enums

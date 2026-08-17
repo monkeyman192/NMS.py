@@ -1,6 +1,7 @@
 import ctypes
 import types
 from logging import getLogger
+from math import ceil
 from typing import TYPE_CHECKING, Any, Generator, Generic, Type, TypeVar, Union
 
 from pymhf.core.memutils import get_addressof, map_struct
@@ -35,6 +36,10 @@ def fnv_1a(input: str, length: int):
         _hash = (ord(char) ^ _hash) & 0xFFFFFFFFFFFFFFFF
         _hash = (_hash * FNV_prime) & 0xFFFFFFFFFFFFFFFF
     return _hash
+
+
+class MallocError(Exception):
+    pass
 
 
 class cTkBitArray(ctypes.Structure, Generic[TN, N]):
@@ -656,7 +661,7 @@ class VariableSizeString(cTkDynamicArray[ctypes.c_char]):
                     self.ArrayPointer = int(new_addr)
                     self.Size = new_size
                 else:
-                    logger.error("Unable to alloccate memory for the new string. Nothing allocated...")
+                    logger.error("Unable to allocate memory for the new string. Nothing allocated...")
             except Exception:
                 logger.exception("Could not write the new string for some reason:")
         else:
@@ -768,17 +773,27 @@ class TkStd:
             else:
                 raise IndexError
 
-        def __delitem__(self, i: int):
+        def __delitem__(self, idx: int):
             if self.vector_size > 0:
+                if idx >= self.vector_size:
+                    raise IndexError
                 # If we are deleting the last element, just decrement the vector size.
-                if i == self.vector_size - 1:
+                if idx == self.vector_size - 1:
                     self.vector_size -= 1
                 # Move the proceeding bytes after the index down by the size of the element and then decrement
                 # the vector size.
                 else:
-                    raise NotImplementedError("Coming soon!")
+                    ptr_data_addr = get_addressof(self._ptr)
+                    size = self._template_type_size * (self.vector_size - (idx + 1))
+                    old_addr = ptr_data_addr + self._template_type_size * (idx + 1)
+                    new_addr = ptr_data_addr + self._template_type_size * idx
+                    old_data = (ctypes.c_ubyte * size).from_address(old_addr)
+                    new_data = (ctypes.c_ubyte * size).from_address(new_addr)
+                    ctypes.memmove(ctypes.byref(new_data), ctypes.byref(old_data), size)
+                    self.vector_size -= 1
+                    # Keep the allocated_size the same so that we can re-use it if we add something back.
 
-        def add(self, other: T) -> bool:
+        def append(self, other: T) -> bool:
             # Add an extra item into the vector.
             # NOTE: This checks to ensure that there is space for the item.
             # If there is not this will raise an error.
@@ -788,7 +803,41 @@ class TkStd:
                 self.vector_size += 1
                 return True
             else:
-                raise NotImplementedError("Vector already full. Cannot add another element yet...")
+                if self.expand():
+                    return self.add(other)
+                else:
+                    logger.error("Unable to allocate new memory to add a new element.")
+                    return False
+
+        def expand(self) -> bool:
+            """Resize the current vector, moving all the current data."""
+            from nmspy.data.types import engine_modules
+
+            gMemoryManager = engine_modules.mgMemoryManager
+
+            # Expand by 1.5x the current max size (rounded up). This is (roughly) the way MSVC does it.
+            new_length = ceil(len(self) * 1.5)
+
+            # Allocate enough new memory for the required size and copy over the old data.
+            try:
+                new_size = new_length * self._template_type_size
+                if (new_addr := gMemoryManager.Malloc(new_size, 0, 0, 0, 16, -1)) is not None:
+                    # Copy all the original data over to the new address.
+                    old_size = self._template_type_size * self.vector_size
+                    ptr_data_addr = get_addressof(self._ptr)
+                    ctypes.memmove(int(new_addr), ptr_data_addr, old_size)
+                    # Free the old memory to release it back to NMS.
+                    gMemoryManager.Free(ctypes.c_void_p(ptr_data_addr), -1)
+                    # Change the address the pointer points to.
+                    self._ptr = ctypes.cast(new_addr, ctypes.POINTER(self._template_type))
+                    self.allocated_size = new_length
+                    return True
+                else:
+                    logger.error("Unable to reallocate memory for the vector. Nothing allocated...")
+                    return False
+            except Exception:
+                logger.exception("Could not expand the vector")
+                return False
 
         def __iter__(self) -> Generator[T, None, None]:
             for i in range(self.vector_size):
