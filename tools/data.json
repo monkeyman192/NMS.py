@@ -1624,5 +1624,35 @@
   "name": "cGcInventoryStore::Remove",
   "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 54 24 ? 56 57 41 56 48 83 EC ? 48 8B B9",
   "mangled_name": "?Remove@cGcInventoryStore@@QEAA_NVcGcInventoryIndex@@H@Z"
+ },
+ {
+  "name": "cGcFishLaser::OnModeChanged",
+  "signature": "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 8D 42",
+  "mangled_name": "__ZN12cGcFishLaser13OnModeChangedENS_5eModeES0_"
+ },
+ {
+  "name": "cGcHUDManager::RemoveOSDMessage",
+  "signature": "48 89 5C 24 ? 55 56 57 48 81 EC ? ? ? ? 4C 8B 89",
+  "mangled_name": "__ZN13cGcHUDManager16RemoveOSDMessageEPKc"
+ },
+ {
+  "name": "cGcVibrationManager::SendValue",
+  "signature": "48 89 5C 24 ? 57 48 83 EC ? 48 8B F9 48 83 C1 ? E8 ? ? ? ? 48 8D 14 40 48 8B 47 ? 48 8D 04 D0 48 3B 47 ? 75",
+  "mangled_name": "?SendValue@cGcVibrationManager@@QEAA_NAEBT?$TkID@$0IA@@@M@Z"
+ },
+ {
+  "name": "cGcFishManager::Update",
+  "signature": "F3 0F 11 4C 24 ? 55 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 44 0F 29 8C 24",
+  "mangled_name": "__ZN14cGcFishManager6UpdateEf"
+ },
+ {
+  "name": "cGcFishManager::SetFishing",
+  "signature": "48 89 5C 24 ? 48 89 7C 24 ? 55 48 8B EC 48 81 EC ? ? ? ? 80 79",
+  "mangled_name": "__ZN14cGcFishManager10SetFishingEP12cGcFishLaser"
+ },
+ {
+  "name": "cGcFishingData::GetRandomFish",
+  "signature": "48 8B C4 44 89 48 ? 4C 89 40 ? 48 89 50 ? 48 89 48 ? 55 53 48 8D A8",
+  "mangled_name": "__ZN14cGcFishingData13GetRandomFishE10cTkVector34TkIDILm128EE12eItemQualityRfS3_"
  }
 ]
