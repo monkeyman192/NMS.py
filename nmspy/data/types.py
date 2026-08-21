@@ -1,5 +1,6 @@
 import ctypes.wintypes as wintypes
 import types
+from contextlib import contextmanager
 from ctypes import (
     POINTER,
     _Pointer,
@@ -21,14 +22,13 @@ from ctypes import (
 )
 from enum import IntEnum
 from logging import getLogger
-from typing import TYPE_CHECKING, Annotated, Generic, Optional, Type, TypeVar
+from typing import TYPE_CHECKING, Annotated, Generator, Generic, Optional, Type, TypeVar
 
-from pymhf.core._internal import BASE_ADDRESS
 from pymhf.core.hooking import Structure, function_hook, static_function_hook
-from pymhf.core.memutils import find_pattern_in_binary, map_struct
+from pymhf.core.memutils import _get_memview_with_size
+from pymhf.core.structs import ContainerStruct, Field, Pattern, partial_struct
 from pymhf.extensions.cpptypes import std
 from pymhf.extensions.ctypes import c_char_p64, c_enum8, c_enum16, c_enum32
-from pymhf.utils.partial_struct import Field, partial_struct
 from pymhf.utils.winapi import get_filepath_from_handle
 
 import nmspy.data.basic_types as basic
@@ -581,6 +581,28 @@ class cGcInventoryStore(Structure):
         "48 89 5C 24 ? 57 48 83 EC ? 33 FF 0F 57 C0 0F 11 01 48 8B D9 0F 11 41 ? 0F 11 41 ? 0F 11 41"
     )
     def cGcInventoryStore(self, this: "_Pointer[cGcInventoryStore]"): ...
+
+    @function_hook("48 89 5C 24 ? 48 89 74 24 ? 55 57 41 56 48 8D 6C 24 ? 48 81 EC ? ? ? ? 41 0F 10 00")
+    def Add(
+        self,
+        this: "_Pointer[cGcInventoryStore]",
+        result: _Pointer[nmse.cGcInventoryIndex],
+        lItem: _Pointer[nmse.cGcInventoryElement],
+    ): ...
+
+    @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 54 24 ? 56 57 41 56 48 83 EC ? 48 8B B9")
+    def Remove(
+        self,
+        this: "_Pointer[cGcInventoryStore]",
+        lIndex: nmse.cGcInventoryIndex,
+        liAmountOverride: Annotated[int, c_int32],
+    ): ...
+
+    @function_hook(
+        "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B 99 ? ? ? ? 48 8B F2 8B 81 ? ? ? ? 48 8D 3C 40 48 C1 "
+        "E7 ? 48 03 FB 48 3B DF 74 ? 90 48 8D 53"
+    )
+    def GetElement(self, this: "_Pointer[cGcInventoryStore]", lIndex: _Pointer[nmse.cGcInventoryIndex]): ...
 
 
 class cGcUniverseAddressData(nmse.cGcUniverseAddressData):
@@ -1632,10 +1654,61 @@ class cGcEcosystem(Structure):
 
 
 @partial_struct
+class cGcFishingData(Structure):
+    @function_hook("48 8B C4 44 89 48 ? 4C 89 40 ? 48 89 50 ? 48 89 48 ? 55 53 48 8D A8")
+    def GetRandomFish(
+        self,
+        this: "_Pointer[cGcFishingData]",
+        lpPos: _Pointer[basic.cTkVector3],
+        lpID: _Pointer[basic.TkID0x10],
+        leQuality: c_enum32[enums.cGcItemQuality],
+        lpMass: _Pointer[c_float],
+        lUnknown: c_int32,
+    ) -> c_uint64:  # presumably nmse.cGcFishData
+        """Get a random fish.
+        This is called when the bobber hits the water.
+        lpMass is set within the function and the value is determined by cGcFishingData::GetRandomFishMass."""
+        ...
+
+
+@partial_struct
+class cGcFishLaser(Structure):
+    class eMode(IntEnum):
+        Inactive = 0x0
+        Error = 0x2
+        Chase = 0x5
+        Escaped = 0x7
+
+    @function_hook("48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 8D 42")
+    def OnModeChanged(
+        self,
+        this: "_Pointer[cGcFishLaser]",
+        mePrevMode: c_enum32[eMode],
+        meNewMode: c_enum32[eMode],
+    ): ...
+
+    @function_hook("40 53 48 83 EC ? 8B 41 ? 48 8B D9 3B D0")
+    def SetMode(self, this: "_Pointer[cGcFishLaser]", meMode: c_enum32[eMode]): ...
+
+
+@partial_struct
+class cGcFishManager(Structure):
+    # Assigned from cGcFishingData.GetRandomFish
+    mCurrentFish: Annotated[_Pointer[nmse.cGcFishData], 0x1C8]
+
+    @function_hook("F3 0F 11 4C 24 ? 55 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 44 0F 29 8C 24")
+    def Update(self, this: "_Pointer[cGcFishManager]", lfTimeStep: Annotated[float, c_float]): ...
+
+    @function_hook("48 89 5C 24 ? 48 89 7C 24 ? 55 48 8B EC 48 81 EC ? ? ? ? 80 79")
+    def SetFishing(self, this: "_Pointer[cGcFishManager]", lpFishLaser: _Pointer[cGcFishLaser]): ...
+
+
+@partial_struct
 class cGcSimulation(Structure):
     # Found in cGcSimulation::Update. Passed into cGcEnvironment::Update.
     mEnvironment: Annotated[cGcEnvironment, 0xAC810]
     mEcosystem: Annotated[cGcEcosystem, 0xB3B50]
+    mFishManager: Annotated[cGcFishManager, 0x24D520]
     # Found in cGcSimulation::Update. Passed into cGcSolarSystem::Update.
     mpSolarSystem: Annotated[_Pointer[cGcSolarSystem], 0x24DFD0]
     mPlayerExperienceDirector: Annotated[cGcPlayerExperienceDirector, 0x24E630]
@@ -1753,6 +1826,8 @@ class cGcPlayerHUD(cGcHUD):
     mHelmetLines: Annotated[cGcNGui, 0x20930]
     mQuickMenu: Annotated[cGcNGuiLayer, 0x20DB0]  # Maybe
     maMarkers: Annotated[tuple[cGcHUDMarker, ...], Field(cGcHUDMarker * 0x80, 0x20FD0)]
+    # Found in cGcPlayerHUD::LoadData
+    mpHUDShieldLayer: Annotated[_Pointer[cGcNGuiLayer], 0xE9DF8]
 
     @function_hook(
         "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 0F 29 74 24 ? 48 8B F9 E8 "
@@ -1771,6 +1846,9 @@ class cGcPlayerHUD(cGcHUD):
 
     @function_hook("F3 0F 11 4C 24 ? 48 89 4C 24 ? 55 41 57")
     def Update(self, this: "_Pointer[cGcPlayerHUD]", lfTimeStep: Annotated[float, c_float]): ...
+
+    @function_hook("48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8B EC 48 83 EC ? 48 8D B1")
+    def LoadData(self, this: "_Pointer[cGcPlayerHUD]"): ...
 
 
 class cGcQuickMenu(Structure):
@@ -1791,6 +1869,9 @@ class cGcHUDManager(Structure):
 
     @function_hook("48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 F6 48 8B F9 48 89 71 ? 48 89 71")
     def cGcHUDManager(self, this: "_Pointer[cGcHUDManager]", a2: c_bool): ...
+
+    @function_hook("48 89 5C 24 ? 55 56 57 48 81 EC ? ? ? ? 4C 8B 89")
+    def RemoveOSDMessage(self, this: "_Pointer[cGcHUDManager]", message: c_char_p64) -> c_bool: ...
 
 
 @partial_struct
@@ -1903,6 +1984,20 @@ class cGcNGuiManager(Structure):
 
 
 @partial_struct
+class cGcVibrationManager(Structure):
+    @function_hook(
+        "48 89 5C 24 ? 57 48 83 EC ? 48 8B F9 48 83 C1 ? E8 ? ? ? ? 48 8D 14 40 48 8B 47 ? 48 8D 04 D0 48 3B "
+        "47 ? 75"
+    )
+    def SendValue(
+        self,
+        this: "_Pointer[cGcVibrationManager]",
+        lID: _Pointer[basic.TkID0x10],
+        lfValue: Annotated[float, c_float],
+    ) -> c_bool: ...
+
+
+@partial_struct
 class cGcApplication(cTkFSM):
     @partial_struct
     class Data(Structure):
@@ -1913,6 +2008,7 @@ class cGcApplication(cTkFSM):
         mSimulation: Annotated[cGcSimulation, 0x4B28E0]
         mHUDManager: Annotated[cGcHUDManager, 0x707C30]
         mFrontendManager: Annotated[cGcFrontendManager, 0x82B680]
+        mVibrationManager: Annotated[cGcVibrationManager, 0x901FA8]
         mNGuiManager: Annotated[cGcNGuiManager, 0x902AD0]
 
         @function_hook(
@@ -2008,6 +2104,16 @@ class cGcBaseBuildingManager(Structure):
         "48 8B C4 F3 0F 11 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 80 79"
     )
     def Update(self, this: "_Pointer[cGcBaseBuildingManager]", lfTimeStep: Annotated[float, c_float]): ...
+
+    @function_hook("40 53 48 83 EC ? 66 0F 6F 25")
+    def GetBaseBuildingRootMatrix(
+        self,
+        this: "_Pointer[cGcBaseBuildingManager]",
+        result: _Pointer[basic.cTkPhysRelVec3],
+        luBaseIndex: _Pointer[c_uint16],
+        lUA: c_uint64,
+    ) -> c_uint64:  # cTkPhysRelMat34 *
+        ...
 
 
 class cGcBaseSearch(Structure):
@@ -3565,10 +3671,22 @@ class cTkMemoryManager(Structure):
 
     @function_hook("48 85 D2 0F 84 ? ? ? ? 53 41 56")
     def Free(self, this: "_Pointer[cTkMemoryManager]", lpPointer: c_void_p, liPool: Annotated[int, c_int32]):
-        """Hello Games' internal memory freeing function. Never ucall this function with an lpPointer value
+        """Hello Games' internal memory freeing function. Never call this function with an lpPointer value
         that was not generated by a Malloc call previously from NMS.py, and never try and clear memory
         allocated by the game itself otherwise you will almost certainly crash the game."""
         ...
+
+    @contextmanager
+    def TemporaryMemory(self, size: int) -> Generator[Optional[memoryview], None, None]:
+        """Create a temporary block of memory of the specified size.
+        This will return a memoryview which can then be modified"""
+        addr = None
+        try:
+            if (addr := self.Malloc(size, 0, 0, 0, 16, -1)) is not None:
+                yield _get_memview_with_size(int(addr), size)
+        finally:
+            if addr is not None:
+                self.Free(addr, -1)
 
 
 class cGcOptionsPageUI(Structure):
@@ -4182,99 +4300,44 @@ class cTkClock(Structure):
     mbRealtime: Annotated[bool, Field(c_bool, 0x32)]
 
 
-class cTkTimeManager:
-    patt_mLocalClock = "48 8D 0D ? ? ? ? 44 88 35 ? ? ? ? C7 05"
-    patt_mGlobalClock = (
-        "48 8D 0D ? ? ? ? E8 ? ? ? ? B2 ? 48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8D 0D ? ? ? ? 44 88 35"
-    )
-    patt_mRealtimeClock = "48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8D 0D ? ? ? ? 44 88 35 ? ? ? ? 44 89 35"
-
-    mLocalClock: cTkClock
-    mGlobalClock: cTkClock
-    mRealtimeClock: cTkClock
-
-    def find_variables(self):
-        # mLocalClock
-        patt_addr = find_pattern_in_binary(self.patt_mLocalClock, False)
-        if patt_addr:
-            start_addr = BASE_ADDRESS + patt_addr
-            offset = c_uint32.from_address(start_addr + 3)
-            mLocalClock_offset = start_addr + offset.value + 7
-            self.mLocalClock = map_struct(mLocalClock_offset, cTkClock)
-
-        # mGlobalClock
-        patt_addr = find_pattern_in_binary(self.patt_mGlobalClock, False)
-        if patt_addr:
-            start_addr = BASE_ADDRESS + patt_addr
-            offset = c_uint32.from_address(start_addr + 3)
-            mGlobalClock_offset = start_addr + offset.value + 7
-            self.mGlobalClock = map_struct(mGlobalClock_offset, cTkClock)
-
-        # mRealtimeClock
-        patt_addr = find_pattern_in_binary(self.patt_mRealtimeClock, False)
-        if patt_addr:
-            start_addr = BASE_ADDRESS + patt_addr
-            offset = c_uint32.from_address(start_addr + 3)
-            mRealtimeClock_offset = start_addr + offset.value + 7
-            self.mRealtimeClock = map_struct(mRealtimeClock_offset, cTkClock)
+class cTkTimeManager(ContainerStruct):
+    mLocalClock: Annotated[cTkClock, Pattern("48 8D 0D ? ? ? ? 44 88 35 ? ? ? ? C7 05")]
+    mGlobalClock: Annotated[
+        cTkClock,
+        Pattern("48 8D 0D ? ? ? ? E8 ? ? ? ? B2 ? 48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8D 0D ? ? ? ? 44 88 35"),
+    ]
+    mRealtimeClock: Annotated[
+        cTkClock,
+        Pattern("48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8D 0D ? ? ? ? 44 88 35 ? ? ? ? 44 89 35"),
+    ]
 
 
 time_manager = cTkTimeManager()
 
 
-class cEgModules:
+class cEgModules(ContainerStruct):
     # Found in cEgModules::Initialise
-    patt_mgpSceneManager = (
-        "48 89 05 ? ? ? ? E8 ? ? ? ? 48 39 3D ? ? ? ? 75 ? B9 ? ? ? ? E8 ? ? ? ? 48 85 C0 74 ? 48 89 78 ? 40 "
-        "88 78 ? 48 89 78 ? 40 88 78"
-    )
-    patt_mgpRenderer = "48 89 3D ? ? ? ? 48 83 C4 ? 5F C3 CC 89 54 24"
-    patt_mgpResourceManager = (
-        "48 89 05 ? ? ? ? 48 39 3D ? ? ? ? 75 ? B9 ? ? ? ? E8 ? ? ? ? 48 85 C0 74 ? 48 8B C8 E8 ? ? ? ? 48 "
-        "8B F8"
-    )
-    patt_cTkMemoryManager = "48 8D 0D ? ? ? ? E8 ? ? ? ? E8 ? ? ? ? 80 3D"
-    patt_gGameGui = "48 8D 0D ? ? ? ? F3 0F 11 44 24 ? BA"
-    mgpSceneManager: _Pointer[cEgSceneManager]
-    mgpResourceManager: _Pointer[cTkResourceManager]
-    mgpRenderer: _Pointer[cEgRenderer]
+    mgpSceneManager: Annotated[
+        _Pointer[cEgSceneManager],
+        Pattern(
+            "48 89 05 ? ? ? ? E8 ? ? ? ? 48 39 3D ? ? ? ? 75 ? B9 ? ? ? ? E8 ? ? ? ? 48 85 C0 74 ? 48 89 78 "
+            "? 40 88 78 ? 48 89 78 ? 40 88 78"
+        ),
+    ]
+    mgpResourceManager: Annotated[
+        _Pointer[cTkResourceManager],
+        Pattern(
+            "48 89 05 ? ? ? ? 48 39 3D ? ? ? ? 75 ? B9 ? ? ? ? E8 ? ? ? ? 48 85 C0 74 ? 48 8B C8 E8 ? ? ? ? "
+            "48 8B F8"
+        ),
+    ]
+    mgpRenderer: Annotated[
+        _Pointer[cEgRenderer],
+        Pattern("48 89 3D ? ? ? ? 48 83 C4 ? 5F C3 CC 40 53"),
+    ]
     # These are just globals, but we'll store them here for now.
-    mgMemoryManager: cTkMemoryManager
-    gGameGui: cGcNGuiGame
-
-    def find_variables(self):
-        patt_addr = find_pattern_in_binary(self.patt_mgpSceneManager, False)
-        if patt_addr:
-            start_addr = BASE_ADDRESS + patt_addr
-            offset = c_uint32.from_address(start_addr + 3)
-            mgpSceneManager_offset = start_addr + offset.value + 7
-            self.mgpSceneManager = map_struct(mgpSceneManager_offset, _Pointer[cEgSceneManager])
-        patt_addr = find_pattern_in_binary(self.patt_mgpRenderer, False)
-        if patt_addr:
-            start_addr = BASE_ADDRESS + patt_addr
-            offset = c_uint32.from_address(start_addr + 3)
-            mgpRenderer_offset = start_addr + offset.value + 7
-            self.mgpRenderer = map_struct(mgpRenderer_offset, _Pointer[cEgRenderer])
-        patt_addr = find_pattern_in_binary(self.patt_mgpResourceManager, False)
-        if patt_addr:
-            start_addr = BASE_ADDRESS + patt_addr
-            offset = c_uint32.from_address(start_addr + 3)
-            mgpResourceManager_offset = start_addr + offset.value + 7
-            self.mgpResourceManager = map_struct(mgpResourceManager_offset, _Pointer[cTkResourceManager])
-
-        patt_addr = find_pattern_in_binary(self.patt_cTkMemoryManager, False)
-        if patt_addr:
-            start_addr = BASE_ADDRESS + patt_addr
-            offset = c_uint32.from_address(start_addr + 3)
-            mgMemoryManager_offset = start_addr + offset.value + 7
-            self.mgMemoryManager = map_struct(mgMemoryManager_offset, cTkMemoryManager)
-
-        patt_addr = find_pattern_in_binary(self.patt_gGameGui, False)
-        if patt_addr:
-            start_addr = BASE_ADDRESS + patt_addr
-            offset = c_uint32.from_address(start_addr + 3)
-            gGameGui_offset = start_addr + offset.value + 7
-            self.gGameGui = map_struct(gGameGui_offset, cGcNGuiGame)
+    mgMemoryManager: Annotated[cTkMemoryManager, Pattern("48 8D 0D ? ? ? ? E8 ? ? ? ? E8 ? ? ? ? 80 3D")]
+    gGameGui: Annotated[cGcNGuiGame, Pattern("48 8D 0D ? ? ? ? F3 0F 11 44 24 ? BA")]
 
     @static_function_hook("40 57 48 83 EC ? 33 FF 48 89 5C 24")
     @staticmethod

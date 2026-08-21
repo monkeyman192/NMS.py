@@ -3,10 +3,10 @@
 
 import colorsys
 from ctypes import _Pointer, byref
+from dataclasses import dataclass
 from logging import getLogger
 
-from pymhf import Mod
-from pymhf.core.hooking import disable
+from pymhf import Mod, ModState
 from pymhf.core.memutils import get_addressof
 from pymhf.gui.decorators import INTEGER, gui_button
 
@@ -27,46 +27,60 @@ def rainbow():
         theta += 1
 
 
-@disable
+@dataclass
+class InventoryState(ModState):
+    inventory_index: int = 0
+    x: int = 0
+    y: int = 0
+
+
 class InventoryMod(Mod):
     __author__ = "monkeyman192"
     __description__ = "A WIP mod which can be used to access inventory data"
 
+    inventory_state = InventoryState()
+
     def __init__(self):
         super().__init__()
-        self._inventory_index = 0
-        self._slot_x = 0
-        self._slot_y = 0
+        self._supercharged_slot_index = 0
         self.rainbow = rainbow()
-        self.p_ship_component = None
         self.supercharged_colour = basics.Colour(0, 0, 0, 0)
 
     @property
     @INTEGER("Inventory index")
     def inventory_index(self):
-        return self._inventory_index
+        return self.inventory_state.inventory_index
 
     @inventory_index.setter
     def inventory_index(self, value):
-        self._inventory_index = value
+        self.inventory_state.inventory_index = value
+
+    @property
+    @INTEGER("Supercharged slot index")
+    def supercharged_slot_index(self):
+        return self._supercharged_slot_index
+
+    @supercharged_slot_index.setter
+    def supercharged_slot_index(self, value: int):
+        self._supercharged_slot_index = value
 
     @property
     @INTEGER("Slot X")
     def slot_x(self):
-        return self._slot_x
+        return self.inventory_state.x
 
     @slot_x.setter
     def slot_x(self, value):
-        self._slot_x = value
+        self.inventory_state.x = value
 
     @property
     @INTEGER("Slot Y")
     def slot_y(self):
-        return self._slot_y
+        return self.inventory_state.y
 
     @slot_y.setter
     def slot_y(self, value):
-        self._slot_y = value
+        self.inventory_state.y = value
 
     @gui_button("press me")
     def press(self):
@@ -92,7 +106,7 @@ class InventoryMod(Mod):
                         if ones := bitarray.ones():
                             logger.info(f"addr: 0x{get_addressof(bitarray):X} -> {ones}")
                 if len(inventory.maSpecialSlots) > 0:
-                    logger.info("Special slots:")
+                    logger.info(f"Special slots (@ 0x{get_addressof(inventory.maSpecialSlots):X}):")
                     for special_slot in inventory.maSpecialSlots:
                         idx = special_slot.Index
                         logger.info(f"Location: ({idx.X} {idx.Y}), Type: {special_slot.Type.name}")
@@ -100,11 +114,11 @@ class InventoryMod(Mod):
     @gui_button("Add a thing")
     def add_a_thing(self):
         if (ps := gameData.player_state) is not None:
-            inventory = ps.mInventories[self._inventory_index]
+            inventory = ps.mInventories[self.inventory_state.inventory_index]
             if len(inventory.mStore) > 0:
                 new_obj = nmse.cGcInventoryElement(
                     basics.TkID0x10(b"SPACEGUNK1"),
-                    nmse.cGcInventoryIndex(self._slot_x, self._slot_y),
+                    nmse.cGcInventoryIndex(self.inventory_state.x, self.inventory_state.y),
                     123,
                     1.0,
                     9999,
@@ -113,32 +127,51 @@ class InventoryMod(Mod):
                     True,
                 )
                 inventory.mStore.add(new_obj)
-                inventory.mxValidSlots[self._slot_y][self._slot_x] = True
+                inventory.mxValidSlots[self.inventory_state.y][self.inventory_state.x] = True
+
+    @gui_button("Toggle supercharged slot")
+    def toggle_supercharged(self):
+        if (ps := gameData.player_state) is not None:
+            inventory = ps.mInventories[self.inventory_state.inventory_index]
+            scslots = [(slot.Index.X, slot.Index.Y) for slot in inventory.maSpecialSlots]
+            if (coord := (self.inventory_state.x, self.inventory_state.y)) in scslots:
+                del inventory.maSpecialSlots[scslots.index(coord)]
+            else:
+                new_slot = nmse.cGcInventorySpecialSlot(
+                    nmse.cGcInventoryIndex(self.inventory_state.x, self.inventory_state.y), 4
+                )
+                inventory.maSpecialSlots.append(new_slot)
 
     @gui_button("Toggle slot activation")
     def toggle_activation(self):
         if (ps := gameData.player_state) is not None:
-            inventory = ps.mInventories[self._inventory_index]
+            inventory = ps.mInventories[self.inventory_state.inventory_index]
             if len(inventory.mStore) > 0:
-                current_state = inventory.mxValidSlots[self._slot_y][self._slot_x]
-                logger.info(f"Changing ({self._slot_x}, {self._slot_y}) to {int(not current_state)}")
-                inventory.mxValidSlots[self._slot_y][self._slot_x] = bool(not current_state)
+                current_state = inventory.mxValidSlots[self.inventory_state.y][self.inventory_state.x]
+                logger.info(
+                    f"Changing ({self.inventory_state.x}, {self.inventory_state.y}) to "
+                    f"{int(not current_state)}"
+                )
+                inventory.mxValidSlots[self.inventory_state.y][self.inventory_state.x] = bool(
+                    not current_state
+                )
 
     @gui_button("Increment selected inventory slot")
     def increment_slot(self):
         if (ps := gameData.player_state) is not None:
-            inventory = ps.mInventories[self._inventory_index]
+            inventory = ps.mInventories[self.inventory_state.inventory_index]
             if len(inventory.mStore) > 0:
                 found = False
                 for item in inventory.mStore:
-                    if item.Index.X == self._slot_x and item.Index.Y == self._slot_y:
+                    if item.Index.X == self.inventory_state.x and item.Index.Y == self.inventory_state.y:
                         found = True
                         item.Amount += 1
                         logger.info(f"Added 1 to {item.Id}")
                         break
                 if not found:
                     logger.error(
-                        f"Could not find at item in the inventory at ({self._slot_x}, {self._slot_y})"
+                        f"Could not find at item in the inventory at ({self.inventory_state.x}, "
+                        f"{self.inventory_state.y})"
                     )
 
             else:
