@@ -1654,5 +1654,15 @@
   "name": "cGcFishingData::GetRandomFish",
   "signature": "48 8B C4 44 89 48 ? 4C 89 40 ? 48 89 50 ? 48 89 48 ? 55 53 48 8D A8",
   "mangled_name": "__ZN14cGcFishingData13GetRandomFishE10cTkVector34TkIDILm128EE12eItemQualityRfS3_"
+ },
+ {
+  "name": "cGcBaseBuildingManager::GetBaseBuildingRootMatrix",
+  "signature": "40 53 48 83 EC ? 66 0F 6F 25",
+  "mangled_name": "?GetBaseBuildingRootMatrix@cGcBaseBuildingManager@@QEBA?AVcTkPhysRelMat34@@UBaseIndex@@_K@Z"
+ },
+ {
+  "name": "cGcPlayerHUD::LoadData",
+  "signature": "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8B EC 48 83 EC ? 48 8D B1",
+  "mangled_name": "?LoadData@cGcPlayerHUD@@QEAAXXZ"
  }
 ]

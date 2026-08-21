@@ -1662,9 +1662,12 @@ class cGcFishingData(Structure):
         lpPos: _Pointer[basic.cTkVector3],
         lpID: _Pointer[basic.TkID0x10],
         leQuality: c_enum32[enums.cGcItemQuality],
-        lUnknown: _Pointer[c_float],
-        result: c_uint64,
+        lpMass: _Pointer[c_float],
+        lUnknown: c_int32,
     ) -> c_uint64:  # presumably nmse.cGcFishData
+        """Get a random fish.
+        This is called when the bobber hits the water.
+        lpMass is set within the function and the value is determined by cGcFishingData::GetRandomFishMass."""
         ...
 
 
@@ -1682,26 +1685,22 @@ class cGcFishLaser(Structure):
         this: "_Pointer[cGcFishLaser]",
         mePrevMode: c_enum32[eMode],
         meNewMode: c_enum32[eMode],
-    ):
-        ...
+    ): ...
 
     @function_hook("40 53 48 83 EC ? 8B 41 ? 48 8B D9 3B D0")
-    def SetMode(self, this: "_Pointer[cGcFishLaser]", meMode: c_enum32[eMode]):
-        ...
+    def SetMode(self, this: "_Pointer[cGcFishLaser]", meMode: c_enum32[eMode]): ...
 
 
 @partial_struct
 class cGcFishManager(Structure):
     # Assigned from cGcFishingData.GetRandomFish
-    mCurrentFish: Annotated[nmse.cGcFishData, 0x1C8]
+    mCurrentFish: Annotated[_Pointer[nmse.cGcFishData], 0x1C8]
 
     @function_hook("F3 0F 11 4C 24 ? 55 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 44 0F 29 8C 24")
-    def Update(self, this: "_Pointer[cGcFishManager]", lfTimeStep: Annotated[float, c_float]):
-        ...
+    def Update(self, this: "_Pointer[cGcFishManager]", lfTimeStep: Annotated[float, c_float]): ...
 
     @function_hook("48 89 5C 24 ? 48 89 7C 24 ? 55 48 8B EC 48 81 EC ? ? ? ? 80 79")
-    def SetFishing(self, this: "_Pointer[cGcFishManager]", lpFishLaser: _Pointer[cGcFishLaser]):
-        ...
+    def SetFishing(self, this: "_Pointer[cGcFishManager]", lpFishLaser: _Pointer[cGcFishLaser]): ...
 
 
 @partial_struct
@@ -1827,6 +1826,8 @@ class cGcPlayerHUD(cGcHUD):
     mHelmetLines: Annotated[cGcNGui, 0x20930]
     mQuickMenu: Annotated[cGcNGuiLayer, 0x20DB0]  # Maybe
     maMarkers: Annotated[tuple[cGcHUDMarker, ...], Field(cGcHUDMarker * 0x80, 0x20FD0)]
+    # Found in cGcPlayerHUD::LoadData
+    mpHUDShieldLayer: Annotated[_Pointer[cGcNGuiLayer], 0xE9DF8]
 
     @function_hook(
         "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 0F 29 74 24 ? 48 8B F9 E8 "
@@ -1845,6 +1846,9 @@ class cGcPlayerHUD(cGcHUD):
 
     @function_hook("F3 0F 11 4C 24 ? 48 89 4C 24 ? 55 41 57")
     def Update(self, this: "_Pointer[cGcPlayerHUD]", lfTimeStep: Annotated[float, c_float]): ...
+
+    @function_hook("48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8B EC 48 83 EC ? 48 8D B1")
+    def LoadData(self, this: "_Pointer[cGcPlayerHUD]"): ...
 
 
 class cGcQuickMenu(Structure):
@@ -1867,8 +1871,7 @@ class cGcHUDManager(Structure):
     def cGcHUDManager(self, this: "_Pointer[cGcHUDManager]", a2: c_bool): ...
 
     @function_hook("48 89 5C 24 ? 55 56 57 48 81 EC ? ? ? ? 4C 8B 89")
-    def RemoveOSDMessage(self, this: "_Pointer[cGcHUDManager]", message: c_char_p64) -> c_bool:
-        ...
+    def RemoveOSDMessage(self, this: "_Pointer[cGcHUDManager]", message: c_char_p64) -> c_bool: ...
 
 
 @partial_struct
@@ -1991,8 +1994,7 @@ class cGcVibrationManager(Structure):
         this: "_Pointer[cGcVibrationManager]",
         lID: _Pointer[basic.TkID0x10],
         lfValue: Annotated[float, c_float],
-    ) -> c_bool:
-        ...
+    ) -> c_bool: ...
 
 
 @partial_struct
@@ -2102,6 +2104,16 @@ class cGcBaseBuildingManager(Structure):
         "48 8B C4 F3 0F 11 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 80 79"
     )
     def Update(self, this: "_Pointer[cGcBaseBuildingManager]", lfTimeStep: Annotated[float, c_float]): ...
+
+    @function_hook("40 53 48 83 EC ? 66 0F 6F 25")
+    def GetBaseBuildingRootMatrix(
+        self,
+        this: "_Pointer[cGcBaseBuildingManager]",
+        result: _Pointer[basic.cTkPhysRelVec3],
+        luBaseIndex: _Pointer[c_uint16],
+        lUA: c_uint64,
+    ) -> c_uint64:  # cTkPhysRelMat34 *
+        ...
 
 
 class cGcBaseSearch(Structure):
