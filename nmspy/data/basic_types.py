@@ -124,6 +124,9 @@ class Vector3f(ctypes.Structure):
         self.y = y
         self.z = z
 
+    def __eq__(self, other: "Vector3f"):
+        return (self.x == other.x) and (self.y == other.y) and (self.z == other.z)
+
     def __iadd__(self, other: "Vector3f"):
         self.x += other.x
         self.y += other.y
@@ -302,7 +305,7 @@ class TkID(ctypes.Structure):
         return _cls
 
     def __str__(self) -> str:
-        return self.value.decode()
+        return self.value.decode(errors="backslashreplace")
 
     def __repr__(self) -> str:
         return str(self)
@@ -329,7 +332,7 @@ class cTkFixedWString(ctypes.Structure):
         return _cls
 
     def __str__(self) -> str:
-        return self.value.decode()
+        return self.value.decode(errors="backslashreplace")
 
     def __eq__(self, other: str) -> bool:
         return str(self) == other
@@ -356,7 +359,7 @@ class cTkFixedString(ctypes.Structure):
         return _cls
 
     def __str__(self) -> str:
-        return self.value.decode()
+        return self.value.decode(errors="backslashreplace")
 
     def __eq__(self, other: str) -> bool:
         return str(self) == other
@@ -411,6 +414,26 @@ class cTkMatrix44(ctypes.Union):
         ("c", (ctypes.c_float * 4) * 4),
         ("x", (ctypes.c_float * 16)),
     ]
+
+
+class cTkPhysRelMat34(ctypes.Structure):
+    right: Vector3f
+    up: Vector3f
+    at: Vector3f
+    pos: cTkPhysRelVec3
+
+    _fields_ = [
+        ("right", Vector3f),
+        ("up", Vector3f),
+        ("at", Vector3f),
+        ("pos", cTkPhysRelVec3),
+    ]
+
+    def __str__(self):
+        return (
+            f"<{self.__qualname__};right: {str(self.right)}, up: {str(self.up)}, at: {str(self.at)}, "
+            f"pos: {str(self.pos)}>"
+        )
 
 
 class TkShaderConstHandle(ctypes.Structure):
@@ -638,7 +661,7 @@ class VariableSizeString(cTkDynamicArray[ctypes.c_char]):
         if self.ArrayPointer == 0 or self.Size == 0:
             return ""
         else:
-            if _val := ctypes.string_at(self.ArrayPointer, self.Size - 1).decode():
+            if _val := ctypes.string_at(self.ArrayPointer, self.Size - 1).decode(errors="backslashreplace"):
                 # Split on a null byte and strip anything after it *just in case*.
                 val = _val.split("\x00", maxsplit=1)
                 return val[0]
@@ -675,7 +698,7 @@ class VariableSizeString(cTkDynamicArray[ctypes.c_char]):
 class VariableSizeWString(cTkDynamicArray[ctypes.c_wchar]):
     @property
     def value(self) -> str:  # type: ignore
-        return super().value.value.decode()
+        return super().value.value.decode(errors="backslashreplace")
 
     def __str__(self):
         return self.value
@@ -732,7 +755,7 @@ class TkStd:
         def __str__(self):
             if self.size < 0x10:
                 # With SSO, the value is stored directly.
-                return self.value.value.decode()
+                return self.value.value.decode(errors="backslashreplace")
             else:
                 # In this case the string was too long so we follow the ptr.
                 return str(self.value.ptr.value)

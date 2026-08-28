@@ -162,19 +162,16 @@ wheels = [
 
 [[package]]
 name = "click"
-version = "8.4.2"
+version = "8.5.0"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
     "python_full_version >= '3.14' and sys_platform == 'win32'",
     "python_full_version == '3.13.*' and sys_platform == 'win32'",
     "python_full_version >= '3.10' and python_full_version < '3.13' and sys_platform == 'win32'",
 ]
-dependencies = [
-    { name = "colorama", marker = "python_full_version >= '3.10' and sys_platform == 'win32'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/76/d4/81420972a676e8ffea40450d8c8c92943e7218a78fe9b64359836cc9876b/click-8.4.2.tar.gz", hash = "sha256:9a6cea6e60b17ebe0a44c5cc636d94f09bd66142c1cd7d8b4cd731c4917a15f6", size = 338000, upload-time = "2026-06-24T17:45:15.148Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/c7/0e/7fa0ef50764b67090eca4114772a2abf8b6148198475e54c660b97caeee6/click-8.5.0.tar.gz", hash = "sha256:ba0d2089de75ea0310e2dde03160e6ca10009947fb95a182f9b54021bb272e34", size = 382235, upload-time = "2026-08-26T13:33:14.56Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/fb/e2/79c688af8b210d232694e31e59da9f6ec747bae31c3f5946e4e9b98860d5/click-8.4.2-py3-none-any.whl", hash = "sha256:e6f9f66136c816745b9d65817da91d61d957fb16e02e4dcd0552553c5a197b76", size = 119243, upload-time = "2026-06-24T17:45:13.73Z" },
+    { url = "https://files.pythonhosted.org/packages/58/50/6c0d534c5f134586a8e1ba4e330569e32f057e33372ae556463212fb4cd3/click-8.5.0-py3-none-any.whl", hash = "sha256:255bc9599cf7748b4b1a446ccc735421bd08a2ae529a8b88597d3de5664ee360", size = 125251, upload-time = "2026-08-26T13:33:12.928Z" },
 ]
 
 [[package]]
@@ -188,20 +185,28 @@ wheels = [
 
 [[package]]
 name = "cyminhook"
-version = "0.1.5"
+version = "0.1.6"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/3d/78/3d8f1505964f448c19bf0fc238a536d04e7dbcd28c050f464fb4d0e8f7db/cyminhook-0.1.5.tar.gz", hash = "sha256:3764af8a1a256d0359d175324099c239b7783a75b8ec40da3264f26a7b59167f", size = 46835, upload-time = "2024-11-02T10:56:35.465Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ca/1a/c1981634b4d42ebb54d0b7c3a9f05964a66e420f2379a552a99697fbd3c4/cyminhook-0.1.6.tar.gz", hash = "sha256:f2256f7700a6876fc3a823dca7022900ce8e2577daabbe42263d5f73e2f5da5b", size = 30089, upload-time = "2026-08-21T19:22:54.575Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/69/6b/fab4e01bf1f5423977f7a894dd5af652e77f04dd302474c788c6b9169df4/cyminhook-0.1.5-cp310-cp310-win32.whl", hash = "sha256:6f17444ecd5e5890af0a29ded6b4fa27e51b725564e22df59e2d21efdbd2f069", size = 58287, upload-time = "2024-11-02T10:56:13.844Z" },
-    { url = "https://files.pythonhosted.org/packages/e8/de/5f94d21cae2273d403ab511bbe14335adedae632aeff49a9fbdeba9bdb59/cyminhook-0.1.5-cp310-cp310-win_amd64.whl", hash = "sha256:8e70a29b0d7ad896c1b3443c99a8c5f6f3d6e4f56af42f3a509c931c106dd6b1", size = 68782, upload-time = "2024-11-02T10:56:15.532Z" },
-    { url = "https://files.pythonhosted.org/packages/f4/c6/92fe41988faff66cca437cd13a2efc2de318653ea2ec1cbbc02a2f2221bb/cyminhook-0.1.5-cp311-cp311-win32.whl", hash = "sha256:681888e3266374b19ad4fb5ffcd86d904035dfa827fd689c423b5c72b7c05ad8", size = 58189, upload-time = "2024-11-02T10:56:17.023Z" },
-    { url = "https://files.pythonhosted.org/packages/91/17/808a0f1fc446a0f2f4d158e54cf6c8a725492b49eb409e77680f3f91d795/cyminhook-0.1.5-cp311-cp311-win_amd64.whl", hash = "sha256:f82a7e4a36071ea09967ccec7a8f37a30aa709fee19e3c5bb6f0dd66be2ea06d", size = 68905, upload-time = "2024-11-02T10:56:18.128Z" },
-    { url = "https://files.pythonhosted.org/packages/1c/5c/6ca47c22aa5853c60f71c7b3f9b389732646d7aea853fb3dc46fa40b4056/cyminhook-0.1.5-cp312-cp312-win32.whl", hash = "sha256:a1fd7e30e072a2501ca5837f301ab7c0c1a9b176dd067c7c02c7883b676f5899", size = 57216, upload-time = "2024-11-02T10:56:19.59Z" },
-    { url = "https://files.pythonhosted.org/packages/b1/79/362fdf90ad968fd6d7c79c19160996d47f06741f44e8dcb9ac8887fcab0c/cyminhook-0.1.5-cp312-cp312-win_amd64.whl", hash = "sha256:e5a1ec2a3c4455416f46b1e691e01d17b986c8c2ebc8ded3f24fd7abe5ae0ca4", size = 67731, upload-time = "2024-11-02T10:56:20.544Z" },
-    { url = "https://files.pythonhosted.org/packages/7f/94/614701eff1cfdad106aa1ce6ce21aebb18dba1b486088ee5cbc1162b5254/cyminhook-0.1.5-cp313-cp313-win32.whl", hash = "sha256:a3fea767936e162d670b7068f76a339304b6a22c6e1e1776176defa427af0c31", size = 56466, upload-time = "2024-11-02T10:56:21.537Z" },
-    { url = "https://files.pythonhosted.org/packages/28/f3/9ef7f482a31f7eb6cba83f5e1c91165edb1f10ef229b13b79bbdfddc6e01/cyminhook-0.1.5-cp313-cp313-win_amd64.whl", hash = "sha256:e270ee9fa94f35da6232bca625762b7ce3c9c18a431af8519f5fa151bdf29e52", size = 67001, upload-time = "2024-11-02T10:56:23.487Z" },
-    { url = "https://files.pythonhosted.org/packages/8a/47/41d3b6c7fa97cf36ae9f6a560b321cc4787b39e393d031179840f79eca34/cyminhook-0.1.5-cp39-cp39-win32.whl", hash = "sha256:331e95b6e630d79d66ef6cac36c30165806e6b084657fa4646336b53b0a5eb27", size = 58795, upload-time = "2024-11-02T10:56:33.176Z" },
-    { url = "https://files.pythonhosted.org/packages/0c/68/636540403f4ef340df74edd1b5457c82a7fa227f531b67388661d1116589/cyminhook-0.1.5-cp39-cp39-win_amd64.whl", hash = "sha256:52799fbd020e60b53444c098c79682d779f2f8e473daba5e8e08b06bd42be33a", size = 69402, upload-time = "2024-11-02T10:56:34.408Z" },
+    { url = "https://files.pythonhosted.org/packages/4f/23/48b1fdff160fa9070c6ed4f692cdb04b31691132708dfffd6b2c016918e2/cyminhook-0.1.6-cp310-cp310-win32.whl", hash = "sha256:053b85afbda38a38416b87d6628a5194cdfb71f1518ae1156e685beffa156ff5", size = 55555, upload-time = "2026-08-21T19:22:35.23Z" },
+    { url = "https://files.pythonhosted.org/packages/4c/6d/a6eb248d36787fb88b31db64382fdb81198f86e3092c21f37235baa02aa3/cyminhook-0.1.6-cp310-cp310-win_amd64.whl", hash = "sha256:214ed5a19988d96a75c0153c5596df8c6f1e964ca04dc52d2bb310ccc8a755db", size = 68487, upload-time = "2026-08-21T19:22:36.356Z" },
+    { url = "https://files.pythonhosted.org/packages/9f/13/652cc3d2588c949637fb0236b44706f588a3a694647750a0e526aa9f2626/cyminhook-0.1.6-cp311-cp311-win32.whl", hash = "sha256:ca4a6338e0a00ff0697b3932c517970cba0cd98793430389ae1d3ee026739031", size = 55548, upload-time = "2026-08-21T19:22:37.586Z" },
+    { url = "https://files.pythonhosted.org/packages/89/5a/15d6edb52653a3e3428a726871717e8ef41c4a65782c213a137d409da2c9/cyminhook-0.1.6-cp311-cp311-win_amd64.whl", hash = "sha256:66b75b3ad956044bf1fa2d8f436932db07a944cc702f23ad4c8dae443b6e9ead", size = 68527, upload-time = "2026-08-21T19:22:38.591Z" },
+    { url = "https://files.pythonhosted.org/packages/cf/6f/2f3727d7c1729fc31cb97d2c6a97a189ea5aa19e29bcb3874d9d0393fe02/cyminhook-0.1.6-cp312-cp312-win32.whl", hash = "sha256:82ec515128e47a111144ff9a3fa69c4e8c2d03db358c2b460c701d94d543c748", size = 55001, upload-time = "2026-08-21T19:22:39.757Z" },
+    { url = "https://files.pythonhosted.org/packages/9f/90/8e578cb2e5bdde3e08de2632e81b83c554ddf983f5442c82bf7598d37f5c/cyminhook-0.1.6-cp312-cp312-win_amd64.whl", hash = "sha256:9694e7213850530313b55d112d8138f96f0350947eb768055ac312f0d4dee43e", size = 67034, upload-time = "2026-08-21T19:22:40.706Z" },
+    { url = "https://files.pythonhosted.org/packages/24/35/735e21dc452c9b026ce194e1e3bad06ec0111f758fb4cb5e224a39ab8542/cyminhook-0.1.6-cp313-cp313-win32.whl", hash = "sha256:a64216058d4872b7f9e594167464a0e83bca2d54e5f029040e24e9c3d47f8bfe", size = 54339, upload-time = "2026-08-21T19:22:41.752Z" },
+    { url = "https://files.pythonhosted.org/packages/b1/93/7846b23b964591e6eb2e7e6e4fe602f0f84c2bc5d70df6f1afccf76da182/cyminhook-0.1.6-cp313-cp313-win_amd64.whl", hash = "sha256:abf92a407c3044c192487df2a4137dc3b4084df9a680b3d3e5795b448a5e4041", size = 66342, upload-time = "2026-08-21T19:22:42.829Z" },
+    { url = "https://files.pythonhosted.org/packages/73/b9/6ecaa66be5989808f7f0679c240b082fec4ed7f82286b1353c97870559db/cyminhook-0.1.6-cp314-cp314-win32.whl", hash = "sha256:8fea46e4e7ab3b8cf4349285b6bedbb4acd8c962160c93fd84d9784650800da0", size = 55804, upload-time = "2026-08-21T19:22:43.79Z" },
+    { url = "https://files.pythonhosted.org/packages/7d/6a/9fd6b25ce3753a94c4a4b11032f91c1add3bff877a1d2be2a68c1d62d94e/cyminhook-0.1.6-cp314-cp314-win_amd64.whl", hash = "sha256:20dd86f8abd32715365a2842c041f6345bb29cedb091bab418e1eb7db7068e94", size = 67802, upload-time = "2026-08-21T19:22:44.896Z" },
+    { url = "https://files.pythonhosted.org/packages/b8/09/e00a4ee76f3eca3ead0f8aa8e69f0e290c36871c952a68b052cd749bf095/cyminhook-0.1.6-cp314-cp314t-win32.whl", hash = "sha256:be3f512b540e1800cfd42400ff7ec92d1389cab28500963ac94f225aabdd9aa1", size = 60642, upload-time = "2026-08-21T19:22:46.079Z" },
+    { url = "https://files.pythonhosted.org/packages/38/84/1ec72e879bf4dc3b2214940a970818940dfeab666d06e73e8d0f291157fe/cyminhook-0.1.6-cp314-cp314t-win_amd64.whl", hash = "sha256:a0157886e776624255b6d3934a08a9c49b81f9993e4bcaaef7e33d59e482583e", size = 73965, upload-time = "2026-08-21T19:22:47.12Z" },
+    { url = "https://files.pythonhosted.org/packages/86/5e/4aea2e5d67f93868aee59f9e6c5bdf08fc9a2bc83cc9f28e2152d20da707/cyminhook-0.1.6-cp315-cp315-win32.whl", hash = "sha256:286b382f428d301c0e52b32ed9836b5a1246f2fb84a68357994bb1a9e608134c", size = 55795, upload-time = "2026-08-21T19:22:48.178Z" },
+    { url = "https://files.pythonhosted.org/packages/72/56/4ca223019154930cb4f9349190ba48bc124d25fdd6cad172ae4f5f7b7207/cyminhook-0.1.6-cp315-cp315-win_amd64.whl", hash = "sha256:7dd84c1af9fd1099bfa7d83e7279d0459d47677760562efd860e3a78072bb2db", size = 67796, upload-time = "2026-08-21T19:22:49.382Z" },
+    { url = "https://files.pythonhosted.org/packages/dd/0d/c0a47bae43ee41c54a3543a7802d4d9fd7985d34930099ab721a323a678e/cyminhook-0.1.6-cp315-cp315t-win32.whl", hash = "sha256:928ea7bdb5d7248988bbc9138c4d38c4c570fafcadd0c950278cede612b0c1ba", size = 60654, upload-time = "2026-08-21T19:22:50.54Z" },
+    { url = "https://files.pythonhosted.org/packages/da/3c/59e9816047474fa768edb2bffdbdc7c48451610ce7ace5bdbbedf58242e9/cyminhook-0.1.6-cp315-cp315t-win_amd64.whl", hash = "sha256:40a43acf9ded73a0fa9394ace4cb0f24f8be79f8fa16df4257873fe83fdb224b", size = 73798, upload-time = "2026-08-21T19:22:51.53Z" },
+    { url = "https://files.pythonhosted.org/packages/e0/8f/ec1226229449a1637fc1644536f55bb6fd1a7c7d699eea299453275fc7a4/cyminhook-0.1.6-cp39-cp39-win32.whl", hash = "sha256:28c1d222546fe3f1ec5e22e8b31c8ea0744bb0ec1323e5ce202a9953c8018076", size = 55861, upload-time = "2026-08-21T19:22:52.507Z" },
+    { url = "https://files.pythonhosted.org/packages/56/54/097695967a4af1d70f6844b9008fb83fdd90a92f4e3bc022c87f79601520/cyminhook-0.1.6-cp39-cp39-win_amd64.whl", hash = "sha256:7981a03314519696bb993cddb9a70de9b0665b2630263383729c59e8492a01e6", size = 68746, upload-time = "2026-08-21T19:22:53.56Z" },
 ]
 
 [[package]]
@@ -580,21 +585,21 @@ wheels = [
 
 [[package]]
 name = "nh3"
-version = "0.3.6"
+version = "0.3.7"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/5e/1b/ef84624f14954d270f74060a19fc550dd4f06656399447569afb584d8c06/nh3-0.3.6.tar.gz", hash = "sha256:f3736c9dd3d1856f80cd031715b84ca75cda2bbb1ac802c3da26bfce590838d7", size = 24684, upload-time = "2026-06-22T00:47:02.008Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/18/2f/022b27146d52d24b1b353b003359134788ecbcd6fcdf6283adbd57c0fbc8/nh3-0.3.7.tar.gz", hash = "sha256:71860d01c16f4d8c72e334e0674beb2b0899dbd0bf760de18932ef4390303848", size = 25662, upload-time = "2026-08-23T14:26:30.728Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ed/a6/1f7285ffadc8307c4dbeb08d21b920536d5117785056d1079e998c4dfa44/nh3-0.3.6-cp314-cp314t-win32.whl", hash = "sha256:597a8e843bea00b2eb5520658dc24a9bb032e7fc9e7c2c0c4cd29420220c9796", size = 599253, upload-time = "2026-06-22T00:46:32.072Z" },
-    { url = "https://files.pythonhosted.org/packages/36/ea/5542f3c45da4c00290d9d67a65e996702e23e613c4b627de3e09cb9fe357/nh3-0.3.6-cp314-cp314t-win_amd64.whl", hash = "sha256:4713502748f564fee0633b37b3403783ce0a3af3a3d148ad91025a5bdadb7bc6", size = 612553, upload-time = "2026-06-22T00:46:33.53Z" },
-    { url = "https://files.pythonhosted.org/packages/66/35/26bd47e6af5915a628281dccdac354ddf4e32f7397047894270acd8c9870/nh3-0.3.6-cp314-cp314t-win_arm64.whl", hash = "sha256:69bbb92865a693d909db3a700d3c01537533844d0948c1e9323561ce06ecda41", size = 595151, upload-time = "2026-06-22T00:46:34.878Z" },
-    { url = "https://files.pythonhosted.org/packages/e9/55/9de666ad975d6ccd77d799ea0add55ee2347aa81286ce21b2a97c070746b/nh3-0.3.6-cp38-abi3-win32.whl", hash = "sha256:5276ef17bdba9ad8040575c74072008b13aae429436e9d0429e718bb5f90f4da", size = 609081, upload-time = "2026-06-22T00:46:57.665Z" },
-    { url = "https://files.pythonhosted.org/packages/82/fa/2b5d684e3edf1e81bfd02d298c78c3e3da77ca1d8a2be3183a79544a7548/nh3-0.3.6-cp38-abi3-win_amd64.whl", hash = "sha256:f338ac7d594c067679f1e99b4f5ec3906842979560f9d8f15d6bdfa39a353b10", size = 624461, upload-time = "2026-06-22T00:46:59.163Z" },
-    { url = "https://files.pythonhosted.org/packages/7b/e5/7cafee2f0413ca4cb0ef3bd111e94d408a48810008b283ad8aee00dd1809/nh3-0.3.6-cp38-abi3-win_arm64.whl", hash = "sha256:69f365963f63a1e9bff53bdbb3c542c7c2efed3e163c9d5d83a772a2ac468c21", size = 603060, upload-time = "2026-06-22T00:47:00.596Z" },
+    { url = "https://files.pythonhosted.org/packages/9a/a7/c57a2c70534418310889a65ccfac3525e62f0bc0a8613225903403755ce7/nh3-0.3.7-cp314-cp314t-win32.whl", hash = "sha256:874b7d67a067bd29a59223f6270fc30da4edd8e6d87fd219fc93bcbaa662c946", size = 619895, upload-time = "2026-08-23T14:26:05.105Z" },
+    { url = "https://files.pythonhosted.org/packages/e6/b7/efda1d0a611d940bdfde6893bde1ea6b7b7d48c31273aea48e35b822fd58/nh3-0.3.7-cp314-cp314t-win_amd64.whl", hash = "sha256:614dac4a4c36ad084e78447d16fe898dedd762e354a7ab9cda2984e82f67883d", size = 633456, upload-time = "2026-08-23T14:26:06.661Z" },
+    { url = "https://files.pythonhosted.org/packages/1d/18/3ab564595cb88196f50d26e163ed0fd2acc731ab26ac615df91981885887/nh3-0.3.7-cp314-cp314t-win_arm64.whl", hash = "sha256:157ec1eb7a62f3d9a7badb8d82d89aa810e3e24e097eedfa481a25d0c8a99877", size = 611003, upload-time = "2026-08-23T14:26:07.813Z" },
+    { url = "https://files.pythonhosted.org/packages/4b/6a/478f153f1d7c0baaa3d1e8bb5fdcee3a6235f90fe44ea969a9d4e2b8c47a/nh3-0.3.7-cp38-abi3-win32.whl", hash = "sha256:6e4280115d44c3b278eef712a86748c1a723105cd79feec46952383117ab4e59", size = 630729, upload-time = "2026-08-23T14:26:26.932Z" },
+    { url = "https://files.pythonhosted.org/packages/b4/b9/34433ccb1f0fe6968dabbb7d4bf5721c6221878ef07832748c06655a6a80/nh3-0.3.7-cp38-abi3-win_amd64.whl", hash = "sha256:618e3059caf41ccdf5dcccb3fa9df4cf6e4efe23d1382a8bbfca272a8a4f8bfc", size = 644462, upload-time = "2026-08-23T14:26:28.294Z" },
+    { url = "https://files.pythonhosted.org/packages/f9/70/e140dffff6e808dc6343598df76e7e2407fd0f581de3524c75fba2e0cf24/nh3-0.3.7-cp38-abi3-win_arm64.whl", hash = "sha256:f04b7d333b27f13ca439da3cf1c75c2fba34f104969f6ce4ac8e7079699c2f4a", size = 621867, upload-time = "2026-08-23T14:26:29.547Z" },
 ]
 
 [[package]]
 name = "nmspy"
-version = "170671.4"
+version = "170671.5"
 source = { editable = "." }
 dependencies = [
     { name = "pymhf", extra = ["gui", "http-api"], marker = "sys_platform == 'win32'" },
@@ -612,7 +617,7 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "pymhf", extras = ["http-api", "gui"], specifier = ">=0.2.4" }]
+requires-dist = [{ name = "pymhf", extras = ["http-api", "gui"], specifier = "==0.2.4" }]
 
 [package.metadata.requires-dev]
 dev = [
@@ -1112,13 +1117,13 @@ wheels = [
 
 [[package]]
 name = "ruff"
-version = "0.16.4"
+version = "0.16.5"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/00/8f/d8074b1f25e003164087a8bfe79a0f1a3945135764dbb6aaab04103dcaf9/ruff-0.16.4.tar.gz", hash = "sha256:13171aa9d9af2240ee3504e639de73122c67e74036de5ba2e1d01422cd17e3dc", size = 4899731, upload-time = "2026-08-20T17:43:59.196Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/f3/85/c8e12473c93018f92d19dd988a294202e1c27426c47ec4de53ffb847b8d8/ruff-0.16.5.tar.gz", hash = "sha256:1b88500f9ffbcab3dedb0082c9f9492e91ec3d618aac1236a3e0189938f7040b", size = 4912003, upload-time = "2026-08-27T16:34:18.258Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/aa/28/0c6dd865859c6d17bc8ccc34cb72b0e02d6c7eb25e8a1e22b5bea681e2c0/ruff-0.16.4-py3-none-win32.whl", hash = "sha256:312769988007aaeb8e189b443ccdd03c0e6374489e053467be6d96518ebff76e", size = 10021687, upload-time = "2026-08-20T17:43:52.281Z" },
-    { url = "https://files.pythonhosted.org/packages/a3/03/e724450f621698117f9aa6dd241c94d0274ae96781378dc86745ae29f0e7/ruff-0.16.4-py3-none-win_amd64.whl", hash = "sha256:05d9d27a18c4bcbefada602480ec9e01e0bc949d432e0ced5df77edac195919c", size = 10567657, upload-time = "2026-08-20T17:43:54.78Z" },
-    { url = "https://files.pythonhosted.org/packages/0e/fe/da8b9e1347696bb22120b77280ec5ce25d500ca5cb39d5ad6e5c18de19c1/ruff-0.16.4-py3-none-win_arm64.whl", hash = "sha256:a3a61621c9b6f6a89573e938a080e648f1695baa3f58570a3a707bc51ff65a21", size = 10451579, upload-time = "2026-08-20T17:43:57.135Z" },
+    { url = "https://files.pythonhosted.org/packages/ed/20/656d67f5b25ca9bda4e02b1de25867b2954e1d19e03648060f167ad0f4cc/ruff-0.16.5-py3-none-win32.whl", hash = "sha256:288b0a5f080492fe5635db849f9e2e84aa3cce7b7f0e955997d416c507c76a26", size = 10034250, upload-time = "2026-08-27T16:34:11.8Z" },
+    { url = "https://files.pythonhosted.org/packages/5b/42/ee8e68a207b9127fcde6c3d7e197def432f346cb1af159e1fa14ca0d1cdc/ruff-0.16.5-py3-none-win_amd64.whl", hash = "sha256:ddc6385fb2137f616357ca03d6c74f4be987f80fed4008566b754f6032b8546f", size = 10516714, upload-time = "2026-08-27T16:34:13.963Z" },
+    { url = "https://files.pythonhosted.org/packages/73/e3/7df5a396e445b9ba49ce9a9437439a4d80042c61c0ade199abf8d16de1ac/ruff-0.16.5-py3-none-win_arm64.whl", hash = "sha256:a64abe90968719b851bb7cedffaa8753fbdbdadab483089682db623f3edc587e", size = 10391564, upload-time = "2026-08-27T16:34:16.064Z" },
 ]
 
 [[package]]
@@ -1374,7 +1379,7 @@ resolution-markers = [
     "python_full_version >= '3.10' and python_full_version < '3.13' and sys_platform == 'win32'",
 ]
 dependencies = [
-    { name = "click", version = "8.4.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10' and sys_platform == 'win32'" },
+    { name = "click", version = "8.5.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10' and sys_platform == 'win32'" },
     { name = "h11", marker = "python_full_version >= '3.10' and sys_platform == 'win32'" },
     { name = "typing-extensions", marker = "python_full_version == '3.10.*' and sys_platform == 'win32'" },
 ]
