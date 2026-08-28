@@ -85,19 +85,15 @@ class InventoryMod(Mod):
     @gui_button("press me")
     def press(self):
         if (ps := gameData.player_state) is not None:
-            self.pymhf_gui.hex_view.add_snapshot(get_addressof(ps))
             logger.info("Inventories with something in them:")
             for i, inventory in enumerate(ps.mInventories):
+                logger.info(
+                    f"Inventory ({i}) | Width: {inventory.miWidth} Height: {inventory.miHeight}, "
+                    f"capacity: {inventory.miCapacity}, name: {inventory.mInventoryName}"
+                )
                 store = inventory.mStore
                 if len(store) > 0:
-                    logger.info(
-                        f"Inventory ({i}) | Width: {inventory.miWidth} Height: {inventory.miHeight}, "
-                        f"capacity: {inventory.miCapacity}"
-                    )
-                    logger.info(
-                        f"Inventory store ({store.vector_size}/{store.allocated_size}). Next free address: "
-                        f"0x{store._next_empty_addr:X}"
-                    )
+                    logger.info(f"Inventory store ({store.vector_size}/{store.allocated_size}).")
                     for item in store:
                         idx = item.Index
                         logger.info(f"Item: {item.Id}, Index: ({idx.X} {idx.Y}), Amount: {item.Amount}")

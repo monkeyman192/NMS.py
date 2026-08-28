@@ -118,3 +118,44 @@ class eGraphicsDetail(IntEnum):
     Medium = 0x1
     High = 0x2
     Ultra = 0x3
+
+
+class TryStoreMode(IntEnum):
+    Commit = 0x0
+    Peek = 0x1
+
+
+class InventoryChoice(IntEnum):
+    Suit = 0x0
+    Suit_Tech = 0x1
+    Suit_Cargo = 0x2
+    Weapon = 0x3
+    Ship = 0x4
+    Ship_Cargo = 0x5
+    Ship_Tech = 0x6
+    Freighter = 0x7
+    Freighter_Tech = 0x8
+    Freighter_Cargo = 0x9
+    Vehicle = 0xA
+    Vehicle_Tech = 0xB
+    Unknown0xC = 0xC  # BUIDING_STORAGE
+    Unknown0xD = 0xD  # BUIDING_STORAGE
+    Unknown0xE = 0xE  # BUIDING_STORAGE
+    Unknown0xF = 0xF  # BUIDING_STORAGE
+    Unknown0x10 = 0x10  # BUIDING_STORAGE
+    Unknown0x11 = 0x11  # BUIDING_STORAGE
+    Unknown0x12 = 0x12  # BUIDING_STORAGE
+    Unknown0x13 = 0x13  # BUIDING_STORAGE
+    Unknown0x14 = 0x14  # BUIDING_STORAGE
+    Unknown0x15 = 0x15  # BUIDING_STORAGE
+    Unknown0x16 = 0x16  # BASE_CACHE?
+    Unknown0x17 = 0x17  # BASE_CACHE?
+    Unknown0x18 = 0x18  # Frontend stroe
+    Unknown0x19 = 0x19  # Temporary frontend store
+    Unknown0x1A = 0x1A  # PANTRY?
+    Unknown0x1B = 0x1B  # SUIT_ROCKET?
+    Unknown0x1C = 0x1C
+    Unknown0x1D = 0x1D
+    Unknown0x1E = 0x1E
+    Unknown0x1F = 0x1F
+    Unknown0x20 = 0x20

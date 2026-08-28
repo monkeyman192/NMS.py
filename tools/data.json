@@ -778,7 +778,7 @@
  {
   "name": "cGcSpaceshipWarp::UpdatePulseDrive",
   "signature": "F3 0F 11 4C 24 ? 55 57 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 80 3D",
-  "mangled_name": "?UpdatePulseEncounters@cGcPlayerExperienceDirector@@AEAAXM@Z"
+  "mangled_name": "?UpdatePulseDrive@cGcSpaceshipWarp@@AEAAXM@Z"
  },
  {
   "name": "cGcRealityManager::cGcRealityManager",
@@ -1664,5 +1664,37 @@
   "name": "cGcPlayerHUD::LoadData",
   "signature": "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8B EC 48 83 EC ? 48 8D B1",
   "mangled_name": "?LoadData@cGcPlayerHUD@@QEAAXXZ"
+ },
+ {
+  "name": "cGcPlayerState::PackageTechnology",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 54 41 56 41 57 48 83 EC ? 48 8D 99",
+  "mangled_name": "?PackageTechnology@cGcPlayerState@@QEAA_NW4InventoryChoice@@AEBVcGcInventoryIndex@@01W4TryStoreMode@@AEAV?$cTkFixedString@$0CA@D@@@Z",
+  "unique_string": "UI_TECH_PACK_ERROR"
+ },
+ {
+  "name": "cGcFrontendPageFunctions::DoInventorySlots",
+  "signature": "48 85 D2 0F 84 ? ? ? ? 48 8B C4 4C 89 48 ? 4C 89 40",
+  "mangled_name": "?DoInventorySlots@cGcFrontendPageFunctions@@CAXPEAVcGcFrontendPage@@PEAVcGcNGuiLayer@@PEAVcGcInventoryStore@@AEAV?$vector@W4ePopupAction@@V?$TkSTLAllocatorShim@W4ePopupAction@@$03$0?0@@@std@@HH_NAEBVcGcInventoryIndex@@HH4HH4M@Z"
+ },
+ {
+  "name": "cGcScanManager::UpdateConstantMarkers",
+  "signature": "48 89 4C 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 0F 29 B4 24 ? ? ? ? 4C 8B F9",
+  "mangled_name": "?UpdateConstantMarkers@cGcScanManager@@AEAAXXZ",
+  "unique_string": "UI_MARKER_TAG_NORTH"
+ },
+ {
+  "name": "cGcScanManager::UpdateScannableMarkers",
+  "signature": "48 89 4C 24 ? 55 53 57 41 54 41 57 48 8D AC 24 ? ? ? ? B8",
+  "mangled_name": "?UpdateScannableMarkers@cGcScanManager@@AEAAXXZ"
+ },
+ {
+  "name": "cGcMarkerPoint::Update",
+  "signature": "40 55 53 56 57 41 56 48 8D 6C 24 ? 48 81 EC ? ? ? ? 0F B6 99",
+  "mangled_name": "?Update@cGcMarkerPoint@@QEAAXXZ"
+ },
+ {
+  "name": "cGcMarkerPoint::IsEqual",
+  "signature": "48 89 74 24 ? 57 48 83 EC ? 48 8B F9 48 8B F2 48 8B 89",
+  "mangled_name": "?IsEqual@cGcMarkerPoint@@QEAA_NAEBV1@@Z"
  }
 ]

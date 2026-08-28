@@ -143,6 +143,8 @@ from .internal_enums import (
     EPulseDriveState,
     eFileOpenMode,
     eGraphicsDetail,
+    TryStoreMode,
+    InventoryChoice,
 )
 
 # The following list is auto-generated.
