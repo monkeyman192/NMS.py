@@ -902,9 +902,9 @@
   "mangled_name": "__ZN16cGcOptionsPageUI10ListOptionEPKci"
  },
  {
-  "name": "cTkMetaDataManager::GetInstance",
+  "name": "cGcModManager::GetInstance",
   "signature": "48 83 EC ? 65 48 8B 04 25 ? ? ? ? B9 ? ? ? ? 48 8B 00 8B 04 01 39 05 ? ? ? ? 0F 8F ? ? ? ? 48 8D 05 ? ? ? ? 48 83 C4 ? C3 48 8D 0D",
-  "mangled_name": "?GetInstance@cTkMetaDataManager@@SAAEAV1@XZ"
+  "mangled_name": "?GetInstance@cGcModManager@@SAAEAV1@XZ"
  },
  {
   "name": "cTkFileSystem::Data::MountAllArchives",
@@ -912,9 +912,9 @@
   "mangled_name": "__ZN13cTkFileSystem4Data16MountAllArchivesERKN5TkStd17TkVectorExtentionI11cTkBankInfoNS1_13DefaultConfigILin1EEENS1_9tk_vectorIS3_Lin1ENS1_17null_stack_bufferEEEEEb"
  },
  {
-  "name": "cTkMetaDataManager::LoadModdedData",
+  "name": "cGcModManager::LoadModdedData",
   "signature": "40 55 53 56 57 41 55 41 56 48 8D AC 24 ? ? ? ? B8",
-  "mangled_name": "cTkMetaDataManager::LoadModdedData",
+  "mangled_name": "cGcModManager::LoadModdedData",
   "unique_string": "../BINARIES/SETTINGS/GCMODSETTINGS.MXML"
  },
  {
@@ -1696,5 +1696,92 @@
   "name": "cGcMarkerPoint::IsEqual",
   "signature": "48 89 74 24 ? 57 48 83 EC ? 48 8B F9 48 8B F2 48 8B 89",
   "mangled_name": "?IsEqual@cGcMarkerPoint@@QEAA_NAEBV1@@Z"
+ },
+ {
+  "name": "cGcHologramComponent::GetDesiredHologramResource",
+  "signature": "40 53 48 83 EC ? 80 B9 ? ? ? ? ? 48 8B DA 74 ? 8B 81",
+  "mangled_name": "__ZNK20cGcHologramComponent26GetDesiredHologramResourceEv"
+ },
+ {
+  "name": "cGcOptionsPageUI::Boolean",
+  "signature": "4C 89 44 24 ? 53 57 41 54 41 55 41 57",
+  "mangled_name": "__ZN16cGcOptionsPageUI7BooleanEPKcS1_bbRK17cGcBooleanOptions"
+ },
+ {
+  "name": "cGcFrontendPageOptions::DoCameraOptions",
+  "signature": "48 8B C4 55 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 58 ? 48 89 70 ? 48 8B F1 48 89 78 ? 48 8B 3D",
+  "mangled_name": "__ZN22cGcFrontendPageOptions15DoCameraOptionsEP16cGcOptionsPageUI"
+ },
+ {
+  "name": "cGcOptionsPageUI::Header",
+  "signature": "48 89 5C 24 ? 57 48 83 EC ? 83 79 ? ? 48 8B DA",
+  "mangled_name": "__ZN16cGcOptionsPageUI6HeaderEPKc24eOptionsUIHeaderIconType"
+ },
+ {
+  "name": "cGcOptionsPageUI::Float",
+  "signature": "F3 0F 11 5C 24 ? 55",
+  "mangled_name": "__ZN16cGcOptionsPageUI5FloatEPKcS1_ffffRK15cGcFloatOptions"
+ },
+ {
+  "name": "cGcOptionsPageUI::Int",
+  "signature": "44 89 4C 24 ? 4C 89 44 24 ? 55 56 41 54",
+  "mangled_name": "__ZN16cGcOptionsPageUI3IntEPKcS1_iiiiRK13cGcIntOptions"
+ },
+ {
+  "name": "cGcOptionsPageUI::BeginPage",
+  "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 57 C0 33 C0",
+  "mangled_name": "__ZN16cGcOptionsPageUI9BeginPageEPNS_15PersistentStateEP28cGcOptionsInteractionContext"
+ },
+ {
+  "name": "cGcOptionsPageUI::EndPage",
+  "signature": "48 8B C4 55 57 48 8B EC",
+  "mangled_name": "__ZN16cGcOptionsPageUI7EndPageEv"
+ },
+ {
+  "name": "cGcFrontendPageOptions::DoOptions",
+  "signature": "40 55 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 83 3D",
+  "mangled_name": "__ZN22cGcFrontendPageOptions9DoOptionsEv"
+ },
+ {
+  "name": "cGcFrontendPageOptions::RequestOptionsPage",
+  "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 8B F9",
+  "mangled_name": "__ZN22cGcFrontendPageOptions18RequestOptionsPageE12eOptionsMenub"
+ },
+ {
+  "name": "cGcOptionsPageUI::Button",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 57 48 81 EC ? ? ? ? 32 DB",
+  "mangled_name": "__ZN16cGcOptionsPageUI6ButtonEPKcS1_RK16cGcButtonOptions"
+ },
+ {
+  "name": "cGcOptionsPageUI::FinalizePage",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 55 41 56 41 57 48 83 EC ? 48 8B 81",
+  "mangled_name": "__ZN16cGcOptionsPageUI12FinalizePageEbb"
+ },
+ {
+  "name": "cGcFrontendPage::Confirm",
+  "signature": "48 89 6C 24 ? 41 54 41 56 41 57 48 83 EC ? 80 B9",
+  "mangled_name": "?Confirm@cGcFrontendPage@@QEAA_NPEAVcGcNGuiLayer@@_N1VTkAudioID@@11@Z"
+ },
+ {
+  "name": "cGcFrontendPageOptions::DoGameSwitcher",
+  "signature": "48 8B C4 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 66 0F 6F 0D",
+  "mangled_name": "__ZN22cGcFrontendPageOptions14DoGameSwitcherEP15cGcFrontendPage",
+  "unique_string": "UI_DIFFICULTY_SELF_BAN"
+ },
+ {
+  "name": "cGcFrontendManager::RenderPage",
+  "signature": "48 89 4C 24 ? 55 53 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 48 89 B4 24 ? ? ? ? 48 89 BC 24",
+  "mangled_name": "__ZN18cGcFrontendManager10RenderPageEv"
+ },
+ {
+  "name": "cGcFrontendPageFunctions::DoItemPopup",
+  "signature": "48 8B C4 44 89 48 ? 4C 89 40 ? 48 89 48 ? 55 48 8D A8",
+  "mangled_name": "?DoItemPopup@cGcFrontendPageFunctions@@SAPEAVcGcNGuiLayer@@PEAVcGcFrontendPage@@PEAV2@AEBVcGcInventoryElement@@W4eItemPopupLayer@@_NAEBT?$TkID@$0BAA@@@PEBVcGcInventoryStore@@@Z",
+  "unique_string": "UI_EMPTY_REFINER"
+ },
+ {
+  "name": "cTkHashedNGuiElement::cTkHashedNGuiElement",
+  "signature": "0F 10 02 4C 8B D9",
+  "mangled_name": "??0cTkHashedNGuiElement@@QEAA@AEBT?$TkID@$0IA@@@H@Z"
  }
 ]

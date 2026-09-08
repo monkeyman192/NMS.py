@@ -4,6 +4,7 @@ from contextlib import contextmanager
 from ctypes import (
     POINTER,
     _Pointer,
+    byref,
     c_bool,
     c_char,
     c_char_p,
@@ -351,6 +352,26 @@ class cGcNGuiText(cGcNGuiElement):
 
 
 @partial_struct
+class cTkHashedNGuiElement(Structure):
+    mID: Annotated[basic.TkID0x10, 0x0]
+    mHash: Annotated[int, Field(c_uint64, 0x10)]
+
+    def __init__(self, ID: str, type_: enums.eNGuiGameElementType):
+        # Generate the hash as NMS does... This is RE'd from the game since the actual constructor function
+        # is inlined so we can't just call it...
+        buffer = basic.TkID0x10(ID)
+        self.cTkHashedNGuiElement(byref(buffer), type_)
+
+    @function_hook("0F 10 02 4C 8B D9")
+    def cTkHashedNGuiElement(
+        self,
+        this: "_Pointer[cTkHashedNGuiElement]",
+        lID: _Pointer[basic.TkID0x10],
+        liType: c_enum32[enums.eNGuiGameElementType],
+    ) -> c_uint64: ...
+
+
+@partial_struct
 class cGcNGuiLayer(cGcNGuiElement):
     mapElements: Annotated[basic.TkStd.tk_vector[_Pointer[cGcNGuiElement]], 0x58]
     # mapLayerElements: Annotated[basic.TkStd.tk_vector[_Pointer[cGcNGuiLayer]], 0x58]
@@ -369,7 +390,7 @@ class cGcNGuiLayer(cGcNGuiElement):
     def FindTextRecursive(
         self,
         this: "_Pointer[cGcNGuiLayer]",
-        lID: c_uint64,
+        lID: _Pointer[basic.TkID0x10],
     ) -> c_uint64:  # cGcNGuiElement *
         ...
 
@@ -377,8 +398,8 @@ class cGcNGuiLayer(cGcNGuiElement):
     def FindElementRecursive(
         self,
         this: "_Pointer[cGcNGuiLayer]",
-        lID: c_uint64,  # const cTkHashedNGuiElement *
-        leType: c_uint32,  # eNGuiGameElementType
+        lID: _Pointer[cTkHashedNGuiElement],
+        leType: c_enum32[enums.eNGuiGameElementType],
     ) -> c_uint64:  # cGcNGuiElement *
         ...
 
@@ -490,9 +511,9 @@ class cGcShipHUD(Structure):
 
     # The following offset is found by searching for "UI\\HUD\\SHIP\\MAINSCREEN.MXML"
     # (It's above the below entry.)
-    mMainScreenGUI: Annotated[cGcNGui, Field(cGcNGui, offset=0x27630)]
+    mMainScreenGUI: Annotated[cGcNGui, 0x27630]
     # The following offset is found by searching for "UI\\HUD\\SHIP\\HEADSUP.MXML"
-    mHeadsUpGUI: Annotated[cGcNGui, Field(cGcNGui, offset=0x27BF0)]
+    mHeadsUpGUI: Annotated[cGcNGui, 0x27BF0]
 
     # hud_root: Annotated[int, Field(c_ulonglong, 0x27F70)]  # TODO: Fix
 
@@ -2155,9 +2176,30 @@ class cGcInteractionComponent(Structure):
 
 
 @partial_struct
+class cGcFrontendPage(Structure):
+    # This is probably a cGcNGui
+    # Found in cGcFrontendPageOptions::DoGameSwitcher
+    mRootNode: Annotated[_Pointer[cGcNGuiLayer], 0x135E8]
+
+    @function_hook("48 89 6C 24 ? 41 54 41 56 41 57 48 83 EC ? 80 B9")
+    def Confirm(
+        self,
+        this: "_Pointer[cGcFrontendPage]",
+        lpLayer: _Pointer[cGcNGuiLayer],
+        lbInstant: Annotated[bool, c_bool],
+        lbSlow: Annotated[bool, c_bool],
+        lCustomConfirmationSound: _Pointer[TkAudioID],
+        lbIsSetTouchButton: Annotated[bool, c_bool],
+        lbSkipSlowForTouch: Annotated[bool, c_bool],
+    ) -> c_bool: ...
+
+
+@partial_struct
 class cGcFrontendManager(Structure):
     # Found in cGcFrontendManager::cGcFrontendManager
     mFrontendRoot: Annotated[cGcNGuiLayer, 0x2468]
+    # Found near the top of cGcFrontendManager::RenderPage
+    mPage: Annotated[cGcFrontendPage, 0x2790]
 
     @function_hook(
         "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 54 41 56 41 57 48 83 EC ? 48 8D 05"
@@ -2172,6 +2214,12 @@ class cGcFrontendManager(Structure):
         lfStartDelay: Annotated[float, c_float],
         lpInteraction: _Pointer[cGcInteractionComponent],
     ): ...
+
+    @function_hook(
+        "48 89 4C 24 ? 55 53 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 48 89 B4 24 ? ? ? ? 48 89 BC "
+        "24"
+    )
+    def RenderPage(self, this: "_Pointer[cGcFrontendManager]"): ...
 
 
 @partial_struct
@@ -2230,6 +2278,8 @@ class cGcApplication(cTkFSM):
     meGameMode: Annotated[int, Field(c_uint32, 0x44)]  # ePresetGameMode
     mbSavingEnabled: Annotated[bool, Field(c_bool, 0x4C)]
     mbPaused: Annotated[bool, Field(c_bool, 0xB4A5)]
+    mbWindowFocused: Annotated[bool, Field(c_bool, 0xB4A9)]
+    mbHasFocus: Annotated[bool, Field(c_bool, 0xB4AA)]
     mbMultiplayerActive: Annotated[bool, Field(c_bool, 0xB4A8)]
 
 
@@ -3481,27 +3531,6 @@ class cGcFrontendPageDiscovery(Structure):
     ): ...
 
 
-class cGcFrontendPage(Structure): ...
-
-
-class cGcFrontendPagePortalRunes(Structure):
-    @static_function_hook("48 8B C4 44 88 48 20 44 88 40 18 48 89 50 10 55 53 56 57 41 54")
-    @staticmethod
-    def CheckUAIsValid(
-        lTargetUA: c_uint64,
-        lModifiedUA: "_Pointer[cGcGalacticVoxelCoordinate]",
-        lbDeterministicRandom: Annotated[bool, c_bool],
-        a4: Annotated[bool, c_bool],
-    ) -> c_bool: ...
-
-    @function_hook("48 89 54 24 ? 48 89 4C 24 ? 55 57 41 55 41 56 48 8D 6C 24")
-    def DoInteraction(
-        self,
-        this: "_Pointer[cGcFrontendPagePortalRunes]",
-        lpPage: _Pointer[cGcFrontendPage],
-    ): ...
-
-
 class cTkLanguageManager(Structure):
     @static_function_hook(
         "48 83 EC ? 65 48 8B 04 25 ? ? ? ? B9 ? ? ? ? 48 8B 00 8B 04 01 39 05 ? ? ? ? 0F 8F ? ? ? ? 48 8D 05 "
@@ -3734,7 +3763,10 @@ class cTkFileSystem(Structure):
         liMaxDirectories: Annotated[int, c_int32],
         a5: Annotated[int, c_int32],
         a6: c_uint64,
-    ) -> c_uint64: ...
+    ) -> c_uint64:
+        """Return the number of contained files in a directory. This will be called on the MODS/ directory
+        and any child directories."""
+        ...
 
     @function_hook(
         "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 4C 89 74 24 ? 55 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 "
@@ -3780,17 +3812,12 @@ class cTkFileSystem(Structure):
 # All method names are guessed.
 @partial_struct
 class cGcModManager(Structure):
-    liModCount: Annotated[int, Field(c_int32, 0x4)]
+    _total_size_ = 0x140  # Roughly, based on the cGcModManager::GetInstance
 
     @partial_struct
-    class ModInfo(Structure):
-        # This Struct and it's info is mostly determined from
+    class ModInfo(nmse.cGcModSettingsInfo):
+        # This Struct and it's info is mostly determined from memory
         _total_size_ = 0x640
-        liIndex: Annotated[int, Field(c_uint16, 0x28)]
-        # Looks like there might be another cTkFixedString0x80 here too based on the constructor.
-        mModName: Annotated[basic.cTkFixedString0x80, 0xAA]
-        lbUnknown0x12A: Annotated[bool, Field(c_bool, 0x12A)]
-        lbUnknown0x12B: Annotated[bool, Field(c_bool, 0x12B)]
         # Looks like this might be 8 * 0x80's from 0x130
         lpacPath: Annotated[c_char_p, 0x530]
         liUnknown0x630: Annotated[int, Field(c_int32, 0x630)]
@@ -3813,6 +3840,9 @@ class cGcModManager(Structure):
         this: "_Pointer[cGcModManager]",
         lbVREnabled: Annotated[bool, c_bool],
     ) -> c_bool: ...
+
+    lpModInfo: Annotated[basic.TkStd.tk_vector[ModInfo], 0x0]
+    lpModSettingsInfo: Annotated[basic.TkStd.tk_vector[nmse.cGcModSettingsInfo], 0x58]
 
 
 class cTkMemoryManager(Structure):
@@ -3851,6 +3881,68 @@ class cTkMemoryManager(Structure):
                 self.Free(addr, -1)
 
 
+@partial_struct
+class cGcOptionsMenuState(Structure):
+    meType: Annotated[c_enum32[enums.eOptionsMenu], 0x0]
+
+
+class cGcFrontendPageOptions_Container(ContainerStruct):
+    mOpenMenuIndex: Annotated[
+        c_uint32, Pattern("83 3D ? ? ? ? ? 0F 84 ? ? ? ? 48 89 9C 24 ? ? ? ? 48 8D 4C 24", address_offset=2)
+    ]
+    mOpenMenus: Annotated[_Pointer[_Pointer[cGcOptionsMenuState]], Pattern("48 8B 05 ? ? ? ? FF C9 48 8B 9D")]
+
+
+GcFrontendPageOptions = cGcFrontendPageOptions_Container()
+
+
+class cGcFrontendPageOptions(Structure):
+    @function_hook(
+        "48 8B C4 55 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 58 ? 48 89 70 ? 48 8B F1 48 89 78 ? 48 8B 3D"
+    )
+    def DoCameraOptions(self, this: "_Pointer[cGcFrontendPageOptions]"): ...
+
+    @static_function_hook("40 55 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 83 3D")
+    @staticmethod
+    def DoOptions(): ...
+
+    @function_hook(
+        "48 8B C4 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 66 0F 6F 0D"
+    )
+    def DoGameSwitcher(self, this: "_Pointer[cGcFrontendPage]"): ...
+
+    @static_function_hook("48 89 5C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 8B F9")
+    @staticmethod
+    def RequestOptionsPage(leMenu: c_enum32[enums.eOptionsMenu], lUnknown: Annotated[bool, c_bool]): ...
+
+
+@partial_struct
+class cGcFloatOptions(Structure):
+    lStep1: Annotated[float, Field(c_float, 0x0)]
+    lStep2: Annotated[float, Field(c_float, 0x4)]
+    lpacSuffix: Annotated[c_char_p64, 0x8]
+    lUnknown: Annotated[int, Field(c_uint64, 0x10)] = 0
+
+
+@partial_struct
+class cGcIntOptions(Structure):
+    lStep1: Annotated[int, Field(c_int32, 0x0)]
+    lStep2: Annotated[int, Field(c_int32, 0x4)]
+    lpacSuffix: Annotated[c_char_p64, 0x8]
+    lUnknown: Annotated[int, Field(c_uint64, 0x10)] = 0
+
+
+@partial_struct
+class cGcBooleanOptions(Structure):
+    lpacEnabledText: Annotated[c_char_p64, 0x0]
+    lpacDisabledText: Annotated[c_char_p64, 0x8]
+
+
+@partial_struct
+class cGcButtonOptions(Structure):
+    lUnknown: Annotated[bool, Field(c_bool, 0x0)]
+
+
 class cGcOptionsPageUI(Structure):
     @function_hook(
         "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 33 DB 48 8D 79 ? 89 59"
@@ -3864,6 +3956,14 @@ class cGcOptionsPageUI(Structure):
         liDefaultValue: Annotated[int, c_int32],
         a6: _Pointer[c_int32],
     ): ...
+
+    @static_function_hook("48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 57 C0 33 C0")
+    @staticmethod
+    def BeginPage(lpOptionsPage: _Pointer[cGcFrontendPageOptions]): ...
+
+    @static_function_hook("48 8B C4 55 57 48 8B EC")
+    @staticmethod
+    def EndPage(lpOptionsPage: _Pointer[cGcFrontendPageOptions]): ...
 
     @function_hook("4C 8B DC 4D 89 43 ? 49 89 53 ? 49 89 4B ? 53 56")
     def QualityOption(
@@ -3881,6 +3981,86 @@ class cGcOptionsPageUI(Structure):
         this: "_Pointer[cGcOptionsPageUI]",
         lpacOptionText: c_char_p64,
         liValue: Annotated[int, c_int32],
+    ): ...
+
+    @static_function_hook("4C 89 44 24 ? 53 57 41 54 41 55 41 57")
+    @staticmethod
+    def Boolean(
+        lpOptionsPage: _Pointer[cGcFrontendPageOptions],
+        lpacOptionName: c_char_p64,
+        lpacDescriptionLocKey: c_char_p64,
+        lCurrentValue: Annotated[int, c_uint8],
+        lDefaultValue: Annotated[int, c_uint8],
+        lpBooleanOptions: _Pointer[cGcBooleanOptions],
+    ) -> c_bool: ...
+
+    @static_function_hook("48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 57 48 81 EC ? ? ? ? 32 DB")
+    @staticmethod
+    def Button(
+        lpOptionsPage: _Pointer[cGcFrontendPageOptions],
+        lpacOptionName: c_char_p64,
+        lpacDescriptionLocKey: c_char_p64,
+        lpButtonOptions: _Pointer[cGcButtonOptions],
+    ) -> c_bool: ...
+
+    @static_function_hook("F3 0F 11 5C 24 ? 55")
+    @staticmethod
+    def Float(
+        lpOptionsPage: _Pointer[cGcFrontendPageOptions],
+        lpacOptionName: c_char_p64,
+        lpacDescriptionLocKey: c_char_p64,
+        lCurrentValue: Annotated[float, c_float],
+        lDefaultValue: Annotated[float, c_float],
+        lMinValue: Annotated[float, c_float],
+        lMaxValue: Annotated[float, c_float],
+        lpFloatOptions: _Pointer[cGcFloatOptions],
+    ) -> c_float: ...
+
+    @static_function_hook("48 89 5C 24 ? 57 48 83 EC ? 83 79 ? ? 48 8B DA")
+    @staticmethod
+    def Header(
+        lpOptionsPage: _Pointer[cGcFrontendPageOptions],
+        lpacHeaderName: c_char_p64,
+        lHeaderIndex: c_enum32[enums.cGcOptionsUIHeaderIcons],
+    ): ...
+
+    @static_function_hook("44 89 4C 24 ? 4C 89 44 24 ? 55 56 41 54")
+    @staticmethod
+    def Int(
+        lpOptionsPage: _Pointer[cGcFrontendPageOptions],
+        lpacOptionName: c_char_p64,
+        lpacDescriptionLocKey: c_char_p64,
+        lCurrentValue: Annotated[int, c_int32],
+        lDefaultValue: Annotated[int, c_int32],
+        lMinValue: Annotated[int, c_int32],
+        lMaxValue: Annotated[int, c_int32],
+        lpIntOptions: _Pointer[cGcIntOptions],
+    ) -> c_int32: ...
+
+    @static_function_hook("48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 55 41 56 41 57 48 83 EC ? 48 8B 81")
+    @staticmethod
+    def FinalizePage(
+        lpOptionsPage: _Pointer[cGcFrontendPageOptions],
+        lUknown1: Annotated[bool, c_bool],
+        lUknown2: Annotated[bool, c_bool],
+    ) -> c_uint64: ...
+
+
+class cGcFrontendPagePortalRunes(Structure):
+    @static_function_hook("48 8B C4 44 88 48 20 44 88 40 18 48 89 50 10 55 53 56 57 41 54")
+    @staticmethod
+    def CheckUAIsValid(
+        lTargetUA: c_uint64,
+        lModifiedUA: "_Pointer[cGcGalacticVoxelCoordinate]",
+        lbDeterministicRandom: Annotated[bool, c_bool],
+        a4: Annotated[bool, c_bool],
+    ) -> c_bool: ...
+
+    @function_hook("48 89 54 24 ? 48 89 4C 24 ? 55 57 41 55 41 56 48 8D 6C 24")
+    def DoInteraction(
+        self,
+        this: "_Pointer[cGcFrontendPagePortalRunes]",
+        lpPage: _Pointer[cGcFrontendPage],
     ): ...
 
 
@@ -3945,6 +4125,19 @@ class cGcFrontendPageFunctions(Structure):
         lbDoCompareScreenSpecialCase: Annotated[bool, c_bool],
         lfScrollOffset: Annotated[float, c_float],
     ): ...
+
+    @static_function_hook("48 8B C4 44 89 48 ? 4C 89 40 ? 48 89 48 ? 55 48 8D A8")
+    @staticmethod
+    def DoItemPopup(
+        lpPage: _Pointer[cGcFrontendPage],
+        lpParentSlot: _Pointer[cGcNGuiLayer],
+        lItem: _Pointer[nmse.cGcInventoryElement],
+        leType: Annotated[int, c_int32],
+        lbDisabled: Annotated[bool, c_bool],
+        lRecipeId: _Pointer[basic.TkID0x20],
+        lpStore: _Pointer[cGcInventoryStore],
+    ) -> c_uint64:  # cGcNGuiLayer *
+        ...
 
 
 class cTkSystem(Structure):
@@ -4620,6 +4813,19 @@ class cGcSimpleInteractionComponent(cTkComponent):
         "48 8B C4 55 41 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 58 ? 4C 8B F1 48 89 70 ? 48 8D 8D"
     )
     def DoAction(self, this: "_Pointer[cGcSimpleInteractionComponent]"): ...
+
+
+@partial_struct
+class cGcHologramComponent(Structure):
+    # Found at the top of cGcHologramComponent::GetDesiredHologramResource
+    mpData: Annotated[_Pointer[nmse.cGcHologramComponentData], 0x30]
+
+    @function_hook("40 53 48 83 EC ? 80 B9 ? ? ? ? ? 48 8B DA 74 ? 8B 81")
+    def GetDesiredHologramResource(
+        self,
+        this: "_Pointer[cGcHologramComponent]",
+        lResult: c_uint64,
+    ) -> c_uint64: ...
 
 
 # Dummy values to copy and paste to make adding new things quicker...
