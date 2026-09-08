@@ -145,6 +145,8 @@ from .internal_enums import (
     eGraphicsDetail,
     TryStoreMode,
     InventoryChoice,
+    eOptionsMenu,
+    eNGuiGameElementType,
 )
 
 # The following list is auto-generated.

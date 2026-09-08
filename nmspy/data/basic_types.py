@@ -267,11 +267,21 @@ class Colour(ctypes.Structure):
         ("a", ctypes.c_float),
     ]
 
-    def update(self, r: float, g: float, b: float, a: float):
+    def __init__(self, r: float, g: float, b: float, a: float):
         self.r = r
         self.g = g
         self.b = b
         self.a = a
+
+    def update(self, r: float | None, g: float | None, b: float | None, a: float | None):
+        if r is not None:
+            self.r = r
+        if g is not None:
+            self.g = g
+        if b is not None:
+            self.b = b
+        if a is not None:
+            self.a = a
 
     def __str__(self):
         return f"({self.r}, {self.g}, {self.b}, {self.a})"
@@ -297,6 +307,14 @@ class TkID(ctypes.Structure):
     _align_ = 0x8  # One day this will work...
     _size: int  # This should only ever be 0x10 or 0x20...
     value: bytes
+
+    def __init__(self, value: str | bytes):
+        # Ensure the string isn't longer than the size of the type.
+        value = value[: self._size]
+        if isinstance(value, str):
+            self.value = value.encode()
+        else:
+            self.value = value
 
     def __class_getitem__(cls: type["TkID"], key: int):
         _cls: type["TkID"] = types.new_class(f"TkID<0x{key:X}>", (cls,))
@@ -347,10 +365,16 @@ class cTkFixedString(ctypes.Structure):
     _size: int
     value: bytes
 
-    def set(self, val: str):
+    def __init__(self, value: str | bytes):
+        if isinstance(value, str):
+            self.value = value.encode()
+        else:
+            self.value = value
+
+    def set(self, value: str):
         """Set the value of the string."""
-        new_len = len(val)
-        self.value = val[: self._size].encode() + (self._size - new_len) * b"\x00"
+        new_len = len(value)
+        self.value = value[: self._size].encode() + (self._size - new_len) * b"\x00"
 
     def __class_getitem__(cls: type["cTkFixedString"], key: int):
         _cls: type["cTkFixedString"] = types.new_class(f"cTkFixedString<0x{key:X}>", (cls,))
@@ -361,8 +385,8 @@ class cTkFixedString(ctypes.Structure):
     def __str__(self) -> str:
         return self.value.decode(errors="backslashreplace")
 
-    def __eq__(self, other: str) -> bool:
-        return str(self) == other
+    def __eq__(self, other: "str | cTkFixedString") -> bool:
+        return str(self) == str(other)
 
     def __repr__(self) -> str:
         return str(self)

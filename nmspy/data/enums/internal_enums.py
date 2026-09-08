@@ -159,3 +159,22 @@ class InventoryChoice(IntEnum):
     Unknown0x1E = 0x1E
     Unknown0x1F = 0x1F
     Unknown0x20 = 0x20
+
+
+class eOptionsMenu(IntEnum):
+    General = 0x0
+    Accessibility = 0x1
+    Controls = 0x2
+    Camera = 0x3
+    Display = 0x4
+    MotionSensor = 0x5
+    Options = 0x6
+    Network = 0x7
+
+
+class eNGuiGameElementType(IntEnum):
+    Layer = 0x0
+    Text = 0x1
+    Text_Special = 0x2
+    Graphic = 0x3
+    Spacing = 0x4
