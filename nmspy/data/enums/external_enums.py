@@ -178,6 +178,7 @@ class cGcAlienPuzzleCategory(IntEnum):
     SpiderA = 0x38
     SpiderB = 0x39
     SpiderRenewed = 0x3A
+    LegacyStation = 0x3B
 
 
 class cGcAlienPuzzleTableIndex(IntEnum):
@@ -2356,6 +2357,7 @@ class cGcAudioWwiseEvents(IntEnum):
     POI_SPACECLOCK = 0x38EF2B82
     POI_SPINNER = 0xF1CA2105
     POI_SUN = 0xD4E10AB0
+    POI_SUN_3D = 0x5E236C4E
     POI_SUN_END = 0x753DA356
     POI_WEIRD_METAL = 0xFF2F4C51
     POLICE_CHATTER_START = 0x22042BF0

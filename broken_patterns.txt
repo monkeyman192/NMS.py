@@ -30,7 +30,6 @@ Could not rename cGcSky::Update
 Could not rename cGcTerrainEditorBeam::Fire
 Could not rename cGcGalaxyMapUI::SolarInfoPanel::UpdatePanelUI Unique string: 'GLXY_REGION'
 Could not rename cEgGeometryResource::CloneOriginalVertDataToIndex
-Could not rename cGcLocalPlayerCharacterInterface::IsJetpacking
 Could not rename cGcPlayerFleetManager::cGcPlayerFleetManager
 Could not rename cGcSpaceshipWarp::GetPulseDriveFuelFactor
 Could not rename cGcOptionsPageUI::EndPage
