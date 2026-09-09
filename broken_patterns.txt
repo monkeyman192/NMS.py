@@ -1,5 +1,107 @@
-- Could not rename cGcPersistentInteractionBuffer::SaveInteraction
-- Could not rename nvgArc
-- Could not rename cEgSceneGraphResource::ParseData
-- Could not rename XMLNode::writeToFile
-- Could not rename cTkFileSystem::Write
+Could not rename cGcNGuiLayer::FindTextRecursive
+Could not rename cGcEnvironment::Update
+Could not rename cTkDynamicGravityControl::cTkDynamicGravityControl
+Could not rename cEgModelNode::UpdateGeometry
+Could not rename cGcPlayer::CheckFallenThroughFloor
+Could not rename cGcPersistentInteractionBuffer::SaveInteraction
+Could not rename nvgText
+Could not rename cGcBinoculars::UpdateRayCasts
+Could not rename cGcBaseSearch::FindNearestBaseInCurrentSystem
+Could not rename cGcPlayerHUD::RenderCrosshair
+Could not rename cGcSolarSystem::OnEnterPlanetOrbit
+Could not rename cGcBuilding::DestroyIntersectingVolcanoes
+Could not rename cGcBaseBuildingManager::GetBaseRootNode
+Could not rename cGcScanEvent::CalculateMarkerPosition
+Could not rename cTkDynamicGravityControl::GetGravity
+Could not rename cGcPlayerHUD::Update
+Could not rename cGcGameState::LoadFromPersistentStorage
+Could not rename Engine::ShiftAllTransformsForNode
+Could not rename cGcPlanet::cGcPlanet
+Could not rename cTkDynamicGravityControl::Construct
+Could not rename cGcPlayerEnvironment::Update
+Could not rename cGcPlayerEnvironment::IsOnPlanet
+Could not rename cGcSpaceshipComponent::Eject
+Could not rename Engine::SetUniformArrayDefaultMultipleShaders
+Could not rename cGcApplication::Data::Data
+Could not rename cGcBinoculars::SetMarker
+Could not rename cGcPlanet::Generate
+Could not rename cTkDynamicGravityControl::UpdateGravityPoint
+Could not rename cGcSky::Update
+Could not rename cGcTerrainEditorBeam::Fire
+Could not rename cGcGalaxyMapUI::SolarInfoPanel::UpdatePanelUI Unique string: 'GLXY_REGION'
+Could not rename cEgGeometryResource::CloneOriginalVertDataToIndex
+Could not rename cGcLocalPlayerCharacterInterface::IsJetpacking
+Could not rename cGcPlayerFleetManager::cGcPlayerFleetManager
+Could not rename cGcSpaceshipWarp::GetPulseDriveFuelFactor
+Could not rename cGcOptionsPageUI::EndPage
+Could not rename nvgArc
+Could not rename cGcGalaxyStarAttributesData::SetDefaults
+Could not rename cGcGalaxyVoxelGenerator::Populate
+Could not rename cGcInteractionComponent::DoInteractionEvent Unique string: 'INTRCT_BLOCK_USER_HEADER'
+Could not rename cTkRigidBody::SetAngularVelocity
+Could not rename cGcSky::UpdateSunPosition
+Could not rename cEgModelNode::Animate
+Could not rename cTkResourceManager::AddResource
+Could not rename cGcNGuiLayer::GetGraphic
+Could not rename Engine::GetNodeParent
+Could not rename cEgSceneGraphResource::ParseData
+Could not rename cGcOptionsPageUI::Float
+Could not rename cGcRealityManager::Construct
+Could not rename cGcPlayerState::PackageTechnology Unique string: 'UI_TECH_PACK_ERROR'
+Could not rename cGcRealityManager::GenerateProceduralTechnology
+Could not rename cGcQuickActionMenu::TriggerAction
+Could not rename cGcSimulation::Update
+Could not rename cGcSolarSystem::Update
+Could not rename cGcPlayer::Update
+Could not rename cGcPlayer::UpdateGraphics
+Could not rename cGcPlayer::SetToPosition
+Could not rename Engine::AddGroupNode
+Could not rename cGcPlayerShipOwnership::UpdateMeshRefresh
+Could not rename cGcGameState::Update
+Could not rename cTkAsyncIOManager::GetOpDataSize
+Could not rename cGcPlayerShipOwnership::SpawnNewShip
+Could not rename cGcPlayerHUD::LoadData
+Could not rename cGcPlayerShipOwnership::DestroyShip
+Could not rename cGcSpaceshipWarp::UpdatePulseDrive
+Could not rename cGcGameState::cGcGameState
+Could not rename cGcPlayerCreatureOwnership::cGcPlayerCreatureOwnership
+Could not rename cTkResource::cTkResource
+Could not rename cGcMarkerPoint::IsEqual
+Could not rename cGcQuickMenu::cGcQuickMenu
+Could not rename cGcModManager::LoadModdedData Unique string: '../BINARIES/SETTINGS/GCMODSETTINGS.MXML'
+Could not rename XMLNode::writeToFile
+Could not rename cTkFileSystem::Write
+Could not rename cTkFileSystem::Open
+Could not rename cTkSystem::GetInstance
+Could not rename cGcOptionsPageUI::QualityOption
+Could not rename cGcFrontendPageFunctions::SetPopupBasics
+Could not rename cEgTextureResource::Load
+Could not rename cEgRenderer::DrawMeshes
+Could not rename cEgRenderer::SetupMeshMaterial
+Could not rename cEgRenderer::DrawRenderables
+Could not rename cEgDrawGeometry::Draw
+Could not rename Engine::GetNodeNumChildren
+Could not rename cGcOptionsPageUI::Int
+Could not rename cEgGeometryResource::CreateVertexInfoForHash
+Could not rename GeometryStreaming::cEgGeometryStreamer::OnBufferLoadFinish
+Could not rename cTkEngineUtils::LoadResourcesFromDisk
+Could not rename EgInstancedModelExtension::cEgInstancedMeshNode::RenderAsync
+Could not rename cGcPlayerState::GetStatValue
+Could not rename cGcPlanetGenerator::GenerateCreatureSpawnData
+Could not rename cTkRigidBody::SetLinearVelocity
+Could not rename cTkResourceManager::GetDefaultResource
+Could not rename cGcSimpleInteractionComponent::DoAction
+Could not rename cGcPersistentInteractionBuffer::PopulateBufferData
+Could not rename cGcPlayer::RenderNGui Unique string: 'PLAYER STATS'
+Could not rename cGcFrontendPageClaimBase::DoBaseClaimOptions
+Could not rename cGcResourceCustomisation::CreateGenerationTask
+Could not rename cGcGalaxyMap::Data::DoSolarPopup
+Could not rename cGcGameState::ComputeWarpCapability
+Could not rename cGcEcosystem::Update
+Could not rename cGcDiscoveryManager::SubmitDiscoveryData
+Could not rename cGcFishManager::SetFishing
+Could not rename cGcOptionsPageUI::FinalizePage
+Could not rename cGcScanManager::UpdateConstantMarkers Unique string: 'UI_MARKER_TAG_NORTH'
+Could not rename cGcMarkerPoint::Update
+Could not rename cGcOptionsPageUI::Boolean
+Could not rename cGcFrontendPageOptions::RequestOptionsPage

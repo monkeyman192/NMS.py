@@ -599,7 +599,7 @@ wheels = [
 
 [[package]]
 name = "nmspy"
-version = "170671.6"
+version = "178763.0.dev1"
 source = { editable = "." }
 dependencies = [
     { name = "pymhf", extra = ["gui", "http-api"], marker = "sys_platform == 'win32'" },

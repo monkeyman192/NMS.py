@@ -786,6 +786,27 @@ if __name__ == "__main__":
                     module=cst.Attribute(
                         value=cst.Attribute(
                             value=cst.Name(value="pymhf"),
+                            attr=cst.Name("core")
+                        ),
+                        attr=cst.Name(value="structs")
+                    ),
+                    names=[
+                        cst.ImportAlias(
+                            name=cst.Name(value="Field")
+                        ),
+                        cst.ImportAlias(
+                            name=cst.Name(value="partial_struct")
+                        ),
+                    ]
+                )
+            ],
+        ),
+        cst.SimpleStatementLine(
+            body=[
+                cst.ImportFrom(
+                    module=cst.Attribute(
+                        value=cst.Attribute(
+                            value=cst.Name(value="pymhf"),
                             attr=cst.Name("extensions")
                         ),
                         attr=cst.Name(value="ctypes")
@@ -800,27 +821,6 @@ if __name__ == "__main__":
                         # ),
                         cst.ImportAlias(
                             name=cst.Name(value="c_enum32")
-                        ),
-                    ]
-                )
-            ],
-        ),
-        cst.SimpleStatementLine(
-            body=[
-                cst.ImportFrom(
-                    module=cst.Attribute(
-                        value=cst.Attribute(
-                            value=cst.Name(value="pymhf"),
-                            attr=cst.Name("utils")
-                        ),
-                        attr=cst.Name(value="partial_struct")
-                    ),
-                    names=[
-                        cst.ImportAlias(
-                            name=cst.Name(value="Field")
-                        ),
-                        cst.ImportAlias(
-                            name=cst.Name(value="partial_struct")
                         ),
                     ]
                 )
