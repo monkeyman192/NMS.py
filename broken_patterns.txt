@@ -1,6 +1,5 @@
-Could not rename cEgModelNode::UpdateGeometry
-Could not rename cGcPlayer::CheckFallenThroughFloor
 Could not rename cGcPersistentInteractionBuffer::SaveInteraction
+Could not rename cEgModelNode::UpdateGeometry
 Could not rename nvgText
 Could not rename cGcBaseSearch::FindNearestBaseInCurrentSystem
 Could not rename cGcBuilding::DestroyIntersectingVolcanoes
@@ -9,12 +8,10 @@ Could not rename cGcPlayerHUD::Update
 Could not rename cGcPlayerEnvironment::IsOnPlanet
 Could not rename cGcSpaceshipComponent::Eject
 Could not rename Engine::SetUniformArrayDefaultMultipleShaders
-Could not rename cGcTerrainEditorBeam::Fire
 Could not rename cEgGeometryResource::CloneOriginalVertDataToIndex
 Could not rename cGcPlayerFleetManager::cGcPlayerFleetManager
 Could not rename cGcSpaceshipWarp::GetPulseDriveFuelFactor
 Could not rename nvgArc
-Could not rename cGcInteractionComponent::DoInteractionEvent Unique string: 'INTRCT_BLOCK_USER_HEADER'
 Could not rename cTkRigidBody::SetAngularVelocity
 Could not rename cEgModelNode::Animate
 Could not rename cTkResourceManager::AddResource
@@ -22,18 +19,12 @@ Could not rename Engine::GetNodeParent
 Could not rename cEgSceneGraphResource::ParseData
 Could not rename cGcRealityManager::Construct
 Could not rename cGcRealityManager::GenerateProceduralTechnology
-Could not rename cGcQuickActionMenu::TriggerAction
-Could not rename cGcPlayer::UpdateGraphics
-Could not rename cGcPlayer::SetToPosition
 Could not rename cGcPlayerShipOwnership::UpdateMeshRefresh
-Could not rename cTkAsyncIOManager::GetOpDataSize
 Could not rename cGcPlayerShipOwnership::SpawnNewShip
-Could not rename cGcPlayerHUD::LoadData
 Could not rename cGcPlayerShipOwnership::DestroyShip
 Could not rename cGcSpaceshipWarp::UpdatePulseDrive
 Could not rename cGcPlayerCreatureOwnership::cGcPlayerCreatureOwnership
 Could not rename cTkResource::cTkResource
-Could not rename cGcMarkerPoint::IsEqual
 Could not rename XMLNode::writeToFile
 Could not rename cTkFileSystem::Write
 Could not rename cTkFileSystem::Open
@@ -51,11 +42,8 @@ Could not rename GeometryStreaming::cEgGeometryStreamer::OnBufferLoadFinish
 Could not rename cTkEngineUtils::LoadResourcesFromDisk
 Could not rename EgInstancedModelExtension::cEgInstancedMeshNode::RenderAsync
 Could not rename cGcPlayerState::GetStatValue
-Could not rename cTkRigidBody::SetLinearVelocity
 Could not rename cTkResourceManager::GetDefaultResource
-Could not rename cGcPlayer::RenderNGui Unique string: 'PLAYER STATS'
 Could not rename cGcFrontendPageClaimBase::DoBaseClaimOptions
 Could not rename cGcResourceCustomisation::CreateGenerationTask
-Could not rename cGcGalaxyMap::Data::DoSolarPopup
 Could not rename cGcGameState::ComputeWarpCapability
 Could not rename cGcDiscoveryManager::SubmitDiscoveryData

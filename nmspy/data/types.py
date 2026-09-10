@@ -277,6 +277,10 @@ class TkAudioID(Structure):
     mbValid: Annotated[bool, Field(c_bool)]
 
 
+class TkAudioObject(Structure):
+    pass
+
+
 @partial_struct
 class cTkAudioManager(Structure):
     @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 56 48 83 EC ? 48 8B F1 48 8B C2")
@@ -296,6 +300,15 @@ class cTkAudioManager(Structure):
         event: _Pointer[TkAudioID],
         object: c_int64,
     ) -> c_bool: ...
+
+    @function_hook("4C 89 44 24 ? 55 53 56 57 41 55 41 56 48 8D 6C 24")
+    def RegisterNamedAudioObject(
+        self,
+        this: "_Pointer[cTkAudioManager]",
+        result: _Pointer[TkAudioObject],
+        lObject: c_uint64,
+        lpObjectName: c_char_p64,
+    ) -> c_uint64: ...
 
 
 @partial_struct
@@ -1452,20 +1465,26 @@ class cGcPlayerCommunicator(Structure):
 @partial_struct
 class cGcPlayer(Structure):
     mRootNode: Annotated[basic.TkHandle, 0xE0]
-    mEquipmentNode: Annotated[basic.TkHandle, 0xE0]
     mPhysicsController: Annotated[_Pointer[cTkHavokCharacterController], 0x160]
+    mPosition: Annotated[basic.cTkVector3, 0x380]
+    mEquipmentNode: Annotated[basic.TkHandle, 0x3A0]
+    mAudioObject: Annotated[TkAudioObject, 0x3F0]
     # Found in cGcPlayer::Prepare around where the number 0xFA83126E / -92073362 is
-    mbSpawned: Annotated[bool, Field(c_bool, 0x2FC0)]
-    mbIsRunning: Annotated[bool, Field(c_bool, 0x2FC2)]
-    mbIsAutoWalking: Annotated[bool, Field(c_bool, 0x2FC8)]
-    mfJetpackTank: Annotated[float, Field(c_float, 0x3374)]
+    mbSpawned: Annotated[bool, Field(c_bool, 0x3140)]
+    mbIsRunning: Annotated[bool, Field(c_bool, 0x3142)]
+    mbIsAutoWalking: Annotated[bool, Field(c_bool, 0x3148)]
+    mfJetpackTank: Annotated[float, Field(c_float, 0x34F4)]
+    mfJetpackUpForce: Annotated[float, Field(c_float, 0x34FC)]
+    mfJetpackForce: Annotated[float, Field(c_float, 0x3500)]
+    mfJetpackIgnitionForce: Annotated[float, Field(c_float, 0x3504)]
     # Found Above the cGcPlayer::UpdateGraphics call in cGcPlayer::CheckFallenThroughFloor
-    mfAirTimer: Annotated[float, Field(c_float, 0x33B0)]
-    mfStamina: Annotated[float, Field(c_float, 0x5160)]
-    mbIsDying: Annotated[bool, Field(c_bool, 0x5240)]
-    mCommunicator: Annotated[cGcPlayerCommunicator, 0x5420]
+    mfAirTimer: Annotated[float, Field(c_float, 0x3530)]
+    mfStamina: Annotated[float, Field(c_float, 0x55E0)]
+    mbIsTransitioning: Annotated[bool, Field(c_bool, 0x55E8)]
+    mbIsDying: Annotated[bool, Field(c_bool, 0x56C0)]
+    mCommunicator: Annotated[cGcPlayerCommunicator, 0x5918]
 
-    @function_hook("40 55 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B F9 48 8B 0D ? ? ? ? 83 B9")
+    @function_hook("40 55 41 54 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B E1")
     def CheckFallenThroughFloor(self, this: "_Pointer[cGcPlayer]"): ...
 
     @function_hook("48 8B C4 4C 89 48 ? 44 89 40 ? 55 56")
@@ -1489,13 +1508,13 @@ class cGcPlayer(Structure):
     @function_hook("48 8B C4 48 89 48 ? 55 53 41 54 41 55 41 57 48 8D A8")
     def Update(self, this: "_Pointer[cGcPlayer]", lfStep: Annotated[float, c_float]): ...
 
-    @function_hook("48 8B C4 48 89 58 ? 48 89 70 ? 57 48 81 EC ? ? ? ? 0F 29 70 ? 0F B6 F2")
+    @function_hook("48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 57 48 81 EC ? ? ? ? 0F 29 70 ? 0F B6 EA")
     def UpdateGraphics(self, this: "_Pointer[cGcPlayer]", lbSetNode: Annotated[bool, c_bool]): ...
 
     @function_hook("48 8B C4 55 53 56 57 41 54 41 56 41 57 48 8D 6C 24")
     def Prepare(self, this: "_Pointer[cGcPlayer]", lpController: _Pointer[cGcPlayerController]): ...
 
-    @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 48 8B FA 48 8B D9")
+    @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B FA 48 8B D9 48 8B 15")
     def SetToPosition(
         self,
         this: "_Pointer[cGcPlayer]",
@@ -1507,7 +1526,7 @@ class cGcPlayer(Structure):
     @function_hook("48 89 4C 24 ? 55 41 55 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 45 33 ED")
     def RenderInventoryEditor(self, this: "_Pointer[cGcPlayer]"): ...
 
-    @function_hook("48 8B C4 48 89 48 ? 55 41 55 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 78")
+    @function_hook("48 8B C4 48 89 48 ? 55 41 55 41 57")
     def RenderNGui(self, this: "_Pointer[cGcPlayer]"): ...
 
 
@@ -1523,8 +1542,7 @@ class cGcTerrainRegionMap(Structure):
     mRootNode: Annotated[basic.TkHandle, 0x9E808]
 
     @function_hook("48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 29 74 24 ? 48 8D 05")
-    def cGcTerrainRegionMap(self, this: "_Pointer[cGcTerrainRegionMap]"):
-        ...
+    def cGcTerrainRegionMap(self, this: "_Pointer[cGcTerrainRegionMap]"): ...
 
     @function_hook(
         "48 8B C4 48 89 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 "
@@ -1899,7 +1917,9 @@ class cGcMarkerPoint(Structure):
     @function_hook("40 55 53 56 57 41 54 48 8D 6C 24 ? 48 81 EC ? ? ? ? 0F B6 B9")
     def Update(self, this: "_Pointer[cGcMarkerPoint]"): ...
 
-    @function_hook("48 89 74 24 ? 57 48 83 EC ? 48 8B F9 48 8B F2 48 8B 89")
+    @function_hook(
+        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8B F9 48 8B F2"
+    )
     def IsEqual(
         self,
         this: "_Pointer[cGcMarkerPoint]",
@@ -2069,7 +2089,7 @@ class cGcPlayerHUD(cGcHUD):
     @function_hook("F3 0F 11 4C 24 ? 48 89 4C 24 ? 55 41 57")
     def Update(self, this: "_Pointer[cGcPlayerHUD]", lfTimeStep: Annotated[float, c_float]): ...
 
-    @function_hook("48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8B EC 48 83 EC ? 48 8D B1")
+    @function_hook("48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8B EC 48 83 EC ? 4C 8D B1")
     def LoadData(self, this: "_Pointer[cGcPlayerHUD]"): ...
 
 
@@ -2164,11 +2184,12 @@ class cGcInteractionComponent(Structure):
     ) -> c_uint64:  # cGcInteractionComponent *
         ...
 
-    @function_hook("40 55 41 55 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B F1")
+    @function_hook("40 55 41 55 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B F1 44 8B EA")
     def DoInteractionEvent(
         self,
         this: "_Pointer[cGcInteractionComponent]",
         leEvent: c_enum32[enums.cGcInteractionType],
+        a3: c_uint64,
     ): ...
 
     @function_hook("40 53 48 83 EC ? 48 8B D9 48 8B 0D ? ? ? ? 8B 93")
@@ -2259,6 +2280,7 @@ class cGcApplication(cTkFSM):
         # Passed into any cGcVibrationManager methods
         mVibrationManager: Annotated[cGcVibrationManager, 0x924718]
         mNGuiManager: Annotated[cGcNGuiManager, 0x902AD0]
+        mAudioManager: Annotated[cTkAudioManager, 0x925A50]
 
         @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 F6 48 C7 41")
         def Data(self, this: "_Pointer[cGcApplication.Data]"): ...
@@ -2766,18 +2788,6 @@ class cEgCodeResource(cEgResource):
     ) -> c_bool: ...
 
 
-class cTkAsyncIOManager:
-    @static_function_hook("48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B 3D ? ? ? ? 0F B6 F2")
-    @staticmethod
-    def GetOpDataSize(
-        lOpHandle: Annotated[int, c_int32], lbTakeLock: Annotated[bool, c_bool]
-    ) -> c_uint64: ...
-
-    @static_function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B 3D ? ? ? ? 0F B6 EA")
-    @staticmethod
-    def GetOpData(lOpHandle: Annotated[int, c_int32], lbTakeLock: Annotated[bool, c_bool]) -> c_void_p: ...
-
-
 class GeometryStreaming:
     @partial_struct
     class cEgGeometryStreamer(Structure):
@@ -3200,7 +3210,7 @@ class sTerrainEditData(Structure):
 class cTkRigidBody(Structure):
     @function_hook(
         "48 89 5C 24 ? 57 48 83 EC ? 41 0F B6 F8 48 8B D9 4C 8B 81 ? ? ? ? 49 83 B8 ? ? ? ? ? 75 ? 48 8B 81 "
-        "? ? ? ? 48 85 C0 0F 84 ? ? ? ? 80 08"
+        "? ? ? ? 48 85 C0 74 ? 80 08"
     )
     def SetLinearVelocity(
         self,
@@ -3230,7 +3240,7 @@ class cTkPhysicsComponent(Structure):
 class cGcTerrainEditorBeam(Structure):
     @function_hook(
         "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? "
-        "? ? 48 8B F2"
+        "? ? 4C 8B F2"
     )
     def Fire(
         self,
@@ -3609,7 +3619,7 @@ class MenuAction(Structure): ...
 
 
 class cGcQuickActionMenu(Structure):
-    @function_hook("44 88 44 24 ? 48 89 4C 24 ? 55 56 57 41 54 41 56")
+    @function_hook("44 88 44 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 57")
     def TriggerAction(
         self,
         this: "_Pointer[cGcQuickActionMenu]",
@@ -4767,7 +4777,7 @@ class cGcGalaxyMap(Structure):
             pass
 
         @function_hook(
-            "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 55 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 44 0F "
+            "48 8B C4 48 89 58 ? 48 89 70 ? 55 57 41 54 41 55 41 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 44 0F "
             "B7 72"
         )
         def DoSolarPopup(

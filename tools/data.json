@@ -111,8 +111,9 @@
  },
  {
   "name": "cGcPlayer::CheckFallenThroughFloor",
-  "signature": "40 55 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B F9 48 8B 0D ? ? ? ? 83 B9",
-  "mangled_name": "?CheckFallenThroughFloor@cGcPlayer@@IEAAXXZ"
+  "signature": "40 55 41 54 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B E1",
+  "mangled_name": "?CheckFallenThroughFloor@cGcPlayer@@IEAAXXZ",
+  "unique_string": "void __cdecl cGcPlayer::CheckFallenThroughFloor(void)"
  },
  {
   "name": "cGcNGuiLayer::LoadFromMetadata",
@@ -346,7 +347,7 @@
  },
  {
   "name": "cGcTerrainEditorBeam::Fire",
-  "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 8B F2",
+  "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B F2",
   "mangled_name": "?Fire@cGcTerrainEditorBeam@@QEAA_NAEBVcTkPhysRelVec3@@PEAVcTkRigidBody@@PEAVcGcOwnerConcept@@W4eStatsType@@_N@Z"
  },
  {
@@ -694,8 +695,9 @@
  },
  {
   "name": "cGcQuickActionMenu::TriggerAction",
-  "signature": "44 88 44 24 ? 48 89 4C 24 ? 55 56 57 41 54 41 56",
-  "mangled_name": "?TriggerAction@cGcQuickActionMenu@@AEAA_NAEBUMenuAction@@_N@Z"
+  "signature": "44 88 44 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 57",
+  "mangled_name": "?TriggerAction@cGcQuickActionMenu@@AEAA_NAEBUMenuAction@@_N@Z",
+  "unique_string": "QUICK_MENU_SQUADRON_UNAVAILABLE"
  },
  {
   "name": "cGcPlayerState::StoreCurrentSystemSpaceStationEndpoint",
@@ -724,12 +726,12 @@
  },
  {
   "name": "cGcPlayer::UpdateGraphics",
-  "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 57 48 81 EC ? ? ? ? 0F 29 70 ? 0F B6 F2",
+  "signature": "48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 57 48 81 EC ? ? ? ? 0F 29 70 ? 0F B6 EA",
   "mangled_name": "?UpdateGraphics@cGcPlayer@@IEAAX_N@Z"
  },
  {
   "name": "cGcPlayer::SetToPosition",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 48 8B FA 48 8B D9",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B FA 48 8B D9 48 8B 15",
   "mangled_name": "?SetToPosition@cGcPlayer@@QEAAXAEBVcTkPhysRelVec3@@AEBVcTkVector3@@1@Z"
  },
  {
@@ -1297,16 +1299,6 @@
   "mangled_name": "?CreateIndexBuffer@cTkGraphicsAPI@@SAPEAXAEAPEAUVkBuffer_T@@AEAUTkDeviceMemory@@PEAXH_N3@Z"
  },
  {
-  "name": "cTkAsyncIOManager::GetOpDataSize",
-  "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B 3D ? ? ? ? 0F B6 F2",
-  "mangled_name": "?GetOpDataSize@cTkAsyncIOManager@@SA_JH_N@Z"
- },
- {
-  "name": "cTkAsyncIOManager::GetOpData",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B 3D ? ? ? ? 0F B6 EA",
-  "mangled_name": "?GetOpData@cTkAsyncIOManager@@SAPEAXH_N@Z"
- },
- {
   "name": "GeometryStreaming::cEgGeometryStreamer::FindVertexBufferIndexByHash",
   "signature": "48 83 EC ? 8B 41 ? 4C 8B DA 48 85 C0",
   "mangled_name": "__ZN17GeometryStreaming19cEgGeometryStreamer27FindVertexBufferIndexByHashEm"
@@ -1348,7 +1340,7 @@
  },
  {
   "name": "cTkRigidBody::SetLinearVelocity",
-  "signature": "48 89 5C 24 ? 57 48 83 EC ? 41 0F B6 F8 48 8B D9 4C 8B 81 ? ? ? ? 49 83 B8 ? ? ? ? ? 75 ? 48 8B 81 ? ? ? ? 48 85 C0 0F 84 ? ? ? ? 80 08",
+  "signature": "48 89 5C 24 ? 57 48 83 EC ? 41 0F B6 F8 48 8B D9 4C 8B 81 ? ? ? ? 49 83 B8 ? ? ? ? ? 75 ? 48 8B 81 ? ? ? ? 48 85 C0 74 ? 80 08",
   "mangled_name": "?SetLinearVelocity@cTkRigidBody@@QEAAXAEBVcTkVector3@@@Z"
  },
  {
@@ -1433,7 +1425,7 @@
  },
  {
   "name": "cGcPlayer::RenderNGui",
-  "signature": "48 8B C4 48 89 48 ? 55 41 55 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 78",
+  "signature": "48 8B C4 48 89 48 ? 55 41 55 41 57",
   "mangled_name": "?RenderNGui@cGcPlayer@@IEAAXXZ",
   "unique_string": "PLAYER STATS"
  },
@@ -1464,9 +1456,9 @@
  },
  {
   "name": "cGcInteractionComponent::DoInteractionEvent",
-  "signature": "40 55 41 55 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B F1",
+  "signature": "40 55 41 55 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B F1 44 8B EA",
   "mangled_name": "?DoInteractionEvent@cGcInteractionComponent@@QEAAXW4eInteractionEvent@@@Z",
-  "unique_string": "INTRCT_BLOCK_USER_HEADER"
+  "unique_string": "ALIENS_MET"
  },
  {
   "name": "cGcInteractionComponent::GetInteractionData",
@@ -1507,7 +1499,7 @@
  },
  {
   "name": "cGcGalaxyMap::Data::DoSolarPopup",
-  "signature": "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 55 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 44 0F B7 72",
+  "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 55 57 41 54 41 55 41 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 44 0F B7 72",
   "mangled_name": "?DoSolarPopup@Data@cGcGalaxyMap@@QEAAXAEBUSolarQueryResult@@@Z"
  },
  {
@@ -1671,8 +1663,9 @@
  },
  {
   "name": "cGcPlayerHUD::LoadData",
-  "signature": "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8B EC 48 83 EC ? 48 8D B1",
-  "mangled_name": "?LoadData@cGcPlayerHUD@@QEAAXXZ"
+  "signature": "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8B EC 48 83 EC ? 4C 8D B1",
+  "mangled_name": "?LoadData@cGcPlayerHUD@@QEAAXXZ",
+  "unique_string": "UI\\HUD\\HUDCROSSHAIR.MXML"
  },
  {
   "name": "cGcPlayerState::PackageTechnology",
@@ -1703,7 +1696,7 @@
  },
  {
   "name": "cGcMarkerPoint::IsEqual",
-  "signature": "48 89 74 24 ? 57 48 83 EC ? 48 8B F9 48 8B F2 48 8B 89",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8B F9 48 8B F2",
   "mangled_name": "?IsEqual@cGcMarkerPoint@@QEAA_NAEBV1@@Z"
  },
  {
@@ -1797,5 +1790,10 @@
   "name": "GcTerrainRegionMap::cGcTerrainRegionMap",
   "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 29 74 24 ? 48 8D 05",
   "mangled_name": "??0cGcTerrainRegionMap@@QEAA@XZ"
+ },
+ {
+  "name": "cTkAudioManager::RegisterNamedAudioObject",
+  "signature": "4C 89 44 24 ? 55 53 56 57 41 55 41 56 48 8D 6C 24",
+  "mangled_name": "?RegisterNamedAudioObject@cTkAudioManager@@QEAA?AVTkAudioObject@@_KPEBD@Z"
  }
 ]
