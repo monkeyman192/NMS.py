@@ -1,10 +1,5 @@
 [
  {
-  "name": "cGcNGuiLayer::FindTextRecursive",
-  "signature": "48 83 EC ? 4C 8B 02 4C 8B C9 0F 10 02 49 8B C0 48 B9 ? ? ? ? ? ? ? ? 48 33 42 ? 48 0F AF C1 0F 11 44 24 ? 48 8B D0 48 C1 EA ? 48 33 D0 49 33 D0 48 0F AF D1 4C 8B C2 49 C1 E8 ? 4C 33 C2 4C 0F AF C1 41 0F B7 C8 41 8B D0 81 C1 ? ? ? ? C1 EA ? 8B C1 49 C1 E8 ? 81 E2 ? ? ? ? C1 E0 ? 33 D0 41 0F B7 C0 33 D1 41 C1 E8 ? 8B CA 41 81 E0 ? ? ? ? C1 E9 ? 03 D0 03 D1 8B C2 C1 E0 ? 44 33 C0 44 33 C2 41 8B C8 C1 E9 ? 41 03 C8 41 B8 ? ? ? ? 8D 14 CD ? ? ? ? 33 D1 8B CA C1 E9 ? 03 CA 8B D1 C1 E2 ? 33 D1 8B CA C1 E9 ? 03 CA 8B D1 C1 E2 ? 33 D1 8B C2 C1 E8 ? 03 C2 48 8D 54 24 ? 69 C0 ? ? ? ? C1 C8 ? 69 C8 ? ? ? ? 83 F1 ? C1 C9 ? 8D 0C 89 81 C1 ? ? ? ? 48 89 4C 24 ? 49 8B C9 E8 ? ? ? ? 48 83 C4 ? C3 CC CC CC CC 0F B6 41",
-  "mangled_name": "?FindTextRecursive@cGcNGuiLayer@@QEAAPEAVcGcNGuiText@@AEBT?$TkID@$0IA@@@@Z"
- },
- {
   "name": "cGcNGuiLayer::FindElementRecursive",
   "signature": "40 55 57 41 57 48 83 EC ? 4C 8B 89",
   "mangled_name": "?FindElementRecursive@cGcNGuiLayer@@QEAAPEAVcGcNGuiElement@@AEBVcTkHashedNGuiElement@@W4eNGuiGameElementType@@@Z"
@@ -141,7 +136,7 @@
  },
  {
   "name": "cGcPlanet::cGcPlanet",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 45 33 FF 48 C7 41 ? ? ? ? ? 44 89 79",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 45 33 F6 48 C7 41 ? ? ? ? ? 44 89 71 ? 48 8D 59",
   "mangled_name": "??0cGcPlanet@@QEAA@XZ"
  },
  {
@@ -171,7 +166,7 @@
  },
  {
   "name": "cGcSolarSystem::OnEnterPlanetOrbit",
-  "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 55 57 41 54 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 45 33 F6",
+  "signature": "88 54 24 ? 55 53 56 57 41 54 41 56",
   "mangled_name": "?OnEnterPlanetOrbit@cGcSolarSystem@@QEAAX_N@Z"
  },
  {
@@ -192,7 +187,7 @@
  },
  {
   "name": "cTkDynamicGravityControl::cTkDynamicGravityControl",
-  "signature": "66 0F 6F 05 ? ? ? ? 4C 8B C9",
+  "signature": "48 89 5C 24 ? 57 48 83 EC ? 0F 29 74 24 ? 48 8D 41",
   "mangled_name": "??0cTkDynamicGravityControl@@QEAA@XZ"
  },
  {
@@ -227,7 +222,7 @@
  },
  {
   "name": "Engine::ShiftAllTransformsForNode",
-  "signature": "40 53 44 8B D1",
+  "signature": "44 8B C1 4C 8B D2 41 C1 E8 ? 45 85 C0 74 ? 8B C1 25 ? ? ? ? 3D ? ? ? ? 74 ? 4C 8B 0D ? ? ? ? 8B D1",
   "mangled_name": "?ShiftAllTransformsForNode@Engine@@YAXVTkHandle@@AEBVcTkVector3@@@Z"
  },
  {
@@ -327,7 +322,7 @@
  },
  {
   "name": "cTkDynamicGravityControl::UpdateGravityPoint",
-  "signature": "40 57 48 83 EC ? 48 63 81",
+  "signature": "48 63 81 ? ? ? ? 4C 8B C9 85 C0",
   "mangled_name": "?UpdateGravityPoint@cTkDynamicGravityControl@@QEAAXAEBVcTkVector3@@MM@Z"
  },
  {
@@ -437,8 +432,9 @@
  },
  {
   "name": "cGcPlanet::Generate",
-  "signature": "48 8B C4 48 89 58 ? 4C 89 40 ? 88 50",
-  "mangled_name": "?Generate@cGcPlanet@@QEAAX_NAEBVcTkVector3@@AEBVcGcDiscoveryData@@AEBVcGcPlanetGenerationInputData@@@Z"
+  "signature": "48 8B C4 48 89 58 ? 88 50 ? 55",
+  "mangled_name": "?Generate@cGcPlanet@@QEAAX_NAEBVcTkVector3@@AEBVcGcDiscoveryData@@AEBVcGcPlanetGenerationInputData@@@Z",
+  "unique_string": "cGcPlanet::Generate"
  },
  {
   "name": "cGcNotificationSequenceStartEvent::DeepInterstellarSearch",
@@ -647,7 +643,7 @@
  },
  {
   "name": "cGcApplication::Data::Data",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 33 ED 48 C7 41 ? ? ? ? ? 48 89 29",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 F6 48 C7 41",
   "mangled_name": "??0Data@cGcApplication@@QEAA@XZ"
  },
  {
@@ -787,7 +783,7 @@
  },
  {
   "name": "cGcGameState::cGcGameState",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? C7 41",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? C7 41",
   "mangled_name": "??0cGcGameState@@QEAA@XZ"
  },
  {
@@ -1704,7 +1700,7 @@
  },
  {
   "name": "cGcOptionsPageUI::Boolean",
-  "signature": "4C 89 44 24 ? 53 57 41 54 41 55 41 57",
+  "signature": "4C 89 44 24 ? 56 57 41 55",
   "mangled_name": "__ZN16cGcOptionsPageUI7BooleanEPKcS1_bbRK17cGcBooleanOptions"
  },
  {
@@ -1719,12 +1715,12 @@
  },
  {
   "name": "cGcOptionsPageUI::Float",
-  "signature": "F3 0F 11 5C 24 ? 55",
+  "signature": "F3 0F 11 5C 24 ? 55 53",
   "mangled_name": "__ZN16cGcOptionsPageUI5FloatEPKcS1_ffffRK15cGcFloatOptions"
  },
  {
   "name": "cGcOptionsPageUI::Int",
-  "signature": "44 89 4C 24 ? 4C 89 44 24 ? 55 56 41 54",
+  "signature": "44 89 4C 24 ? 4C 89 44 24 ? 55 56 41 57",
   "mangled_name": "__ZN16cGcOptionsPageUI3IntEPKcS1_iiiiRK13cGcIntOptions"
  },
  {
@@ -1734,7 +1730,7 @@
  },
  {
   "name": "cGcOptionsPageUI::EndPage",
-  "signature": "48 8B C4 55 57 48 8B EC",
+  "signature": "48 8B C4 55 57 48 8D 68 ? 48 81 EC ? ? ? ? 83 79",
   "mangled_name": "__ZN16cGcOptionsPageUI7EndPageEv"
  },
  {
@@ -1744,7 +1740,7 @@
  },
  {
   "name": "cGcFrontendPageOptions::RequestOptionsPage",
-  "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 8B F9",
+  "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 8B D9",
   "mangled_name": "__ZN22cGcFrontendPageOptions18RequestOptionsPageE12eOptionsMenub"
  },
  {
@@ -1754,7 +1750,7 @@
  },
  {
   "name": "cGcOptionsPageUI::FinalizePage",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 55 41 56 41 57 48 83 EC ? 48 8B 81",
+  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 55 41 56 41 57 48 83 EC ? 48 8B 81 ? ? ? ? 45 33 FF",
   "mangled_name": "__ZN16cGcOptionsPageUI12FinalizePageEbb"
  },
  {
@@ -1783,5 +1779,10 @@
   "name": "cTkHashedNGuiElement::cTkHashedNGuiElement",
   "signature": "0F 10 02 4C 8B D9",
   "mangled_name": "??0cTkHashedNGuiElement@@QEAA@AEBT?$TkID@$0IA@@@H@Z"
+ },
+ {
+  "name": "GcTerrainRegionMap::cGcTerrainRegionMap",
+  "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 29 74 24 ? 48 8D 05",
+  "mangled_name": "??0cGcTerrainRegionMap@@QEAA@XZ"
  }
 ]
