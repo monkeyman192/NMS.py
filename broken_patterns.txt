@@ -28,7 +28,6 @@ Could not rename cGcPlanet::Generate
 Could not rename cTkDynamicGravityControl::UpdateGravityPoint
 Could not rename cGcSky::Update
 Could not rename cGcTerrainEditorBeam::Fire
-Could not rename cGcGalaxyMapUI::SolarInfoPanel::UpdatePanelUI Unique string: 'GLXY_REGION'
 Could not rename cEgGeometryResource::CloneOriginalVertDataToIndex
 Could not rename cGcPlayerFleetManager::cGcPlayerFleetManager
 Could not rename cGcSpaceshipWarp::GetPulseDriveFuelFactor
@@ -46,7 +45,6 @@ Could not rename Engine::GetNodeParent
 Could not rename cEgSceneGraphResource::ParseData
 Could not rename cGcOptionsPageUI::Float
 Could not rename cGcRealityManager::Construct
-Could not rename cGcPlayerState::PackageTechnology Unique string: 'UI_TECH_PACK_ERROR'
 Could not rename cGcRealityManager::GenerateProceduralTechnology
 Could not rename cGcQuickActionMenu::TriggerAction
 Could not rename cGcSimulation::Update
@@ -67,7 +65,6 @@ Could not rename cGcPlayerCreatureOwnership::cGcPlayerCreatureOwnership
 Could not rename cTkResource::cTkResource
 Could not rename cGcMarkerPoint::IsEqual
 Could not rename cGcQuickMenu::cGcQuickMenu
-Could not rename cGcModManager::LoadModdedData Unique string: '../BINARIES/SETTINGS/GCMODSETTINGS.MXML'
 Could not rename XMLNode::writeToFile
 Could not rename cTkFileSystem::Write
 Could not rename cTkFileSystem::Open
@@ -100,7 +97,6 @@ Could not rename cGcEcosystem::Update
 Could not rename cGcDiscoveryManager::SubmitDiscoveryData
 Could not rename cGcFishManager::SetFishing
 Could not rename cGcOptionsPageUI::FinalizePage
-Could not rename cGcScanManager::UpdateConstantMarkers Unique string: 'UI_MARKER_TAG_NORTH'
 Could not rename cGcMarkerPoint::Update
 Could not rename cGcOptionsPageUI::Boolean
 Could not rename cGcFrontendPageOptions::RequestOptionsPage

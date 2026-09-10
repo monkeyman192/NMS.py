@@ -913,7 +913,8 @@ class cGcPlayerState(Structure):
     ): ...
 
     @function_hook(
-        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 54 41 56 41 57 48 83 EC ? 48 8D 99"
+        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 54 41 56 41 57 48 83 EC ? 48 8D 99 ? ? ? "
+        "? 4D 8B F8"
     )
     def PackageTechnology(
         self,
@@ -1937,12 +1938,14 @@ class cGcScanManager(Structure):
     mMarkerList: Annotated[cGcMarkerList, 0x2240]
 
     @function_hook(
-        "48 89 4C 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B "
-        "E0 0F 29 B4 24 ? ? ? ? 4C 8B F9"
+        "48 89 4C 24 ? 55 53 56 57 41 54 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 0F "
+        "29 B4 24 ? ? ? ? 4C 8B F9"
     )
     def UpdateConstantMarkers(self, this: "_Pointer[cGcScanManager]"): ...
 
-    @function_hook("48 89 4C 24 ? 55 53 57 41 54 41 57 48 8D AC 24 ? ? ? ? B8")
+    @function_hook(
+        "48 89 4C 24 ? 55 53 57 41 54 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 0F 29 B4 24"
+    )
     def UpdateScannableMarkers(self, this: "_Pointer[cGcScanManager]"): ...
 
 
@@ -3834,7 +3837,7 @@ class cGcModManager(Structure):
     @staticmethod
     def GetInstance() -> c_uint64: ...
 
-    @function_hook("40 55 53 56 57 41 55 41 56 48 8D AC 24 ? ? ? ? B8")
+    @function_hook("40 55 53 56 57 41 55 41 56 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 33 F6")
     def LoadModdedData(
         self,
         this: "_Pointer[cGcModManager]",
@@ -4773,7 +4776,7 @@ class cGcGalaxyMap(Structure):
 
 class cGcGalaxyMapUI(Structure):
     class SolarInfoPanel(Structure):
-        @function_hook("48 89 4C 24 ? 55 53 41 54 41 55 48 8D AC 24 ? ? ? ? B8")
+        @function_hook("48 89 4C 24 ? 55 53 41 55 41 56 48 8D AC 24 ? ? ? ? B8")
         def UpdatePanelUI(self, this: "_Pointer[cGcGalaxyMapUI.SolarInfoPanel]"): ...
 
 
