@@ -111,7 +111,7 @@
  },
  {
   "name": "cGcPlayer::CheckFallenThroughFloor",
-  "signature": "40 55 41 54 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B E1",
+  "signature": "40 55 41 54 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05",
   "mangled_name": "?CheckFallenThroughFloor@cGcPlayer@@IEAAXXZ",
   "unique_string": "void __cdecl cGcPlayer::CheckFallenThroughFloor(void)"
  },
@@ -287,7 +287,7 @@
  },
  {
   "name": "cTkFSMState::StateChange",
-  "signature": "4C 8B 51 ? 4D 8B D8",
+  "signature": "4C 8B 51 ? 4D 8B D8 48 8B 05",
   "mangled_name": "?StateChange@cTkFSMState@@IEAAXAEBT?$TkID@$0IA@@@PEBX_N@Z"
  },
 {
@@ -751,7 +751,7 @@
  },
  {
   "name": "cGcPlayerShipOwnership::UpdateMeshRefresh",
-  "signature": "48 89 5C 24 ? 55 56 57 41 54 41 56 48 8D 6C 24 ? 48 81 EC ? ? ? ? 45 33 E4",
+  "signature": "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 45 33 E4 48 8B F1 44 38 A1",
   "mangled_name": "?UpdateMeshRefresh@cGcPlayerShipOwnership@@AEAAXXZ"
  },
  {
@@ -1013,7 +1013,7 @@
  },
  {
   "name": "cGcFrontendPageFunctions::SetPopupBasics",
-  "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 4C 89 40 ? 55 41 54 41 55 41 56 41 57 48 8D 68 ? 48 81 EC ? ? ? ? 0F 29 78",
+  "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 4C 89 48 ? 55 41 54 41 55 41 56 41 57 48 8D 68 ? 48 81 EC ? ? ? ? 0F 29 78",
   "mangled_name": "?SetPopupBasics@cGcFrontendPageFunctions@@SAPEAVcGcNGuiLayer@@PEAV2@PEBDAEBVcTkColour@@11111_NHAEBT?$TkID@$0IA@@@@Z"
  },
  {
@@ -1571,7 +1571,7 @@
  },
  {
   "name": "cGcPlayerHUD::Update",
-  "signature": "F3 0F 11 4C 24 ? 48 89 4C 24 ? 55 41 57",
+  "signature": "F3 0F 11 4C 24 ? 4C 8B DC 55 41 55",
   "mangled_name": "?Update@cGcPlayerHUD@@QEAAXM@Z",
   "unique_string": "UI_ABAND_AREA_MAPPED"
  },
@@ -1795,5 +1795,15 @@
   "name": "cTkAudioManager::RegisterNamedAudioObject",
   "signature": "4C 89 44 24 ? 55 53 56 57 41 55 41 56 48 8D 6C 24",
   "mangled_name": "?RegisterNamedAudioObject@cTkAudioManager@@QEAA?AVTkAudioObject@@_KPEBD@Z"
+ },
+ {
+  "name": "cTkPersonalRNG::cTkPersonalRNG",
+  "signature": "40 53 48 83 EC ? 48 8B D9 FF 15 ? ? ? ? 48 8B D0 48 B9 ? ? ? ? ? ? ? ? 48 C1 EA ? 48 33 D0 48 B8 ? ? ? ? ? ? ? ? 48 0F AF D0 48 8B C2 48 C1 E8 ? 48 33 C2 48 0F AF C1 48 8B D0 48 C1 EA ? 48 33 D0 33 C0 85 D2 8B CA 0F 94 C0 C1 C9 ? 03 C2 89 03 48 8B C2 48 C1 E8 ? 33 C8 48 8B C3",
+  "mangled_name": "??0cTkPersonalRNG@@QEAA@XZ"
+ },
+ {
+  "name": "cGcApplicationDeathState::Update",
+  "signature": "48 89 4C 24 ? 55 53 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8",
+  "mangled_name": "?Update@cGcApplicationDeathState@@EEAAXM@Z"
  }
 ]
