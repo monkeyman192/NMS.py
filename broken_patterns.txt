@@ -1,5 +1,44 @@
-- Could not rename cGcPersistentInteractionBuffer::SaveInteraction
-- Could not rename nvgArc
-- Could not rename cEgSceneGraphResource::ParseData
-- Could not rename XMLNode::writeToFile
-- Could not rename cTkFileSystem::Write
+Could not rename cEgModelNode::UpdateGeometry
+Could not rename cGcPersistentInteractionBuffer::SaveInteraction
+Could not rename nvgText
+Could not rename cGcBaseSearch::FindNearestBaseInCurrentSystem
+Could not rename cGcBuilding::DestroyIntersectingVolcanoes
+Could not rename cGcBaseBuildingManager::GetBaseRootNode
+Could not rename cGcSpaceshipComponent::Eject
+Could not rename Engine::SetUniformArrayDefaultMultipleShaders
+Could not rename cGcMarkerPoint::Update
+Could not rename cGcPlayerEnvironment::IsOnPlanet
+Could not rename cEgGeometryResource::CloneOriginalVertDataToIndex
+Could not rename cGcPlayerFleetManager::cGcPlayerFleetManager
+Could not rename cGcSpaceshipWarp::GetPulseDriveFuelFactor
+Could not rename nvgArc
+Could not rename cTkRigidBody::SetAngularVelocity
+Could not rename cEgModelNode::Animate
+Could not rename cTkResourceManager::AddResource
+Could not rename Engine::GetNodeParent
+Could not rename cEgSceneGraphResource::ParseData
+Could not rename cGcRealityManager::Construct
+Could not rename cGcRealityManager::GenerateProceduralTechnology
+Could not rename cGcPlayer::UpdateGraphics
+Could not rename cGcPlayerShipOwnership::DestroyShip
+Could not rename cGcSpaceshipWarp::UpdatePulseDrive
+Could not rename cGcPlayerCreatureOwnership::cGcPlayerCreatureOwnership
+Could not rename cTkResource::cTkResource
+Could not rename XMLNode::writeToFile
+Could not rename cTkFileSystem::Write
+Could not rename cTkFileSystem::Open
+Could not rename cGcOptionsPageUI::QualityOption
+Could not rename cEgTextureResource::Load
+Could not rename cEgRenderer::DrawMeshes
+Could not rename cEgRenderer::SetupMeshMaterial
+Could not rename cEgRenderer::DrawRenderables
+Could not rename cEgDrawGeometry::Draw
+Could not rename Engine::GetNodeNumChildren
+Could not rename cEgGeometryResource::CreateVertexInfoForHash
+Could not rename GeometryStreaming::cEgGeometryStreamer::OnBufferLoadFinish
+Could not rename cTkEngineUtils::LoadResourcesFromDisk
+Could not rename EgInstancedModelExtension::cEgInstancedMeshNode::RenderAsync
+Could not rename cGcPlayerState::GetStatValue
+Could not rename cTkResourceManager::GetDefaultResource
+Could not rename cGcFrontendPageClaimBase::DoBaseClaimOptions
+Could not rename cGcDiscoveryManager::SubmitDiscoveryData

@@ -26,7 +26,7 @@ from logging import getLogger
 from typing import TYPE_CHECKING, Annotated, Generator, Generic, Optional, Type, TypeVar
 
 from pymhf.core.hooking import Structure, function_hook, static_function_hook
-from pymhf.core.memutils import _get_memview_with_size
+from pymhf.core.memutils import _get_memview_with_size, map_struct
 from pymhf.core.structs import ContainerStruct, Field, Pattern, partial_struct
 from pymhf.extensions.cpptypes import std
 from pymhf.extensions.ctypes import c_char_p64, c_enum8, c_enum16, c_enum32
@@ -269,12 +269,23 @@ class cTkPersonalRNG(Structure):
     mState0: Annotated[int, Field(c_uint32)]
     mState1: Annotated[int, Field(c_uint32)]
 
+    @function_hook(
+        "40 53 48 83 EC ? 48 8B D9 FF 15 ? ? ? ? 48 8B D0 48 B9 ? ? ? ? ? ? ? ? 48 C1 EA ? 48 33 D0 48 B8 ? "
+        "? ? ? ? ? ? ? 48 0F AF D0 48 8B C2 48 C1 E8 ? 48 33 C2 48 0F AF C1 48 8B D0 48 C1 EA ? 48 33 D0 33 "
+        "C0 85 D2 8B CA 0F 94 C0 C1 C9 ? 03 C2 89 03 48 8B C2 48 C1 E8 ? 33 C8 48 8B C3"
+    )
+    def cTkPersonalRNG(self, this: "_Pointer[cTkPersonalRNG]"): ...
+
 
 @partial_struct
 class TkAudioID(Structure):
     mpacName: Annotated[Optional[str], Field(c_char_p)]
     muID: Annotated[int, Field(c_uint32)]
     mbValid: Annotated[bool, Field(c_bool)]
+
+
+class TkAudioObject(Structure):
+    pass
 
 
 @partial_struct
@@ -296,6 +307,15 @@ class cTkAudioManager(Structure):
         event: _Pointer[TkAudioID],
         object: c_int64,
     ) -> c_bool: ...
+
+    @function_hook("4C 89 44 24 ? 55 53 56 57 41 55 41 56 48 8D 6C 24")
+    def RegisterNamedAudioObject(
+        self,
+        this: "_Pointer[cTkAudioManager]",
+        result: _Pointer[TkAudioObject],
+        lObject: c_uint64,
+        lpObjectName: c_char_p64,
+    ) -> c_uint64: ...
 
 
 @partial_struct
@@ -341,7 +361,7 @@ class cGcNGuiText(cGcNGuiElement):
     # Found in cGcNGuiText::EditElement
     mpTextData: Annotated[
         _Pointer[nmse.cGcNGuiTextData],
-        Field(_Pointer[nmse.cGcNGuiTextData], 0x180),
+        Field(_Pointer[nmse.cGcNGuiTextData], 0x188),
     ]
 
     @function_hook(
@@ -362,7 +382,7 @@ class cTkHashedNGuiElement(Structure):
         buffer = basic.TkID0x10(ID)
         self.cTkHashedNGuiElement(byref(buffer), type_)
 
-    @function_hook("0F 10 02 4C 8B D9")
+    @function_hook("4C 8B D9 45 8B D0")
     def cTkHashedNGuiElement(
         self,
         this: "_Pointer[cTkHashedNGuiElement]",
@@ -373,26 +393,39 @@ class cTkHashedNGuiElement(Structure):
 
 @partial_struct
 class cGcNGuiLayer(cGcNGuiElement):
+    # Found near the top of cGcNGuiLayer::AddElement
     mapElements: Annotated[basic.TkStd.tk_vector[_Pointer[cGcNGuiElement]], 0x58]
-    # mapLayerElements: Annotated[basic.TkStd.tk_vector[_Pointer[cGcNGuiLayer]], 0x58]
+    mapLayerElements: Annotated["basic.TkStd.tk_vector[_Pointer[cGcNGuiLayer]]", 0x68]
+    # Found in cGcNGuiLayer::cGcNGuiLayer
     mpLayerData: Annotated[_Pointer[nmse.cGcNGuiLayerData], 0x148]
 
-    @function_hook(
-        "48 83 EC ? 4C 8B 02 4C 8B C9 0F 10 02 49 8B C0 48 B9 ? ? ? ? ? ? ? ? 48 33 42 ? 48 0F AF C1 0F 11 "
-        "44 24 ? 48 8B D0 48 C1 EA ? 48 33 D0 49 33 D0 48 0F AF D1 4C 8B C2 49 C1 E8 ? 4C 33 C2 4C 0F AF C1 "
-        "41 0F B7 C8 41 8B D0 81 C1 ? ? ? ? C1 EA ? 8B C1 49 C1 E8 ? 81 E2 ? ? ? ? C1 E0 ? 33 D0 41 0F B7 C0 "
-        "33 D1 41 C1 E8 ? 8B CA 41 81 E0 ? ? ? ? C1 E9 ? 03 D0 03 D1 8B C2 C1 E0 ? 44 33 C0 44 33 C2 41 8B "
-        "C8 C1 E9 ? 41 03 C8 41 B8 ? ? ? ? 8D 14 CD ? ? ? ? 33 D1 8B CA C1 E9 ? 03 CA 8B D1 C1 E2 ? 33 D1 8B "
-        "CA C1 E9 ? 03 CA 8B D1 C1 E2 ? 33 D1 8B C2 C1 E8 ? 03 C2 48 8D 54 24 ? 69 C0 ? ? ? ? C1 C8 ? 69 C8 "
-        "? ? ? ? 83 F1 ? C1 C9 ? 8D 0C 89 81 C1 ? ? ? ? 48 89 4C 24 ? 49 8B C9 E8 ? ? ? ? 48 83 C4 ? C3 CC "
-        "CC CC CC 0F B6 41"
-    )
-    def FindTextRecursive(
-        self,
-        this: "_Pointer[cGcNGuiLayer]",
-        lID: _Pointer[basic.TkID0x10],
-    ) -> c_uint64:  # cGcNGuiElement *
-        ...
+    def FindTextRecursive(self, ID: str) -> cGcNGuiText | None:
+        """Our own method to easily find a text element recursively."""
+        lID = cTkHashedNGuiElement(ID, enums.eNGuiGameElementType.Text)
+        addr = self.FindElementRecursive(byref(lID), enums.eNGuiGameElementType.Text)
+        if addr:
+            return map_struct(addr, cGcNGuiText)
+
+    def FindTextSpecialRecursive(self, ID: str) -> cGcNGuiElement | None:
+        """Our own method to easily find a text element recursively."""
+        lID = cTkHashedNGuiElement(ID, enums.eNGuiGameElementType.Text)
+        addr = self.FindElementRecursive(byref(lID), enums.eNGuiGameElementType.Text_Special)
+        if addr:
+            return map_struct(addr, cGcNGuiElement)
+
+    def FindGraphicRecursive(self, ID: str) -> cGcNGuiElement | None:
+        """Our own method to easily find a graphic element recursively."""
+        lID = cTkHashedNGuiElement(ID, enums.eNGuiGameElementType.Text)
+        addr = self.FindElementRecursive(byref(lID), enums.eNGuiGameElementType.Graphic)
+        if addr:
+            return map_struct(addr, cGcNGuiElement)
+
+    def FindLayerRecursive(self, ID: str) -> "cGcNGuiLayer | None":
+        """Our own method to easily find a graphic element recursively."""
+        lID = cTkHashedNGuiElement(ID, enums.eNGuiGameElementType.Text)
+        addr = self.FindElementRecursive(byref(lID), enums.eNGuiGameElementType.Layer)
+        if addr:
+            return map_struct(addr, cGcNGuiLayer)
 
     @function_hook("40 55 57 41 57 48 83 EC ? 4C 8B 89")
     def FindElementRecursive(
@@ -420,13 +453,22 @@ class cGcNGuiLayer(cGcNGuiElement):
         lbOnTheEnd: c_int64,
     ): ...
 
+    @function_hook("48 89 5C 24 ? 57 48 83 EC ? 48 8B 99 ? ? ? ? 41 0F B6 F8 45 33 C0")
+    def GetLayer(
+        self,
+        this: "_Pointer[cGcNGuiLayer]",
+        lID: _Pointer[basic.TkID0x10],
+        lbUseDefault: Annotated[bool, c_bool],
+    ) -> c_uint64:  # cGcNGuiLayer *
+        ...
+
     @function_hook(
-        "48 89 5C 24 ? 57 48 83 EC ? 4C 8B 89 ? ? ? ? 41 0F B6 F8 48 8B 0A 49 BA ? ? ? ? ? ? ? ? 48 8B C1 48 "
-        "33 42 ? 49 0F AF C2 48 8B D0 48 C1 EA ? 48 33 D0 48 33 D1 49 0F AF D2 4C 8B C2 49 C1 E8 ? 4C 33 C2 "
-        "4D 0F AF C2 41 8B D0 41 0F B7 C8 C1 EA ? 81 C1 ? ? ? ? 81 E2 ? ? ? ? 49 C1 E8 ? 8B C1 C1 E0 ? 33 D0 "
-        "41 0F B7 C0 33 D1 41 C1 E8 ? 8B CA 41 81 E0 ? ? ? ? 03 D0 C1 E9 ? 03 D1 8B C2 C1 E0 ? 44 33 C0 44 "
-        "33 C2 41 8B C8 C1 E9 ? 41 03 C8 8D 14 CD ? ? ? ? 33 D1 8B CA C1 E9 ? 03 CA 8B D1 C1 E2 ? 33 D1 8B "
-        "CA C1 E9 ? 03 CA 8B D1 C1 E2 ? 33 D1 8B C2 C1 E8 ? 03 C2 69 C0 ? ? ? ? C1 C8 ? 69 C0 ? ? ? ? C1 C8"
+        "48 89 5C 24 ? 57 48 83 EC ? 48 8B 99 ? ? ? ? 41 0F B6 F8 41 B8 ? ? ? ? 48 8D 4C 24 ? E8 ? ? ? ? 83 "
+        "7B ? ? 7E ? 48 8B 50 ? 48 63 4B ? 48 FF C9 48 63 C2 48 23 C8 48 8B 43 ? 48 8B 04 C8 48 85 C0 74 ? "
+        "0F 1F 80 ? ? ? ? 48 39 50 ? 75 ? 48 3B 50 ? 74 ? 48 8B 40 ? 48 85 C0 75 ? 33 C0 48 8D 0D ? ? ? ? 40 "
+        "84 FF 48 0F 45 C1 48 8B 5C 24 ? 48 83 C4 ? 5F C3 48 8B 58 ? 48 85 DB 74 ? 48 8B 0B 48 8B 51 ? 48 8B "
+        "CB FF D2 83 F8 ? 75 ? 48 8B C3 48 8B 5C 24 ? 48 83 C4 ? 5F C3 CC CC CC CC CC CC CC CC 48 89 5C 24 ? "
+        "57 48 83 EC ? 48 8D B9"
     )
     def GetGraphic(
         self,
@@ -507,13 +549,13 @@ class cGcShipHUD(Structure):
     # The following offset is found from cGcShipHUD::RenderHeadsUp below the 2nd
     # cGcNGuiLayer::FindElementRecursive call.
     miSelectedPlanet: Annotated[int, Field(c_uint32, 0x23BF0)]
+    meSelectedPlanetLabelState: Annotated[int, Field(c_uint32, 0x23BF4)]
     mbSelectedPlanetPanelVisible: Annotated[bool, Field(c_bool, 0x23C00)]
 
-    # The following offset is found by searching for "UI\\HUD\\SHIP\\MAINSCREEN.MXML"
-    # (It's above the below entry.)
-    mMainScreenGUI: Annotated[cGcNGui, 0x27630]
-    # The following offset is found by searching for "UI\\HUD\\SHIP\\HEADSUP.MXML"
-    mHeadsUpGUI: Annotated[cGcNGui, 0x27BF0]
+    # The following offsets are found by searching for "UI\\HUD\\SHIP\\MAINSCREEN.MXML"
+    mMainScreenGUI: Annotated[cGcNGui, 0x27640]
+    mHeadsUpGUI: Annotated[cGcNGui, 0x27C00]
+    mSystemMapGUI: Annotated[cGcNGui, 0x28088]
 
     # hud_root: Annotated[int, Field(c_ulonglong, 0x27F70)]  # TODO: Fix
 
@@ -776,10 +818,7 @@ class cGcResourceCustomisation(Structure):
     mResourceCustomisation: Annotated[CustomisationData, 0x0]
     mForcedTextureName: Annotated[basic.TkID0x20, 0x3900]
 
-    @function_hook(
-        "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 4C 89 74 24 ? 55 48 8D 6C 24 ? 48 81 EC ? ? ? ? 66 0F 6F "
-        "05 ? ? ? ? 45 33 F6"
-    )
+    @function_hook("48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 57 48 81 EC ? ? ? ? 48 8B F2 49 8B F8")
     def CreateGenerationTask(
         self,
         this: "_Pointer[cGcResourceCustomisation]",
@@ -793,56 +832,56 @@ class cGcResourceCustomisation(Structure):
 class cGcPlayerState(Structure):
     # Found at the top of cGcPlayerState::cGcPlayerState
     mNameWithTitle: Annotated[basic.cTkFixedString0x100, 0x0]
-    mGameStartLocation1: Annotated[nmse.cGcUniverseAddressData, 0x430]
-    mGameStartLocation2: Annotated[nmse.cGcUniverseAddressData, 0x448]
-    mLocation: Annotated[nmse.cGcUniverseAddressData, 0x460]
-    mPrevLocation: Annotated[nmse.cGcUniverseAddressData, 0x478]
+    mGameStartLocation1: Annotated[nmse.cGcUniverseAddressData, 0x830]
+    mGameStartLocation2: Annotated[nmse.cGcUniverseAddressData, 0x848]
+    mLocation: Annotated[nmse.cGcUniverseAddressData, 0x860]
+    mPrevLocation: Annotated[nmse.cGcUniverseAddressData, 0x878]
 
     # Found near the top of cGcPlayerState::SaveToData
-    miShield: Annotated[int, Field(c_int32, 0x490)]
-    miHealth: Annotated[int, Field(c_int32, 0x494)]
-    miShipHealth: Annotated[int, Field(c_int32, 0x498)]
-    muUnits: Annotated[int, Field(c_uint32, 0x49C)]
-    muNanites: Annotated[int, Field(c_uint32, 0x4A0)]
-    muSpecials: Annotated[int, Field(c_uint32, 0x4A4)]
+    miShield: Annotated[int, Field(c_int32, 0x890)]
+    miHealth: Annotated[int, Field(c_int32, 0x894)]
+    miShipHealth: Annotated[int, Field(c_int32, 0x898)]
+    muUnits: Annotated[int, Field(c_uint32, 0x89C)]
+    muNanites: Annotated[int, Field(c_uint32, 0x8A0)]
+    muSpecials: Annotated[int, Field(c_uint32, 0x8A4)]
     # Found in cGcPlayerState::cGcPlayerState
-    mInventories: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0x21, 0x510)]
-    mVehicleInventories: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0x7, 0x5068)]
-    mVehicleTechInventories: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0x7, 0x6060)]
+    mInventories: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0x21, 0x910)]
+    mVehicleInventories: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0x7, 0x5468)]
+    mVehicleTechInventories: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0x7, 0x6460)]
 
-    mShipInventories: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0xC, 0x7058)]
-    mShipInventoriesCargo: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0xC, 0x8BC8)]
-    mShipInventoriesTechOnly: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0xC, 0xA728)]
+    mShipInventories: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0xC, 0x7458)]
+    mShipInventoriesCargo: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0xC, 0x8FC8)]
+    mShipInventoriesTechOnly: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0xC, 0xAA28)]
 
     # Found in cGcPlayerState::LoadFromData a little bit above the POLICESHIP.SCENE.MBIN, a few lines above
     # the assignment of something to 12LL.
     # The actual value is this one found - 0x10
     mShipResources: Annotated[
         tuple[nmse.cGcResourceElement, ...],
-        Field(nmse.cGcResourceElement * 0xC, 0x17A00),
+        Field(nmse.cGcResourceElement * 0xC, 0x17EE0),
     ]
 
     # Found in cGcPlayerShipOwnership::SpawnNewShip
-    miPrimaryShip: Annotated[int, Field(c_uint32, 0x17DC0)]
+    miPrimaryShip: Annotated[int, Field(c_uint32, 0x182A0)]
 
     # Found in cGcPlayerState::cGcPlayerState above the loop over something 5 times. Around line 220.
-    mPhotoModeSettings: Annotated[nmse.cGcPhotoModeSettings, 0x1A0D0]
-    maTeleportEndpoints: Annotated[std.vector[nmse.cGcTeleportEndpoint], 0x1A120]
+    mPhotoModeSettings: Annotated[nmse.cGcPhotoModeSettings, 0x1AAC0]
+    maTeleportEndpoints: Annotated[std.vector[nmse.cGcTeleportEndpoint], 0x1AB10]
 
-    mHoloExplorerInteraction: Annotated[cGcInteractionData, 0x1A310]
-    mHoloScepticInteraction: Annotated[cGcInteractionData, 0x1A330]
-    mHoloNooneInteraction: Annotated[cGcInteractionData, 0x1A350]
-    mNetworkPlayerInteraction: Annotated[cGcInteractionData, 0x1A370]
+    mHoloExplorerInteraction: Annotated[cGcInteractionData, 0x1AD00]
+    mHoloScepticInteraction: Annotated[cGcInteractionData, 0x1AD20]
+    mHoloNooneInteraction: Annotated[cGcInteractionData, 0x1AD40]
+    mNetworkPlayerInteraction: Annotated[cGcInteractionData, 0x1AD60]
     # Directly below the calls to cGcInteractionData::SetDefaults in cGcPlayerState::cGcPlayerState
     maCustomShipNames: Annotated[
         tuple[basic.cTkFixedString0x20, ...],
-        Field(basic.cTkFixedString0x20 * 0xC, 0x1A3A3),
+        Field(basic.cTkFixedString0x20 * 0xC, 0x1AD93),
     ]
 
     # This can be found in cGcPlayerShipOwnership::UpdateMeshRefresh
     mCustomisationData: Annotated[
         tuple[cGcResourceCustomisation, ...],
-        Field(cGcResourceCustomisation * 0x1A, 0x1A790),
+        Field(cGcResourceCustomisation * 0x1A, 0x1CA10),
     ]
 
     @function_hook(
@@ -913,7 +952,8 @@ class cGcPlayerState(Structure):
     ): ...
 
     @function_hook(
-        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 54 41 56 41 57 48 83 EC ? 48 8D 99"
+        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 54 41 56 41 57 48 83 EC ? 48 8D 99 ? ? ? "
+        "? 4D 8B F8"
     )
     def PackageTechnology(
         self,
@@ -953,7 +993,10 @@ class cGcPlayerShipOwnership(Structure):
     )
     def cGcPlayerShipOwnership(self, this: "_Pointer[cGcPlayerShipOwnership]"): ...
 
-    @function_hook("48 89 5C 24 ? 55 56 57 41 54 41 56 48 8D 6C 24 ? 48 81 EC ? ? ? ? 45 33 E4")
+    @function_hook(
+        "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 45 33 E4 48 8B "
+        "F1 44 38 A1"
+    )
     def UpdateMeshRefresh(self, this: "_Pointer[cGcPlayerShipOwnership]"): ...
 
     @function_hook("48 8B C4 55 53 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 80 B9 ? ? ? ? ? 48 8B F1")
@@ -963,7 +1006,7 @@ class cGcPlayerShipOwnership(Structure):
         lfTimestep: Annotated[float, c_float],
     ): ...
 
-    @function_hook("44 89 44 24 ? 48 89 54 24 ? 55 53 56 41 54")
+    @function_hook("44 89 44 24 ? 55 53 56 57 41 54 41 55 41 57")
     def SpawnNewShip(
         self,
         this: "_Pointer[cGcPlayerShipOwnership]",
@@ -993,9 +1036,9 @@ class cGcPlayerShipOwnership(Structure):
     # Found in cGcPlayerShipOwnership::cGcPlayerShipOwnership
     mShips: Annotated[list[sGcShipData], Field(sGcShipData * 12, 0x60)]
     # Both these found at the top of cGcPlayerShipOwnership::UpdateMeshRefresh
-    mbShouldRefreshMesh: Annotated[bool, Field(c_bool, 0xA870)]
-    mMeshRefreshState: Annotated[c_enum32[eMeshRefreshState], 0xA874]
-    mRefreshSwapRes: Annotated[cTkSmartResHandle, 0xA878]
+    mbShouldRefreshMesh: Annotated[bool, Field(c_bool, 0xA9F0)]
+    mMeshRefreshState: Annotated[c_enum32[eMeshRefreshState], 0xA9F4]
+    mRefreshSwapRes: Annotated[cTkSmartResHandle, 0xA9F8]
 
 
 @partial_struct
@@ -1176,7 +1219,7 @@ class cGcPersistentInteractionBuffer(cGcNetworkSynchronisedBuffer):
         lu64Address: _Pointer[c_uint64],
     ): ...
 
-    @function_hook("48 89 5C 24 ? 57 48 83 EC ? 48 8B FA 48 8B D9 8B 51")
+    @function_hook("48 89 5C 24 ? 57 48 83 EC ? 48 8B FA 48 8B D9 8B 51 ? 48 8B CF")
     def PopulateBufferData(
         self,
         this: "_Pointer[cGcPersistentInteractionBuffer]",
@@ -1198,16 +1241,16 @@ class cGcPersistentInteractionBuffer(cGcNetworkSynchronisedBuffer):
 @partial_struct
 class cGcPersistentInteractionsManager(Structure):
     # Found in cGcPersistentInteractionsManager::LoadGalacticAddressBuffers
-    maPersistentBaseBuffers: Annotated[basic.TkStd.tk_vector[_Pointer[cGcPlayerBasePersistentBuffer]], 0x1C08]
-    mDistressSignalBuffer: Annotated[cGcPersistentInteractionBuffer, 0x1C20]
-    mCrateBuffer: Annotated[cGcPersistentInteractionBuffer, 0x1DB0]
-    mDestructableBuffer: Annotated[cGcPersistentInteractionBuffer, 0x1F40]
-    mCostBuffer: Annotated[cGcPersistentInteractionBuffer, 0x20D0]
-    mBuildingBuffer: Annotated[cGcPersistentInteractionBuffer, 0x2260]
-    mCreatureBuffer: Annotated[cGcPersistentInteractionBuffer, 0x23F0]
-    mPersonalBuffer: Annotated[cGcPersistentInteractionBuffer, 0x2580]
-    mFireteamSyncBuffer: Annotated[cGcPersistentInteractionBuffer, 0x2710]
-    mVisitedSystemsBuffer: Annotated[cGcVisitedSystemsBuffer, 0x1A4A70]
+    maPersistentBaseBuffers: Annotated[basic.TkStd.tk_vector[_Pointer[cGcPlayerBasePersistentBuffer]], 0x2408]
+    mDistressSignalBuffer: Annotated[cGcPersistentInteractionBuffer, 0x2420]
+    mCrateBuffer: Annotated[cGcPersistentInteractionBuffer, 0x25B0]
+    mDestructableBuffer: Annotated[cGcPersistentInteractionBuffer, 0x2740]
+    mCostBuffer: Annotated[cGcPersistentInteractionBuffer, 0x28D0]
+    mBuildingBuffer: Annotated[cGcPersistentInteractionBuffer, 0x2A60]
+    mCreatureBuffer: Annotated[cGcPersistentInteractionBuffer, 0x2BF0]
+    mPersonalBuffer: Annotated[cGcPersistentInteractionBuffer, 0x2D80]
+    mFireteamSyncBuffer: Annotated[cGcPersistentInteractionBuffer, 0x2F10]
+    mVisitedSystemsBuffer: Annotated[cGcVisitedSystemsBuffer, 0x1A5270]
 
     @function_hook("48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 83 EC ? 4C 8B E9 4C 8B FA")
     def LoadGalacticAddressBuffers(
@@ -1244,7 +1287,7 @@ class cGcGalaxyVoxelAttributesData(nmse.cGcGalaxyVoxelAttributesData):
 
 class cGcGalaxyStarAttributesData(nmse.cGcGalaxyStarAttributesData):
     @function_hook(
-        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 ED 48 8D B9 ? ? ? ? 48 89 6C 24"
+        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8B D9 48 8D 41"
     )
     def SetDefaults(self, this: "_Pointer[cGcGalaxyStarAttributesData]"): ...
 
@@ -1261,7 +1304,7 @@ class cGcGalaxyVoxelData(Structure): ...
 
 
 class cGcGalaxyVoxelGenerator(nmse.cGcGalaxyStarAttributesData):
-    @static_function_hook("48 8B C4 4C 89 40 ? 48 89 48 ? 55 53 56 57 41 57")
+    @static_function_hook("48 8B C4 4C 89 40 ? 48 89 48 ? 55 53 56 57 41 56")
     @staticmethod
     def Populate(
         lu64UniverseAddress: c_uint64,
@@ -1349,27 +1392,27 @@ class cGcDiscoveryManager(Structure):
 class cGcGameState(Structure):
     # Found in cGcGameState::cGcGameState
     mPlayerState: Annotated[cGcPlayerState, 0xAAD0]
-    mSavedSpawnState: Annotated[nmse.cGcPlayerSpawnStateData, 0xCEAD0]
-    mPlayerShipOwnership: Annotated[cGcPlayerShipOwnership, 0xCEBB0]
-    mPlayerVehicleOwnership: Annotated[cGcPlayerVehicleOwnership, 0xD9430]
-    mPlayerCreatureOwnership: Annotated[cGcPlayerCreatureOwnership, 0xD9B70]
-    mPlayerMultitoolOwnership: Annotated[cGcPlayerMultitoolOwnership, 0x29ECF0]
+    mSavedSpawnState: Annotated[nmse.cGcPlayerSpawnStateData, 0xD5010]
+    mPlayerShipOwnership: Annotated[cGcPlayerShipOwnership, 0xD50F0]
+    mPlayerVehicleOwnership: Annotated[cGcPlayerVehicleOwnership, 0xDFB10]
+    mPlayerCreatureOwnership: Annotated[cGcPlayerCreatureOwnership, 0xE0260]
+    mPlayerMultitoolOwnership: Annotated[cGcPlayerMultitoolOwnership, 0x2B2160]
     mPlayerFreighterOwnership: Annotated[
         tuple[cGcPlayerFreighterOwnership, ...],
-        Field(cGcPlayerFreighterOwnership * 4, 0x2A4D90),
+        Field(cGcPlayerFreighterOwnership * 4, 0x2B82E0),
     ]
     mPlayerFleetManager: Annotated[
         tuple[cGcPlayerFleetManager, ...],
-        Field(cGcPlayerFleetManager * 4, 0x2A6090),
+        Field(cGcPlayerFleetManager * 4, 0x2B95E0),
     ]
-    mPlayerSquadronOwnership: Annotated[cGcPlayerSquadronOwnership, 0x2B5F54]
-    mDiscoveryManager: Annotated[cGcDiscoveryManager, 0x2BA3B8]
+    mPlayerSquadronOwnership: Annotated[cGcPlayerSquadronOwnership, 0x2C94E0]
+    # mDiscoveryManager: Annotated[cGcDiscoveryManager, 0x2BA3B8]
     # Found passed into cGcPersistentInteractionsManager::LoadGalacticAddressBuffers wherever it is called.
     # Need to subtract the offset of cGcGamestate from the address in the exe which is the pointer to the
     # start of cGcApplication::Data
-    mSavedInteractionsManager: Annotated[cGcPersistentInteractionsManager, 0x2FDD80]
+    mSavedInteractionsManager: Annotated[cGcPersistentInteractionsManager, 0x317B10]
 
-    @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? C7 41")
+    @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? C7 41")
     def cGcGameState(self, this: "_Pointer[cGcGameState]"): ...
 
     @function_hook("48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 88 54 24")
@@ -1382,7 +1425,7 @@ class cGcGameState(Structure):
         leSaveReason: c_int32,
     ): ...
 
-    @function_hook("44 89 44 24 ? 89 54 24 ? 48 89 4C 24 ? 55 56")
+    @function_hook("44 89 44 24 ? 89 54 24 ? 48 89 4C 24 ? 55 57")
     def LoadFromPersistentStorage(
         self,
         this: "_Pointer[cGcGameState]",
@@ -1392,7 +1435,8 @@ class cGcGameState(Structure):
     ) -> c_uint64: ...
 
     @function_hook(
-        "48 8B C4 48 89 58 ? 48 89 70 ? 55 57 41 54 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? F3 0F 10 91"
+        "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? "
+        "? ? F3 0F 10 91"
     )
     def Update(self, this: "_Pointer[cGcGameState]", lfTimeStep: Annotated[float, c_float]): ...
 
@@ -1458,20 +1502,26 @@ class cGcPlayerCommunicator(Structure):
 @partial_struct
 class cGcPlayer(Structure):
     mRootNode: Annotated[basic.TkHandle, 0xE0]
-    mEquipmentNode: Annotated[basic.TkHandle, 0xE0]
     mPhysicsController: Annotated[_Pointer[cTkHavokCharacterController], 0x160]
+    mPosition: Annotated[basic.cTkVector3, 0x380]
+    mEquipmentNode: Annotated[basic.TkHandle, 0x3A0]
+    mAudioObject: Annotated[TkAudioObject, 0x3F0]
     # Found in cGcPlayer::Prepare around where the number 0xFA83126E / -92073362 is
-    mbSpawned: Annotated[bool, Field(c_bool, 0x2FC0)]
-    mbIsRunning: Annotated[bool, Field(c_bool, 0x2FC2)]
-    mbIsAutoWalking: Annotated[bool, Field(c_bool, 0x2FC8)]
-    mfJetpackTank: Annotated[float, Field(c_float, 0x3374)]
+    mbSpawned: Annotated[bool, Field(c_bool, 0x3140)]
+    mbIsRunning: Annotated[bool, Field(c_bool, 0x3142)]
+    mbIsAutoWalking: Annotated[bool, Field(c_bool, 0x3148)]
+    mfJetpackTank: Annotated[float, Field(c_float, 0x34F4)]
+    mfJetpackUpForce: Annotated[float, Field(c_float, 0x34FC)]
+    mfJetpackForce: Annotated[float, Field(c_float, 0x3500)]
+    mfJetpackIgnitionForce: Annotated[float, Field(c_float, 0x3504)]
     # Found Above the cGcPlayer::UpdateGraphics call in cGcPlayer::CheckFallenThroughFloor
-    mfAirTimer: Annotated[float, Field(c_float, 0x33B0)]
-    mfStamina: Annotated[float, Field(c_float, 0x5160)]
-    mbIsDying: Annotated[bool, Field(c_bool, 0x5240)]
-    mCommunicator: Annotated[cGcPlayerCommunicator, 0x5420]
+    mfAirTimer: Annotated[float, Field(c_float, 0x3530)]
+    mfStamina: Annotated[float, Field(c_float, 0x55E0)]
+    mbIsTransitioning: Annotated[bool, Field(c_bool, 0x55E8)]
+    mbIsDying: Annotated[bool, Field(c_bool, 0x56C0)]
+    mCommunicator: Annotated[cGcPlayerCommunicator, 0x5918]
 
-    @function_hook("40 55 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B F9 48 8B 0D ? ? ? ? 83 B9")
+    @function_hook("40 55 41 54 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05")
     def CheckFallenThroughFloor(self, this: "_Pointer[cGcPlayer]"): ...
 
     @function_hook("48 8B C4 4C 89 48 ? 44 89 40 ? 55 56")
@@ -1492,16 +1542,16 @@ class cGcPlayer(Structure):
     @function_hook("40 53 48 83 EC 20 48 8B 1D ?? ?? ?? ?? E8 ?? ?? ?? ?? 83 78 10 05 75 ?? 48 8B")
     def GetDominantHand(self, this: "_Pointer[cGcPlayer]") -> c_int64: ...
 
-    @function_hook("48 8B C4 55 53 56 41 55 41 57")
+    @function_hook("48 8B C4 48 89 48 ? 55 53 41 54 41 55 41 57 48 8D A8")
     def Update(self, this: "_Pointer[cGcPlayer]", lfStep: Annotated[float, c_float]): ...
 
-    @function_hook("48 8B C4 48 89 58 ? 48 89 70 ? 57 48 81 EC ? ? ? ? 0F 29 70 ? 0F B6 F2")
+    @function_hook("48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 57 48 81 EC ? ? ? ? 0F 29 70 ? 0F B6 EA")
     def UpdateGraphics(self, this: "_Pointer[cGcPlayer]", lbSetNode: Annotated[bool, c_bool]): ...
 
     @function_hook("48 8B C4 55 53 56 57 41 54 41 56 41 57 48 8D 6C 24")
     def Prepare(self, this: "_Pointer[cGcPlayer]", lpController: _Pointer[cGcPlayerController]): ...
 
-    @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 48 8B FA 48 8B D9")
+    @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B FA 48 8B D9 48 8B 15")
     def SetToPosition(
         self,
         this: "_Pointer[cGcPlayer]",
@@ -1513,7 +1563,7 @@ class cGcPlayer(Structure):
     @function_hook("48 89 4C 24 ? 55 41 55 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 45 33 ED")
     def RenderInventoryEditor(self, this: "_Pointer[cGcPlayer]"): ...
 
-    @function_hook("48 8B C4 48 89 48 ? 55 41 55 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 78")
+    @function_hook("48 8B C4 48 89 48 ? 55 41 55 41 57")
     def RenderNGui(self, this: "_Pointer[cGcPlayer]"): ...
 
 
@@ -1527,6 +1577,9 @@ class cGcTerrainRegionMap(Structure):
     mfCachedRadius: Annotated[float, Field(c_float, 0x30)]
     mMatrix: Annotated[basic.cTkMatrix34, 0xD3490]
     mRootNode: Annotated[basic.TkHandle, 0x9E808]
+
+    @function_hook("48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 29 74 24 ? 48 8D 05")
+    def cGcTerrainRegionMap(self, this: "_Pointer[cGcTerrainRegionMap]"): ...
 
     @function_hook(
         "48 8B C4 48 89 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 "
@@ -1546,28 +1599,34 @@ class cGcTerrainRegionMap(Structure):
 @partial_struct
 class cGcPlanet(Structure):
     # This is found in cGcSolarSystem::cGcSolarSystem near the call to cGcPlanet::cGcPlanet
-    _total_size_ = 0xD9070
+    _total_size_ = 0xD9170
     # Most of these found in cGcPlanet::Construct or cGcPlanet::cGcPlanet
     mPlanetDiscoveryData: Annotated[cGcDiscoveryData, 0x8]
     miPlanetIndex: Annotated[int, Field(c_int32, 0x50)]
     mPlanetData: Annotated[nmse.cGcPlanetData, 0x60]
-    mPlanetGenerationInputData: Annotated[cGcPlanetGenerationInputData, 0x3A60]
-    mRegionMap: Annotated[cGcTerrainRegionMap, 0x3B80]
-    mNode: Annotated[basic.TkHandle, 0xD73D8]
-    mAtmosphereNode: Annotated[basic.TkHandle, 0xD73DC]
-    mRingNode: Annotated[basic.TkHandle, 0xD73E4]
-    mPosition: Annotated[basic.Vector3f, 0xD73F0]
+    mPlanetGenerationInputData: Annotated[cGcPlanetGenerationInputData, 0x3B40]
+    # Passed in to cGcTerrainRegionMap::cGcTerrainRegionMap
+    mRegionMap: Annotated[cGcTerrainRegionMap, 0x3C70]
+    # Found directly below that. One of these I think is wrong/gone.
+    mRegionNode: Annotated[basic.TkHandle, 0xD74B0]
+    mNode: Annotated[basic.TkHandle, 0xD74B8]
+    mPlanetMeshNode: Annotated[basic.TkHandle, 0xD74BC]
+    mAtmosphereNode: Annotated[basic.TkHandle, 0xD74C0]
+    mRingNode: Annotated[basic.TkHandle, 0xD74C4]
 
-    mpEnvProperties: Annotated[_Pointer[nmse.cGcEnvironmentProperties], 0xD9058]
-    mpSkyProperties: Annotated[_Pointer[nmse.cGcPlanetSkyProperties], 0xD9060]
+    mPosition: Annotated[basic.Vector3f, 0xD74D0]
+    mPlanetSceneNode: Annotated[basic.TkHandle, 0xD90AC]
+
+    mpEnvProperties: Annotated[_Pointer[nmse.cGcEnvironmentProperties], 0xD9158]
+    mpSkyProperties: Annotated[_Pointer[nmse.cGcPlanetSkyProperties], 0xD9160]
 
     @function_hook(
-        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 45 33 FF 48 C7 41 ? ? ? ? ? 44 "
-        "89 79"
+        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 45 33 F6 48 C7 41 ? ? ? ? "
+        "? 44 89 71 ? 48 8D 59"
     )
     def cGcPlanet(self, this: "_Pointer[cGcPlanet]"): ...
 
-    @function_hook("48 8B C4 48 89 58 ? 4C 89 40 ? 88 50")
+    @function_hook("48 8B C4 48 89 58 ? 88 50 ? 55")
     def Generate(
         self,
         this: "_Pointer[cGcPlanet]",
@@ -1595,6 +1654,12 @@ class cGcPlanet(Structure):
 
     @function_hook("40 55 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 80 3D")
     def UpdateWeather(self, this: "_Pointer[cGcPlanet]", lfTimeStep: Annotated[float, c_float]): ...
+
+    @function_hook(
+        "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? "
+        "? ? ? 65 48 8B 04 25 ? ? ? ? 48 8B F9"
+    )
+    def PollToPrepare(self, this: "_Pointer[cGcPlanet]"): ...
 
 
 @partial_struct
@@ -1674,16 +1739,30 @@ class cGcSolarSystemGenerator(Structure):
 
 
 @partial_struct
+class cGcSolarSystemMap(Structure):
+    # This is the same as the start of cGcSolarSystemMapSettings, but I think it diverges... Need to
+    # investigate more.
+    # This struct is definitely larger.
+    maSpacePoiObjectData: Annotated[
+        tuple[nmse.cGcSolarSystemMapObjectData, ...], Field(nmse.cGcSolarSystemMapObjectData * 0xE, 0x0)
+    ]
+    maMapObjectData: Annotated[
+        tuple[nmse.cGcSolarSystemMapObjectData, ...], Field(nmse.cGcSolarSystemMapObjectData * 0x9, 0x700)
+    ]
+
+
+@partial_struct
 class cGcSolarSystem(Structure):
-    _total_size_ = 0x51C920
+    _total_size_ = 0x522220
     # These can be found in cGcSolarSystem::cGcSolarSystem
     mSolarSystemData: Annotated[nmse.cGcSolarSystemData, 0x0]
-    mGalaxyAttributes: Annotated[cGcGalaxyAttributesAtAddress, 0x23D0]
-    maPlanets: Annotated[tuple[cGcPlanet, ...], Field(cGcPlanet * 6, 0x2630)]
+    mGalaxyAttributes: Annotated[cGcGalaxyAttributesAtAddress, 0x26C0]
+    maPlanets: Annotated[tuple[cGcPlanet, ...], Field(cGcPlanet * 6, 0x2E30)]
     miPrimaryPlanet: Annotated[int, Field(c_int32, 0x5188D0)]
-    mSolarSystemGenerator: Annotated[cGcSolarSystemGenerator, 0x51B9A0]
+    mSolarSystemMap: Annotated[cGcSolarSystemMap, 0x51BC20]
+    mSolarSystemGenerator: Annotated[cGcSolarSystemGenerator, 0x521160]
     # Found in cGcPlayerState::StoreCurrentSystemSpaceStationEndpoint
-    mSpaceStationNode: Annotated[basic.TkHandle, 0x51C088]
+    mSpaceStationNode: Annotated[basic.TkHandle, 0x521870]
 
     @function_hook("48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 29 74 24 ? 48 8B F9 48 8B D9")
     def cGcSolarSystem(self, this: "_Pointer[cGcSolarSystem]"): ...
@@ -1696,9 +1775,7 @@ class cGcSolarSystem(Structure):
         """lbAnnounceOSD not used."""
         ...
 
-    @function_hook(
-        "48 8B C4 48 89 58 ? 48 89 70 ? 55 57 41 54 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 45 33 F6"
-    )
+    @function_hook("88 54 24 ? 55 53 56 57 41 54 41 56")
     def OnEnterPlanetOrbit(
         self, this: "_Pointer[cGcSolarSystem]", lbAnnounceOSD: Annotated[bool, c_bool]
     ): ...
@@ -1713,7 +1790,7 @@ class cGcSolarSystem(Structure):
         lSeed: _Pointer[basic.GcSeed],
     ): ...
 
-    @function_hook("48 8B C4 55 53 56 41 55 41 56")
+    @function_hook("48 8B C4 55 53 56 57 41 55 41 57 48 8D 6C 24")
     def Update(self, this: "_Pointer[cGcSolarSystem]", lfTimeStep: Annotated[float, c_float]): ...
 
 
@@ -1730,11 +1807,11 @@ class cGcPlayerEnvironment(Structure):
     mbInsidePlanetAtmosphere: Annotated[bool, Field(c_bool, 0x2EC)]
     meLocation: Annotated[
         enums.EnvironmentLocation.Enum,
-        Field(c_enum32[enums.EnvironmentLocation.Enum], 0x458),
+        Field(c_enum32[enums.EnvironmentLocation.Enum], 0x468),
     ]
     meLocationStable: Annotated[
         enums.EnvironmentLocation.Enum,
-        Field(c_enum32[enums.EnvironmentLocation.Enum], 0x464),
+        Field(c_enum32[enums.EnvironmentLocation.Enum], 0x474),
     ]
 
     @function_hook("48 83 EC ? 80 B9 ? ? ? ? ? C6 04 24")
@@ -1745,7 +1822,7 @@ class cGcPlayerEnvironment(Structure):
     )
     def IsOnPlanet(self, this: "_Pointer[cGcPlayerEnvironment]") -> c_bool: ...
 
-    @function_hook("48 8B C4 F3 0F 11 48 ? 48 89 48 ? 55 53 41 54")
+    @function_hook("48 8B C4 F3 0F 11 48 ? 48 89 48 ? 55 41 56")
     def Update(
         self,
         this: "_Pointer[cGcPlayerEnvironment]",
@@ -1766,13 +1843,10 @@ class cGcSky(Structure):
     @function_hook("40 53 48 83 EC ? 0F 28 C1 0F 29 7C 24 ? F3 0F 5E 05")
     def SetSunAngle(self, this: "_Pointer[cGcSky]", lfAngle: Annotated[float, c_float]): ...
 
-    @function_hook(
-        "48 8B C4 48 89 58 ? 48 89 70 ? 55 57 41 54 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? "
-        "48 8B D9 0F 29 78 ? 44 0F 29 40"
-    )
+    @function_hook("48 8B C4 55 53 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70")
     def Update(self, this: "_Pointer[cGcSky]", lfTimeStep: Annotated[float, c_float]): ...
 
-    @function_hook("48 8B C4 53 48 81 EC ? ? ? ? 4C 8B 05 ? ? ? ? 48 8B D9")
+    @function_hook("48 8B C4 48 89 58 ? 57 48 81 EC ? ? ? ? 4C 8B 05 ? ? ? ? 48 8B D9 8B 89")
     def UpdateSunPosition(self, this: "_Pointer[cGcSky]", lfAngle: Annotated[float, c_float]): ...
 
 
@@ -1781,7 +1855,7 @@ class cGcEnvironment(Structure):
     # Passed into cGcSky::Update but offset includes the offset of cGcEnvironment.
     mSky: Annotated[cGcSky, 0x10]
     # Passed into cGcPlayerEnvironment::Update
-    mPlayerEnvironment: Annotated[cGcPlayerEnvironment, 0x8B0]
+    mPlayerEnvironment: Annotated[cGcPlayerEnvironment, 0x8C0]
 
     @function_hook(
         "48 8B C4 48 89 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 "
@@ -1791,7 +1865,7 @@ class cGcEnvironment(Structure):
         # TODO: There could be a few good functions to get which are called in here...
         ...
 
-    @function_hook("40 56 48 81 EC ? ? ? ? 66 0F 6F 05")
+    @function_hook("40 55 56 48 8D 6C 24 ? 48 81 EC ? ? ? ? 66 0F 6F 05")
     def Update(self, this: "_Pointer[cGcEnvironment]", lfTimeStep: Annotated[float, c_float]): ...
 
 
@@ -1808,7 +1882,10 @@ class cGcPlayerExperienceDirector(Structure):
 
 
 class cGcEcosystem(Structure):
-    @function_hook("48 8B C4 48 89 48 ? 55 41 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 58 ? 48 8B 1D")
+    @function_hook(
+        "48 8B C4 48 89 58 ? 48 89 48 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? "
+        "0F 29 70 ? 45 33 F6"
+    )
     def Update(self, this: "_Pointer[cGcEcosystem]", lfTimeStep: Annotated[float, c_float]): ...
 
 
@@ -1858,7 +1935,7 @@ class cGcFishManager(Structure):
     @function_hook("F3 0F 11 4C 24 ? 55 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 44 0F 29 8C 24")
     def Update(self, this: "_Pointer[cGcFishManager]", lfTimeStep: Annotated[float, c_float]): ...
 
-    @function_hook("48 89 5C 24 ? 48 89 7C 24 ? 55 48 8B EC 48 81 EC ? ? ? ? 80 79")
+    @function_hook("48 8B C4 48 89 58 ? 48 89 78 ? 55 48 8D 68 ? 48 81 EC ? ? ? ? 80 79")
     def SetFishing(self, this: "_Pointer[cGcFishManager]", lpFishLaser: _Pointer[cGcFishLaser]): ...
 
 
@@ -1894,10 +1971,12 @@ class cGcMarkerPoint(Structure):
     @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 28 05 ? ? ? ? 48 8D 79")
     def Reset(self, this: "_Pointer[cGcMarkerPoint]"): ...
 
-    @function_hook("40 55 53 56 57 41 56 48 8D 6C 24 ? 48 81 EC ? ? ? ? 0F B6 99")
+    @function_hook("40 55 53 56 57 41 54 48 8D 6C 24 ? 48 81 EC ? ? ? ? 0F B6 B9")
     def Update(self, this: "_Pointer[cGcMarkerPoint]"): ...
 
-    @function_hook("48 89 74 24 ? 57 48 83 EC ? 48 8B F9 48 8B F2 48 8B 89")
+    @function_hook(
+        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8B F9 48 8B F2"
+    )
     def IsEqual(
         self,
         this: "_Pointer[cGcMarkerPoint]",
@@ -1934,35 +2013,38 @@ class cGcMarkerList(Structure):
 @partial_struct
 class cGcScanManager(Structure):
     # Passed in to cGcScanManager::UpdateConstantMarkers
-    mMarkerList: Annotated[cGcMarkerList, 0x2240]
+    mMarkerList: Annotated[cGcMarkerList, 0x22F0]
 
     @function_hook(
-        "48 89 4C 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B "
-        "E0 0F 29 B4 24 ? ? ? ? 4C 8B F9"
+        "48 89 4C 24 ? 55 53 56 57 41 54 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 0F "
+        "29 B4 24 ? ? ? ? 4C 8B F9"
     )
     def UpdateConstantMarkers(self, this: "_Pointer[cGcScanManager]"): ...
 
-    @function_hook("48 89 4C 24 ? 55 53 57 41 54 41 57 48 8D AC 24 ? ? ? ? B8")
+    @function_hook(
+        "48 89 4C 24 ? 55 53 57 41 54 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 0F 29 B4 24"
+    )
     def UpdateScannableMarkers(self, this: "_Pointer[cGcScanManager]"): ...
 
 
 @partial_struct
 class cGcSimulation(Structure):
     # Passed in to cGcScanManager::UpdateConstantMarkers
-    mScanManager: Annotated[cGcScanManager, 0xF1C0]
+    mScanManager: Annotated[cGcScanManager, 0xF1B0]
     # Found in cGcSimulation::Update. Passed into cGcEnvironment::Update.
-    mEnvironment: Annotated[cGcEnvironment, 0xAC810]
-    mEcosystem: Annotated[cGcEcosystem, 0xB3B50]
+    mEnvironment: Annotated[cGcEnvironment, 0xAC8B0]
+    mSky: Annotated[cGcSky, 0xAC9B0]
+    mEcosystem: Annotated[cGcEcosystem, 0xB3C20]
     mFishManager: Annotated[cGcFishManager, 0x24D520]
     # Found in cGcSimulation::Update. Passed into cGcSolarSystem::Update.
     mpSolarSystem: Annotated[_Pointer[cGcSolarSystem], 0x24DFD0]
-    mPlayerExperienceDirector: Annotated[cGcPlayerExperienceDirector, 0x24E630]
+    mPlayerExperienceDirector: Annotated[cGcPlayerExperienceDirector, 0x24E730]
     # Found in cGcSimulation::Update. Passed into cGcPlayer::Update
-    mPlayer: Annotated[cGcPlayer, 0x24F580]
+    mPlayer: Annotated[cGcPlayer, 0x24F6E0]
     # In cGcSimulation::Update
-    mCurrentUA: Annotated[int, Field(c_uint64, 0x255300)]
+    mCurrentUA: Annotated[int, Field(c_uint64, 0x2558B0)]
     # Found in cGcSimulation::Construct
-    mSimulationRootNode: Annotated[basic.TkHandle, 0x256CA0]
+    mSimulationRootNode: Annotated[basic.TkHandle, 0x255850]
 
     @function_hook(
         "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 33 C0 0F 29 74 24"
@@ -1972,7 +2054,7 @@ class cGcSimulation(Structure):
     @function_hook("48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 45 33 FF")
     def Construct(self, this: "_Pointer[cGcSimulation]"): ...
 
-    @function_hook("48 8B C4 89 50 ? 55 48 8D 6C 24")
+    @function_hook("48 8B C4 55 48 8D 6C 24 ? 48 81 EC ? ? ? ? 44 0F 29 98")
     def Update(
         self,
         this: "_Pointer[cGcSimulation]",
@@ -2058,20 +2140,19 @@ class cGcPlayerHUD(cGcHUD):
     @function_hook("48 8B C4 48 89 48 ? 55 41 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 83 B9")
     def RenderWeaponPanel(self, this: "_Pointer[cGcPlayerHUD]"): ...
 
-    @function_hook("48 8B C4 55 53 56 41 54 41 55 41 56")
+    @function_hook("48 8B C4 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 8B B9")
     def RenderCrosshair(self, this: "_Pointer[cGcPlayerHUD]"): ...
 
-    @function_hook("F3 0F 11 4C 24 ? 48 89 4C 24 ? 55 41 57")
+    @function_hook("F3 0F 11 4C 24 ? 4C 8B DC 55 41 55")
     def Update(self, this: "_Pointer[cGcPlayerHUD]", lfTimeStep: Annotated[float, c_float]): ...
 
-    @function_hook("48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8B EC 48 83 EC ? 48 8D B1")
+    @function_hook("48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8B EC 48 83 EC ? 4C 8D B1")
     def LoadData(self, this: "_Pointer[cGcPlayerHUD]"): ...
 
 
 class cGcQuickMenu(Structure):
     @function_hook(
-        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B F1 48 8D 59 ? BF ? ? ? ? 33 ED 40 88 "
-        "2B"
+        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8D 79 ? 0F 29 74 24"
     )
     def cGcQuickMenu(self, this: "_Pointer[cGcQuickMenu]"): ...
 
@@ -2080,9 +2161,9 @@ class cGcQuickMenu(Structure):
 class cGcHUDManager(Structure):
     # Found in cGcHUDManager::cGcHUDManager
     mPlayerHUD: Annotated[cGcPlayerHUD, 0xA0]
-    mShipHUD: Annotated[cGcShipHUD, 0xE9550]
-    mQuickMenu: Annotated[cGcQuickMenu, 0x111EF0]
-    mChargingInventory: Annotated[cGcInventoryStore, 0x120A00]
+    mShipHUD: Annotated[cGcShipHUD, 0xECD70]
+    mQuickMenu: Annotated[cGcQuickMenu, 0x115D50]
+    mChargingInventory: Annotated[cGcInventoryStore, 0x124900]
 
     @function_hook("48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 F6 48 8B F9 48 89 71 ? 48 89 71")
     def cGcHUDManager(self, this: "_Pointer[cGcHUDManager]", a2: c_bool): ...
@@ -2160,11 +2241,12 @@ class cGcInteractionComponent(Structure):
     ) -> c_uint64:  # cGcInteractionComponent *
         ...
 
-    @function_hook("40 55 41 55 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B F1")
+    @function_hook("40 55 41 55 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B F1 44 8B EA")
     def DoInteractionEvent(
         self,
         this: "_Pointer[cGcInteractionComponent]",
         leEvent: c_enum32[enums.cGcInteractionType],
+        a3: c_uint64,
     ): ...
 
     @function_hook("40 53 48 83 EC ? 48 8B D9 48 8B 0D ? ? ? ? 8B 93")
@@ -2179,7 +2261,7 @@ class cGcInteractionComponent(Structure):
 class cGcFrontendPage(Structure):
     # This is probably a cGcNGui
     # Found in cGcFrontendPageOptions::DoGameSwitcher
-    mRootNode: Annotated[_Pointer[cGcNGuiLayer], 0x135E8]
+    mRootNode: Annotated[_Pointer[cGcNGuiLayer], 0x14468]
 
     @function_hook("48 89 6C 24 ? 41 54 41 56 41 57 48 83 EC ? 80 B9")
     def Confirm(
@@ -2245,20 +2327,19 @@ class cGcVibrationManager(Structure):
 class cGcApplication(cTkFSM):
     @partial_struct
     class Data(Structure):
-        _total_size_ = 0x92BD70
+        _total_size_ = 0x94F0E0
         # These are found in cGcApplication::Data::Data
         mRealityManager: Annotated[cGcRealityManager, 0x60]
-        mGameState: Annotated[cGcGameState, 0xE20]
-        mSimulation: Annotated[cGcSimulation, 0x4B28E0]
-        mHUDManager: Annotated[cGcHUDManager, 0x707C30]
-        mFrontendManager: Annotated[cGcFrontendManager, 0x82B680]
-        mVibrationManager: Annotated[cGcVibrationManager, 0x901FA8]
-        mNGuiManager: Annotated[cGcNGuiManager, 0x902AD0]
+        mGameState: Annotated[cGcGameState, 0xE70]
+        mSimulation: Annotated[cGcSimulation, 0x4CCF90]
+        mHUDManager: Annotated[cGcHUDManager, 0x722890]
+        mFrontendManager: Annotated[cGcFrontendManager, 0x849000]
+        # Passed into any cGcVibrationManager methods
+        mVibrationManager: Annotated[cGcVibrationManager, 0x9246F8]
+        mNGuiManager: Annotated[cGcNGuiManager, 0x925240]
+        mAudioManager: Annotated[cTkAudioManager, 0x925A30]
 
-        @function_hook(
-            "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 33 ED 48 C7 41 ? ? ? ? "
-            "? 48 89 29"
-        )
+        @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 F6 48 C7 41")
         def Data(self, this: "_Pointer[cGcApplication.Data]"): ...
 
     @function_hook("40 53 48 83 EC 20 E8 ? ? ? ? 48 89")
@@ -2277,10 +2358,10 @@ class cGcApplication(cTkFSM):
     muPlayerSaveSlot: Annotated[int, Field(c_uint32, 0x40)]
     meGameMode: Annotated[int, Field(c_uint32, 0x44)]  # ePresetGameMode
     mbSavingEnabled: Annotated[bool, Field(c_bool, 0x4C)]
-    mbPaused: Annotated[bool, Field(c_bool, 0xB4A5)]
-    mbWindowFocused: Annotated[bool, Field(c_bool, 0xB4A9)]
-    mbHasFocus: Annotated[bool, Field(c_bool, 0xB4AA)]
-    mbMultiplayerActive: Annotated[bool, Field(c_bool, 0xB4A8)]
+    mbPaused: Annotated[bool, Field(c_bool, 0xB8D5)]
+    mbMultiplayerActive: Annotated[bool, Field(c_bool, 0xB8D8)]
+    mbWindowFocused: Annotated[bool, Field(c_bool, 0xB8D9)]
+    mbHasFocus: Annotated[bool, Field(c_bool, 0xB8DA)]
 
 
 class cGcBeamEffect(Structure):
@@ -2411,9 +2492,7 @@ class cGcScanEvent(Structure):
         lpMission: c_uint64,  # std::pair<TkID<128>,cTkSeed> *
     ): ...
 
-    @function_hook(
-        "48 8B C4 55 53 56 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 33 F6 0F 29 78 ? 48 8B F9"
-    )
+    @function_hook("48 8B C4 55 53 56 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 48 8B F9")
     def CalculateMarkerPosition(self, this: "_Pointer[cGcScanEvent]"): ...
 
     @function_hook("4C 8B DC 55 57 49 8D AB ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 8B F9 45 0F 29 43")
@@ -2434,11 +2513,12 @@ class cGcApplicationLocalLoadState(Structure):
 class cTkDynamicGravityControl(Structure):
     @partial_struct
     class cTkGravityPoint(Structure):
-        _total_size_ = 0x20
+        _total_size_ = 0x30
         mCenter: Annotated[basic.Vector3f, 0x0]
-        mfStrength: Annotated[float, Field(c_float, 0x10)]
-        mfFalloffRadiusSqr: Annotated[float, Field(c_float, 0x14)]
-        mfMaxStrength: Annotated[float, Field(c_float, 0x18)]
+        mUnknown0x10: Annotated[basic.Vector3f, 0x10]
+        mfStrength: Annotated[float, Field(c_float, 0x20)]
+        mfFalloffRadiusSqr: Annotated[float, Field(c_float, 0x24)]
+        mfMaxStrength: Annotated[float, Field(c_float, 0x28)]
 
     @partial_struct
     class cTkGravityOBB(Structure):
@@ -2455,21 +2535,22 @@ class cTkDynamicGravityControl(Structure):
     miNumGravityPoints: int
     maGravityOBBs: bytes
 
-    @function_hook("33 C0 4C 8D 89 ? ? ? ? 89 81")
+    @function_hook("40 53 48 83 EC ? 48 8B D9 E8 ? ? ? ? 33 C0 89 83")
     def Construct(self, this: "_Pointer[cTkDynamicGravityControl]"): ...
 
-    @function_hook("66 0F 6F 05 ? ? ? ? 4C 8B C9")
+    @function_hook("48 89 5C 24 ? 57 48 83 EC ? 0F 29 74 24 ? 48 8D 41")
     def cTkDynamicGravityControl(self, this: "_Pointer[cTkDynamicGravityControl]"): ...
 
-    @function_hook("48 8B C4 53 55 56 41 54")
+    @function_hook("48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 57 48 83 EC ? 0F 28 05")
     def GetGravity(
         self,
         this: "_Pointer[cTkDynamicGravityControl]",
         result: c_uint64,
         lPos: _Pointer[basic.Vector3f],
+        a4: Annotated[int, c_uint32],
     ) -> c_uint64: ...
 
-    @function_hook("40 57 48 83 EC ? 48 63 81")
+    @function_hook("48 63 81 ? ? ? ? 4C 8B C9 85 C0")
     def UpdateGravityPoint(
         self,
         this: "_Pointer[cTkDynamicGravityControl]",
@@ -2482,14 +2563,15 @@ class cTkDynamicGravityControl(Structure):
 # TODO: Check this in memory.
 cTkDynamicGravityControl._fields_ = [
     ("maGravityPoints", cTkDynamicGravityControl.cTkGravityPoint * 0x10),
-    ("_padding0x200", 0x40 * c_ubyte),
+    ("_padding0x300", 0x40 * c_ubyte),
     # Guessed name. Seems to be number of gravity points for planets as we see in
     # cTkDynamicGravityControl::UpdateGravityPoint that
-    ("miNumPlanetGravityPoints", c_int32),  # 0x240
-    ("_padding0x244", 0x3C * c_ubyte),
-    ("miNumGravityPoints", c_int32),  # 0x280
+    ("miNumPlanetGravityPoints", c_int32),  # 0x340
+    ("_padding0x344", 0x3C * c_ubyte),
+    ("miNumGravityPoints", c_int32),  # 0x380
     # TODO: Figure out where this is in memory.
-    ("maGravityOBBs", basic.cTkClassPool[cTkDynamicGravityControl.cTkGravityOBB, 0x40]),
+    # Looks like there are like 0x400 now...
+    # ("maGravityOBBs", basic.cTkClassPool[cTkDynamicGravityControl.cTkGravityOBB, 0x40]),
 ]
 
 
@@ -2555,7 +2637,9 @@ class cTkTexture(cTkTextureBase):
 
 
 class Engine:
-    @static_function_hook("40 53 44 8B D1")
+    @static_function_hook(
+        "44 8B C1 4C 8B D2 41 C1 E8 ? 45 85 C0 74 ? 8B C1 25 ? ? ? ? 3D ? ? ? ? 74 ? 4C 8B 0D ? ? ? ? 8B D1"
+    )
     @staticmethod
     def ShiftAllTransformsForNode(node: basic.TkHandle, lShift: _Pointer[basic.Vector3f]): ...
 
@@ -2609,10 +2693,10 @@ class Engine:
         "48 89 5C 24 ? 57 48 81 EC ? ? ? ? 44 8B D2 48 8B D9 41 C1 EA ? 45 85 D2 0F 84 ? ? ? ? 44 8B CA 41 "
         "81 E1 ? ? ? ? 41 81 F9 ? ? ? ? 0F 84 ? ? ? ? 8B CA 48 8B 15 ? ? ? ? 81 E1 ? ? ? ? 48 8B 82 ? ? ? ? "
         "48 63 0C 88 48 8B 82 ? ? ? ? 48 8B 3C C8 48 85 FF 74 ? 8B 4F ? 8B C1 25 ? ? ? ? 41 3B C1 75 ? C1 E9 "
-        "? 41 3B CA 75 ? 4C 8B CF 48 8D 4C 24 ? BA ? ? ? ? E8 ? ? ? ? 48 8B 0D ? ? ? ? 48 8D 05 ? ? ? ? 4C "
-        "8D 4C 24 ? 48 89 44 24 ? 41 B8 ? ? ? ? 48 89 7C 24 ? 48 8B D3 E8 ? ? ? ? 48 8D 4C 24 ? E8 ? ? ? ? "
-        "EB ? C7 03 ? ? ? ? 48 8B C3 48 8B 9C 24 ? ? ? ? 48 81 C4 ? ? ? ? 5F C3 CC CC CC CC CC 48 89 5C 24 ? "
-        "57"
+        "? 41 3B CA 75 ? 4C 8B CF 48 8D 4C 24 ? B2 ? E8 ? ? ? ? 48 8B 0D ? ? ? ? 48 8D 05 ? ? ? ? 4C 8D 4C "
+        "24 ? 48 89 44 24 ? 41 B0 ? 48 89 7C 24 ? 48 8B D3 E8 ? ? ? ? 48 8D 4C 24 ? E8 ? ? ? ? EB ? C7 03 ? "
+        "? ? ? 48 8B C3 48 8B 9C 24 ? ? ? ? 48 81 C4 ? ? ? ? 5F C3 CC CC CC CC CC CC CC CC CC CC CC 48 89 5C "
+        "24 ? 57"
     )
     @staticmethod
     def AddGroupNode(
@@ -2759,18 +2843,6 @@ class cEgCodeResource(cEgResource):
         lpcData: c_char_p64,
         liSize: Annotated[int, c_int32],
     ) -> c_bool: ...
-
-
-class cTkAsyncIOManager:
-    @static_function_hook("48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B 3D ? ? ? ? 0F B6 F2")
-    @staticmethod
-    def GetOpDataSize(
-        lOpHandle: Annotated[int, c_int32], lbTakeLock: Annotated[bool, c_bool]
-    ) -> c_uint64: ...
-
-    @static_function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B 3D ? ? ? ? 0F B6 EA")
-    @staticmethod
-    def GetOpData(lOpHandle: Annotated[int, c_int32], lbTakeLock: Annotated[bool, c_bool]) -> c_void_p: ...
 
 
 class GeometryStreaming:
@@ -3104,7 +3176,9 @@ class cGcBinoculars(Structure):
     mMarkerModel: Annotated[basic.TkHandle, 0x7B0]
     mpBinocularInfoGui: Annotated[_Pointer[cGcNGui], 0x800]
 
-    @function_hook("48 8B C4 55 41 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 80 3D ? ? ? ? ? 4C 8B F1 0F 84")
+    @function_hook(
+        "48 8B C4 55 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 80 3D ? ? ? ? ? 48 8B F1 0F 84 ? ? ? ? 4C 89 70"
+    )
     def SetMarker(self, this: "_Pointer[cGcBinoculars]"): ...
 
     @function_hook("40 53 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 8D 54 24")
@@ -3121,9 +3195,7 @@ class cGcBinoculars(Structure):
         argument of this function."""
         ...
 
-    @function_hook(
-        "48 8B C4 55 53 56 57 41 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 4C 8B F1 48 8B 0D"
-    )
+    @function_hook("48 8B C4 55 53 57 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 44 0F 29 48")
     def UpdateRayCasts(
         self,
         this: "_Pointer[cGcBinoculars]",
@@ -3143,7 +3215,7 @@ class cGcBinoculars(Structure):
 
 
 class cTkFSMState(Structure):
-    @function_hook(signature="4C 8B 51 ? 4D 8B D8")
+    @function_hook(signature="4C 8B 51 ? 4D 8B D8 48 8B 05")
     def StateChange(
         self,
         this: "_Pointer[cTkFSMState]",
@@ -3195,7 +3267,7 @@ class sTerrainEditData(Structure):
 class cTkRigidBody(Structure):
     @function_hook(
         "48 89 5C 24 ? 57 48 83 EC ? 41 0F B6 F8 48 8B D9 4C 8B 81 ? ? ? ? 49 83 B8 ? ? ? ? ? 75 ? 48 8B 81 "
-        "? ? ? ? 48 85 C0 0F 84 ? ? ? ? 80 08"
+        "? ? ? ? 48 85 C0 74 ? 80 08"
     )
     def SetLinearVelocity(
         self,
@@ -3225,7 +3297,7 @@ class cTkPhysicsComponent(Structure):
 class cGcTerrainEditorBeam(Structure):
     @function_hook(
         "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? "
-        "? ? 48 8B F2"
+        "? ? 4C 8B F2"
     )
     def Fire(
         self,
@@ -3475,7 +3547,7 @@ class cGcPlanetGenerator(Structure):
         lPlanetData: _Pointer[nmse.cGcPlanetData],
     ): ...
 
-    @function_hook("48 89 4C 24 ? 53 57 41 55 41 56")
+    @function_hook("48 89 4C 24 ? 53 57 41 55 41 56 41 57 48 83 EC ? 48 63 9A")
     def GenerateCreatureSpawnData(
         self,
         this: "_Pointer[cGcPlanetGenerator]",
@@ -3604,7 +3676,7 @@ class MenuAction(Structure): ...
 
 
 class cGcQuickActionMenu(Structure):
-    @function_hook("44 88 44 24 ? 48 89 4C 24 ? 55 56 57 41 54 41 56")
+    @function_hook("44 88 44 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 57")
     def TriggerAction(
         self,
         this: "_Pointer[cGcQuickActionMenu]",
@@ -3834,7 +3906,7 @@ class cGcModManager(Structure):
     @staticmethod
     def GetInstance() -> c_uint64: ...
 
-    @function_hook("40 55 53 56 57 41 55 41 56 48 8D AC 24 ? ? ? ? B8")
+    @function_hook("40 55 53 56 57 41 55 41 56 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 33 F6")
     def LoadModdedData(
         self,
         this: "_Pointer[cGcModManager]",
@@ -3911,7 +3983,7 @@ class cGcFrontendPageOptions(Structure):
     )
     def DoGameSwitcher(self, this: "_Pointer[cGcFrontendPage]"): ...
 
-    @static_function_hook("48 89 5C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 8B F9")
+    @static_function_hook("48 89 5C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 8B D9")
     @staticmethod
     def RequestOptionsPage(leMenu: c_enum32[enums.eOptionsMenu], lUnknown: Annotated[bool, c_bool]): ...
 
@@ -3961,7 +4033,7 @@ class cGcOptionsPageUI(Structure):
     @staticmethod
     def BeginPage(lpOptionsPage: _Pointer[cGcFrontendPageOptions]): ...
 
-    @static_function_hook("48 8B C4 55 57 48 8B EC")
+    @static_function_hook("48 8B C4 55 57 48 8D 68 ? 48 81 EC ? ? ? ? 83 79")
     @staticmethod
     def EndPage(lpOptionsPage: _Pointer[cGcFrontendPageOptions]): ...
 
@@ -3983,7 +4055,7 @@ class cGcOptionsPageUI(Structure):
         liValue: Annotated[int, c_int32],
     ): ...
 
-    @static_function_hook("4C 89 44 24 ? 53 57 41 54 41 55 41 57")
+    @static_function_hook("4C 89 44 24 ? 56 57 41 55")
     @staticmethod
     def Boolean(
         lpOptionsPage: _Pointer[cGcFrontendPageOptions],
@@ -4003,7 +4075,7 @@ class cGcOptionsPageUI(Structure):
         lpButtonOptions: _Pointer[cGcButtonOptions],
     ) -> c_bool: ...
 
-    @static_function_hook("F3 0F 11 5C 24 ? 55")
+    @static_function_hook("F3 0F 11 5C 24 ? 55 53")
     @staticmethod
     def Float(
         lpOptionsPage: _Pointer[cGcFrontendPageOptions],
@@ -4024,7 +4096,7 @@ class cGcOptionsPageUI(Structure):
         lHeaderIndex: c_enum32[enums.cGcOptionsUIHeaderIcons],
     ): ...
 
-    @static_function_hook("44 89 4C 24 ? 4C 89 44 24 ? 55 56 41 54")
+    @static_function_hook("44 89 4C 24 ? 4C 89 44 24 ? 55 56 41 57")
     @staticmethod
     def Int(
         lpOptionsPage: _Pointer[cGcFrontendPageOptions],
@@ -4037,7 +4109,9 @@ class cGcOptionsPageUI(Structure):
         lpIntOptions: _Pointer[cGcIntOptions],
     ) -> c_int32: ...
 
-    @static_function_hook("48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 55 41 56 41 57 48 83 EC ? 48 8B 81")
+    @static_function_hook(
+        "48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 55 41 56 41 57 48 83 EC ? 48 8B 81 ? ? ? ? 45 33 FF"
+    )
     @staticmethod
     def FinalizePage(
         lpOptionsPage: _Pointer[cGcFrontendPageOptions],
@@ -4087,7 +4161,7 @@ class cGcFrontendPageFunctions(Structure):
     ): ...
 
     @static_function_hook(
-        "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 4C 89 40 ? 55 41 54 41 55 41 56 41 57 48 8D 68 ? 48 81 EC "
+        "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 4C 89 48 ? 55 41 54 41 55 41 56 41 57 48 8D 68 ? 48 81 EC "
         "? ? ? ? 0F 29 78"
     )
     @staticmethod
@@ -4146,7 +4220,9 @@ class cTkSystem(Structure):
 
     @static_function_hook(
         "40 53 48 83 EC ? 65 48 8B 04 25 ? ? ? ? B9 ? ? ? ? 48 8B 00 8B 04 01 39 05 ? ? ? ? 7F ? 48 8D 05 ? "
-        "? ? ? 48 83 C4 ? 5B C3 90"
+        "? ? ? 48 83 C4 ? 5B C3 48 8D 0D ? ? ? ? E8 ? ? ? ? 83 3D ? ? ? ? ? 75 ? 48 8D 1D ? ? ? ? 48 8B CB "
+        "E8 ? ? ? ? 48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8B C3 48 83 C4 ? 5B C3 CC CC "
+        "CC CC CC CC CC CC CC CC CC CC 8B 11"
     )
     @staticmethod
     def GetInstance() -> c_uint64: ...
@@ -4708,14 +4784,18 @@ class cEgModules(ContainerStruct):
     ]
     mgpRenderer: Annotated[
         _Pointer[cEgRenderer],
-        Pattern("48 89 3D ? ? ? ? 48 83 C4 ? 5F C3 CC 40 53"),
+        Pattern("75 ? B9 ? ? ? ? E8 ? ? ? ? 48 85 C0 74 ? 48 8B C8 E8 ? ? ? ? 48 8B F8"),
     ]
     # These are just globals, but we'll store them here for now.
-    mgMemoryManager: Annotated[cTkMemoryManager, Pattern("48 8D 0D ? ? ? ? E8 ? ? ? ? E8 ? ? ? ? 80 3D")]
+    # Find this above cGcModManager::LoadModdedData into a function which takes a few constants
+    mgMemoryManager: Annotated[
+        cTkMemoryManager, Pattern("48 8D 0D ? ? ? ? 48 8D 05 ? ? ? ? 48 89 44 24 ? E8 ? ? ? ? E8")
+    ]
     gGameGui: Annotated[cGcNGuiGame, Pattern("48 8D 0D ? ? ? ? F3 0F 11 44 24 ? BA")]
+    # Passed as an argument to cGcBaseBuildingManager::Update
     mBaseBuildingManager: Annotated[
         cGcBaseBuildingManager,
-        Pattern("48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8B 0D ? ? ? ? 41 0F 28 C8"),
+        Pattern("48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8B 0D ? ? ? ? 0F 28 CF"),
     ]
 
     @static_function_hook("40 57 48 83 EC ? 33 FF 48 89 5C 24")
@@ -4760,7 +4840,7 @@ class cGcGalaxyMap(Structure):
             pass
 
         @function_hook(
-            "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 55 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 44 0F "
+            "48 8B C4 48 89 58 ? 48 89 70 ? 55 57 41 54 41 55 41 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 44 0F "
             "B7 72"
         )
         def DoSolarPopup(
@@ -4773,7 +4853,7 @@ class cGcGalaxyMap(Structure):
 
 class cGcGalaxyMapUI(Structure):
     class SolarInfoPanel(Structure):
-        @function_hook("48 89 4C 24 ? 55 53 41 54 41 55 48 8D AC 24 ? ? ? ? B8")
+        @function_hook("48 89 4C 24 ? 55 53 41 55 41 56 48 8D AC 24 ? ? ? ? B8")
         def UpdatePanelUI(self, this: "_Pointer[cGcGalaxyMapUI.SolarInfoPanel]"): ...
 
 
@@ -4809,9 +4889,7 @@ class cGcSimpleInteractionComponent(cTkComponent):
     mpData: Annotated[_Pointer[nmse.cGcSimpleInteractionComponentData], 0x30]
     mfActionTimer: Annotated[float, Field(c_float, 0x4C)]
 
-    @function_hook(
-        "48 8B C4 55 41 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 58 ? 4C 8B F1 48 89 70 ? 48 8D 8D"
-    )
+    @function_hook("48 8B C4 48 89 48 ? 55 41 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 58 ? 4C 8B F1")
     def DoAction(self, this: "_Pointer[cGcSimpleInteractionComponent]"): ...
 
 
@@ -4826,6 +4904,11 @@ class cGcHologramComponent(Structure):
         this: "_Pointer[cGcHologramComponent]",
         lResult: c_uint64,
     ) -> c_uint64: ...
+
+
+class cGcApplicationDeathState(Structure):
+    @function_hook("48 89 4C 24 ? 55 53 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8")
+    def Update(self, this: "_Pointer[cGcApplicationDeathState]", lfTimeStep: Annotated[float, c_float]): ...
 
 
 # Dummy values to copy and paste to make adding new things quicker...
