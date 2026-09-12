@@ -766,7 +766,7 @@
  },
  {
   "name": "cGcPlayerShipOwnership::SpawnNewShip",
-  "signature": "44 89 44 24 ? 48 89 54 24 ? 55 53 56 41 54",
+  "signature": "44 89 44 24 ? 55 53 56 57 41 54 41 55 41 57",
   "mangled_name": "?SpawnNewShip@cGcPlayerShipOwnership@@QEAA_NAEBVcTkMatrix34@@W4ShipSpawnLandingGearState@1@H_N@Z"
  },
  {
@@ -973,7 +973,7 @@
  },
  {
   "name": "cTkSystem::GetInstance",
-  "signature": "40 53 48 83 EC ? 65 48 8B 04 25 ? ? ? ? B9 ? ? ? ? 48 8B 00 8B 04 01 39 05 ? ? ? ? 7F ? 48 8D 05 ? ? ? ? 48 83 C4 ? 5B C3 90",
+  "signature": "40 53 48 83 EC ? 65 48 8B 04 25 ? ? ? ? B9 ? ? ? ? 48 8B 00 8B 04 01 39 05 ? ? ? ? 7F ? 48 8D 05 ? ? ? ? 48 83 C4 ? 5B C3 48 8D 0D ? ? ? ? E8 ? ? ? ? 83 3D ? ? ? ? ? 75 ? 48 8D 1D ? ? ? ? 48 8B CB E8 ? ? ? ? 48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8B C3 48 83 C4 ? 5B C3 CC CC CC CC CC CC CC CC CC CC CC CC 8B 11",
   "mangled_name": "?GetInstance@cTkSystem@@SAAEAV1@XZ"
  },
  {
@@ -1488,7 +1488,7 @@
  },
  {
   "name": "cGcResourceCustomisation::CreateGenerationTask",
-  "signature": "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 4C 89 74 24 ? 55 48 8D 6C 24 ? 48 81 EC ? ? ? ? 66 0F 6F 05 ? ? ? ? 45 33 F6",
+  "signature": "48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 57 48 81 EC ? ? ? ? 48 8B F2 49 8B F8",
   "mangled_name": "?CreateGenerationTask@cGcResourceCustomisation@@QEAAPEAUTaskContext@cGcProceduralTextureManager@@PEAVcTkSmartResHandle@@PEBD_N@Z"
  },
  {
@@ -1805,5 +1805,11 @@
   "name": "cGcApplicationDeathState::Update",
   "signature": "48 89 4C 24 ? 55 53 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8",
   "mangled_name": "?Update@cGcApplicationDeathState@@EEAAXM@Z"
+ },
+ {
+  "name": "cGcSolarSystem::PollToPrepare",
+  "signature": "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 65 48 8B 04 25 ? ? ? ? 48 8B F9",
+  "mangled_name": "?PollToPrepare@cGcSolarSystem@@QEAA?AW4TkPollResult@@XZ",
+  "unique_string": "SolarSystemPhase%zu"
  }
 ]

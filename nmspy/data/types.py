@@ -818,10 +818,7 @@ class cGcResourceCustomisation(Structure):
     mResourceCustomisation: Annotated[CustomisationData, 0x0]
     mForcedTextureName: Annotated[basic.TkID0x20, 0x3900]
 
-    @function_hook(
-        "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 4C 89 74 24 ? 55 48 8D 6C 24 ? 48 81 EC ? ? ? ? 66 0F 6F "
-        "05 ? ? ? ? 45 33 F6"
-    )
+    @function_hook("48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 57 48 81 EC ? ? ? ? 48 8B F2 49 8B F8")
     def CreateGenerationTask(
         self,
         this: "_Pointer[cGcResourceCustomisation]",
@@ -835,56 +832,56 @@ class cGcResourceCustomisation(Structure):
 class cGcPlayerState(Structure):
     # Found at the top of cGcPlayerState::cGcPlayerState
     mNameWithTitle: Annotated[basic.cTkFixedString0x100, 0x0]
-    mGameStartLocation1: Annotated[nmse.cGcUniverseAddressData, 0x430]
-    mGameStartLocation2: Annotated[nmse.cGcUniverseAddressData, 0x448]
-    mLocation: Annotated[nmse.cGcUniverseAddressData, 0x460]
-    mPrevLocation: Annotated[nmse.cGcUniverseAddressData, 0x478]
+    mGameStartLocation1: Annotated[nmse.cGcUniverseAddressData, 0x830]
+    mGameStartLocation2: Annotated[nmse.cGcUniverseAddressData, 0x848]
+    mLocation: Annotated[nmse.cGcUniverseAddressData, 0x860]
+    mPrevLocation: Annotated[nmse.cGcUniverseAddressData, 0x878]
 
     # Found near the top of cGcPlayerState::SaveToData
-    miShield: Annotated[int, Field(c_int32, 0x490)]
-    miHealth: Annotated[int, Field(c_int32, 0x494)]
-    miShipHealth: Annotated[int, Field(c_int32, 0x498)]
-    muUnits: Annotated[int, Field(c_uint32, 0x49C)]
-    muNanites: Annotated[int, Field(c_uint32, 0x4A0)]
-    muSpecials: Annotated[int, Field(c_uint32, 0x4A4)]
+    miShield: Annotated[int, Field(c_int32, 0x890)]
+    miHealth: Annotated[int, Field(c_int32, 0x894)]
+    miShipHealth: Annotated[int, Field(c_int32, 0x898)]
+    muUnits: Annotated[int, Field(c_uint32, 0x89C)]
+    muNanites: Annotated[int, Field(c_uint32, 0x8A0)]
+    muSpecials: Annotated[int, Field(c_uint32, 0x8A4)]
     # Found in cGcPlayerState::cGcPlayerState
-    mInventories: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0x21, 0x510)]
-    mVehicleInventories: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0x7, 0x5068)]
-    mVehicleTechInventories: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0x7, 0x6060)]
+    mInventories: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0x21, 0x910)]
+    mVehicleInventories: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0x7, 0x5468)]
+    mVehicleTechInventories: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0x7, 0x6460)]
 
-    mShipInventories: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0xC, 0x7058)]
-    mShipInventoriesCargo: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0xC, 0x8BC8)]
-    mShipInventoriesTechOnly: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0xC, 0xA728)]
+    mShipInventories: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0xC, 0x7458)]
+    mShipInventoriesCargo: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0xC, 0x8FC8)]
+    mShipInventoriesTechOnly: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0xC, 0xAA28)]
 
     # Found in cGcPlayerState::LoadFromData a little bit above the POLICESHIP.SCENE.MBIN, a few lines above
     # the assignment of something to 12LL.
     # The actual value is this one found - 0x10
     mShipResources: Annotated[
         tuple[nmse.cGcResourceElement, ...],
-        Field(nmse.cGcResourceElement * 0xC, 0x17A00),
+        Field(nmse.cGcResourceElement * 0xC, 0x17EE0),
     ]
 
     # Found in cGcPlayerShipOwnership::SpawnNewShip
-    miPrimaryShip: Annotated[int, Field(c_uint32, 0x17DC0)]
+    miPrimaryShip: Annotated[int, Field(c_uint32, 0x182A0)]
 
     # Found in cGcPlayerState::cGcPlayerState above the loop over something 5 times. Around line 220.
-    mPhotoModeSettings: Annotated[nmse.cGcPhotoModeSettings, 0x1A0D0]
-    maTeleportEndpoints: Annotated[std.vector[nmse.cGcTeleportEndpoint], 0x1A120]
+    mPhotoModeSettings: Annotated[nmse.cGcPhotoModeSettings, 0x1AAC0]
+    maTeleportEndpoints: Annotated[std.vector[nmse.cGcTeleportEndpoint], 0x1AB10]
 
-    mHoloExplorerInteraction: Annotated[cGcInteractionData, 0x1A310]
-    mHoloScepticInteraction: Annotated[cGcInteractionData, 0x1A330]
-    mHoloNooneInteraction: Annotated[cGcInteractionData, 0x1A350]
-    mNetworkPlayerInteraction: Annotated[cGcInteractionData, 0x1A370]
+    mHoloExplorerInteraction: Annotated[cGcInteractionData, 0x1AD00]
+    mHoloScepticInteraction: Annotated[cGcInteractionData, 0x1AD20]
+    mHoloNooneInteraction: Annotated[cGcInteractionData, 0x1AD40]
+    mNetworkPlayerInteraction: Annotated[cGcInteractionData, 0x1AD60]
     # Directly below the calls to cGcInteractionData::SetDefaults in cGcPlayerState::cGcPlayerState
     maCustomShipNames: Annotated[
         tuple[basic.cTkFixedString0x20, ...],
-        Field(basic.cTkFixedString0x20 * 0xC, 0x1A3A3),
+        Field(basic.cTkFixedString0x20 * 0xC, 0x1AD93),
     ]
 
     # This can be found in cGcPlayerShipOwnership::UpdateMeshRefresh
     mCustomisationData: Annotated[
         tuple[cGcResourceCustomisation, ...],
-        Field(cGcResourceCustomisation * 0x1A, 0x1A790),
+        Field(cGcResourceCustomisation * 0x1A, 0x1CA10),
     ]
 
     @function_hook(
@@ -1009,7 +1006,7 @@ class cGcPlayerShipOwnership(Structure):
         lfTimestep: Annotated[float, c_float],
     ): ...
 
-    @function_hook("44 89 44 24 ? 48 89 54 24 ? 55 53 56 41 54")
+    @function_hook("44 89 44 24 ? 55 53 56 57 41 54 41 55 41 57")
     def SpawnNewShip(
         self,
         this: "_Pointer[cGcPlayerShipOwnership]",
@@ -1657,6 +1654,12 @@ class cGcPlanet(Structure):
 
     @function_hook("40 55 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 80 3D")
     def UpdateWeather(self, this: "_Pointer[cGcPlanet]", lfTimeStep: Annotated[float, c_float]): ...
+
+    @function_hook(
+        "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? "
+        "? ? ? 65 48 8B 04 25 ? ? ? ? 48 8B F9"
+    )
+    def PollToPrepare(self, this: "_Pointer[cGcPlanet]"): ...
 
 
 @partial_struct
@@ -4217,7 +4220,9 @@ class cTkSystem(Structure):
 
     @static_function_hook(
         "40 53 48 83 EC ? 65 48 8B 04 25 ? ? ? ? B9 ? ? ? ? 48 8B 00 8B 04 01 39 05 ? ? ? ? 7F ? 48 8D 05 ? "
-        "? ? ? 48 83 C4 ? 5B C3 90"
+        "? ? ? 48 83 C4 ? 5B C3 48 8D 0D ? ? ? ? E8 ? ? ? ? 83 3D ? ? ? ? ? 75 ? 48 8D 1D ? ? ? ? 48 8B CB "
+        "E8 ? ? ? ? 48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8B C3 48 83 C4 ? 5B C3 CC CC "
+        "CC CC CC CC CC CC CC CC CC CC 8B 11"
     )
     @staticmethod
     def GetInstance() -> c_uint64: ...
