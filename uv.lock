@@ -347,7 +347,7 @@ resolution-markers = [
     "python_full_version >= '3.10' and python_full_version < '3.13' and sys_platform == 'win32'",
 ]
 dependencies = [
-    { name = "zipp", version = "4.1.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10' and sys_platform == 'win32'" },
+    { name = "zipp", version = "4.1.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10' and python_full_version < '3.13' and sys_platform == 'win32'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/6f/7e/1e7e8dc30634b93ebb3d58a3dea569ad146e656218d3960ab04f62047b29/importlib_metadata-9.0.1.tar.gz", hash = "sha256:ab830580bc0ef3db61ce8fae716389e5462b67e033018bab6d8f80ef17172f99", size = 59124, upload-time = "2026-08-28T15:30:34.646Z" }
 wheels = [
@@ -599,7 +599,7 @@ wheels = [
 
 [[package]]
 name = "nmspy"
-version = "178994.0.dev1"
+version = "178994.1"
 source = { editable = "." }
 dependencies = [
     { name = "pymhf", extra = ["gui", "http-api"], marker = "sys_platform == 'win32'" },
@@ -776,7 +776,6 @@ dependencies = [
     { name = "cyminhook", marker = "sys_platform == 'win32'" },
     { name = "iced-x86", marker = "sys_platform == 'win32'" },
     { name = "importlib-metadata", version = "8.7.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10' and sys_platform == 'win32'" },
-    { name = "importlib-metadata", version = "9.0.1", source = { registry = "https://pypi.org/simple" }, marker = "python_version < '0'" },
     { name = "keyboard", marker = "sys_platform == 'win32'" },
     { name = "packaging", marker = "sys_platform == 'win32'" },
     { name = "pefile", marker = "sys_platform == 'win32'" },

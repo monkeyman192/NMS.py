@@ -122,7 +122,7 @@ class XMLNode(Structure):
     ) -> c_uint64:  # XMLNode *
         ...
 
-    @function_hook("40 53 57 41 54 41 56 41 57 48 81 EC")
+    @function_hook("40 53 55 57 41 54 41 57 48 81 EC ? ? ? ? 45 33 E4 41 0F B6 E9")
     def writeToFile(
         self,
         this: "_Pointer[XMLNode]",
@@ -614,6 +614,21 @@ class cGcNameGenerator(Structure):
         lLocResult: _Pointer[basic.cTkFixedString[0x7F]],
     ): ...
 
+    @function_hook(
+        "44 89 4C 24 ? 4C 89 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D "
+        "AC 24"
+    )
+    def GenerateSpacePoiName(
+        self,
+        this: "_Pointer[cGcNameGenerator]",
+        a2: Annotated[int, c_uint64],
+        a3: Annotated[int, c_int64],
+        lPoiType: c_enum32[enums.cGcSpacePoiType],
+        a5: Annotated[int, c_int32],
+        a6: Annotated[int, c_int64],
+        lLocResult: _Pointer[basic.cTkFixedString[0x7F]],
+    ): ...
+
 
 @partial_struct
 class cGcRealityManager(Structure):
@@ -642,68 +657,70 @@ class cGcRealityManager(Structure):
     mpPetBattlerMovesTable: Annotated[_Pointer[nmse.cGcPetBattlerMovesTable], 0xB0]
     mpPetBattlerMoveSetTable: Annotated[_Pointer[nmse.cGcPetBattlerMoveSetTable], 0xB8]
     mpPetShopItemTable: Annotated[_Pointer[nmse.cGcPetShopItemTable], 0xC0]
-    mpMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0xC8]
-    mpNPCMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0xD0]
-    mpWikiMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0xD8]
-    mpCoreMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0xE0]
-    mpTutorialMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0xE8]
-    mpAtlasPathTable: Annotated[_Pointer[nmse.cGcMissionTable], 0xF0]
-    mpRecurringMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0xF8]
-    mpCommunityMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x100]
-    mpFleetMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x108]
-    mpWaterMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x110]
-    mpMultiplayerMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x118]
-    mpCorvetteMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x120]
-    mpBaseComputerMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x128]
-    mpPlanetProcMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x130]
-    mpDisablingConditionsTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x138]
-    mpSpacePOIMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x140]
-    mpSeasonalMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x148]
-    mpSeasonalBespokeMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x150]
-    mpSentinelSettlementMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x158]
-    mpStatStoriesMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x160]
-    mpPirateMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x168]
-    mpStartedOnUseMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x170]
-    mpNPCBuildersMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x178]
-    mpSwarmMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x180]
-    mpDeprecatedMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x188]
-    mpModMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x190]
-    mpMissionSchedulesTable: Annotated[_Pointer[nmse.cGcMissionSchedulesTable], 0x198]
-    mpMissionCommunityData: Annotated[_Pointer[nmse.cGcMissionCommunityData], 0x1A0]
-    mpInventoryTable: Annotated[_Pointer[nmse.cGcInventoryTable], 0x1A8]
-    mpMaintenanceGroupsTable: Annotated[_Pointer[nmse.cGcMaintenanceGroupsTable], 0x1B0]
-    mpUnlockableTrees: Annotated[_Pointer[nmse.cGcUnlockableTrees], 0x1E0]
-    mpEmotesList: Annotated[_Pointer[nmse.cGcPlayerEmoteList], 0x1E8]
-    mpPlayerDamageTable: Annotated[_Pointer[nmse.cGcPlayerDamageTable], 0x1F0]
-    mpPurchaseableBuildingBlueprints: Annotated[_Pointer[nmse.cGcPurchaseableBuildingBlueprints], 0x1F8]
-    mpPurchaseableSpecials: Annotated[_Pointer[nmse.cGcPurchaseableSpecials], 0x200]
-    mpHistoricalSeasonDataTable: Annotated[_Pointer[nmse.cGcHistoricalSeasonDataTable], 0x208]
-    mpUnlockableSeasonRewards: Annotated[_Pointer[nmse.cGcUnlockableSeasonRewards], 0x210]
-    mpUnlockableTwitchRewards: Annotated[_Pointer[nmse.cGcUnlockableTwitchRewards], 0x218]
-    mpUnlockablePlatformRewards: Annotated[_Pointer[nmse.cGcUnlockablePlatformRewards], 0x220]
-    mpSettlementPerksTable: Annotated[_Pointer[nmse.cGcSettlementPerksTable], 0x228]
-    mpWiki: Annotated[_Pointer[nmse.cGcWiki], 0x230]
-    mpItemCostTable: Annotated[_Pointer[nmse.cGcItemCostTable], 0x268]
-    mpTradingClassTable: Annotated[_Pointer[nmse.cGcTradingClassTable], 0x270]
-    mpCostTable: Annotated[_Pointer[nmse.cGcCostTable], 0x278]
-    mpPlayerWeaponPropertiesTable: Annotated[_Pointer[nmse.cGcPlayerWeaponPropertiesTable], 0x280]
-    mpCombatEffectsTable: Annotated[_Pointer[nmse.cGcCombatEffectsTable], 0x288]
-    mpPlayerTitleData: Annotated[_Pointer[nmse.cGcPlayerTitleData], 0x290]
-    mpGalacticMapIcons: Annotated[_Pointer[nmse.cGcGalaxyInfoIcons], 0xC08]
-    mpAlienWords: Annotated[_Pointer[nmse.cGcAlienSpeechTable], 0xC10]
-    mNameGenerator: Annotated[cGcNameGenerator, 0xC18]
-    mapRepairTechs: Annotated[basic.TkStd.tk_vector[_Pointer[nmse.cGcTechnology]], 0xCE0]
+    mpSpacePoiTable: Annotated[_Pointer[nmse.cGcSpacePoiTable], 0xC8]
+    mpMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0xD0]
+    mpNPCMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0xD8]
+    mpWikiMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0xE0]
+    mpCoreMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0xE8]
+    mpTutorialMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0xF0]
+    mpAtlasPathTable: Annotated[_Pointer[nmse.cGcMissionTable], 0xF8]
+    mpRecurringMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x100]
+    mpCommunityMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x108]
+    mpFleetMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x110]
+    mpWaterMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x118]
+    mpMultiplayerMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x120]
+    mpCorvetteMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x128]
+    mpBaseComputerMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x130]
+    mpPlanetProcMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x138]
+    mpDisablingConditionsTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x140]
+    mpSpacePOIMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x148]
+    mpSpaceOutpostMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x150]
+    mpSeasonalMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x158]
+    mpSeasonalBespokeMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x160]
+    mpSentinelSettlementMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x168]
+    mpStatStoriesMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x170]
+    mpPirateMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x178]
+    mpStartedOnUseMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x180]
+    mpNPCBuildersMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x188]
+    mpSwarmMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x190]
+    mpDeprecatedMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x198]
+    mpModMissionTable: Annotated[_Pointer[nmse.cGcMissionTable], 0x1A0]
+    mpMissionSchedulesTable: Annotated[_Pointer[nmse.cGcMissionSchedulesTable], 0x1A8]
+    mpMissionCommunityData: Annotated[_Pointer[nmse.cGcMissionCommunityData], 0x1B0]
+    mpInventoryTable: Annotated[_Pointer[nmse.cGcInventoryTable], 0x1B8]
+    mpMaintenanceGroupsTable: Annotated[_Pointer[nmse.cGcMaintenanceGroupsTable], 0x1C0]
+    mpUnlockableTrees: Annotated[_Pointer[nmse.cGcUnlockableTrees], 0x1F0]
+    mpEmotesList: Annotated[_Pointer[nmse.cGcPlayerEmoteList], 0x1F8]
+    mpPlayerDamageTable: Annotated[_Pointer[nmse.cGcPlayerDamageTable], 0x200]
+    mpPurchaseableBuildingBlueprints: Annotated[_Pointer[nmse.cGcPurchaseableBuildingBlueprints], 0x208]
+    mpPurchaseableSpecials: Annotated[_Pointer[nmse.cGcPurchaseableSpecials], 0x210]
+    mpHistoricalSeasonDataTable: Annotated[_Pointer[nmse.cGcHistoricalSeasonDataTable], 0x218]
+    mpUnlockableSeasonRewards: Annotated[_Pointer[nmse.cGcUnlockableSeasonRewards], 0x220]
+    mpUnlockableTwitchRewards: Annotated[_Pointer[nmse.cGcUnlockableTwitchRewards], 0x228]
+    mpUnlockablePlatformRewards: Annotated[_Pointer[nmse.cGcUnlockablePlatformRewards], 0x230]
+    mpSettlementPerksTable: Annotated[_Pointer[nmse.cGcSettlementPerksTable], 0x238]
+    mpWiki: Annotated[_Pointer[nmse.cGcWiki], 0x248]
+    mpItemCostTable: Annotated[_Pointer[nmse.cGcItemCostTable], 0x280]
+    mpTradingClassTable: Annotated[_Pointer[nmse.cGcTradingClassTable], 0x288]
+    mpCostTable: Annotated[_Pointer[nmse.cGcCostTable], 0x290]
+    mpPlayerWeaponPropertiesTable: Annotated[_Pointer[nmse.cGcPlayerWeaponPropertiesTable], 0x298]
+    mpCombatEffectsTable: Annotated[_Pointer[nmse.cGcCombatEffectsTable], 0x2A0]
+    mpPlayerTitleData: Annotated[_Pointer[nmse.cGcPlayerTitleData], 0x2A8]
+
+    mpGalacticMapIcons: Annotated[_Pointer[nmse.cGcGalaxyInfoIcons], 0xC60]
+    mpAlienWords: Annotated[_Pointer[nmse.cGcAlienSpeechTable], 0xC68]
+    # Found right at the top of cGcRealityManager::Construct
+    mNameGenerator: Annotated[cGcNameGenerator, 0xC70]
+    mapRepairTechs: Annotated[basic.TkStd.tk_vector[_Pointer[nmse.cGcTechnology]], 0xD38]
     mapAlienPuzzleTables: Annotated[
-        basic.TkStd.tk_vector[std.pair[_Pointer[nmse.cGcAlienPuzzleTable], c_int32]], 0xCF0
+        basic.TkStd.tk_vector[std.pair[_Pointer[nmse.cGcAlienPuzzleTable], c_int32]], 0xDD8
     ]
-    mpDialogClearanceTable: Annotated[_Pointer[nmse.cGcDialogClearanceTable], 0xD00]
+    mpDialogClearanceTable: Annotated[_Pointer[nmse.cGcDialogClearanceTable], 0xD58]
     maDynamicHazardProtectionIcons: Annotated[
-        tuple[nmse.cTkTextureResource, ...], Field(nmse.cTkTextureResource * 7, 0xD08)
+        tuple[nmse.cTkTextureResource, ...], Field(nmse.cTkTextureResource * 7, 0xD60)
     ]
 
-    @function_hook(
-        "40 55 53 56 57 41 54 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 4C 8B F1"
-    )
+    @function_hook("40 55 53 56 57 41 54 41 55 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B E1")
     def Construct(self, this: "_Pointer[cGcRealityManager]"): ...
 
     @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B F9 33 ED 48 89 A9")
@@ -717,7 +734,7 @@ class cGcRealityManager(Structure):
     ) -> c_uint64:  # cGcProductData *
         ...
 
-    @function_hook("4C 89 4C 24 ? 44 88 44 24 ? 48 89 4C 24 ? 55 56")
+    @function_hook("4C 89 4C 24 ? 44 88 44 24 ? 48 89 4C 24")
     def GenerateProceduralTechnology(
         self,
         this: "_Pointer[cGcRealityManager]",
@@ -725,6 +742,13 @@ class cGcRealityManager(Structure):
         lbExampleForWiki: Annotated[bool, c_bool],
     ) -> c_uint64:  # cGcProductData *
         ...
+
+    @static_function_hook(
+        "40 53 48 83 EC ? 4C 8B 01 48 8B D9 4D 85 C0 0F 84 ? ? ? ? 48 C7 C0 ? ? ? ? 0F 1F 40 ? 48 FF C0 41 "
+        "80 3C 00 ? 75 ? 85 C0 7E ? 48 8D 44 24 ? 48 C7 44 24 ? ? ? ? ? 48 89 44 24 ? 48 8D 8C 24 ? ? ? ? BA"
+    )
+    @staticmethod
+    def LoadTexture(lResource: _Pointer[nmse.cTkTextureResource]): ...
 
 
 @partial_struct
@@ -918,10 +942,7 @@ class cGcPlayerState(Structure):
         a2: c_int32,
     ): ...
 
-    @function_hook(
-        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 54 41 55 41 56 41 57 48 83 EC ? 4C 8B BC 24 ? ? ? ? "
-        "48 8B F9 48 63 EA"
-    )
+    @function_hook("48 8B C4 44 89 40 ? 53 55 56 57 41 54")
     def GetStatValue(
         self,
         this: "_Pointer[cGcPlayerState]",
@@ -1016,9 +1037,7 @@ class cGcPlayerShipOwnership(Structure):
         lbSpawnShipOverride: c_bool,
     ) -> c_bool: ...
 
-    @function_hook(
-        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8B 2D ? ? ? ? 8B DA"
-    )
+    @function_hook("40 55 53 57 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 8B 1D")
     def DestroyShip(
         self,
         this: "_Pointer[cGcPlayerShipOwnership]",
@@ -1081,10 +1100,7 @@ class cGcPlayerFreighterOwnership(Structure):
 class cGcPlayerFleetManager(Structure):
     _total_size_ = 0x3FB0
 
-    @function_hook(
-        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8D 05 ? ? ? ? C7 41 ? ? ? ? ? 48 89 01 "
-        "48 8B D9"
-    )
+    @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 57 C0 48 8D 05")
     def cGcPlayerFleetManager(self, this: "_Pointer[cGcPlayerFleetManager]"): ...
 
 
@@ -1226,16 +1242,15 @@ class cGcPersistentInteractionBuffer(cGcNetworkSynchronisedBuffer):
         lBufferData: _Pointer[nmse.cGcInteractionBuffer],
     ): ...
 
-    # FIXME: This doesn't seem to exist any more. Need to xref with the mac binary?
-    # @function_hook("48 89 5C 24 ? 56 48 83 EC ? 0F 10 22")
-    # def SaveInteraction(
-    #     self,
-    #     this: "_Pointer[cGcPersistentInteractionBuffer]",
-    #     lPosition: _Pointer[basic.cTkVector3],
-    #     lData: _Pointer[nmse.cGcInteractionData],
-    #     lbReplace: Annotated[bool, c_bool],
-    #     lfRadius: Annotated[float, c_float],
-    # ): ...
+    @function_hook("48 89 5C 24 ? 57 48 83 EC ? 0F 10 1A 41 0F B6 D9")
+    def SaveInteraction(
+        self,
+        this: "_Pointer[cGcPersistentInteractionBuffer]",
+        lPosition: _Pointer[basic.cTkVector3],
+        lData: _Pointer[nmse.cGcInteractionData],
+        lbReplace: Annotated[bool, c_bool],
+        lfRadius: Annotated[float, c_float],
+    ): ...
 
 
 @partial_struct
@@ -1379,7 +1394,7 @@ class cGcDiscoveryData(Structure):
 
 @partial_struct
 class cGcDiscoveryManager(Structure):
-    @function_hook("48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B 59 ? 49 8B F8 48 8B F2")
+    @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B 59 ? 41 0F B6 F9")
     def SubmitDiscoveryData(
         self,
         this: "_Pointer[cGcDiscoveryManager]",
@@ -1503,6 +1518,7 @@ class cGcPlayerCommunicator(Structure):
 class cGcPlayer(Structure):
     mRootNode: Annotated[basic.TkHandle, 0xE0]
     mPhysicsController: Annotated[_Pointer[cTkHavokCharacterController], 0x160]
+    mGraphicsMatrix: Annotated[basic.cTkPhysRelMat34, 0x330]
     mPosition: Annotated[basic.cTkVector3, 0x380]
     mEquipmentNode: Annotated[basic.TkHandle, 0x3A0]
     mAudioObject: Annotated[TkAudioObject, 0x3F0]
@@ -1545,7 +1561,7 @@ class cGcPlayer(Structure):
     @function_hook("48 8B C4 48 89 48 ? 55 53 41 54 41 55 41 57 48 8D A8")
     def Update(self, this: "_Pointer[cGcPlayer]", lfStep: Annotated[float, c_float]): ...
 
-    @function_hook("48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 57 48 81 EC ? ? ? ? 0F 29 70 ? 0F B6 EA")
+    @function_hook("48 8B C4 48 89 58 ? 48 89 70 ? 57 48 81 EC ? ? ? ? 0F 29 70 ? 0F B6 F2")
     def UpdateGraphics(self, this: "_Pointer[cGcPlayer]", lbSetNode: Annotated[bool, c_bool]): ...
 
     @function_hook("48 8B C4 55 53 56 57 41 54 41 56 41 57 48 8D 6C 24")
@@ -1565,6 +1581,14 @@ class cGcPlayer(Structure):
 
     @function_hook("48 8B C4 48 89 48 ? 55 41 55 41 57")
     def RenderNGui(self, this: "_Pointer[cGcPlayer]"): ...
+
+    @function_hook(
+        "48 8B 91 ? ? ? ? 48 85 D2 74 ? 48 8B CA 4C 8D 15 ? ? ? ? 48 C1 F9 ? 45 33 C0 81 F9 ? ? ? ? 77 ? 48 "
+        "63 C1 4C 6B C8 ? 4B 8D 04 11 4B 39 54 11 ? 74 ? 49 8B C0 48 85 C0 74 ? 81 F9 ? ? ? ? 77 ? 48 63 C1 "
+        "48 6B C8 ? 4A 39 54 11 ? 75 ? 4E 8D 04 11 0F BF 0D ? ? ? ? 49 8B D0 E9 ? ? ? ? 33 C0 C3 CC CC CC CC "
+        "CC 48 8B 05"
+    )
+    def GetSpaceship(self, this: "_Pointer[cGcPlayer]"): ...
 
 
 class cGcPlanetGenerationInputData(nmse.cGcPlanetGenerationInputData):
@@ -1739,16 +1763,62 @@ class cGcSolarSystemGenerator(Structure):
 
 
 @partial_struct
+class cGcSpacePoiSiteComponent(Structure):
+    # All found by looking at memory and comparing to cGcSpacePoiSiteComponent::Prepare
+    mPosition: Annotated[basic.cTkVector3, 0x40]
+    mSpacePoiID: Annotated[basic.TkID0x10, 0x50]
+    mpSpacePoiDataItem: Annotated[_Pointer[nmse.cGcSpacePoiTableItem], 0x80]
+    mPosition2: Annotated[basic.cTkVector3, 0xF0]
+    mDistanceFromCenter: Annotated[float, Field(c_float, 0x100)]
+    mNode: Annotated[basic.TkHandle, 0x114]
+    mRootNode: Annotated[basic.TkHandle, 0x118]
+    mName: Annotated[basic.cTkFixedString0x80, 0x140]
+    mDescription: Annotated[basic.cTkFixedString0x80, 0x1C0]
+
+    @function_hook("48 89 5C 24 ? 48 89 74 24 ? 55 57 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 63 FA")
+    def GeneratePoiDescription(
+        self,
+        this: "_Pointer[cGcSpacePoiSiteComponent]",
+        lPoiType: c_enum32[enums.cGcSpacePoiType],
+        a3: _Pointer[cGcGalaxyAttributeGenerator],
+    ) -> c_uint64: ...
+
+    @function_hook(
+        "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 8B 51 ? 48 8B "
+        "D9"
+    )
+    def Prepare(self, this: "_Pointer[cGcSpacePoiSiteComponent]"): ...
+
+    @function_hook("40 53 48 81 EC ? ? ? ? 48 8B 81 ? ? ? ? 48 8B D9 8B 88")
+    def OnActivate(self, this: "_Pointer[cGcSpacePoiSiteComponent]") -> c_uint64: ...
+
+    @function_hook("48 89 5C 24 ? 57 48 83 EC ? 0F 29 74 24 ? 41 0F B6 F8 0F 28 F1 48 8B D9 E8 ? ? ? ? 80 BB")
+    def AdvanceLifecycle(
+        self,
+        this: "_Pointer[cGcSpacePoiSiteComponent]",
+        lfTimeStep: Annotated[float, c_float],
+        a3: Annotated[bool, c_bool],
+    ): ...
+
+    @function_hook("40 53 48 83 EC ? 48 8B 81 ? ? ? ? 48 8B D9 48 85 C0 0F 84 ? ? ? ? 83 B8 ? ? ? ? ? 0F 85")
+    def UpdateSunTrackedPosition(self, this: "_Pointer[cGcSpacePoiSiteComponent]"): ...
+
+
+@partial_struct
 class cGcSolarSystemMap(Structure):
-    # This is the same as the start of cGcSolarSystemMapSettings, but I think it diverges... Need to
-    # investigate more.
-    # This struct is definitely larger.
-    maSpacePoiObjectData: Annotated[
-        tuple[nmse.cGcSolarSystemMapObjectData, ...], Field(nmse.cGcSolarSystemMapObjectData * 0xE, 0x0)
-    ]
-    maMapObjectData: Annotated[
-        tuple[nmse.cGcSolarSystemMapObjectData, ...], Field(nmse.cGcSolarSystemMapObjectData * 0x9, 0x700)
-    ]
+    @partial_struct
+    class MapObject(Structure):
+        # This struct is all basically a guess (including the name).
+        # Found at the bottom of cGcSpacePoiSiteComponent::OnActivate
+        mbIsActivated: Annotated[bool, Field(c_bool, 0xC9)]
+
+    mSettings: Annotated[nmse.cGcSolarSystemMapSettings, 0x0]
+    # These look to be called "Associated Map Object"'s
+    # Byte +0xC9 is set to 1 when the associated POI is activated.
+    maAssociatedMapObjects: Annotated[tuple[MapObject, ...], Field(MapObject * 0x40, 0x1220)]
+
+    @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B F1 E8 ? ? ? ? 48 8D 8E")
+    def cGcSolarSystemMap(self, this: "_Pointer[cGcSolarSystemMap]"): ...
 
 
 @partial_struct
@@ -1793,6 +1863,9 @@ class cGcSolarSystem(Structure):
     @function_hook("48 8B C4 55 53 56 57 41 55 41 57 48 8D 6C 24")
     def Update(self, this: "_Pointer[cGcSolarSystem]", lfTimeStep: Annotated[float, c_float]): ...
 
+    @function_hook("4C 8B DC 53 48 81 EC ? ? ? ? 48 83 B9")
+    def UpdateSunLock(self, this: "_Pointer[cGcSolarSystem]", lfTimeStep: Annotated[float, c_float]): ...
+
 
 @partial_struct
 class cGcPlayerEnvironment(Structure):
@@ -1818,7 +1891,7 @@ class cGcPlayerEnvironment(Structure):
     def IsOnboardOwnFreighter(self, this: "_Pointer[cGcPlayerEnvironment]") -> c_bool: ...
 
     @function_hook(
-        "8B 81 ? ? ? ? 83 F8 ? 74 ? 83 C0 ? 83 F8 ? 76 ? 32 C0 C3 B0 ? C3 CC CC CC CC CC CC CC 48 8B 02"
+        "8B 81 ? ? ? ? 83 F8 ? 74 ? 83 C0 ? 83 F8 ? 76 ? 32 C0 C3 B0 ? C3 CC CC CC CC CC CC CC 48 83 EC"
     )
     def IsOnPlanet(self, this: "_Pointer[cGcPlayerEnvironment]") -> c_bool: ...
 
@@ -1835,7 +1908,11 @@ class cGcSky(Structure):
     eStormState = enums.eStormState
 
     # Found in cGcSky::SetSunAngle
+    mfSolarSunAngle: Annotated[float, Field(c_float, 0x4F0)]
     mSunDirection: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x500)]
+    mLightDirection: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x510)]
+    mSunAxis: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x520)]
+    mRelativeUp: Annotated[basic.Vector3f, Field(basic.Vector3f, 0x530)]
 
     @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 54 41 56 41 57 48 83 EC ? 4C 8B 15")
     def SetStormState(self, this: "_Pointer[cGcSky]", leNewState: c_enum32[eStormState]): ...
@@ -1971,7 +2048,7 @@ class cGcMarkerPoint(Structure):
     @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 28 05 ? ? ? ? 48 8D 79")
     def Reset(self, this: "_Pointer[cGcMarkerPoint]"): ...
 
-    @function_hook("40 55 53 56 57 41 54 48 8D 6C 24 ? 48 81 EC ? ? ? ? 0F B6 B9")
+    @function_hook("40 55 53 56 57 41 54 48 8D 6C 24 ? 48 81 EC ? ? ? ? 0F B6 99")
     def Update(self, this: "_Pointer[cGcMarkerPoint]"): ...
 
     @function_hook(
@@ -2060,6 +2137,13 @@ class cGcSimulation(Structure):
         this: "_Pointer[cGcSimulation]",
         leMode: c_uint32,  # SimulationUpdateMode
         lfTimeStep: Annotated[float, c_float],
+    ): ...
+
+    @function_hook("40 53 48 83 EC ? 48 83 B9 ? ? ? ? ? 48 8B DA")
+    def WarpToSystem(
+        self,
+        this: "_Pointer[cGcSimulation]",
+        lSolarSystemToWarpTo: _Pointer[cGcGalacticSolarSystemAddress],
     ): ...
 
 
@@ -2159,6 +2243,7 @@ class cGcQuickMenu(Structure):
 
 @partial_struct
 class cGcHUDManager(Structure):
+    mpData: Annotated[_Pointer[nmse.cGcHUDManagerData], 0x8]
     # Found in cGcHUDManager::cGcHUDManager
     mPlayerHUD: Annotated[cGcPlayerHUD, 0xA0]
     mShipHUD: Annotated[cGcShipHUD, 0xECD70]
@@ -2170,6 +2255,12 @@ class cGcHUDManager(Structure):
 
     @function_hook("48 89 5C 24 ? 55 56 57 48 81 EC ? ? ? ? 4C 8B 89")
     def RemoveOSDMessage(self, this: "_Pointer[cGcHUDManager]", message: c_char_p64) -> c_bool: ...
+
+    @function_hook(
+        "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B F9 "
+        "45 33 E4"
+    )
+    def Construct(self, this: "_Pointer[cGcHUDManager]"): ...
 
 
 @partial_struct
@@ -2385,7 +2476,7 @@ class cGcBaseBuildingManager(Structure):
     mBaseRootNodes: Annotated[basic.TkStd.tk_vector[basic.TkHandle], 0x360]
     mBaseBuildingNode: Annotated[basic.TkHandle, 0x370]
 
-    @function_hook("40 55 56 57 41 56 41 57 48 81 EC ? ? ? ? 49 8B F8")
+    @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 56 48 81 EC ? ? ? ? 49 8B D8 B8")
     def GetBaseRootNode(
         self,
         this: "_Pointer[cGcBaseBuildingManager]",
@@ -2435,7 +2526,7 @@ class cGcBaseBuildingManager(Structure):
 class cGcBaseSearch(Structure):
     @static_function_hook(
         "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 4C 89 60 ? 55 41 56 41 57 48 8D 68 ? 48 81 EC ? ? ? ? 66 "
-        "0F 6F 05"
+        "0F 6F 0D ? ? ? ? 0F 57 C0"
     )
     @staticmethod
     def FindNearestBaseInCurrentSystem(
@@ -2450,9 +2541,10 @@ class cGcBaseSearch(Structure):
 class cGcBuilding(Structure):
     mpPlanet: Annotated[_Pointer[cGcPlanet], 0x70]
     mpData: Annotated[_Pointer[nmse.cGcBuildingSpawnData], 0x78]
+    mNode: Annotated[basic.TkHandle, 0x80]
     meScanState: Annotated[int, Field(c_int32, 0xB4)]  # cGcBuilding::eScanState (enum has changed since 4.13)
 
-    @function_hook("4C 8B DC 55 49 8D AB ? ? ? ? 48 81 EC ? ? ? ? 48 8B D1")
+    @function_hook("4C 8B DC 55 49 8D AB ? ? ? ? 48 81 EC ? ? ? ? 44 8B 81")
     def DestroyIntersectingVolcanoes(self, this: "_Pointer[cGcBuilding]"): ...
 
     @function_hook(
@@ -2643,7 +2735,7 @@ class Engine:
     @staticmethod
     def ShiftAllTransformsForNode(node: basic.TkHandle, lShift: _Pointer[basic.Vector3f]): ...
 
-    @static_function_hook("40 56 48 83 EC ? 44 8B C9")
+    @static_function_hook("40 56 48 83 EC ? 44 8B C1 48 8B F2 41 C1 E8 ? 45 85 C0 0F 84 ? ? ? ? 8B C1")
     @staticmethod
     def GetNodeAbsoluteTransMatrix(
         node: basic.TkHandle,
@@ -2706,7 +2798,7 @@ class Engine:
     @static_function_hook("40 55 48 8D 6C 24 ? 48 81 EC ? ? ? ? 80 3D ? ? ? ? ? 74")
     def Initialise() -> c_char: ...
 
-    @static_function_hook("44 8B CA 4C 8B D9")
+    @static_function_hook("48 89 5C 24 ? 48 89 7C 24 ? 44 8B D2")
     @staticmethod
     def GetModelNode(
         result: _Pointer[basic.TkHandle],
@@ -2744,17 +2836,9 @@ class Engine:
         ...
 
     @static_function_hook(
-        "44 8B C1 41 C1 E8 ? 45 85 C0 74 ? 44 8B C9 41 81 E1 ? ? ? ? 41 81 F9 ? ? ? ? 74 ? 4C 8B 15 ? ? ? ? "
-        "81 E1 ? ? ? ? 4D 8B 9A ? ? ? ? 49 8B 82 ? ? ? ? 49 63 14 8B 48 8B 0C D0 48 85 C9 74 ? 8B 49 ? 8B C1 "
-        "25 ? ? ? ? 8B D1 41 3B C1 75 ? C1 E9 ? 41 3B C8 75 ? 49 8B 82"
-    )
-    @staticmethod
-    def GetNodeType(node: basic.TkHandle) -> c_int64: ...
-
-    @static_function_hook(
-        "44 8B C1 41 C1 E8 ? 45 85 C0 74 ? 44 8B C9 41 81 E1 ? ? ? ? 41 81 F9 ? ? ? ? 74 ? 4C 8B 15 ? ? ? ? "
-        "81 E1 ? ? ? ? 4D 8B 9A ? ? ? ? 49 8B 82 ? ? ? ? 49 63 14 8B 48 8B 0C D0 48 85 C9 74 ? 8B 49 ? 8B C1 "
-        "25 ? ? ? ? 8B D1 41 3B C1 75 ? C1 E9 ? 41 3B C8 75 ? 81 E2"
+        "8B D1 C1 EA ? 85 D2 74 ? 8B C1 25 ? ? ? ? 3D ? ? ? ? 74 ? 4C 8B 05 ? ? ? ? 81 E1 ? ? ? ? 49 8B 80 ? "
+        "? ? ? 4C 63 0C 88 41 83 F9 ? 74 ? 49 8B 80 ? ? ? ? 0F BF 0C 48 3B D1 75 ? 49 8B 40 ? 4B 8D 0C 89 8B "
+        "04 88"
     )
     @staticmethod
     def GetNodeNumChildren(node: basic.TkHandle) -> c_int32: ...
@@ -2779,7 +2863,7 @@ class Engine:
     ) -> c_uint64:  # cTkTexture *
         ...
 
-    @static_function_hook("48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 44 8B D2")
+    @static_function_hook("44 8B CA 4C 8B C1 41 C1 E9")
     @staticmethod
     def GetNodeParent(result: _Pointer[basic.TkHandle], node: basic.TkHandle) -> c_uint64:  # TkHandle *
         ...
@@ -2809,7 +2893,7 @@ class cEgTextureResource(cEgResource):
     mbHasMipMaps: Annotated[bool, Field(c_bool, 0x1F9)]
     mTexture: Annotated[cTkTexture, 0x200]
 
-    @function_hook("40 53 57 41 56 48 81 EC ? ? ? ? 45 8B F0")
+    @function_hook("40 53 57 41 57 48 81 EC ? ? ? ? 45 8B F8")
     def Load(
         self,
         this: "_Pointer[cEgTextureResource]",
@@ -2817,7 +2901,7 @@ class cEgTextureResource(cEgResource):
         liSize: Annotated[int, c_int32],
     ) -> c_char: ...
 
-    @function_hook("44 89 4C 24 ? 48 89 54 24 ? 55 53 56 41 54 41 55")
+    @function_hook("44 89 4C 24 ? 4C 89 44 24 ? 48 89 54 24 ? 55 56 57 48 8D 6C 24")
     def LoadFromDds(
         self,
         this: "_Pointer[cEgTextureResource]",
@@ -3290,8 +3374,8 @@ class cTkRigidBody(Structure):
 
 @partial_struct
 class cTkPhysicsComponent(Structure):
-    # Found in cGcSpaceshipComponent::Update near
-    mRigidBody: Annotated[cTkRigidBody, 0x50]
+    # Found in cGcSpaceshipComponent::Update near the top
+    mRigidBody: Annotated[cTkRigidBody, 0x2F0]
 
 
 class cGcTerrainEditorBeam(Structure):
@@ -3336,14 +3420,28 @@ class cGcLocalPlayerCharacterInterface(Structure):
 
 @partial_struct
 class cGcSpaceshipComponent(Structure):
-    mpController: Annotated[_Pointer[cGcPlayerController], 0x5F20]
-    mbControllerActive: Annotated[bool, Field(c_bool, 0x5F28)]
-    mpPhysics: Annotated[_Pointer[cTkPhysicsComponent], 0x60A8]
-    # Found near the top of cGcSpaceshipComponent::Update
-    mfHeight: Annotated[float, Field(c_float, 0x656C)]
-    meLandState: Annotated[int, Field(c_uint32, 0x7040)]  # cGcSpaceshipComponent::eLanding
+    class eLanding(IntEnum):
+        Inactive = 0x0
+        Ground = 0x1
+        GroundManeuvre = 0x2
+        GroundEjecting = 0x3
+        GroundLanded = 0x4
+        GroundTakeoff = 0x5
+        Outpost = 0x6
+        OutpostDocked = 0x7
+        OutpostTakeoff = 0x8
+        Air = 0x9
 
-    @function_hook("48 89 5C 24 18 48 89 54 24 10 57 48 83 EC 70 41 0F B6 F8")
+    # Found at the bottom of cGcSpaceshipComponent::Update to check whether to call
+    # cGcSpaceshipComponent::UpdateControlled
+    mpController: Annotated[_Pointer[cGcPlayerController], 0x60C0]
+    mbControllerActive: Annotated[bool, Field(c_bool, 0x60C8)]
+    mpPhysics: Annotated[_Pointer[cTkPhysicsComponent], 0x6248]
+    # Found near the top of cGcSpaceshipComponent::Update
+    mfHeight: Annotated[float, Field(c_float, 0x671C)]
+    meLandState: Annotated[c_enum32[eLanding], 0x72C8]
+
+    @function_hook("48 89 5C 24 ? 48 89 54 24 ? 57 48 83 EC ? 41 0F B6 F8")
     def Eject(
         self,
         this: "_Pointer[cGcSpaceshipComponent]",
@@ -3352,7 +3450,7 @@ class cGcSpaceshipComponent(Structure):
         lbForceDuringCommunicator: Annotated[bool, c_bool],
     ): ...
 
-    @function_hook("F3 0F 11 4C 24 ? 55 53 56 41 54 41 55 48 8D AC 24")
+    @function_hook("F3 0F 11 4C 24 ? 55 53 56 41 57")
     def Update(self, this: "_Pointer[cGcSpaceshipComponent]", lfTimeStep: Annotated[float, c_float]): ...
 
     @function_hook(
@@ -3375,23 +3473,34 @@ class cGcSpaceshipComponent(Structure):
 
 
 @partial_struct
+class cGcWarpJumpTarget(Structure):
+    mTargetSystem: Annotated[cGcGalacticSolarSystemAddress, 0x0]
+
+
+@partial_struct
 class cGcSpaceshipWarp(Structure):
+    mJumpTarget: Annotated[cGcWarpJumpTarget, 0x10]
     mePulseDriveState: Annotated[c_enum32[enums.EPulseDriveState], 0xA4]
     mfPulseDriveTimer: Annotated[float, Field(c_float, 0xB4)]
     mfPulseDriveFuelTimer: Annotated[float, Field(c_float, 0xB8)]
     mfPulseDriveTimer: Annotated[float, Field(c_float, 0x1A8)]
     mfPulseDriveFuelTimer: Annotated[float, Field(c_float, 0x1AC)]
 
-    @function_hook("F3 0F 11 4C 24 ? 55 57 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 80 3D")
+    @function_hook("40 55 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 8B 81")
+    def Update(
+        self,
+        this: "_Pointer[cGcSpaceshipWarp]",
+        lfTimeStep: Annotated[float, c_float],
+    ): ...
+
+    @function_hook("F3 0F 11 4C 24 ? 55 53 56 41 54 41 55 48 8D AC 24")
     def UpdatePulseDrive(
         self,
         this: "_Pointer[cGcSpaceshipWarp]",
+        lfTimeStep: Annotated[float, c_float],
     ): ...
 
-    @function_hook(
-        "48 83 EC ? 48 8B 0D ? ? ? ? BA ? ? ? ? 48 81 C1 ? ? ? ? C7 44 24 ? ? ? ? ? 41 B9 ? ? ? ? 41 B8 ? ? "
-        "? ? E8 ? ? ? ? 48 85 C0 74 ? 66 0F 6E 40"
-    )
+    @function_hook("48 89 4C 24 ? 53 48 83 EC ? 48 89 6C 24")
     def GetPulseDriveFuelFactor(self, this: "_Pointer[cGcSpaceshipWarp]") -> c_float: ...
 
 
@@ -3858,7 +3967,9 @@ class cTkFileSystem(Structure):
     @function_hook("48 81 EC ? ? ? ? 41 B1")
     def CreatePath(self, this: "_Pointer[cTkFileSystem]", lpacPath: c_char_p64): ...
 
-    @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B 7C 24 ? 49 8B F0")
+    @function_hook(
+        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8B 5C 24 ? 49 8B E9"
+    )
     def Write(
         self,
         this: "_Pointer[cTkFileSystem]",
@@ -3868,7 +3979,7 @@ class cTkFileSystem(Structure):
         lFile: c_uint64,  # FIOS2HANDLE *
     ) -> c_uint64: ...
 
-    @function_hook("40 53 56 57 48 81 EC ? ? ? ? 45 85 C0")
+    @function_hook("48 89 5C 24 ? 57 48 81 EC ? ? ? ? 45 85 C0")
     def Open(
         self,
         this: "_Pointer[cTkFileSystem]",
@@ -3876,6 +3987,16 @@ class cTkFileSystem(Structure):
         leMode: c_enum32[enums.eFileOpenMode],
     ) -> c_uint64:  # FIOS2HANDLE *
         ...
+
+    @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B 5C 24 ? 49 8B F1")
+    def Read(
+        self,
+        this: "_Pointer[cTkFileSystem]",
+        lpData: c_void_p,
+        liSize: Annotated[int, c_int64],
+        liNumElements: Annotated[int, c_int64],
+        lFile: _Pointer[basic.FIOS2HANDLE],
+    ) -> c_int64: ...
 
     mpData: Annotated[_Pointer[Data], 0x0]
 
@@ -4037,7 +4158,7 @@ class cGcOptionsPageUI(Structure):
     @staticmethod
     def EndPage(lpOptionsPage: _Pointer[cGcFrontendPageOptions]): ...
 
-    @function_hook("4C 8B DC 4D 89 43 ? 49 89 53 ? 49 89 4B ? 53 56")
+    @function_hook("4C 8B DC 4D 89 43 ? 49 89 53 ? 49 89 4B ? 53 55 57")
     def QualityOption(
         self,
         this: "_Pointer[cGcOptionsPageUI]",
@@ -4255,10 +4376,6 @@ class cTkEngineUtils(Structure):
         lRelativeMatrix: _Pointer[basic.cTkMatrix34],
     ) -> c_char: ...
 
-    @static_function_hook("89 4C 24 ? 53 56 41 54 41 55")
-    @staticmethod
-    def LoadResourcesFromDisk(lBalancing: Annotated[int, c_int32]) -> c_uint64: ...
-
     @static_function_hook("40 53 48 81 EC ? ? ? ? 66 0F 6F 05 ? ? ? ? 8B D9")
     @staticmethod
     def RepositionGroupNode(lGroupNode: basic.TkHandle, lDesiredPosition: _Pointer[basic.cTkVector3]): ...
@@ -4289,7 +4406,7 @@ class cGcNGuiNodeInfo(Structure):
     mTypeName: Annotated[basic.cTkFixedString0x80, 0x10C]
     maChildren: Annotated["basic.TkStd.tk_vector[_Pointer[cGcNGuiNodeInfo]]", 0x190]
 
-    @function_hook("48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 81 EC ? ? ? ? 4C 8B F9")
+    @function_hook("48 8B C4 53 55 56 57 41 55 48 81 EC ? ? ? ? 4C 89 60")
     def Get(self, this: "_Pointer[cGcNGuiNodeInfo]", lNode: basic.TkHandle): ...
 
 
@@ -4868,7 +4985,7 @@ class cGcPlayerWanted(Structure):
 
 
 class cGcFrontendPageClaimBase(Structure):
-    @static_function_hook("48 89 5C 24 ? 48 89 54 24 ? 55 57 41 54 41 56")
+    @static_function_hook("48 89 54 24 ? 55 53 41 54 41 56")
     @staticmethod
     def DoBaseClaimOptions(
         lpPage: _Pointer[cGcFrontendPage],
@@ -4876,6 +4993,7 @@ class cGcFrontendPageClaimBase(Structure):
         leBaseType: Annotated[int, c_uint32],
         lbInsideOtherBase: Annotated[bool, c_bool],
         luiLegacyBase: _Pointer[c_uint16],
+        a6: Annotated[bool, c_bool],
     ): ...
 
 
