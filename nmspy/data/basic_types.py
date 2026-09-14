@@ -407,6 +407,13 @@ class TkHandle(ctypes.Union):
         return {"lookupInt": self.lookupInt}
 
 
+class FIOS2HANDLE(ctypes.Structure):
+    _fields_ = [
+        ("mFH", ctypes.c_int32),
+    ]
+    mFH: int
+
+
 class cTkMatrix34(ctypes.Structure):
     right: Vector3f
     up: Vector3f
