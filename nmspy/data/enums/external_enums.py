@@ -6410,22 +6410,23 @@ class cGcPhysicsCollisionGroups(IntEnum):
     Raycast_NavigationLink = 0x41
     Raycast_AiShipAtack = 0x42
     Raycast_AiShipTravel = 0x43
-    Raycast_ObstructionQuery = 0x44
-    Raycast_GeometryProbe = 0x45
-    Raycast_AirNavigationProbe = 0x46
-    Raycast_DroneTargetSensing_Friendly = 0x47
-    Raycast_DroneTargetSensing_Unfriendly = 0x48
-    Raycast_DroneTargetSensing_Friendly_NoShield = 0x49
-    Raycast_DroneTargetSensing_Unfriendly_NoShield = 0x4A
-    Raycast_ObjectPlacementAddObject = 0x4B
-    Raycast_CatchCreatures = 0x4C
-    Raycast_CatchNormal = 0x4D
-    Raycast_CatchTerrain = 0x4E
-    Raycast_CatchTerrainAndNormal = 0x4F
-    Raycast_CatchCreatureObstacles = 0x50
-    Raycast_SpaceStationShipBuilderCamera = 0x51
-    Raycast_GravLaserObjectBlocking = 0x52
-    Raycast_SolarSystemMapObject = 0x53
+    Raycast_AiShipMining = 0x44
+    Raycast_ObstructionQuery = 0x45
+    Raycast_GeometryProbe = 0x46
+    Raycast_AirNavigationProbe = 0x47
+    Raycast_DroneTargetSensing_Friendly = 0x48
+    Raycast_DroneTargetSensing_Unfriendly = 0x49
+    Raycast_DroneTargetSensing_Friendly_NoShield = 0x4A
+    Raycast_DroneTargetSensing_Unfriendly_NoShield = 0x4B
+    Raycast_ObjectPlacementAddObject = 0x4C
+    Raycast_CatchCreatures = 0x4D
+    Raycast_CatchNormal = 0x4E
+    Raycast_CatchTerrain = 0x4F
+    Raycast_CatchTerrainAndNormal = 0x50
+    Raycast_CatchCreatureObstacles = 0x51
+    Raycast_SpaceStationShipBuilderCamera = 0x52
+    Raycast_GravLaserObjectBlocking = 0x53
+    Raycast_SolarSystemMapObject = 0x54
 
 
 class cGcPlanetClass(IntEnum):

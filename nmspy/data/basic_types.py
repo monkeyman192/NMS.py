@@ -521,6 +521,25 @@ class cTkClassPool(ctypes.Structure, Generic[T, N]):
         return _cls
 
 
+class cTkFixedArray(ctypes.Structure, Generic[T, N]):
+    _template_type: Type[T]
+    maArray: list[T]
+
+    def __class_getitem__(cls: type["cTkFixedArray"], key: tuple[Type[T], int]):
+        _type, _count = key
+        _cls: type["cTkDynamicArray"] = types.new_class(f"cTkFixedArray<{_type}, {_count}>", (cls,))
+        _cls._template_type = _type
+        _cls._fields_ = [("maArray", _type * _count)]
+        return _cls
+
+    def __iter__(self) -> Generator[T, None, None]:
+        for obj in self.maArray:
+            yield obj
+
+    def __getitem__(self, i: int) -> T:
+        return self.maArray[i]
+
+
 class cTkDynamicArray(ctypes.Structure, Generic[T]):
     _template_type: Type[T]
     _fields_ = [
