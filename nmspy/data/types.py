@@ -26,7 +26,7 @@ from logging import getLogger
 from typing import TYPE_CHECKING, Annotated, Generator, Generic, Optional, Type, TypeVar
 
 from pymhf.core.hooking import Structure, function_hook, static_function_hook
-from pymhf.core.memutils import _get_memview_with_size, map_struct
+from pymhf.core.memutils import _get_memview_with_size, get_addressof, map_struct
 from pymhf.core.structs import ContainerStruct, Field, Pattern, partial_struct
 from pymhf.extensions.cpptypes import std
 from pymhf.extensions.ctypes import c_char_p64, c_enum8, c_enum16, c_enum32
@@ -407,22 +407,22 @@ class cGcNGuiLayer(cGcNGuiElement):
             return map_struct(addr, cGcNGuiText)
 
     def FindTextSpecialRecursive(self, ID: str) -> cGcNGuiElement | None:
-        """Our own method to easily find a text element recursively."""
-        lID = cTkHashedNGuiElement(ID, enums.eNGuiGameElementType.Text)
+        """Our own method to easily find a special text element recursively."""
+        lID = cTkHashedNGuiElement(ID, enums.eNGuiGameElementType.Text_Special)
         addr = self.FindElementRecursive(byref(lID), enums.eNGuiGameElementType.Text_Special)
         if addr:
             return map_struct(addr, cGcNGuiElement)
 
     def FindGraphicRecursive(self, ID: str) -> cGcNGuiElement | None:
         """Our own method to easily find a graphic element recursively."""
-        lID = cTkHashedNGuiElement(ID, enums.eNGuiGameElementType.Text)
+        lID = cTkHashedNGuiElement(ID, enums.eNGuiGameElementType.Graphic)
         addr = self.FindElementRecursive(byref(lID), enums.eNGuiGameElementType.Graphic)
         if addr:
             return map_struct(addr, cGcNGuiElement)
 
     def FindLayerRecursive(self, ID: str) -> "cGcNGuiLayer | None":
-        """Our own method to easily find a graphic element recursively."""
-        lID = cTkHashedNGuiElement(ID, enums.eNGuiGameElementType.Text)
+        """Our own method to easily find a layer element recursively."""
+        lID = cTkHashedNGuiElement(ID, enums.eNGuiGameElementType.Layer)
         addr = self.FindElementRecursive(byref(lID), enums.eNGuiGameElementType.Layer)
         if addr:
             return map_struct(addr, cGcNGuiLayer)
@@ -564,7 +564,7 @@ class cGcShipHUD(Structure):
     )
     def cGcShipHUD(self, this: "_Pointer[cGcShipHUD]"): ...
 
-    @function_hook("48 89 5C 24 ? 57 41 54 41 55 41 56 41 57 48 81 EC")
+    @function_hook("48 89 5C 24 ? 56 57 41 54 41 55 41 57 48 81 EC ? ? ? ? 48 8B D9")
     def LoadData(self, this: "_Pointer[cGcShipHUD]"): ...
 
     @function_hook("40 55 56 41 55 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B F1 48 8B 0D")
@@ -730,7 +730,7 @@ class cGcRealityManager(Structure):
     def GenerateProceduralProduct(
         self,
         this: "_Pointer[cGcRealityManager]",
-        lProcProdID: _Pointer[basic.TkID[0x10]],
+        lProcProdID: _Pointer[basic.TkID0x10],
     ) -> c_uint64:  # cGcProductData *
         ...
 
@@ -738,7 +738,7 @@ class cGcRealityManager(Structure):
     def GenerateProceduralTechnology(
         self,
         this: "_Pointer[cGcRealityManager]",
-        lProcTechID: _Pointer[basic.TkID[0x10]],
+        lProcTechID: _Pointer[basic.TkID0x10],
         lbExampleForWiki: Annotated[bool, c_bool],
     ) -> c_uint64:  # cGcProductData *
         ...
@@ -1546,7 +1546,7 @@ class cGcPlayer(Structure):
         this: "_Pointer[cGcPlayer]",
         lfDamageAmount: Annotated[float, c_float],
         leDamageType: c_enum32[enums.cGcDamageType],
-        lDamageId: _Pointer[basic.TkID[0x10]],
+        lDamageId: _Pointer[basic.TkID0x10],
         lDir: _Pointer[basic.Vector3f],
         lpOwner: c_uint64,  # cGcOwnerConcept *
         laEffectsDamageMultipliers: c_uint64,  # std::vector<cGcCombatEffectDamageMultiplier,TkSTLAllocatorShim<cGcCombatEffectDamageMultiplier,4,-1> > *  # noqa
@@ -1579,7 +1579,7 @@ class cGcPlayer(Structure):
     @function_hook("48 89 4C 24 ? 55 41 55 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 45 33 ED")
     def RenderInventoryEditor(self, this: "_Pointer[cGcPlayer]"): ...
 
-    @function_hook("48 8B C4 48 89 48 ? 55 41 55 41 57")
+    @function_hook("48 8B C4 48 89 48 ? 55 41 55 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 58")
     def RenderNGui(self, this: "_Pointer[cGcPlayer]"): ...
 
     @function_hook(
@@ -1689,6 +1689,7 @@ class cGcPlanet(Structure):
 @partial_struct
 class cGcGalaxyAttributesAtAddress(Structure):
     # Looks the same as 4.13
+    # Looks to have changed as of 7.0
     mVoxel: Annotated[cGcGalaxyVoxelAttributesData, 0x0]
     mVoxelPrimaryColour: Annotated[basic.Colour, 0x90]
     mVoxelSecondaryColour: Annotated[basic.Colour, 0x90]
@@ -1805,20 +1806,31 @@ class cGcSpacePoiSiteComponent(Structure):
 
 
 @partial_struct
-class cGcSolarSystemMap(Structure):
-    @partial_struct
-    class MapObject(Structure):
-        # This struct is all basically a guess (including the name).
-        # Found at the bottom of cGcSpacePoiSiteComponent::OnActivate
-        mbIsActivated: Annotated[bool, Field(c_bool, 0xC9)]
+class cGcSolarSystemMapObject(Structure):
+    # Found at the bottom of cGcSpacePoiSiteComponent::OnActivate
+    mbIsActivated: Annotated[bool, Field(c_bool, 0xC9)]
 
+
+@partial_struct
+class cGcSolarSystemMap(Structure):
     mSettings: Annotated[nmse.cGcSolarSystemMapSettings, 0x0]
-    # These look to be called "Associated Map Object"'s
-    # Byte +0xC9 is set to 1 when the associated POI is activated.
-    maAssociatedMapObjects: Annotated[tuple[MapObject, ...], Field(MapObject * 0x40, 0x1220)]
+    maAssociatedMapObjects: Annotated[
+        tuple[cGcSolarSystemMapObject, ...],
+        Field(cGcSolarSystemMapObject * 0x40, 0x1220),
+    ]
 
     @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B F1 E8 ? ? ? ? 48 8D 8E")
     def cGcSolarSystemMap(self, this: "_Pointer[cGcSolarSystemMap]"): ...
+
+
+class cGcSpacePoiGenerator(Structure):
+    @function_hook("4C 8B DC 4D 89 43 ? 49 89 4B ? 55 41 55")
+    def Generate(
+        self,
+        this: "_Pointer[cGcSpacePoiGenerator]",
+        lpGalaxyAttributes: _Pointer[cGcGalaxyAttributesAtAddress],
+        lpSpacePoiPositions: _Pointer[basic.cTkFixedArray[basic.cTkVector3, 0x20]],
+    ): ...
 
 
 @partial_struct
@@ -1826,13 +1838,15 @@ class cGcSolarSystem(Structure):
     _total_size_ = 0x522220
     # These can be found in cGcSolarSystem::cGcSolarSystem
     mSolarSystemData: Annotated[nmse.cGcSolarSystemData, 0x0]
+    mUA: Annotated[int, Field(c_uint64, 0x26B0)]
     mGalaxyAttributes: Annotated[cGcGalaxyAttributesAtAddress, 0x26C0]
     maPlanets: Annotated[tuple[cGcPlanet, ...], Field(cGcPlanet * 6, 0x2E30)]
     miPrimaryPlanet: Annotated[int, Field(c_int32, 0x5188D0)]
     mSolarSystemMap: Annotated[cGcSolarSystemMap, 0x51BC20]
-    mSolarSystemGenerator: Annotated[cGcSolarSystemGenerator, 0x521160]
+    mSolarSystemGenerator: Annotated[cGcSolarSystemGenerator, 0x521180]
+    mSpacePoiGenerator: Annotated[cGcSpacePoiGenerator, 0x521860]
     # Found in cGcPlayerState::StoreCurrentSystemSpaceStationEndpoint
-    mSpaceStationNode: Annotated[basic.TkHandle, 0x521870]
+    mSpaceStationNode: Annotated[basic.TkHandle, 0x521890]
 
     @function_hook("48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 29 74 24 ? 48 8B F9 48 8B D9")
     def cGcSolarSystem(self, this: "_Pointer[cGcSolarSystem]"): ...
@@ -1865,6 +1879,14 @@ class cGcSolarSystem(Structure):
 
     @function_hook("4C 8B DC 53 48 81 EC ? ? ? ? 48 83 B9")
     def UpdateSunLock(self, this: "_Pointer[cGcSolarSystem]", lfTimeStep: Annotated[float, c_float]): ...
+
+    # Sadly hooking this function seems to crash the game :(
+    # @function_hook("F3 0F 10 0D ? ? ? ? 33 C0 F3 0F 10 91")
+    # def GetStarCount(
+    #     self,
+    #     this: "_Pointer[cGcSolarSystem]",
+    # ) -> c_int64:
+    #     ...
 
 
 @partial_struct
@@ -2109,19 +2131,19 @@ class cGcSimulation(Structure):
     # Passed in to cGcScanManager::UpdateConstantMarkers
     mScanManager: Annotated[cGcScanManager, 0xF1B0]
     # Found in cGcSimulation::Update. Passed into cGcEnvironment::Update.
-    mEnvironment: Annotated[cGcEnvironment, 0xAC8B0]
-    mSky: Annotated[cGcSky, 0xAC9B0]
+    mEnvironment: Annotated[cGcEnvironment, 0xAC8C0]
+    mSky: Annotated[cGcSky, 0xAC9C0]
     mEcosystem: Annotated[cGcEcosystem, 0xB3C20]
-    mFishManager: Annotated[cGcFishManager, 0x24D520]
+    mFishManager: Annotated[cGcFishManager, 0x24D530]
     # Found in cGcSimulation::Update. Passed into cGcSolarSystem::Update.
-    mpSolarSystem: Annotated[_Pointer[cGcSolarSystem], 0x24DFD0]
-    mPlayerExperienceDirector: Annotated[cGcPlayerExperienceDirector, 0x24E730]
+    mpSolarSystem: Annotated[_Pointer[cGcSolarSystem], 0x24DFE0]
+    mPlayerExperienceDirector: Annotated[cGcPlayerExperienceDirector, 0x24E740]
     # Found in cGcSimulation::Update. Passed into cGcPlayer::Update
-    mPlayer: Annotated[cGcPlayer, 0x24F6E0]
+    mPlayer: Annotated[cGcPlayer, 0x24F700]
     # In cGcSimulation::Update
-    mCurrentUA: Annotated[int, Field(c_uint64, 0x2558B0)]
+    mCurrentUA: Annotated[int, Field(c_uint64, 0x2558D0)]
     # Found in cGcSimulation::Construct
-    mSimulationRootNode: Annotated[basic.TkHandle, 0x255850]
+    mSimulationRootNode: Annotated[basic.TkHandle, 0x255870]
 
     @function_hook(
         "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 33 C0 0F 29 74 24"
@@ -2423,12 +2445,12 @@ class cGcApplication(cTkFSM):
         mRealityManager: Annotated[cGcRealityManager, 0x60]
         mGameState: Annotated[cGcGameState, 0xE70]
         mSimulation: Annotated[cGcSimulation, 0x4CCF90]
-        mHUDManager: Annotated[cGcHUDManager, 0x722890]
-        mFrontendManager: Annotated[cGcFrontendManager, 0x849000]
+        mHUDManager: Annotated[cGcHUDManager, 0x7228B0]
+        mFrontendManager: Annotated[cGcFrontendManager, 0x849020]
         # Passed into any cGcVibrationManager methods
-        mVibrationManager: Annotated[cGcVibrationManager, 0x9246F8]
-        mNGuiManager: Annotated[cGcNGuiManager, 0x925240]
-        mAudioManager: Annotated[cTkAudioManager, 0x925A30]
+        mVibrationManager: Annotated[cGcVibrationManager, 0x924718]
+        mNGuiManager: Annotated[cGcNGuiManager, 0x925260]
+        mAudioManager: Annotated[cTkAudioManager, 0x925A50]
 
         @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 F6 48 C7 41")
         def Data(self, this: "_Pointer[cGcApplication.Data]"): ...
@@ -3712,26 +3734,19 @@ class cGcFrontendPageDiscovery(Structure):
     ): ...
 
 
-class cTkLanguageManager(Structure):
-    @static_function_hook(
-        "48 83 EC ? 65 48 8B 04 25 ? ? ? ? B9 ? ? ? ? 48 8B 00 8B 04 01 39 05 ? ? ? ? 0F 8F ? ? ? ? 48 8D 05 "
-        "? ? ? ? 48 83 C4 ? C3 4C 89 00"
-    )
-    @staticmethod
-    def GetInstance() -> c_uint64: ...
-
-
 @partial_struct
 class cTkLanguageManagerBase(Structure):
     meRegion: Annotated[c_enum32[enums.eLanguageRegion], Field(c_enum32[enums.eLanguageRegion], 0x8)]
 
     @function_hook("48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 57 C0 49 8B E8")
-    def Translate(
+    def Translate_internal(
         self,
         this: "_Pointer[cTkLanguageManagerBase]",
         lpacText: c_char_p64,
-        lpacDefaultReturnValue: _Pointer[basic.TkID[0x20]],
-    ) -> c_uint64: ...
+        lpacDefaultReturnValue: _Pointer[basic.TkID0x20],
+    ) -> c_char_p64:
+        """The actual game Translate function"""
+        ...
 
     @function_hook("48 89 5C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 33 DB C6 44 24")
     def Load(
@@ -3740,6 +3755,27 @@ class cTkLanguageManagerBase(Structure):
         a2: c_char_p64,
         a3: Annotated[bool, c_bool],
     ): ...
+
+
+class cTkLanguageManager(cTkLanguageManagerBase):
+    @static_function_hook(
+        "48 83 EC ? 65 48 8B 04 25 ? ? ? ? B9 ? ? ? ? 48 8B 00 8B 04 01 39 05 ? ? ? ? 0F 8F ? ? ? ? 48 8D 05 "
+        "? ? ? ? 48 83 C4 ? C3 4C 89 00"
+    )
+    @staticmethod
+    def GetInstance() -> c_uint64: ...
+
+    @staticmethod
+    def Translate(value: str) -> str:
+        """Translate the provided string into whatever language is currently chosen for the game."""
+        if language_manager := cTkLanguageManager.GetInstance():
+            instance = map_struct(language_manager, cTkLanguageManagerBase)
+            _value = c_char_p(value.encode())
+            p_value = c_char_p64(get_addressof(_value))
+            res = instance.Translate_internal(p_value, None)  # type: ignore
+            if res:
+                return str(res)
+        return ""
 
 
 @partial_struct
@@ -4196,7 +4232,7 @@ class cGcOptionsPageUI(Structure):
         lpButtonOptions: _Pointer[cGcButtonOptions],
     ) -> c_bool: ...
 
-    @static_function_hook("F3 0F 11 5C 24 ? 55 53")
+    @static_function_hook("F3 0F 11 5C 24 ? 55 53 41 54")
     @staticmethod
     def Float(
         lpOptionsPage: _Pointer[cGcFrontendPageOptions],

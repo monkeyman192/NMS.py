@@ -6,8 +6,9 @@
  },
  {
   "name": "cGcShipHUD::LoadData",
-  "signature": "48 89 5C 24 ? 57 41 54 41 55 41 56 41 57 48 81 EC",
-  "mangled_name": "?LoadData@cGcShipHUD@@QEAAXXZ"
+  "signature": "48 89 5C 24 ? 56 57 41 54 41 55 41 57 48 81 EC ? ? ? ? 48 8B D9",
+  "mangled_name": "?LoadData@cGcShipHUD@@QEAAXXZ",
+  "unique_string": "UI\\HUD\\SHIP\\MAINSCREEN.MXML"
  },
  {
   "name": "cGcShipHUD::RenderHeadsUp",
@@ -1419,7 +1420,7 @@
  },
  {
   "name": "cGcPlayer::RenderNGui",
-  "signature": "48 8B C4 48 89 48 ? 55 41 55 41 57",
+  "signature": "48 8B C4 48 89 48 ? 55 41 55 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 58",
   "mangled_name": "?RenderNGui@cGcPlayer@@IEAAXXZ",
   "unique_string": "PLAYER STATS"
  },
@@ -1717,8 +1718,9 @@
  },
  {
   "name": "cGcOptionsPageUI::Float",
-  "signature": "F3 0F 11 5C 24 ? 55 53",
-  "mangled_name": "__ZN16cGcOptionsPageUI5FloatEPKcS1_ffffRK15cGcFloatOptions"
+  "signature": "F3 0F 11 5C 24 ? 55 53 41 54",
+  "mangled_name": "__ZN16cGcOptionsPageUI5FloatEPKcS1_ffffRK15cGcFloatOptions",
+  "unique_string": "%.1f%s"
  },
  {
   "name": "cGcOptionsPageUI::Int",
@@ -1879,5 +1881,10 @@
   "name": "cGcPlayer::GetSpaceship",
   "signature": "48 8B 91 ? ? ? ? 48 85 D2 74 ? 48 8B CA 4C 8D 15 ? ? ? ? 48 C1 F9 ? 45 33 C0 81 F9 ? ? ? ? 77 ? 48 63 C1 4C 6B C8 ? 4B 8D 04 11 4B 39 54 11 ? 74 ? 49 8B C0 48 85 C0 74 ? 81 F9 ? ? ? ? 77 ? 48 63 C1 48 6B C8 ? 4A 39 54 11 ? 75 ? 4E 8D 04 11 0F BF 0D ? ? ? ? 49 8B D0 E9 ? ? ? ? 33 C0 C3 CC CC CC CC CC 48 8B 05",
   "mangled_name": "?GetSpaceship@cGcPlayer@@QEBAPEAVcGcSpaceshipComponent@@XZ"
+ },
+ {
+  "name": "cGcSpacePoiGenerator::Generate",
+  "signature": "4C 8B DC 4D 89 43 ? 49 89 4B ? 55 41 55",
+  "mangled_name": "__ZN20cGcSpacePoiGenerator8GenerateERK28cGcGalaxyAttributesAtAddressRK13cTkFixedArrayI10cTkVector3Lm32EE"
  }
 ]
