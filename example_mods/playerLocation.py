@@ -55,6 +55,14 @@ class PlayerLocation(Mod):
         if (player_state := gameData.player_state) is not None:
             player_state.AwardNanites(10)
 
+    @gui_button("Log system name")
+    def system_name(self):
+        if (sim := gameData.simulation) is not None:
+            if ss := sim.mpSolarSystem:
+                name_str = basic.cTkFixedString0x80()
+                ss.contents.GetName(ctypes.byref(name_str))
+                logger.info(f"The current solar system name is {str(name_str)}")
+
     @nms.cGcPlayerState.AwardNanites.after
     def awarded_nanites(self, this, liChange: int):
         logger.info(f"Player was just given {liChange} nanites")
