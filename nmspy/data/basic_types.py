@@ -365,7 +365,7 @@ class cTkFixedString(ctypes.Structure):
     _size: int
     value: bytes
 
-    def __init__(self, value: str | bytes):
+    def __init__(self, value: str | bytes = ""):
         if isinstance(value, str):
             self.value = value.encode()
         else:
@@ -726,7 +726,7 @@ class VariableSizeString(cTkDynamicArray[ctypes.c_char]):
         if len(value) > self.Size:
             from nmspy.data.types import engine_modules
 
-            gMemoryManager = engine_modules.mgMemoryManager
+            gMemoryManager = engine_modules.gMemoryManager
             try:
                 if (new_addr := gMemoryManager.Malloc(new_size, 0, 0, 0, 16, -1)) is not None:
                     ctypes.memmove(int(new_addr), ctypes.addressof(buf), new_size)
@@ -886,7 +886,7 @@ class TkStd:
             """Resize the current vector, moving all the current data."""
             from nmspy.data.types import engine_modules
 
-            gMemoryManager = engine_modules.mgMemoryManager
+            gMemoryManager = engine_modules.gMemoryManager
 
             # Expand by 1.5x the current max size (rounded up). This is (roughly) the way MSVC does it.
             new_length = ceil(len(self) * 1.5)

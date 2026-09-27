@@ -1,1890 +1,2218 @@
-[
- {
-  "name": "cGcNGuiLayer::FindElementRecursive",
-  "signature": "40 55 57 41 57 48 83 EC ? 4C 8B 89",
-  "mangled_name": "?FindElementRecursive@cGcNGuiLayer@@QEAAPEAVcGcNGuiElement@@AEBVcTkHashedNGuiElement@@W4eNGuiGameElementType@@@Z"
- },
- {
-  "name": "cGcShipHUD::LoadData",
-  "signature": "48 89 5C 24 ? 56 57 41 54 41 55 41 57 48 81 EC ? ? ? ? 48 8B D9",
-  "mangled_name": "?LoadData@cGcShipHUD@@QEAAXXZ",
-  "unique_string": "UI\\HUD\\SHIP\\MAINSCREEN.MXML"
- },
- {
-  "name": "cGcShipHUD::RenderHeadsUp",
-  "signature": "40 55 56 41 55 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B F1 48 8B 0D",
-  "mangled_name": "?RenderHeadsUp@cGcShipHUD@@QEAAXXZ"
- },
- {
-  "name": "cTkStopwatch::GetDurationInSeconds",
-  "signature": "48 83 EC ? 48 8B 11 0F 29 74 24",
-  "mangled_name": "?GetDurationInSeconds@cTkStopwatch@@QEBAMXZ"
- },
- {
-  "name": "cGcApplication::Update",
-  "signature": "40 53 48 83 EC 20 E8 ? ? ? ? 48 89",
-  "mangled_name": "?Update@cGcApplication@@QEAAXXZ"
- },
- {
-  "name": "cGcApplication::Construct",
-  "signature": "48 89 5C 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 45 33 F6 83 3D",
-  "mangled_name": "?Construct@cGcApplication@@QEAAXXZ"
- },
- {
-  "name": "cTkFSM::Construct",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 ED 48 89 51",
-  "mangled_name": "?Construct@cTkFSM@@UEAAXPEBVcTkFSMStateOffset@@AEBT?$TkID@$0IA@@@@Z"
- },
- {
-  "name": "cTkFSM::Update",
-  "signature": "48 89 5C 24 ? 57 48 83 EC ? 48 8B 05 ? ? ? ? 48 8B D9 0F 29 74 24",
-  "mangled_name": "?Update@cTkFSM@@UEAAXM@Z"
- },
- {
-  "name": "cTkFSM::StateChange",
-  "signature": "48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 4C 8B 51 ? 49 8B E8",
-  "mangled_name": "?StateChange@cTkFSM@@IEAAXAEBT?$TkID@$0IA@@@PEBX_N@Z"
- },
- {
-  "name": "cGcLaserBeam::Fire",
-  "signature": "48 89 5C 24 ? 57 48 83 EC ? 48 83 B9 ? ? ? ? ? 0F B6 FA 48 8B D9 77",
-  "mangled_name": "?Fire@cGcLaserBeam@@QEAAX_N@Z"
- },
- {
-  "name": "cGcMarkerPoint::cGcMarkerPoint",
-  "signature": "40 53 48 83 EC ? 33 C0 0F 57 C0 0F 11 01 48 8B D9",
-  "mangled_name": "??0cGcMarkerPoint@@QEAA@XZ"
- },
- {
-  "name": "cGcMarkerPoint::Reset",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 28 05 ? ? ? ? 48 8D 79",
-  "mangled_name": "?Reset@cGcMarkerPoint@@QEAAXXZ"
- },
- {
-  "name": "cGcMarkerList::RemoveMarker",
-  "signature": "48 89 5C 24 ? 55 57 41 56 48 83 EC ? 40 32 ED",
-  "mangled_name": "?RemoveMarker@cGcMarkerList@@QEAA_NAEAVcGcMarkerPoint@@@Z"
- },
- {
-  "name": "cGcMarkerList::TryAddMarker",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 54 41 56 41 57 48 83 EC ? F6 82",
-  "mangled_name": "?TryAddMarker@cGcMarkerList@@QEAA_NAEBVcGcMarkerPoint@@_N@Z"
- },
- {
-  "name": "cGcBaseBuildingManager::GetBaseRootNode",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 56 48 81 EC ? ? ? ? 49 8B D8 B8",
-  "mangled_name": "?GetBaseRootNode@cGcBaseBuildingManager@@QEAA?AVTkHandle@@UBaseIndex@@_N@Z"
- },
- {
-  "name": "cGcBaseSearch::FindNearestBaseInCurrentSystem",
-  "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 4C 89 60 ? 55 41 56 41 57 48 8D 68 ? 48 81 EC ? ? ? ? 66 0F 6F 0D ? ? ? ? 0F 57 C0",
-  "mangled_name": "?FindNearestBaseInCurrentSystem@cGcBaseSearch@@SA?AUBaseIndex@@AEBVcTkVector3@@W4ePersistentBaseTypes@@@Z"
- },
- {
-  "name": "cGcBuilding::DestroyIntersectingVolcanoes",
-  "signature": "4C 8B DC 55 49 8D AB ? ? ? ? 48 81 EC ? ? ? ? 44 8B 81",
-  "mangled_name": "?DestroyIntersectingVolcanoes@cGcBuilding@@QEBAXXZ"
- },
- {
-  "name": "cGcScanEvent::Construct",
-  "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 33 F6",
-  "mangled_name": "?Construct@cGcScanEvent@@QEAAXW4eScanTable@@PEAVcGcScanEventData@@PEAVcGcBuilding@@M_NPEAU?$pair@T?$TkID@$0IA@@@VcTkSeed@@@std@@T?$TkID@$0IA@@@@Z"
- },
- {
-  "name": "cGcScanEvent::CalculateMarkerPosition",
-  "signature": "48 8B C4 55 53 56 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 48 8B F9",
-  "mangled_name": "?CalculateMarkerPosition@cGcScanEvent@@AEAAXXZ"
- },
- {
-  "name": "cGcScanEvent::Update",
-  "signature": "4C 8B DC 55 57 49 8D AB ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 8B F9 45 0F 29 43",
-  "mangled_name": "?Update@cGcScanEvent@@QEAAXM@Z"
- },
- {
-  "name": "cGcScanEvent::UpdateInteraction",
-  "signature": "48 8B C4 55 53 57 41 54 41 56 41 57",
-  "mangled_name": "?UpdateInteraction@cGcScanEvent@@AEAAXXZ"
- },
- {
-  "name": "cGcScanEvent::UpdateSpaceStationLocation",
-  "signature": "4C 8B DC 55 56 49 8D 6B ? 48 81 EC ? ? ? ? 48 8B 81",
-  "mangled_name": "?UpdateSpaceStationLocation@cGcScanEvent@@AEAAXXZ"
- },
- {
-  "name": "cGcPlayer::CheckFallenThroughFloor",
-  "signature": "40 55 41 54 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05",
-  "mangled_name": "?CheckFallenThroughFloor@cGcPlayer@@IEAAXXZ",
-  "unique_string": "void __cdecl cGcPlayer::CheckFallenThroughFloor(void)"
- },
- {
-  "name": "cGcNGuiLayer::LoadFromMetadata",
-  "signature": "48 8B C4 53 48 81 EC ? ? ? ? 48 89 78 ? 4C 8B D2",
-  "mangled_name": "?LoadFromMetadata@cGcNGuiLayer@@QEAAXPEBD_N@Z"
- },
- {
-  "name": "cGcGameState::OnSaveProgressCompleted",
-  "signature": "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 88 54 24",
-  "mangled_name": "?OnSaveProgressCompleted@cGcGameState@@AEAAX_N0W4Type@SpecificSave@GcGameStatePersistence@@@Z"
- },
- {
-  "name": "cGcGameState::LoadFromPersistentStorage",
-  "signature": "44 89 44 24 ? 89 54 24 ? 48 89 4C 24 ? 55 57",
-  "mangled_name": "?LoadFromPersistentStorage@cGcGameState@@AEAA_NW4Slot@cTkStoragePersistent@@_N@Z",
-  "unique_string": "GameKnowledgeData"
- },
- {
-  "name": "cGcPlanetGenerationInputData::SetDefaults",
-  "signature": "48 89 5C 24 ? 57 48 83 EC ? 0F 57 C0 33 FF 0F 11 01 48 8B D9 48 89 7C 24",
-  "mangled_name": "?SetDefaults@cGcPlanetGenerationInputData@@QEAAXXZ"
- },
- {
-  "name": "cGcPlanet::cGcPlanet",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 45 33 F6 48 C7 41 ? ? ? ? ? 44 89 71 ? 48 8D 59",
-  "mangled_name": "??0cGcPlanet@@QEAA@XZ"
- },
- {
-  "name": "cGcPlanet::Construct",
-  "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 F6 89 51 ? 89 B1",
-  "mangled_name": "?Construct@cGcPlanet@@QEAAXH@Z"
- },
- {
-  "name": "cGcPlanet::SetupRegionMap",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 56 48 83 EC ? 48 8B D9 8B 89",
-  "mangled_name": "?SetupRegionMap@cGcPlanet@@IEAAXXZ"
- },
- {
-  "name": "cGcSolarSystem::cGcSolarSystem",
-  "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 29 74 24 ? 48 8B F9 48 8B D9",
-  "mangled_name": "??0cGcSolarSystem@@QEAA@XZ"
- },
- {
-  "name": "cGcSolarSystem::Construct",
-  "signature": "48 8B C4 55 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 83 3D",
-  "mangled_name": "?Construct@cGcSolarSystem@@QEAAXXZ"
- },
- {
-  "name": "cGcSolarSystem::OnLeavePlanetOrbit",
-  "signature": "40 55 53 56 57 41 56 48 8B EC 48 83 EC ? 83 3D",
-  "mangled_name": "?OnLeavePlanetOrbit@cGcSolarSystem@@QEAAX_N@Z"
- },
- {
-  "name": "cGcSolarSystem::OnEnterPlanetOrbit",
-  "signature": "88 54 24 ? 55 53 56 57 41 54 41 56",
-  "mangled_name": "?OnEnterPlanetOrbit@cGcSolarSystem@@QEAAX_N@Z"
- },
- {
-  "name": "cGcSolarSystem::Generate",
-  "signature": "48 8B C4 55 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 58 ? 48 89 70 ? 48 8B F1 48 89 78 ? 49 8B F8",
-  "mangled_name": "?Generate@cGcSolarSystem@@QEAAX_NVcTkSeed@@@Z",
-  "unique_string": "%s/SolarSystems/System_%llu.mxml"
- },
- {
-  "name": "cGcApplicationLocalLoadState::GetRespawnReason",
-  "signature": "48 89 5C 24 ? 57 48 83 EC ? 80 B9 ? ? ? ? ? 48 8B F9 BB",
-  "mangled_name": "?GetRespawnReason@cGcApplicationLocalLoadState@@AEAA?AW4RespawnReason@cGcPlayerRespawn@@XZ"
- },
- {
-  "name": "cTkDynamicGravityControl::Construct",
-  "signature": "40 53 48 83 EC ? 48 8B D9 E8 ? ? ? ? 33 C0 89 83",
-  "mangled_name": "?Construct@cTkDynamicGravityControl@@QEAAXXZ"
- },
- {
-  "name": "cTkDynamicGravityControl::cTkDynamicGravityControl",
-  "signature": "48 89 5C 24 ? 57 48 83 EC ? 0F 29 74 24 ? 48 8D 41",
-  "mangled_name": "??0cTkDynamicGravityControl@@QEAA@XZ"
- },
- {
-  "name": "cTkDynamicGravityControl::GetGravity",
-  "signature": "48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 57 48 83 EC ? 0F 28 05",
-  "mangled_name": "?GetGravity@cTkDynamicGravityControl@@QEBA?AUcTkGravityData@@AEBVcTkVector3@@@Z"
- },
- {
-  "name": "cGcSimulation::Construct",
-  "signature": "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 45 33 FF",
-  "mangled_name": "?Construct@cGcSimulation@@QEAAXXZ",
-  "unique_string": "cGcSimulation::Construct"
- },
- {
-  "name": "cGcPlayerEnvironment::IsOnboardOwnFreighter",
-  "signature": "48 83 EC ? 80 B9 ? ? ? ? ? C6 04 24",
-  "mangled_name": "?IsOnboardOwnFreighter@cGcPlayerEnvironment@@QEBA_NXZ"
- },
- {
-  "name": "cGcPlayerEnvironment::IsOnPlanet",
-  "signature": "8B 81 ? ? ? ? 83 F8 ? 74 ? 83 C0 ? 83 F8 ? 76 ? 32 C0 C3 B0 ? C3 CC CC CC CC CC CC CC 48 83 EC",
-  "mangled_name": "?IsOnPlanet@cGcPlayerEnvironment@@QEBA_NXZ"
- },
- {
-  "name": "cGcPlayerEnvironment::Update",
-  "signature": "48 8B C4 F3 0F 11 48 ? 48 89 48 ? 55 41 56",
-  "mangled_name": "__ZN20cGcPlayerEnvironment6UpdateEf",
-  "unique_string": "void __cdecl cGcPlayerEnvironment::Update(float)"
- },
- {
-  "name": "cGcEnvironment::UpdateRender",
-  "signature": "48 8B C4 48 89 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 4C 8B F9",
-  "mangled_name": "?UpdateRender@cGcEnvironment@@QEAAXXZ"
- },
- {
-  "name": "Engine::ShiftAllTransformsForNode",
-  "signature": "44 8B C1 4C 8B D2 41 C1 E8 ? 45 85 C0 74 ? 8B C1 25 ? ? ? ? 3D ? ? ? ? 74 ? 4C 8B 0D ? ? ? ? 8B D1",
-  "mangled_name": "?ShiftAllTransformsForNode@Engine@@YAXVTkHandle@@AEBVcTkVector3@@@Z"
- },
- {
-  "name": "Engine::GetNodeAbsoluteTransMatrix",
-  "signature": "40 56 48 83 EC ? 44 8B C1 48 8B F2 41 C1 E8 ? 45 85 C0 0F 84 ? ? ? ? 8B C1",
-  "mangled_name": "?GetNodeAbsoluteTransMatrix@Engine@@YAXVTkHandle@@PEAVcTkMatrix34@@@Z"
- },
- {
-  "name": "Engine::SetUniformArrayDefaultMultipleShaders",
-  "signature": "4C 89 4C 24 ? 48 89 4C 24 ? 56 41 56",
-  "mangled_name": "?SetUniformArrayDefaultMultipleShaders@Engine@@YAHPEAU?$TkStrongType@HUTkResHandleID@TkStrongTypeIDs@@@@HPEBDPEBMH@Z"
- },
- {
-  "name": "Engine::SetMaterialUniformArray",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 4D 63 F1 49 8B F8",
-  "mangled_name": "?SetMaterialUniformArray@Engine@@YA_NU?$TkStrongType@HUTkResHandleID@TkStrongTypeIDs@@@@PEBDPEBMH@Z"
- },
- {
-  "name": "cGcRewardManager::GiveGenericReward",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 48 8B 3D ? ? ? ? 48 8B F1",
-  "mangled_name": "?GiveGenericReward@cGcRewardManager@@QEAA_NAEBT?$TkID@$0IA@@@0AEBVcTkSeed@@_N2AEAH2W4InventoryChoice@@2@Z"
- },
- {
-  "name": "cGcInteractionComponent::GiveReward",
-  "signature": "44 88 4C 24 ? 44 88 44 24 ? 48 89 54 24 ? 53",
-  "mangled_name": "?GiveReward@cGcInteractionComponent@@QEAA_NAEBVcGcAlienPuzzleOption@@_N1@Z"
- },
- {
-  "name": "cGcInteractionComponent::GetPuzzle",
-  "signature": "48 8B 81 ? ? ? ? 48 85 C0 74 ? 48 83 B9 ? ? ? ? ? 75 ? 48 83 B9",
-  "mangled_name": "?GetPuzzle@cGcInteractionComponent@@QEBAPEBVcGcAlienPuzzleEntry@@XZ"
- },
- {
-  "name": "cTkInputPort::SetButton",
-  "signature": "40 57 48 83 EC ? 48 83 79 ? ? 44 8B CA",
-  "mangled_name": "?SetButton@cTkInputPort@@QEAAXW4eInputButton@@@Z"
- },
- {
-  "name": "cTkInputPort::GetButton",
-  "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 41 8B D8 8B FA 48 8B F1 45 84 C9",
-  "mangled_name": "?GetButton@cTkInputPort@@QEBA_NW4eInputButton@@W4eInputValidation@@_N@Z"
- },
- {
-  "name": "cGcBinoculars::SetMarker",
-  "signature": "48 8B C4 55 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 80 3D ? ? ? ? ? 48 8B F1 0F 84 ? ? ? ? 4C 89 70",
-  "mangled_name": "?SetMarker@cGcBinoculars@@QEAAXXZ"
- },
- {
-  "name": "cGcBinoculars::GetRange",
-  "signature": "40 53 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 8D 54 24",
-  "mangled_name": "?GetRange@cGcBinoculars@@QEBAMXZ"
- },
- {
-  "name": "cGcBinoculars::UpdateRayCasts",
-  "signature": "48 8B C4 55 53 57 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 44 0F 29 48",
-  "mangled_name": "?UpdateRayCasts@cGcBinoculars@@AEAAXAEAVcTkContactPoint@@@Z",
-  "unique_string": "void __cdecl cGcBinoculars::UpdateRayCasts(class cTkContactPoint &)"
- },
- {
-  "name": "cTkFSMState::StateChange",
-  "signature": "4C 8B 51 ? 4D 8B D8 48 8B 05",
-  "mangled_name": "?StateChange@cTkFSMState@@IEAAXAEBT?$TkID@$0IA@@@PEBX_N@Z"
- },
 {
-  "name": "cTkAudioManager::Play",
-  "signature": "48 83 EC ? 33 C9 4C 8B D2 89 4C 24 ? 49 8B C0 48 89 4C 24 ? 45 33 C9",
-  "mangled_name": "?Play@cTkAudioManager@@QEAA_NVTkAudioID@@VTkAudioObject@@@Z"
- },
- {
-  "name": "cTkAudioManager::Play_attenuated",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 56 48 83 EC ? 48 8B F1 48 8B C2",
-  "mangled_name": "?Play@cTkAudioManager@@QEAA_NVTkAudioID@@AEBVcTkVector3@@VTkAudioObject@@M@Z"
- },
- {
-  "name": "cGcPlayerNotifications::AddTimedMessage",
-  "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 44 8B 81",
-  "mangled_name": "?AddTimedMessage@cGcPlayerNotifications@@QEAAXPEBDMAEBVcTkColour@@IAEBVcTkSmartResHandle@@_NM3@Z"
- },
- {
-  "name": "cGcSky::SetStormState",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 54 41 56 41 57 48 83 EC ? 4C 8B 15",
-  "mangled_name": "?SetStormState@cGcSky@@QEAAXW4eStormState@1@@Z"
- },
- {
-  "name": "cGcPlanet::UpdateWeather",
-  "signature": "40 55 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 80 3D",
-  "mangled_name": "?UpdateWeather@cGcPlanet@@IEAAXM@Z"
- },
- {
-  "name": "cGcPlanet::UpdateGravity",
-  "signature": "40 53 48 83 EC ? 83 B9 ? ? ? ? ? 48 8B D9 0F 29 74 24 ? 75",
-  "mangled_name": "?UpdateGravity@cGcPlanet@@IEBAXM@Z"
- },
- {
-  "name": "cGcPlanet::UpdateClouds",
-  "signature": "48 8B C4 53 57 48 81 EC ? ? ? ? F3 0F 10 15",
-  "mangled_name": "?UpdateClouds@cGcPlanet@@IEAAXM@Z"
- },
- {
-  "name": "cTkDynamicGravityControl::UpdateGravityPoint",
-  "signature": "48 63 81 ? ? ? ? 4C 8B C9 85 C0",
-  "mangled_name": "?UpdateGravityPoint@cTkDynamicGravityControl@@QEAAXAEBVcTkVector3@@MM@Z"
- },
- {
-  "name": "cGcPlayer::TakeDamage",
-  "signature": "48 8B C4 4C 89 48 ? 44 89 40 ? 55 56",
-  "mangled_name": "?TakeDamage@cGcPlayer@@QEAAXMW4eDamageType@@AEBT?$TkID@$0IA@@@AEBVcTkVector3@@PEAVcGcOwnerConcept@@AEBV?$vector@VcGcCombatEffectDamageMultiplier@@V?$TkSTLAllocatorShim@VcGcCombatEffectDamageMultiplier@@$03$0?0@@@std@@@Z"
- },
- {
-  "name": "cGcPlayer::OnEnteredCockpit",
-  "signature": "40 53 48 81 EC E0 00 00 00 48 8B D9 E8 ? ? ? ? 83 78 10 05",
-  "mangled_name": "?OnEnteredCockpit@cGcPlayer@@QEAAXXZ"
- },
- {
-  "name": "cGcPlayer::GetDominantHand",
-  "signature": "40 53 48 83 EC 20 48 8B 1D ? ? ? ? E8 ? ? ? ? 83 78 10 05 75 ? 48 8B",
-  "mangled_name": "?GetDominantHand@cGcPlayer@@UEBA?AW4eHand@@XZ"
- },
- {
-  "name": "cGcTerrainEditorBeam::Fire",
-  "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B F2",
-  "mangled_name": "?Fire@cGcTerrainEditorBeam@@QEAA_NAEBVcTkPhysRelVec3@@PEAVcTkRigidBody@@PEAVcGcOwnerConcept@@W4eStatsType@@_N@Z"
- },
- {
-  "name": "cGcTerrainEditorBeam::StartEffect",
-  "signature": "48 89 5C 24 ? 48 89 7C 24 ? 55 48 8D 6C 24 ? 48 81 EC ? ? ? ? 0F 28 05 ? ? ? ? 48 8B D9",
-  "mangled_name": "?StartEffect@cGcTerrainEditorBeam@@QEAAXXZ"
- },
- {
-  "name": "cGcTerrainEditorBeam::ApplyTerrainEditStroke",
-  "signature": "4C 89 44 24 ? 55 53 56 57 41 54 41 55 41 56 48 8D AC 24 ? ? ? ? 48 81 EC",
-  "mangled_name": "?ApplyTerrainEditStroke@cGcTerrainEditorBeam@@QEAAHUsTerrainEditData@@AEBVcGcProjectileImpact@@@Z"
- },
- {
-  "name": "cGcTerrainEditorBeam::ApplyTerrainEditFlatten",
-  "signature": "48 8B C4 4C 89 40 ? 48 89 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8",
-  "mangled_name": "?ApplyTerrainEditFlatten@cGcTerrainEditorBeam@@QEAAHUsTerrainEditData@@AEBVcGcProjectileImpact@@@Z"
- },
- {
-  "name": "cGcBeamEffect::Prepare",
-  "signature": "40 53 48 83 EC ? 8B 41 ? 48 8B D9 A9 ? ? ? ? 76 ? 25 ? ? ? ? 3D ? ? ? ? 0F 85",
-  "mangled_name": "?Prepare@cGcBeamEffect@@QEAAXXZ"
- },
- {
-  "name": "cGcLocalPlayerCharacterInterface::IsJetpacking",
-  "signature": "40 53 48 83 EC 20 48 8B 1D ? ? ? ? 48 8D 8B ? ? ? 00 E8 ? ? ? 00",
-  "mangled_name": "?IsJetpacking@cGcLocalPlayerCharacterInterface@@UEBA_NXZ"
- },
- {
-  "name": "cGcSpaceshipComponent::Eject",
-  "signature": "48 89 5C 24 ? 48 89 54 24 ? 57 48 83 EC ? 41 0F B6 F8",
-  "mangled_name": "?Eject@cGcSpaceshipComponent@@QEAAXPEAVcGcPlayer@@_N1@Z"
- },
- {
-  "name": "cGcSpaceshipWarp::GetPulseDriveFuelFactor",
-  "signature": "48 89 4C 24 ? 53 48 83 EC ? 48 89 6C 24",
-  "mangled_name": "?GetPulseDriveFuelFactor@cGcSpaceshipWarp@@QEBAMXZ"
- },
- {
-  "name": "cGcSpaceshipWeapons::GetOverheatProgress",
-  "signature": "48 63 81 ? ? 00 00 80 BC 08 ? ? 00 00 00 74 12",
-  "mangled_name": "?GetOverheatProgress@cGcSpaceshipWeapons@@UEBAMXZ"
- },
- {
-  "name": "cGcSpaceshipWeapons::GetAverageBarrelPos",
-  "signature": "48 8B C4 48 89 70 ? 57 48 81 EC ? ? ? ? 83 79",
-  "mangled_name": "?GetAverageBarrelPos@cGcSpaceshipWeapons@@QEAA?AVcTkPhysRelVec3@@XZ"
- },
- {
-  "name": "cGcSpaceshipWeapons::GetCurrentShootPoints",
-  "signature": "40 53 48 83 EC ? 48 8B 51 ? 48 8B D9 0F BF 0D ? ? ? ? 48 8B 52 ? E8 ? ? ? ? 48 85 C0 0F 84",
-  "mangled_name": "?GetCurrentShootPoints@cGcSpaceshipWeapons@@IEAAPEAVcGcShootPoint@@XZ"
- },
- {
-  "name": "cGcPlayerCharacterComponent::SetDeathState",
-  "signature": "48 8B C4 48 89 58 ? 55 56 57 48 8D 68 ? 48 81 EC ? ? ? ? 4C 89 70",
-  "mangled_name": "?SetDeathState@cGcPlayerCharacterComponent@@AEAAXXZ"
- },
- {
-  "name": "nvgText",
-  "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 55 57 41 54 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 48 8B F9 0F 29 78",
-  "mangled_name": "nvgText"
- },
- {
-  "name": "nvgTextBox",
-  "signature": "4C 8B DC 53 56 57 41 54 48 81 EC",
-  "mangled_name": "nvgTextBox"
- },
- {
-  "name": "nvgArc",
-  "signature": "48 8B C4 48 89 58 ? 48 89 68 ? F3 0F 11 50",
-  "mangled_name": "nvgArc"
- },
- {
-  "name": "cGcTextChatInput::ParseTextForCommands",
-  "signature": "40 55 53 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 80 3A",
-  "mangled_name": "?ParseTextForCommands@cGcTextChatInput@@AEAAXAEBV?$cTkFixedString@$0DPP@D@@@Z"
- },
- {
-  "name": "cGcTextChatManager::Say",
-  "signature": "40 53 48 81 EC ? ? ? ? F3 0F 10 05",
-  "mangled_name": "?Say@cGcTextChatManager@@QEAAXAEBV?$cTkFixedString@$0DPP@D@@_N@Z"
- },
- {
-  "name": "cGcTextChatManager::Construct",
-  "signature": "48 89 5C 24 ? 57 48 83 EC ? 48 8D 91 ? ? ? ? 33 FF",
-  "mangled_name": "?Construct@cGcTextChatManager@@QEAAXXZ"
- },
- {
-  "name": "cGcPlanet::Generate",
-  "signature": "48 8B C4 48 89 58 ? 88 50 ? 55",
-  "mangled_name": "?Generate@cGcPlanet@@QEAAX_NAEBVcTkVector3@@AEBVcGcDiscoveryData@@AEBVcGcPlanetGenerationInputData@@@Z",
-  "unique_string": "cGcPlanet::Generate"
- },
- {
-  "name": "cGcNotificationSequenceStartEvent::DeepInterstellarSearch",
-  "signature": "48 89 5C 24 ? 57 48 83 EC ? 48 8B 81 ? ? ? ? 48 8D 91 ? ? ? ? 44 8B 81",
-  "mangled_name": "?DeepInterstellarSearch@cGcNotificationSequenceStartEvent@@SA_NPEAVcGcNotificationSequenceStage@@@Z"
- },
- {
-  "name": "cGcScanEventManager::PassesPlanetInfoChecks",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 8B B1",
-  "mangled_name": "?PassesPlanetInfoChecks@cGcScanEventManager@@SA_NAEBVPlanetGenerationQuery@@AEBVcGcScanEventSolarSystemLookup@@_NW4eBuildingClass@@2@Z"
- },
- {
-  "name": "cGcPlanetGenerator::GenerateCreatureRoles",
-  "signature": "48 8B C4 48 89 50 ? 48 89 48 ? 55 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 58 ? 48 89 70 ? 49 8B F0",
-  "mangled_name": "?GenerateCreatureRoles@cGcPlanetGenerator@@QEAAXAEAVcGcPlanetData@@AEB_K@Z"
- },
- {
-  "name": "cGcPlanetGenerator::GenerateQueryInfo",
-  "signature": "4C 89 4C 24 ? 48 89 54 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 49 8B F0",
-  "mangled_name": "?GenerateQueryInfo@cGcPlanetGenerator@@QEAAXAEAVPlanetGenerationQuery@@AEBVcGcPlanetGenerationInputData@@_K_N@Z"
- },
- {
-  "name": "cGcPlanetGenerator::GenerateCreatureInfo",
-  "signature": "48 8B C4 48 89 50 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 33 F6",
-  "mangled_name": "?GenerateCreatureInfo@cGcPlanetGenerator@@IEAAXAEAVcGcPlanetData@@AEAVcGcCreatureRoleData@@@Z"
- },
- {
-  "name": "cGcSolarSystemGenerator::GenerateQueryInfo",
-  "signature": "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 33 F6 0F 29 B4 24",
-  "mangled_name": "?GenerateQueryInfo@cGcSolarSystemGenerator@@QEAAXAEBVcTkSeed@@AEBVcGcGalaxyAttributesAtAddress@@AEAUGenerationData@1@@Z"
- },
- {
-  "name": "cGcFrontendPageDiscovery::DoDiscoveryView",
-  "signature": "4C 89 4C 24 ? 4C 89 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 48 8B 99",
-  "mangled_name": "?DoDiscoveryView@cGcFrontendPageDiscovery@@SAXPEAVcGcFrontendPage@@AEAVcGcDiscoveryPageData@@AEAVcGcFrontendTextInput@@AEAVcGcFrontendModelRenderer@@@Z"
- },
- {
-  "name": "cGcFrontendPageDiscovery::GetDiscoveryHintString",
-  "signature": "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 8D 05 ? ? ? ? 41 8B F9",
-  "mangled_name": "?GetDiscoveryHintString@cGcFrontendPageDiscovery@@KA?AV?$cTkFixedString@$0EA@D@@W4eTileType@@W4eCreatureType@@W4eRarity@@W4eCreatureActiveTime@@W4eCreatureHemiSphere@@@Z"
- },
- {
-  "name": "cGcPlanetGenerator::FillCreatureSpawnDataFromDescription",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 54 41 56 41 57 48 83 EC ? 4C 8B F9 0F 29 74 24",
-  "mangled_name": "?FillCreatureSpawnDataFromDescription@cGcPlanetGenerator@@IEAAXAEBVcGcCreatureRoleData@@AEAVcGcCreatureSpawnData@@AEAVcGcPlanetData@@@Z"
- },
- {
-  "name": "cGcBinoculars::UpdateTarget",
-  "signature": "48 8B C4 55 57 41 54 41 56 48 8D A8",
-  "mangled_name": "?UpdateTarget@cGcBinoculars@@AEAAXM@Z"
- },
- {
-  "name": "cGcFrontendPagePortalRunes::CheckUAIsValid",
-  "signature": "48 8B C4 44 88 48 20 44 88 40 18 48 89 50 10 55 53 56 57 41 54",
-  "mangled_name": "?CheckUAIsValid@cGcFrontendPagePortalRunes@@SA_N_KAEA_K_N@Z"
- },
- {
-  "name": "cGcGalaxyVoxelAttributesData::SetDefaults",
-  "signature": "33 C0 0F 57 C0 0F 11 01 0F 11 41 ? 0F 11 41 ? 48 89 41 ? 48 89 41 ? 48 89 41 ? 48 89 41",
-  "mangled_name": "?SetDefaults@cGcGalaxyVoxelAttributesData@@QEAAXXZ"
- },
- {
-  "name": "cGcGalaxyAttributeGenerator::ClassifyVoxel",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F BF 41",
-  "mangled_name": "?ClassifyVoxel@cGcGalaxyAttributeGenerator@@SAXAEBVcGcGalacticVoxelCoordinate@@AEAVcGcGalaxyVoxelAttributesData@@@Z"
- },
- {
-  "name": "cGcGalaxyStarAttributesData::SetDefaults",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8B D9 48 8D 41",
-  "mangled_name": "?SetDefaults@cGcGalaxyStarAttributesData@@QEAAXXZ"
- },
- {
-  "name": "cGcGalaxyAttributeGenerator::ClassifyStarSystem",
-  "signature": "48 89 54 24 ? 55 53 56 57 41 54 41 55 41 56 48 8B EC",
-  "mangled_name": "?ClassifyStarSystem@cGcGalaxyAttributeGenerator@@SAX_KAEAVcGcGalaxyStarAttributesData@@@Z"
- },
- {
-  "name": "cGcGalaxyVoxelGenerator::Populate",
-  "signature": "48 8B C4 4C 89 40 ? 48 89 48 ? 55 53 56 57 41 56",
-  "mangled_name": "?Populate@cGcGalaxyVoxelGenerator@@SAX_KAEAVcGcGalaxyVoxelData@@AEBVcTkVector3@@@Z",
-  "unique_string": "UI_TERRAIN_SHAPE_%d"
- },
- {
-  "name": "cGcFrontendPagePortalRunes::DoInteraction",
-  "signature": "48 89 54 24 ? 48 89 4C 24 ? 55 57 41 55 41 56 48 8D 6C 24",
-  "mangled_name": "?DoInteraction@cGcFrontendPagePortalRunes@@QEAAXPEAVcGcFrontendPage@@@Z"
- },
- {
-  "name": "cTkLanguageManagerBase::Translate",
-  "signature": "48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 57 C0 49 8B E8",
-  "mangled_name": "?Translate@cTkLanguageManagerBase@@QEBAPEBDPEBD0@Z"
- },
- {
-  "name": "cGcBinoculars::UpdateScanBarProgress",
-  "signature": "40 53 48 83 EC ? 48 8B 91 ? ? ? ? 48 8B D9 F3 0F 11 49",
-  "mangled_name": "?UpdateScanBarProgress@cGcBinoculars@@AEAAXM@Z"
- },
- {
-  "name": "cGcNameGenerator::GeneratePlanetName",
-  "signature": "4C 89 4C 24 ? 4C 89 44 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 44 8B D2",
-  "mangled_name": "?GeneratePlanetName@cGcNameGenerator@@QEBAX_KAEAV?$cTkFixedString@$0HP@D@@PEAV2@@Z"
- },
- {
-  "name": "cGcPlanetGenerator::Generate",
-  "signature": "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4D 8B F8 C6 85",
-  "mangled_name": "?Generate@cGcPlanetGenerator@@QEAAXAEAVcGcPlanetData@@AEBVcGcPlanetGenerationInputData@@PEAVcGcPlanet@@@Z"
- },
- {
-  "name": "cGcPlayerState::AwardUnits",
-  "signature": "48 89 5C 24 ? 57 48 83 EC ? 44 8B 81 ? ? ? ? 48 8B D9 66 0F 6F 05 ? ? ? ? 41 8B C0 F7 D0 48 C7 44 24 ? ? ? ? ? 3B D0 8B FA F3 0F 7F 44 24 ? 0F 42 C2 45 33 C9 44 03 C0 48 8D 54 24 ? 44 89 81 ? ? ? ? 48 8B 0D ? ? ? ? 48 81 C1 ? ? ? ? E8 ? ? ? ? 85 FF 7E ? 48 8B 0D",
-  "mangled_name": "?AwardUnits@cGcPlayerState@@QEAAIH@Z"
- },
- {
-  "name": "cGcPlayerState::AwardNanites",
-  "signature": "48 89 5C 24 ? 57 48 83 EC ? 44 8B 81 ? ? ? ? 48 8B D9 66 0F 6F 05 ? ? ? ? 41 8B C0 F7 D0 48 C7 44 24 ? ? ? ? ? 3B D0 8B FA F3 0F 7F 44 24 ? 0F 42 C2 45 33 C9 44 03 C0 48 8D 54 24 ? 44 89 81 ? ? ? ? 48 8B 0D ? ? ? ? 48 81 C1 ? ? ? ? E8 ? ? ? ? 85 FF 7E ? 4C 8B 15",
-  "mangled_name": "?AwardNanites@cGcPlayerState@@QEAAIH@Z"
- },
- {
-  "name": "cGcCreatureComponent::Prepare",
-  "signature": "48 8B C4 55 56 41 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 51",
-  "mangled_name": "?Prepare@cGcCreatureComponent@@MEAAXXZ"
- },
- {
-  "name": "cGcSky::SetSunAngle",
-  "signature": "40 53 48 83 EC ? 0F 28 C1 0F 29 7C 24 ? F3 0F 5E 05",
-  "mangled_name": "?SetSunAngle@cGcSky@@IEAAXM@Z"
- },
- {
-  "name": "cGcSky::UpdateSunPosition",
-  "signature": "48 8B C4 48 89 58 ? 57 48 81 EC ? ? ? ? 4C 8B 05 ? ? ? ? 48 8B D9 8B 89",
-  "mangled_name": "?UpdateSunPosition@cGcSky@@QEAAXXZ"
- },
- {
-  "name": "cGcSky::Update",
-  "signature": "48 8B C4 55 53 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70",
-  "mangled_name": "?Update@cGcSky@@QEAAXM@Z"
- },
- {
-  "name": "cGcNGuiLayer::AddElement",
-  "signature": "48 89 5C 24 ? 48 89 74 24 ? 48 89 54 24 ? 57 48 81 EC ? ? ? ? 44 8B 51",
-  "mangled_name": "?AddElement@cGcNGuiLayer@@QEAAPEAVcGcNGuiElement@@PEAV2@_N@Z"
- },
- {
-  "name": "Engine::SetOption",
-  "signature": "48 83 EC ? FF CA 83 FA ? 0F 87",
-  "mangled_name": "?SetOption@Engine@@YA_NW4List@EgOptions@@M@Z"
- },
- {
-  "name": "Engine::AddResource",
-  "signature": "4C 8B DC 49 89 5B ? 49 89 6B ? 49 89 73 ? 57 41 56 41 57 48 81 EC ? ? ? ? 48 8B BC 24",
-  "mangled_name": "?AddResource@Engine@@YA?AVcTkSmartResHandle@@HPEBDHPEAVcTkResourceDescriptor@@@ZZ"
- },
- {
-  "name": "cTkResourceManager::AddResource",
-  "signature": "44 89 44 24 ? 55 53 57 41 54",
-  "mangled_name": "?AddResource@cTkResourceManager@@QEAA?AVcTkSmartResHandle@@HPEBDH_NPEAVcTkResourceDescriptor@@@Z"
- },
- {
-  "name": "cTkResourceManager::FindResourceA",
-  "signature": "4C 89 4C 24 ? 89 54 24 ? 53 55 48 81 EC",
-  "mangled_name": "?FindResourceA@cTkResourceManager@@QEAAPEAVcTkResource@@HPEBDPEBVcTkResourceDescriptor@@_N2@Z"
- },
- {
-  "name": "cEgSceneGraphResource::ParseData",
-  "signature": "4C 89 44 24 ? 55 53 56 57 41 55 41 56 48 8D AC 24",
-  "mangled_name": "?ParseData@cEgSceneGraphResource@@UEAA_NAEAVcTkSceneNodeData@@PEAUcEgSceneNodeTemplate@@@Z"
- },
- {
-  "name": "cGcPlayerHUD::RenderIndicatorPanel",
-  "signature": "48 8B C4 55 57 48 8D 68 ? 48 81 EC ? ? ? ? 48 8B 91",
-  "mangled_name": "?RenderIndicatorPanel@cGcPlayerHUD@@IEAAXXZ"
- },
- {
-  "name": "cGcPlayerHUD::RenderWeaponPanel",
-  "signature": "48 8B C4 48 89 48 ? 55 41 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 83 B9",
-  "mangled_name": "?RenderWeaponPanel@cGcPlayerHUD@@IEAAXXZ",
-  "unique_string": "UI_POLICE_TIMER_OSD"
- },
- {
-  "name": "cGcTerrainRegionMap::Construct",
-  "signature": "48 8B C4 48 89 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 48 8D B1",
-  "mangled_name": "?Construct@cGcTerrainRegionMap@@QEAAXVTkHandle@@PEAVcTkVoxelGeneratorData@@PEAVcGcPlanetBuildingData@@HH@Z"
- },
- {
-  "name": "cGcNGuiText::EditElement",
-  "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 81 EC ? ? ? ? 0F 29 70 ? 48 8D A8 ? ? ? ? 48 83 E5 ? 48 8B 01",
-  "mangled_name": "?EditElement@cGcNGuiText@@UEAAXXZ"
- },
- {
-  "name": "cTkLanguageManagerBase::Load",
-  "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 33 DB C6 44 24",
-  "mangled_name": "?Load@cTkLanguageManagerBase@@QEAAXXZ"
- },
- {
-  "name": "cGcRealityManager::Construct",
-  "signature": "40 55 53 56 57 41 54 41 55 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B E1",
-  "mangled_name": "?Construct@cGcRealityManager@@QEAAXXZ"
- },
- {
-  "name": "cGcRealityManager::GenerateProceduralProduct",
-  "signature": "48 89 54 24 ? 48 89 4C 24 ? 55 53 57 48 8D AC 24 ? ? ? ? B8",
-  "mangled_name": "?GenerateProceduralProduct@cGcRealityManager@@QEAAPEBVcGcProductData@@AEBT?$TkID@$0IA@@@@Z"
- },
- {
-  "name": "cGcRealityManager::GenerateProceduralTechnology",
-  "signature": "4C 89 4C 24 ? 44 88 44 24 ? 48 89 4C 24",
-  "mangled_name": "?GenerateProceduralTechnology@cGcRealityManager@@QEAAPEBVcGcTechnology@@AEBT?$TkID@$0IA@@@_N@Z",
-  "unique_string": "UI_WIKI_PROC_TECH_SUB"
- },
- {
-  "name": "cGcApplication::Data::Data",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 F6 48 C7 41",
-  "mangled_name": "??0Data@cGcApplication@@QEAA@XZ"
- },
- {
-  "name": "cTkLanguageManager::GetInstance",
-  "signature": "48 83 EC ? 65 48 8B 04 25 ? ? ? ? B9 ? ? ? ? 48 8B 00 8B 04 01 39 05 ? ? ? ? 0F 8F ? ? ? ? 48 8D 05 ? ? ? ? 48 83 C4 ? C3 4C 89 00",
-  "mangled_name": "?GetInstance@cTkLanguageManager@@SAAEAV1@XZ"
- },
- {
-  "name": "nvgFill",
-  "signature": "48 89 5C 24 ? 57 48 81 EC ? ? ? ? 48 63 81 ? ? ? ? 48 8B D9 48 69 F8 ? ? ? ? 0F 10 44 0F",
-  "mangled_name": "nvgFill"
- },
- {
-  "name": "nvgRect",
-  "signature": "48 8B C4 48 83 EC ? 0F 28 E2",
-  "mangled_name": "nvgRect"
- },
- {
-  "name": "cGcPlayerHUD::RenderCrosshair",
-  "signature": "48 8B C4 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 8B B9",
-  "mangled_name": "?RenderCrosshair@cGcPlayerHUD@@IEAAXXZ",
-  "unique_string": "STORED RESOURCES (%d/%d)"
- },
- {
-  "name": "cGcNGuiElement::SetPosition",
-  "signature": "48 83 EC ? 4C 8B 59 ? 4C 8B D1",
-  "mangled_name": "?SetPosition@cGcNGuiElement@@QEAAXAEBVcTkVector2@@W4PositionType@1@@Z"
- },
- {
-  "name": "cGcApplicationBootState::Update",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 54 41 56 41 57 48 81 EC ? ? ? ? 45 33 FF",
-  "mangled_name": "?Update@cGcApplicationBootState@@MEAAXM@Z"
- },
- {
-  "name": "cGcPlayerDiscoveryHelper::GetDiscoveryWorth",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 4C 24 ? 57 48 81 EC ? ? ? ? 48 8B 1D",
-  "mangled_name": "?GetDiscoveryWorth@cGcPlayerDiscoveryHelper@@QEAAHAEBVcGcDiscoveryData@@@Z"
- },
- {
-  "name": "cGcBinoculars::PopulateDiscoveryInfo",
-  "signature": "48 8B C4 4C 89 48 ? 44 89 40 ? 48 89 48",
-  "mangled_name": "?PopulateDiscoveryInfo@cGcBinoculars@@QEAAXAEAUDiscoveryInfo@DiscoveryResolver@@VTkHandle@@VcTkAttachmentPtr@@_N3@Z"
- },
- {
-  "name": "cGcQuickActionMenu::TriggerAction",
-  "signature": "44 88 44 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 57",
-  "mangled_name": "?TriggerAction@cGcQuickActionMenu@@AEAA_NAEBUMenuAction@@_N@Z",
-  "unique_string": "QUICK_MENU_SQUADRON_UNAVAILABLE"
- },
- {
-  "name": "cGcPlayerState::StoreCurrentSystemSpaceStationEndpoint",
-  "signature": "89 54 24 ? 4C 8B DC 48 83 EC",
-  "mangled_name": "?StoreCurrentSystemSpaceStationEndpoint@cGcPlayerState@@QEAAXXZ"
- },
- {
-  "name": "cGcPlayerExperienceDirector::Update",
-  "signature": "48 8B C4 48 89 58 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 99 ? ? ? ? 48 8B F1 0F 29 70 ? 0F 29 78 ? 66 0F 6F 3D",
-  "mangled_name": "?Update@cGcPlayerExperienceDirector@@QEAAXM@Z"
- },
- {
-  "name": "cGcSimulation::Update",
-  "signature": "48 8B C4 55 48 8D 6C 24 ? 48 81 EC ? ? ? ? 44 0F 29 98",
-  "mangled_name": "?Update@cGcSimulation@@QEAAXW4SimulationUpdateMode@@M@Z"
- },
- {
-  "name": "cGcSolarSystem::Update",
-  "signature": "48 8B C4 55 53 56 57 41 55 41 57 48 8D 6C 24",
-  "mangled_name": "?Update@cGcSolarSystem@@QEAAXM@Z"
- },
- {
-  "name": "cGcPlayer::Update",
-  "signature": "48 8B C4 48 89 48 ? 55 53 41 54 41 55 41 57 48 8D A8",
-  "mangled_name": "?Update@cGcPlayer@@QEAAXM@Z"
- },
- {
-  "name": "cGcPlayer::UpdateGraphics",
-  "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 57 48 81 EC ? ? ? ? 0F 29 70 ? 0F B6 F2",
-  "mangled_name": "?UpdateGraphics@cGcPlayer@@IEAAX_N@Z"
- },
- {
-  "name": "cGcPlayer::SetToPosition",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B FA 48 8B D9 48 8B 15",
-  "mangled_name": "?SetToPosition@cGcPlayer@@QEAAXAEBVcTkPhysRelVec3@@AEBVcTkVector3@@1@Z"
- },
- {
-  "name": "cGcBaseBuildingManager::AddHUDMarker",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 48 8B E9 49 63 F1",
-  "mangled_name": "?AddHUDMarker@cGcBaseBuildingManager@@QEAAXW4eType@cGcMarkerPoint@@AEBVcTkPhysRelMat34@@HPEBD@Z"
- },
- {
-  "name": "cGcPlayer::Prepare",
-  "signature": "48 8B C4 55 53 56 57 41 54 41 56 41 57 48 8D 6C 24",
-  "mangled_name": "?Prepare@cGcPlayer@@QEAAXPEAVcGcPlayerController@@@Z"
- },
- {
-  "name": "Engine::AddGroupNode",
-  "signature": "48 89 5C 24 ? 57 48 81 EC ? ? ? ? 44 8B D2 48 8B D9 41 C1 EA ? 45 85 D2 0F 84 ? ? ? ? 44 8B CA 41 81 E1 ? ? ? ? 41 81 F9 ? ? ? ? 0F 84 ? ? ? ? 8B CA 48 8B 15 ? ? ? ? 81 E1 ? ? ? ? 48 8B 82 ? ? ? ? 48 63 0C 88 48 8B 82 ? ? ? ? 48 8B 3C C8 48 85 FF 74 ? 8B 4F ? 8B C1 25 ? ? ? ? 41 3B C1 75 ? C1 E9 ? 41 3B CA 75 ? 4C 8B CF 48 8D 4C 24 ? B2 ? E8 ? ? ? ? 48 8B 0D ? ? ? ? 48 8D 05 ? ? ? ? 4C 8D 4C 24 ? 48 89 44 24 ? 41 B0 ? 48 89 7C 24 ? 48 8B D3 E8 ? ? ? ? 48 8D 4C 24 ? E8 ? ? ? ? EB ? C7 03 ? ? ? ? 48 8B C3 48 8B 9C 24 ? ? ? ? 48 81 C4 ? ? ? ? 5F C3 CC CC CC CC CC CC CC CC CC CC CC 48 89 5C 24 ? 57",
-  "mangled_name": "?AddGroupNode@Engine@@YA?AVTkHandle@@V2@PEBD@Z"
- },
- {
-  "name": "cGcPlayerShipOwnership::UpdateMeshRefresh",
-  "signature": "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 45 33 E4 48 8B F1 44 38 A1",
-  "mangled_name": "?UpdateMeshRefresh@cGcPlayerShipOwnership@@AEAAXXZ"
- },
- {
-  "name": "cGcPlayerShipOwnership::Update",
-  "signature": "48 8B C4 55 53 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 80 B9 ? ? ? ? ? 48 8B F1",
-  "mangled_name": "?Update@cGcPlayerShipOwnership@@QEAAXM@Z"
- },
- {
-  "name": "cGcGameState::Update",
-  "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? F3 0F 10 91",
-  "mangled_name": "?Update@cGcGameState@@QEAAXM@Z"
- },
- {
-  "name": "cGcPlayerShipOwnership::SpawnNewShip",
-  "signature": "44 89 44 24 ? 55 53 56 57 41 54 41 55 41 57",
-  "mangled_name": "?SpawnNewShip@cGcPlayerShipOwnership@@QEAA_NAEBVcTkMatrix34@@W4ShipSpawnLandingGearState@1@H_N@Z"
- },
- {
-  "name": "cGcPlayerShipOwnership::DestroyShip",
-  "signature": "40 55 53 57 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 8B 1D",
-  "mangled_name": "?DestroyShip@cGcPlayerShipOwnership@@QEAA_NH@Z"
- },
- {
-  "name": "cGcSpaceshipWeapons::GetHeatFactor",
-  "signature": "48 63 81 ? ? ? ? F3 0F 10 84 81",
-  "mangled_name": "?GetHeatFactor@cGcSpaceshipWeapons@@UEBAMXZ"
- },
- {
-  "name": "cGcSpaceshipWarp::UpdatePulseDrive",
-  "signature": "F3 0F 11 4C 24 ? 55 53 56 41 54 41 55 48 8D AC 24",
-  "mangled_name": "?UpdatePulseDrive@cGcSpaceshipWarp@@AEAAXM@Z",
-  "unique_string": "%FREIGHTERNAME%"
- },
- {
-  "name": "cGcRealityManager::cGcRealityManager",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B F9 33 ED 48 89 A9",
-  "mangled_name": "??0cGcRealityManager@@QEAA@XZ"
- },
- {
-  "name": "cGcGameState::cGcGameState",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? C7 41",
-  "mangled_name": "??0cGcGameState@@QEAA@XZ"
- },
- {
-  "name": "cGcPlayerState::cGcPlayerState",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 54 41 55 41 56 41 57 48 83 EC ? 45 33 ED 0F 29 74 24",
-  "mangled_name": "??0cGcPlayerState@@QEAA@XZ"
- },
- {
-  "name": "cGcInventoryStore::cGcInventoryStore",
-  "signature": "48 89 5C 24 ? 57 48 83 EC ? 33 FF 0F 57 C0 0F 11 01 48 8B D9 0F 11 41 ? 0F 11 41 ? 0F 11 41",
-  "mangled_name": "??0cGcInventoryStore@@QEAA@XZ"
- },
- {
-  "name": "cGcPlayerShipOwnership::cGcPlayerShipOwnership",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 54 41 56 41 57 48 83 EC ? 45 33 E4 48 C7 41",
-  "mangled_name": "??0cGcPlayerShipOwnership@@QEAA@XZ"
- },
- {
-  "name": "cGcPlayerVehicleOwnership::cGcPlayerVehicleOwnership",
-  "signature": "48 89 5C 24 ? 57 48 83 EC ? 33 FF 48 C7 41 ? ? ? ? ? 48 89 79 ? 48 B8",
-  "mangled_name": "??0cGcPlayerVehicleOwnership@@QEAA@XZ"
- },
- {
-  "name": "cGcPlayerCreatureOwnership::cGcPlayerCreatureOwnership",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 54 41 55 41 56 41 57 48 83 EC ? 48 8B E9 48 8B D9",
-  "mangled_name": "__ZN26cGcPlayerCreatureOwnershipC2Ev"
- },
- {
-  "name": "cGcPlayerMultitoolOwnership::cGcPlayerMultitoolOwnership",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 45 33 FF 0F 29 74 24 ? 44 89 39",
-  "mangled_name": "__ZN27cGcPlayerMultitoolOwnershipC2Ev"
- },
- {
-  "name": "cGcPlayerFreighterOwnership::cGcPlayerFreighterOwnership",
-  "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 57 C0 48 8D 05",
-  "mangled_name": "__ZN27cGcPlayerFreighterOwnershipC2Ev"
- },
- {
-  "name": "cGcPlayerFleetManager::cGcPlayerFleetManager",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 57 C0 48 8D 05",
-  "mangled_name": "__ZN21cGcPlayerFleetManagerC1Ev"
- },
- {
-  "name": "cGcSimulation::cGcSimulation",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 33 C0 0F 29 74 24",
-  "mangled_name": "??0cGcSimulation@@QEAA@XZ"
- },
- {
-  "name": "cGcHUDManager::cGcHUDManager",
-  "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 F6 48 8B F9 48 89 71 ? 48 89 71",
-  "mangled_name": "??0cGcHUDManager@@QEAA@XZ"
- },
- {
-  "name": "cGcPlayerHUD::cGcPlayerHUD",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 0F 29 74 24 ? 48 8B F9 E8 ? ? ? ? 48 8D 9F",
-  "mangled_name": "??0cGcPlayerHUD@@QEAA@XZ"
- },
- {
-  "name": "cGcHUD::cGcHUD",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 33 ED 4C 8B F1 89 29",
-  "mangled_name": "??0cGcHUD@@QEAA@XZ"
- },
- {
-  "name": "cGcHUDMarker::cGcHUDMarker",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8B F1 48 83 C1",
-  "mangled_name": "??0cGcHUDMarker@@QEAA@XZ"
- },
- {
-  "name": "cGcQuickMenu::cGcQuickMenu",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8D 79 ? 0F 29 74 24",
-  "mangled_name": "??0cGcQuickMenu@@QEAA@XZ"
- },
- {
-  "name": "cGcApplicationGameModeSelectorState::Update",
-  "signature": "48 8B C4 55 53 56 57 41 54 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 48 8B F9",
-  "mangled_name": "?Update@cGcApplicationGameModeSelectorState@@MEAAXM@Z"
- },
- {
-  "name": "cTkFileSystem::IsModded",
-  "signature": "48 8B 01 48 85 C0 74 ? 0F B6 80 ? ? ? ? C3 C3 CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 48 8B 01",
-  "mangled_name": "?IsModded@cTkFileSystem@@QEBA_NXZ"
- },
- {
-  "name": "cTkFileSystem::GetInstance",
-  "signature": "48 83 EC ? 65 48 8B 04 25 ? ? ? ? B9 ? ? ? ? 48 8B 00 8B 04 01 39 05 ? ? ? ? 7F ? 48 8D 05 ? ? ? ? 48 83 C4 ? C3 48 8D 0D ? ? ? ? E8 ? ? ? ? 83 3D ? ? ? ? ? 75 ? 48 8D 0D ? ? ? ? 48 C7 05",
-  "mangled_name": "?GetInstance@cTkFileSystem@@SAAEAV1@XZ"
- },
- {
-  "name": "cTkFileSystem::Data::Data",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 54 41 55 41 56 41 57 48 81 EC ? ? ? ? 48 8D 2D",
-  "mangled_name": "??0Data@cTkFileSystem@@QEAA@_N0@Z",
-  "unique_string": "%sPCBANKS/MODS/"
- },
- {
-  "name": "cTkFileSystem::EnumerateDirectory",
-  "signature": "40 55 53 56 57 41 55 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8D 45",
-  "mangled_name": "?EnumerateDirectory@cTkFileSystem@@QEAAHPEBDQEAPEADHH@Z"
- },
- {
-  "name": "cTkMemoryManager::Malloc",
-  "signature": "44 89 4C 24 ? 4C 89 44 24 ? 53",
-  "mangled_name": "?Malloc@cTkMemoryManager@@QEAAPEAXHPEBDH0HH@Z"
- },
- {
-  "name": "cGcOptionsPageUI::BeginList",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 33 DB 48 8D 79 ? 89 59",
-  "mangled_name": "__ZN16cGcOptionsPageUI9BeginListEPKcS1_iiRK14cGcListOptions"
- },
- {
-  "name": "cGcOptionsPageUI::ListOption",
-  "signature": "40 53 48 83 EC ? 48 63 41 ? 48 8D 59",
-  "mangled_name": "__ZN16cGcOptionsPageUI10ListOptionEPKci"
- },
- {
-  "name": "cGcModManager::GetInstance",
-  "signature": "48 83 EC ? 65 48 8B 04 25 ? ? ? ? B9 ? ? ? ? 48 8B 00 8B 04 01 39 05 ? ? ? ? 0F 8F ? ? ? ? 48 8D 05 ? ? ? ? 48 83 C4 ? C3 48 8D 0D",
-  "mangled_name": "?GetInstance@cGcModManager@@SAAEAV1@XZ"
- },
- {
-  "name": "cTkFileSystem::Data::MountAllArchives",
-  "signature": "4C 8B DC 45 88 43 ? 41 57",
-  "mangled_name": "__ZN13cTkFileSystem4Data16MountAllArchivesERKN5TkStd17TkVectorExtentionI11cTkBankInfoNS1_13DefaultConfigILin1EEENS1_9tk_vectorIS3_Lin1ENS1_17null_stack_bufferEEEEEb"
- },
- {
-  "name": "cGcModManager::LoadModdedData",
-  "signature": "40 55 53 56 57 41 55 41 56 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 33 F6",
-  "mangled_name": "cGcModManager::LoadModdedData",
-  "unique_string": "../BINARIES/SETTINGS/GCMODSETTINGS.MXML"
- },
- {
-  "name": "cTkFileSystem::DoesFileExist",
-  "signature": "48 8B C4 53 48 81 EC ? ? ? ? 80 3A",
-  "mangled_name": "?DoesFileExist@cTkFileSystem@@QEAA_NPEBD@Z"
- },
- {
-  "name": "cTkFileSystem::LoadModDirectory",
-  "signature": "48 89 5C 24 ? 4C 89 44 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 33 F6",
-  "mangled_name": "cTkFileSystem::LoadModDirectory"
- },
- {
-  "name": "cTkFileSystem::LoadModSubdirectory",
-  "signature": "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 4C 89 74 24 ? 55 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B FA 48 8B F1",
-  "mangled_name": "cTkFileSystem::LoadModSubdirectory"
- },
- {
-  "name": "GenerateModdedFilepath",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 54 41 55 41 56 41 57 48 83 EC ? 33 FF 48 8D 59",
-  "mangled_name": "GenerateModdedFilepath"
- },
- {
-  "name": "cTkFileSystem::CreatePath",
-  "signature": "48 81 EC ? ? ? ? 41 B1",
-  "mangled_name": "?CreatePath@cTkFileSystem@@QEAAXPEBD@Z"
- },
- {
-  "name": "XMLNode::writeToFile",
-  "signature": "40 53 55 57 41 54 41 57 48 81 EC ? ? ? ? 45 33 E4 41 0F B6 E9",
-  "mangled_name": "?writeToFile@XMLNode@@QEBA?AW4XMLError@@PEBD0D@Z"
- },
- {
-  "name": "cTkFileSystem::Write",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8B 5C 24 ? 49 8B E9",
-  "mangled_name": "?Write@cTkFileSystem@@QEAA_JPEAX_J1PEAUFIOS2HANDLE@@@Z"
- },
- {
-  "name": "cTkFileSystem::Open",
-  "signature": "48 89 5C 24 ? 57 48 81 EC ? ? ? ? 45 85 C0",
-  "mangled_name": "?Open@cTkFileSystem@@QEAAPEAUFIOS2HANDLE@@PEBDW4eFileOpenMode@@@Z"
- },
- {
-  "name": "MiniDumpFunction",
-  "signature": "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? B8",
-  "mangled_name": "MiniDumpFunction"
- },
- {
-  "name": "cTkSystem::IntegratedGPUActive",
-  "signature": "80 B9 ? ? ? ? ? 75 ? 83 3D",
-  "mangled_name": "?IntegratedGPUActive@cTkSystem@@QEAA_NXZ"
- },
- {
-  "name": "cTkSystem::GetInstance",
-  "signature": "40 53 48 83 EC ? 65 48 8B 04 25 ? ? ? ? B9 ? ? ? ? 48 8B 00 8B 04 01 39 05 ? ? ? ? 7F ? 48 8D 05 ? ? ? ? 48 83 C4 ? 5B C3 48 8D 0D ? ? ? ? E8 ? ? ? ? 83 3D ? ? ? ? ? 75 ? 48 8D 1D ? ? ? ? 48 8B CB E8 ? ? ? ? 48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8B C3 48 83 C4 ? 5B C3 CC CC CC CC CC CC CC CC CC CC CC CC 8B 11",
-  "mangled_name": "?GetInstance@cTkSystem@@SAAEAV1@XZ"
- },
- {
-  "name": "cGcOptionsPageUI::QualityOption",
-  "signature": "4C 8B DC 4D 89 43 ? 49 89 53 ? 49 89 4B ? 53 55 57",
-  "mangled_name": "__ZN16cGcOptionsPageUI13QualityOptionEPKcS1_14eGraphicDetailS2_"
- },
- {
-  "name": "cTkMetaDataXML::Register",
-  "signature": "4C 89 4C 24 ? 4C 89 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 53 48 83 EC",
-  "mangled_name": "?Register@cTkMetaDataXML@@SAXPEBDP6AXAEBVcTkClassPointer@@AEAUXMLNode@@_N@ZP6AXAEAV2@2PEAVcTkLinearMemoryPool@@@ZP6A_N10@Z@Z"
- },
- {
-  "name": "cTkMetaDataXML::GetLookup",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8B 05 ? ? ? ? 48 8B E9",
-  "mangled_name": "?GetLookup@cTkMetaDataXML@@SAPEAVcTkMetaDataXMLFunctionLookup@@PEBD@Z"
- },
- {
-  "name": "cGcFrontendPageFunctions::DoEmptySlotPopup",
-  "signature": "4C 89 4C 24 ? 4C 89 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55 53 56 57 41 55 41 56 41 57 48 8D AC 24",
-  "mangled_name": "?DoEmptySlotPopup@cGcFrontendPageFunctions@@SAXPEAVcGcFrontendPage@@PEAVcGcNGuiLayer@@AEAV?$vector@W4ePopupAction@@V?$TkSTLAllocatorShim@W4ePopupAction@@$03$0?0@@@std@@AEBVcGcInventoryIndex@@PEAVcGcInventoryStore@@@Z"
- },
- {
-  "name": "cGcFrontendPageFunctions::SetEmptySlotBackground",
-  "signature": "48 89 74 24 ? 48 89 7C 24 ? 55 48 8B EC 48 83 EC ? 0F B6 0D",
-  "mangled_name": "?SetEmptySlotBackground@cGcFrontendPageFunctions@@SAXPEAVcGcFrontendPage@@PEAVcGcNGuiLayer@@W4InventoryChoice@@_N@Z"
- },
- {
-  "name": "cGcNGuiLayer::GetGraphic",
-  "signature": "48 89 5C 24 ? 57 48 83 EC ? 48 8B 99 ? ? ? ? 41 0F B6 F8 41 B8 ? ? ? ? 48 8D 4C 24 ? E8 ? ? ? ? 83 7B ? ? 7E ? 48 8B 50 ? 48 63 4B ? 48 FF C9 48 63 C2 48 23 C8 48 8B 43 ? 48 8B 04 C8 48 85 C0 74 ? 0F 1F 80 ? ? ? ? 48 39 50 ? 75 ? 48 3B 50 ? 74 ? 48 8B 40 ? 48 85 C0 75 ? 33 C0 48 8D 0D ? ? ? ? 40 84 FF 48 0F 45 C1 48 8B 5C 24 ? 48 83 C4 ? 5F C3 48 8B 58 ? 48 85 DB 74 ? 48 8B 0B 48 8B 51 ? 48 8B CB FF D2 83 F8 ? 75 ? 48 8B C3 48 8B 5C 24 ? 48 83 C4 ? 5F C3 CC CC CC CC CC CC CC CC 48 89 5C 24 ? 57 48 83 EC ? 48 8D B9",
-  "mangled_name": "?GetGraphic@cGcNGuiLayer@@QEAAPEAVcGcNGuiGraphic@@T?$TkID@$0IA@@@_N@Z"
- },
- {
-  "name": "cGcNGuiLayer::GetLayer",
-  "signature": "48 89 5C 24 ? 57 48 83 EC ? 48 8B 99 ? ? ? ? 41 0F B6 F8 45 33 C0",
-  "mangled_name": "?GetLayer@cGcNGuiLayer@@QEAAPEAV1@T?$TkID@$0IA@@@_N@Z"
- },
- {
-  "name": "cGcFrontendPageFunctions::SetPopupBasics",
-  "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 4C 89 48 ? 55 41 54 41 55 41 56 41 57 48 8D 68 ? 48 81 EC ? ? ? ? 0F 29 78",
-  "mangled_name": "?SetPopupBasics@cGcFrontendPageFunctions@@SAPEAVcGcNGuiLayer@@PEAV2@PEBDAEBVcTkColour@@11111_NHAEBT?$TkID@$0IA@@@@Z"
- },
- {
-  "name": "Engine::Initialise",
-  "signature": "40 55 48 8D 6C 24 ? 48 81 EC ? ? ? ? 80 3D ? ? ? ? ? 74",
-  "mangled_name": "?Initialise@Engine@@YA_NXZ"
- },
- {
-  "name": "cEgTextureResource::Load",
-  "signature": "40 53 57 41 57 48 81 EC ? ? ? ? 45 8B F8",
-  "mangled_name": "?Load@cEgTextureResource@@UEAA_NPEBDH@Z"
- },
- {
-  "name": "cTkResource::cTkResource",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? C6 41",
-  "mangled_name": "??0cTkResource@@QEAA@HAEBV?$basic_string@DU?$char_traits@D@std@@V?$TkSTLAllocatorShim@D$00$0?0@@@std@@H@Z"
- },
- {
-  "name": "cEgMeshNode::ParsingFunc",
-  "signature": "48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 4C 8B F9 49 8B E8",
-  "mangled_name": "?ParsingFunc@cEgMeshNode@@SAPEAUcEgSceneNodeTemplate@@AEBV?$cTkDynamicArray@VcTkSceneNodeAttributeData@@@@PEAVcTkResourceDescriptor@@H@Z"
- },
- {
-  "name": "cEgRenderer::DrawMeshes",
-  "signature": "48 8B C4 44 89 40 ? 48 89 48 ? 55 53 41 54",
-  "mangled_name": "?DrawMeshes@cEgRenderer@@SAXAEAVcEgRenderQueueBuffer@@AEBT?$TkID@$0IA@@@H_NW4List@RenderingOrder@@22AEBVcEgFrustum@@PEAVcEgThreadableRenderCall@@@Z"
- },
- {
-  "name": "cEgRenderer::SetupMeshMaterial",
-  "signature": "48 8B C4 48 89 58 ? 48 89 78 ? 4C 89 70 ? 55 48 8D 68 ? 48 81 EC ? ? ? ? 48 8B 9D",
-  "mangled_name": "?SetupMeshMaterial@cEgRenderer@@SA_NPEAVcEgMeshNode@@PEAVcEgMaterialResource@@AEBV?$TkIDHashed@$0IA@@@HAEBVcTkMatrix34@@3AEBVcTkMatrix44@@44MHPEAVcTkVector4@@5H_NPEAVcEgThreadableRenderCall@@_NPEAVcEgShaderUniformBufferBinding@@@Z"
- },
- {
-  "name": "cEgRenderer::DrawRenderables",
-  "signature": "44 88 4C 24 ? 4C 89 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 57",
-  "mangled_name": "?DrawRenderables@cEgRenderer@@KAXAEAVcEgRenderQueue@@AEBVcEgFrustum@@AEBT?$TkID@$0IA@@@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@2H_NW4List@RenderingOrder@@4HHPEAVcEgThreadableRenderCall@@44@Z"
- },
- {
-  "name": "cEgDrawGeometry::Draw",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 65 48 8B 04 25 ? ? ? ? 48 8D B1 ? ? ? ? 48 8B BE ? ? ? ? 48 8B D9 48 8B 28 B8 ? ? ? ? 80 3C 28 ? 75 ? E8 ? ? ? ? B8 ? ? ? ? 48 89 34 28 80 BF ? ? ? ? ? 74 ? 48 8D 8F ? ? ? ? 41 B0 ? 33 D2 E8 ? ? ? ? 48 8B BB",
-  "mangled_name": "?Draw@cEgDrawGeometry@@SAXPEAX@Z"
- },
- {
-  "name": "cEgRenderer::SetupMeshGeometry",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 54 41 56 41 57 48 83 EC ? 49 8B F9",
-  "mangled_name": "?SetupMeshGeometry@cEgRenderer@@SA_NPEAVcEgMeshNode@@PEAVcEgGeometryResource@@AEAIAEAPEBVcTkVertexLayoutRT@@_NPEAVcTkRenderStateCache@@PEAVcEgThreadableRenderCall@@@Z"
- },
- {
-  "name": "cGcVisitedSystemsBuffer::VisitNewGalacticAddress",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 54 41 55 41 56 41 57 48 83 EC ? 48 8B 2A",
-  "mangled_name": "?VisitNewGalacticAddress@cGcVisitedSystemsBuffer@@QEAAXAEB_K@Z"
- },
- {
-  "name": "cGcPersistentInteractionsManager::LoadGalacticAddressBuffers",
-  "signature": "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 83 EC ? 4C 8B E9 4C 8B FA",
-  "mangled_name": "?LoadGalacticAddressBuffers@cGcPersistentInteractionsManager@@QEAAXAEB_K@Z"
- },
- {
-  "name": "cGcPersistentInteractionBuffer::LoadGalacticAddressBuffers",
-  "signature": "40 53 56 57 41 56 48 81 EC ? ? ? ? 48 8B F1",
-  "mangled_name": "?LoadGalacticAddressBuffers@cGcPersistentInteractionBuffer@@QEAAXAEB_K@Z"
- },
- {
-  "name": "cGcPlayerBasePersistentBuffer::LoadGalacticAddress",
-  "signature": "48 8B C4 53 48 81 EC ? ? ? ? 48 89 68 ? 48 8B D9 48 8B 69",
-  "mangled_name": "?LoadGalacticAddress@cGcPlayerBasePersistentBuffer@@QEAAXAEB_KUBaseIndex@@@Z"
- },
- {
-  "name": "cGcPlayerCommunicator::Update",
-  "signature": "F3 0F 11 4C 24 ? 4C 8B DC 55 56 49 8D AB",
-  "mangled_name": "?Update@cGcPlayerCommunicator@@QEAAXM@Z"
- },
- {
-  "name": "cGcInteractionComponent::FindFirstTypedComponent",
-  "signature": "4C 8B DC 48 83 EC ? 49 C7 43 ? ? ? ? ? 41 C7 43 ? ? ? ? ? 83 FA ? 75 ? 48 8D 05 ? ? ? ? 45 33 C0 49 89 43 ? 4D 8D 4B ? 49 8D 43 ? 49 89 43 ? 48 8D 15 ? ? ? ? 49 8D 43 ? 49 89 43 ? E8 ? ? ? ? 48 8B 84 24 ? ? ? ? 48 83 C4 ? C3 48 8D 84 24 ? ? ? ? 48 89 44 24 ? 48 8D 54 24 ? 48 8D 84 24 ? ? ? ? 48 89 44 24 ? 0F 28 44 24 ? 66 0F 7F 44 24 ? E8 ? ? ? ? 48 8B 84 24 ? ? ? ? 48 83 C4 ? C3 CC CC CC CC CC CC CC CC CC CC CC CC CC 48 89 5C 24 ? 57 48 83 EC ? 33 FF",
-  "mangled_name": "?FindFirstTypedComponent@cGcInteractionComponent@@SAPEAV1@VTkHandle@@_N@Z"
- },
- {
-  "name": "cGcDestructableComponent::Destroy",
-  "signature": "4C 89 44 24 ? 48 89 4C 24 ? 55 53 57 41 55",
-  "mangled_name": "?Destroy@cGcDestructableComponent@@QEAAXW4eDestroyedBy@@AEBU?$cTkUserIdBase@V?$cTkFixedString@$0EA@D@@@@@Z",
-  "unique_string": "C_SENT_KILLS"
- },
- {
-  "name": "Engine::GetModelNode",
-  "signature": "48 89 5C 24 ? 48 89 7C 24 ? 44 8B D2",
-  "mangled_name": "?GetModelNode@Engine@@YA?AVTkHandle@@V2@@Z"
- },
- {
-  "name": "cGcPersistentInteractionBuffer::SaveInteraction",
-  "signature": "48 89 5C 24 ? 57 48 83 EC ? 0F 10 1A 41 0F B6 D9",
-  "mangled_name": "?SaveInteraction@cGcPersistentInteractionBuffer@@QEAAXAEBVcTkVector3@@AEBVcGcInteractionData@@_NM@Z"
- },
- {
-  "name": "Engine::AddNodes",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 44 8B CA 49 63 D8 41 C1 E9 ? 48 8B F1 45 85 C9 0F 84 ? ? ? ? 44 8B C2 41 81 E0 ? ? ? ? 41 81 F8 ? ? ? ? 0F 84 ? ? ? ? 8B CA 48 8B 15 ? ? ? ? 81 E1 ? ? ? ? 48 8B 82 ? ? ? ? 48 63 0C 88 48 8B 82 ? ? ? ? 48 8B 2C C8 48 85 ED 0F 84 ? ? ? ? 8B 4D ? 8B C1 25 ? ? ? ? 41 3B C0 75",
-  "mangled_name": "?AddNodes@Engine@@YA?AVTkHandle@@V2@U?$TkStrongType@HUTkResHandleID@TkStrongTypeIDs@@@@@Z"
- },
- {
-  "name": "cGcPurchaseableItem::Update",
-  "signature": "F3 0F 11 4C 24 ? 55 53 56 57 41 54 41 56 41 57 48 8D AC 24 ? ? ? ? B8",
-  "mangled_name": "?Update@cGcPurchaseableItem@@QEAAXM@Z"
- },
- {
-  "name": "cGcPlayerShipOwnership::GetShipComponent",
-  "signature": "83 FA ? 75 ? 48 8B 05 ? ? ? ? 8B 90 ? ? ? ? 48 63 C2 48 8D 14 40 48 03 D2",
-  "mangled_name": "?GetShipComponent@cGcPlayerShipOwnership@@QEBAPEBVcGcSpaceshipComponent@@H@Z"
- },
- {
-  "name": "cGcPlayerCharacterComponent::Update",
-  "signature": "40 55 53 56 57 41 54 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 45 33 FF",
-  "mangled_name": "?Update@cGcPlayerCharacterComponent@@UEAAXM@Z"
- },
- {
-  "name": "cTkEngineUtils::GetMasterModelNode",
-  "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 41 8B F0 48 8B F9",
-  "mangled_name": "?GetMasterModelNode@cTkEngineUtils@@SA?AVTkHandle@@V2@W4eMasterModelNodeDistance@@@Z"
- },
- {
-  "name": "Engine::GetResourceHandleForNode",
-  "signature": "44 8B D2 4C 8B C1",
-  "mangled_name": "?GetResourceHandleForNode@Engine@@YA?AU?$TkStrongType@HUTkResHandleID@TkStrongTypeIDs@@@@VTkHandle@@@Z"
- },
- {
-  "name": "cEgGeometryResource::Load",
-  "signature": "40 53 56 48 83 EC ? 65 48 8B 04 25 ? ? ? ? 48 8B DA 48 89 6C 24 ? 48 8B F1 4C 89 64 24 ? 4C 89 74 24 ? 45 8B F0 48 8B 28 4C 89 7C 24 ? 41 BF ? ? ? ? 41 80 3C 2F ? 75 ? E8 ? ? ? ? 83 3D ? ? ? ? ? 41 BC ? ? ? ? 48 89 7C 24 ? 41 8B 04 2C 89 44 24 ? 7E ? 48 8B 05 ? ? ? ? 48 63 48 ? 48 8B 05 ? ? ? ? 48 8D 3C CD ? ? ? ? 48 83 3C 07 ? 74 ? 41 80 3C 2F ? 75 ? E8 ? ? ? ? 48 8B 05 ? ? ? ? 41 C7 04 2C ? ? ? ? 48 8B 04 07 48 89 05 ? ? ? ? EB ? 48 C7 05 ? ? ? ? ? ? ? ? 45 8B C6 48 8B D3 48 8B CE E8 ? ? ? ? 4C 8B 7C 24 ? 4C 8B 74 24 ? 4C 8B 64 24 ? 48 8B 7C 24 ? 48 8B 6C 24 ? 84 C0 74 ? 48 B8 ? ? ? ? ? ? ? ? 48 39 03 75 ? B8 ? ? ? ? 66 39 43 ? 75 ? 48 8D 56 ? 45 33 C0 48 8D 4B ? E8 ? ? ? ? 48 8D 53",
-  "mangled_name": "?Load@cEgGeometryResource@@UEAA_NPEBDH@Z"
- },
- {
-  "name": "Engine::GetTexture",
-  "signature": "40 53 48 83 EC ? 4C 8B 0D ? ? ? ? 33 DB",
-  "mangled_name": "?GetTexture@Engine@@YAPEAXU?$TkStrongType@HUTkResHandleID@TkStrongTypeIDs@@@@@Z"
- },
- {
-  "name": "cGcNGuiNodeInfo::Get",
-  "signature": "48 8B C4 53 55 56 57 41 55 48 81 EC ? ? ? ? 4C 89 60",
-  "mangled_name": "?Get@cGcNGuiNodeInfo@@QEAAXVTkHandle@@@Z",
-  "unique_string": " - %d Children"
- },
- {
-  "name": "Engine::GetNodeNumChildren",
-  "signature": "8B D1 C1 EA ? 85 D2 74 ? 8B C1 25 ? ? ? ? 3D ? ? ? ? 74 ? 4C 8B 05 ? ? ? ? 81 E1 ? ? ? ? 49 8B 80 ? ? ? ? 4C 63 0C 88 41 83 F9 ? 74 ? 49 8B 80 ? ? ? ? 0F BF 0C 48 3B D1 75 ? 49 8B 40 ? 4B 8D 0C 89 8B 04 88",
-  "mangled_name": "?GetNodeNumChildren@Engine@@YAHVTkHandle@@@Z"
- },
- {
-  "name": "cTkEngineUtils::GetMatricesFromNode",
-  "signature": "48 83 EC ? 49 8B C0 48 85 D2",
-  "mangled_name": "?GetMatricesFromNode@cTkEngineUtils@@SA_NVTkHandle@@PEAVcTkMatrix34@@1@Z"
- },
- {
-  "name": "cEgModules::Initialise",
-  "signature": "40 57 48 83 EC ? 33 FF 48 89 5C 24",
-  "mangled_name": "?Initialise@cEgModules@@SAXXZ"
- },
- {
-  "name": "Engine::GetNodeName",
-  "signature": "44 8B C1 41 C1 E8 ? 45 85 C0 74 ? 44 8B C9 41 81 E1 ? ? ? ? 41 81 F9 ? ? ? ? 74 ? 48 8B 15 ? ? ? ? 81 E1 ? ? ? ? 48 8B 82 ? ? ? ? 48 63 0C 88 48 8B 82 ? ? ? ? 48 8B 14 C8 48 85 D2 74 ? 8B 4A ? 8B C1 25 ? ? ? ? 41 3B C1 75 ? C1 E9 ? 41 3B C8 75 ? 48 8B 42 ? 48 85 C0",
-  "mangled_name": "??$GetNodeName@$0A@@Engine@@YAPEBDVTkHandle@@@Z"
- },
- {
-  "name": "cEgModelNode::UpdateGeometry",
-  "signature": "4C 8B DC 55 53 49 8D AB ? ? ? ? 48 81 EC ? ? ? ? 48 8D 81",
-  "mangled_name": "?UpdateGeometry@cEgModelNode@@QEAA_NXZ"
- },
- {
-  "name": "cEgGeometryResource::CreateVertexInfoForHash",
-  "signature": "48 89 54 24 ? 55 57 41 57 48 8D AC 24 ? ? ? ? 48 81 EC",
-  "mangled_name": "?CreateVertexInfoForHash@cEgGeometryResource@@QEAAX_K@Z"
- },
- {
-  "name": "cEgGeometryResource::cEgGeometryResource",
-  "signature": "48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 48 89 78 ? 41 54 41 56 41 57 48 81 EC ? ? ? ? 49 8B E9",
-  "mangled_name": "??0cEgGeometryResource@@QEAA@AEBV?$basic_string@DU?$char_traits@D@std@@V?$TkSTLAllocatorShim@D$00$0?0@@@std@@HPEBVcTkResourceDescriptor@@@Z"
- },
- {
-  "name": "GeometryStreaming::cEgGeometryStreamer::GetVertexBufferByIndex",
-  "signature": "48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 83 79 ? ? 41 0F B6 E8",
-  "mangled_name": "__ZN17GeometryStreaming19cEgGeometryStreamer22GetVertexBufferByIndexEiNS0_11eStreamTypeE"
- },
- {
-  "name": "cTkGraphicsAPI::GetVertexBufferData",
-  "signature": "48 89 5C 24 ? 57 48 83 EC ? 48 8B FA 48 8B D9 4D 85 C0",
-  "mangled_name": "?GetVertexBufferData@cTkGraphicsAPI@@SAXQEAUcTkBuffer@@PEAXPEAH@Z"
- },
- {
-  "name": "GeometryStreaming::cEgGeometryStreamer::RequestStream",
-  "signature": "40 55 53 56 57 41 54 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B FA",
-  "mangled_name": "?RequestStream@cEgGeometryStreamer@GeometryStreaming@@QEAAXPEBVcTkResourceDescriptor@@@Z"
- },
- {
-  "name": "cEgGeometryResource::CloneOriginalVertDataToIndex",
-  "signature": "40 57 48 83 EC ? 83 B9 ? ? ? ? ? 48 8B F9 0F 8F",
-  "mangled_name": "?CloneOriginalVertDataToIndex@cEgGeometryResource@@QEAAXH@Z"
- },
- {
-  "name": "cEgGeometryResource::CloneInternal",
-  "signature": "48 89 5C 24 ? 55 56 57 41 54 41 56 48 81 EC ? ? ? ? 48 8B DA",
-  "mangled_name": "?CloneInternal@cEgGeometryResource@@MEAAXPEBVcTkResource@@@Z",
-  "unique_string": "_CLONED"
- },
- {
-  "name": "GeometryStreaming::cEgGeometryStreamer::OnBufferLoadFinish",
-  "signature": "4C 8B DC 49 89 4B ? 55 57 41 57 48 81 EC ? ? ? ? 48 8B 29",
-  "mangled_name": "?OnBufferLoadFinish@cEgGeometryStreamer@GeometryStreaming@@CAXPEAX@Z"
- },
- {
-  "name": "GeometryStreaming::cEgStreamRequests::ProcessOnlyStreamRequests",
-  "signature": "40 56 48 83 EC ? 83 79 ? ? 48 8B F1 0F 29 74 24",
-  "mangled_name": "?ProcessOnlyStreamRequests@cEgStreamRequests@GeometryStreaming@@QEAAXN@Z"
- },
- {
-  "name": "EgInstancedModelExtension::cEgInstancedMeshNode::RenderAsync",
-  "signature": "48 8B C4 44 89 40 ? 48 89 50 ? 48 89 48 ? 55 56 48 8D A8",
-  "mangled_name": "?RenderAsync@cEgInstancedMeshNode@EgInstancedModelExtension@@CAXAEAVcEgRenderQueueBuffer@@AEBT?$TkID@$0IA@@@H_NW4List@RenderingOrder@@22PEBVcEgFrustum@@PEAVcEgThreadableRenderCall@@@Z"
- },
- {
-  "name": "cGcPlayerWeapon::GetChargeFactor",
-  "signature": "48 83 EC ? 48 63 81 ? ? ? ? 83 F8",
-  "mangled_name": "?GetChargeFactor@cGcPlayerWeapon@@UEBAMXZ"
- },
- {
-  "name": "cGcPlayerWeapon::GetChargeTime",
-  "signature": "48 83 EC ? 48 63 91 ? ? ? ? 8B CA",
-  "mangled_name": "?GetChargeTime@cGcPlayerWeapon@@QEBAMXZ"
- },
- {
-  "name": "cGcPlayerState::GetStatValue",
-  "signature": "48 8B C4 44 89 40 ? 53 55 56 57 41 54",
-  "mangled_name": "?GetStatValue@cGcPlayerState@@QEBAMW4eStatsType@@W4ItemLookupType@@0_N2PEBVcGcInventoryStore@@3@Z"
- },
- {
-  "name": "cGcPlayerState::SaveToData",
-  "signature": "48 8B C4 48 89 50 ? 48 89 48 ? 55 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 58 ? 48 89 70 ? 48 89 78 ? 4C 89 60",
-  "mangled_name": "?SaveToData@cGcPlayerState@@QEAAXAEAVcGcPlayerStateData@@@Z"
- },
- {
-  "name": "cGcPersistentInteractionsManager::PopulateArrays",
-  "signature": "48 8B C4 4C 89 40 ? 55 53 41 55 41 57",
-  "mangled_name": "?PopulateArrays@cGcPersistentInteractionsManager@@QEAAXAEAV?$cTkFixedArray@VcGcInteractionBuffer@@$0L@@@AEAV?$cTkDynamicArray@VcGcPersistentBase@@@@AEAV?$cTkDynamicArray@VcGcMaintenanceContainer@@@@2AEAV?$cTkDynamicArray@_K@@@Z"
- },
- {
-  "name": "cGcGalaxyAttributesAtAddress::Classify",
-  "signature": "48 89 5C 24 ? 57 48 83 EC ? 44 8B C2 C6 44 24",
-  "mangled_name": "?Classify@cGcGalaxyAttributesAtAddress@@QEAAX_K@Z"
- },
- {
-  "name": "cGcSolarSystemQuery::Run",
-  "signature": "44 88 4C 24 ? 53 56 57",
-  "mangled_name": "?Run@cGcSolarSystemQuery@@QEAAX_KW4Type@1@_N@Z"
- },
- {
-  "name": "cGcPlanetGenerator::GenerateCreatureSpawnData",
-  "signature": "48 89 4C 24 ? 53 57 41 55 41 56 41 57 48 83 EC ? 48 63 9A",
-  "mangled_name": "?GenerateCreatureSpawnData@cGcPlanetGenerator@@QEAAXAEAVcGcPlanetData@@@Z"
- },
- {
-  "name": "cEgResource::Load",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 56 48 83 EC ? 48 8B 01 41 8B F0",
-  "mangled_name": "?Load@cEgResource@@UEAA_NPEBDH@Z"
- },
- {
-  "name": "cGcBuilding::Visited",
-  "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 83 B9 ? ? ? ? ? 48 8B F9 0F 8D ? ? ? ? C7 81 ? ? ? ? ? ? ? ? 84 D2 0F 85 ? ? ? ? E8",
-  "mangled_name": "?Visited@cGcBuilding@@QEAAX_N@Z"
- },
- {
-  "name": "cTkGraphicsAPI::CreateVertexBuffer",
-  "signature": "48 8B C4 4C 89 40 ? 48 89 50 ? 48 89 48 ? 41 57",
-  "mangled_name": "?CreateVertexBuffer@cTkGraphicsAPI@@SAPEAXAEAPEAUVkBuffer_T@@AEAUTkDeviceMemory@@PEAPEAXPEAXAEBVcTkVertexLayoutRT@@HH_N55@Z"
- },
- {
-  "name": "cTkGraphicsAPI::CreateIndexBuffer",
-  "signature": "48 89 5C 24 ? 55 56 41 54 41 56 41 57 48 83 EC ? 33 DB",
-  "mangled_name": "?CreateIndexBuffer@cTkGraphicsAPI@@SAPEAXAEAPEAUVkBuffer_T@@AEAUTkDeviceMemory@@PEAXH_N3@Z"
- },
- {
-  "name": "GeometryStreaming::cEgGeometryStreamer::FindVertexBufferIndexByHash",
-  "signature": "48 83 EC ? 8B 41 ? 4C 8B DA 48 85 C0",
-  "mangled_name": "__ZN17GeometryStreaming19cEgGeometryStreamer27FindVertexBufferIndexByHashEm"
- },
- {
-  "name": "cEgGeometryResource::ParseData",
-  "signature": "40 55 56 57 41 56 48 8D 6C 24 ? 48 81 EC ? ? ? ? 44 8B 82",
-  "mangled_name": "?ParseData@cEgGeometryResource@@IEAA_NAEAVcTkGeometryData@@@Z"
- },
- {
-  "name": "cEgRendererBase::ApplyVertexLayout",
-  "signature": "44 89 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 53 55 56 57 41 55",
-  "mangled_name": "?ApplyVertexLayout@cEgRendererBase@@QEAA_NAEBVcTkVertexLayoutRT@@AEBVcTkShader@@PEAVcEgThreadableRenderCall@@H@Z"
- },
- {
-  "name": "cGcPhotoModeUI::OnRenderScreenshotFinished",
-  "signature": "48 89 4C 24 ? 55 53 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 8B 49",
-  "mangled_name": "?OnRenderScreenshotFinished@cGcPhotoModeUI@@CAXPEAX@Z"
- },
- {
-  "name": "Engine::GetRenderBufferTexture",
-  "signature": "40 53 48 83 EC ? 8B DA 85 C9 74 ? 4C 8B 0D ? ? ? ? 8D 41 ? 41 3B 41 ? 73 ? 49 8B 41 ? 4C 63 C1 4A 8B 44 C0 ? 48 85 C0 74 ? 80 B8 ? ? ? ? ? 74 ? 4C 8B 80 ? ? ? ? 49 8B C9 8B 50 ? E8 ? ? ? ? EB ? 33 C0 48 85 C0 74 ? 83 78 ? ? 75 ? 8B 90",
-  "mangled_name": "?GetRenderBufferTexture@Engine@@YAPEAXU?$TkStrongType@HUTkResHandleID@TkStrongTypeIDs@@@@H@Z"
- },
- {
-  "name": "cTkTextureBase::CalculateTextureSize",
-  "signature": "0F B6 C1 45 8B D0",
-  "mangled_name": "?CalculateTextureSize@cTkTextureBase@@SAIW4eTexFormat@1@HHH@Z"
- },
- {
-  "name": "cTkTexture::CopyPixelDataToBuffer",
-  "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B FA 48 8B F1 33 D2 48 8D 0D",
-  "mangled_name": "?CopyPixelDataToBuffer@cTkTexture@@QEAAXPEAD_NII@Z"
- },
- {
-  "name": "cTkTexture::CreateEmptyTexture",
-  "signature": "48 8B C4 44 89 48 ? 44 89 40 ? 88 50 ? 48 89 48",
-  "mangled_name": "?CreateEmptyTexture@cTkTexture@@QEAAXW4eTkTextureType@@IIIIIW4eTextureAddressMode@@W4eTextureFilterMode@@I_N3333@Z"
- },
- {
-  "name": "cTkRigidBody::SetLinearVelocity",
-  "signature": "48 89 5C 24 ? 57 48 83 EC ? 41 0F B6 F8 48 8B D9 4C 8B 81 ? ? ? ? 49 83 B8 ? ? ? ? ? 75 ? 48 8B 81 ? ? ? ? 48 85 C0 74 ? 80 08",
-  "mangled_name": "?SetLinearVelocity@cTkRigidBody@@QEAAXAEBVcTkVector3@@@Z"
- },
- {
-  "name": "cTkRigidBody::SetAngularVelocity",
-  "signature": "48 89 5C 24 ? 57 48 83 EC ? 41 0F B6 F8 48 8B D9 4C 8B 81 ? ? ? ? 49 83 B8 ? ? ? ? ? 75 ? 48 8B 81 ? ? ? ? 48 85 C0 0F 84 ? ? ? ? 0F 28 02",
-  "mangled_name": "?SetAngularVelocity@cTkRigidBody@@QEAAXAEBVcTkVector3@@@Z"
- },
- {
-  "name": "cGcSpaceshipComponent::Update",
-  "signature": "F3 0F 11 4C 24 ? 55 53 56 41 57",
-  "mangled_name": "?Update@cGcSpaceshipComponent@@UEAAXM@Z"
- },
- {
-  "name": "cGcSpaceshipComponent::UpdateControlled",
-  "signature": "F3 0F 11 4C 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 4C 8B A9",
-  "mangled_name": "?UpdateControlled@cGcSpaceshipComponent@@AEAAXM@Z"
- },
- {
-  "name": "cGcSpaceshipComponent::GetVelocity",
-  "signature": "40 53 48 83 EC ? 48 8B 89 ? ? ? ? 48 8B DA 48 83 C1",
-  "mangled_name": "?GetVelocity@cGcSpaceshipComponent@@QEBA?AVcTkVector3@@XZ"
- },
- {
-  "name": "cEgMaterialResource::ParseNode",
-  "signature": "48 89 54 24 ? 48 89 4C 24 ? 55 53 57 41 54 41 55 41 56 48 8D AC 24",
-  "mangled_name": "?ParseNode@cEgMaterialResource@@EEAA_NAEAVcTkMaterialData@@@Z"
- },
- {
-  "name": "Engine::GetNodeParent",
-  "signature": "44 8B CA 4C 8B C1 41 C1 E9",
-  "mangled_name": "?GetNodeParent@Engine@@YA?AVTkHandle@@V2@@Z"
- },
- {
-  "name": "cTkResourceManager::GetDefaultResource",
-  "signature": "4C 89 44 24 ? 89 54 24 ? 53 55 56 57",
-  "mangled_name": "?GetDefaultResource@cTkResourceManager@@QEBAPEAVcTkResource@@HH@Z"
- },
- {
-  "name": "Engine::SetMaterialSampler",
-  "signature": "48 89 5C 24 ? 55 56 57 48 83 EC ? 4C 8B 0D",
-  "mangled_name": "?SetMaterialSampler@Engine@@YA_NU?$TkStrongType@HUTkResHandleID@TkStrongTypeIDs@@@@PEBD0@Z"
- },
- {
-  "name": "cEgTextureResource::LoadFromDds",
-  "signature": "44 89 4C 24 ? 4C 89 44 24 ? 48 89 54 24 ? 55 56 57 48 8D 6C 24",
-  "mangled_name": "?LoadFromDds@cEgTextureResource@@QEAA_NPEBD0HHHPEAIHH@Z"
- },
- {
-  "name": "cTkMemoryManager::Free",
-  "signature": "48 85 D2 0F 84 ? ? ? ? 53 41 56",
-  "mangled_name": "?Free@cTkMemoryManager@@QEAAXPEAXH@Z"
- },
- {
-  "name": "cGcPlayerFreighterOwnership::ResetPlayerFreighterBase",
-  "signature": "48 89 5C 24 ? 48 89 74 24 ? 55 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B D9 E8",
-  "mangled_name": "?ResetPlayerFreighterBase@cGcPlayerFreighterOwnership@@QEAA_NXZ"
- },
- {
-  "name": "cEgCodeResource::Load",
-  "signature": "48 89 5C 24 ? 48 89 4C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 49 63 F8",
-  "mangled_name": "?Load@cEgCodeResource@@UEAA_NPEBDH@Z"
- },
- {
-  "name": "cGcShipHUD::cGcShipHUD",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 0F 29 74 24 ? 48 8B F1 E8",
-  "mangled_name": "??0cGcShipHUD@@QEAA@XZ"
- },
- {
-  "name": "cGcPersistentInteractionBuffer::PopulateBufferData",
-  "signature": "48 89 5C 24 ? 57 48 83 EC ? 48 8B FA 48 8B D9 8B 51 ? 48 8B CF",
-  "mangled_name": "?PopulateBufferData@cGcPersistentInteractionBuffer@@QEAAXAEAVcGcInteractionBuffer@@@Z"
- },
- {
-  "name": "cGcShipHUD::ReadPlanetStats",
-  "signature": "48 89 5C 24 ? 4C 89 44 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05",
-  "mangled_name": "?ReadPlanetStats@cGcShipHUD@@IEAAX_NAEAV?$cTkFixedString@$0CAA@D@@110AEA_NPEAM@Z"
- },
- {
-  "name": "cGcPlayer::RenderInventoryEditor",
-  "signature": "48 89 4C 24 ? 55 41 55 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 45 33 ED",
-  "mangled_name": "?RenderInventoryEditor@cGcPlayer@@IEAAXXZ"
- },
- {
-  "name": "cGcPlayer::RenderNGui",
-  "signature": "48 8B C4 48 89 48 ? 55 41 55 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 58",
-  "mangled_name": "?RenderNGui@cGcPlayer@@IEAAXXZ",
-  "unique_string": "PLAYER STATS"
- },
- {
-  "name": "cGcPositionMarker::Render",
-  "signature": "48 8B C4 55 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 83 39",
-  "mangled_name": "?Render@cGcPositionMarker@@QEAAXXZ"
- },
- {
-  "name": "cGcEnvironment::Update",
-  "signature": "40 55 56 48 8D 6C 24 ? 48 81 EC ? ? ? ? 66 0F 6F 05",
-  "mangled_name": "__ZN14cGcEnvironment6UpdateEf"
- },
- {
-  "name": "cGcPlayerState::LoadFromData",
-  "signature": "44 88 4C 24 ? 4C 89 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55 41 55",
-  "mangled_name": "?LoadFromData@cGcPlayerState@@QEAAXAEBVcGcPlayerStateData@@_N1@Z"
- },
- {
-  "name": "cGcGalaxyMap::Data::RenderNVG",
-  "signature": "40 55 53 41 54 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 48 89 B4 24 ? ? ? ? 48 8B F1 48 8B 0D",
-  "mangled_name": "?RenderNVG@Data@cGcGalaxyMap@@QEAAXXZ"
- },
- {
-  "name": "nvgEllipse",
-  "signature": "48 8B C4 55 48 8D 68 ? 48 81 EC ? ? ? ? F3 0F 10 6D",
-  "mangled_name": "nvgEllipse"
- },
- {
-  "name": "cGcInteractionComponent::DoInteractionEvent",
-  "signature": "40 55 41 55 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B F1 44 8B EA",
-  "mangled_name": "?DoInteractionEvent@cGcInteractionComponent@@QEAAXW4eInteractionEvent@@@Z",
-  "unique_string": "ALIENS_MET"
- },
- {
-  "name": "cGcInteractionComponent::GetInteractionData",
-  "signature": "40 53 48 83 EC ? 48 8B D9 48 8B 0D ? ? ? ? 8B 93",
-  "mangled_name": "?GetInteractionData@cGcInteractionComponent@@AEAAPEBVcGcInteractionData@@XZ"
- },
- {
-  "name": "cGcPlayerWanted::Update",
-  "signature": "48 8B C4 F3 0F 11 50 ? 48 89 50 ? 55 53",
-  "mangled_name": "?Update@cGcPlayerWanted@@QEAAXAEBVcTkVector3@@M@Z",
-  "unique_string": "LAST KNOWN PLAYER POS"
- },
- {
-  "name": "cGcGalaxyAttributeGenerator::ClassifyStarKeyAttributes",
-  "signature": "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 8B F9",
-  "mangled_name": "?ClassifyStarKeyAttributes@cGcGalaxyAttributeGenerator@@SAX_KAEAUStarSystemKeyAttributes@1@@Z"
- },
- {
-  "name": "cGcGalaxyAttributeGenerator::ClassifyStarKeyAttributes",
-  "signature": "48 89 5C 24 ? 66 89 54 24",
-  "mangled_name": "?ClassifyStarKeyAttributes@cGcGalaxyAttributeGenerator@@SAXAEAVcTkParallelRNG@@GAEAVcGcGalaxyVoxelAttributesData@@AEAUStarSystemKeyAttributes@1@_K@Z"
- },
- {
-  "name": "cGcInteractionData::SetDefaults",
-  "signature": "66 0F 6F 05 ? ? ? ? 33 C0 0F 11 01 48 89 41 ? 48 89 41 ? C3",
-  "mangled_name": "?SetDefaults@cGcInteractionData@@QEAAXXZ"
- },
- {
-  "name": "cGcResourceCustomisation::CreateGenerationTask",
-  "signature": "48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 57 48 81 EC ? ? ? ? 48 8B F2 49 8B F8",
-  "mangled_name": "?CreateGenerationTask@cGcResourceCustomisation@@QEAAPEAUTaskContext@cGcProceduralTextureManager@@PEAVcTkSmartResHandle@@PEBD_N@Z"
- },
- {
-  "name": "cGcNameGenerator::GenerateGalacticRegionName",
-  "signature": "48 89 5C 24 ? 55 56 57 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 8B F9",
-  "mangled_name": "?GenerateGalacticRegionName@cGcNameGenerator@@QEBAX_KAEAV?$cTkFixedString@$0HP@D@@PEAV2@@Z",
-  "unique_string": "NAMEGEN_SUFFIX_REGION_%i"
- },
- {
-  "name": "cGcGalaxyMap::Data::DoSolarPopup",
-  "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 55 57 41 54 41 55 41 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 44 0F B7 72",
-  "mangled_name": "?DoSolarPopup@Data@cGcGalaxyMap@@QEAAXAEBUSolarQueryResult@@@Z"
- },
- {
-  "name": "SolarQueryResult::ComputeLightyearDistanceBetweenSolarSystems",
-  "signature": "48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 54 41 56 41 57 48 83 EC ? 44 0F B7 41",
-  "mangled_name": "?ComputeLightyearDistanceBetweenSolarSystems@SolarQueryResult@@SAMAEBU1@0@Z"
- },
- {
-  "name": "cGcGalaxyMap::Data::Update",
-  "signature": "40 55 53 56 57 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 4C 89 A4 24",
-  "mangled_name": "?Update@Data@cGcGalaxyMap@@QEAAXM@Z",
-  "unique_string": "NEW_GALAXY%i"
- },
- {
-  "name": "cGcGalaxyMapUI::SolarInfoPanel::UpdatePanelUI",
-  "signature": "48 89 4C 24 ? 55 53 41 55 41 56 48 8D AC 24 ? ? ? ? B8",
-  "mangled_name": "?UpdatePanelUI@SolarInfoPanel@cGcGalaxyMapUI@@QEAAXXZ",
-  "unique_string": "GLXY_REGION"
- },
- {
-  "name": "cGcGameState::ComputeWarpCapability",
-  "signature": "40 53 56 41 54 41 55 41 56",
-  "mangled_name": "?ComputeWarpCapability@cGcGameState@@QEBA?AUWarpCapabilityResult@@M_N_KAEBUStarSystemKeyAttributes@cGcGalaxyAttributeGenerator@@@Z"
- },
- {
-  "name": "cTkEngineUtils::RepositionGroupNode",
-  "signature": "40 53 48 81 EC ? ? ? ? 66 0F 6F 05 ? ? ? ? 8B D9",
-  "mangled_name": "?RepositionGroupNode@cTkEngineUtils@@SAXVTkHandle@@AEBVcTkVector3@@@Z"
- },
- {
-  "name": "cGcEcosystem::Update",
-  "signature": "48 8B C4 48 89 58 ? 48 89 48 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 45 33 F6",
-  "mangled_name": "?Update@cGcEcosystem@@QEAAXM@Z"
- },
- {
-  "name": "cGcBaseBuildingManager::Update",
-  "signature": "48 8B C4 F3 0F 11 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 80 79",
-  "mangled_name": "?Update@cGcBaseBuildingManager@@QEAAXM@Z"
- },
- {
-  "name": "cGcFrontendPageClaimBase::DoBaseClaimOptions",
-  "signature": "48 89 54 24 ? 55 53 41 54 41 56",
-  "mangled_name": "?DoBaseClaimOptions@cGcFrontendPageClaimBase@@SAXPEAVcGcFrontendPage@@V?$array@PEAVcGcNGuiLayer@@$04@std@@W4ePersistentBaseTypes@@_NUBaseIndex@@@Z",
-  "unique_string": "UI_BASE_MOVE_HERE"
- },
- {
-  "name": "cGcSolarSystemGenerator::GeneratePlanetPositions",
-  "signature": "48 8B C4 4C 89 48 ? 4C 89 40 ? 48 89 50 ? 48 89 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 44 0F 29 B8",
-  "mangled_name": "?GeneratePlanetPositions@cGcSolarSystemGenerator@@QEAAXAEBVcGcGalaxyAttributesAtAddress@@AEAUGenerationData@1@PEAVcGcSolarSystemGeometry@@@Z"
- },
- {
-  "name": "cGcSolarSystemGenerator::GenerateBasics",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B FA 49 8B D9",
-  "mangled_name": "?GenerateBasics@cGcSolarSystemGenerator@@QEAAXAEBVcTkSeed@@AEBVcGcGalaxyAttributesAtAddress@@AEAUStarSystemKeyAttributes@cGcGalaxyAttributeGenerator@@AEAUGenerationData@1@@Z"
- },
- {
-  "name": "cGcSolarSystemGenerator::GeneratePlanetBiomes",
-  "signature": "48 8B C4 4C 89 48 ? 4C 89 40 ? 48 89 50 ? 48 89 48 ? 53 55 56 57 41 54 41 55 41 56 41 57 48 81 EC ? ? ? ? 4C 63 9A",
-  "mangled_name": "?GeneratePlanetBiomes@cGcSolarSystemGenerator@@QEAAXAEBVcGcGalaxyAttributesAtAddress@@AEAUGenerationData@1@AEAUStarSystemKeyAttributes@cGcGalaxyAttributeGenerator@@@Z"
- },
- {
-  "name": "cEgModelNode::Animate",
-  "signature": "40 53 48 81 EC ? ? ? ? 48 83 B9 ? ? ? ? ? 48 8B D9 0F 84 ? ? ? ? 48 83 B9",
-  "mangled_name": "?Animate@cEgModelNode@@IEAAXXZ"
- },
- {
-  "name": "cEgSceneNodeData::SetRelativeTransform",
-  "signature": "48 8B 81 ? ? ? ? 81 E2 ? ? ? ? 4C 8B C9",
-  "mangled_name": "?SetRelativeTransform@cEgSceneNodeData@@QEAAXVTkHandle@@AEBVcTkMatrix34@@@Z"
- },
- {
-  "name": "cGcPlayerHUD::Update",
-  "signature": "F3 0F 11 4C 24 ? 4C 8B DC 55 41 55",
-  "mangled_name": "?Update@cGcPlayerHUD@@QEAAXM@Z",
-  "unique_string": "UI_ABAND_AREA_MAPPED"
- },
- {
-  "name": "cGcNGuiElement::GetPosition",
-  "signature": "48 83 EC ? 48 8B 41 ? 45 85 C0",
-  "mangled_name": "?GetPosition@cGcNGuiElement@@QEBA?AVcTkVector2@@W4PositionType@1@@Z"
- },
- {
-  "name": "cGcNGuiElement::Render",
-  "signature": "4C 8B DC 53 48 81 EC ? ? ? ? 49 89 6B ? 48 8B D9",
-  "mangled_name": "?Render@cGcNGuiElement@@UEAAXXZ"
- },
- {
-  "name": "cGcFrontendManager::cGcFrontendManager",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 54 41 56 41 57 48 83 EC ? 48 8D 05",
-  "mangled_name": "??0cGcFrontendManager@@QEAA@XZ"
- },
- {
-  "name": "cGcNGuiLayer::cGcNGuiLayer",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B F9 E8 ? ? ? ? 33 ED",
-  "mangled_name": "??0cGcNGuiLayer@@QEAA@XZ"
- },
- {
-  "name": "cGcSimpleInteractionComponent::DoAction",
-  "signature": "48 8B C4 48 89 48 ? 55 41 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 58 ? 4C 8B F1",
-  "mangled_name": "?DoAction@cGcSimpleInteractionComponent@@AEAAXXZ",
-  "unique_string": "UI_NOTIFY_LANDINGPAD_ERROR"
- },
- {
-  "name": "cGcDiscoveryManager::SubmitDiscoveryData",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B 59 ? 41 0F B6 F9",
-  "mangled_name": "?SubmitDiscoveryData@cGcDiscoveryManager@@QEAA_NAEBVcGcDiscoveryData@@PEA_N@Z"
- },
- {
-  "name": "cGcFrontendManager::QueueFrontendPage",
-  "signature": "48 63 81 ? ? ? ? 48 03 C0 83 BC C1 ? ? ? ? ? 75 ? 89 94 C1",
-  "mangled_name": "?QueueFrontendPage@cGcFrontendManager@@QEAAXW4eFrontendPage@@MPEAVcGcInteractionComponent@@@Z"
- },
- {
-  "name": "cGcInventoryStore::Add",
-  "signature": "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 56 48 8D 6C 24 ? 48 81 EC ? ? ? ? 41 0F 10 00",
-  "mangled_name": "?Add@cGcInventoryStore@@QEAA?AVcGcInventoryIndex@@AEBVcGcInventoryElement@@@Z"
- },
- {
-  "name": "cGcInventoryStore::GetElement",
-  "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B 99 ? ? ? ? 48 8B F2 8B 81 ? ? ? ? 48 8D 3C 40 48 C1 E7 ? 48 03 FB 48 3B DF 74 ? 90 48 8D 53",
-  "mangled_name": "?GetElement@cGcInventoryStore@@QEBAPEBVcGcInventoryElement@@AEBVcGcInventoryIndex@@@Z"
- },
- {
-  "name": "cGcInventoryStore::Remove",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 54 24 ? 56 57 41 56 48 83 EC ? 48 8B B9",
-  "mangled_name": "?Remove@cGcInventoryStore@@QEAA_NVcGcInventoryIndex@@H@Z"
- },
- {
-  "name": "cGcFishLaser::OnModeChanged",
-  "signature": "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 8D 42",
-  "mangled_name": "__ZN12cGcFishLaser13OnModeChangedENS_5eModeES0_"
- },
- {
-  "name": "cGcHUDManager::RemoveOSDMessage",
-  "signature": "48 89 5C 24 ? 55 56 57 48 81 EC ? ? ? ? 4C 8B 89",
-  "mangled_name": "__ZN13cGcHUDManager16RemoveOSDMessageEPKc"
- },
- {
-  "name": "cGcVibrationManager::SendValue",
-  "signature": "48 89 5C 24 ? 57 48 83 EC ? 48 8B F9 48 83 C1 ? E8 ? ? ? ? 48 8D 14 40 48 8B 47 ? 48 8D 04 D0 48 3B 47 ? 75",
-  "mangled_name": "?SendValue@cGcVibrationManager@@QEAA_NAEBT?$TkID@$0IA@@@M@Z"
- },
- {
-  "name": "cGcFishManager::Update",
-  "signature": "F3 0F 11 4C 24 ? 55 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 44 0F 29 8C 24",
-  "mangled_name": "__ZN14cGcFishManager6UpdateEf"
- },
- {
-  "name": "cGcFishManager::SetFishing",
-  "signature": "48 8B C4 48 89 58 ? 48 89 78 ? 55 48 8D 68 ? 48 81 EC ? ? ? ? 80 79",
-  "mangled_name": "__ZN14cGcFishManager10SetFishingEP12cGcFishLaser"
- },
- {
-  "name": "cGcFishingData::GetRandomFish",
-  "signature": "48 8B C4 44 89 48 ? 4C 89 40 ? 48 89 50 ? 48 89 48 ? 55 53 48 8D A8",
-  "mangled_name": "__ZN14cGcFishingData13GetRandomFishE10cTkVector34TkIDILm128EE12eItemQualityRfS3_"
- },
- {
-  "name": "cGcBaseBuildingManager::GetBaseBuildingRootMatrix",
-  "signature": "40 53 48 83 EC ? 66 0F 6F 25",
-  "mangled_name": "?GetBaseBuildingRootMatrix@cGcBaseBuildingManager@@QEBA?AVcTkPhysRelMat34@@UBaseIndex@@_K@Z"
- },
- {
-  "name": "cGcPlayerHUD::LoadData",
-  "signature": "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8B EC 48 83 EC ? 4C 8D B1",
-  "mangled_name": "?LoadData@cGcPlayerHUD@@QEAAXXZ",
-  "unique_string": "UI\\HUD\\HUDCROSSHAIR.MXML"
- },
- {
-  "name": "cGcPlayerState::PackageTechnology",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 54 41 56 41 57 48 83 EC ? 48 8D 99 ? ? ? ? 4D 8B F8",
-  "mangled_name": "?PackageTechnology@cGcPlayerState@@QEAA_NW4InventoryChoice@@AEBVcGcInventoryIndex@@01W4TryStoreMode@@AEAV?$cTkFixedString@$0CA@D@@@Z",
-  "unique_string": "UI_TECH_PACK_ERROR"
- },
- {
-  "name": "cGcFrontendPageFunctions::DoInventorySlots",
-  "signature": "48 85 D2 0F 84 ? ? ? ? 48 8B C4 4C 89 48 ? 4C 89 40",
-  "mangled_name": "?DoInventorySlots@cGcFrontendPageFunctions@@CAXPEAVcGcFrontendPage@@PEAVcGcNGuiLayer@@PEAVcGcInventoryStore@@AEAV?$vector@W4ePopupAction@@V?$TkSTLAllocatorShim@W4ePopupAction@@$03$0?0@@@std@@HH_NAEBVcGcInventoryIndex@@HH4HH4M@Z"
- },
- {
-  "name": "cGcScanManager::UpdateConstantMarkers",
-  "signature": "48 89 4C 24 ? 55 53 56 57 41 54 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 0F 29 B4 24 ? ? ? ? 4C 8B F9",
-  "mangled_name": "?UpdateConstantMarkers@cGcScanManager@@AEAAXXZ",
-  "unique_string": "UI_MARKER_TAG_NORTH"
- },
- {
-  "name": "cGcScanManager::UpdateScannableMarkers",
-  "signature": "48 89 4C 24 ? 55 53 57 41 54 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 0F 29 B4 24",
-  "mangled_name": "?UpdateScannableMarkers@cGcScanManager@@AEAAXXZ"
- },
- {
-  "name": "cGcMarkerPoint::Update",
-  "signature": "40 55 53 56 57 41 54 48 8D 6C 24 ? 48 81 EC ? ? ? ? 0F B6 99",
-  "mangled_name": "?Update@cGcMarkerPoint@@QEAAXXZ",
-  "unique_string": "STATION_MARKER"
- },
- {
-  "name": "cGcMarkerPoint::IsEqual",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8B F9 48 8B F2",
-  "mangled_name": "?IsEqual@cGcMarkerPoint@@QEAA_NAEBV1@@Z"
- },
- {
-  "name": "cGcHologramComponent::GetDesiredHologramResource",
-  "signature": "40 53 48 83 EC ? 80 B9 ? ? ? ? ? 48 8B DA 74 ? 8B 81",
-  "mangled_name": "__ZNK20cGcHologramComponent26GetDesiredHologramResourceEv"
- },
- {
-  "name": "cGcOptionsPageUI::Boolean",
-  "signature": "4C 89 44 24 ? 56 57 41 55",
-  "mangled_name": "__ZN16cGcOptionsPageUI7BooleanEPKcS1_bbRK17cGcBooleanOptions"
- },
- {
-  "name": "cGcFrontendPageOptions::DoCameraOptions",
-  "signature": "48 8B C4 55 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 58 ? 48 89 70 ? 48 8B F1 48 89 78 ? 48 8B 3D",
-  "mangled_name": "__ZN22cGcFrontendPageOptions15DoCameraOptionsEP16cGcOptionsPageUI"
- },
- {
-  "name": "cGcOptionsPageUI::Header",
-  "signature": "48 89 5C 24 ? 57 48 83 EC ? 83 79 ? ? 48 8B DA",
-  "mangled_name": "__ZN16cGcOptionsPageUI6HeaderEPKc24eOptionsUIHeaderIconType"
- },
- {
-  "name": "cGcOptionsPageUI::Float",
-  "signature": "F3 0F 11 5C 24 ? 55 53 41 54",
-  "mangled_name": "__ZN16cGcOptionsPageUI5FloatEPKcS1_ffffRK15cGcFloatOptions",
-  "unique_string": "%.1f%s"
- },
- {
-  "name": "cGcOptionsPageUI::Int",
-  "signature": "44 89 4C 24 ? 4C 89 44 24 ? 55 56 41 57",
-  "mangled_name": "__ZN16cGcOptionsPageUI3IntEPKcS1_iiiiRK13cGcIntOptions"
- },
- {
-  "name": "cGcOptionsPageUI::BeginPage",
-  "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 57 C0 33 C0",
-  "mangled_name": "__ZN16cGcOptionsPageUI9BeginPageEPNS_15PersistentStateEP28cGcOptionsInteractionContext"
- },
- {
-  "name": "cGcOptionsPageUI::EndPage",
-  "signature": "48 8B C4 55 57 48 8D 68 ? 48 81 EC ? ? ? ? 83 79",
-  "mangled_name": "__ZN16cGcOptionsPageUI7EndPageEv"
- },
- {
-  "name": "cGcFrontendPageOptions::DoOptions",
-  "signature": "40 55 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 83 3D",
-  "mangled_name": "__ZN22cGcFrontendPageOptions9DoOptionsEv"
- },
- {
-  "name": "cGcFrontendPageOptions::RequestOptionsPage",
-  "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 8B D9",
-  "mangled_name": "__ZN22cGcFrontendPageOptions18RequestOptionsPageE12eOptionsMenub"
- },
- {
-  "name": "cGcOptionsPageUI::Button",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 57 48 81 EC ? ? ? ? 32 DB",
-  "mangled_name": "__ZN16cGcOptionsPageUI6ButtonEPKcS1_RK16cGcButtonOptions"
- },
- {
-  "name": "cGcOptionsPageUI::FinalizePage",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 55 41 56 41 57 48 83 EC ? 48 8B 81 ? ? ? ? 45 33 FF",
-  "mangled_name": "__ZN16cGcOptionsPageUI12FinalizePageEbb"
- },
- {
-  "name": "cGcFrontendPage::Confirm",
-  "signature": "48 89 6C 24 ? 41 54 41 56 41 57 48 83 EC ? 80 B9",
-  "mangled_name": "?Confirm@cGcFrontendPage@@QEAA_NPEAVcGcNGuiLayer@@_N1VTkAudioID@@11@Z"
- },
- {
-  "name": "cGcFrontendPageOptions::DoGameSwitcher",
-  "signature": "48 8B C4 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 66 0F 6F 0D",
-  "mangled_name": "__ZN22cGcFrontendPageOptions14DoGameSwitcherEP15cGcFrontendPage",
-  "unique_string": "UI_DIFFICULTY_SELF_BAN"
- },
- {
-  "name": "cGcFrontendManager::RenderPage",
-  "signature": "48 89 4C 24 ? 55 53 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 48 89 B4 24 ? ? ? ? 48 89 BC 24",
-  "mangled_name": "__ZN18cGcFrontendManager10RenderPageEv"
- },
- {
-  "name": "cGcFrontendPageFunctions::DoItemPopup",
-  "signature": "48 8B C4 44 89 48 ? 4C 89 40 ? 48 89 48 ? 55 48 8D A8",
-  "mangled_name": "?DoItemPopup@cGcFrontendPageFunctions@@SAPEAVcGcNGuiLayer@@PEAVcGcFrontendPage@@PEAV2@AEBVcGcInventoryElement@@W4eItemPopupLayer@@_NAEBT?$TkID@$0BAA@@@PEBVcGcInventoryStore@@@Z",
-  "unique_string": "UI_EMPTY_REFINER"
- },
- {
-  "name": "cTkHashedNGuiElement::cTkHashedNGuiElement",
-  "signature": "4C 8B D9 45 8B D0",
-  "mangled_name": "??0cTkHashedNGuiElement@@QEAA@AEBT?$TkID@$0IA@@@H@Z"
- },
- {
-  "name": "GcTerrainRegionMap::cGcTerrainRegionMap",
-  "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 29 74 24 ? 48 8D 05",
-  "mangled_name": "??0cGcTerrainRegionMap@@QEAA@XZ"
- },
- {
-  "name": "cTkAudioManager::RegisterNamedAudioObject",
-  "signature": "4C 89 44 24 ? 55 53 56 57 41 55 41 56 48 8D 6C 24",
-  "mangled_name": "?RegisterNamedAudioObject@cTkAudioManager@@QEAA?AVTkAudioObject@@_KPEBD@Z"
- },
- {
-  "name": "cTkPersonalRNG::cTkPersonalRNG",
-  "signature": "40 53 48 83 EC ? 48 8B D9 FF 15 ? ? ? ? 48 8B D0 48 B9 ? ? ? ? ? ? ? ? 48 C1 EA ? 48 33 D0 48 B8 ? ? ? ? ? ? ? ? 48 0F AF D0 48 8B C2 48 C1 E8 ? 48 33 C2 48 0F AF C1 48 8B D0 48 C1 EA ? 48 33 D0 33 C0 85 D2 8B CA 0F 94 C0 C1 C9 ? 03 C2 89 03 48 8B C2 48 C1 E8 ? 33 C8 48 8B C3",
-  "mangled_name": "??0cTkPersonalRNG@@QEAA@XZ"
- },
- {
-  "name": "cGcApplicationDeathState::Update",
-  "signature": "48 89 4C 24 ? 55 53 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8",
-  "mangled_name": "?Update@cGcApplicationDeathState@@EEAAXM@Z"
- },
- {
-  "name": "cGcSolarSystem::PollToPrepare",
-  "signature": "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 65 48 8B 04 25 ? ? ? ? 48 8B F9",
-  "mangled_name": "?PollToPrepare@cGcSolarSystem@@QEAA?AW4TkPollResult@@XZ",
-  "unique_string": "SolarSystemPhase%zu"
- },
- {
-  "name": "cGcSolarSystemMap::cGcSolarSystemMap",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B F1 E8 ? ? ? ? 48 8D 8E",
-  "mangled_name": "__ZN17cGcSolarSystemMapC2Ev"
- },
- {
-  "name": "cGcSpacePoiSiteComponent::GeneratePoiDescription",
-  "signature": "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 63 FA",
-  "mangled_name": "__ZN24cGcSpacePoiSiteComponent22GeneratePoiDescriptionE13eSpacePoiTypem",
-  "unique_string": "%STARCLASS%"
- },
- {
-  "name": "cGcSpacePoiSiteComponent::Prepare",
-  "signature": "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 8B 51 ? 48 8B D9",
-  "mangled_name": "__ZN24cGcSpacePoiSiteComponent7PrepareEv"
- },
- {
-  "name": "cGcNameGenerator::GenerateSpacePoiName",
-  "signature": "44 89 4C 24 ? 4C 89 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D AC 24",
-  "mangled_name": "__ZNK16cGcNameGenerator20GenerateSpacePoiNameEmm13eSpacePoiTypeiRK14cTkFixedStringILi127EcERS2_",
-  "unique_string": "NAMEGEN_ASTEROIDBELT_%i"
- },
- {
-  "name": "cGcSpacePoiSiteComponent::OnActivate",
-  "signature": "40 53 48 81 EC ? ? ? ? 48 8B 81 ? ? ? ? 48 8B D9 8B 88",
-  "mangled_name": "__ZN24cGcSpacePoiSiteComponent10OnActivateEv"
- },
- {
-  "name": "cGcSpacePoiSiteComponent::AdvanceLifecycle",
-  "signature": "48 89 5C 24 ? 57 48 83 EC ? 0F 29 74 24 ? 41 0F B6 F8 0F 28 F1 48 8B D9 E8 ? ? ? ? 80 BB",
-  "mangled_name": "__ZN24cGcSpacePoiSiteComponent16AdvanceLifecycleEfb"
- },
- {
-  "name": "cGcSpacePoiSiteComponent::UpdateSunTrackedPosition",
-  "signature": "40 53 48 83 EC ? 48 8B 81 ? ? ? ? 48 8B D9 48 85 C0 0F 84 ? ? ? ? 83 B8 ? ? ? ? ? 0F 85",
-  "mangled_name": "__ZN24cGcSpacePoiSiteComponent24UpdateSunTrackedPositionEv"
- },
- {
-  "name": "cGcSolarSystem::UpdateSunLock",
-  "signature": "4C 8B DC 53 48 81 EC ? ? ? ? 48 83 B9",
-  "mangled_name": "__ZN14cGcSolarSystem13UpdateSunLockEf"
- },
- {
-  "name": "cGcSpaceshipWarp::Update",
-  "signature": "40 55 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 8B 81",
-  "mangled_name": "?Update@cGcSpaceshipWarp@@QEAAXM@Z"
- },
- {
-  "name": "cGcSimulation::WarpToSystem",
-  "signature": "40 53 48 83 EC ? 48 83 B9 ? ? ? ? ? 48 8B DA",
-  "mangled_name": "?WarpToSystem@cGcSimulation@@QEAAXAEBVcGcGalacticSolarSystemAddress@@@Z"
- },
- {
-  "name": "cGcRealityManager::LoadTexture",
-  "signature": "40 53 48 83 EC ? 4C 8B 01 48 8B D9 4D 85 C0 0F 84 ? ? ? ? 48 C7 C0 ? ? ? ? 0F 1F 40 ? 48 FF C0 41 80 3C 00 ? 75 ? 85 C0 7E ? 48 8D 44 24 ? 48 C7 44 24 ? ? ? ? ? 48 89 44 24 ? 48 8D 8C 24 ? ? ? ? BA",
-  "mangled_name": "?LoadTexture@cGcRealityManager@@SAXAEAVcTkTextureResource@@@Z"
- },
- {
-  "name": "cGcHUDManager::Construct",
-  "signature": "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B F9 45 33 E4",
-  "mangled_name": "?Construct@cGcHUDManager@@QEAAXXZ"
- },
- {
-  "name": "cTkFileSystem::Read",
-  "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B 5C 24 ? 49 8B F1",
-  "mangled_name": "?Read@cTkFileSystem@@QEAA_JPEAX_J1PEAUFIOS2HANDLE@@@Z"
- },
- {
-  "name": "cGcPlayer::GetSpaceship",
-  "signature": "48 8B 91 ? ? ? ? 48 85 D2 74 ? 48 8B CA 4C 8D 15 ? ? ? ? 48 C1 F9 ? 45 33 C0 81 F9 ? ? ? ? 77 ? 48 63 C1 4C 6B C8 ? 4B 8D 04 11 4B 39 54 11 ? 74 ? 49 8B C0 48 85 C0 74 ? 81 F9 ? ? ? ? 77 ? 48 63 C1 48 6B C8 ? 4A 39 54 11 ? 75 ? 4E 8D 04 11 0F BF 0D ? ? ? ? 49 8B D0 E9 ? ? ? ? 33 C0 C3 CC CC CC CC CC 48 8B 05",
-  "mangled_name": "?GetSpaceship@cGcPlayer@@QEBAPEAVcGcSpaceshipComponent@@XZ"
- },
- {
-  "name": "cGcSpacePoiGenerator::Generate",
-  "signature": "4C 8B DC 4D 89 43 ? 49 89 4B ? 55 41 55",
-  "mangled_name": "__ZN20cGcSpacePoiGenerator8GenerateERK28cGcGalaxyAttributesAtAddressRK13cTkFixedArrayI10cTkVector3Lm32EE"
- }
-]
+  "functions":
+  [
+    {
+      "name": "cGcNGuiLayer::FindElementRecursive",
+      "signature": "40 55 57 41 57 48 83 EC ? 4C 8B 89",
+      "mangled_name": "?FindElementRecursive@cGcNGuiLayer@@QEAAPEAVcGcNGuiElement@@AEBVcTkHashedNGuiElement@@W4eNGuiGameElementType@@@Z"
+    },
+    {
+      "name": "cGcShipHUD::LoadData",
+      "signature": "48 89 5C 24 ? 56 57 41 54 41 55 41 57 48 81 EC ? ? ? ? 48 8B D9",
+      "mangled_name": "?LoadData@cGcShipHUD@@QEAAXXZ",
+      "unique_string": "UI\\HUD\\SHIP\\MAINSCREEN.MXML"
+    },
+    {
+      "name": "cGcShipHUD::RenderHeadsUp",
+      "signature": "40 55 56 41 55 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B F1 48 8B 0D",
+      "mangled_name": "?RenderHeadsUp@cGcShipHUD@@QEAAXXZ"
+    },
+    {
+      "name": "cTkStopwatch::GetDurationInSeconds",
+      "signature": "48 83 EC ? 48 8B 11 0F 29 74 24",
+      "mangled_name": "?GetDurationInSeconds@cTkStopwatch@@QEBAMXZ"
+    },
+    {
+      "name": "cGcApplication::Update",
+      "signature": "40 53 48 83 EC 20 E8 ? ? ? ? 48 89",
+      "mangled_name": "?Update@cGcApplication@@QEAAXXZ"
+    },
+    {
+      "name": "cGcApplication::Construct",
+      "signature": "40 57 48 83 EC ? 33 FF 48 89 5C 24 ? 83 3D",
+      "mangled_name": "?Construct@cGcApplication@@QEAAXXZ",
+      "unique_string": "APPBOOT"
+    },
+    {
+      "name": "cTkFSM::Construct",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 ED 48 89 51",
+      "mangled_name": "?Construct@cTkFSM@@UEAAXPEBVcTkFSMStateOffset@@AEBT?$TkID@$0IA@@@@Z"
+    },
+    {
+      "name": "cTkFSM::Update",
+      "signature": "48 89 5C 24 ? 57 48 83 EC ? 48 8B 05 ? ? ? ? 48 8B D9 0F 29 74 24",
+      "mangled_name": "?Update@cTkFSM@@UEAAXM@Z"
+    },
+    {
+      "name": "cTkFSM::StateChange",
+      "signature": "48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 4C 8B 51 ? 49 8B E8",
+      "mangled_name": "?StateChange@cTkFSM@@IEAAXAEBT?$TkID@$0IA@@@PEBX_N@Z"
+    },
+    {
+      "name": "cGcLaserBeam::Fire",
+      "signature": "48 89 5C 24 ? 57 48 83 EC ? 48 83 B9 ? ? ? ? ? 0F B6 FA 48 8B D9 77",
+      "mangled_name": "?Fire@cGcLaserBeam@@QEAAX_N@Z"
+    },
+    {
+      "name": "cGcMarkerPoint::cGcMarkerPoint",
+      "signature": "40 53 48 83 EC ? 33 C0 0F 57 C0 0F 11 01 48 8B D9",
+      "mangled_name": "??0cGcMarkerPoint@@QEAA@XZ"
+    },
+    {
+      "name": "cGcMarkerPoint::Reset",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 28 05 ? ? ? ? 48 8D 79",
+      "mangled_name": "?Reset@cGcMarkerPoint@@QEAAXXZ"
+    },
+    {
+      "name": "cGcMarkerList::RemoveMarker",
+      "signature": "48 89 5C 24 ? 55 57 41 56 48 83 EC ? 40 32 ED",
+      "mangled_name": "?RemoveMarker@cGcMarkerList@@QEAA_NAEAVcGcMarkerPoint@@@Z"
+    },
+    {
+      "name": "cGcMarkerList::TryAddMarker",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 54 41 56 41 57 48 83 EC ? F6 82",
+      "mangled_name": "?TryAddMarker@cGcMarkerList@@QEAA_NAEBVcGcMarkerPoint@@_N@Z"
+    },
+    {
+      "name": "cGcBaseBuildingManager::GetBaseRootNode",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 56 48 81 EC ? ? ? ? 49 8B D8 B8",
+      "mangled_name": "?GetBaseRootNode@cGcBaseBuildingManager@@QEAA?AVTkHandle@@UBaseIndex@@_N@Z"
+    },
+    {
+      "name": "cGcBaseSearch::FindNearestBaseInCurrentSystem",
+      "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 4C 89 60 ? 55 41 56 41 57 48 8D 68 ? 48 81 EC ? ? ? ? 66 0F 6F 0D ? ? ? ? 0F 57 C0",
+      "mangled_name": "?FindNearestBaseInCurrentSystem@cGcBaseSearch@@SA?AUBaseIndex@@AEBVcTkVector3@@W4ePersistentBaseTypes@@@Z"
+    },
+    {
+      "name": "cGcBuilding::DestroyIntersectingVolcanoes",
+      "signature": "4C 8B DC 55 49 8D AB ? ? ? ? 48 81 EC ? ? ? ? 44 8B 81",
+      "mangled_name": "?DestroyIntersectingVolcanoes@cGcBuilding@@QEBAXXZ"
+    },
+    {
+      "name": "cGcScanEvent::Construct",
+      "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 33 F6",
+      "mangled_name": "?Construct@cGcScanEvent@@QEAAXW4eScanTable@@PEAVcGcScanEventData@@PEAVcGcBuilding@@M_NPEAU?$pair@T?$TkID@$0IA@@@VcTkSeed@@@std@@T?$TkID@$0IA@@@@Z"
+    },
+    {
+      "name": "cGcScanEvent::CalculateMarkerPosition",
+      "signature": "48 8B C4 55 53 56 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 48 8B F9",
+      "mangled_name": "?CalculateMarkerPosition@cGcScanEvent@@AEAAXXZ"
+    },
+    {
+      "name": "cGcScanEvent::Update",
+      "signature": "4C 8B DC 55 57 49 8D AB ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 8B F9 45 0F 29 43",
+      "mangled_name": "?Update@cGcScanEvent@@QEAAXM@Z"
+    },
+    {
+      "name": "cGcScanEvent::UpdateInteraction",
+      "signature": "48 8B C4 55 53 57 41 54 41 56 41 57",
+      "mangled_name": "?UpdateInteraction@cGcScanEvent@@AEAAXXZ"
+    },
+    {
+      "name": "cGcScanEvent::UpdateSpaceStationLocation",
+      "signature": "4C 8B DC 55 56 49 8D 6B ? 48 81 EC ? ? ? ? 48 8B 81",
+      "mangled_name": "?UpdateSpaceStationLocation@cGcScanEvent@@AEAAXXZ"
+    },
+    {
+      "name": "cGcPlayer::CheckFallenThroughFloor",
+      "signature": "40 55 41 54 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05",
+      "mangled_name": "?CheckFallenThroughFloor@cGcPlayer@@IEAAXXZ",
+      "unique_string": "void __cdecl cGcPlayer::CheckFallenThroughFloor(void)"
+    },
+    {
+      "name": "cGcNGuiLayer::LoadFromMetadata",
+      "signature": "48 8B C4 53 48 81 EC ? ? ? ? 48 89 78 ? 4C 8B D2",
+      "mangled_name": "?LoadFromMetadata@cGcNGuiLayer@@QEAAXPEBD_N@Z"
+    },
+    {
+      "name": "cGcGameState::OnSaveProgressCompleted",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 88 54 24",
+      "mangled_name": "?OnSaveProgressCompleted@cGcGameState@@AEAAX_N0W4Type@SpecificSave@GcGameStatePersistence@@@Z"
+    },
+    {
+      "name": "cGcGameState::LoadFromPersistentStorage",
+      "signature": "44 89 44 24 ? 89 54 24 ? 48 89 4C 24 ? 55 57",
+      "mangled_name": "?LoadFromPersistentStorage@cGcGameState@@AEAA_NW4Slot@cTkStoragePersistent@@_N@Z",
+      "unique_string": "GameKnowledgeData"
+    },
+    {
+      "name": "cGcPlanetGenerationInputData::SetDefaults",
+      "signature": "48 89 5C 24 ? 57 48 83 EC ? 0F 57 C0 33 FF 0F 11 01 48 8B D9 48 89 7C 24",
+      "mangled_name": "?SetDefaults@cGcPlanetGenerationInputData@@QEAAXXZ"
+    },
+    {
+      "name": "cGcPlanet::cGcPlanet",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 45 33 F6 48 C7 41 ? ? ? ? ? 44 89 71 ? 48 8D 59",
+      "mangled_name": "??0cGcPlanet@@QEAA@XZ"
+    },
+    {
+      "name": "cGcPlanet::Construct",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 F6 89 51 ? 89 B1",
+      "mangled_name": "?Construct@cGcPlanet@@QEAAXH@Z"
+    },
+    {
+      "name": "cGcPlanet::SetupRegionMap",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 56 48 83 EC ? 48 8B D9 8B 89",
+      "mangled_name": "?SetupRegionMap@cGcPlanet@@IEAAXXZ"
+    },
+    {
+      "name": "cGcSolarSystem::cGcSolarSystem",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 29 74 24 ? 48 8B F9 48 8B D9",
+      "mangled_name": "??0cGcSolarSystem@@QEAA@XZ"
+    },
+    {
+      "name": "cGcSolarSystem::Construct",
+      "signature": "48 8B C4 55 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 83 3D",
+      "mangled_name": "?Construct@cGcSolarSystem@@QEAAXXZ"
+    },
+    {
+      "name": "cGcSolarSystem::OnLeavePlanetOrbit",
+      "signature": "40 55 53 56 57 41 56 48 8B EC 48 83 EC ? 83 3D",
+      "mangled_name": "?OnLeavePlanetOrbit@cGcSolarSystem@@QEAAX_N@Z"
+    },
+    {
+      "name": "cGcSolarSystem::OnEnterPlanetOrbit",
+      "signature": "88 54 24 ? 55 53 56 57 41 54 41 56",
+      "mangled_name": "?OnEnterPlanetOrbit@cGcSolarSystem@@QEAAX_N@Z"
+    },
+    {
+      "name": "cGcSolarSystem::Generate",
+      "signature": "48 8B C4 55 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 58 ? 48 89 70 ? 48 8B F1 48 89 78 ? 49 8B F8",
+      "mangled_name": "?Generate@cGcSolarSystem@@QEAAX_NVcTkSeed@@@Z",
+      "unique_string": "%s/SolarSystems/System_%llu.mxml"
+    },
+    {
+      "name": "cGcApplicationLocalLoadState::GetRespawnReason",
+      "signature": "48 89 5C 24 ? 57 48 83 EC ? 80 B9 ? ? ? ? ? 48 8B F9 BB",
+      "mangled_name": "?GetRespawnReason@cGcApplicationLocalLoadState@@AEAA?AW4RespawnReason@cGcPlayerRespawn@@XZ"
+    },
+    {
+      "name": "cTkDynamicGravityControl::Construct",
+      "signature": "40 53 48 83 EC ? 48 8B D9 E8 ? ? ? ? 33 C0 89 83",
+      "mangled_name": "?Construct@cTkDynamicGravityControl@@QEAAXXZ"
+    },
+    {
+      "name": "cTkDynamicGravityControl::cTkDynamicGravityControl",
+      "signature": "48 89 5C 24 ? 57 48 83 EC ? 0F 29 74 24 ? 48 8D 41",
+      "mangled_name": "??0cTkDynamicGravityControl@@QEAA@XZ"
+    },
+    {
+      "name": "cTkDynamicGravityControl::GetGravity",
+      "signature": "48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 57 48 83 EC ? 0F 28 05",
+      "mangled_name": "?GetGravity@cTkDynamicGravityControl@@QEBA?AUcTkGravityData@@AEBVcTkVector3@@@Z"
+    },
+    {
+      "name": "cGcSimulation::Construct",
+      "signature": "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 45 33 FF",
+      "mangled_name": "?Construct@cGcSimulation@@QEAAXXZ",
+      "unique_string": "cGcSimulation::Construct"
+    },
+    {
+      "name": "cGcPlayerEnvironment::IsOnboardOwnFreighter",
+      "signature": "48 83 EC ? 80 B9 ? ? ? ? ? C6 04 24",
+      "mangled_name": "?IsOnboardOwnFreighter@cGcPlayerEnvironment@@QEBA_NXZ"
+    },
+    {
+      "name": "cGcPlayerEnvironment::IsOnPlanet",
+      "signature": "8B 81 ? ? ? ? 83 F8 ? 74 ? 83 C0 ? 83 F8 ? 76 ? 32 C0 C3 B0 ? C3 CC CC CC CC CC CC CC 48 83 EC",
+      "mangled_name": "?IsOnPlanet@cGcPlayerEnvironment@@QEBA_NXZ"
+    },
+    {
+      "name": "cGcPlayerEnvironment::Update",
+      "signature": "48 8B C4 F3 0F 11 48 ? 48 89 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 4C 8B F1 0F 29 78 ? 48 8D 0D",
+      "mangled_name": "__ZN20cGcPlayerEnvironment6UpdateEf",
+      "unique_string": "void __cdecl cGcPlayerEnvironment::Update(float)"
+    },
+    {
+      "name": "cGcEnvironment::UpdateRender",
+      "signature": "48 8B C4 48 89 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 4C 8B F9",
+      "mangled_name": "?UpdateRender@cGcEnvironment@@QEAAXXZ"
+    },
+    {
+      "name": "Engine::ShiftAllTransformsForNode",
+      "signature": "44 8B C1 4C 8B D2 41 C1 E8 ? 45 85 C0 74 ? 8B C1 25 ? ? ? ? 3D ? ? ? ? 74 ? 4C 8B 0D ? ? ? ? 8B D1",
+      "mangled_name": "?ShiftAllTransformsForNode@Engine@@YAXVTkHandle@@AEBVcTkVector3@@@Z"
+    },
+    {
+      "name": "Engine::GetNodeAbsoluteTransMatrix",
+      "signature": "40 56 48 83 EC ? 44 8B C1 48 8B F2 41 C1 E8 ? 45 85 C0 0F 84 ? ? ? ? 8B C1",
+      "mangled_name": "?GetNodeAbsoluteTransMatrix@Engine@@YAXVTkHandle@@PEAVcTkMatrix34@@@Z"
+    },
+    {
+      "name": "Engine::SetUniformArrayDefaultMultipleShaders",
+      "signature": "4C 89 4C 24 ? 48 89 4C 24 ? 56 41 56",
+      "mangled_name": "?SetUniformArrayDefaultMultipleShaders@Engine@@YAHPEAU?$TkStrongType@HUTkResHandleID@TkStrongTypeIDs@@@@HPEBDPEBMH@Z"
+    },
+    {
+      "name": "Engine::SetMaterialUniformArray",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 4D 63 F1 49 8B F8",
+      "mangled_name": "?SetMaterialUniformArray@Engine@@YA_NU?$TkStrongType@HUTkResHandleID@TkStrongTypeIDs@@@@PEBDPEBMH@Z"
+    },
+    {
+      "name": "cGcRewardManager::GiveGenericReward",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 48 8B 3D ? ? ? ? 48 8B F1",
+      "mangled_name": "?GiveGenericReward@cGcRewardManager@@QEAA_NAEBT?$TkID@$0IA@@@0AEBVcTkSeed@@_N2AEAH2W4InventoryChoice@@2@Z"
+    },
+    {
+      "name": "cGcInteractionComponent::GiveReward",
+      "signature": "44 88 4C 24 ? 44 88 44 24 ? 48 89 54 24 ? 53",
+      "mangled_name": "?GiveReward@cGcInteractionComponent@@QEAA_NAEBVcGcAlienPuzzleOption@@_N1@Z"
+    },
+    {
+      "name": "cGcInteractionComponent::GetPuzzle",
+      "signature": "48 8B 81 ? ? ? ? 48 85 C0 74 ? 48 83 B9 ? ? ? ? ? 75 ? 48 83 B9",
+      "mangled_name": "?GetPuzzle@cGcInteractionComponent@@QEBAPEBVcGcAlienPuzzleEntry@@XZ"
+    },
+    {
+      "name": "cTkInputPort::SetButton",
+      "signature": "40 57 48 83 EC ? 48 83 79 ? ? 44 8B CA",
+      "mangled_name": "?SetButton@cTkInputPort@@QEAAXW4eInputButton@@@Z"
+    },
+    {
+      "name": "cTkInputPort::GetButton",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 41 8B D8 8B FA 48 8B F1 45 84 C9",
+      "mangled_name": "?GetButton@cTkInputPort@@QEBA_NW4eInputButton@@W4eInputValidation@@_N@Z"
+    },
+    {
+      "name": "cGcBinoculars::SetMarker",
+      "signature": "48 8B C4 55 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 80 3D ? ? ? ? ? 48 8B F1 0F 84 ? ? ? ? 4C 89 70",
+      "mangled_name": "?SetMarker@cGcBinoculars@@QEAAXXZ"
+    },
+    {
+      "name": "cGcBinoculars::GetRange",
+      "signature": "40 53 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 8D 54 24",
+      "mangled_name": "?GetRange@cGcBinoculars@@QEBAMXZ"
+    },
+    {
+      "name": "cGcBinoculars::UpdateRayCasts",
+      "signature": "48 8B C4 55 53 57 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 44 0F 29 48",
+      "mangled_name": "?UpdateRayCasts@cGcBinoculars@@AEAAXAEAVcTkContactPoint@@@Z",
+      "unique_string": "void __cdecl cGcBinoculars::UpdateRayCasts(class cTkContactPoint &)"
+    },
+    {
+      "name": "cTkFSMState::StateChange",
+      "signature": "4C 8B 51 ? 4D 8B D8 48 8B 05",
+      "mangled_name": "?StateChange@cTkFSMState@@IEAAXAEBT?$TkID@$0IA@@@PEBX_N@Z"
+    },
+    {
+      "name": "cTkAudioManager::Play",
+      "signature": "48 83 EC ? 33 C9 4C 8B D2 89 4C 24 ? 49 8B C0 48 89 4C 24 ? 45 33 C9",
+      "mangled_name": "?Play@cTkAudioManager@@QEAA_NVTkAudioID@@VTkAudioObject@@@Z"
+    },
+    {
+      "name": "cTkAudioManager::Play_attenuated",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 56 48 83 EC ? 48 8B F1 48 8B C2",
+      "mangled_name": "?Play@cTkAudioManager@@QEAA_NVTkAudioID@@AEBVcTkVector3@@VTkAudioObject@@M@Z"
+    },
+    {
+      "name": "cGcPlayerNotifications::AddTimedMessage",
+      "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 44 8B 81",
+      "mangled_name": "?AddTimedMessage@cGcPlayerNotifications@@QEAAXPEBDMAEBVcTkColour@@IAEBVcTkSmartResHandle@@_NM3@Z"
+    },
+    {
+      "name": "cGcSky::SetStormState",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 54 41 56 41 57 48 83 EC ? 4C 8B 15",
+      "mangled_name": "?SetStormState@cGcSky@@QEAAXW4eStormState@1@@Z"
+    },
+    {
+      "name": "cGcPlanet::UpdateWeather",
+      "signature": "40 55 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 80 3D",
+      "mangled_name": "?UpdateWeather@cGcPlanet@@IEAAXM@Z"
+    },
+    {
+      "name": "cGcPlanet::UpdateGravity",
+      "signature": "40 53 48 83 EC ? 83 B9 ? ? ? ? ? 48 8B D9 0F 29 74 24 ? 75",
+      "mangled_name": "?UpdateGravity@cGcPlanet@@IEBAXM@Z"
+    },
+    {
+      "name": "cGcPlanet::UpdateClouds",
+      "signature": "48 8B C4 53 57 48 81 EC ? ? ? ? F3 0F 10 15",
+      "mangled_name": "?UpdateClouds@cGcPlanet@@IEAAXM@Z"
+    },
+    {
+      "name": "cTkDynamicGravityControl::UpdateGravityPoint",
+      "signature": "48 63 81 ? ? ? ? 4C 8B C9 85 C0",
+      "mangled_name": "?UpdateGravityPoint@cTkDynamicGravityControl@@QEAAXAEBVcTkVector3@@MM@Z"
+    },
+    {
+      "name": "cGcPlayer::TakeDamage",
+      "signature": "48 8B C4 4C 89 48 ? 44 89 40 ? 55 53 56",
+      "mangled_name": "?TakeDamage@cGcPlayer@@QEAAXMW4eDamageType@@AEBT?$TkID@$0IA@@@AEBVcTkVector3@@PEAVcGcOwnerConcept@@AEBV?$vector@VcGcCombatEffectDamageMultiplier@@V?$TkSTLAllocatorShim@VcGcCombatEffectDamageMultiplier@@$03$0?0@@@std@@@Z",
+      "unique_string": "TOOK_DAMAGE_WHY"
+    },
+    {
+      "name": "cGcPlayer::OnEnteredCockpit",
+      "signature": "40 53 48 81 EC E0 00 00 00 48 8B D9 E8 ? ? ? ? 83 78 10 05",
+      "mangled_name": "?OnEnteredCockpit@cGcPlayer@@QEAAXXZ"
+    },
+    {
+      "name": "cGcPlayer::GetDominantHand",
+      "signature": "40 53 48 83 EC 20 48 8B 1D ? ? ? ? E8 ? ? ? ? 83 78 10 05 75 ? 48 8B",
+      "mangled_name": "?GetDominantHand@cGcPlayer@@UEBA?AW4eHand@@XZ"
+    },
+    {
+      "name": "cGcTerrainEditorBeam::Fire",
+      "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B F2",
+      "mangled_name": "?Fire@cGcTerrainEditorBeam@@QEAA_NAEBVcTkPhysRelVec3@@PEAVcTkRigidBody@@PEAVcGcOwnerConcept@@W4eStatsType@@_N@Z"
+    },
+    {
+      "name": "cGcTerrainEditorBeam::StartEffect",
+      "signature": "48 89 5C 24 ? 48 89 7C 24 ? 55 48 8D 6C 24 ? 48 81 EC ? ? ? ? 0F 28 05 ? ? ? ? 48 8B D9",
+      "mangled_name": "?StartEffect@cGcTerrainEditorBeam@@QEAAXXZ"
+    },
+    {
+      "name": "cGcTerrainEditorBeam::ApplyTerrainEditStroke",
+      "signature": "4C 89 44 24 ? 55 53 56 57 41 54 41 55 41 56 48 8D AC 24 ? ? ? ? 48 81 EC",
+      "mangled_name": "?ApplyTerrainEditStroke@cGcTerrainEditorBeam@@QEAAHUsTerrainEditData@@AEBVcGcProjectileImpact@@@Z"
+    },
+    {
+      "name": "cGcTerrainEditorBeam::ApplyTerrainEditFlatten",
+      "signature": "48 8B C4 4C 89 40 ? 48 89 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8",
+      "mangled_name": "?ApplyTerrainEditFlatten@cGcTerrainEditorBeam@@QEAAHUsTerrainEditData@@AEBVcGcProjectileImpact@@@Z"
+    },
+    {
+      "name": "cGcBeamEffect::Prepare",
+      "signature": "40 53 48 83 EC ? 8B 41 ? 48 8B D9 A9 ? ? ? ? 76 ? 25 ? ? ? ? 3D ? ? ? ? 0F 85",
+      "mangled_name": "?Prepare@cGcBeamEffect@@QEAAXXZ"
+    },
+    {
+      "name": "cGcLocalPlayerCharacterInterface::IsJetpacking",
+      "signature": "40 53 48 83 EC 20 48 8B 1D ? ? ? ? 48 8D 8B ? ? ? 00 E8 ? ? ? 00",
+      "mangled_name": "?IsJetpacking@cGcLocalPlayerCharacterInterface@@UEBA_NXZ"
+    },
+    {
+      "name": "cGcSpaceshipComponent::Eject",
+      "signature": "48 89 5C 24 ? 48 89 54 24 ? 57 48 83 EC ? 41 0F B6 F8",
+      "mangled_name": "?Eject@cGcSpaceshipComponent@@QEAAXPEAVcGcPlayer@@_N1@Z"
+    },
+    {
+      "name": "cGcSpaceshipWarp::GetPulseDriveFuelFactor",
+      "signature": "48 89 4C 24 ? 53 48 83 EC ? 48 89 6C 24",
+      "mangled_name": "?GetPulseDriveFuelFactor@cGcSpaceshipWarp@@QEBAMXZ"
+    },
+    {
+      "name": "cGcSpaceshipWeapons::GetOverheatProgress",
+      "signature": "48 63 81 ? ? 00 00 80 BC 08 ? ? 00 00 00 74 12",
+      "mangled_name": "?GetOverheatProgress@cGcSpaceshipWeapons@@UEBAMXZ"
+    },
+    {
+      "name": "cGcSpaceshipWeapons::GetAverageBarrelPos",
+      "signature": "48 8B C4 48 89 70 ? 57 48 81 EC ? ? ? ? 83 79",
+      "mangled_name": "?GetAverageBarrelPos@cGcSpaceshipWeapons@@QEAA?AVcTkPhysRelVec3@@XZ"
+    },
+    {
+      "name": "cGcSpaceshipWeapons::GetCurrentShootPoints",
+      "signature": "40 53 48 83 EC ? 48 8B 51 ? 48 8B D9 0F BF 0D ? ? ? ? 48 8B 52 ? E8 ? ? ? ? 48 85 C0 0F 84",
+      "mangled_name": "?GetCurrentShootPoints@cGcSpaceshipWeapons@@IEAAPEAVcGcShootPoint@@XZ"
+    },
+    {
+      "name": "cGcPlayerCharacterComponent::SetDeathState",
+      "signature": "48 8B C4 48 89 58 ? 55 56 57 48 8D 68 ? 48 81 EC ? ? ? ? 4C 89 70",
+      "mangled_name": "?SetDeathState@cGcPlayerCharacterComponent@@AEAAXXZ"
+    },
+    {
+      "name": "nvgText",
+      "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 55 57 41 54 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 48 8B F9 0F 29 78",
+      "mangled_name": "nvgText"
+    },
+    {
+      "name": "nvgTextBox",
+      "signature": "4C 8B DC 53 56 57 41 54 48 81 EC",
+      "mangled_name": "nvgTextBox"
+    },
+    {
+      "name": "nvgArc",
+      "signature": "48 8B C4 48 89 58 ? 48 89 68 ? F3 0F 11 50",
+      "mangled_name": "nvgArc"
+    },
+    {
+      "name": "cGcTextChatInput::ParseTextForCommands",
+      "signature": "40 55 53 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 80 3A",
+      "mangled_name": "?ParseTextForCommands@cGcTextChatInput@@AEAAXAEBV?$cTkFixedString@$0DPP@D@@@Z"
+    },
+    {
+      "name": "cGcTextChatManager::Say",
+      "signature": "40 53 48 81 EC ? ? ? ? F3 0F 10 05",
+      "mangled_name": "?Say@cGcTextChatManager@@QEAAXAEBV?$cTkFixedString@$0DPP@D@@_N@Z"
+    },
+    {
+      "name": "cGcTextChatManager::Construct",
+      "signature": "48 89 5C 24 ? 57 48 83 EC ? 48 8D 91 ? ? ? ? 33 FF",
+      "mangled_name": "?Construct@cGcTextChatManager@@QEAAXXZ"
+    },
+    {
+      "name": "cGcPlanet::Generate",
+      "signature": "48 8B C4 48 89 58 ? 88 50 ? 55",
+      "mangled_name": "?Generate@cGcPlanet@@QEAAX_NAEBVcTkVector3@@AEBVcGcDiscoveryData@@AEBVcGcPlanetGenerationInputData@@@Z",
+      "unique_string": "cGcPlanet::Generate"
+    },
+    {
+      "name": "cGcNotificationSequenceStartEvent::DeepInterstellarSearch",
+      "signature": "48 89 5C 24 ? 57 48 83 EC ? 48 8B 81 ? ? ? ? 48 8D 91 ? ? ? ? 44 8B 81",
+      "mangled_name": "?DeepInterstellarSearch@cGcNotificationSequenceStartEvent@@SA_NPEAVcGcNotificationSequenceStage@@@Z"
+    },
+    {
+      "name": "cGcScanEventManager::PassesPlanetInfoChecks",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 8B B1",
+      "mangled_name": "?PassesPlanetInfoChecks@cGcScanEventManager@@SA_NAEBVPlanetGenerationQuery@@AEBVcGcScanEventSolarSystemLookup@@_NW4eBuildingClass@@2@Z"
+    },
+    {
+      "name": "cGcPlanetGenerator::GenerateCreatureRoles",
+      "signature": "48 8B C4 48 89 50 ? 48 89 48 ? 55 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 58 ? 48 89 70 ? 49 8B F0",
+      "mangled_name": "?GenerateCreatureRoles@cGcPlanetGenerator@@QEAAXAEAVcGcPlanetData@@AEB_K@Z"
+    },
+    {
+      "name": "cGcPlanetGenerator::GenerateQueryInfo",
+      "signature": "4C 89 4C 24 ? 48 89 54 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 49 8B F0",
+      "mangled_name": "?GenerateQueryInfo@cGcPlanetGenerator@@QEAAXAEAVPlanetGenerationQuery@@AEBVcGcPlanetGenerationInputData@@_K_N@Z"
+    },
+    {
+      "name": "cGcPlanetGenerator::GenerateCreatureInfo",
+      "signature": "48 8B C4 48 89 50 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 33 F6",
+      "mangled_name": "?GenerateCreatureInfo@cGcPlanetGenerator@@IEAAXAEAVcGcPlanetData@@AEAVcGcCreatureRoleData@@@Z"
+    },
+    {
+      "name": "cGcSolarSystemGenerator::GenerateQueryInfo",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 33 F6 0F 29 B4 24",
+      "mangled_name": "?GenerateQueryInfo@cGcSolarSystemGenerator@@QEAAXAEBVcTkSeed@@AEBVcGcGalaxyAttributesAtAddress@@AEAUGenerationData@1@@Z"
+    },
+    {
+      "name": "cGcFrontendPageDiscovery::DoDiscoveryView",
+      "signature": "4C 89 4C 24 ? 4C 89 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 48 8B 99",
+      "mangled_name": "?DoDiscoveryView@cGcFrontendPageDiscovery@@SAXPEAVcGcFrontendPage@@AEAVcGcDiscoveryPageData@@AEAVcGcFrontendTextInput@@AEAVcGcFrontendModelRenderer@@@Z"
+    },
+    {
+      "name": "cGcFrontendPageDiscovery::GetDiscoveryHintString",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 8D 05 ? ? ? ? 41 8B F9",
+      "mangled_name": "?GetDiscoveryHintString@cGcFrontendPageDiscovery@@KA?AV?$cTkFixedString@$0EA@D@@W4eTileType@@W4eCreatureType@@W4eRarity@@W4eCreatureActiveTime@@W4eCreatureHemiSphere@@@Z"
+    },
+    {
+      "name": "cGcPlanetGenerator::FillCreatureSpawnDataFromDescription",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 54 41 56 41 57 48 83 EC ? 4C 8B F9 0F 29 74 24",
+      "mangled_name": "?FillCreatureSpawnDataFromDescription@cGcPlanetGenerator@@IEAAXAEBVcGcCreatureRoleData@@AEAVcGcCreatureSpawnData@@AEAVcGcPlanetData@@@Z"
+    },
+    {
+      "name": "cGcBinoculars::UpdateTarget",
+      "signature": "48 8B C4 55 57 41 54 41 56 48 8D A8",
+      "mangled_name": "?UpdateTarget@cGcBinoculars@@AEAAXM@Z"
+    },
+    {
+      "name": "cGcFrontendPagePortalRunes::CheckUAIsValid",
+      "signature": "48 8B C4 44 88 48 20 44 88 40 18 48 89 50 10 55 53 56 57 41 54",
+      "mangled_name": "?CheckUAIsValid@cGcFrontendPagePortalRunes@@SA_N_KAEA_K_N@Z"
+    },
+    {
+      "name": "cGcGalaxyVoxelAttributesData::SetDefaults",
+      "signature": "33 C0 0F 57 C0 0F 11 01 0F 11 41 ? 0F 11 41 ? 48 89 41 ? 48 89 41 ? 48 89 41 ? 48 89 41",
+      "mangled_name": "?SetDefaults@cGcGalaxyVoxelAttributesData@@QEAAXXZ"
+    },
+    {
+      "name": "cGcGalaxyAttributeGenerator::ClassifyVoxel",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F BF 41",
+      "mangled_name": "?ClassifyVoxel@cGcGalaxyAttributeGenerator@@SAXAEBVcGcGalacticVoxelCoordinate@@AEAVcGcGalaxyVoxelAttributesData@@@Z"
+    },
+    {
+      "name": "cGcGalaxyStarAttributesData::SetDefaults",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8B D9 48 8D 41",
+      "mangled_name": "?SetDefaults@cGcGalaxyStarAttributesData@@QEAAXXZ"
+    },
+    {
+      "name": "cGcGalaxyAttributeGenerator::ClassifyStarSystem",
+      "signature": "48 89 54 24 ? 55 53 56 57 41 54 41 55 41 56 48 8B EC",
+      "mangled_name": "?ClassifyStarSystem@cGcGalaxyAttributeGenerator@@SAX_KAEAVcGcGalaxyStarAttributesData@@@Z"
+    },
+    {
+      "name": "cGcGalaxyVoxelGenerator::Populate",
+      "signature": "48 8B C4 4C 89 40 ? 48 89 48 ? 55 53 56 57 41 56",
+      "mangled_name": "?Populate@cGcGalaxyVoxelGenerator@@SAX_KAEAVcGcGalaxyVoxelData@@AEBVcTkVector3@@@Z",
+      "unique_string": "UI_TERRAIN_SHAPE_%d"
+    },
+    {
+      "name": "cGcFrontendPagePortalRunes::DoInteraction",
+      "signature": "48 89 54 24 ? 48 89 4C 24 ? 55 57 41 55 41 56 48 8D 6C 24",
+      "mangled_name": "?DoInteraction@cGcFrontendPagePortalRunes@@QEAAXPEAVcGcFrontendPage@@@Z"
+    },
+    {
+      "name": "cTkLanguageManagerBase::Translate",
+      "signature": "48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 57 C0 49 8B E8",
+      "mangled_name": "?Translate@cTkLanguageManagerBase@@QEBAPEBDPEBD0@Z"
+    },
+    {
+      "name": "cGcBinoculars::UpdateScanBarProgress",
+      "signature": "40 53 48 83 EC ? 48 8B 91 ? ? ? ? 48 8B D9 F3 0F 11 49",
+      "mangled_name": "?UpdateScanBarProgress@cGcBinoculars@@AEAAXM@Z"
+    },
+    {
+      "name": "cGcNameGenerator::GeneratePlanetName",
+      "signature": "4C 89 4C 24 ? 4C 89 44 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 44 8B D2",
+      "mangled_name": "?GeneratePlanetName@cGcNameGenerator@@QEBAX_KAEAV?$cTkFixedString@$0HP@D@@PEAV2@@Z"
+    },
+    {
+      "name": "cGcPlanetGenerator::Generate",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4D 8B F8 C6 85",
+      "mangled_name": "?Generate@cGcPlanetGenerator@@QEAAXAEAVcGcPlanetData@@AEBVcGcPlanetGenerationInputData@@PEAVcGcPlanet@@@Z"
+    },
+    {
+      "name": "cGcPlayerState::AwardUnits",
+      "signature": "48 89 5C 24 ? 57 48 83 EC ? 44 8B 81 ? ? ? ? 48 8B D9 66 0F 6F 05 ? ? ? ? 41 8B C0 F7 D0 48 C7 44 24 ? ? ? ? ? 3B D0 8B FA F3 0F 7F 44 24 ? 0F 42 C2 45 33 C9 44 03 C0 48 8D 54 24 ? 44 89 81 ? ? ? ? 48 8B 0D ? ? ? ? 48 81 C1 ? ? ? ? E8 ? ? ? ? 85 FF 7E ? 48 8B 0D",
+      "mangled_name": "?AwardUnits@cGcPlayerState@@QEAAIH@Z"
+    },
+    {
+      "name": "cGcPlayerState::AwardNanites",
+      "signature": "48 89 5C 24 ? 57 48 83 EC ? 44 8B 81 ? ? ? ? 48 8B D9 66 0F 6F 05 ? ? ? ? 41 8B C0 F7 D0 48 C7 44 24 ? ? ? ? ? 3B D0 8B FA F3 0F 7F 44 24 ? 0F 42 C2 45 33 C9 44 03 C0 48 8D 54 24 ? 44 89 81 ? ? ? ? 48 8B 0D ? ? ? ? 48 81 C1 ? ? ? ? E8 ? ? ? ? 85 FF 7E ? 4C 8B 15",
+      "mangled_name": "?AwardNanites@cGcPlayerState@@QEAAIH@Z"
+    },
+    {
+      "name": "cGcCreatureComponent::Prepare",
+      "signature": "48 8B C4 55 56 41 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 51",
+      "mangled_name": "?Prepare@cGcCreatureComponent@@MEAAXXZ"
+    },
+    {
+      "name": "cGcSky::SetSunAngle",
+      "signature": "40 53 48 83 EC ? 0F 28 C1 0F 29 7C 24 ? F3 0F 5E 05",
+      "mangled_name": "?SetSunAngle@cGcSky@@IEAAXM@Z"
+    },
+    {
+      "name": "cGcSky::UpdateSunPosition",
+      "signature": "48 8B C4 48 89 58 ? 57 48 81 EC ? ? ? ? 4C 8B 05 ? ? ? ? 48 8B D9 8B 89",
+      "mangled_name": "?UpdateSunPosition@cGcSky@@QEAAXXZ"
+    },
+    {
+      "name": "cGcSky::Update",
+      "signature": "48 8B C4 55 53 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70",
+      "mangled_name": "?Update@cGcSky@@QEAAXM@Z"
+    },
+    {
+      "name": "cGcNGuiLayer::AddElement",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 48 89 54 24 ? 57 48 81 EC ? ? ? ? 44 8B 51",
+      "mangled_name": "?AddElement@cGcNGuiLayer@@QEAAPEAVcGcNGuiElement@@PEAV2@_N@Z"
+    },
+    {
+      "name": "Engine::SetOption",
+      "signature": "48 83 EC ? FF CA 83 FA ? 0F 87",
+      "mangled_name": "?SetOption@Engine@@YA_NW4List@EgOptions@@M@Z"
+    },
+    {
+      "name": "Engine::AddResource",
+      "signature": "4C 8B DC 49 89 5B ? 49 89 6B ? 49 89 73 ? 57 41 56 41 57 48 81 EC ? ? ? ? 48 8B BC 24",
+      "mangled_name": "?AddResource@Engine@@YA?AVcTkSmartResHandle@@HPEBDHPEAVcTkResourceDescriptor@@@ZZ"
+    },
+    {
+      "name": "cTkResourceManager::AddResource",
+      "signature": "44 89 44 24 ? 55 57 41 54 41 55 41 56 41 57",
+      "mangled_name": "?AddResource@cTkResourceManager@@QEAA?AVcTkSmartResHandle@@HPEBDH_NPEAVcTkResourceDescriptor@@@Z"
+    },
+    {
+      "name": "cTkResourceManager::FindResourceA",
+      "signature": "4C 89 4C 24 ? 89 54 24 ? 53 55 48 81 EC",
+      "mangled_name": "?FindResourceA@cTkResourceManager@@QEAAPEAVcTkResource@@HPEBDPEBVcTkResourceDescriptor@@_N2@Z"
+    },
+    {
+      "name": "cEgSceneGraphResource::ParseData",
+      "signature": "4C 89 44 24 ? 55 53 56 57 41 55 41 56 48 8D AC 24",
+      "mangled_name": "?ParseData@cEgSceneGraphResource@@UEAA_NAEAVcTkSceneNodeData@@PEAUcEgSceneNodeTemplate@@@Z"
+    },
+    {
+      "name": "cGcPlayerHUD::RenderIndicatorPanel",
+      "signature": "48 8B C4 55 57 48 8D 68 ? 48 81 EC ? ? ? ? 48 8B 91",
+      "mangled_name": "?RenderIndicatorPanel@cGcPlayerHUD@@IEAAXXZ"
+    },
+    {
+      "name": "cGcPlayerHUD::RenderWeaponPanel",
+      "signature": "48 8B C4 48 89 48 ? 55 41 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 83 B9",
+      "mangled_name": "?RenderWeaponPanel@cGcPlayerHUD@@IEAAXXZ",
+      "unique_string": "UI_POLICE_TIMER_OSD"
+    },
+    {
+      "name": "cGcTerrainRegionMap::Construct",
+      "signature": "48 8B C4 48 89 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 48 8D B1",
+      "mangled_name": "?Construct@cGcTerrainRegionMap@@QEAAXVTkHandle@@PEAVcTkVoxelGeneratorData@@PEAVcGcPlanetBuildingData@@HH@Z"
+    },
+    {
+      "name": "cGcNGuiText::EditElement",
+      "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 81 EC ? ? ? ? 0F 29 70 ? 48 8D A8 ? ? ? ? 48 83 E5 ? 48 8B 01",
+      "mangled_name": "?EditElement@cGcNGuiText@@UEAAXXZ"
+    },
+    {
+      "name": "cTkLanguageManagerBase::Load",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 33 DB C6 44 24",
+      "mangled_name": "?Load@cTkLanguageManagerBase@@QEAAXXZ"
+    },
+    {
+      "name": "cGcRealityManager::Construct",
+      "signature": "40 55 53 56 57 41 54 41 55 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B E1",
+      "mangled_name": "?Construct@cGcRealityManager@@QEAAXXZ"
+    },
+    {
+      "name": "cGcRealityManager::GenerateProceduralProduct",
+      "signature": "48 89 54 24 ? 48 89 4C 24 ? 55 53 57 48 8D AC 24 ? ? ? ? B8",
+      "mangled_name": "?GenerateProceduralProduct@cGcRealityManager@@QEAAPEBVcGcProductData@@AEBT?$TkID@$0IA@@@@Z"
+    },
+    {
+      "name": "cGcRealityManager::GenerateProceduralTechnology",
+      "signature": "4C 89 4C 24 ? 44 88 44 24 ? 48 89 4C 24",
+      "mangled_name": "?GenerateProceduralTechnology@cGcRealityManager@@QEAAPEBVcGcTechnology@@AEBT?$TkID@$0IA@@@_N@Z",
+      "unique_string": "UI_WIKI_PROC_TECH_SUB"
+    },
+    {
+      "name": "cGcApplication::Data::Data",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 F6 48 C7 41",
+      "mangled_name": "??0Data@cGcApplication@@QEAA@XZ"
+    },
+    {
+      "name": "cTkLanguageManager::GetInstance",
+      "signature": "48 83 EC ? 65 48 8B 04 25 ? ? ? ? B9 ? ? ? ? 48 8B 00 8B 04 01 39 05 ? ? ? ? 0F 8F ? ? ? ? 48 8D 05 ? ? ? ? 48 83 C4 ? C3 4C 89 00",
+      "mangled_name": "?GetInstance@cTkLanguageManager@@SAAEAV1@XZ"
+    },
+    {
+      "name": "nvgFill",
+      "signature": "48 89 5C 24 ? 57 48 81 EC ? ? ? ? 48 63 81 ? ? ? ? 48 8B D9 48 69 F8 ? ? ? ? 0F 10 44 0F",
+      "mangled_name": "nvgFill"
+    },
+    {
+      "name": "nvgRect",
+      "signature": "48 8B C4 48 83 EC ? 0F 28 E2",
+      "mangled_name": "nvgRect"
+    },
+    {
+      "name": "cGcPlayerHUD::RenderCrosshair",
+      "signature": "48 8B C4 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 8B B9",
+      "mangled_name": "?RenderCrosshair@cGcPlayerHUD@@IEAAXXZ",
+      "unique_string": "STORED RESOURCES (%d/%d)"
+    },
+    {
+      "name": "cGcNGuiElement::SetPosition",
+      "signature": "48 83 EC ? 4C 8B 59 ? 4C 8B D1",
+      "mangled_name": "?SetPosition@cGcNGuiElement@@QEAAXAEBVcTkVector2@@W4PositionType@1@@Z"
+    },
+    {
+      "name": "cGcApplicationBootState::Update",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 54 41 56 41 57 48 81 EC ? ? ? ? 45 33 FF",
+      "mangled_name": "?Update@cGcApplicationBootState@@MEAAXM@Z"
+    },
+    {
+      "name": "cGcPlayerDiscoveryHelper::GetDiscoveryWorth",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 4C 24 ? 57 48 81 EC ? ? ? ? 48 8B 1D",
+      "mangled_name": "?GetDiscoveryWorth@cGcPlayerDiscoveryHelper@@QEAAHAEBVcGcDiscoveryData@@@Z"
+    },
+    {
+      "name": "cGcBinoculars::PopulateDiscoveryInfo",
+      "signature": "48 8B C4 4C 89 48 ? 44 89 40 ? 48 89 48",
+      "mangled_name": "?PopulateDiscoveryInfo@cGcBinoculars@@QEAAXAEAUDiscoveryInfo@DiscoveryResolver@@VTkHandle@@VcTkAttachmentPtr@@_N3@Z"
+    },
+    {
+      "name": "cGcQuickActionMenu::TriggerAction",
+      "signature": "44 88 44 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 57",
+      "mangled_name": "?TriggerAction@cGcQuickActionMenu@@AEAA_NAEBUMenuAction@@_N@Z",
+      "unique_string": "QUICK_MENU_SQUADRON_UNAVAILABLE"
+    },
+    {
+      "name": "cGcPlayerState::StoreCurrentSystemSpaceStationEndpoint",
+      "signature": "89 54 24 ? 4C 8B DC 48 83 EC",
+      "mangled_name": "?StoreCurrentSystemSpaceStationEndpoint@cGcPlayerState@@QEAAXXZ"
+    },
+    {
+      "name": "cGcPlayerExperienceDirector::Update",
+      "signature": "48 8B C4 48 89 58 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 99 ? ? ? ? 48 8B F1 0F 29 70 ? 0F 29 78 ? 66 0F 6F 3D",
+      "mangled_name": "?Update@cGcPlayerExperienceDirector@@QEAAXM@Z"
+    },
+    {
+      "name": "cGcSimulation::Update",
+      "signature": "48 8B C4 55 48 8D 6C 24 ? 48 81 EC ? ? ? ? 44 0F 29 98",
+      "mangled_name": "?Update@cGcSimulation@@QEAAXW4SimulationUpdateMode@@M@Z"
+    },
+    {
+      "name": "cGcSolarSystem::Update",
+      "signature": "48 8B C4 55 53 56 57 41 55 41 57 48 8D 6C 24",
+      "mangled_name": "?Update@cGcSolarSystem@@QEAAXM@Z"
+    },
+    {
+      "name": "cGcPlayer::Update",
+      "signature": "48 8B C4 48 89 48 ? 55 53 41 54 41 55 41 57 48 8D A8",
+      "mangled_name": "?Update@cGcPlayer@@QEAAXM@Z"
+    },
+    {
+      "name": "cGcPlayer::UpdateGraphics",
+      "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 57 48 81 EC ? ? ? ? 0F 29 70 ? 0F B6 F2",
+      "mangled_name": "?UpdateGraphics@cGcPlayer@@IEAAX_N@Z"
+    },
+    {
+      "name": "cGcPlayer::SetToPosition",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B FA 48 8B D9 48 8B 15",
+      "mangled_name": "?SetToPosition@cGcPlayer@@QEAAXAEBVcTkPhysRelVec3@@AEBVcTkVector3@@1@Z"
+    },
+    {
+      "name": "cGcBaseBuildingManager::AddHUDMarker",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 48 8B E9 49 63 F1",
+      "mangled_name": "?AddHUDMarker@cGcBaseBuildingManager@@QEAAXW4eType@cGcMarkerPoint@@AEBVcTkPhysRelMat34@@HPEBD@Z"
+    },
+    {
+      "name": "cGcPlayer::Prepare",
+      "signature": "48 8B C4 55 53 56 57 41 54 41 56 41 57 48 8D 6C 24",
+      "mangled_name": "?Prepare@cGcPlayer@@QEAAXPEAVcGcPlayerController@@@Z"
+    },
+    {
+      "name": "Engine::AddGroupNode",
+      "signature": "48 89 5C 24 ? 57 48 81 EC ? ? ? ? 44 8B D2 48 8B D9 41 C1 EA ? 45 85 D2 0F 84 ? ? ? ? 44 8B CA 41 81 E1 ? ? ? ? 41 81 F9 ? ? ? ? 0F 84 ? ? ? ? 8B CA 48 8B 15 ? ? ? ? 81 E1 ? ? ? ? 48 8B 82 ? ? ? ? 48 63 0C 88 48 8B 82 ? ? ? ? 48 8B 3C C8 48 85 FF 74 ? 8B 4F ? 8B C1 25 ? ? ? ? 41 3B C1 75 ? C1 E9 ? 41 3B CA 75 ? 4C 8B CF 48 8D 4C 24 ? B2 ? E8 ? ? ? ? 48 8B 0D ? ? ? ? 48 8D 05 ? ? ? ? 4C 8D 4C 24 ? 48 89 44 24 ? 41 B0 ? 48 89 7C 24 ? 48 8B D3 E8 ? ? ? ? 48 8D 4C 24 ? E8 ? ? ? ? EB ? C7 03 ? ? ? ? 48 8B C3 48 8B 9C 24 ? ? ? ? 48 81 C4 ? ? ? ? 5F C3 CC CC CC CC CC CC CC CC CC CC CC 48 89 5C 24 ? 57",
+      "mangled_name": "?AddGroupNode@Engine@@YA?AVTkHandle@@V2@PEBD@Z"
+    },
+    {
+      "name": "cGcPlayerShipOwnership::UpdateMeshRefresh",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 45 33 E4 48 8B F1 44 38 A1",
+      "mangled_name": "?UpdateMeshRefresh@cGcPlayerShipOwnership@@AEAAXXZ"
+    },
+    {
+      "name": "cGcPlayerShipOwnership::Update",
+      "signature": "48 8B C4 55 53 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 80 B9 ? ? ? ? ? 48 8B F1",
+      "mangled_name": "?Update@cGcPlayerShipOwnership@@QEAAXM@Z"
+    },
+    {
+      "name": "cGcGameState::Update",
+      "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? F3 0F 10 91",
+      "mangled_name": "?Update@cGcGameState@@QEAAXM@Z"
+    },
+    {
+      "name": "cGcPlayerShipOwnership::SpawnNewShip",
+      "signature": "44 89 44 24 ? 55 53 56 57 41 54 41 55 41 57",
+      "mangled_name": "?SpawnNewShip@cGcPlayerShipOwnership@@QEAA_NAEBVcTkMatrix34@@W4ShipSpawnLandingGearState@1@H_N@Z"
+    },
+    {
+      "name": "cGcPlayerShipOwnership::DestroyShip",
+      "signature": "40 55 53 57 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 8B 1D",
+      "mangled_name": "?DestroyShip@cGcPlayerShipOwnership@@QEAA_NH@Z"
+    },
+    {
+      "name": "cGcSpaceshipWeapons::GetHeatFactor",
+      "signature": "48 63 81 ? ? ? ? F3 0F 10 84 81",
+      "mangled_name": "?GetHeatFactor@cGcSpaceshipWeapons@@UEBAMXZ"
+    },
+    {
+      "name": "cGcSpaceshipWarp::UpdatePulseDrive",
+      "signature": "F3 0F 11 4C 24 ? 55 53 56 41 54 41 55 48 8D AC 24",
+      "mangled_name": "?UpdatePulseDrive@cGcSpaceshipWarp@@AEAAXM@Z",
+      "unique_string": "%FREIGHTERNAME%"
+    },
+    {
+      "name": "cGcRealityManager::cGcRealityManager",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B F9 33 ED 48 89 A9",
+      "mangled_name": "??0cGcRealityManager@@QEAA@XZ"
+    },
+    {
+      "name": "cGcGameState::cGcGameState",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? C7 41",
+      "mangled_name": "??0cGcGameState@@QEAA@XZ"
+    },
+    {
+      "name": "cGcPlayerState::cGcPlayerState",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 54 41 55 41 56 41 57 48 83 EC ? 45 33 ED 0F 29 74 24",
+      "mangled_name": "??0cGcPlayerState@@QEAA@XZ"
+    },
+    {
+      "name": "cGcInventoryStore::cGcInventoryStore",
+      "signature": "48 89 5C 24 ? 57 48 83 EC ? 33 FF 0F 57 C0 0F 11 01 48 8B D9 0F 11 41 ? 0F 11 41 ? 0F 11 41",
+      "mangled_name": "??0cGcInventoryStore@@QEAA@XZ"
+    },
+    {
+      "name": "cGcPlayerShipOwnership::cGcPlayerShipOwnership",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 54 41 56 41 57 48 83 EC ? 45 33 E4 48 C7 41",
+      "mangled_name": "??0cGcPlayerShipOwnership@@QEAA@XZ"
+    },
+    {
+      "name": "cGcPlayerVehicleOwnership::cGcPlayerVehicleOwnership",
+      "signature": "48 89 5C 24 ? 57 48 83 EC ? 33 FF 48 C7 41 ? ? ? ? ? 48 89 79 ? 48 B8",
+      "mangled_name": "??0cGcPlayerVehicleOwnership@@QEAA@XZ"
+    },
+    {
+      "name": "cGcPlayerCreatureOwnership::cGcPlayerCreatureOwnership",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 54 41 55 41 56 41 57 48 83 EC ? 4C 8B F1 48 8B D9",
+      "mangled_name": "__ZN26cGcPlayerCreatureOwnershipC2Ev"
+    },
+    {
+      "name": "cGcPlayerMultitoolOwnership::cGcPlayerMultitoolOwnership",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 45 33 FF 0F 29 74 24 ? 44 89 39",
+      "mangled_name": "__ZN27cGcPlayerMultitoolOwnershipC2Ev"
+    },
+    {
+      "name": "cGcPlayerFreighterOwnership::cGcPlayerFreighterOwnership",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 57 C0 48 8D 05",
+      "mangled_name": "__ZN27cGcPlayerFreighterOwnershipC2Ev"
+    },
+    {
+      "name": "cGcPlayerFleetManager::cGcPlayerFleetManager",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 57 C0 48 8D 05",
+      "mangled_name": "__ZN21cGcPlayerFleetManagerC1Ev"
+    },
+    {
+      "name": "cGcSimulation::cGcSimulation",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 33 C0 0F 29 74 24",
+      "mangled_name": "??0cGcSimulation@@QEAA@XZ"
+    },
+    {
+      "name": "cGcHUDManager::cGcHUDManager",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 F6 48 8B F9 48 89 71 ? 48 89 71",
+      "mangled_name": "??0cGcHUDManager@@QEAA@XZ"
+    },
+    {
+      "name": "cGcPlayerHUD::cGcPlayerHUD",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 0F 29 74 24 ? 48 8B F9 E8 ? ? ? ? 48 8D 9F",
+      "mangled_name": "??0cGcPlayerHUD@@QEAA@XZ"
+    },
+    {
+      "name": "cGcHUD::cGcHUD",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 33 ED 4C 8B F1 89 29",
+      "mangled_name": "??0cGcHUD@@QEAA@XZ"
+    },
+    {
+      "name": "cGcHUDMarker::cGcHUDMarker",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8B F1 48 83 C1",
+      "mangled_name": "??0cGcHUDMarker@@QEAA@XZ"
+    },
+    {
+      "name": "cGcQuickMenu::cGcQuickMenu",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8D 79 ? 0F 29 74 24",
+      "mangled_name": "??0cGcQuickMenu@@QEAA@XZ"
+    },
+    {
+      "name": "cGcApplicationGameModeSelectorState::Update",
+      "signature": "48 8B C4 55 53 56 57 41 54 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 48 8B F9",
+      "mangled_name": "?Update@cGcApplicationGameModeSelectorState@@MEAAXM@Z"
+    },
+    {
+      "name": "cTkFileSystem::IsModded",
+      "signature": "48 8B 01 48 85 C0 74 ? 0F B6 80 ? ? ? ? C3 C3 CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 48 8B 01",
+      "mangled_name": "?IsModded@cTkFileSystem@@QEBA_NXZ"
+    },
+    {
+      "name": "cTkFileSystem::GetInstance",
+      "signature": "48 83 EC ? 65 48 8B 04 25 ? ? ? ? B9 ? ? ? ? 48 8B 00 8B 04 01 39 05 ? ? ? ? 7F ? 48 8D 05 ? ? ? ? 48 83 C4 ? C3 48 8D 0D ? ? ? ? E8 ? ? ? ? 83 3D ? ? ? ? ? 75 ? 48 8D 0D ? ? ? ? 48 C7 05",
+      "mangled_name": "?GetInstance@cTkFileSystem@@SAAEAV1@XZ"
+    },
+    {
+      "name": "cTkFileSystem::Data::Data",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 54 41 55 41 56 41 57 48 81 EC ? ? ? ? 48 8D 2D",
+      "mangled_name": "??0Data@cTkFileSystem@@QEAA@_N0@Z",
+      "unique_string": "%sPCBANKS/MODS/"
+    },
+    {
+      "name": "cTkFileSystem::EnumerateDirectory",
+      "signature": "40 55 53 56 57 41 55 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8D 45",
+      "mangled_name": "?EnumerateDirectory@cTkFileSystem@@QEAAHPEBDQEAPEADHH@Z"
+    },
+    {
+      "name": "cTkMemoryManager::Malloc",
+      "signature": "44 89 4C 24 ? 4C 89 44 24 ? 53",
+      "mangled_name": "?Malloc@cTkMemoryManager@@QEAAPEAXHPEBDH0HH@Z"
+    },
+    {
+      "name": "cGcOptionsPageUI::BeginList",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 33 DB 48 8D 79 ? 89 59",
+      "mangled_name": "__ZN16cGcOptionsPageUI9BeginListEPKcS1_iiRK14cGcListOptions"
+    },
+    {
+      "name": "cGcOptionsPageUI::ListOption",
+      "signature": "40 53 48 83 EC ? 48 63 41 ? 48 8D 59",
+      "mangled_name": "__ZN16cGcOptionsPageUI10ListOptionEPKci"
+    },
+    {
+      "name": "cGcModManager::GetInstance",
+      "signature": "48 83 EC ? 65 48 8B 04 25 ? ? ? ? B9 ? ? ? ? 48 8B 00 8B 04 01 39 05 ? ? ? ? 0F 8F ? ? ? ? 48 8D 05 ? ? ? ? 48 83 C4 ? C3 48 8D 0D",
+      "mangled_name": "?GetInstance@cGcModManager@@SAAEAV1@XZ"
+    },
+    {
+      "name": "cTkFileSystem::Data::MountAllArchives",
+      "signature": "4C 8B DC 45 88 43 ? 41 57",
+      "mangled_name": "__ZN13cTkFileSystem4Data16MountAllArchivesERKN5TkStd17TkVectorExtentionI11cTkBankInfoNS1_13DefaultConfigILin1EEENS1_9tk_vectorIS3_Lin1ENS1_17null_stack_bufferEEEEEb"
+    },
+    {
+      "name": "cGcModManager::LoadModdedData",
+      "signature": "40 55 53 56 57 41 55 41 56 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 33 F6",
+      "mangled_name": "cGcModManager::LoadModdedData",
+      "unique_string": "../BINARIES/SETTINGS/GCMODSETTINGS.MXML"
+    },
+    {
+      "name": "cTkFileSystem::DoesFileExist",
+      "signature": "48 8B C4 53 48 81 EC ? ? ? ? 80 3A",
+      "mangled_name": "?DoesFileExist@cTkFileSystem@@QEAA_NPEBD@Z"
+    },
+    {
+      "name": "cTkFileSystem::LoadModDirectory",
+      "signature": "48 89 5C 24 ? 4C 89 44 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 33 F6",
+      "mangled_name": "cTkFileSystem::LoadModDirectory"
+    },
+    {
+      "name": "cTkFileSystem::LoadModSubdirectory",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 4C 89 74 24 ? 55 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B FA 48 8B F1",
+      "mangled_name": "cTkFileSystem::LoadModSubdirectory"
+    },
+    {
+      "name": "GenerateModdedFilepath",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 54 41 55 41 56 41 57 48 83 EC ? 33 FF 48 8D 59",
+      "mangled_name": "GenerateModdedFilepath"
+    },
+    {
+      "name": "cTkFileSystem::CreatePath",
+      "signature": "48 81 EC ? ? ? ? 41 B1",
+      "mangled_name": "?CreatePath@cTkFileSystem@@QEAAXPEBD@Z"
+    },
+    {
+      "name": "XMLNode::writeToFile",
+      "signature": "40 53 55 57 41 54 41 57 48 81 EC ? ? ? ? 45 33 E4 41 0F B6 E9",
+      "mangled_name": "?writeToFile@XMLNode@@QEBA?AW4XMLError@@PEBD0D@Z"
+    },
+    {
+      "name": "cTkFileSystem::Write",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8B 5C 24 ? 49 8B E9",
+      "mangled_name": "?Write@cTkFileSystem@@QEAA_JPEAX_J1PEAUFIOS2HANDLE@@@Z"
+    },
+    {
+      "name": "cTkFileSystem::Open",
+      "signature": "48 89 5C 24 ? 57 48 81 EC ? ? ? ? 45 85 C0",
+      "mangled_name": "?Open@cTkFileSystem@@QEAAPEAUFIOS2HANDLE@@PEBDW4eFileOpenMode@@@Z"
+    },
+    {
+      "name": "MiniDumpFunction",
+      "signature": "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? B8",
+      "mangled_name": "MiniDumpFunction"
+    },
+    {
+      "name": "cTkSystem::IntegratedGPUActive",
+      "signature": "80 B9 ? ? ? ? ? 75 ? 83 3D",
+      "mangled_name": "?IntegratedGPUActive@cTkSystem@@QEAA_NXZ"
+    },
+    {
+      "name": "cTkSystem::GetInstance",
+      "signature": "40 53 48 83 EC ? 65 48 8B 04 25 ? ? ? ? B9 ? ? ? ? 48 8B 00 8B 04 01 39 05 ? ? ? ? 7F ? 48 8D 05 ? ? ? ? 48 83 C4 ? 5B C3 48 8D 0D ? ? ? ? E8 ? ? ? ? 83 3D ? ? ? ? ? 75 ? 48 8D 1D ? ? ? ? 48 8B CB E8 ? ? ? ? 48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8B C3 48 83 C4 ? 5B C3 CC CC CC CC CC CC CC CC CC CC CC CC 8B 11",
+      "mangled_name": "?GetInstance@cTkSystem@@SAAEAV1@XZ"
+    },
+    {
+      "name": "cGcOptionsPageUI::QualityOption",
+      "signature": "4C 8B DC 4D 89 43 ? 49 89 53 ? 49 89 4B ? 53 55 57",
+      "mangled_name": "__ZN16cGcOptionsPageUI13QualityOptionEPKcS1_14eGraphicDetailS2_"
+    },
+    {
+      "name": "cTkMetaDataXML::Register",
+      "signature": "4C 89 4C 24 ? 4C 89 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 53 48 83 EC",
+      "mangled_name": "?Register@cTkMetaDataXML@@SAXPEBDP6AXAEBVcTkClassPointer@@AEAUXMLNode@@_N@ZP6AXAEAV2@2PEAVcTkLinearMemoryPool@@@ZP6A_N10@Z@Z"
+    },
+    {
+      "name": "cTkMetaDataXML::GetLookup",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8B 05 ? ? ? ? 48 8B E9",
+      "mangled_name": "?GetLookup@cTkMetaDataXML@@SAPEAVcTkMetaDataXMLFunctionLookup@@PEBD@Z"
+    },
+    {
+      "name": "cGcFrontendPageFunctions::DoEmptySlotPopup",
+      "signature": "4C 89 4C 24 ? 4C 89 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55 53 56 57 41 55 41 56 41 57 48 8D AC 24",
+      "mangled_name": "?DoEmptySlotPopup@cGcFrontendPageFunctions@@SAXPEAVcGcFrontendPage@@PEAVcGcNGuiLayer@@AEAV?$vector@W4ePopupAction@@V?$TkSTLAllocatorShim@W4ePopupAction@@$03$0?0@@@std@@AEBVcGcInventoryIndex@@PEAVcGcInventoryStore@@@Z"
+    },
+    {
+      "name": "cGcFrontendPageFunctions::SetEmptySlotBackground",
+      "signature": "48 89 74 24 ? 48 89 7C 24 ? 55 48 8B EC 48 83 EC ? 0F B6 0D",
+      "mangled_name": "?SetEmptySlotBackground@cGcFrontendPageFunctions@@SAXPEAVcGcFrontendPage@@PEAVcGcNGuiLayer@@W4InventoryChoice@@_N@Z"
+    },
+    {
+      "name": "cGcNGuiLayer::GetGraphic",
+      "signature": "48 89 5C 24 ? 57 48 83 EC ? 48 8B 99 ? ? ? ? 41 0F B6 F8 41 B8 ? ? ? ? 48 8D 4C 24 ? E8 ? ? ? ? 83 7B ? ? 7E ? 48 8B 50 ? 48 63 4B ? 48 FF C9 48 63 C2 48 23 C8 48 8B 43 ? 48 8B 04 C8 48 85 C0 74 ? 0F 1F 80 ? ? ? ? 48 39 50 ? 75 ? 48 3B 50 ? 74 ? 48 8B 40 ? 48 85 C0 75 ? 33 C0 48 8D 0D ? ? ? ? 40 84 FF 48 0F 45 C1 48 8B 5C 24 ? 48 83 C4 ? 5F C3 48 8B 58 ? 48 85 DB 74 ? 48 8B 0B 48 8B 51 ? 48 8B CB FF D2 83 F8 ? 75 ? 48 8B C3 48 8B 5C 24 ? 48 83 C4 ? 5F C3 CC CC CC CC CC CC CC CC 48 89 5C 24 ? 57 48 83 EC ? 48 8D B9",
+      "mangled_name": "?GetGraphic@cGcNGuiLayer@@QEAAPEAVcGcNGuiGraphic@@T?$TkID@$0IA@@@_N@Z"
+    },
+    {
+      "name": "cGcNGuiLayer::GetLayer",
+      "signature": "48 89 5C 24 ? 57 48 83 EC ? 48 8B 99 ? ? ? ? 41 0F B6 F8 45 33 C0",
+      "mangled_name": "?GetLayer@cGcNGuiLayer@@QEAAPEAV1@T?$TkID@$0IA@@@_N@Z"
+    },
+    {
+      "name": "cGcFrontendPageFunctions::SetPopupBasics",
+      "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 4C 89 48 ? 55 41 54 41 55 41 56 41 57 48 8D 68 ? 48 81 EC ? ? ? ? 0F 29 78",
+      "mangled_name": "?SetPopupBasics@cGcFrontendPageFunctions@@SAPEAVcGcNGuiLayer@@PEAV2@PEBDAEBVcTkColour@@11111_NHAEBT?$TkID@$0IA@@@@Z"
+    },
+    {
+      "name": "Engine::Initialise",
+      "signature": "40 55 48 8D 6C 24 ? 48 81 EC ? ? ? ? 80 3D ? ? ? ? ? 74",
+      "mangled_name": "?Initialise@Engine@@YA_NXZ"
+    },
+    {
+      "name": "cEgTextureResource::Load",
+      "signature": "40 53 57 41 57 48 81 EC ? ? ? ? 45 8B F8",
+      "mangled_name": "?Load@cEgTextureResource@@UEAA_NPEBDH@Z"
+    },
+    {
+      "name": "cTkResource::cTkResource",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? C6 41",
+      "mangled_name": "??0cTkResource@@QEAA@HAEBV?$basic_string@DU?$char_traits@D@std@@V?$TkSTLAllocatorShim@D$00$0?0@@@std@@H@Z"
+    },
+    {
+      "name": "cEgMeshNode::ParsingFunc",
+      "signature": "48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 4C 8B F9 49 8B E8",
+      "mangled_name": "?ParsingFunc@cEgMeshNode@@SAPEAUcEgSceneNodeTemplate@@AEBV?$cTkDynamicArray@VcTkSceneNodeAttributeData@@@@PEAVcTkResourceDescriptor@@H@Z"
+    },
+    {
+      "name": "cEgRenderer::DrawMeshes",
+      "signature": "48 8B C4 44 89 40 ? 48 89 48 ? 55 53 41 54",
+      "mangled_name": "?DrawMeshes@cEgRenderer@@SAXAEAVcEgRenderQueueBuffer@@AEBT?$TkID@$0IA@@@H_NW4List@RenderingOrder@@22AEBVcEgFrustum@@PEAVcEgThreadableRenderCall@@@Z"
+    },
+    {
+      "name": "cEgRenderer::SetupMeshMaterial",
+      "signature": "48 8B C4 48 89 58 ? 48 89 78 ? 4C 89 70 ? 55 48 8D 68 ? 48 81 EC ? ? ? ? 48 8B 9D",
+      "mangled_name": "?SetupMeshMaterial@cEgRenderer@@SA_NPEAVcEgMeshNode@@PEAVcEgMaterialResource@@AEBV?$TkIDHashed@$0IA@@@HAEBVcTkMatrix34@@3AEBVcTkMatrix44@@44MHPEAVcTkVector4@@5H_NPEAVcEgThreadableRenderCall@@_NPEAVcEgShaderUniformBufferBinding@@@Z"
+    },
+    {
+      "name": "cEgRenderer::DrawRenderables",
+      "signature": "44 88 4C 24 ? 4C 89 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 57",
+      "mangled_name": "?DrawRenderables@cEgRenderer@@KAXAEAVcEgRenderQueue@@AEBVcEgFrustum@@AEBT?$TkID@$0IA@@@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@2H_NW4List@RenderingOrder@@4HHPEAVcEgThreadableRenderCall@@44@Z"
+    },
+    {
+      "name": "cEgDrawGeometry::Draw",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 65 48 8B 04 25 ? ? ? ? 48 8D B1 ? ? ? ? 48 8B BE ? ? ? ? 48 8B D9 48 8B 28 B8 ? ? ? ? 80 3C 28 ? 75 ? E8 ? ? ? ? B8 ? ? ? ? 48 89 34 28 80 BF ? ? ? ? ? 74 ? 48 8D 8F ? ? ? ? 41 B0 ? 33 D2 E8 ? ? ? ? 48 8B BB",
+      "mangled_name": "?Draw@cEgDrawGeometry@@SAXPEAX@Z"
+    },
+    {
+      "name": "cEgRenderer::SetupMeshGeometry",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 54 41 56 41 57 48 83 EC ? 49 8B F9",
+      "mangled_name": "?SetupMeshGeometry@cEgRenderer@@SA_NPEAVcEgMeshNode@@PEAVcEgGeometryResource@@AEAIAEAPEBVcTkVertexLayoutRT@@_NPEAVcTkRenderStateCache@@PEAVcEgThreadableRenderCall@@@Z"
+    },
+    {
+      "name": "cGcVisitedSystemsBuffer::VisitNewGalacticAddress",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 54 41 55 41 56 41 57 48 83 EC ? 48 8B 2A",
+      "mangled_name": "?VisitNewGalacticAddress@cGcVisitedSystemsBuffer@@QEAAXAEB_K@Z"
+    },
+    {
+      "name": "cGcPersistentInteractionsManager::LoadGalacticAddressBuffers",
+      "signature": "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 83 EC ? 4C 8B E9 4C 8B FA",
+      "mangled_name": "?LoadGalacticAddressBuffers@cGcPersistentInteractionsManager@@QEAAXAEB_K@Z"
+    },
+    {
+      "name": "cGcPersistentInteractionBuffer::LoadGalacticAddressBuffers",
+      "signature": "40 53 56 57 41 56 48 81 EC ? ? ? ? 48 8B F1",
+      "mangled_name": "?LoadGalacticAddressBuffers@cGcPersistentInteractionBuffer@@QEAAXAEB_K@Z"
+    },
+    {
+      "name": "cGcPlayerBasePersistentBuffer::LoadGalacticAddress",
+      "signature": "48 8B C4 53 48 81 EC ? ? ? ? 48 89 68 ? 48 8B D9 48 8B 69",
+      "mangled_name": "?LoadGalacticAddress@cGcPlayerBasePersistentBuffer@@QEAAXAEB_KUBaseIndex@@@Z"
+    },
+    {
+      "name": "cGcPlayerCommunicator::Update",
+      "signature": "F3 0F 11 4C 24 ? 4C 8B DC 55 56 49 8D AB",
+      "mangled_name": "?Update@cGcPlayerCommunicator@@QEAAXM@Z"
+    },
+    {
+      "name": "cGcInteractionComponent::FindFirstTypedComponent",
+      "signature": "4C 8B DC 48 83 EC ? 49 C7 43 ? ? ? ? ? 41 C7 43 ? ? ? ? ? 83 FA ? 75 ? 48 8D 05 ? ? ? ? 45 33 C0 49 89 43 ? 4D 8D 4B ? 49 8D 43 ? 49 89 43 ? 48 8D 15 ? ? ? ? 49 8D 43 ? 49 89 43 ? E8 ? ? ? ? 48 8B 84 24 ? ? ? ? 48 83 C4 ? C3 48 8D 84 24 ? ? ? ? 48 89 44 24 ? 48 8D 54 24 ? 48 8D 84 24 ? ? ? ? 48 89 44 24 ? 0F 28 44 24 ? 66 0F 7F 44 24 ? E8 ? ? ? ? 48 8B 84 24 ? ? ? ? 48 83 C4 ? C3 CC CC CC CC CC CC CC CC CC CC CC CC CC 48 89 5C 24 ? 57 48 83 EC ? 33 FF",
+      "mangled_name": "?FindFirstTypedComponent@cGcInteractionComponent@@SAPEAV1@VTkHandle@@_N@Z"
+    },
+    {
+      "name": "cGcDestructableComponent::Destroy",
+      "signature": "4C 89 44 24 ? 48 89 4C 24 ? 55 53 57 41 55",
+      "mangled_name": "?Destroy@cGcDestructableComponent@@QEAAXW4eDestroyedBy@@AEBU?$cTkUserIdBase@V?$cTkFixedString@$0EA@D@@@@@Z",
+      "unique_string": "C_SENT_KILLS"
+    },
+    {
+      "name": "Engine::GetModelNode",
+      "signature": "48 89 5C 24 ? 48 89 7C 24 ? 44 8B D2",
+      "mangled_name": "?GetModelNode@Engine@@YA?AVTkHandle@@V2@@Z"
+    },
+    {
+      "name": "cGcPersistentInteractionBuffer::SaveInteraction",
+      "signature": "48 89 5C 24 ? 57 48 83 EC ? 0F 10 1A 41 0F B6 D9",
+      "mangled_name": "?SaveInteraction@cGcPersistentInteractionBuffer@@QEAAXAEBVcTkVector3@@AEBVcGcInteractionData@@_NM@Z"
+    },
+    {
+      "name": "Engine::AddNodes",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 44 8B CA 49 63 D8 41 C1 E9 ? 48 8B F1 45 85 C9 0F 84 ? ? ? ? 44 8B C2 41 81 E0 ? ? ? ? 41 81 F8 ? ? ? ? 0F 84 ? ? ? ? 8B CA 48 8B 15 ? ? ? ? 81 E1 ? ? ? ? 48 8B 82 ? ? ? ? 48 63 0C 88 48 8B 82 ? ? ? ? 48 8B 2C C8 48 85 ED 0F 84 ? ? ? ? 8B 4D ? 8B C1 25 ? ? ? ? 41 3B C0 75",
+      "mangled_name": "?AddNodes@Engine@@YA?AVTkHandle@@V2@U?$TkStrongType@HUTkResHandleID@TkStrongTypeIDs@@@@@Z"
+    },
+    {
+      "name": "cGcPurchaseableItem::Update",
+      "signature": "F3 0F 11 4C 24 ? 55 53 56 57 41 54 41 56 41 57 48 8D AC 24 ? ? ? ? B8",
+      "mangled_name": "?Update@cGcPurchaseableItem@@QEAAXM@Z"
+    },
+    {
+      "name": "cGcPlayerShipOwnership::GetShipComponent",
+      "signature": "83 FA ? 75 ? 48 8B 05 ? ? ? ? 8B 90 ? ? ? ? 48 63 C2 48 8D 14 40 48 03 D2",
+      "mangled_name": "?GetShipComponent@cGcPlayerShipOwnership@@QEBAPEBVcGcSpaceshipComponent@@H@Z"
+    },
+    {
+      "name": "cGcPlayerCharacterComponent::Update",
+      "signature": "40 55 53 57 41 57 48 8D AC 24",
+      "mangled_name": "?Update@cGcPlayerCharacterComponent@@UEAAXM@Z",
+      "unique_string": "JEMMC_%d_%d"
+    },
+    {
+      "name": "cTkEngineUtils::GetMasterModelNode",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 41 8B F0 48 8B F9",
+      "mangled_name": "?GetMasterModelNode@cTkEngineUtils@@SA?AVTkHandle@@V2@W4eMasterModelNodeDistance@@@Z"
+    },
+    {
+      "name": "Engine::GetResourceHandleForNode",
+      "signature": "44 8B D2 4C 8B C1",
+      "mangled_name": "?GetResourceHandleForNode@Engine@@YA?AU?$TkStrongType@HUTkResHandleID@TkStrongTypeIDs@@@@VTkHandle@@@Z"
+    },
+    {
+      "name": "cEgGeometryResource::Load",
+      "signature": "40 53 56 48 83 EC ? 65 48 8B 04 25 ? ? ? ? 48 8B DA 48 89 6C 24 ? 48 8B F1 4C 89 64 24 ? 4C 89 74 24 ? 45 8B F0 48 8B 28 4C 89 7C 24 ? 41 BF ? ? ? ? 41 80 3C 2F ? 75 ? E8 ? ? ? ? 83 3D ? ? ? ? ? 41 BC ? ? ? ? 48 89 7C 24 ? 41 8B 04 2C 89 44 24 ? 7E ? 48 8B 05 ? ? ? ? 48 63 48 ? 48 8B 05 ? ? ? ? 48 8D 3C CD ? ? ? ? 48 83 3C 07 ? 74 ? 41 80 3C 2F ? 75 ? E8 ? ? ? ? 48 8B 05 ? ? ? ? 41 C7 04 2C ? ? ? ? 48 8B 04 07 48 89 05 ? ? ? ? EB ? 48 C7 05 ? ? ? ? ? ? ? ? 45 8B C6 48 8B D3 48 8B CE E8 ? ? ? ? 4C 8B 7C 24 ? 4C 8B 74 24 ? 4C 8B 64 24 ? 48 8B 7C 24 ? 48 8B 6C 24 ? 84 C0 74 ? 48 B8 ? ? ? ? ? ? ? ? 48 39 03 75 ? B8 ? ? ? ? 66 39 43 ? 75 ? 48 8D 56 ? 45 33 C0 48 8D 4B ? E8 ? ? ? ? 48 8D 53",
+      "mangled_name": "?Load@cEgGeometryResource@@UEAA_NPEBDH@Z"
+    },
+    {
+      "name": "Engine::GetTexture",
+      "signature": "40 53 48 83 EC ? 4C 8B 0D ? ? ? ? 33 DB",
+      "mangled_name": "?GetTexture@Engine@@YAPEAXU?$TkStrongType@HUTkResHandleID@TkStrongTypeIDs@@@@@Z"
+    },
+    {
+      "name": "cGcNGuiNodeInfo::Get",
+      "signature": "48 8B C4 53 55 56 57 41 55 48 81 EC ? ? ? ? 4C 89 60",
+      "mangled_name": "?Get@cGcNGuiNodeInfo@@QEAAXVTkHandle@@@Z",
+      "unique_string": " - %d Children"
+    },
+    {
+      "name": "Engine::GetNodeNumChildren",
+      "signature": "8B D1 C1 EA ? 85 D2 74 ? 8B C1 25 ? ? ? ? 3D ? ? ? ? 74 ? 4C 8B 05 ? ? ? ? 81 E1 ? ? ? ? 49 8B 80 ? ? ? ? 4C 63 0C 88 41 83 F9 ? 74 ? 49 8B 80 ? ? ? ? 0F BF 0C 48 3B D1 75 ? 49 8B 40 ? 4B 8D 0C 89 8B 04 88",
+      "mangled_name": "?GetNodeNumChildren@Engine@@YAHVTkHandle@@@Z"
+    },
+    {
+      "name": "cTkEngineUtils::GetMatricesFromNode",
+      "signature": "48 83 EC ? 49 8B C0 48 85 D2",
+      "mangled_name": "?GetMatricesFromNode@cTkEngineUtils@@SA_NVTkHandle@@PEAVcTkMatrix34@@1@Z"
+    },
+    {
+      "name": "cEgModules::Initialise",
+      "signature": "40 57 48 83 EC ? 33 FF 48 89 5C 24 ? 48 39 3D",
+      "mangled_name": "?Initialise@cEgModules@@SAXXZ"
+    },
+    {
+      "name": "Engine::GetNodeName",
+      "signature": "44 8B C1 41 C1 E8 ? 45 85 C0 74 ? 44 8B C9 41 81 E1 ? ? ? ? 41 81 F9 ? ? ? ? 74 ? 48 8B 15 ? ? ? ? 81 E1 ? ? ? ? 48 8B 82 ? ? ? ? 48 63 0C 88 48 8B 82 ? ? ? ? 48 8B 14 C8 48 85 D2 74 ? 8B 4A ? 8B C1 25 ? ? ? ? 41 3B C1 75 ? C1 E9 ? 41 3B C8 75 ? 48 8B 42 ? 48 85 C0",
+      "mangled_name": "??$GetNodeName@$0A@@Engine@@YAPEBDVTkHandle@@@Z"
+    },
+    {
+      "name": "cEgModelNode::UpdateGeometry",
+      "signature": "4C 8B DC 55 53 49 8D AB ? ? ? ? 48 81 EC ? ? ? ? 48 8D 81",
+      "mangled_name": "?UpdateGeometry@cEgModelNode@@QEAA_NXZ"
+    },
+    {
+      "name": "cEgGeometryResource::CreateVertexInfoForHash",
+      "signature": "48 89 54 24 ? 55 57 41 57 48 8D AC 24 ? ? ? ? 48 81 EC",
+      "mangled_name": "?CreateVertexInfoForHash@cEgGeometryResource@@QEAAX_K@Z"
+    },
+    {
+      "name": "cEgGeometryResource::cEgGeometryResource",
+      "signature": "48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 48 89 78 ? 41 54 41 56 41 57 48 81 EC ? ? ? ? 49 8B E9",
+      "mangled_name": "??0cEgGeometryResource@@QEAA@AEBV?$basic_string@DU?$char_traits@D@std@@V?$TkSTLAllocatorShim@D$00$0?0@@@std@@HPEBVcTkResourceDescriptor@@@Z"
+    },
+    {
+      "name": "GeometryStreaming::cEgGeometryStreamer::GetVertexBufferByIndex",
+      "signature": "48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 83 79 ? ? 41 0F B6 E8",
+      "mangled_name": "__ZN17GeometryStreaming19cEgGeometryStreamer22GetVertexBufferByIndexEiNS0_11eStreamTypeE"
+    },
+    {
+      "name": "cTkGraphicsAPI::GetVertexBufferData",
+      "signature": "48 89 5C 24 ? 57 48 83 EC ? 48 8B FA 48 8B D9 4D 85 C0",
+      "mangled_name": "?GetVertexBufferData@cTkGraphicsAPI@@SAXQEAUcTkBuffer@@PEAXPEAH@Z"
+    },
+    {
+      "name": "GeometryStreaming::cEgGeometryStreamer::RequestStream",
+      "signature": "40 55 53 56 57 41 54 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B FA",
+      "mangled_name": "?RequestStream@cEgGeometryStreamer@GeometryStreaming@@QEAAXPEBVcTkResourceDescriptor@@@Z"
+    },
+    {
+      "name": "cEgGeometryResource::CloneOriginalVertDataToIndex",
+      "signature": "40 57 48 83 EC ? 83 B9 ? ? ? ? ? 48 8B F9 0F 8F",
+      "mangled_name": "?CloneOriginalVertDataToIndex@cEgGeometryResource@@QEAAXH@Z"
+    },
+    {
+      "name": "cEgGeometryResource::CloneInternal",
+      "signature": "48 89 5C 24 ? 55 56 57 41 54 41 56 48 81 EC ? ? ? ? 48 8B DA",
+      "mangled_name": "?CloneInternal@cEgGeometryResource@@MEAAXPEBVcTkResource@@@Z",
+      "unique_string": "_CLONED"
+    },
+    {
+      "name": "GeometryStreaming::cEgGeometryStreamer::OnBufferLoadFinish",
+      "signature": "4C 8B DC 49 89 4B ? 55 57 41 57 48 81 EC ? ? ? ? 48 8B 29",
+      "mangled_name": "?OnBufferLoadFinish@cEgGeometryStreamer@GeometryStreaming@@CAXPEAX@Z"
+    },
+    {
+      "name": "GeometryStreaming::cEgStreamRequests::ProcessOnlyStreamRequests",
+      "signature": "40 56 48 83 EC ? 83 79 ? ? 48 8B F1 0F 29 74 24",
+      "mangled_name": "?ProcessOnlyStreamRequests@cEgStreamRequests@GeometryStreaming@@QEAAXN@Z"
+    },
+    {
+      "name": "EgInstancedModelExtension::cEgInstancedMeshNode::RenderAsync",
+      "signature": "48 8B C4 44 89 40 ? 48 89 50 ? 48 89 48 ? 55 56 48 8D A8",
+      "mangled_name": "?RenderAsync@cEgInstancedMeshNode@EgInstancedModelExtension@@CAXAEAVcEgRenderQueueBuffer@@AEBT?$TkID@$0IA@@@H_NW4List@RenderingOrder@@22PEBVcEgFrustum@@PEAVcEgThreadableRenderCall@@@Z"
+    },
+    {
+      "name": "cGcPlayerWeapon::GetChargeFactor",
+      "signature": "48 83 EC ? 48 63 81 ? ? ? ? 83 F8",
+      "mangled_name": "?GetChargeFactor@cGcPlayerWeapon@@UEBAMXZ"
+    },
+    {
+      "name": "cGcPlayerWeapon::GetChargeTime",
+      "signature": "48 83 EC ? 48 63 91 ? ? ? ? 8B CA",
+      "mangled_name": "?GetChargeTime@cGcPlayerWeapon@@QEBAMXZ"
+    },
+    {
+      "name": "cGcPlayerState::GetStatValue",
+      "signature": "48 8B C4 44 89 40 ? 53 55 56 57 41 54",
+      "mangled_name": "?GetStatValue@cGcPlayerState@@QEBAMW4eStatsType@@W4ItemLookupType@@0_N2PEBVcGcInventoryStore@@3@Z"
+    },
+    {
+      "name": "cGcPlayerState::SaveToData",
+      "signature": "48 8B C4 48 89 50 ? 48 89 48 ? 55 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 58 ? 48 89 70 ? 48 89 78 ? 4C 89 60",
+      "mangled_name": "?SaveToData@cGcPlayerState@@QEAAXAEAVcGcPlayerStateData@@@Z"
+    },
+    {
+      "name": "cGcPersistentInteractionsManager::PopulateArrays",
+      "signature": "48 8B C4 4C 89 40 ? 55 53 41 55 41 57",
+      "mangled_name": "?PopulateArrays@cGcPersistentInteractionsManager@@QEAAXAEAV?$cTkFixedArray@VcGcInteractionBuffer@@$0L@@@AEAV?$cTkDynamicArray@VcGcPersistentBase@@@@AEAV?$cTkDynamicArray@VcGcMaintenanceContainer@@@@2AEAV?$cTkDynamicArray@_K@@@Z"
+    },
+    {
+      "name": "cGcGalaxyAttributesAtAddress::Classify",
+      "signature": "48 89 5C 24 ? 57 48 83 EC ? 44 8B C2 C6 44 24",
+      "mangled_name": "?Classify@cGcGalaxyAttributesAtAddress@@QEAAX_K@Z"
+    },
+    {
+      "name": "cGcSolarSystemQuery::Run",
+      "signature": "44 88 4C 24 ? 53 56 57",
+      "mangled_name": "?Run@cGcSolarSystemQuery@@QEAAX_KW4Type@1@_N@Z"
+    },
+    {
+      "name": "cGcPlanetGenerator::GenerateCreatureSpawnData",
+      "signature": "48 89 4C 24 ? 53 57 41 55 41 56 41 57 48 83 EC ? 48 63 9A",
+      "mangled_name": "?GenerateCreatureSpawnData@cGcPlanetGenerator@@QEAAXAEAVcGcPlanetData@@@Z"
+    },
+    {
+      "name": "cEgResource::Load",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 56 48 83 EC ? 48 8B 01 41 8B F0",
+      "mangled_name": "?Load@cEgResource@@UEAA_NPEBDH@Z"
+    },
+    {
+      "name": "cGcBuilding::Visited",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 83 B9 ? ? ? ? ? 48 8B F9 0F 8D ? ? ? ? C7 81 ? ? ? ? ? ? ? ? 84 D2 0F 85 ? ? ? ? E8",
+      "mangled_name": "?Visited@cGcBuilding@@QEAAX_N@Z"
+    },
+    {
+      "name": "cTkGraphicsAPI::CreateVertexBuffer",
+      "signature": "48 8B C4 4C 89 40 ? 48 89 50 ? 48 89 48 ? 41 57",
+      "mangled_name": "?CreateVertexBuffer@cTkGraphicsAPI@@SAPEAXAEAPEAUVkBuffer_T@@AEAUTkDeviceMemory@@PEAPEAXPEAXAEBVcTkVertexLayoutRT@@HH_N55@Z"
+    },
+    {
+      "name": "cTkGraphicsAPI::CreateIndexBuffer",
+      "signature": "48 89 5C 24 ? 55 56 41 54 41 56 41 57 48 83 EC ? 33 DB",
+      "mangled_name": "?CreateIndexBuffer@cTkGraphicsAPI@@SAPEAXAEAPEAUVkBuffer_T@@AEAUTkDeviceMemory@@PEAXH_N3@Z"
+    },
+    {
+      "name": "GeometryStreaming::cEgGeometryStreamer::FindVertexBufferIndexByHash",
+      "signature": "48 83 EC ? 8B 41 ? 4C 8B DA 48 85 C0",
+      "mangled_name": "__ZN17GeometryStreaming19cEgGeometryStreamer27FindVertexBufferIndexByHashEm"
+    },
+    {
+      "name": "cEgGeometryResource::ParseData",
+      "signature": "40 55 56 57 41 56 48 8D 6C 24 ? 48 81 EC ? ? ? ? 44 8B 82",
+      "mangled_name": "?ParseData@cEgGeometryResource@@IEAA_NAEAVcTkGeometryData@@@Z"
+    },
+    {
+      "name": "cEgRendererBase::ApplyVertexLayout",
+      "signature": "44 89 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 53 55 56 57 41 55",
+      "mangled_name": "?ApplyVertexLayout@cEgRendererBase@@QEAA_NAEBVcTkVertexLayoutRT@@AEBVcTkShader@@PEAVcEgThreadableRenderCall@@H@Z"
+    },
+    {
+      "name": "cGcPhotoModeUI::OnRenderScreenshotFinished",
+      "signature": "48 89 4C 24 ? 55 53 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 8B 49",
+      "mangled_name": "?OnRenderScreenshotFinished@cGcPhotoModeUI@@CAXPEAX@Z"
+    },
+    {
+      "name": "Engine::GetRenderBufferTexture",
+      "signature": "40 53 48 83 EC ? 8B DA 85 C9 74 ? 4C 8B 0D ? ? ? ? 8D 41 ? 41 3B 41 ? 73 ? 49 8B 41 ? 4C 63 C1 4A 8B 44 C0 ? 48 85 C0 74 ? 80 B8 ? ? ? ? ? 74 ? 4C 8B 80 ? ? ? ? 49 8B C9 8B 50 ? E8 ? ? ? ? EB ? 33 C0 48 85 C0 74 ? 83 78 ? ? 75 ? 8B 90",
+      "mangled_name": "?GetRenderBufferTexture@Engine@@YAPEAXU?$TkStrongType@HUTkResHandleID@TkStrongTypeIDs@@@@H@Z"
+    },
+    {
+      "name": "cTkTextureBase::CalculateTextureSize",
+      "signature": "0F B6 C1 45 8B D0",
+      "mangled_name": "?CalculateTextureSize@cTkTextureBase@@SAIW4eTexFormat@1@HHH@Z"
+    },
+    {
+      "name": "cTkTexture::CopyPixelDataToBuffer",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B FA 48 8B F1 33 D2 48 8D 0D",
+      "mangled_name": "?CopyPixelDataToBuffer@cTkTexture@@QEAAXPEAD_NII@Z"
+    },
+    {
+      "name": "cTkTexture::CreateEmptyTexture",
+      "signature": "48 8B C4 44 89 48 ? 44 89 40 ? 88 50 ? 48 89 48",
+      "mangled_name": "?CreateEmptyTexture@cTkTexture@@QEAAXW4eTkTextureType@@IIIIIW4eTextureAddressMode@@W4eTextureFilterMode@@I_N3333@Z"
+    },
+    {
+      "name": "cTkRigidBody::SetLinearVelocity",
+      "signature": "48 89 5C 24 ? 57 48 83 EC ? 41 0F B6 F8 48 8B D9 4C 8B 81 ? ? ? ? 49 83 B8 ? ? ? ? ? 75 ? 48 8B 81 ? ? ? ? 48 85 C0 74 ? 80 08",
+      "mangled_name": "?SetLinearVelocity@cTkRigidBody@@QEAAXAEBVcTkVector3@@@Z"
+    },
+    {
+      "name": "cTkRigidBody::SetAngularVelocity",
+      "signature": "48 89 5C 24 ? 57 48 83 EC ? 41 0F B6 F8 48 8B D9 4C 8B 81 ? ? ? ? 49 83 B8 ? ? ? ? ? 75 ? 48 8B 81 ? ? ? ? 48 85 C0 0F 84 ? ? ? ? 0F 28 02",
+      "mangled_name": "?SetAngularVelocity@cTkRigidBody@@QEAAXAEBVcTkVector3@@@Z"
+    },
+    {
+      "name": "cGcSpaceshipComponent::Update",
+      "signature": "F3 0F 11 4C 24 ? 55 53 56 41 57",
+      "mangled_name": "?Update@cGcSpaceshipComponent@@UEAAXM@Z"
+    },
+    {
+      "name": "cGcSpaceshipComponent::UpdateControlled",
+      "signature": "F3 0F 11 4C 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 4C 8B A9",
+      "mangled_name": "?UpdateControlled@cGcSpaceshipComponent@@AEAAXM@Z"
+    },
+    {
+      "name": "cGcSpaceshipComponent::GetVelocity",
+      "signature": "40 53 48 83 EC ? 48 8B 89 ? ? ? ? 48 8B DA 48 83 C1",
+      "mangled_name": "?GetVelocity@cGcSpaceshipComponent@@QEBA?AVcTkVector3@@XZ"
+    },
+    {
+      "name": "cEgMaterialResource::ParseNode",
+      "signature": "48 89 54 24 ? 48 89 4C 24 ? 55 53 57 41 54 41 55 41 56 48 8D AC 24",
+      "mangled_name": "?ParseNode@cEgMaterialResource@@EEAA_NAEAVcTkMaterialData@@@Z"
+    },
+    {
+      "name": "Engine::GetNodeParent",
+      "signature": "44 8B CA 4C 8B C1 41 C1 E9",
+      "mangled_name": "?GetNodeParent@Engine@@YA?AVTkHandle@@V2@@Z"
+    },
+    {
+      "name": "cTkResourceManager::GetDefaultResource",
+      "signature": "4C 89 44 24 ? 89 54 24 ? 53 55 56 57",
+      "mangled_name": "?GetDefaultResource@cTkResourceManager@@QEBAPEAVcTkResource@@HH@Z"
+    },
+    {
+      "name": "Engine::SetMaterialSampler",
+      "signature": "48 89 5C 24 ? 55 56 57 48 83 EC ? 4C 8B 0D",
+      "mangled_name": "?SetMaterialSampler@Engine@@YA_NU?$TkStrongType@HUTkResHandleID@TkStrongTypeIDs@@@@PEBD0@Z"
+    },
+    {
+      "name": "cEgTextureResource::LoadFromDds",
+      "signature": "44 89 4C 24 ? 4C 89 44 24 ? 48 89 54 24 ? 55 56 57 48 8D 6C 24",
+      "mangled_name": "?LoadFromDds@cEgTextureResource@@QEAA_NPEBD0HHHPEAIHH@Z"
+    },
+    {
+      "name": "cTkMemoryManager::Free",
+      "signature": "48 85 D2 0F 84 ? ? ? ? 53 41 56",
+      "mangled_name": "?Free@cTkMemoryManager@@QEAAXPEAXH@Z"
+    },
+    {
+      "name": "cGcPlayerFreighterOwnership::ResetPlayerFreighterBase",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 55 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B D9 E8",
+      "mangled_name": "?ResetPlayerFreighterBase@cGcPlayerFreighterOwnership@@QEAA_NXZ"
+    },
+    {
+      "name": "cEgCodeResource::Load",
+      "signature": "48 89 5C 24 ? 48 89 4C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 49 63 F8",
+      "mangled_name": "?Load@cEgCodeResource@@UEAA_NPEBDH@Z"
+    },
+    {
+      "name": "cGcShipHUD::cGcShipHUD",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 0F 29 74 24 ? 48 8B F1 E8",
+      "mangled_name": "??0cGcShipHUD@@QEAA@XZ"
+    },
+    {
+      "name": "cGcPersistentInteractionBuffer::PopulateBufferData",
+      "signature": "48 89 5C 24 ? 57 48 83 EC ? 48 8B FA 48 8B D9 8B 51 ? 48 8B CF",
+      "mangled_name": "?PopulateBufferData@cGcPersistentInteractionBuffer@@QEAAXAEAVcGcInteractionBuffer@@@Z"
+    },
+    {
+      "name": "cGcShipHUD::ReadPlanetStats",
+      "signature": "48 89 5C 24 ? 4C 89 44 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05",
+      "mangled_name": "?ReadPlanetStats@cGcShipHUD@@IEAAX_NAEAV?$cTkFixedString@$0CAA@D@@110AEA_NPEAM@Z"
+    },
+    {
+      "name": "cGcPlayer::RenderInventoryEditor",
+      "signature": "48 89 4C 24 ? 55 41 55 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 45 33 ED",
+      "mangled_name": "?RenderInventoryEditor@cGcPlayer@@IEAAXXZ"
+    },
+    {
+      "name": "cGcPlayer::RenderNGui",
+      "signature": "48 8B C4 55 41 54 41 55 48 8D A8",
+      "mangled_name": "?RenderNGui@cGcPlayer@@IEAAXXZ",
+      "unique_string": "PLAYER STATS"
+    },
+    {
+      "name": "cGcPositionMarker::Render",
+      "signature": "48 8B C4 55 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 83 39",
+      "mangled_name": "?Render@cGcPositionMarker@@QEAAXXZ"
+    },
+    {
+      "name": "cGcEnvironment::Update",
+      "signature": "40 55 56 48 8D 6C 24 ? 48 81 EC ? ? ? ? 66 0F 6F 05",
+      "mangled_name": "__ZN14cGcEnvironment6UpdateEf"
+    },
+    {
+      "name": "cGcPlayerState::LoadFromData",
+      "signature": "44 88 4C 24 ? 4C 89 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55 41 55",
+      "mangled_name": "?LoadFromData@cGcPlayerState@@QEAAXAEBVcGcPlayerStateData@@_N1@Z"
+    },
+    {
+      "name": "cGcGalaxyMap::Data::RenderNVG",
+      "signature": "40 55 53 41 54 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 48 89 B4 24 ? ? ? ? 48 8B F1 48 8B 0D",
+      "mangled_name": "?RenderNVG@Data@cGcGalaxyMap@@QEAAXXZ"
+    },
+    {
+      "name": "nvgEllipse",
+      "signature": "48 8B C4 55 48 8D 68 ? 48 81 EC ? ? ? ? F3 0F 10 6D",
+      "mangled_name": "nvgEllipse"
+    },
+    {
+      "name": "cGcInteractionComponent::DoInteractionEvent",
+      "signature": "40 55 41 55 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B F1 44 8B EA",
+      "mangled_name": "?DoInteractionEvent@cGcInteractionComponent@@QEAAXW4eInteractionEvent@@@Z",
+      "unique_string": "ALIENS_MET"
+    },
+    {
+      "name": "cGcInteractionComponent::GetInteractionData",
+      "signature": "40 53 48 83 EC ? 48 8B D9 48 8B 0D ? ? ? ? 8B 93",
+      "mangled_name": "?GetInteractionData@cGcInteractionComponent@@AEAAPEBVcGcInteractionData@@XZ"
+    },
+    {
+      "name": "cGcPlayerWanted::Update",
+      "signature": "48 8B C4 F3 0F 11 50 ? 48 89 50 ? 55 53",
+      "mangled_name": "?Update@cGcPlayerWanted@@QEAAXAEBVcTkVector3@@M@Z",
+      "unique_string": "LAST KNOWN PLAYER POS"
+    },
+    {
+      "name": "cGcGalaxyAttributeGenerator::ClassifyStarKeyAttributes",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 8B F9",
+      "mangled_name": "?ClassifyStarKeyAttributes@cGcGalaxyAttributeGenerator@@SAX_KAEAUStarSystemKeyAttributes@1@@Z"
+    },
+    {
+      "name": "cGcGalaxyAttributeGenerator::ClassifyStarKeyAttributes",
+      "signature": "48 89 5C 24 ? 66 89 54 24",
+      "mangled_name": "?ClassifyStarKeyAttributes@cGcGalaxyAttributeGenerator@@SAXAEAVcTkParallelRNG@@GAEAVcGcGalaxyVoxelAttributesData@@AEAUStarSystemKeyAttributes@1@_K@Z"
+    },
+    {
+      "name": "cGcInteractionData::SetDefaults",
+      "signature": "66 0F 6F 05 ? ? ? ? 33 C0 0F 11 01 48 89 41 ? 48 89 41 ? C3",
+      "mangled_name": "?SetDefaults@cGcInteractionData@@QEAAXXZ"
+    },
+    {
+      "name": "cGcResourceCustomisation::CreateGenerationTask",
+      "signature": "48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 57 48 81 EC ? ? ? ? 48 8B F2 49 8B F8",
+      "mangled_name": "?CreateGenerationTask@cGcResourceCustomisation@@QEAAPEAUTaskContext@cGcProceduralTextureManager@@PEAVcTkSmartResHandle@@PEBD_N@Z"
+    },
+    {
+      "name": "cGcNameGenerator::GenerateGalacticRegionName",
+      "signature": "48 89 5C 24 ? 55 56 57 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 8B F9",
+      "mangled_name": "?GenerateGalacticRegionName@cGcNameGenerator@@QEBAX_KAEAV?$cTkFixedString@$0HP@D@@PEAV2@@Z",
+      "unique_string": "NAMEGEN_SUFFIX_REGION_%i"
+    },
+    {
+      "name": "cGcGalaxyMap::Data::DoSolarPopup",
+      "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 55 57 41 54 41 55 41 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 44 0F B7 72",
+      "mangled_name": "?DoSolarPopup@Data@cGcGalaxyMap@@QEAAXAEBUSolarQueryResult@@@Z"
+    },
+    {
+      "name": "SolarQueryResult::ComputeLightyearDistanceBetweenSolarSystems",
+      "signature": "48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 54 41 56 41 57 48 83 EC ? 44 0F B7 41",
+      "mangled_name": "?ComputeLightyearDistanceBetweenSolarSystems@SolarQueryResult@@SAMAEBU1@0@Z"
+    },
+    {
+      "name": "cGcGalaxyMap::Data::Update",
+      "signature": "40 55 53 56 57 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 4C 89 A4 24",
+      "mangled_name": "?Update@Data@cGcGalaxyMap@@QEAAXM@Z",
+      "unique_string": "NEW_GALAXY%i"
+    },
+    {
+      "name": "cGcGalaxyMapUI::SolarInfoPanel::UpdatePanelUI",
+      "signature": "48 89 4C 24 ? 55 53 41 55 41 56 48 8D AC 24 ? ? ? ? B8",
+      "mangled_name": "?UpdatePanelUI@SolarInfoPanel@cGcGalaxyMapUI@@QEAAXXZ",
+      "unique_string": "GLXY_REGION"
+    },
+    {
+      "name": "cGcGameState::ComputeWarpCapability",
+      "signature": "40 53 56 41 54 41 55 41 56",
+      "mangled_name": "?ComputeWarpCapability@cGcGameState@@QEBA?AUWarpCapabilityResult@@M_N_KAEBUStarSystemKeyAttributes@cGcGalaxyAttributeGenerator@@@Z"
+    },
+    {
+      "name": "cTkEngineUtils::RepositionGroupNode",
+      "signature": "40 53 48 81 EC ? ? ? ? 66 0F 6F 05 ? ? ? ? 8B D9",
+      "mangled_name": "?RepositionGroupNode@cTkEngineUtils@@SAXVTkHandle@@AEBVcTkVector3@@@Z"
+    },
+    {
+      "name": "cGcEcosystem::Update",
+      "signature": "48 8B C4 48 89 58 ? 48 89 48 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 45 33 F6",
+      "mangled_name": "?Update@cGcEcosystem@@QEAAXM@Z"
+    },
+    {
+      "name": "cGcBaseBuildingManager::Update",
+      "signature": "48 8B C4 F3 0F 11 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 80 79",
+      "mangled_name": "?Update@cGcBaseBuildingManager@@QEAAXM@Z"
+    },
+    {
+      "name": "cGcFrontendPageClaimBase::DoBaseClaimOptions",
+      "signature": "48 89 54 24 ? 55 53 41 54 41 56",
+      "mangled_name": "?DoBaseClaimOptions@cGcFrontendPageClaimBase@@SAXPEAVcGcFrontendPage@@V?$array@PEAVcGcNGuiLayer@@$04@std@@W4ePersistentBaseTypes@@_NUBaseIndex@@@Z",
+      "unique_string": "UI_BASE_MOVE_HERE"
+    },
+    {
+      "name": "cGcSolarSystemGenerator::GeneratePlanetPositions",
+      "signature": "48 8B C4 4C 89 48 ? 4C 89 40 ? 48 89 50 ? 48 89 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 44 0F 29 B8",
+      "mangled_name": "?GeneratePlanetPositions@cGcSolarSystemGenerator@@QEAAXAEBVcGcGalaxyAttributesAtAddress@@AEAUGenerationData@1@PEAVcGcSolarSystemGeometry@@@Z"
+    },
+    {
+      "name": "cGcSolarSystemGenerator::GenerateBasics",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B FA 49 8B D9",
+      "mangled_name": "?GenerateBasics@cGcSolarSystemGenerator@@QEAAXAEBVcTkSeed@@AEBVcGcGalaxyAttributesAtAddress@@AEAUStarSystemKeyAttributes@cGcGalaxyAttributeGenerator@@AEAUGenerationData@1@@Z"
+    },
+    {
+      "name": "cGcSolarSystemGenerator::GeneratePlanetBiomes",
+      "signature": "48 8B C4 4C 89 48 ? 4C 89 40 ? 48 89 50 ? 48 89 48 ? 53 55 56 57 41 54 41 55 41 56 41 57 48 81 EC ? ? ? ? 4C 63 9A",
+      "mangled_name": "?GeneratePlanetBiomes@cGcSolarSystemGenerator@@QEAAXAEBVcGcGalaxyAttributesAtAddress@@AEAUGenerationData@1@AEAUStarSystemKeyAttributes@cGcGalaxyAttributeGenerator@@@Z"
+    },
+    {
+      "name": "cEgModelNode::Animate",
+      "signature": "40 53 48 81 EC ? ? ? ? 48 83 B9 ? ? ? ? ? 48 8B D9 0F 84 ? ? ? ? 48 83 B9",
+      "mangled_name": "?Animate@cEgModelNode@@IEAAXXZ"
+    },
+    {
+      "name": "cEgSceneNodeData::SetRelativeTransform",
+      "signature": "48 8B 81 ? ? ? ? 81 E2 ? ? ? ? 4C 8B C9",
+      "mangled_name": "?SetRelativeTransform@cEgSceneNodeData@@QEAAXVTkHandle@@AEBVcTkMatrix34@@@Z"
+    },
+    {
+      "name": "cGcPlayerHUD::Update",
+      "signature": "F3 0F 11 4C 24 ? 4C 8B DC 55 41 55",
+      "mangled_name": "?Update@cGcPlayerHUD@@QEAAXM@Z",
+      "unique_string": "UI_ABAND_AREA_MAPPED"
+    },
+    {
+      "name": "cGcNGuiElement::GetPosition",
+      "signature": "48 83 EC ? 48 8B 41 ? 45 85 C0",
+      "mangled_name": "?GetPosition@cGcNGuiElement@@QEBA?AVcTkVector2@@W4PositionType@1@@Z"
+    },
+    {
+      "name": "cGcNGuiElement::Render",
+      "signature": "4C 8B DC 53 48 81 EC ? ? ? ? 49 89 6B ? 48 8B D9",
+      "mangled_name": "?Render@cGcNGuiElement@@UEAAXXZ"
+    },
+    {
+      "name": "cGcFrontendManager::cGcFrontendManager",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 54 41 56 41 57 48 83 EC ? 48 8D 05",
+      "mangled_name": "??0cGcFrontendManager@@QEAA@XZ"
+    },
+    {
+      "name": "cGcNGuiLayer::cGcNGuiLayer",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B F9 E8 ? ? ? ? 33 ED",
+      "mangled_name": "??0cGcNGuiLayer@@QEAA@XZ"
+    },
+    {
+      "name": "cGcSimpleInteractionComponent::DoAction",
+      "signature": "48 8B C4 48 89 48 ? 55 41 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 58 ? 4C 8B F1",
+      "mangled_name": "?DoAction@cGcSimpleInteractionComponent@@AEAAXXZ",
+      "unique_string": "UI_NOTIFY_LANDINGPAD_ERROR"
+    },
+    {
+      "name": "cGcDiscoveryManager::SubmitDiscoveryData",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B 59 ? 41 0F B6 F9",
+      "mangled_name": "?SubmitDiscoveryData@cGcDiscoveryManager@@QEAA_NAEBVcGcDiscoveryData@@PEA_N@Z"
+    },
+    {
+      "name": "cGcFrontendManager::QueueFrontendPage",
+      "signature": "48 63 81 ? ? ? ? 48 03 C0 83 BC C1 ? ? ? ? ? 75 ? 89 94 C1",
+      "mangled_name": "?QueueFrontendPage@cGcFrontendManager@@QEAAXW4eFrontendPage@@MPEAVcGcInteractionComponent@@@Z"
+    },
+    {
+      "name": "cGcInventoryStore::Add",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 56 48 8D 6C 24 ? 48 81 EC ? ? ? ? 41 0F 10 00",
+      "mangled_name": "?Add@cGcInventoryStore@@QEAA?AVcGcInventoryIndex@@AEBVcGcInventoryElement@@@Z"
+    },
+    {
+      "name": "cGcInventoryStore::GetElement",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B 99 ? ? ? ? 48 8B F2 8B 81 ? ? ? ? 48 8D 3C 40 48 C1 E7 ? 48 03 FB 48 3B DF 74 ? 90 48 8D 53",
+      "mangled_name": "?GetElement@cGcInventoryStore@@QEBAPEBVcGcInventoryElement@@AEBVcGcInventoryIndex@@@Z"
+    },
+    {
+      "name": "cGcInventoryStore::Remove",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 54 24 ? 56 57 41 56 48 83 EC ? 48 8B B9",
+      "mangled_name": "?Remove@cGcInventoryStore@@QEAA_NVcGcInventoryIndex@@H@Z"
+    },
+    {
+      "name": "cGcFishLaser::OnModeChanged",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 8D 42",
+      "mangled_name": "__ZN12cGcFishLaser13OnModeChangedENS_5eModeES0_"
+    },
+    {
+      "name": "cGcHUDManager::RemoveOSDMessage",
+      "signature": "48 89 5C 24 ? 55 56 57 48 81 EC ? ? ? ? 4C 8B 89",
+      "mangled_name": "__ZN13cGcHUDManager16RemoveOSDMessageEPKc"
+    },
+    {
+      "name": "cGcVibrationManager::SendValue",
+      "signature": "48 89 5C 24 ? 57 48 83 EC ? 48 8B F9 48 83 C1 ? E8 ? ? ? ? 48 8D 14 40 48 8B 47 ? 48 8D 04 D0 48 3B 47 ? 75",
+      "mangled_name": "?SendValue@cGcVibrationManager@@QEAA_NAEBT?$TkID@$0IA@@@M@Z"
+    },
+    {
+      "name": "cGcFishManager::Update",
+      "signature": "F3 0F 11 4C 24 ? 55 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 44 0F 29 8C 24",
+      "mangled_name": "__ZN14cGcFishManager6UpdateEf"
+    },
+    {
+      "name": "cGcFishManager::SetFishing",
+      "signature": "48 8B C4 48 89 58 ? 48 89 78 ? 55 48 8D 68 ? 48 81 EC ? ? ? ? 80 79",
+      "mangled_name": "__ZN14cGcFishManager10SetFishingEP12cGcFishLaser"
+    },
+    {
+      "name": "cGcFishingData::GetRandomFish",
+      "signature": "48 8B C4 44 89 48 ? 4C 89 40 ? 48 89 50 ? 48 89 48 ? 55 53 48 8D A8",
+      "mangled_name": "__ZN14cGcFishingData13GetRandomFishE10cTkVector34TkIDILm128EE12eItemQualityRfS3_"
+    },
+    {
+      "name": "cGcBaseBuildingManager::GetBaseBuildingRootMatrix",
+      "signature": "40 53 48 83 EC ? 66 0F 6F 25",
+      "mangled_name": "?GetBaseBuildingRootMatrix@cGcBaseBuildingManager@@QEBA?AVcTkPhysRelMat34@@UBaseIndex@@_K@Z"
+    },
+    {
+      "name": "cGcPlayerHUD::LoadData",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8B EC 48 83 EC ? 4C 8D B1",
+      "mangled_name": "?LoadData@cGcPlayerHUD@@QEAAXXZ",
+      "unique_string": "UI\\HUD\\HUDCROSSHAIR.MXML"
+    },
+    {
+      "name": "cGcPlayerState::PackageTechnology",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 54 41 56 41 57 48 83 EC ? 48 8D 99 ? ? ? ? 4D 8B F8",
+      "mangled_name": "?PackageTechnology@cGcPlayerState@@QEAA_NW4InventoryChoice@@AEBVcGcInventoryIndex@@01W4TryStoreMode@@AEAV?$cTkFixedString@$0CA@D@@@Z",
+      "unique_string": "UI_TECH_PACK_ERROR"
+    },
+    {
+      "name": "cGcFrontendPageFunctions::DoInventorySlots",
+      "signature": "48 85 D2 0F 84 ? ? ? ? 48 8B C4 4C 89 48 ? 4C 89 40",
+      "mangled_name": "?DoInventorySlots@cGcFrontendPageFunctions@@CAXPEAVcGcFrontendPage@@PEAVcGcNGuiLayer@@PEAVcGcInventoryStore@@AEAV?$vector@W4ePopupAction@@V?$TkSTLAllocatorShim@W4ePopupAction@@$03$0?0@@@std@@HH_NAEBVcGcInventoryIndex@@HH4HH4M@Z"
+    },
+    {
+      "name": "cGcScanManager::UpdateConstantMarkers",
+      "signature": "48 89 4C 24 ? 55 53 56 57 41 54 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 0F 29 B4 24 ? ? ? ? 4C 8B F9",
+      "mangled_name": "?UpdateConstantMarkers@cGcScanManager@@AEAAXXZ",
+      "unique_string": "UI_MARKER_TAG_NORTH"
+    },
+    {
+      "name": "cGcScanManager::UpdateScannableMarkers",
+      "signature": "48 89 4C 24 ? 55 53 57 41 54 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 0F 29 B4 24",
+      "mangled_name": "?UpdateScannableMarkers@cGcScanManager@@AEAAXXZ"
+    },
+    {
+      "name": "cGcMarkerPoint::Update",
+      "signature": "40 55 53 56 57 41 54 48 8D 6C 24 ? 48 81 EC ? ? ? ? 0F B6 99",
+      "mangled_name": "?Update@cGcMarkerPoint@@QEAAXXZ",
+      "unique_string": "STATION_MARKER"
+    },
+    {
+      "name": "cGcMarkerPoint::IsEqual",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8B F9 48 8B F2",
+      "mangled_name": "?IsEqual@cGcMarkerPoint@@QEAA_NAEBV1@@Z"
+    },
+    {
+      "name": "cGcHologramComponent::GetDesiredHologramResource",
+      "signature": "40 53 48 83 EC ? 80 B9 ? ? ? ? ? 48 8B DA 74 ? 8B 81",
+      "mangled_name": "__ZNK20cGcHologramComponent26GetDesiredHologramResourceEv"
+    },
+    {
+      "name": "cGcOptionsPageUI::Boolean",
+      "signature": "4C 89 44 24 ? 56 57 41 55",
+      "mangled_name": "__ZN16cGcOptionsPageUI7BooleanEPKcS1_bbRK17cGcBooleanOptions"
+    },
+    {
+      "name": "cGcFrontendPageOptions::DoCameraOptions",
+      "signature": "48 8B C4 55 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 58 ? 48 89 70 ? 48 8B F1 48 89 78 ? 48 8B 3D",
+      "mangled_name": "__ZN22cGcFrontendPageOptions15DoCameraOptionsEP16cGcOptionsPageUI"
+    },
+    {
+      "name": "cGcOptionsPageUI::Header",
+      "signature": "48 89 5C 24 ? 57 48 83 EC ? 83 79 ? ? 48 8B DA",
+      "mangled_name": "__ZN16cGcOptionsPageUI6HeaderEPKc24eOptionsUIHeaderIconType"
+    },
+    {
+      "name": "cGcOptionsPageUI::Float",
+      "signature": "F3 0F 11 5C 24 ? 55 53 41 54",
+      "mangled_name": "__ZN16cGcOptionsPageUI5FloatEPKcS1_ffffRK15cGcFloatOptions",
+      "unique_string": "%.1f%s"
+    },
+    {
+      "name": "cGcOptionsPageUI::Int",
+      "signature": "44 89 4C 24 ? 4C 89 44 24 ? 55 56 41 57",
+      "mangled_name": "__ZN16cGcOptionsPageUI3IntEPKcS1_iiiiRK13cGcIntOptions"
+    },
+    {
+      "name": "cGcOptionsPageUI::BeginPage",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 57 C0 33 C0",
+      "mangled_name": "__ZN16cGcOptionsPageUI9BeginPageEPNS_15PersistentStateEP28cGcOptionsInteractionContext"
+    },
+    {
+      "name": "cGcOptionsPageUI::EndPage",
+      "signature": "48 8B C4 55 57 48 8D 68 ? 48 81 EC ? ? ? ? 83 79",
+      "mangled_name": "__ZN16cGcOptionsPageUI7EndPageEv"
+    },
+    {
+      "name": "cGcFrontendPageOptions::DoOptions",
+      "signature": "40 55 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 83 3D",
+      "mangled_name": "__ZN22cGcFrontendPageOptions9DoOptionsEv"
+    },
+    {
+      "name": "cGcFrontendPageOptions::RequestOptionsPage",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 8B D9",
+      "mangled_name": "__ZN22cGcFrontendPageOptions18RequestOptionsPageE12eOptionsMenub"
+    },
+    {
+      "name": "cGcOptionsPageUI::Button",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 57 48 81 EC ? ? ? ? 32 DB",
+      "mangled_name": "__ZN16cGcOptionsPageUI6ButtonEPKcS1_RK16cGcButtonOptions"
+    },
+    {
+      "name": "cGcOptionsPageUI::FinalizePage",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 55 41 56 41 57 48 83 EC ? 48 8B 81 ? ? ? ? 45 33 FF",
+      "mangled_name": "__ZN16cGcOptionsPageUI12FinalizePageEbb"
+    },
+    {
+      "name": "cGcFrontendPage::Confirm",
+      "signature": "48 89 6C 24 ? 41 54 41 56 41 57 48 83 EC ? 80 B9",
+      "mangled_name": "?Confirm@cGcFrontendPage@@QEAA_NPEAVcGcNGuiLayer@@_N1VTkAudioID@@11@Z"
+    },
+    {
+      "name": "cGcFrontendPageOptions::DoGameSwitcher",
+      "signature": "48 8B C4 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 66 0F 6F 0D",
+      "mangled_name": "__ZN22cGcFrontendPageOptions14DoGameSwitcherEP15cGcFrontendPage",
+      "unique_string": "UI_DIFFICULTY_SELF_BAN"
+    },
+    {
+      "name": "cGcFrontendManager::RenderPage",
+      "signature": "48 89 4C 24 ? 55 53 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 48 89 B4 24 ? ? ? ? 48 89 BC 24",
+      "mangled_name": "__ZN18cGcFrontendManager10RenderPageEv"
+    },
+    {
+      "name": "cGcFrontendPageFunctions::DoItemPopup",
+      "signature": "48 8B C4 44 89 48 ? 4C 89 40 ? 48 89 48 ? 55 48 8D A8",
+      "mangled_name": "?DoItemPopup@cGcFrontendPageFunctions@@SAPEAVcGcNGuiLayer@@PEAVcGcFrontendPage@@PEAV2@AEBVcGcInventoryElement@@W4eItemPopupLayer@@_NAEBT?$TkID@$0BAA@@@PEBVcGcInventoryStore@@@Z",
+      "unique_string": "UI_EMPTY_REFINER"
+    },
+    {
+      "name": "cTkHashedNGuiElement::cTkHashedNGuiElement",
+      "signature": "4C 8B D9 45 8B D0",
+      "mangled_name": "??0cTkHashedNGuiElement@@QEAA@AEBT?$TkID@$0IA@@@H@Z"
+    },
+    {
+      "name": "GcTerrainRegionMap::cGcTerrainRegionMap",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 29 74 24 ? 48 8D 05",
+      "mangled_name": "??0cGcTerrainRegionMap@@QEAA@XZ"
+    },
+    {
+      "name": "cTkAudioManager::RegisterNamedAudioObject",
+      "signature": "4C 89 44 24 ? 55 53 56 57 41 55 41 56 48 8D 6C 24",
+      "mangled_name": "?RegisterNamedAudioObject@cTkAudioManager@@QEAA?AVTkAudioObject@@_KPEBD@Z"
+    },
+    {
+      "name": "cTkPersonalRNG::cTkPersonalRNG",
+      "signature": "40 53 48 83 EC ? 48 8B D9 FF 15 ? ? ? ? 48 8B D0 48 B9 ? ? ? ? ? ? ? ? 48 C1 EA ? 48 33 D0 48 B8 ? ? ? ? ? ? ? ? 48 0F AF D0 48 8B C2 48 C1 E8 ? 48 33 C2 48 0F AF C1 48 8B D0 48 C1 EA ? 48 33 D0 33 C0 85 D2 8B CA 0F 94 C0 C1 C9 ? 03 C2 89 03 48 8B C2 48 C1 E8 ? 33 C8 48 8B C3",
+      "mangled_name": "??0cTkPersonalRNG@@QEAA@XZ"
+    },
+    {
+      "name": "cGcApplicationDeathState::Update",
+      "signature": "48 89 4C 24 ? 55 53 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8",
+      "mangled_name": "?Update@cGcApplicationDeathState@@EEAAXM@Z"
+    },
+    {
+      "name": "cGcSolarSystem::PollToPrepare",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 65 48 8B 04 25 ? ? ? ? 48 8B F9",
+      "mangled_name": "?PollToPrepare@cGcSolarSystem@@QEAA?AW4TkPollResult@@XZ",
+      "unique_string": "SolarSystemPhase%zu"
+    },
+    {
+      "name": "cGcSolarSystemMap::cGcSolarSystemMap",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B F1 E8 ? ? ? ? 48 8D 8E",
+      "mangled_name": "__ZN17cGcSolarSystemMapC2Ev"
+    },
+    {
+      "name": "cGcSpacePoiSiteComponent::GeneratePoiDescription",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 63 FA",
+      "mangled_name": "__ZN24cGcSpacePoiSiteComponent22GeneratePoiDescriptionE13eSpacePoiTypem",
+      "unique_string": "%STARCLASS%"
+    },
+    {
+      "name": "cGcSpacePoiSiteComponent::Prepare",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 8B 51 ? 48 8B D9",
+      "mangled_name": "__ZN24cGcSpacePoiSiteComponent7PrepareEv"
+    },
+    {
+      "name": "cGcNameGenerator::GenerateSpacePoiName",
+      "signature": "44 89 4C 24 ? 4C 89 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D AC 24",
+      "mangled_name": "__ZNK16cGcNameGenerator20GenerateSpacePoiNameEmm13eSpacePoiTypeiRK14cTkFixedStringILi127EcERS2_",
+      "unique_string": "NAMEGEN_ASTEROIDBELT_%i"
+    },
+    {
+      "name": "cGcSpacePoiSiteComponent::OnActivate",
+      "signature": "40 53 48 81 EC ? ? ? ? 48 8B 81 ? ? ? ? 48 8B D9 8B 88",
+      "mangled_name": "__ZN24cGcSpacePoiSiteComponent10OnActivateEv"
+    },
+    {
+      "name": "cGcSpacePoiSiteComponent::AdvanceLifecycle",
+      "signature": "48 89 5C 24 ? 57 48 83 EC ? 0F 29 74 24 ? 41 0F B6 F8 0F 28 F1 48 8B D9 E8 ? ? ? ? 80 BB",
+      "mangled_name": "__ZN24cGcSpacePoiSiteComponent16AdvanceLifecycleEfb"
+    },
+    {
+      "name": "cGcSpacePoiSiteComponent::UpdateSunTrackedPosition",
+      "signature": "40 53 48 83 EC ? 48 8B 81 ? ? ? ? 48 8B D9 48 85 C0 0F 84 ? ? ? ? 83 B8 ? ? ? ? ? 0F 85",
+      "mangled_name": "__ZN24cGcSpacePoiSiteComponent24UpdateSunTrackedPositionEv"
+    },
+    {
+      "name": "cGcSolarSystem::UpdateSunLock",
+      "signature": "4C 8B DC 53 48 81 EC ? ? ? ? 48 83 B9",
+      "mangled_name": "__ZN14cGcSolarSystem13UpdateSunLockEf"
+    },
+    {
+      "name": "cGcSpaceshipWarp::Update",
+      "signature": "40 55 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 8B 81",
+      "mangled_name": "?Update@cGcSpaceshipWarp@@QEAAXM@Z"
+    },
+    {
+      "name": "cGcSimulation::WarpToSystem",
+      "signature": "40 53 48 83 EC ? 48 83 B9 ? ? ? ? ? 48 8B DA",
+      "mangled_name": "?WarpToSystem@cGcSimulation@@QEAAXAEBVcGcGalacticSolarSystemAddress@@@Z"
+    },
+    {
+      "name": "cGcRealityManager::LoadTexture",
+      "signature": "40 53 48 83 EC ? 4C 8B 01 48 8B D9 4D 85 C0 0F 84 ? ? ? ? 48 C7 C0 ? ? ? ? 0F 1F 40 ? 48 FF C0 41 80 3C 00 ? 75 ? 85 C0 7E ? 48 8D 44 24 ? 48 C7 44 24 ? ? ? ? ? 48 89 44 24 ? 48 8D 8C 24 ? ? ? ? BA",
+      "mangled_name": "?LoadTexture@cGcRealityManager@@SAXAEAVcTkTextureResource@@@Z"
+    },
+    {
+      "name": "cGcHUDManager::Construct",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B F9 45 33 E4",
+      "mangled_name": "?Construct@cGcHUDManager@@QEAAXXZ"
+    },
+    {
+      "name": "cTkFileSystem::Read",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B 5C 24 ? 49 8B F1",
+      "mangled_name": "?Read@cTkFileSystem@@QEAA_JPEAX_J1PEAUFIOS2HANDLE@@@Z"
+    },
+    {
+      "name": "cGcPlayer::GetSpaceship",
+      "signature": "48 8B 91 ? ? ? ? 48 85 D2 74 ? 48 8B CA 4C 8D 15 ? ? ? ? 48 C1 F9 ? 45 33 C0 81 F9 ? ? ? ? 77 ? 48 63 C1 4C 6B C8 ? 4B 8D 04 11 4B 39 54 11 ? 74 ? 49 8B C0 48 85 C0 74 ? 81 F9 ? ? ? ? 77 ? 48 63 C1 48 6B C8 ? 4A 39 54 11 ? 75 ? 4E 8D 04 11 0F BF 0D ? ? ? ? 49 8B D0 E9 ? ? ? ? 33 C0 C3 CC CC CC CC CC 48 8B 05",
+      "mangled_name": "?GetSpaceship@cGcPlayer@@QEBAPEAVcGcSpaceshipComponent@@XZ"
+    },
+    {
+      "name": "cGcSpacePoiGenerator::Generate",
+      "signature": "4C 8B DC 4D 89 43 ? 49 89 4B ? 55 41 55",
+      "mangled_name": "__ZN20cGcSpacePoiGenerator8GenerateERK28cGcGalaxyAttributesAtAddressRK13cTkFixedArrayI10cTkVector3Lm32EE"
+    },
+    {
+      "name": "cGcFrontendPageSolarSystemMap::OnMarkerPlaced",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 4C 24 ? 57 41 56",
+      "mangled_name": "__ZN29cGcFrontendPageSolarSystemMap14OnMarkerPlacedER23cGcSolarSystemMapObject"
+    },
+    {
+      "name": "cTkClock::Update",
+      "signature": "40 53 48 83 EC ? 80 79 ? ? 48 8B D9 8B 05",
+      "mangled_name": "?Update@cTkClock@@QEAAXXZ"
+    },
+    {
+      "name": "cGcSolarSystem::GetName",
+      "signature": "48 89 5C 24 ? 48 89 7C 24 ? 55 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B D9 C6 85",
+      "mangled_name": "?GetName@cGcSolarSystem@@QEBAXAEAV?$cTkFixedString@$0HP@D@@@Z"
+    }
+  ],
+  "global_objects":
+  [
+    {
+      "name": "cEgModules::mgpSceneManager",
+      "signature": "48 89 05 ? ? ? ? E8 ? ? ? ? 48 39 3D ? ? ? ? 75 ? B9 ? ? ? ? E8 ? ? ? ? 48 85 C0 74 ? 48 89 78 ? 40 88 78 ? 48 89 78 ? 40 88 78",
+      "mangled_name": "?mgpSceneManager@cEgModules@@0PEAVcEgSceneManager@@EA"
+    },
+    {
+      "name": "cEgModules::mgpResourceManager",
+      "signature": "48 89 05 ? ? ? ? 48 39 3D ? ? ? ? 75 ? B9 ? ? ? ? E8 ? ? ? ? 48 85 C0 74 ? 48 8B C8 E8 ? ? ? ? 48 8B F8",
+      "mangled_name": "?mgpResourceManager@cEgModules@@0PEAVcTkResourceManager@@EA"
+    },
+    {
+      "name": "cEgModules::mgpRenderer",
+      "signature": "48 8B 1D ? ? ? ? FF 15 ? ? ? ? 0F 10 83 ? ? ? ? 48 8D 54 24",
+      "mangled_name": "?mgpRenderer@cEgModules@@0PEAVcEgRenderer@@EA"
+    },
+    {
+      "name": "cTkTimeManager::mLocalClock",
+      "signature": "48 8D 0D ? ? ? ? 40 88 3D ? ? ? ? C7 05",
+      "mangled_name": "?mLocalClock@cTkTimeManager@@0VcTkClock@@A"
+    },
+    {
+      "name": "cTkTimeManager::mGlobalClock",
+      "signature": "48 8D 0D ? ? ? ? E8 ? ? ? ? B2 ? 48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8D 0D ? ? ? ? 40 88 3D",
+      "mangled_name": "?mGlobalClock@cTkTimeManager@@0VcTkClock@@A"
+    },
+    {
+      "name": "cTkTimeManager::mRealtimeClock",
+      "signature": "48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8D 0D ? ? ? ? 40 88 3D ? ? ? ? 89 3D",
+      "mangled_name": "?mRealtimeClock@cTkTimeManager@@0VcTkClock@@A"
+    },
+    {
+      "name": "gMemoryManager",
+      "signature": "48 8D 0D ? ? ? ? 48 8D 05 ? ? ? ? 48 89 44 24 ? E8 ? ? ? ? E8",
+      "mangled_name": "gMemoryManager"
+    },
+    {
+      "name": "gGameGui",
+      "signature": "48 8D 0D ? ? ? ? F3 0F 11 44 24 ? BA",
+      "mangled_name": "gGameGui"
+    },
+    {
+      "name": "cGcBaseBuildingManager::mBaseBuildingManager",
+      "signature": "48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8B 0D ? ? ? ? 0F 28 CF",
+      "mangled_name": "?mBaseBuildingManager@cGcBaseBuildingManager@@0V1@A"
+    }
+  ],
+  "structs":
+  [
+    {
+      "name": "cGcApplication::Data",
+      "size": {
+        "signature": "41 B8 ? ? ? ? 48 8B C8 E8 ? ? ? ? 48 8B 1D",
+        "offset": 2
+      },
+      "fields": [
+        {
+          "name": "mGameState",
+          "signature": "48 8D 8F ? ? ? ? E8 ? ? ? ? 48 8D 8F ? ? ? ? E8 ? ? ? ? 48 8D 8F ? ? ? ? E8 ? ? ? ? 48 8D 8F ? ? ? ? E8 ? ? ? ? 48 8D 8F ? ? ? ? E8 ? ? ? ? 48 8D 9F ? ? ? ? 48 8B CB E8 ? ? ? ? 48 8D 8F",
+          "offset": 3
+        },
+        {
+          "name": "mSimulation",
+          "signature": "48 8D 8F ? ? ? ? E8 ? ? ? ? 48 8D 8F ? ? ? ? E8 ? ? ? ? 48 8D 8F ? ? ? ? E8 ? ? ? ? 48 8D 8F ? ? ? ? E8 ? ? ? ? 48 8D 8F ? ? ? ? E8 ? ? ? ? 48 8D 9F ? ? ? ? 48 8B CB E8 ? ? ? ? 48 8D 8F",
+          "offset": 27
+        },
+        {
+          "name": "mHUDManager",
+          "signature": "48 8D 8F ? ? ? ? E8 ? ? ? ? 48 8D 8F ? ? ? ? E8 ? ? ? ? 48 8D 8F ? ? ? ? E8 ? ? ? ? 48 8D 8F ? ? ? ? E8 ? ? ? ? 48 8D 8F ? ? ? ? E8 ? ? ? ? 48 8D 9F ? ? ? ? 48 8B CB E8 ? ? ? ? 48 8D 8F",
+          "offset": 39
+        },
+        {
+          "name": "mFrontendManager",
+          "signature": "48 8D 8F ? ? ? ? E8 ? ? ? ? 48 8D 9F ? ? ? ? 48 8B CB E8 ? ? ? ? 48 8D 8F"
+        },
+        {
+          "name": "mNGuiManager",
+          "signature": "48 81 C1 ? ? ? ? E8 ? ? ? ? E8 ? ? ? ? 41 0F 28 CC"
+        },
+        {
+          "name": "mVibrationManager",
+          "signatures": [
+            "48 81 C1 ? ? ? ? E8 ? ? ? ? 44 0F 28 94 24 ? ? ? ? 44 0F 28 84 24",
+            "48 81 C1 ? ? ? ? 41 0F 28 D0 F3 0F 7F 85 ? ? ? ? E8 ? ? ? ? E9 ? ? ? ? 83 F9 ? 75 ? 48 8B 0D ? ? ? ? 48 81 C1 ? ? ? ? E8 ? ? ? ? 48 85 C0 74 ? 48 8B C8",
+            "48 81 C1 ? ? ? ? 0F 28 D6 E8 ? ? ? ? 0F 28 B4 24"
+          ]
+        },
+        {
+          "name": "mAudioManager",
+          "signature": "48 8D 8B ? ? ? ? E8 ? ? ? ? 4C 8B 45 ? 4C 89 83 ? ? ? ? C6 45 ? ? 48 8D 55 ? 4C 89 7D ? 48 8D 8B ? ? ? ? C7 45 ? ? ? ? ? 0F 28 45 ? 66 0F 7F 45 ? E8 ? ? ? ? 41 BF"
+        }
+      ]
+    },
+    {
+      "name": "cGcGameState",
+      "fields": [
+        {
+          "name": "mPlayerSquadronOwnership",
+          "signature": "48 8D 8E ? ? ? ? E8 ? ? ? ? 44 89 B6 ? ? ? ? 48 8D BE",
+          "adjustment": -4
+        }
+      ]
+    },
+    {
+      "name": "cGcSimulation",
+      "fields": [
+        {
+          "name": "mEnvironment",
+          "signature": "48 8D 8E ? ? ? ? 41 0F 28 CA E8 ? ? ? ? 48 8D 8E ? ? ? ? 41 0F 28 CA E8 ? ? ? ? 48 8D 8E ? ? ? ? 41 0F 28 CA E8 ? ? ? ? 48 8D 8E ? ? ? ? 41 0F 28 CA"
+        },
+        {
+          "name": "mEcosystem",
+          "signature": "48 8D 8E ? ? ? ? 41 0F 28 CA E8 ? ? ? ? 48 8D 8E ? ? ? ? 41 0F 28 CA E8 ? ? ? ? 48 8D 8E ? ? ? ? 41 0F 28 CA E8 ? ? ? ? 48 8D 8E ? ? ? ? 41 0F 28 CA",
+          "offset": "0x13"
+        },
+        {
+          "name": "mFishManager",
+          "signature": "48 8D 8E ? ? ? ? 41 0F 28 CA E8 ? ? ? ? 48 8D 8E ? ? ? ? 41 0F 28 CA E8 ? ? ? ? 48 8D 8E ? ? ? ? 41 0F 28 CA E8 ? ? ? ? 48 8D 8E ? ? ? ? 41 0F 28 CA",
+          "offset": "0x33"
+        },
+        {
+          "name": "mCurrentUA",
+          "signature": "48 89 86 ? ? ? ? 48 8B 0D ? ? ? ? 48 81 C1 ? ? ? ? 48 8B 01"
+        },
+        {
+          "name": "mWarp",
+          "signature": "48 8D 8E ? ? ? ? 41 0F 28 CA E8 ? ? ? ? 45 85 ED 0F 85"
+        },
+        {
+          "name": "mPlayer",
+          "signature": "4C 8D B6 ? ? ? ? 41 B0"
+        },
+        {
+          "name": "mpSolarSystem",
+          "signature": "48 8B 8E ? ? ? ? 41 0F 28 CA E8 ? ? ? ? 48 8B 8E"
+        },
+        {
+          "name": "mSky",
+          "signature": "48 8D 8E ? ? ? ? 41 0F 28 CA E8 ? ? ? ? 48 8D 8E ? ? ? ? 41 0F 28 CA E8 ? ? ? ? 49 8D 8E"
+        },
+        {
+          "name": "mPlayerExperienceDirector",
+          "signature": "48 8D 8E ? ? ? ? 41 0F 28 CA E8 ? ? ? ? 8B 05"
+        },
+        {
+          "name": "mSimulationRootNode",
+          "signature": "89 87 ? ? ? ? 0F 1F 40 ? 4C 8B 03",
+          "offset": 2
+        },
+        {
+          "name": "maGroupNodes",
+          "relative_to": {
+            "name": "mSimulationRootNode",
+            "offset": 4
+          }
+        }
+      ]
+    },
+    {
+      "name": "cGcSolarSystem",
+      "fields": [
+        {
+          "name": "mSpaceStationNode",
+          "signature": "8B 8A ? ? ? ? F7 C1 ? ? ? ? 76 ? 8B C1 25 ? ? ? ? 3D ? ? ? ? 74 ? 48 8D 05",
+          "offset": 2
+        }
+      ]
+    },
+    {
+      "name": "cGcPlayer",
+      "fields": [
+        {
+          "name": "mfAirTimer",
+          "signature": "41 89 B4 24 ? ? ? ? 49 8B CC E8",
+          "offset": 4
+        },
+        {
+          "name": "mRootNode",
+          "signature": "89 8F ? ? ? ? 83 3D ? ? ? ? ? 75",
+          "offset": 2
+        },
+        {
+          "name": "mEquipmentNode",
+          "signature": "89 8F ? ? ? ? 83 3D ? ? ? ? ? 0F 28 05",
+          "offset": 2
+        },
+        {
+          "name": "mbTorchLightNeeded",
+          "signature": "66 44 89 A7 ? ? ? ? 44 88 A7 ? ? ? ? 44 88 A7",
+          "offset": 4
+        },
+        {
+          "name": "mbTorchActive",
+          "signature": "66 44 89 A7 ? ? ? ? 44 88 A7 ? ? ? ? 44 88 A7",
+          "offset": 11
+        },
+        {
+          "name": "mfJetpackTank",
+          "signature": "F3 0F 11 87 ? ? ? ? 48 8D 8F",
+          "offset": 4
+        },
+        {
+          "name": "mfStamina",
+          "signature": "C7 87 ? ? ? ? 00 00 80 3F E8 ? ? ? ? F3 0F 11 87",
+          "offset": 2
+        },
+        {
+          "name": "mfJetpackUpForce",
+          "signature": "F3 0F 11 87 ? ? ? ? F3 0F 10 0D ? ? ? ? F3 0F 11 8F ? ? ? ? F3 0F 10 05 ? ? ? ? F3 0F 11 87 ? ? ? ? 44 88 A7",
+          "offset": 4
+        },
+        {
+          "name": "mfJetpackForce",
+          "relative_to": {
+            "name": "mfJetpackUpForce",
+            "offset": 4
+          }
+        },
+        {
+          "name": "mfJetpackIgnitionForce",
+          "relative_to": {
+            "name": "mfJetpackUpForce",
+            "offset": 8
+          }
+        },
+        {
+          "name": "mbSpawned",
+          "signature": "44 88 A7 ? ? ? ? 44 88 A7 ? ? ? ? 44 88 A7 ? ? ? ? 44 88 A7 ? ? ? ? 4C 89 A7",
+          "offset": 3
+        },
+        {
+          "name": "mbIsRunning",
+          "relative_to": {
+            "name": "mbSpawned",
+            "offset": 2
+          }
+        },
+        {
+          "name": "mbIsAutoWalking",
+          "relative_to": {
+            "name": "mbSpawned",
+            "offset": 8
+          }
+        },
+        {
+          "name": "mbIsDying",
+          "signature": "44 88 A7 ? ? ? ? 44 88 A7 ? ? ? ? 44 88 A7 ? ? ? ? 44 88 A7 ? ? ? ? 4C 89 A7",
+          "offset": "0xA"
+        }
+      ]
+    },
+    {
+      "name": "cGcPlanet",
+      "fields": [
+        {
+          "name": "mRegionMap",
+          "signature": "48 8D 8F ? ? ? ? 4C 89 B7 ? ? ? ? 4C 89 B7 ? ? ? ? 4C 89 B7 ? ? ? ? 4C 89 B7 ? ? ? ? 4C 89 B7 ? ? ? ? 4C 89 B7"
+        },
+        {
+          "name": "mPosition",
+          "signature": "0F 11 B7 ? ? ? ? 44 89 31"
+        }
+      ]
+    },
+    {
+      "name": "cGcRealityManager",
+      "fields": [
+        {
+          "name": "mNameGenerator",
+          "signature": "48 81 C1 ? ? ? ? E8 ? ? ? ? 48 8D 0D ? ? ? ? E8 ? ? ? ? 41 B1"
+        }
+      ]
+    },
+    {
+      "name": "cGcSpacePoiSiteComponent",
+      "fields": [
+        {
+          "name": "mName",
+          "signature": "48 8D BB ? ? ? ? 48 3B C7 74 ? 41 8B CC"
+        }
+      ]
+    },
+    {
+      "name": "cGcPlayerState",
+      "fields": [
+        {
+          "name": "muUnits",
+          "signature": "41 8B 87 ? ? ? ? 41 89 86 ? ? ? ? 41 8B 87 ? ? ? ? 41 89 86 ? ? ? ? 41 8B 87 ? ? ? ? 41 89 86 ? ? ? ? 48 8B 05"
+        },
+        {
+          "name": "muNanites",
+          "relative_to": {
+            "name": "muUnits",
+            "offset": 4
+          }
+        },
+        {
+          "name": "muSpecials",
+          "relative_to": {
+            "name": "muUnits",
+            "offset": 8
+          }
+        }
+      ]
+    }
+  ]
+}

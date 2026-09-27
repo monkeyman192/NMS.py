@@ -23,7 +23,7 @@ from ctypes import (
 )
 from enum import IntEnum
 from logging import getLogger
-from typing import TYPE_CHECKING, Annotated, Generator, Generic, Optional, Type, TypeVar
+from typing import TYPE_CHECKING, Annotated, Generator, Generic, Optional, Type, TypeVar, get_args
 
 from pymhf.core.hooking import Structure, function_hook, static_function_hook
 from pymhf.core.memutils import _get_memview_with_size, get_addressof, map_struct
@@ -33,6 +33,7 @@ from pymhf.extensions.ctypes import c_char_p64, c_enum8, c_enum16, c_enum32
 from pymhf.utils.winapi import get_filepath_from_handle
 
 import nmspy.data.basic_types as basic
+import nmspy.data.constants as constants
 import nmspy.data.enums as enums
 import nmspy.data.exported_types as nmse
 import nmspy.data.vulkan as vulkan
@@ -713,7 +714,7 @@ class cGcRealityManager(Structure):
     mNameGenerator: Annotated[cGcNameGenerator, 0xC70]
     mapRepairTechs: Annotated[basic.TkStd.tk_vector[_Pointer[nmse.cGcTechnology]], 0xD38]
     mapAlienPuzzleTables: Annotated[
-        basic.TkStd.tk_vector[std.pair[_Pointer[nmse.cGcAlienPuzzleTable], c_int32]], 0xDD8
+        basic.TkStd.tk_vector[std.pair[_Pointer[nmse.cGcAlienPuzzleTable], c_int32]], 0xD48
     ]
     mpDialogClearanceTable: Annotated[_Pointer[nmse.cGcDialogClearanceTable], 0xD58]
     maDynamicHazardProtectionIcons: Annotated[
@@ -1071,7 +1072,7 @@ class cGcPlayerVehicleOwnership(Structure):
 
 class cGcPlayerCreatureOwnership(Structure):
     @function_hook(
-        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 54 41 55 41 56 41 57 48 83 EC ? 48 8B E9 48 8B D9"
+        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 54 41 55 41 56 41 57 48 83 EC ? 4C 8B F1 48 8B D9"
     )
     def cGcPlayerCreatureOwnership(self, this: "_Pointer[cGcPlayerCreatureOwnership]"): ...
 
@@ -1518,29 +1519,31 @@ class cGcPlayerCommunicator(Structure):
 class cGcPlayer(Structure):
     mRootNode: Annotated[basic.TkHandle, 0xE0]
     mPhysicsController: Annotated[_Pointer[cTkHavokCharacterController], 0x160]
-    mGraphicsMatrix: Annotated[basic.cTkPhysRelMat34, 0x330]
-    mPosition: Annotated[basic.cTkVector3, 0x380]
-    mEquipmentNode: Annotated[basic.TkHandle, 0x3A0]
-    mAudioObject: Annotated[TkAudioObject, 0x3F0]
+    mGraphicsMatrix: Annotated[basic.cTkPhysRelMat34, 0x310]
+    mPosition: Annotated[basic.cTkVector3, 0x360]
+    mEquipmentNode: Annotated[basic.TkHandle, 0x380]
+    mAudioObject: Annotated[TkAudioObject, 0x3D0]
     # Found in cGcPlayer::Prepare around where the number 0xFA83126E / -92073362 is
-    mbSpawned: Annotated[bool, Field(c_bool, 0x3140)]
-    mbIsRunning: Annotated[bool, Field(c_bool, 0x3142)]
-    mbIsAutoWalking: Annotated[bool, Field(c_bool, 0x3148)]
-    mfJetpackTank: Annotated[float, Field(c_float, 0x34F4)]
-    mfJetpackUpForce: Annotated[float, Field(c_float, 0x34FC)]
-    mfJetpackForce: Annotated[float, Field(c_float, 0x3500)]
-    mfJetpackIgnitionForce: Annotated[float, Field(c_float, 0x3504)]
+    mbSpawned: Annotated[bool, Field(c_bool, 0x3130)]
+    mbIsRunning: Annotated[bool, Field(c_bool, 0x3132)]
+    mbIsAutoWalking: Annotated[bool, Field(c_bool, 0x3138)]
+    mfJetpackTank: Annotated[float, Field(c_float, 0x34E4)]
+    mfJetpackUpForce: Annotated[float, Field(c_float, 0x34EC)]
+    mfJetpackForce: Annotated[float, Field(c_float, 0x35F0)]
+    mfJetpackIgnitionForce: Annotated[float, Field(c_float, 0x35F4)]
     # Found Above the cGcPlayer::UpdateGraphics call in cGcPlayer::CheckFallenThroughFloor
-    mfAirTimer: Annotated[float, Field(c_float, 0x3530)]
-    mfStamina: Annotated[float, Field(c_float, 0x55E0)]
-    mbIsTransitioning: Annotated[bool, Field(c_bool, 0x55E8)]
-    mbIsDying: Annotated[bool, Field(c_bool, 0x56C0)]
-    mCommunicator: Annotated[cGcPlayerCommunicator, 0x5918]
+    mfAirTimer: Annotated[float, Field(c_float, 0x3520)]
+    mbTorchActive: Annotated[bool, Field(c_bool, 0x5758)]
+    mbTorchLightNeeded: Annotated[bool, Field(c_bool, 0x575A)]
+    mfStamina: Annotated[float, Field(c_float, 0x55D0)]
+    mbIsTransitioning: Annotated[bool, Field(c_bool, 0x55D8)]
+    mbIsDying: Annotated[bool, Field(c_bool, 0x56B0)]
+    mCommunicator: Annotated[cGcPlayerCommunicator, 0x5908]
 
     @function_hook("40 55 41 54 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05")
     def CheckFallenThroughFloor(self, this: "_Pointer[cGcPlayer]"): ...
 
-    @function_hook("48 8B C4 4C 89 48 ? 44 89 40 ? 55 56")
+    @function_hook("48 8B C4 4C 89 48 ? 44 89 40 ? 55 53 56")
     def TakeDamage(
         self,
         this: "_Pointer[cGcPlayer]",
@@ -1579,7 +1582,7 @@ class cGcPlayer(Structure):
     @function_hook("48 89 4C 24 ? 55 41 55 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 45 33 ED")
     def RenderInventoryEditor(self, this: "_Pointer[cGcPlayer]"): ...
 
-    @function_hook("48 8B C4 48 89 48 ? 55 41 55 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 58")
+    @function_hook("48 8B C4 55 41 54 41 55 48 8D A8")
     def RenderNGui(self, this: "_Pointer[cGcPlayer]"): ...
 
     @function_hook(
@@ -1806,9 +1809,24 @@ class cGcSpacePoiSiteComponent(Structure):
 
 
 @partial_struct
+class cGcSolarSystemMapMarker(Structure):
+    pass
+
+
+@partial_struct
 class cGcSolarSystemMapObject(Structure):
     # Found at the bottom of cGcSpacePoiSiteComponent::OnActivate
     mbIsActivated: Annotated[bool, Field(c_bool, 0xC9)]
+
+
+@partial_struct
+class cGcFrontendPageSolarSystemMap(Structure):
+    @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 4C 24 ? 57 41 56")
+    def OnMarkerPlaced(
+        self,
+        this: "_Pointer[cGcFrontendPageSolarSystemMap]",
+        lpMarker: _Pointer[cGcSolarSystemMapObject],
+    ): ...
 
 
 @partial_struct
@@ -1880,6 +1898,9 @@ class cGcSolarSystem(Structure):
     @function_hook("4C 8B DC 53 48 81 EC ? ? ? ? 48 83 B9")
     def UpdateSunLock(self, this: "_Pointer[cGcSolarSystem]", lfTimeStep: Annotated[float, c_float]): ...
 
+    @function_hook("48 89 5C 24 ? 48 89 7C 24 ? 55 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B D9 C6 85")
+    def GetName(self, this: "_Pointer[cGcSolarSystem]", lNameString: _Pointer[basic.cTkFixedString0x80]): ...
+
     # Sadly hooking this function seems to crash the game :(
     # @function_hook("F3 0F 10 0D ? ? ? ? 33 C0 F3 0F 10 91")
     # def GetStarCount(
@@ -1917,7 +1938,10 @@ class cGcPlayerEnvironment(Structure):
     )
     def IsOnPlanet(self, this: "_Pointer[cGcPlayerEnvironment]") -> c_bool: ...
 
-    @function_hook("48 8B C4 F3 0F 11 48 ? 48 89 48 ? 55 41 56")
+    @function_hook(
+        "48 8B C4 F3 0F 11 48 ? 48 89 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? "
+        "? ? 0F 29 70 ? 4C 8B F1 0F 29 78 ? 48 8D 0D"
+    )
     def Update(
         self,
         this: "_Pointer[cGcPlayerEnvironment]",
@@ -2041,7 +2065,7 @@ class cGcFishManager(Structure):
 @partial_struct
 class cGcMarkerPoint(Structure):
     # Size found in the vector allocator in cGcMarkerList::TryAddMarker
-    _total_size_ = 0x270
+    _total_size_ = 0x2C0
     # Found in cGcMarkerPoint::Reset
     # Note: These first 2 I'm not sure about...
     mPosition: Annotated[basic.cTkPhysRelVec3, 0x20]
@@ -2053,13 +2077,10 @@ class cGcMarkerPoint(Structure):
     mModelNode: Annotated[basic.TkHandle, 0x128]
     mEntranceNode: Annotated[basic.TkHandle, 0x12C]
     meBuildingClass: Annotated[
-        c_enum32[enums.cGcBuildingClassification],
-        Field(c_enum32[enums.cGcBuildingClassification], 0x138),
+        c_enum8[enums.cGcBuildingClassification],
+        Field(c_enum8[enums.cGcBuildingClassification], 0x138),
     ]
-    meType: Annotated[c_enum8[enums.cGcMarkerType], 0x25B]
-    # The following is a bitfield. Previously there were individual bytes, but now HG checks individual bits.
-    # mUnknown & 4 -> mbFollowNode
-    mUnknown: Annotated[c_ubyte, 0x267]
+    meType: Annotated[c_enum8[enums.cGcMarkerType], 0x291]
 
     @static_function_hook("40 53 48 83 EC ? 33 C0 0F 57 C0 0F 11 01 48 8B D9")
     @staticmethod
@@ -2111,8 +2132,7 @@ class cGcMarkerList(Structure):
 
 @partial_struct
 class cGcScanManager(Structure):
-    # Passed in to cGcScanManager::UpdateConstantMarkers
-    mMarkerList: Annotated[cGcMarkerList, 0x22F0]
+    mMarkerList: Annotated[cGcMarkerList, 0x2310]
 
     @function_hook(
         "48 89 4C 24 ? 55 53 56 57 41 54 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 0F "
@@ -2127,23 +2147,62 @@ class cGcScanManager(Structure):
 
 
 @partial_struct
+class cGcWarpJumpTarget(Structure):
+    mTargetSystem: Annotated[cGcGalacticSolarSystemAddress, 0x0]
+
+
+@partial_struct
+class cGcSpaceshipWarp(Structure):
+    mJumpTarget: Annotated[cGcWarpJumpTarget, 0x10]
+    mePulseDriveState: Annotated[c_enum32[enums.EPulseDriveState], 0xA4]
+    mfPulseDriveTimer: Annotated[float, Field(c_float, 0xB4)]
+    mfPulseDriveFuelTimer: Annotated[float, Field(c_float, 0xB8)]
+    mfPulseDriveTimer: Annotated[float, Field(c_float, 0x1A8)]
+    mfPulseDriveFuelTimer: Annotated[float, Field(c_float, 0x1AC)]
+
+    @function_hook("40 55 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 8B 81")
+    def Update(
+        self,
+        this: "_Pointer[cGcSpaceshipWarp]",
+        lfTimeStep: Annotated[float, c_float],
+    ): ...
+
+    @function_hook("F3 0F 11 4C 24 ? 55 53 56 41 54 41 55 48 8D AC 24")
+    def UpdatePulseDrive(
+        self,
+        this: "_Pointer[cGcSpaceshipWarp]",
+        lfTimeStep: Annotated[float, c_float],
+    ): ...
+
+    @function_hook("48 89 4C 24 ? 53 48 83 EC ? 48 89 6C 24")
+    def GetPulseDriveFuelFactor(self, this: "_Pointer[cGcSpaceshipWarp]") -> c_float: ...
+
+
+@partial_struct
 class cGcSimulation(Structure):
     # Passed in to cGcScanManager::UpdateConstantMarkers
     mScanManager: Annotated[cGcScanManager, 0xF1B0]
     # Found in cGcSimulation::Update. Passed into cGcEnvironment::Update.
     mEnvironment: Annotated[cGcEnvironment, 0xAC8C0]
     mSky: Annotated[cGcSky, 0xAC9C0]
-    mEcosystem: Annotated[cGcEcosystem, 0xB3C20]
-    mFishManager: Annotated[cGcFishManager, 0x24D530]
+    mEcosystem: Annotated[cGcEcosystem, 0xB3C30]
+    mFishManager: Annotated[cGcFishManager, 0x25D570]
     # Found in cGcSimulation::Update. Passed into cGcSolarSystem::Update.
-    mpSolarSystem: Annotated[_Pointer[cGcSolarSystem], 0x24DFE0]
-    mPlayerExperienceDirector: Annotated[cGcPlayerExperienceDirector, 0x24E740]
+    mpSolarSystem: Annotated[_Pointer[cGcSolarSystem], 0x25E020]
+    mWarp: Annotated[cGcSpaceshipWarp, 0x25E040]
+    mPlayerExperienceDirector: Annotated[cGcPlayerExperienceDirector, 0x25E780]
     # Found in cGcSimulation::Update. Passed into cGcPlayer::Update
-    mPlayer: Annotated[cGcPlayer, 0x24F700]
-    # In cGcSimulation::Update
-    mCurrentUA: Annotated[int, Field(c_uint64, 0x2558D0)]
+    mPlayer: Annotated[cGcPlayer, 0x25F760]
     # Found in cGcSimulation::Construct
-    mSimulationRootNode: Annotated[basic.TkHandle, 0x255870]
+    mSimulationRootNode: Annotated[basic.TkHandle, 0x2658E0]
+    maGroupNodes: Annotated[tuple[basic.TkHandle, ...], Field(basic.TkHandle * 0xD, 0x2658E4)]
+    # In cGcSimulation::Update
+    mCurrentUA: Annotated[int, Field(c_uint64, 0x265940)]
+
+    def group_node(self, name: constants.kaNodeNames) -> basic.TkHandle | None:
+        """Get the node handle associated with the name."""
+        if name in (node_names := get_args(constants.kaNodeNames)):
+            return self.maGroupNodes[node_names.index(name)]
 
     @function_hook(
         "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 33 C0 0F 29 74 24"
@@ -2213,7 +2272,7 @@ class cGcHUD(Structure):
 
 @partial_struct
 class cGcHUDMarker(Structure):
-    _total_size_ = 0x1610
+    _total_size_ = 0x1700
 
     mColour: Annotated[basic.Colour, 0x0]
     mData: Annotated[cGcMarkerPoint, 0x10]
@@ -2226,13 +2285,14 @@ class cGcHUDMarker(Structure):
 
 @partial_struct
 class cGcPlayerHUD(cGcHUD):
+    # Found in cGcPlayerHUD::cGcPlayerHUD
     mHelmetGUI: Annotated[cGcNGui, 0x20040]
-    mCrosshairGui: Annotated[cGcNGui, 0x204B8]
-    mHelmetLines: Annotated[cGcNGui, 0x20930]
-    mQuickMenu: Annotated[cGcNGuiLayer, 0x20DB0]  # Maybe
-    maMarkers: Annotated[tuple[cGcHUDMarker, ...], Field(cGcHUDMarker * 0x80, 0x20FD0)]
+    mCrosshairGui: Annotated[cGcNGui, 0x204C0]
+    mHelmetLines: Annotated[cGcNGui, 0x20940]
+    mQuickMenu: Annotated[cGcNGuiLayer, 0x20DC8]
+    maMarkers: Annotated[tuple[cGcHUDMarker, ...], Field(cGcHUDMarker * 0x80, 0x20FE0)]
     # Found in cGcPlayerHUD::LoadData
-    mpHUDShieldLayer: Annotated[_Pointer[cGcNGuiLayer], 0xE9DF8]
+    mpHUDShieldLayer: Annotated[_Pointer[cGcNGuiLayer], 0xECE08]
 
     @function_hook(
         "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 0F 29 74 24 ? 48 8B F9 E8 "
@@ -2268,9 +2328,9 @@ class cGcHUDManager(Structure):
     mpData: Annotated[_Pointer[nmse.cGcHUDManagerData], 0x8]
     # Found in cGcHUDManager::cGcHUDManager
     mPlayerHUD: Annotated[cGcPlayerHUD, 0xA0]
-    mShipHUD: Annotated[cGcShipHUD, 0xECD70]
-    mQuickMenu: Annotated[cGcQuickMenu, 0x115D50]
-    mChargingInventory: Annotated[cGcInventoryStore, 0x124900]
+    mShipHUD: Annotated[cGcShipHUD, 0xED570]
+    mQuickMenu: Annotated[cGcQuickMenu, 0x116550]
+    mChargingInventory: Annotated[cGcInventoryStore, 0x125100]
 
     @function_hook("48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 F6 48 8B F9 48 89 71 ? 48 89 71")
     def cGcHUDManager(self, this: "_Pointer[cGcHUDManager]", a2: c_bool): ...
@@ -2440,17 +2500,17 @@ class cGcVibrationManager(Structure):
 class cGcApplication(cTkFSM):
     @partial_struct
     class Data(Structure):
-        _total_size_ = 0x94F0E0
+        _total_size_ = 0x95F210
         # These are found in cGcApplication::Data::Data
         mRealityManager: Annotated[cGcRealityManager, 0x60]
         mGameState: Annotated[cGcGameState, 0xE70]
         mSimulation: Annotated[cGcSimulation, 0x4CCF90]
-        mHUDManager: Annotated[cGcHUDManager, 0x7228B0]
-        mFrontendManager: Annotated[cGcFrontendManager, 0x849020]
+        mHUDManager: Annotated[cGcHUDManager, 0x732920]
+        mFrontendManager: Annotated[cGcFrontendManager, 0x859090]
         # Passed into any cGcVibrationManager methods
-        mVibrationManager: Annotated[cGcVibrationManager, 0x924718]
-        mNGuiManager: Annotated[cGcNGuiManager, 0x925260]
-        mAudioManager: Annotated[cTkAudioManager, 0x925A50]
+        mVibrationManager: Annotated[cGcVibrationManager, 0x9347A8]
+        mNGuiManager: Annotated[cGcNGuiManager, 0x9352F0]
+        mAudioManager: Annotated[cTkAudioManager, 0x935AF0]
 
         @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 F6 48 C7 41")
         def Data(self, this: "_Pointer[cGcApplication.Data]"): ...
@@ -2458,7 +2518,7 @@ class cGcApplication(cTkFSM):
     @function_hook("40 53 48 83 EC 20 E8 ? ? ? ? 48 89")
     def Update(self, this: "_Pointer[cGcApplication]"): ...
 
-    @function_hook("48 89 5C 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 45 33 F6 83 3D")
+    @function_hook("40 57 48 83 EC ? 33 FF 48 89 5C 24 ? 83 3D")
     def Construct(self, this: "_Pointer[cGcApplication]"): ...
 
     # There are tricky to get...
@@ -3166,7 +3226,7 @@ class cTkResourceManager(Structure):
     _total_size_ = 0x210
     mResources: Annotated[basic.TkStd.tk_vector[_Pointer[cTkResource]], 0x58]
 
-    @function_hook("44 89 44 24 ? 55 53 57 41 54")
+    @function_hook("44 89 44 24 ? 55 57 41 54 41 55 41 56 41 57")
     def AddResource(
         self,
         this: "_Pointer[cTkResourceManager]",
@@ -3495,38 +3555,6 @@ class cGcSpaceshipComponent(Structure):
 
 
 @partial_struct
-class cGcWarpJumpTarget(Structure):
-    mTargetSystem: Annotated[cGcGalacticSolarSystemAddress, 0x0]
-
-
-@partial_struct
-class cGcSpaceshipWarp(Structure):
-    mJumpTarget: Annotated[cGcWarpJumpTarget, 0x10]
-    mePulseDriveState: Annotated[c_enum32[enums.EPulseDriveState], 0xA4]
-    mfPulseDriveTimer: Annotated[float, Field(c_float, 0xB4)]
-    mfPulseDriveFuelTimer: Annotated[float, Field(c_float, 0xB8)]
-    mfPulseDriveTimer: Annotated[float, Field(c_float, 0x1A8)]
-    mfPulseDriveFuelTimer: Annotated[float, Field(c_float, 0x1AC)]
-
-    @function_hook("40 55 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 8B 81")
-    def Update(
-        self,
-        this: "_Pointer[cGcSpaceshipWarp]",
-        lfTimeStep: Annotated[float, c_float],
-    ): ...
-
-    @function_hook("F3 0F 11 4C 24 ? 55 53 56 41 54 41 55 48 8D AC 24")
-    def UpdatePulseDrive(
-        self,
-        this: "_Pointer[cGcSpaceshipWarp]",
-        lfTimeStep: Annotated[float, c_float],
-    ): ...
-
-    @function_hook("48 89 4C 24 ? 53 48 83 EC ? 48 89 6C 24")
-    def GetPulseDriveFuelFactor(self, this: "_Pointer[cGcSpaceshipWarp]") -> c_float: ...
-
-
-@partial_struct
 class cGcSpaceshipWeapons(Structure):
     # These can be found in cGcSpaceshipWeapons::GetHeatFactor and cGcSpaceshipWeapons::GetOverheatProgress
     # This enum corresponds to the element in the following 3 arrays by index.
@@ -3567,7 +3595,7 @@ class cGcPlayerCharacterComponent(Structure):
     @function_hook("48 8B C4 48 89 58 ? 55 56 57 48 8D 68 ? 48 81 EC ? ? ? ? 4C 89 70")
     def SetDeathState(self, this: c_uint64): ...
 
-    @function_hook("40 55 53 56 57 41 54 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 45 33 FF")
+    @function_hook("40 55 53 57 41 57 48 8D AC 24")
     def Update(
         self,
         this: "_Pointer[cGcPlayerCharacterComponent]",
@@ -4679,7 +4707,7 @@ class cEgPipelineCommand(Structure):
 
 @partial_struct
 class cEgRenderer(cEgRendererBase):
-    _total_size_ = 0x145A0
+    _total_size_ = 0x14C90
 
     @static_function_hook("48 8B C4 44 89 40 ? 48 89 48 ? 55 53 41 54")
     @staticmethod
@@ -4903,16 +4931,19 @@ class cTkClock(Structure):
     mbPaused: Annotated[bool, Field(c_bool, 0x31)]
     mbRealtime: Annotated[bool, Field(c_bool, 0x32)]
 
+    @function_hook("40 53 48 83 EC ? 80 79 ? ? 48 8B D9 8B 05")
+    def Update(self, this: "_Pointer[cTkClock]"): ...
+
 
 class cTkTimeManager(ContainerStruct):
-    mLocalClock: Annotated[cTkClock, Pattern("48 8D 0D ? ? ? ? 44 88 35 ? ? ? ? C7 05")]
+    mLocalClock: Annotated[cTkClock, Pattern("48 8D 0D ? ? ? ? 40 88 3D ? ? ? ? C7 05")]
     mGlobalClock: Annotated[
         cTkClock,
-        Pattern("48 8D 0D ? ? ? ? E8 ? ? ? ? B2 ? 48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8D 0D ? ? ? ? 44 88 35"),
+        Pattern("48 8D 0D ? ? ? ? E8 ? ? ? ? B2 ? 48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8D 0D ? ? ? ? 40 88 3D"),
     ]
     mRealtimeClock: Annotated[
         cTkClock,
-        Pattern("48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8D 0D ? ? ? ? 44 88 35 ? ? ? ? 44 89 35"),
+        Pattern("48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8D 0D ? ? ? ? 40 88 3D ? ? ? ? 89 3D"),
     ]
 
 
@@ -4937,11 +4968,11 @@ class cEgModules(ContainerStruct):
     ]
     mgpRenderer: Annotated[
         _Pointer[cEgRenderer],
-        Pattern("75 ? B9 ? ? ? ? E8 ? ? ? ? 48 85 C0 74 ? 48 8B C8 E8 ? ? ? ? 48 8B F8"),
+        Pattern("48 8B 1D ? ? ? ? FF 15 ? ? ? ? 0F 10 83 ? ? ? ? 48 8D 54 24"),
     ]
     # These are just globals, but we'll store them here for now.
     # Find this above cGcModManager::LoadModdedData into a function which takes a few constants
-    mgMemoryManager: Annotated[
+    gMemoryManager: Annotated[
         cTkMemoryManager, Pattern("48 8D 0D ? ? ? ? 48 8D 05 ? ? ? ? 48 89 44 24 ? E8 ? ? ? ? E8")
     ]
     gGameGui: Annotated[cGcNGuiGame, Pattern("48 8D 0D ? ? ? ? F3 0F 11 44 24 ? BA")]
@@ -4951,7 +4982,7 @@ class cEgModules(ContainerStruct):
         Pattern("48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8B 0D ? ? ? ? 0F 28 CF"),
     ]
 
-    @static_function_hook("40 57 48 83 EC ? 33 FF 48 89 5C 24")
+    @static_function_hook("40 57 48 83 EC ? 33 FF 48 89 5C 24 ? 48 39 3D")
     @staticmethod
     def Initialise(): ...
 

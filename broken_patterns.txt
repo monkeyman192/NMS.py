@@ -7,13 +7,13 @@ Could not rename cTkRigidBody::SetAngularVelocity
 Could not rename cEgModelNode::Animate
 Could not rename cTkResourceManager::AddResource
 Could not rename cEgSceneGraphResource::ParseData
-Could not rename cGcPlayerCreatureOwnership::cGcPlayerCreatureOwnership
 Could not rename cTkResource::cTkResource
 Could not rename cEgRenderer::DrawMeshes
 Could not rename cEgRenderer::SetupMeshMaterial
 Could not rename cEgRenderer::DrawRenderables
 Could not rename cEgDrawGeometry::Draw
 Could not rename cEgGeometryResource::CreateVertexInfoForHash
+Could not rename GeometryStreaming::cEgGeometryStreamer::RequestStream
 Could not rename GeometryStreaming::cEgGeometryStreamer::OnBufferLoadFinish
 Could not rename EgInstancedModelExtension::cEgInstancedMeshNode::RenderAsync
 Could not rename cTkResourceManager::GetDefaultResource
