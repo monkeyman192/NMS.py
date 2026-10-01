@@ -7,6 +7,7 @@ import ctypes
 from typing import Annotated
 
 from pymhf.core.hooking import static_function_hook
+from pymhf.extensions.ctypes import c_char_p64
 
 
 class NVGcontext(ctypes.Structure):
@@ -43,39 +44,47 @@ class NVGpaint(ctypes.Structure):
 @static_function_hook("48 8B C4 48 89 58 ? 48 89 68 ? F3 0F 11 50")
 def nvgArc(
     ctx: ctypes._Pointer[NVGcontext],
-    cx: ctypes.c_float,
-    cy: ctypes.c_float,
-    r: ctypes.c_float,
-    a0: ctypes.c_float,
-    a1: ctypes.c_float,
-    dir: ctypes.c_int32,
+    cx: Annotated[float, ctypes.c_float],
+    cy: Annotated[float, ctypes.c_float],
+    r: Annotated[float, ctypes.c_float],
+    a0: Annotated[float, ctypes.c_float],
+    a1: Annotated[float, ctypes.c_float],
+    dir: Annotated[float, ctypes.c_int32],
 ):
     """Adds an arc segment at the corner defined by the last path point, and two specified points."""
     ...
 
 
-@static_function_hook(
-    "48 8B C4 48 89 58 ? 48 89 70 ? 55 57 41 54 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 48 "
-    "8B F9 0F 29 78"
-)
+@static_function_hook("48 8B C4 48 89 70 ? 55 57 41 54 41 56 41 57 48 8D A8")
 def nvgText(
     ctx: ctypes._Pointer[NVGcontext],
-    x: ctypes.c_float,
-    y: ctypes.c_float,
-    string: ctypes.c_char_p,
-    end: ctypes.c_char_p,
+    x: Annotated[float, ctypes.c_float],
+    y: Annotated[float, ctypes.c_float],
+    string: c_char_p64,
+    end: c_char_p64,
 ):
     """Draws text string at specified location.
     If end is specified only the sub-string up to the end is drawn."""
     ...
 
 
+@static_function_hook("48 8B C4 48 89 58 ? F3 0F 11 58 ? 4C 89 40 ? 48 89 48")
+def nvgTextBreakLines(
+    ctx: ctypes._Pointer[NVGcontext],
+    string: c_char_p64,
+    end: ctypes.c_char_p,
+    breakRowWidth: Annotated[float, ctypes.c_float],
+    rows: ctypes.c_uint64,  # NVGtextRow *
+    maxRows: Annotated[int, ctypes.c_int32],
+): ...
+
+
 @static_function_hook("4C 8B DC 53 56 57 41 54 48 81 EC")
 def nvgTextBox(
     ctx: ctypes._Pointer[NVGcontext],
-    x: ctypes.c_float,
-    y: ctypes.c_float,
-    breakRowWidth: ctypes.c_float,
+    x: Annotated[float, ctypes.c_float],
+    y: Annotated[float, ctypes.c_float],
+    breakRowWidth: Annotated[float, ctypes.c_float],
     string: ctypes.c_char_p,
     end: ctypes.c_char_p,
 ):
@@ -98,20 +107,20 @@ def nvgFill(ctx: ctypes._Pointer[NVGcontext]): ...
 @static_function_hook("48 8B C4 55 48 8D 68 ? 48 81 EC ? ? ? ? F3 0F 10 6D")
 def nvgEllipse(
     ctx: ctypes._Pointer[NVGcontext],
-    cx: ctypes.c_float,
-    cy: ctypes.c_float,
-    rx: ctypes.c_float,
-    ry: ctypes.c_float,
+    cx: Annotated[float, ctypes.c_float],
+    cy: Annotated[float, ctypes.c_float],
+    rx: Annotated[float, ctypes.c_float],
+    ry: Annotated[float, ctypes.c_float],
 ): ...
 
 
 @static_function_hook("48 8B C4 48 83 EC ? 0F 28 E2")
 def nvgRect(
     ctx: ctypes._Pointer[NVGcontext],
-    x: ctypes.c_float,
-    y: ctypes.c_float,
-    w: ctypes.c_float,
-    h: ctypes.c_float,
+    x: Annotated[float, ctypes.c_float],
+    y: Annotated[float, ctypes.c_float],
+    w: Annotated[float, ctypes.c_float],
+    h: Annotated[float, ctypes.c_float],
 ): ...
 
 
@@ -122,3 +131,16 @@ def NVGRegisterTexture(
     liRenderBufferObject: Annotated[int, ctypes.c_uint32],
     liImageFlags: Annotated[int, ctypes.c_int32],
 ) -> ctypes.c_uint64: ...
+
+
+@static_function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 29 74 24 ? 33 ED")
+def nvgBeginFrame(
+    ctx: ctypes._Pointer[NVGcontext],
+    windowWidth: Annotated[int, ctypes.c_int32],
+    windowHeight: Annotated[int, ctypes.c_int32],
+    devicePixelRatio: Annotated[float, ctypes.c_float],
+): ...
+
+
+@static_function_hook("40 53 48 83 EC ? 48 8B 41 ? 48 8B D9 48 8B 09")
+def nvgEndFrame(ctx: ctypes._Pointer[NVGcontext]): ...

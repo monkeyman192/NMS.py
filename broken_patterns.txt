@@ -1,6 +1,6 @@
-Could not rename cEgModelNode::UpdateGeometry
-Could not rename nvgText
+Could not rename EgInstancedModelExtension::cEgInstancedMeshNode::RenderAsync
 Could not rename Engine::SetUniformArrayDefaultMultipleShaders
+Could not rename cEgModelNode::UpdateGeometry
 Could not rename cEgGeometryResource::CloneOriginalVertDataToIndex
 Could not rename nvgArc
 Could not rename cTkRigidBody::SetAngularVelocity
@@ -15,5 +15,4 @@ Could not rename cEgDrawGeometry::Draw
 Could not rename cEgGeometryResource::CreateVertexInfoForHash
 Could not rename GeometryStreaming::cEgGeometryStreamer::RequestStream
 Could not rename GeometryStreaming::cEgGeometryStreamer::OnBufferLoadFinish
-Could not rename EgInstancedModelExtension::cEgInstancedMeshNode::RenderAsync
 Could not rename cTkResourceManager::GetDefaultResource
