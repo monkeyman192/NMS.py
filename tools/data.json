@@ -411,8 +411,13 @@
       "mangled_name": "?SetDeathState@cGcPlayerCharacterComponent@@AEAAXXZ"
     },
     {
+      "name": "nvgBeginFrame",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 29 74 24 ? 33 ED",
+      "mangled_name": "nvgBeginFrame"
+    },
+    {
       "name": "nvgText",
-      "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 55 57 41 54 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 48 8B F9 0F 29 78",
+      "signature": "48 8B C4 48 89 70 ? 55 57 41 54 41 56 41 57 48 8D A8",
       "mangled_name": "nvgText"
     },
     {
@@ -1906,6 +1911,43 @@
       "name": "cGcSolarSystem::GetName",
       "signature": "48 89 5C 24 ? 48 89 7C 24 ? 55 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B D9 C6 85",
       "mangled_name": "?GetName@cGcSolarSystem@@QEBAXAEAV?$cTkFixedString@$0HP@D@@@Z"
+    },
+    {
+      "name": "cGcNGuiLayer::GetTextSpecial",
+      "signature": "48 89 5C 24 ? 57 48 83 EC ? 48 8B 99 ? ? ? ? 41 0F B6 F8 41 B8 02 00 00 00",
+      "mangled_name": "?GetTextSpecial@cGcNGuiLayer@@QEAAPEAVcGcNGuiTextSpecial@@T?$TkID@$0IA@@@_N@Z"
+    },
+    {
+      "name": "cGcFrontendPageFunctions::DoToolbar",
+      "signature": "48 89 5C 24 ? 44 88 4C 24 ? 48 89 54 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 66 0F 6F 0D",
+      "mangled_name": "?DoToolbar@cGcFrontendPageFunctions@@SAXPEAVcGcFrontendPage@@PEAVcGcNGuiLayer@@PEAUPageGroup@cGcFrontendManager@@_N@Z",
+      "unique_string": "OPTION%d_OFF_S"
+    },
+    {
+      "name": "cGcFrontendManager::Activate",
+      "signature": "40 55 56 57 41 57 48 8B EC",
+      "mangled_name": "?Activate@cGcFrontendManager@@AEAA_NW4eFrontendPage@@_N@Z"
+    },
+    {
+      "name": "cGcFrontendManager::UpdateRender",
+      "signature": "48 8B C4 48 89 58 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 44 0F 29 90",
+      "mangled_name": "?UpdateRender@cGcFrontendManager@@QEAAXM@Z",
+      "unique_string": "<IMG>ARROWLEFT<><IMG>UI_LEFT<>"
+    },
+    {
+      "name": "cGcFrontendManager::Render2D",
+      "signature": "48 8B C4 55 53 56 57 41 54 48 8D 68",
+      "mangled_name": "?Render2D@cGcFrontendManager@@QEAAXXZ"
+    },
+    {
+      "name": "cGcNGuiManager::EndFrame",
+      "signature": "48 89 5C 24 ? 57 48 81 EC ? ? ? ? 80 B9 ? ? ? ? ? 48 8B FA 48 8B D9 0F 84 ? ? ? ? C6 81",
+      "mangled_name": "?EndFrame@cGcNGuiManager@@QEAAXPEAVcTkNGuiInput@@_N@Z"
+    },
+    {
+      "name": "nvgEndFrame",
+      "signature": "40 53 48 83 EC ? 48 8B 41 ? 48 8B D9 48 8B 09",
+      "mangled_name": "nvgEndFrame"
     }
   ],
   "global_objects":

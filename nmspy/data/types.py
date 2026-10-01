@@ -36,6 +36,7 @@ import nmspy.data.basic_types as basic
 import nmspy.data.constants as constants
 import nmspy.data.enums as enums
 import nmspy.data.exported_types as nmse
+import nmspy.data.nanovg as nvg
 import nmspy.data.vulkan as vulkan
 
 T = TypeVar("T", bound=basic.CTYPES)
@@ -482,6 +483,15 @@ class cGcNGuiLayer(cGcNGuiElement):
     @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B F9 E8 ? ? ? ? 33 ED")
     def cGcNGuiLayer(self, this: "_Pointer[cGcNGuiLayer]"): ...
 
+    @function_hook("48 89 5C 24 ? 57 48 83 EC ? 48 8B 99 ? ? ? ? 41 0F B6 F8 41 B8 02 00 00 00")
+    def GetTextSpecial(
+        self,
+        this: "_Pointer[cGcNGuiLayer]",
+        lID: _Pointer[basic.TkID0x10],
+        lbUseDefault: Annotated[bool, c_bool],
+    ) -> c_uint64:  # cGcNGuiTextSpecial *
+        ...
+
 
 @partial_struct
 class cGcNGui(Structure):
@@ -876,7 +886,7 @@ class cGcPlayerState(Structure):
 
     mShipInventories: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0xC, 0x7458)]
     mShipInventoriesCargo: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0xC, 0x8FC8)]
-    mShipInventoriesTechOnly: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0xC, 0xAA28)]
+    mShipInventoriesTechOnly: Annotated[tuple[cGcInventoryStore, ...], Field(cGcInventoryStore * 0xC, 0xAB28)]
 
     # Found in cGcPlayerState::LoadFromData a little bit above the POLICESHIP.SCENE.MBIN, a few lines above
     # the assignment of something to 12LL.
@@ -1992,7 +2002,10 @@ class cGcEnvironment(Structure):
     def Update(self, this: "_Pointer[cGcEnvironment]", lfTimeStep: Annotated[float, c_float]): ...
 
 
+@partial_struct
 class cGcPlayerExperienceDirector(Structure):
+    mpSpawnTable: Annotated[_Pointer[nmse.cGcExperienceSpawnTable], 0xDC0]
+
     @function_hook(
         "48 8B C4 48 89 58 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 99 ? ? "
         "? ? 48 8B F1 0F 29 70 ? 0F 29 78 ? 66 0F 6F 3D"
@@ -2450,6 +2463,11 @@ class cGcFrontendPage(Structure):
 
 
 @partial_struct
+class cTkNGuiInput(Structure):
+    pass
+
+
+@partial_struct
 class cGcFrontendManager(Structure):
     # Found in cGcFrontendManager::cGcFrontendManager
     mFrontendRoot: Annotated[cGcNGuiLayer, 0x2468]
@@ -2476,10 +2494,36 @@ class cGcFrontendManager(Structure):
     )
     def RenderPage(self, this: "_Pointer[cGcFrontendManager]"): ...
 
+    @function_hook("40 55 56 57 41 57 48 8B EC")
+    def Activate(
+        self,
+        this: "_Pointer[cGcFrontendManager]",
+        lePage: Annotated[int, c_uint32],  # eFrontendPage
+        lbTransitionRight: Annotated[bool, c_bool],
+    ) -> c_bool: ...
+
+    @function_hook(
+        "48 8B C4 48 89 58 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 44 0F 29 90"
+    )
+    def UpdateRender(self, this: "_Pointer[cGcFrontendManager]", lfTimeStep: Annotated[float, c_float]): ...
+
+    @function_hook("48 8B C4 55 53 56 57 41 54 48 8D 68")
+    def Render2D(self, this: "_Pointer[cGcFrontendManager]", a2: c_uint64, a3: c_uint64):
+        # Not sure if the call arguments are correct...
+        ...
+
 
 @partial_struct
 class cGcNGuiManager(Structure):
-    pass
+    mpContext: Annotated[nvg.NVGcontext, 0x6A0]
+
+    @function_hook("48 89 5C 24 ? 57 48 81 EC ? ? ? ? 80 B9 ? ? ? ? ? 48 8B FA 48 8B D9 0F 84 ? ? ? ? C6 81")
+    def EndFrame(
+        self,
+        this: "_Pointer[cGcNGuiManager]",
+        lpInput: _Pointer[cTkNGuiInput],
+        lbMainScreen: Annotated[bool, c_bool],
+    ): ...
 
 
 @partial_struct
@@ -3409,10 +3453,11 @@ class cGcPlayerNotifications(Structure):
         liAudioID: c_uint32,
         lIcon: _Pointer[cTkSmartResHandle],
         # Note: The following fields have changed since 4.13... Might need to confirm...
-        unknown: c_uint64,
-        unknown2: c_uint32,
         lbShowMessageBackground: Annotated[bool, c_bool],
+        lfWaitBeforeDisplayTime: Annotated[float, c_float],
         lbShowIconGlow: Annotated[bool, c_bool],
+        a10: Annotated[bool, c_bool],
+        a11: Annotated[bool, c_bool],
     ): ...
 
 
@@ -4397,6 +4442,18 @@ class cGcFrontendPageFunctions(Structure):
         lpStore: _Pointer[cGcInventoryStore],
     ) -> c_uint64:  # cGcNGuiLayer *
         ...
+
+    @static_function_hook(
+        "48 89 5C 24 ? 44 88 4C 24 ? 48 89 54 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 "
+        "81 EC ? ? ? ? 66 0F 6F 0D"
+    )
+    @staticmethod
+    def DoToolbar(
+        lpPage: _Pointer[cGcFrontendPage],
+        lpParentLayer: _Pointer[cGcNGuiLayer],
+        lpPageGroup: c_uint64,  # cGcFrontendManager::PageGroup *
+        lbActive: Annotated[bool, c_bool],
+    ): ...
 
 
 class cTkSystem(Structure):

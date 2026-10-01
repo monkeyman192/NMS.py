@@ -14,6 +14,7 @@ from .internal_enums import (
     InventoryChoice,
     eOptionsMenu,
     eNGuiGameElementType,
+    eFrontendPage,
 )
 
 # The following list is auto-generated.
