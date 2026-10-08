@@ -374,6 +374,13 @@ class cGcNGuiText(cGcNGuiElement):
 
 
 @partial_struct
+class cGcNGuiTextSpecial(cGcNGuiText):
+    @function_hook("48 89 5C 24 ? 55 57 41 54 48 83 EC ? 44 0F B6 A1")
+    def SetText(self, this: "_Pointer[cGcNGuiTextSpecial]", lacString: _Pointer[basic.cTkFixedString0x200]):
+        ...
+
+
+@partial_struct
 class cTkHashedNGuiElement(Structure):
     mID: Annotated[basic.TkID0x10, 0x0]
     mHash: Annotated[int, Field(c_uint64, 0x10)]
@@ -408,12 +415,12 @@ class cGcNGuiLayer(cGcNGuiElement):
         if addr:
             return map_struct(addr, cGcNGuiText)
 
-    def FindTextSpecialRecursive(self, ID: str) -> cGcNGuiElement | None:
+    def FindTextSpecialRecursive(self, ID: str) -> cGcNGuiTextSpecial | None:
         """Our own method to easily find a special text element recursively."""
         lID = cTkHashedNGuiElement(ID, enums.eNGuiGameElementType.Text_Special)
         addr = self.FindElementRecursive(byref(lID), enums.eNGuiGameElementType.Text_Special)
         if addr:
-            return map_struct(addr, cGcNGuiElement)
+            return map_struct(addr, cGcNGuiTextSpecial)
 
     def FindGraphicRecursive(self, ID: str) -> cGcNGuiElement | None:
         """Our own method to easily find a graphic element recursively."""
@@ -972,7 +979,7 @@ class cGcPlayerState(Structure):
     )
     def SaveToData(self, this: "_Pointer[cGcPlayerState]", lData: _Pointer[nmse.cGcPlayerStateData]): ...
 
-    @function_hook("44 88 4C 24 ? 4C 89 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55 41 55")
+    @function_hook("44 88 4C 24 ? 4C 89 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55 41 54")
     def LoadFromData(
         self,
         this: "_Pointer[cGcPlayerState]",
@@ -1825,8 +1832,20 @@ class cGcSolarSystemMapMarker(Structure):
 
 @partial_struct
 class cGcSolarSystemMapObject(Structure):
+    _total_size_ = 0xD0
+    meType: Annotated[c_enum32[enums.cGcSolarSystemMapObjectType], 0x0]
+    miIndex: Annotated[int, Field(c_int32, 0x8)]  # Planet index when the type is Planet or GasGiant.
+    mNode: Annotated[basic.TkHandle, 0x80]
+    mNode2: Annotated[basic.TkHandle, 0x84]  # Used for the ring model if it's a planet with rings.
+    mVector1: Annotated[basic.cTkVector3, 0x90]
+    mVector2: Annotated[basic.cTkVector3, 0xA0]
+    mVector3: Annotated[basic.cTkVector3, 0xB0]
     # Found at the bottom of cGcSpacePoiSiteComponent::OnActivate
     mbIsActivated: Annotated[bool, Field(c_bool, 0xC9)]
+
+    @function_hook("40 55 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B F9 0F 29 BC 24")
+    def Update(self, this: "_Pointer[cGcSolarSystemMapObject]", lfTimeStep: Annotated[float, c_float]):
+        ...
 
 
 @partial_struct
@@ -1838,17 +1857,28 @@ class cGcFrontendPageSolarSystemMap(Structure):
         lpMarker: _Pointer[cGcSolarSystemMapObject],
     ): ...
 
+    @function_hook("48 8B C4 48 89 50 ? 56 48 81 EC")
+    def Update(self, this: "_Pointer[cGcFrontendPageSolarSystemMap]", lfTimeStep: Annotated[float, c_float]):
+        ...
+
 
 @partial_struct
 class cGcSolarSystemMap(Structure):
     mSettings: Annotated[nmse.cGcSolarSystemMapSettings, 0x0]
+    mRootNode: Annotated[basic.TkHandle, 0x1230]
     maAssociatedMapObjects: Annotated[
         tuple[cGcSolarSystemMapObject, ...],
-        Field(cGcSolarSystemMapObject * 0x40, 0x1220),
+        Field(cGcSolarSystemMapObject * 0x40, 0x1240),
     ]
 
     @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B F1 E8 ? ? ? ? 48 8D 8E")
     def cGcSolarSystemMap(self, this: "_Pointer[cGcSolarSystemMap]"): ...
+
+    @function_hook(
+        "48 8B C4 55 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 58 ? 4C 8B F9 48 89 70 ? 48 89 78"
+    )
+    def Update(self, this: "_Pointer[cGcSolarSystemMap]", lfTimeStep: Annotated[float, c_float]):
+        ...
 
 
 class cGcSpacePoiGenerator(Structure):
@@ -1871,6 +1901,7 @@ class cGcSolarSystem(Structure):
     maPlanets: Annotated[tuple[cGcPlanet, ...], Field(cGcPlanet * 6, 0x2E30)]
     miPrimaryPlanet: Annotated[int, Field(c_int32, 0x5188D0)]
     mSolarSystemMap: Annotated[cGcSolarSystemMap, 0x51BC20]
+    mSolarSystemMapMarker: Annotated[_Pointer[cGcSolarSystemMapMarker], 0x520270]
     mSolarSystemGenerator: Annotated[cGcSolarSystemGenerator, 0x521180]
     mSpacePoiGenerator: Annotated[cGcSpacePoiGenerator, 0x521860]
     # Found in cGcPlayerState::StoreCurrentSystemSpaceStationEndpoint
@@ -2078,7 +2109,7 @@ class cGcFishManager(Structure):
 @partial_struct
 class cGcMarkerPoint(Structure):
     # Size found in the vector allocator in cGcMarkerList::TryAddMarker
-    _total_size_ = 0x2C0
+    _total_size_ = 0x2B0
     # Found in cGcMarkerPoint::Reset
     # Note: These first 2 I'm not sure about...
     mPosition: Annotated[basic.cTkPhysRelVec3, 0x20]
@@ -2319,7 +2350,7 @@ class cGcPlayerHUD(cGcHUD):
     @function_hook("48 8B C4 48 89 48 ? 55 41 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 83 B9")
     def RenderWeaponPanel(self, this: "_Pointer[cGcPlayerHUD]"): ...
 
-    @function_hook("48 8B C4 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 8B B9")
+    @function_hook("48 8B C4 55 53 56 57 41 55 41 56 48 8D 68")
     def RenderCrosshair(self, this: "_Pointer[cGcPlayerHUD]"): ...
 
     @function_hook("F3 0F 11 4C 24 ? 4C 8B DC 55 41 55")
@@ -2464,15 +2495,61 @@ class cGcFrontendPage(Structure):
 
 @partial_struct
 class cTkNGuiInput(Structure):
-    pass
+    mbControlHeld: Annotated[bool, Field(c_bool, 0x0)]
+    mbShiftHeld: Annotated[bool, Field(c_bool, 0x1)]
+    mbAltHeld: Annotated[bool, Field(c_bool, 0x2)]
+    mfRightStickX: Annotated[float, Field(c_float, 0x4)]
+    mfRightStickY: Annotated[float, Field(c_float, 0x8)]
+    mfCursorX: Annotated[float, Field(c_float, 0xC)]
+    mfCursorY: Annotated[float, Field(c_float, 0x10)]
+    mfCursorDeltaX: Annotated[float, Field(c_float, 0x14)]
+    mfCursorDeltaY: Annotated[float, Field(c_float, 0x18)]
+    mfCursorSpeedModifierX: Annotated[float, Field(c_float, 0x1C)]
+    mfCursorSpeedModifierY: Annotated[float, Field(c_float, 0x20)]
+    mfMousePosX: Annotated[float, Field(c_float, 0x28)]
+    mfMousePosY: Annotated[float, Field(c_float, 0x2C)]
+    mfMouseScroll: Annotated[float, Field(c_float, 0x30)]
+    # These fields here is where it starts to diverge from the 4.13 definition...
+    meMouseButtonState: Annotated[c_enum32[enums.eNGuiInputButtonState], 0x34]
+    meMouse2ButtonState: Annotated[c_enum32[enums.eNGuiInputButtonState], 0x38]
+    # Middle button?
+    meMouse3ButtonState: Annotated[c_enum32[enums.eNGuiInputButtonState], 0x3C]
+    meRightThumbState: Annotated[c_enum32[enums.eNGuiInputButtonState], 0x40]
+    meUploadButtonState: Annotated[c_enum32[enums.eNGuiInputButtonState], 0x44]
+    meTransferButtonState: Annotated[c_enum32[enums.eNGuiInputButtonState], 0x48]
+    # the following is either at 0x4C or 0x50
+    # meDiscoveryUploadButtonState: Annotated[c_enum32[enums.eNGuiInputButtonState], 0x4C]
+    mbCursorIsMouse: Annotated[bool, Field(c_bool, 0x54)]
+    mbPadOnly: Annotated[bool, Field(c_bool, 0x55)]
+    maElementsPressed: Annotated[
+        basic.TkStd.tk_vector[std.pair[cTkNGuiElementID, c_enum8[enums.eNGuiInputType]]],
+        0x60,
+    ]
+    maElementsPressed2: Annotated[
+        basic.TkStd.tk_vector[std.pair[cTkNGuiElementID, c_enum8[enums.eNGuiInputType]]],
+        0x70,
+    ]
+    maElementsPressed3: Annotated[
+        basic.TkStd.tk_vector[std.pair[cTkNGuiElementID, c_enum8[enums.eNGuiInputType]]],
+        0x80,
+    ]
+    KeyCtrl: Annotated[bool, Field(c_bool, 0xE0)]
+    KeyShift: Annotated[bool, Field(c_bool, 0xE1)]
+    KeyAlt: Annotated[bool, Field(c_bool, 0xE2)]
+    maKeysDown: Annotated[tuple[bool, ...], Field(c_bool * 0x200, 0xE3)]
+    maInputCharacters: Annotated[tuple[c_char, ...], Field(c_char * 0x11, 0x2E3)]
+    mpDragObject: Annotated[c_uint64, 0x2F8]  # ITkNGuiDraggable *
 
 
 @partial_struct
 class cGcFrontendManager(Structure):
+    # Passed into cGcNGuiManager::BeginFrame as 2nd argument.
+    mGameGuiInput: Annotated[cTkNGuiInput, 0x2248]
     # Found in cGcFrontendManager::cGcFrontendManager
     mFrontendRoot: Annotated[cGcNGuiLayer, 0x2468]
     # Found near the top of cGcFrontendManager::RenderPage
     mPage: Annotated[cGcFrontendPage, 0x2790]
+    mSolarSystemMapUI: Annotated[cGcFrontendPageSolarSystemMap, 0x58DF0]
 
     @function_hook(
         "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 54 41 56 41 57 48 83 EC ? 48 8D 05"
@@ -2515,7 +2592,18 @@ class cGcFrontendManager(Structure):
 
 @partial_struct
 class cGcNGuiManager(Structure):
-    mpContext: Annotated[nvg.NVGcontext, 0x6A0]
+    mpContext: Annotated[_Pointer[nvg.NVGcontext], 0x6A0]
+
+    @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 41 56 48 83 EC ? 80 B9")
+    def BeginFrame(
+        self,
+        this: "_Pointer[cGcNGuiManager]",
+        lpInput: _Pointer[cTkNGuiInput],
+        lScreenSize: _Pointer[basic.Vector2f],
+        lbFullscreen: Annotated[bool, c_bool],
+        lfPixelRatio: Annotated[float, c_float],
+        lbDetectInput: Annotated[bool, c_bool],
+    ): ...
 
     @function_hook("48 89 5C 24 ? 57 48 81 EC ? ? ? ? 80 B9 ? ? ? ? ? 48 8B FA 48 8B D9 0F 84 ? ? ? ? C6 81")
     def EndFrame(
@@ -2523,6 +2611,14 @@ class cGcNGuiManager(Structure):
         this: "_Pointer[cGcNGuiManager]",
         lpInput: _Pointer[cTkNGuiInput],
         lbMainScreen: Annotated[bool, c_bool],
+    ): ...
+
+    @function_hook("48 8B C4 53 55 56 57 41 54 41 56")
+    def BeginInput(
+        self,
+        this: "_Pointer[cGcNGuiManager]",
+        lpInput: _Pointer[cTkNGuiInput],
+        lActiveArea: _Pointer[basic.Vector2f],
     ): ...
 
 
@@ -5151,6 +5247,26 @@ class cGcHologramComponent(Structure):
 class cGcApplicationDeathState(Structure):
     @function_hook("48 89 4C 24 ? 55 53 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8")
     def Update(self, this: "_Pointer[cGcApplicationDeathState]", lfTimeStep: Annotated[float, c_float]): ...
+
+
+class cGcUniverseDetailAddressCoderU64(Structure):
+    @static_function_hook("48 8B C4 48 89 58 ? 57 48 81 EC ? ? ? ? 0F 10 12 49 8B D8")
+    @staticmethod
+    def Encode(
+        lpPosition: _Pointer[basic.cTkVector3],
+        lpCameraDirection: _Pointer[basic.cTkVector3],
+        lResult: _Pointer[c_uint64 * 2],
+    ) -> c_uint64:
+        ...
+
+    @static_function_hook("48 8B C4 53 48 81 EC ? ? ? ? 0F 10 1A 0F 57 C9")
+    @staticmethod
+    def Decode(
+        lValue: _Pointer[c_uint64 * 2],
+        lpPosition: _Pointer[basic.cTkVector3],
+        lpCameraDirection: _Pointer[basic.cTkVector3],
+    ):
+        ...
 
 
 # Dummy values to copy and paste to make adding new things quicker...

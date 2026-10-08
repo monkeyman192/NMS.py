@@ -37,5 +37,11 @@ class GameData:
         if (game_state := self.game_state) is not None:
             return game_state.mPlayerState
 
+    @property
+    def data(self) -> Optional[nms.cGcApplication.Data]:
+        if self.GcApplication is not None:
+            if self.GcApplication.mpData:
+                return self.GcApplication.mpData.contents
+
 
 gameData = GameData()
