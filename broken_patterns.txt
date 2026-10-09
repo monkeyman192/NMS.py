@@ -4,7 +4,6 @@ Could not rename cEgGeometryResource::CloneOriginalVertDataToIndex
 Could not rename nvgArc
 Could not rename cTkRigidBody::SetAngularVelocity
 Could not rename cEgModelNode::Animate
-Could not rename cTkResourceManager::AddResource
 Could not rename cEgSceneGraphResource::ParseData
 Could not rename cTkResource::cTkResource
 Could not rename cEgRenderer::DrawMeshes

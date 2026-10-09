@@ -604,7 +604,7 @@
     },
     {
       "name": "cTkResourceManager::AddResource",
-      "signature": "44 89 44 24 ? 55 57 41 54 41 55 41 56 41 57",
+      "signature": "44 89 44 24 ? 55 53 57 41 54",
       "mangled_name": "?AddResource@cTkResourceManager@@QEAA?AVcTkSmartResHandle@@HPEBDH_NPEAVcTkResourceDescriptor@@@Z"
     },
     {
@@ -976,8 +976,9 @@
     },
     {
       "name": "MiniDumpFunction",
-      "signature": "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? B8",
-      "mangled_name": "MiniDumpFunction"
+      "signature": "48 89 5C 24 ? 44 89 44 24 ? 48 89 54 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? B8",
+      "mangled_name": "MiniDumpFunction",
+      "unique_string": "NMS_crash_%lld_%s.dmp"
     },
     {
       "name": "cTkSystem::IntegratedGPUActive",
@@ -1989,6 +1990,12 @@
       "name": "cGcSolarSystemMapObject::Update",
       "signature": "40 55 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B F9 0F 29 BC 24",
       "mangled_name": "__ZN23cGcSolarSystemMapObject6UpdateEf"
+    },
+    {
+      "name": "cGcFrontendTextInput::GetResult",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 8B 81 ? ? ? ? 33 DB",
+      "mangled_name": "?GetResult@cGcFrontendTextInput@@QEAA?AW4ResultState@1@AEAV?$cTkFixedString@$0BAA@D@@@Z",
+      "unique_string": "PROFANITY_MSG"
     }
   ],
   "global_objects":
@@ -2037,6 +2044,21 @@
       "name": "cGcBaseBuildingManager::mBaseBuildingManager",
       "signature": "48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8B 0D ? ? ? ? 0F 28 CF",
       "mangled_name": "?mBaseBuildingManager@cGcBaseBuildingManager@@0V1@A"
+    },
+    {
+      "name": "cGcQuickActionMenu::TriggerCurrentAction",
+      "signature": "48 63 81 ? ? ? ? F3 0F 10 05 ? ? ? ? F3 0F 11 81",
+      "mangled_name": "?TriggerCurrentAction@cGcQuickActionMenu@@UEAA_NXZ"
+    },
+    {
+      "name": "cGcQuickActionMenu::UpdateActions",
+      "signature": "48 89 54 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 48 8B F1",
+      "mangled_name": "?UpdateActions@cGcQuickActionMenu@@AEAAXAEAUQuickMenuRenderState@@@Z"
+    },
+    {
+      "name": "MenuAction::MenuAction",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 89 11 48 8B F1 44 89 41 ? 0F 57 C0 C6 41 ? ? 33 FF 48 83 C1 ? 41 0F B6 D9 0F 11 01 48 C7 41 ? ? ? ? ? 89 79 ? E8 ? ? ? ? 0F 28 05 ? ? ? ? 48 8D 15 ? ? ? ? 0F B6 44 24",
+      "mangled_name": "??0MenuAction@@QEAA@U?$TkStrongType@HUTkResHandleID@TkStrongTypeIDs@@@@W4eQuickMenuActions@@_N2@Z"
     }
   ],
   "structs":
@@ -2075,8 +2097,8 @@
           "name": "mVibrationManager",
           "signatures": [
             "48 81 C1 ? ? ? ? E8 ? ? ? ? 44 0F 28 94 24 ? ? ? ? 44 0F 28 84 24",
-            "48 81 C1 ? ? ? ? 41 0F 28 D0 F3 0F 7F 85 ? ? ? ? E8 ? ? ? ? E9 ? ? ? ? 83 F9 ? 75 ? 48 8B 0D ? ? ? ? 48 81 C1 ? ? ? ? E8 ? ? ? ? 48 85 C0 74 ? 48 8B C8",
-            "48 81 C1 ? ? ? ? 0F 28 D6 E8 ? ? ? ? 0F 28 B4 24"
+            "48 81 C1 ? ? ? ? 0F 28 D6 E8 ? ? ? ? 0F 28 B4 24",
+            "48 81 C1 ? ? ? ? F3 0F 59 15"
           ]
         },
         {
@@ -2308,6 +2330,26 @@
         {
           "name": "mGameGuiInput",
           "signature": "4C 8D BF ? ? ? ? F3 44 0F 10 35"
+        },
+        {
+          "name": "mPage",
+          "signature": "4C 8D B1 ? ? ? ? 4C 89 BC 24 ? ? ? ? 0F 29 BC 24"
+        }
+      ]
+    },
+    {
+      "name": "cGcFrontendPage",
+      "fields": [
+        {
+          "name": "mpPage",
+          "signature": "48 8B 8E ? ? ? ? E8 ? ? ? ? 66 44 0F 6F 0D"
+        },
+        {
+          "name": "mPage",
+          "relative_to": {
+            "name": "mpPage",
+            "offset": 16
+          }
         }
       ]
     }
