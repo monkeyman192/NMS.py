@@ -604,7 +604,7 @@
     },
     {
       "name": "cTkResourceManager::AddResource",
-      "signature": "44 89 44 24 ? 55 57 41 54 41 55 41 56 41 57",
+      "signature": "44 89 44 24 ? 55 53 57 41 54",
       "mangled_name": "?AddResource@cTkResourceManager@@QEAA?AVcTkSmartResHandle@@HPEBDH_NPEAVcTkResourceDescriptor@@@Z"
     },
     {
@@ -681,9 +681,9 @@
     },
     {
       "name": "cGcPlayerHUD::RenderCrosshair",
-      "signature": "48 8B C4 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 8B B9",
+      "signature": "48 8B C4 55 53 56 57 41 55 41 56 48 8D 68",
       "mangled_name": "?RenderCrosshair@cGcPlayerHUD@@IEAAXXZ",
-      "unique_string": "STORED RESOURCES (%d/%d)"
+      "unique_string": "UI_TERRAIN_EDIT_ROTATE_TIP"
     },
     {
       "name": "cGcNGuiElement::SetPosition",
@@ -976,8 +976,9 @@
     },
     {
       "name": "MiniDumpFunction",
-      "signature": "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? B8",
-      "mangled_name": "MiniDumpFunction"
+      "signature": "48 89 5C 24 ? 44 89 44 24 ? 48 89 54 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? B8",
+      "mangled_name": "MiniDumpFunction",
+      "unique_string": "NMS_crash_%lld_%s.dmp"
     },
     {
       "name": "cTkSystem::IntegratedGPUActive",
@@ -1446,8 +1447,9 @@
     },
     {
       "name": "cGcPlayerState::LoadFromData",
-      "signature": "44 88 4C 24 ? 4C 89 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55 41 55",
-      "mangled_name": "?LoadFromData@cGcPlayerState@@QEAAXAEBVcGcPlayerStateData@@_N1@Z"
+      "signature": "44 88 4C 24 ? 4C 89 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55 41 54",
+      "mangled_name": "?LoadFromData@cGcPlayerState@@QEAAXAEBVcGcPlayerStateData@@_N1@Z",
+      "unique_string": "W_COMMUNITY_02_PORTAL_WAIT"
     },
     {
       "name": "cGcGalaxyMap::Data::RenderNVG",
@@ -1948,6 +1950,52 @@
       "name": "nvgEndFrame",
       "signature": "40 53 48 83 EC ? 48 8B 41 ? 48 8B D9 48 8B 09",
       "mangled_name": "nvgEndFrame"
+    },
+    {
+      "name": "cGcNGuiManager::BeginFrame",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 41 56 48 83 EC ? 80 B9",
+      "mangled_name": "?BeginFrame@cGcNGuiManager@@QEAAXPEAVcTkNGuiInput@@AEBVcTkVector2@@_NM@Z"
+    },
+    {
+      "name": "cGcNGuiManager::BeginInput",
+      "signature": "48 8B C4 53 55 56 57 41 54 41 56",
+      "mangled_name": "?BeginInput@cGcNGuiManager@@IEAAXAEAVcTkNGuiInput@@AEBVcTkVector2@@@Z"
+    },
+    {
+      "name": "nvgStroke",
+      "signature": "48 89 5C 24 ? 57 48 81 EC ? ? ? ? 48 63 81 ? ? ? ? 48 8B D9 48 69 F8 ? ? ? ? 0F 29 B4 24",
+      "mangled_name": "nvgStroke"
+    },
+    {
+      "name": "cGcUniverseDetailAddressCoderU64::Encode",
+      "signature": "48 8B C4 48 89 58 ? 57 48 81 EC ? ? ? ? 0F 10 12 49 8B D8",
+      "mangled_name": "__ZN32cGcUniverseDetailAddressCoderU646EncodeERK10cTkVector3S2_RA2_m"
+    },
+    {
+      "name": "cGcUniverseDetailAddressCoderU64::Decode",
+      "signature": "48 8B C4 53 48 81 EC ? ? ? ? 0F 10 1A 0F 57 C9",
+      "mangled_name": "__ZN32cGcUniverseDetailAddressCoderU646DecodeERA2_KmP10cTkVector3S4_"
+    },
+    {
+      "name": "cGcFrontendPageSolarSystemMap::Update",
+      "signature": "48 8B C4 48 89 50 ? 56 48 81 EC",
+      "mangled_name": "__ZN29cGcFrontendPageSolarSystemMap6UpdateEP15cGcFrontendPagef"
+    },
+    {
+      "name": "cGcSolarSystemMap::Update",
+      "signature": "48 8B C4 55 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 58 ? 4C 8B F9 48 89 70 ? 48 89 78",
+      "mangled_name": "__ZN17cGcSolarSystemMap6UpdateEf"
+    },
+    {
+      "name": "cGcSolarSystemMapObject::Update",
+      "signature": "40 55 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B F9 0F 29 BC 24",
+      "mangled_name": "__ZN23cGcSolarSystemMapObject6UpdateEf"
+    },
+    {
+      "name": "cGcFrontendTextInput::GetResult",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 8B 81 ? ? ? ? 33 DB",
+      "mangled_name": "?GetResult@cGcFrontendTextInput@@QEAA?AW4ResultState@1@AEAV?$cTkFixedString@$0BAA@D@@@Z",
+      "unique_string": "PROFANITY_MSG"
     }
   ],
   "global_objects":
@@ -1996,6 +2044,21 @@
       "name": "cGcBaseBuildingManager::mBaseBuildingManager",
       "signature": "48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8B 0D ? ? ? ? 0F 28 CF",
       "mangled_name": "?mBaseBuildingManager@cGcBaseBuildingManager@@0V1@A"
+    },
+    {
+      "name": "cGcQuickActionMenu::TriggerCurrentAction",
+      "signature": "48 63 81 ? ? ? ? F3 0F 10 05 ? ? ? ? F3 0F 11 81",
+      "mangled_name": "?TriggerCurrentAction@cGcQuickActionMenu@@UEAA_NXZ"
+    },
+    {
+      "name": "cGcQuickActionMenu::UpdateActions",
+      "signature": "48 89 54 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 48 8B F1",
+      "mangled_name": "?UpdateActions@cGcQuickActionMenu@@AEAAXAEAUQuickMenuRenderState@@@Z"
+    },
+    {
+      "name": "MenuAction::MenuAction",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 89 11 48 8B F1 44 89 41 ? 0F 57 C0 C6 41 ? ? 33 FF 48 83 C1 ? 41 0F B6 D9 0F 11 01 48 C7 41 ? ? ? ? ? 89 79 ? E8 ? ? ? ? 0F 28 05 ? ? ? ? 48 8D 15 ? ? ? ? 0F B6 44 24",
+      "mangled_name": "??0MenuAction@@QEAA@U?$TkStrongType@HUTkResHandleID@TkStrongTypeIDs@@@@W4eQuickMenuActions@@_N2@Z"
     }
   ],
   "structs":
@@ -2034,8 +2097,8 @@
           "name": "mVibrationManager",
           "signatures": [
             "48 81 C1 ? ? ? ? E8 ? ? ? ? 44 0F 28 94 24 ? ? ? ? 44 0F 28 84 24",
-            "48 81 C1 ? ? ? ? 41 0F 28 D0 F3 0F 7F 85 ? ? ? ? E8 ? ? ? ? E9 ? ? ? ? 83 F9 ? 75 ? 48 8B 0D ? ? ? ? 48 81 C1 ? ? ? ? E8 ? ? ? ? 48 85 C0 74 ? 48 8B C8",
-            "48 81 C1 ? ? ? ? 0F 28 D6 E8 ? ? ? ? 0F 28 B4 24"
+            "48 81 C1 ? ? ? ? 0F 28 D6 E8 ? ? ? ? 0F 28 B4 24",
+            "48 81 C1 ? ? ? ? F3 0F 59 15"
           ]
         },
         {
@@ -2116,6 +2179,11 @@
           "name": "mSpaceStationNode",
           "signature": "8B 8A ? ? ? ? F7 C1 ? ? ? ? 76 ? 8B C1 25 ? ? ? ? 3D ? ? ? ? 74 ? 48 8D 05",
           "offset": 2
+        },
+        {
+          "name": "mSolarSystemMap",
+          "signature": "48 8D 8B ? ? ? ? 49 8B D7 E8 ? ? ? ? 48 8B F8",
+          "offset": 3
         }
       ]
     },
@@ -2252,6 +2320,35 @@
           "relative_to": {
             "name": "muUnits",
             "offset": 8
+          }
+        }
+      ]
+    },
+    {
+      "name": "cGcFrontendManager",
+      "fields": [
+        {
+          "name": "mGameGuiInput",
+          "signature": "4C 8D BF ? ? ? ? F3 44 0F 10 35"
+        },
+        {
+          "name": "mPage",
+          "signature": "4C 8D B1 ? ? ? ? 4C 89 BC 24 ? ? ? ? 0F 29 BC 24"
+        }
+      ]
+    },
+    {
+      "name": "cGcFrontendPage",
+      "fields": [
+        {
+          "name": "mpPage",
+          "signature": "48 8B 8E ? ? ? ? E8 ? ? ? ? 66 44 0F 6F 0D"
+        },
+        {
+          "name": "mPage",
+          "relative_to": {
+            "name": "mpPage",
+            "offset": 16
           }
         }
       ]

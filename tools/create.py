@@ -148,6 +148,8 @@ from .internal_enums import (
     eOptionsMenu,
     eNGuiGameElementType,
     eFrontendPage,
+    eNGuiInputButtonState,
+    eNGuiInputType,
 )
 
 # The following list is auto-generated.
