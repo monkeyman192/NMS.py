@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import ctypes
 import types
 from logging import getLogger
@@ -876,31 +878,55 @@ class TkStd:
                 self.vector_size += 1
                 return True
             else:
-                if self.expand():
-                    return self.add(other)
+                if self._expand():
+                    return self.append(other)
                 else:
                     logger.error("Unable to allocate new memory to add a new element.")
                     return False
 
-        def expand(self) -> bool:
+        def extend(self, others: list[T]) -> bool:
+            """ Add multiple extra items to the vector at once.
+            This can be more efficient that calling append repeatedly sine we can expand the vector large
+            enough to contain all the elements in one go, avoiding unneccesary malloc calls.
+            """
+            required_size = self.vector_size + len(others)
+            if required_size < self.allocated_size:
+                for element in others:
+                    new_data = (ctypes.c_ubyte * self._template_type_size).from_address(self._next_empty_addr)
+                    ctypes.memmove(ctypes.byref(new_data), ctypes.byref(element), self._template_type_size)
+                    self.vector_size += 1
+                return True
+            else:
+                if self._expand(required_size + 1):
+                    return self.extend(others)
+                else:
+                    logger.error("Unable to allocate new memory to add a new element.")
+                    return False
+
+        def _expand(self, min_required_length: int | None = None) -> bool:
             """Resize the current vector, moving all the current data."""
             from nmspy.data.types import engine_modules
 
             gMemoryManager = engine_modules.gMemoryManager
 
             # Expand by 1.5x the current max size (rounded up). This is (roughly) the way MSVC does it.
-            new_length = ceil(len(self) * 1.5)
+            # Ensure this is always at least 1, since when we do the initial expansion it will have 0
+            # elements.
+            if min_required_length is None:
+                min_required_length = 1
+            new_length = max(ceil(len(self) * 1.5), min_required_length)
 
             # Allocate enough new memory for the required size and copy over the old data.
             try:
                 new_size = new_length * self._template_type_size
                 if (new_addr := gMemoryManager.Malloc(new_size, 0, 0, 0, 16, -1)) is not None:
                     # Copy all the original data over to the new address.
-                    old_size = self._template_type_size * self.vector_size
-                    ptr_data_addr = get_addressof(self._ptr)
-                    ctypes.memmove(int(new_addr), ptr_data_addr, old_size)
-                    # Free the old memory to release it back to NMS.
-                    gMemoryManager.Free(ctypes.c_void_p(ptr_data_addr), -1)
+                    if self.vector_size > 0:
+                        old_size = self._template_type_size * self.vector_size
+                        ptr_data_addr = get_addressof(self._ptr)
+                        ctypes.memmove(int(new_addr), ptr_data_addr, old_size)
+                        # Free the old memory to release it back to NMS.
+                        gMemoryManager.Free(ctypes.c_void_p(ptr_data_addr), -1)
                     # Change the address the pointer points to.
                     self._ptr = ctypes.cast(new_addr, ctypes.POINTER(self._template_type))
                     self.allocated_size = new_length
@@ -908,8 +934,8 @@ class TkStd:
                 else:
                     logger.error("Unable to reallocate memory for the vector. Nothing allocated...")
                     return False
-            except Exception:
-                logger.exception("Could not expand the vector")
+            except Exception as exc:
+                logger.exception(f"Could not expand the vector: {exc}")
                 return False
 
         def __iter__(self) -> Generator[T, None, None]:
@@ -918,3 +944,15 @@ class TkStd:
 
         def to_list(self) -> list[T]:
             return [x for x in self]
+
+        def clear(self):
+            # Delete all elements and set sizes back to 0.
+            if self.vector_size == 0:
+                return
+            from nmspy.data.types import engine_modules
+
+            gMemoryManager = engine_modules.gMemoryManager
+            ptr_data_addr = get_addressof(self._ptr)
+            gMemoryManager.Free(ctypes.c_void_p(ptr_data_addr), -1)
+            self.vector_size = 0
+            self.allocated_size = 0
