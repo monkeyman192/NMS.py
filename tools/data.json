@@ -2059,6 +2059,27 @@
       "name": "MenuAction::MenuAction",
       "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 89 11 48 8B F1 44 89 41 ? 0F 57 C0 C6 41 ? ? 33 FF 48 83 C1 ? 41 0F B6 D9 0F 11 01 48 C7 41 ? ? ? ? ? 89 79 ? E8 ? ? ? ? 0F 28 05 ? ? ? ? 48 8D 15 ? ? ? ? 0F B6 44 24",
       "mangled_name": "??0MenuAction@@QEAA@U?$TkStrongType@HUTkResHandleID@TkStrongTypeIDs@@@@W4eQuickMenuActions@@_N2@Z"
+    },
+    {
+      "name": "cGcQuickActionMenu::UpdateActionString",
+      "signature": "48 89 4C 24 ? 55 56 57 41 55 48 8D AC 24 ? ? ? ? 48 81 EC",
+      "mangled_name": "?UpdateActionString@cGcQuickActionMenu@@AEAAXAEAV?$cTkFixedString@$0IA@D@@@Z"
+    },
+    {
+      "name": "cGcQuickActionMenu::UpdateInWorldUISelection",
+      "signature": "40 53 48 83 EC ? 48 8B 05 ? ? ? ? 4C 8B D2 48 8B D9 44 8B 88",
+      "mangled_name": "?UpdateInWorldUISelection@cGcQuickActionMenu@@AEAAXAEAUQuickMenuRenderState@@@Z"
+    },
+    {
+      "name": "cGcQuickActionMenu::Close",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 66 0F 6F 05 ? ? ? ? 48 8B D9 48 8B 0D",
+      "mangled_name": "?Close@cGcQuickActionMenu@@UEAA_N_N@Z"
+    }
+    ,
+    {
+      "name": "cGcQuickActionMenu::Update",
+      "signature": "4C 89 44 24 ? 48 89 4C 24 ? 55 57 41 54 41 55",
+      "mangled_name": "?Update@cGcQuickActionMenu@@UEAAXMAEAUQuickMenuRenderState@@@Z"
     }
   ],
   "structs":

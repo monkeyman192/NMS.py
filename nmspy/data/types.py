@@ -4027,7 +4027,34 @@ class MenuAction(Structure):
     ): ...
 
 
-class QuickMenuRenderState(Structure): ...
+@partial_struct
+class QuickMenuRenderState(Structure):
+    msControlsString: Annotated[basic.cTkFixedString0x100, 0x0]
+    msExtraControlsString: Annotated[basic.cTkFixedString0x100, 0x100]
+    mbShowMenu: Annotated[bool, Field(c_bool, 0x200)]
+    mbShowCategories: Annotated[bool, Field(c_bool, 0x201)]
+    maCategories: Annotated[
+        tuple[basic.TkID0x20, basic.TkID0x20, basic.TkID0x20],
+        Field(basic.TkID0x20 * 3, 0x208),
+    ]
+    mfCursorX: Annotated[float, Field(c_float, 0x268)]
+    mfCursorY: Annotated[float, Field(c_float, 0x268)]
+    mLabelID: Annotated[basic.cTkFixedString0x200, 0x270]
+    mLabelTextColour: Annotated[basic.Colour, 0x470]
+    mLabelBGColour: Annotated[basic.Colour, 0x480]
+    mItemName: Annotated[basic.cTkFixedString0x80, 0x490]
+    mbShowChargeArrows: Annotated[bool, Field(c_bool, 0x510)]
+    mbForceShowUpArrow: Annotated[bool, Field(c_bool, 0x511)]
+    mbShowBackButton: Annotated[bool, Field(c_bool, 0x512)]
+    mNextActions: Annotated[basic.TkStd.tk_vector[MenuAction], 0x518]
+    mPreviousAction: Annotated[MenuAction, 0x528]
+    mCurrentActions: Annotated[basic.TkStd.tk_vector[MenuAction], 0x608]
+    mbItemChanged: Annotated[bool, Field(c_bool, 0x618)]
+    miCurrentAction: Annotated[int, Field(c_int32, 0x6B4)]
+    miNextAction: Annotated[int, Field(c_int32, 0x6B8)]
+    mbWrapCurrentActions: Annotated[bool, Field(c_bool, 0x6BC)]
+    miCurrentActionDepth: Annotated[int, Field(c_int32, 0x6C0)]
+    mbCurrentActionIsSubMenu: Annotated[bool, Field(c_bool, 0x6C8)]
 
 
 @partial_struct
@@ -4046,6 +4073,7 @@ class cGcQuickActionMenu(Structure):
         maSelectedActions: Annotated[tuple[int, int, int], Field(c_int32 * 3, 0x38)]
 
     mActionTable: Annotated[ActionTable, 0xA050]
+    mbEnteredSubMenu: Annotated[bool, Field(c_bool, 0xA16C)]
 
     @function_hook("44 88 44 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 57")
     def TriggerAction(
@@ -4056,7 +4084,9 @@ class cGcQuickActionMenu(Structure):
     ) -> c_bool: ...
 
     @function_hook("48 63 81 ? ? ? ? F3 0F 10 05 ? ? ? ? F3 0F 11 81")
-    def TriggerCurrentAction(self, this: "_Pointer[cGcQuickActionMenu]") -> c_bool: ...
+    def TriggerCurrentAction(self, this: "_Pointer[cGcQuickActionMenu]") -> c_bool:
+        """Trigger the current action. If this returns True, then the quick menu will close."""
+        ...
 
     @function_hook(
         "48 89 54 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? "
@@ -4067,6 +4097,35 @@ class cGcQuickActionMenu(Structure):
         this: "_Pointer[cGcQuickActionMenu]",
         lOutUpdatedRenderState: _Pointer[QuickMenuRenderState],
     ): ...
+
+    @function_hook("48 89 4C 24 ? 55 56 57 41 55 48 8D AC 24 ? ? ? ? 48 81 EC")
+    def UpdateActionString(
+        self,
+        this: "_Pointer[cGcQuickActionMenu]",
+        lsActionString: _Pointer[basic.cTkFixedString0x80]
+    ):
+        ...
+
+    @function_hook("4C 89 44 24 ? 48 89 4C 24 ? 55 57 41 54 41 55")
+    def Update(
+        self,
+        this: "_Pointer[cGcQuickActionMenu]",
+        lfTimeStep: Annotated[float, c_float],
+        lOutUpdatedRenderState: _Pointer[QuickMenuRenderState],
+    ):
+        ...
+
+    @function_hook("40 53 48 83 EC ? 48 8B 05 ? ? ? ? 4C 8B D2 48 8B D9 44 8B 88")
+    def UpdateInWorldUISelection(
+        self,
+        this: "_Pointer[cGcQuickActionMenu]",
+        lOutUpdatedRenderState: _Pointer[QuickMenuRenderState],
+    ):
+        ...
+
+    @function_hook("48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 66 0F 6F 05 ? ? ? ? 48 8B D9 48 8B 0D")
+    def Close(self, this: "_Pointer[cGcQuickActionMenu]", lbForceClose: Annotated[bool, c_bool]) -> c_bool:
+        ...
 
 
 @partial_struct

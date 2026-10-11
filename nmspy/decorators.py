@@ -1,3 +1,4 @@
+from contextlib import contextmanager
 from typing import Callable, Optional
 
 from pymhf.core._types import CustomTriggerProtocol, DetourTime
@@ -63,3 +64,16 @@ def terminal_command(
         return func  # type: ignore
 
     return _inner
+
+
+def quick_menu_command():
+    pass
+
+
+@contextmanager
+def quick_menu_group(group_label: str):
+    """Create a submenu command group. All methods decorated with `quick_menu_command` will be added under
+    this group.
+    Note that you may only nest one quick_menu_group inside another, so 3 groups deep is not allowed and will
+    raise a SyntaxError if attempted. The game can't handle it so we enforce this strictly."""
+    yield
