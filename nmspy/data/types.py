@@ -649,7 +649,6 @@ class cGcNameGenerator(Structure):
         lLocResult: _Pointer[basic.cTkFixedString[0x7F]],
     ): ...
     @function_hook("48 89 5C 24 18 4C 89 4C 24 20 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 60 FE")
-    # Found in DiscoveryResolver::ComputeDisplayNameAndOwnerForDiscovery. First function below the unique string "! ERROR ! NO PROC NAME !"
     def GenerateSolarSystemName(
         self,
         this: "_Pointer[cGcNameGenerator]",
