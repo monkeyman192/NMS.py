@@ -354,5 +354,4 @@ class eWeaponMode(IntEnum):
     Flamethrower = 0x10
     StunGrenade = 0x11
     Stealth = 0x12
-    NumTypes = 0x13
 

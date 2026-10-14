@@ -654,10 +654,10 @@ class cGcNameGenerator(Structure):
         self, 
         this:"_Pointer[cGcNameGenerator]", 
         lu64Seed: c_uint64, 
-        lResult: _Pointer[basic.cTkFixedString0x200], 
-        lLocResult: _Pointer[basic.cTkFixedString]
+        lResult: _Pointer[basic.cTkFixedString[0x7F]], 
+        lLocResult: _Pointer[basic.cTkFixedString[0x7F]]
         ) -> c_uint64:
-        pass
+        ...
 
 
 @partial_struct
@@ -1064,7 +1064,7 @@ class cGcPlayerState(Structure):
         self, 
         this: "_Pointer[cGcPlayerState]", 
         lItem: _Pointer[nmse.cGcInventoryElement], 
-        leInventory: c_enum32[enums.internal_enums.InventoryChoice],
+        leInventory: c_enum32[enums.InventoryChoice],
         lbIsInstallation: Annotated[bool, c_bool]
         ) -> Annotated[bool, c_bool]: ...
     @function_hook("8B 05 ? ? ? ? 85 C0 74 ? 83 F8 ? 75 ? 48 8B 05 ? ? ? ? 80 B8 ? ? ? ? ? 75 ? 80 B8 ? ? ? ? ? 75 ? 32 C0 C3 80 B8")
@@ -5227,9 +5227,6 @@ class cTkClock(Structure):
     mbPaused: Annotated[bool, Field(c_bool, 0x31)]
     mbRealtime: Annotated[bool, Field(c_bool, 0x32)]
 
-    @function_hook("48 89 5C 24 ? 57 48 83 EC ? 33 C0 48 8B D9 48 89 41")
-    def Construct(self, this: "_Pointer[cTkClock]", lbIsRealtime: Annotated[bool, c_bool]):...
-
     @function_hook("40 53 48 83 EC ? 80 79 ? ? 48 8B D9 8B 05")
     def Update(self, this: "_Pointer[cTkClock]"): ...
 
@@ -5361,8 +5358,9 @@ class cGcPlayerWanted(Structure):
         this: "_Pointer[cGcPlayerWanted]", 
         liLevel: Annotated[int, c_int16],
         lbForce: Annotated[bool, c_bool],
-        lbSquadDefeated: Annotated[bool, c_bool]):
-        pass
+        lbSquadDefeated: Annotated[bool, c_bool]
+        ):
+        ...
 
 
 class cGcFrontendPageClaimBase(Structure):
