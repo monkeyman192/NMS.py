@@ -648,6 +648,16 @@ class cGcNameGenerator(Structure):
         a6: Annotated[int, c_int64],
         lLocResult: _Pointer[basic.cTkFixedString[0x7F]],
     ): ...
+    @function_hook("48 89 5C 24 18 4C 89 4C 24 20 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 60 FE")
+    # Found in DiscoveryResolver::ComputeDisplayNameAndOwnerForDiscovery. First function below the unique string "! ERROR ! NO PROC NAME !"
+    def GenerateSolarSystemName(
+        self, 
+        this:"_Pointer[cGcNameGenerator]", 
+        lu64Seed: c_uint64, 
+        lResult: _Pointer[basic.cTkFixedString0x200], 
+        lLocResult: _Pointer[basic.cTkFixedString]
+        ) -> c_uint64:
+        pass
 
 
 @partial_struct
@@ -871,6 +881,35 @@ class cGcResourceCustomisation(Structure):
         lbCopyOptions: Annotated[bool, c_bool],
     ) -> c_uint64: ...
 
+@partial_struct
+class cGcPortalComponent(Structure):
+    mPortalData: Annotated["cGcPortalComponent.PersistentData", 0x40]
+    @partial_struct
+    class PersistentData(Structure):
+        _total_size_ = 0x64 # Might not be right...
+        mTargetUA: Annotated[c_uint64, Field(c_uint64, 0x48)] #0x88 from parent
+        mbActive: Annotated[bool, Field(c_bool, 0x60)] # 0xA0 from parent
+
+    # Only need the two fields from PersistentData to trigger warps, but should probably get the total size for this...
+
+    @function_hook("40 53 48 83 EC ? 33 C0 66 C7 81 ? ? ? ? ? ? 48 89 81")
+    def OnAttached(
+        self,
+        this: "_Pointer[cGcPortalComponent]"
+        ): ...
+    @function_hook("48 8B C4 55 56 48 8D 68 ? 48 81 EC ? ? ? ? 48 8B F1 48 89 58")
+    def Prepare(
+        self,
+        this:"_Pointer[cGcPortalComponent]"
+        ): ...
+    @function_hook("40 55 41 56 48 8D 6C 24 ? 48 81 EC ? ? ? ? 80 B9")
+    def WarpPlayer(
+        self, 
+        this:"_Pointer[cGcPortalComponent]", 
+        a2: c_uint64, # These seem to be pointers to something but the function can be fired off fine without valid refs.
+        a3: c_uint64, 
+        a4: c_uint64
+        ): ...    
 
 @partial_struct
 class cGcPlayerState(Structure):
@@ -921,6 +960,11 @@ class cGcPlayerState(Structure):
         tuple[basic.cTkFixedString0x20, ...],
         Field(basic.cTkFixedString0x20 * 0xC, 0x1AD93),
     ]
+
+    # Found in cGcPlayerState::ClearIsOnOtherSideOfPortal, a BIT below a call to cGcNameGenerator::GenerateSpaceStationName, before the two nested if statements. Around line 215.
+    # The aforementioned function is the first function call under cGcSpaceshipWarp::WarpToDistantSystem, which is itself called in cGcPortalComponent::WarpPlayer (long call chain sadly)
+    mbOnOtherSideOfPortal: Annotated[bool, Field(c_bool, 0x1B02C)]
+    mbOtherMaybe: Annotated[bool, Field(c_bool, 0x1B060)]
 
     # This can be found in cGcPlayerShipOwnership::UpdateMeshRefresh
     mCustomisationData: Annotated[
@@ -1006,7 +1050,36 @@ class cGcPlayerState(Structure):
         leMode: c_enum32[enums.TryStoreMode],
         lErrorMessage: _Pointer[basic.cTkFixedString0x20],
     ) -> c_bool: ...
+    
+    @function_hook("48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 8B 05 ? ? ? ? 48 8B F1 85 C0 74 ? 83 F8 ? 0F 85 ? ? ? ? 4C 8B 05")
+    def IsBlockedFromShipPurchase(
+        self, 
+        this: "_Pointer[cGcPlayerState]"
+        ) -> Annotated[bool, c_bool]: ...
+    
+    @function_hook("4C 8B DC 49 89 4B ? 53 48 81 EC ? ? ? ? 49 89 6B")
+    # Found under cGcFrontendPageFunctions::DoTechnologySlot, below the "FRONTEND" string and cGcNGuiLayer::FindElementRecursive at the top.
+    # The above function has several unique string Xrefs, such as "UI_INSTALL_TECH_SUB" or "UI_DAMAGE_POTENTIAL"
+    def CanRepairTechnology(
+        self, 
+        this: "_Pointer[cGcPlayerState]", 
+        lItem: _Pointer[nmse.cGcInventoryElement], 
+        leInventory: c_enum32[enums.internal_enums.InventoryChoice],
+        lbIsInstallation: Annotated[bool, c_bool]
+        ) -> Annotated[bool, c_bool]: ...
+    @function_hook("8B 05 ? ? ? ? 85 C0 74 ? 83 F8 ? 75 ? 48 8B 05 ? ? ? ? 80 B8 ? ? ? ? ? 75 ? 80 B8 ? ? ? ? ? 75 ? 32 C0 C3 80 B8")
+    # Found under cGcCostManager::CostAsStringFromClassPointer, RIGHT above unique string "UI_BIGGS_EDIT_COST_BLOCKED" 
+    def CorvetteWorkshopBlockedBySeason(self) -> Annotated[bool,c_bool]: ...
 
+class cGcPlayerRespawn(Structure):
+    @function_hook("48 8B C4 89 50 ? 48 89 48 ? 55 53 56")
+    # Name propagated by tooling
+    def DoPlayerRespawn(
+        self, 
+        this: "_Pointer[cGcPlayerRespawn]",
+        leReason: c_enum32[enums.internal_enums.RespawnReason],
+        lbFirstCall: Annotated[bool, c_bool]
+        ) -> None: ...
 
 @partial_struct
 class cGcPlayerShipOwnership(Structure):
@@ -2199,6 +2272,9 @@ class cGcWarpJumpTarget(Structure):
 @partial_struct
 class cGcSpaceshipWarp(Structure):
     mJumpTarget: Annotated[cGcWarpJumpTarget, 0x10]
+    # The offset for this can be found under cGcPortalComponent::Prepare near the bottom, below the "cGcPortalComponent" string.
+    # However, its a really screwy offset to calculate since you first need the Offsets of cGcSimulation from cGcApplication, as well as the offset for cGcSpaceshipWarp from cGcSimulation, since the binary uses the cGcApplication global.
+    meWarpState: Annotated[c_enum8[enums.internal_enums.eWarpState], 0x98]
     mePulseDriveState: Annotated[c_enum32[enums.EPulseDriveState], 0xA4]
     mfPulseDriveTimer: Annotated[float, Field(c_float, 0xB4)]
     mfPulseDriveFuelTimer: Annotated[float, Field(c_float, 0xB8)]
@@ -4026,49 +4102,6 @@ class MenuAction(Structure):
         lbShowBackground: Annotated[bool, c_bool],
     ): ...
 
-
-class QuickMenuRenderState(Structure): ...
-
-
-@partial_struct
-class cGcQuickActionMenu(Structure):
-    @partial_struct
-    class ActionTable(Structure):
-        miCurrentActionDepth: Annotated[int, Field(c_int32, 0x0)]
-        maActionDepths: Annotated[
-            tuple[
-                basic.TkStd.tk_vector[MenuAction],
-                basic.TkStd.tk_vector[MenuAction],
-                basic.TkStd.tk_vector[MenuAction],
-            ],
-            Field(basic.TkStd.tk_vector[MenuAction] * 3, 0x8),
-        ]
-        maSelectedActions: Annotated[tuple[int, int, int], Field(c_int32 * 3, 0x38)]
-
-    mActionTable: Annotated[ActionTable, 0xA050]
-
-    @function_hook("44 88 44 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 57")
-    def TriggerAction(
-        self,
-        this: "_Pointer[cGcQuickActionMenu]",
-        lAction: _Pointer[MenuAction],
-        lbCalledAsMenu: Annotated[bool, c_bool],
-    ) -> c_bool: ...
-
-    @function_hook("48 63 81 ? ? ? ? F3 0F 10 05 ? ? ? ? F3 0F 11 81")
-    def TriggerCurrentAction(self, this: "_Pointer[cGcQuickActionMenu]") -> c_bool: ...
-
-    @function_hook(
-        "48 89 54 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? "
-        "? ? ? 48 2B E0 48 8B F1"
-    )
-    def UpdateActions(
-        self,
-        this: "_Pointer[cGcQuickActionMenu]",
-        lOutUpdatedRenderState: _Pointer[QuickMenuRenderState],
-    ): ...
-
-
 @partial_struct
 class cGcPurchaseableItem(Structure):
     # Found in cGcPurchaseableItem::Update
@@ -5154,6 +5187,9 @@ class cTkClock(Structure):
     mbPaused: Annotated[bool, Field(c_bool, 0x31)]
     mbRealtime: Annotated[bool, Field(c_bool, 0x32)]
 
+    @function_hook("48 89 5C 24 ? 57 48 83 EC ? 33 C0 48 8B D9 48 89 41")
+    def Construct(self, this: "_Pointer[cTkClock]", lbIsRealtime: Annotated[bool, c_bool]):...
+
     @function_hook("40 53 48 83 EC ? 80 79 ? ? 48 8B D9 8B 05")
     def Update(self, this: "_Pointer[cTkClock]"): ...
 
@@ -5272,6 +5308,21 @@ class cGcPlayerWanted(Structure):
         lPlayerPos: _Pointer[basic.cTkVector3],
         lfTimeStep: Annotated[float, c_float],
     ): ...
+    @function_hook("4C 8B DC 49 89 5B ? 57 48 81 EC ? ? ? ? 33 FF 48 89 11")
+    def Construct(
+        self, 
+        this: "_Pointer[cGcPlayerWanted]", 
+        lpPlayer: c_uint64 # Pointer to cGcPlayerCommon
+        ): ...
+    @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 48 63 F2")
+    # Found in cGcPlayerExperienceDirector::RenderNGui, under the call to cTkNGuiEditor::DoButton, with argument "Police Scan"
+    def SetWantedLevel(
+        self, 
+        this: "_Pointer[cGcPlayerWanted]", 
+        liLevel: Annotated[int, c_int16],
+        lbForce: Annotated[bool, c_bool],
+        lbSquadDefeated: Annotated[bool, c_bool]):
+        pass
 
 
 class cGcFrontendPageClaimBase(Structure):
