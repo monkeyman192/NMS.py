@@ -1071,7 +1071,7 @@ class cGcPlayerRespawn(Structure):
     def DoPlayerRespawn(
         self,
         this: "_Pointer[cGcPlayerRespawn]",
-        leReason: c_enum32[enums.internal_enums.RespawnReason],
+        leReason: c_enum32[enums.RespawnReason],
         lbFirstCall: Annotated[bool, c_bool],
     ) -> None: ...
 
