@@ -4102,6 +4102,44 @@ class MenuAction(Structure):
         lbShowBackground: Annotated[bool, c_bool],
     ): ...
 
+    @partial_struct
+    class cGcQuickActionMenu(Structure):
+        @partial_struct
+        class ActionTable(Structure):
+            miCurrentActionDepth: Annotated[int, Field(c_int32, 0x0)]
+            maActionDepths: Annotated[
+                tuple[
+                    basic.TkStd.tk_vector[MenuAction],
+                    basic.TkStd.tk_vector[MenuAction],
+                    basic.TkStd.tk_vector[MenuAction],
+                ],
+                Field(basic.TkStd.tk_vector[MenuAction] * 3, 0x8),
+            ]
+            maSelectedActions: Annotated[tuple[int, int, int], Field(c_int32 * 3, 0x38)]
+
+        mActionTable: Annotated[ActionTable, 0xA050]
+
+        @function_hook("44 88 44 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 57")
+        def TriggerAction(
+            self,
+            this: "_Pointer[cGcQuickActionMenu]",
+            lAction: _Pointer[MenuAction],
+            lbCalledAsMenu: Annotated[bool, c_bool],
+        ) -> c_bool: ...
+
+        @function_hook("48 63 81 ? ? ? ? F3 0F 10 05 ? ? ? ? F3 0F 11 81")
+        def TriggerCurrentAction(self, this: "_Pointer[cGcQuickActionMenu]") -> c_bool: ...
+
+        @function_hook(
+            "48 89 54 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? "
+            "? ? ? 48 2B E0 48 8B F1"
+        )
+        def UpdateActions(
+            self,
+            this: "_Pointer[cGcQuickActionMenu]",
+            lOutUpdatedRenderState: _Pointer[QuickMenuRenderState],
+    ): ...
+
 @partial_struct
 class cGcPurchaseableItem(Structure):
     # Found in cGcPurchaseableItem::Update
