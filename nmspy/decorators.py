@@ -1,5 +1,5 @@
 from contextlib import contextmanager
-from typing import Callable, Optional
+from typing import Callable, Optional, cast
 
 from pymhf.core._types import CustomTriggerProtocol, DetourTime
 
@@ -7,12 +7,14 @@ from pymhf.core._types import CustomTriggerProtocol, DetourTime
 class main_loop:
     @staticmethod
     def before(func: Callable) -> CustomTriggerProtocol:
+        func = cast(CustomTriggerProtocol, func)
         func._custom_trigger = "MAIN_LOOP"
         func._hook_time = DetourTime.BEFORE
         return func  # type: ignore
 
     @staticmethod
     def after(func: Callable) -> CustomTriggerProtocol:
+        func = cast(CustomTriggerProtocol, func)
         func._custom_trigger = "MAIN_LOOP"
         func._hook_time = DetourTime.AFTER
         return func  # type: ignore
@@ -25,12 +27,14 @@ def on_fully_booted(func: Callable) -> CustomTriggerProtocol:
     This occurs when the games' internal state first changes to "mode selector"
     (ie. just before the game mode selection screen appears).
     """
+    func = cast(CustomTriggerProtocol, func)
     func._custom_trigger = "MODESELECTOR"
     return func  # type: ignore
 
 
 def on_state_change(state: str):
-    def _inner(func: CustomTriggerProtocol):
+    def _inner(func: Callable):
+        func = cast(CustomTriggerProtocol, func)
         func._custom_trigger = state
         return func
 
@@ -50,6 +54,7 @@ def terminal_command(
 
     # TODO: Use inspect to automatically get arguments and types if they have any to show in the description.
     def _inner(func: Callable) -> CustomTriggerProtocol:
+        func = cast(CustomTriggerProtocol, func)
         func_name = func.__qualname__
         split_name = func_name.split(".")
         if len(split_name) != 2:

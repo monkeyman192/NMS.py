@@ -4345,9 +4345,9 @@ class cTkFileSystem(Structure):
         self,
         this: "_Pointer[cTkFileSystem]",
         lpacPath: c_char_p64,
-        a3: c_char_p64,
+        lpaacDirectoryNamesOut: _Pointer[c_char_p64],  # In memory this is a preallocated array of 4096 ptrs.
         liMaxDirectories: Annotated[int, c_int32],
-        a5: Annotated[int, c_int32],
+        liMaxStringSize: Annotated[int, c_int32],
         a6: c_uint64,
     ) -> c_uint64:
         """Return the number of contained files in a directory. This will be called on the MODS/ directory
@@ -4358,15 +4358,15 @@ class cTkFileSystem(Structure):
         "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 4C 89 74 24 ? 55 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 "
         "8B FA 48 8B F1"
     )
-    def LoadModSubDirectory(
+    def MountSearchPath(
         self,
         this: "_Pointer[cTkFileSystem]",
-        lpacPath: c_char_p64,
-        a3: c_char_p64,
-        a4: Annotated[bool, c_bool],
-        a5: Annotated[bool, c_bool],
-        a6: c_uint64,
-        a7: Annotated[bool, c_bool],
+        lpacPathName: c_char_p64,
+        lpacMountPoint: c_char_p64,
+        luLoadOrder: Annotated[int, c_uint8],
+        lbMountFromBanks: Annotated[bool, c_bool],
+        liOverlayID: _Pointer[c_int32],
+        lbModify: Annotated[bool, c_bool],
     ) -> c_bool: ...
 
     @function_hook("48 81 EC ? ? ? ? 41 B1")
@@ -4413,17 +4413,18 @@ class cGcModManager(Structure):
     _total_size_ = 0x140  # Roughly, based on the cGcModManager::GetInstance
 
     @partial_struct
-    class ModInfo(nmse.cGcModSettingsInfo):
-        # This Struct and it's info is mostly determined from memory
+    class ModInfo(Structure):
+        # This struct and its info is mostly determined from memory. Also the 4.13 debug build.
         _total_size_ = 0x640
-        # Looks like this might be 8 * 0x80's from 0x130
-        lpacPath: Annotated[c_char_p, 0x530]
-        liUnknown0x630: Annotated[int, Field(c_int32, 0x630)]
-        lbUnknown0x634: Annotated[bool, Field(c_bool, 0x634)]
-        lbHasGlobals: Annotated[bool, Field(c_bool, 0x635)]
-        lbHasBaseBuildingParts: Annotated[bool, Field(c_bool, 0x636)]
-        lbHasLocTable: Annotated[bool, Field(c_bool, 0x637)]
-        lbAlsoHasBaseBuildingPartsButDifferent: Annotated[bool, Field(c_bool, 0x638)]  # ???
+        mSavedData: Annotated[nmse.cGcModSettingsInfo, 0x0]
+        mThumbailPath: Annotated[basic.cTkFixedString0x400, 0x130]
+        mMountPath: Annotated[basic.cTkFixedString0x100, 0x530]
+        miOverlayID: Annotated[int, Field(c_int32, 0x630)]  # or cGcModManager::eModState meState
+        mbActive: Annotated[bool, Field(c_bool, 0x634)]
+        mbHasGlobals: Annotated[bool, Field(c_bool, 0x635)]
+        mbHasBaseParts: Annotated[bool, Field(c_bool, 0x636)]
+        mbHasLoc: Annotated[bool, Field(c_bool, 0x637)]
+        mbNeedsMounting: Annotated[bool, Field(c_bool, 0x638)]
 
     @static_function_hook(
         "48 83 EC ? 65 48 8B 04 25 ? ? ? ? B9 ? ? ? ? 48 8B 00 8B 04 01 39 05 ? ? ? ? 0F 8F ? ? ? ? 48 8D 05 "
@@ -4433,14 +4434,22 @@ class cGcModManager(Structure):
     def GetInstance() -> c_uint64: ...
 
     @function_hook("40 55 53 56 57 41 55 41 56 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 33 F6")
-    def LoadModdedData(
+    def LoadMods(
         self,
         this: "_Pointer[cGcModManager]",
-        lbVREnabled: Annotated[bool, c_bool],
+        lbIsVR: Annotated[bool, c_bool],
     ) -> c_bool: ...
 
-    lpModInfo: Annotated[basic.TkStd.tk_vector[ModInfo], 0x0]
-    lpModSettingsInfo: Annotated[basic.TkStd.tk_vector[nmse.cGcModSettingsInfo], 0x58]
+    @function_hook("48 8B C4 53 55 48 81 EC ? ? ? ? 33 DB")
+    def WriteSettings(self, this: "_Pointer[cGcModManager]", a2: Annotated[bool, c_bool]):
+        ...
+
+    mLoadedMods: Annotated[basic.TkStd.tk_vector[ModInfo], 0x0]
+    mSavedSettings: Annotated[nmse.cGcModSettings, 0x60]
+    mbIsVR: Annotated[bool, Field(c_bool, 0x78)]
+    mbBootingAfterModsCrash: Annotated[bool, Field(c_bool, 0x79)]
+    miMountedMods: Annotated[int, Field(c_int32, 0x7C)]
+    miUniqueIDCounter: Annotated[int, Field(c_int32, 0x80)]
 
 
 class cTkMemoryManager(Structure):
@@ -5301,6 +5310,15 @@ class cTkTimeManager(ContainerStruct):
 
 
 time_manager = cTkTimeManager()
+
+
+class cTkMetaData(ContainerStruct):
+    # The list of folders (starting with MODS/) which contain mods.
+    # These are iterated over by the game whenever it loads some metadata files and the globals.
+    mgModFolderList: Annotated[basic.TkStd.tk_vector[c_char_p64], Pattern("48 8D 0D ? ? ? ? 41 8B 56")]
+
+
+tkMetaData = cTkMetaData()
 
 
 class cEgModules(ContainerStruct):

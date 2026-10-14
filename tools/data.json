@@ -969,9 +969,9 @@
       "mangled_name": "__ZN13cTkFileSystem4Data16MountAllArchivesERKN5TkStd17TkVectorExtentionI11cTkBankInfoNS1_13DefaultConfigILin1EEENS1_9tk_vectorIS3_Lin1ENS1_17null_stack_bufferEEEEEb"
     },
     {
-      "name": "cGcModManager::LoadModdedData",
+      "name": "cGcModManager::LoadMods",
       "signature": "40 55 53 56 57 41 55 41 56 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 33 F6",
-      "mangled_name": "cGcModManager::LoadModdedData",
+      "mangled_name": "?LoadMods@cGcModManager@@QEAA_N_N@Z",
       "unique_string": "../BINARIES/SETTINGS/GCMODSETTINGS.MXML"
     },
     {
@@ -985,9 +985,9 @@
       "mangled_name": "cTkFileSystem::LoadModDirectory"
     },
     {
-      "name": "cTkFileSystem::LoadModSubdirectory",
+      "name": "cTkFileSystem::MountSearchPath",
       "signature": "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 4C 89 74 24 ? 55 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B FA 48 8B F1",
-      "mangled_name": "cTkFileSystem::LoadModSubdirectory"
+      "mangled_name": "?MountSearchPath@cTkFileSystem@@QEAA_NPEBD0E_NPEAH1@Z"
     },
     {
       "name": "GenerateModdedFilepath",
@@ -2047,6 +2047,12 @@
       "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 8B 81 ? ? ? ? 33 DB",
       "mangled_name": "?GetResult@cGcFrontendTextInput@@QEAA?AW4ResultState@1@AEAV?$cTkFixedString@$0BAA@D@@@Z",
       "unique_string": "PROFANITY_MSG"
+    },
+    {
+      "name": "cGcModManager::WriteSettings",
+      "signature": "48 8B C4 53 55 48 81 EC ? ? ? ? 33 DB",
+      "mangled_name": "?WriteSettings@cGcModManager@@AEAAXXZ",
+      "unique_string": "SETTINGS/GCMODSETTINGS.MXML"
     }
   ],
   "global_objects":
@@ -2125,12 +2131,16 @@
       "name": "cGcQuickActionMenu::Close",
       "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 66 0F 6F 05 ? ? ? ? 48 8B D9 48 8B 0D",
       "mangled_name": "?Close@cGcQuickActionMenu@@UEAA_N_N@Z"
-    }
-    ,
+    },
     {
       "name": "cGcQuickActionMenu::Update",
       "signature": "4C 89 44 24 ? 48 89 4C 24 ? 55 57 41 54 41 55",
       "mangled_name": "?Update@cGcQuickActionMenu@@UEAAXMAEAUQuickMenuRenderState@@@Z"
+    },
+    {
+      "name": "cTkMetaData::mgModFolderList",
+      "signature": "48 8D 0D ? ? ? ? 41 8B 56",
+      "mangled_name": "?mgModFolderList@cTkMetaData@@2V?$vector@PEADV?$TkSTLAllocatorShim@PEAD$07$0?0@@@std@@A"
     }
   ],
   "structs":
