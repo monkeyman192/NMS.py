@@ -322,7 +322,7 @@ class eNGuiInputType(IntEnum):
 class eWarpState(IntEnum):
     # These are just the definitions from 4.13, but I don't think they've changed...
     # This seems to cycle from 0 -> 8 sequentially whilst warping and resets to 0 when the warp is fully complete
-    _None = 0x0
+    None_ = 0x0
     Charge = 0x1
     EnterTunnel = 0x2
     WarpTunnel = 0x3
@@ -331,7 +331,6 @@ class eWarpState(IntEnum):
     ExitTunnel = 0x6
     WarpSlowdown = 0x7
     RenderDebug = 0x8
-    NumStates = 0x9
 
 
 class eWeaponMode(IntEnum):

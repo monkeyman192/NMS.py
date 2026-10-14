@@ -895,8 +895,10 @@ class cGcPortalComponent(Structure):
 
     @function_hook("40 53 48 83 EC ? 33 C0 66 C7 81 ? ? ? ? ? ? 48 89 81")
     def OnAttached(self, this: "_Pointer[cGcPortalComponent]"): ...
+
     @function_hook("48 8B C4 55 56 48 8D 68 ? 48 81 EC ? ? ? ? 48 8B F1 48 89 58")
     def Prepare(self, this: "_Pointer[cGcPortalComponent]"): ...
+
     @function_hook("40 55 41 56 48 8D 6C 24 ? 48 81 EC ? ? ? ? 80 B9")
     def WarpPlayer(
         self,
@@ -958,7 +960,6 @@ class cGcPlayerState(Structure):
     ]
 
     # Found in cGcPlayerState::ClearIsOnOtherSideOfPortal, a BIT below a call to cGcNameGenerator::GenerateSpaceStationName, before the two nested if statements. Around line 215.
-    # The aforementioned function is the first function call under cGcSpaceshipWarp::WarpToDistantSystem, which is itself called in cGcPortalComponent::WarpPlayer (long call chain sadly)
     mbOnOtherSideOfPortal: Annotated[bool, Field(c_bool, 0x1B02C)]
     mbOtherMaybe: Annotated[bool, Field(c_bool, 0x1B060)]
 
@@ -1053,8 +1054,6 @@ class cGcPlayerState(Structure):
     def IsBlockedFromShipPurchase(self, this: "_Pointer[cGcPlayerState]") -> Annotated[bool, c_bool]: ...
 
     @function_hook("4C 8B DC 49 89 4B ? 53 48 81 EC ? ? ? ? 49 89 6B")
-    # Found under cGcFrontendPageFunctions::DoTechnologySlot, below the "FRONTEND" string and cGcNGuiLayer::FindElementRecursive at the top.
-    # The above function has several unique string Xrefs, such as "UI_INSTALL_TECH_SUB" or "UI_DAMAGE_POTENTIAL"
     def CanRepairTechnology(
         self,
         this: "_Pointer[cGcPlayerState]",
@@ -1065,13 +1064,11 @@ class cGcPlayerState(Structure):
     @function_hook(
         "8B 05 ? ? ? ? 85 C0 74 ? 83 F8 ? 75 ? 48 8B 05 ? ? ? ? 80 B8 ? ? ? ? ? 75 ? 80 B8 ? ? ? ? ? 75 ? 32 C0 C3 80 B8"
     )
-    # Found under cGcCostManager::CostAsStringFromClassPointer, RIGHT above unique string "UI_BIGGS_EDIT_COST_BLOCKED"
     def CorvetteWorkshopBlockedBySeason(self) -> Annotated[bool, c_bool]: ...
 
 
 class cGcPlayerRespawn(Structure):
     @function_hook("48 8B C4 89 50 ? 48 89 48 ? 55 53 56")
-    # Name propagated by tooling
     def DoPlayerRespawn(
         self,
         this: "_Pointer[cGcPlayerRespawn]",
@@ -2273,7 +2270,7 @@ class cGcSpaceshipWarp(Structure):
     mJumpTarget: Annotated[cGcWarpJumpTarget, 0x10]
     # The offset for this can be found under cGcPortalComponent::Prepare near the bottom, below the "cGcPortalComponent" string.
     # However, its a really screwy offset to calculate since you first need the Offsets of cGcSimulation from cGcApplication, as well as the offset for cGcSpaceshipWarp from cGcSimulation, since the binary uses the cGcApplication global.
-    meWarpState: Annotated[c_enum8[enums.internal_enums.eWarpState], 0x98]
+    meWarpState: Annotated[c_enum8[enums.eWarpState], 0x98]
     mePulseDriveState: Annotated[c_enum32[enums.EPulseDriveState], 0xA4]
     mfPulseDriveTimer: Annotated[float, Field(c_float, 0xB4)]
     mfPulseDriveFuelTimer: Annotated[float, Field(c_float, 0xB8)]
@@ -5354,7 +5351,6 @@ class cGcPlayerWanted(Structure):
         lpPlayer: c_uint64,  # Pointer to cGcPlayerCommon
     ): ...
     @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 48 63 F2")
-    # Found in cGcPlayerExperienceDirector::RenderNGui, under the call to cTkNGuiEditor::DoButton, with argument "Police Scan"
     def SetWantedLevel(
         self,
         this: "_Pointer[cGcPlayerWanted]",
