@@ -9,6 +9,11 @@ on:
       - 'gh-pages'
     tags:
       - '*'
+  pull_request:
+    paths-ignore:
+      - '*.md'
+    branches-ignore:
+      - 'gh-pages'
 
 jobs:
   build_test:
