@@ -318,19 +318,21 @@ class eNGuiInputType(IntEnum):
     Pressed = 0xFE  # -0x2
     Held = 0xFF  # -0x1
 
+
 class eWarpState(IntEnum):
     # These are just the definitions from 4.13, but I don't think they've changed...
     # This seems to cycle from 0 -> 8 sequentially whilst warping and resets to 0 when the warp is fully complete
-    _None  = 0x0
-    Charge  = 0x1
-    EnterTunnel  = 0x2
-    WarpTunnel  = 0x3
-    WaitForGeneration  = 0x4
-    RespawnPlayer  = 0x5
-    ExitTunnel  = 0x6
-    WarpSlowdown  = 0x7
-    RenderDebug  = 0x8
-    NumStates  = 0x9
+    _None = 0x0
+    Charge = 0x1
+    EnterTunnel = 0x2
+    WarpTunnel = 0x3
+    WaitForGeneration = 0x4
+    RespawnPlayer = 0x5
+    ExitTunnel = 0x6
+    WarpSlowdown = 0x7
+    RenderDebug = 0x8
+    NumStates = 0x9
+
 
 class eWeaponMode(IntEnum):
     # All from 4.13 but I don't think they've changed yet?
@@ -354,4 +356,3 @@ class eWeaponMode(IntEnum):
     Flamethrower = 0x10
     StunGrenade = 0x11
     Stealth = 0x12
-
