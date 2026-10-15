@@ -317,3 +317,41 @@ class eNGuiInputType(IntEnum):
     TouchPressReady = 0xFD  # -0x3
     Pressed = 0xFE  # -0x2
     Held = 0xFF  # -0x1
+
+
+class eWarpState(IntEnum):
+    # These are just the definitions from 4.13, but I don't think they've changed...
+    # This seems to cycle from 0 -> 8 sequentially whilst warping and resets to 0 when the warp is fully complete
+    None_ = 0x0
+    Charge = 0x1
+    EnterTunnel = 0x2
+    WarpTunnel = 0x3
+    WaitForGeneration = 0x4
+    RespawnPlayer = 0x5
+    ExitTunnel = 0x6
+    WarpSlowdown = 0x7
+    RenderDebug = 0x8
+
+
+class eWeaponMode(IntEnum):
+    # All from 4.13 but I don't think they've changed yet?
+    # TODO: Long-winded way to test: Log states from cGcPlayerWeapon.meWeaponMode and compare to what it shows in game
+    Bolt = 0x0
+    Shotgun = 0x1
+    Burst = 0x2
+    Rail = 0x3
+    Cannon = 0x4
+    Laser = 0x5
+    Grenade = 0x6
+    MineGrenade = 0x7
+    Scope = 0x8
+    FrontShield = 0x9
+    Melee = 0xA
+    TerrainEdit = 0xB
+    SunLaser = 0xC
+    Spawner = 0xD
+    SpawnerAlt = 0xE
+    SoulLaser = 0xF
+    Flamethrower = 0x10
+    StunGrenade = 0x11
+    Stealth = 0x12
