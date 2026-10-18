@@ -2109,6 +2109,52 @@
       "name": "cTkMetaDataManager::ReloadGlobals",
       "signature": "48 89 5C 24 ? 56 48 83 EC ? 33 DB 48 8B F1 39 59",
       "mangled_name": "cTkMetaDataManager::ReloadGlobals"
+    },
+    {
+      "name": "cGcFrontendManager::ShowMessageBox",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 66 C7 41",
+      "mangled_name": "?ShowMessageBox@cGcFrontendManager@@QEAAXAEBT?$TkID@$0BAA@@@0@Z"
+    },
+    {
+      "name": "cTkNGuiTextEditState::OnPaste",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8B 99 ? ? ? ? 48 8B F1",
+      "mangled_name": "?OnPaste@cTkNGuiTextEditState@@QEAAXPEBDH@Z"
+    },
+    {
+      "name": "cGcTextChatInput::Update",
+      "signature": "40 55 53 56 57 41 55 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 8B F9",
+      "mangled_name": "?Update@cGcTextChatInput@@QEAAXM@Z"
+    },
+    {
+      "name": "cTkSystem::CopyTextToClipboard",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 57 48 83 EC ? 48 8B E9 8B FA",
+      "mangled_name": "?CopyTextToClipboard@cTkSystem@@UEAAXPEBDH@Z"
+    },
+    {
+      "name": "cTkSystem::PasteTextFromClipboard",
+      "signature": "48 89 5C 24 ? 57 48 83 EC ? 48 8B 89 ? ? ? ? 48 8B DA",
+      "mangled_name": "?PasteTextFromClipboard@cTkSystem@@UEAAXPEADH@Z"
+    },
+    {
+      "name": "cGcParticleManager::AddPermanentEffect",
+      "signature": "48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 57 48 81 EC ? ? ? ? 41 0F 10 01 49 8B D9 49 8B F8 41 0F 10 49 ? 48 8B EA 48 8B F1 0F 29 44 24 ? 41 0F 10 41 ? 0F 29 70 ? 0F 29 78 ? 66 0F 6F 3D ? ? ? ? 41 0F 59 79 ? 0F 11 40 ? 44 0F 29 40 ? 66 44 0F 6F 05 ? ? ? ? 0F 28 C7 0F 11 48 ? E8 ? ? ? ? 0F 57 C9 F3 0F 10 C8 0F 28 C7 0F C6 C7 ? F3 44 0F 10 C1 E8 ? ? ? ? 0F C6 FF ? 0F 28 F0 0F 28 C7 E8 ? ? ? ? 44 8B 8E ? ? ? ? 4C 8B C7 66 0F 7E F0 48 8B D5 C6 44 24 ? ? 48 8B CE 66 44 0F C4 C0 ? C1 F8 ? 66 44 0F C4 C0 ? 66 0F 7E C0 0F 10 43 ? 66 44 0F C4 C0 ? C1 F8 ? 66 44 0F C4 C0 ? 48 8D 44 24 ? 44 0F 59 05 ? ? ? ? 48 89 44 24 ? 41 0F 5C C0 44 0F 29 44 24 ? 0F 29 44 24 ? E8 ? ? ? ? 4C 8D 9C 24 ? ? ? ? 48 8B C5 49 8B 5B ? 49 8B 6B ? 49 8B 73 ? 41 0F 28 73 ? 41 0F 28 7B ? 45 0F 28 43 ? 49 8B E3 5F C3 40 53",
+      "mangled_name": "?AddPermanentEffect@cGcParticleManager@@QEAA?AUEffectInstance@@AEBT?$TkID@$0IA@@@AEBVcTkMatrix34@@@Z"
+    },
+    {
+      "name": "cGcParticleManager::AddEffect_Internal",
+      "signature": "4C 8B DC 49 89 5B ? 57 48 81 EC ? ? ? ? 48 8B 84 24 ? ? ? ? 48 8B DA 41 0F 10 00",
+      "mangled_name": "?AddEffect_Internal@cGcParticleManager@@IEAA?AUEffectInstance@@AEBT?$TkID@$0IA@@@VTkHandle@@AEBVcTkPhysRelMat34@@_N@Z"
+    },
+    {
+      "name": "cGcParticleManager::RetireEffect",
+      "signature": "40 53 48 83 EC ? 8B 02 48 8B DA",
+      "mangled_name": "__ZN18cGcParticleManager12RetireEffectER14EffectInstance"
+    },
+    {
+      "name": "cGcParticleManager::RetireEffectsAndDestroyNodeOnCompletion",
+      "signature": "48 89 5C 24 ? 57 48 81 EC ? ? ? ? 44 8B C2",
+      "mangled_name": "?RetireEffectsAndDestroyNodeOnCompletion@cGcParticleManager@@QEAAXVTkHandle@@@Z",
+      "unique_string": "EffectDestructionProxy"
     }
   ],
   "global_objects":
@@ -2488,6 +2534,22 @@
             "name": "mpPage",
             "offset": 16
           }
+        }
+      ]
+    },
+    {
+      "name": "EffectInstance",
+      "fields": [
+        {
+          "name": "mNodeHandle",
+          "signature": "8B 02 48 8B DA A9"
+        },
+        {
+          "name": "mpExplosion",
+          "signatures": [
+            "48 8B 43 ? 8B 48 ? 85 C9",
+            "48 C7 43 ? ? ? ? ? C7 03 ? ? ? ? 48 83 C4 ? 5B C3 CC CC CC CC CC CC CC CC CC CC 48 8B C4"
+          ]
         }
       ]
     }
