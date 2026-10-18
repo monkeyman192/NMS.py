@@ -890,7 +890,8 @@ class cGcPortalComponent(Structure):
         mTargetUA: Annotated[c_uint64, Field(c_uint64, 0x48)]  # 0x88 from parent
         mbActive: Annotated[bool, Field(c_bool, 0x60)]  # 0xA0 from parent
 
-    # Only need the two fields from PersistentData to trigger warps, but should probably get the total size for this...
+    # Only need the two fields from PersistentData to trigger warps, but should probably get the total size
+    # for this...
 
     @function_hook("40 53 48 83 EC ? 33 C0 66 C7 81 ? ? ? ? ? ? 48 89 81")
     def OnAttached(self, this: "_Pointer[cGcPortalComponent]"): ...
@@ -902,7 +903,8 @@ class cGcPortalComponent(Structure):
     def WarpPlayer(
         self,
         this: "_Pointer[cGcPortalComponent]",
-        a2: c_uint64,  # These seem to be pointers to something but the function can be fired off fine without valid refs.
+        # These seem to be pointers to something but the function can be fired off fine without valid refs.
+        a2: c_uint64,
         a3: c_uint64,
         a4: c_uint64,
     ): ...
@@ -958,7 +960,8 @@ class cGcPlayerState(Structure):
         Field(basic.cTkFixedString0x20 * 0xC, 0x1AD93),
     ]
 
-    # Found in cGcPlayerState::ClearIsOnOtherSideOfPortal, a BIT below a call to cGcNameGenerator::GenerateSpaceStationName, before the two nested if statements. Around line 215.
+    # Found in cGcPlayerState::ClearIsOnOtherSideOfPortal, a BIT below a call to
+    # cGcNameGenerator::GenerateSpaceStationName, before the two nested if statements. Around line 215.
     mbOnOtherSideOfPortal: Annotated[bool, Field(c_bool, 0x1B02C)]
     mbOtherMaybe: Annotated[bool, Field(c_bool, 0x1B060)]
 
@@ -1048,7 +1051,8 @@ class cGcPlayerState(Structure):
     ) -> c_bool: ...
 
     @function_hook(
-        "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 8B 05 ? ? ? ? 48 8B F1 85 C0 74 ? 83 F8 ? 0F 85 ? ? ? ? 4C 8B 05"
+        "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 8B 05 ? ? ? ? 48 8B F1 85 C0 74 ? 83 F8 ? 0F 85 ? ? ? ? "
+        "4C 8B 05"
     )
     def IsBlockedFromShipPurchase(self, this: "_Pointer[cGcPlayerState]") -> Annotated[bool, c_bool]: ...
 
@@ -1060,10 +1064,14 @@ class cGcPlayerState(Structure):
         leInventory: c_enum32[enums.InventoryChoice],
         lbIsInstallation: Annotated[bool, c_bool],
     ) -> Annotated[bool, c_bool]: ...
+
     @function_hook(
-        "8B 05 ? ? ? ? 85 C0 74 ? 83 F8 ? 75 ? 48 8B 05 ? ? ? ? 80 B8 ? ? ? ? ? 75 ? 80 B8 ? ? ? ? ? 75 ? 32 C0 C3 80 B8"
+        "8B 05 ? ? ? ? 85 C0 74 ? 83 F8 ? 75 ? 48 8B 05 ? ? ? ? 80 B8 ? ? ? ? ? 75 ? 80 B8 ? ? ? ? ? 75 ? 32 "
+        "C0 C3 80 B8"
     )
-    def CorvetteWorkshopBlockedBySeason(self) -> Annotated[bool, c_bool]: ...
+    def CorvetteWorkshopBlockedBySeason(
+        self, this: "_Pointer[cGcPlayerState]"
+    ) -> Annotated[bool, c_bool]: ...
 
 
 class cGcPlayerRespawn(Structure):
@@ -2267,8 +2275,11 @@ class cGcWarpJumpTarget(Structure):
 @partial_struct
 class cGcSpaceshipWarp(Structure):
     mJumpTarget: Annotated[cGcWarpJumpTarget, 0x10]
-    # The offset for this can be found under cGcPortalComponent::Prepare near the bottom, below the "cGcPortalComponent" string.
-    # However, its a really screwy offset to calculate since you first need the Offsets of cGcSimulation from cGcApplication, as well as the offset for cGcSpaceshipWarp from cGcSimulation, since the binary uses the cGcApplication global.
+    # The offset for this can be found under cGcPortalComponent::Prepare near the bottom, below the
+    # "cGcPortalComponent" string.
+    # However, its a really screwy offset to calculate since you first need the Offsets of cGcSimulation from
+    # cGcApplication, as well as the offset for cGcSpaceshipWarp from cGcSimulation, since the binary uses the
+    # cGcApplication global.
     meWarpState: Annotated[c_enum8[enums.eWarpState], 0x98]
     mePulseDriveState: Annotated[c_enum32[enums.EPulseDriveState], 0xA4]
     mfPulseDriveTimer: Annotated[float, Field(c_float, 0xB4)]
@@ -4098,7 +4109,34 @@ class MenuAction(Structure):
     ): ...
 
 
-class QuickMenuRenderState(Structure): ...
+@partial_struct
+class QuickMenuRenderState(Structure):
+    msControlsString: Annotated[basic.cTkFixedString0x100, 0x0]
+    msExtraControlsString: Annotated[basic.cTkFixedString0x100, 0x100]
+    mbShowMenu: Annotated[bool, Field(c_bool, 0x200)]
+    mbShowCategories: Annotated[bool, Field(c_bool, 0x201)]
+    maCategories: Annotated[
+        tuple[basic.TkID0x20, basic.TkID0x20, basic.TkID0x20],
+        Field(basic.TkID0x20 * 3, 0x208),
+    ]
+    mfCursorX: Annotated[float, Field(c_float, 0x268)]
+    mfCursorY: Annotated[float, Field(c_float, 0x268)]
+    mLabelID: Annotated[basic.cTkFixedString0x200, 0x270]
+    mLabelTextColour: Annotated[basic.Colour, 0x470]
+    mLabelBGColour: Annotated[basic.Colour, 0x480]
+    mItemName: Annotated[basic.cTkFixedString0x80, 0x490]
+    mbShowChargeArrows: Annotated[bool, Field(c_bool, 0x510)]
+    mbForceShowUpArrow: Annotated[bool, Field(c_bool, 0x511)]
+    mbShowBackButton: Annotated[bool, Field(c_bool, 0x512)]
+    mNextActions: Annotated[basic.TkStd.tk_vector[MenuAction], 0x518]
+    mPreviousAction: Annotated[MenuAction, 0x528]
+    mCurrentActions: Annotated[basic.TkStd.tk_vector[MenuAction], 0x608]
+    mbItemChanged: Annotated[bool, Field(c_bool, 0x618)]
+    miCurrentAction: Annotated[int, Field(c_int32, 0x6B4)]
+    miNextAction: Annotated[int, Field(c_int32, 0x6B8)]
+    mbWrapCurrentActions: Annotated[bool, Field(c_bool, 0x6BC)]
+    miCurrentActionDepth: Annotated[int, Field(c_int32, 0x6C0)]
+    mbCurrentActionIsSubMenu: Annotated[bool, Field(c_bool, 0x6C8)]
 
 
 @partial_struct
@@ -4117,6 +4155,7 @@ class cGcQuickActionMenu(Structure):
         maSelectedActions: Annotated[tuple[int, int, int], Field(c_int32 * 3, 0x38)]
 
     mActionTable: Annotated[ActionTable, 0xA050]
+    mbEnteredSubMenu: Annotated[bool, Field(c_bool, 0xA16C)]
 
     @function_hook("44 88 44 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 57")
     def TriggerAction(
@@ -4127,7 +4166,9 @@ class cGcQuickActionMenu(Structure):
     ) -> c_bool: ...
 
     @function_hook("48 63 81 ? ? ? ? F3 0F 10 05 ? ? ? ? F3 0F 11 81")
-    def TriggerCurrentAction(self, this: "_Pointer[cGcQuickActionMenu]") -> c_bool: ...
+    def TriggerCurrentAction(self, this: "_Pointer[cGcQuickActionMenu]") -> c_bool:
+        """Trigger the current action. If this returns True, then the quick menu will close."""
+        ...
 
     @function_hook(
         "48 89 54 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? "
@@ -4138,6 +4179,31 @@ class cGcQuickActionMenu(Structure):
         this: "_Pointer[cGcQuickActionMenu]",
         lOutUpdatedRenderState: _Pointer[QuickMenuRenderState],
     ): ...
+
+    @function_hook("48 89 4C 24 ? 55 56 57 41 55 48 8D AC 24 ? ? ? ? 48 81 EC")
+    def UpdateActionString(
+        self, this: "_Pointer[cGcQuickActionMenu]", lsActionString: _Pointer[basic.cTkFixedString0x80]
+    ): ...
+
+    @function_hook("4C 89 44 24 ? 48 89 4C 24 ? 55 57 41 54 41 55")
+    def Update(
+        self,
+        this: "_Pointer[cGcQuickActionMenu]",
+        lfTimeStep: Annotated[float, c_float],
+        lOutUpdatedRenderState: _Pointer[QuickMenuRenderState],
+    ): ...
+
+    @function_hook("40 53 48 83 EC ? 48 8B 05 ? ? ? ? 4C 8B D2 48 8B D9 44 8B 88")
+    def UpdateInWorldUISelection(
+        self,
+        this: "_Pointer[cGcQuickActionMenu]",
+        lOutUpdatedRenderState: _Pointer[QuickMenuRenderState],
+    ): ...
+
+    @function_hook("48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 66 0F 6F 05 ? ? ? ? 48 8B D9 48 8B 0D")
+    def Close(
+        self, this: "_Pointer[cGcQuickActionMenu]", lbForceClose: Annotated[bool, c_bool]
+    ) -> c_bool: ...
 
 
 @partial_struct
@@ -4286,9 +4352,9 @@ class cTkFileSystem(Structure):
         self,
         this: "_Pointer[cTkFileSystem]",
         lpacPath: c_char_p64,
-        a3: c_char_p64,
+        lpaacDirectoryNamesOut: _Pointer[c_char_p64],  # In memory this is a preallocated array of 4096 ptrs.
         liMaxDirectories: Annotated[int, c_int32],
-        a5: Annotated[int, c_int32],
+        liMaxStringSize: Annotated[int, c_int32],
         a6: c_uint64,
     ) -> c_uint64:
         """Return the number of contained files in a directory. This will be called on the MODS/ directory
@@ -4299,15 +4365,15 @@ class cTkFileSystem(Structure):
         "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 4C 89 74 24 ? 55 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 "
         "8B FA 48 8B F1"
     )
-    def LoadModSubDirectory(
+    def MountSearchPath(
         self,
         this: "_Pointer[cTkFileSystem]",
-        lpacPath: c_char_p64,
-        a3: c_char_p64,
-        a4: Annotated[bool, c_bool],
-        a5: Annotated[bool, c_bool],
-        a6: c_uint64,
-        a7: Annotated[bool, c_bool],
+        lpacPathName: c_char_p64,
+        lpacMountPoint: c_char_p64,
+        luLoadOrder: Annotated[int, c_uint8],
+        lbMountFromBanks: Annotated[bool, c_bool],
+        liOverlayID: _Pointer[c_int32],
+        lbModify: Annotated[bool, c_bool],
     ) -> c_bool: ...
 
     @function_hook("48 81 EC ? ? ? ? 41 B1")
@@ -4354,17 +4420,18 @@ class cGcModManager(Structure):
     _total_size_ = 0x140  # Roughly, based on the cGcModManager::GetInstance
 
     @partial_struct
-    class ModInfo(nmse.cGcModSettingsInfo):
-        # This Struct and it's info is mostly determined from memory
+    class ModInfo(Structure):
+        # This struct and its info is mostly determined from memory. Also the 4.13 debug build.
         _total_size_ = 0x640
-        # Looks like this might be 8 * 0x80's from 0x130
-        lpacPath: Annotated[c_char_p, 0x530]
-        liUnknown0x630: Annotated[int, Field(c_int32, 0x630)]
-        lbUnknown0x634: Annotated[bool, Field(c_bool, 0x634)]
-        lbHasGlobals: Annotated[bool, Field(c_bool, 0x635)]
-        lbHasBaseBuildingParts: Annotated[bool, Field(c_bool, 0x636)]
-        lbHasLocTable: Annotated[bool, Field(c_bool, 0x637)]
-        lbAlsoHasBaseBuildingPartsButDifferent: Annotated[bool, Field(c_bool, 0x638)]  # ???
+        mSavedData: Annotated[nmse.cGcModSettingsInfo, 0x0]
+        mThumbailPath: Annotated[basic.cTkFixedString0x400, 0x130]
+        mMountPath: Annotated[basic.cTkFixedString0x100, 0x530]
+        miOverlayID: Annotated[int, Field(c_int32, 0x630)]  # or cGcModManager::eModState meState
+        mbActive: Annotated[bool, Field(c_bool, 0x634)]
+        mbHasGlobals: Annotated[bool, Field(c_bool, 0x635)]
+        mbHasBaseParts: Annotated[bool, Field(c_bool, 0x636)]
+        mbHasLoc: Annotated[bool, Field(c_bool, 0x637)]
+        mbNeedsMounting: Annotated[bool, Field(c_bool, 0x638)]
 
     @static_function_hook(
         "48 83 EC ? 65 48 8B 04 25 ? ? ? ? B9 ? ? ? ? 48 8B 00 8B 04 01 39 05 ? ? ? ? 0F 8F ? ? ? ? 48 8D 05 "
@@ -4374,14 +4441,21 @@ class cGcModManager(Structure):
     def GetInstance() -> c_uint64: ...
 
     @function_hook("40 55 53 56 57 41 55 41 56 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 33 F6")
-    def LoadModdedData(
+    def LoadMods(
         self,
         this: "_Pointer[cGcModManager]",
-        lbVREnabled: Annotated[bool, c_bool],
+        lbIsVR: Annotated[bool, c_bool],
     ) -> c_bool: ...
 
-    lpModInfo: Annotated[basic.TkStd.tk_vector[ModInfo], 0x0]
-    lpModSettingsInfo: Annotated[basic.TkStd.tk_vector[nmse.cGcModSettingsInfo], 0x58]
+    @function_hook("48 8B C4 53 55 48 81 EC ? ? ? ? 33 DB")
+    def WriteSettings(self, this: "_Pointer[cGcModManager]", a2: Annotated[bool, c_bool]): ...
+
+    mLoadedMods: Annotated[basic.TkStd.tk_vector[ModInfo], 0x0]
+    mSavedSettings: Annotated[nmse.cGcModSettings, 0x60]
+    mbIsVR: Annotated[bool, Field(c_bool, 0x78)]
+    mbBootingAfterModsCrash: Annotated[bool, Field(c_bool, 0x79)]
+    miMountedMods: Annotated[int, Field(c_int32, 0x7C)]
+    miUniqueIDCounter: Annotated[int, Field(c_int32, 0x80)]
 
 
 class cTkMemoryManager(Structure):
@@ -5244,6 +5318,15 @@ class cTkTimeManager(ContainerStruct):
 time_manager = cTkTimeManager()
 
 
+class cTkMetaData(ContainerStruct):
+    # The list of folders (starting with MODS/) which contain mods.
+    # These are iterated over by the game whenever it loads some metadata files and the globals.
+    mgModFolderList: Annotated[basic.TkStd.tk_vector[c_char_p64], Pattern("48 8D 0D ? ? ? ? 41 8B 56")]
+
+
+tkMetaData = cTkMetaData()
+
+
 class cEgModules(ContainerStruct):
     # Found in cEgModules::Initialise
     mgpSceneManager: Annotated[
@@ -5420,6 +5503,18 @@ class cGcUniverseDetailAddressCoderU64(Structure):
         lpPosition: _Pointer[basic.cTkVector3],
         lpCameraDirection: _Pointer[basic.cTkVector3],
     ): ...
+
+
+class cTkMetaDataManager(Structure):
+    @static_function_hook(
+        "48 83 EC ? 65 48 8B 04 25 ? ? ? ? B9 ? ? ? ? 48 8B 00 8B 04 01 39 05 ? ? ? ? 7F ? 48 8D 05 ? ? ? ? "
+        "48 83 C4 ? C3 48 8D 0D ? ? ? ? E8 ? ? ? ? 83 3D ? ? ? ? ? 75 ? 33 C0 48 8D 0D ? ? ? ? 48 89 05"
+    )
+    @staticmethod
+    def GetInstance() -> c_uint64: ...
+
+    @function_hook("48 89 5C 24 ? 56 48 83 EC ? 33 DB 48 8B F1 39 59")
+    def ReloadGlobals(self, this: "_Pointer[cTkMetaDataManager]"): ...
 
 
 # Dummy values to copy and paste to make adding new things quicker...
