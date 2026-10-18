@@ -884,7 +884,7 @@ class TkStd:
                     return False
 
         def extend(self, others: list[T]) -> bool:
-            """ Add multiple extra items to the vector at once.
+            """Add multiple extra items to the vector at once.
             This can be more efficient that calling append repeatedly sine we can expand the vector large
             enough to contain all the elements in one go, avoiding unneccesary malloc calls.
             """

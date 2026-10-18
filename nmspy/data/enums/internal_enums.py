@@ -321,7 +321,8 @@ class eNGuiInputType(IntEnum):
 
 class eWarpState(IntEnum):
     # These are just the definitions from 4.13, but I don't think they've changed...
-    # This seems to cycle from 0 -> 8 sequentially whilst warping and resets to 0 when the warp is fully complete
+    # This seems to cycle from 0 -> 8 sequentially whilst warping and resets to 0 when the warp is fully
+    # complete.
     None_ = 0x0
     Charge = 0x1
     EnterTunnel = 0x2
@@ -335,7 +336,8 @@ class eWarpState(IntEnum):
 
 class eWeaponMode(IntEnum):
     # All from 4.13 but I don't think they've changed yet?
-    # TODO: Long-winded way to test: Log states from cGcPlayerWeapon.meWeaponMode and compare to what it shows in game
+    # TODO: Long-winded way to test: Log states from cGcPlayerWeapon.meWeaponMode and compare to what it shows
+    # in game.
     Bolt = 0x0
     Shotgun = 0x1
     Burst = 0x2

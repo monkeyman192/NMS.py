@@ -151,7 +151,7 @@ from .internal_enums import (
     eNGuiInputButtonState,
     eNGuiInputType,
     eWarpState,
-    eWeaponMode
+    eWeaponMode,
 )
 
 # The following list is auto-generated.

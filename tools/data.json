@@ -2053,6 +2053,16 @@
       "signature": "48 8B C4 53 55 48 81 EC ? ? ? ? 33 DB",
       "mangled_name": "?WriteSettings@cGcModManager@@AEAAXXZ",
       "unique_string": "SETTINGS/GCMODSETTINGS.MXML"
+    },
+    {
+      "name": "cTkMetaDataManager::GetInstance",
+      "signature": "48 83 EC ? 65 48 8B 04 25 ? ? ? ? B9 ? ? ? ? 48 8B 00 8B 04 01 39 05 ? ? ? ? 7F ? 48 8D 05 ? ? ? ? 48 83 C4 ? C3 48 8D 0D ? ? ? ? E8 ? ? ? ? 83 3D ? ? ? ? ? 75 ? 33 C0 48 8D 0D ? ? ? ? 48 89 05",
+      "mangled_name": "?GetInstance@cTkMetaDataManager@@SAAEAV1@XZ"
+    },
+    {
+      "name": "cTkMetaDataManager::ReloadGlobals",
+      "signature": "48 89 5C 24 ? 56 48 83 EC ? 33 DB 48 8B F1 39 59",
+      "mangled_name": "cTkMetaDataManager::ReloadGlobals"
     }
   ],
   "global_objects":
