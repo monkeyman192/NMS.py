@@ -5607,67 +5607,6 @@ class cTkMetaDataManager(Structure):
     @function_hook("48 89 5C 24 ? 56 48 83 EC ? 33 DB 48 8B F1 39 59")
     def ReloadGlobals(self, this: "_Pointer[cTkMetaDataManager]"): ...
 
-
-@partial_struct
-class cGcExplosion(Structure):
-    # Also found in cGcParticleManager::RetireEffect
-    mAudioObject: Annotated[TkAudioObject, 0x410]
-    mbIsPermanent: Annotated[bool, Field(c_bool, 0x49C)]
-    mbRetired: Annotated[bool, Field(c_bool, 0x4A9)]
-
-
-@partial_struct
-class EffectInstance(Structure):
-    # Found in cGcParticleManager::RetireEffect. Unchanged from 4.13
-    mNodeHandle: Annotated[basic.TkHandle, 0x00]
-    mpExplosion: Annotated[_Pointer[cGcExplosion], 0x08]
-    mpExplosionData: Annotated[_Pointer[nmse.cGcExplosionData], 0x10]
-
-
-class cGcParticleManager(Structure):
-    @function_hook(
-        "48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 57 48 81 EC ? ? ? ? 41 0F 10 01 49 8B D9 49 8B F8 41 0F 10 "
-        "49 ? 48 8B EA 48 8B F1 0F 29 44 24 ? 41 0F 10 41 ? 0F 29 70 ? 0F 29 78 ? 66 0F 6F 3D ? ? ? ? 41 0F "
-        "59 79 ? 0F 11 40 ? 44 0F 29 40 ? 66 44 0F 6F 05 ? ? ? ? 0F 28 C7 0F 11 48 ? E8 ? ? ? ? 0F 57 C9 F3 "
-        "0F 10 C8 0F 28 C7 0F C6 C7 ? F3 44 0F 10 C1 E8 ? ? ? ? 0F C6 FF ? 0F 28 F0 0F 28 C7 E8 ? ? ? ? 44 "
-        "8B 8E ? ? ? ? 4C 8B C7 66 0F 7E F0 48 8B D5 C6 44 24 ? ? 48 8B CE 66 44 0F C4 C0 ? C1 F8 ? 66 "
-        "44 0F C4 C0 ? 66 0F 7E C0 0F 10 43 ? 66 44 0F C4 C0 ? C1 F8 ? 66 44 0F C4 C0 ? 48 8D 44 24 ? "
-        "44 0F 59 05 ? ? ? ? 48 89 44 24 ? 41 0F 5C C0 44 0F 29 44 24 ? 0F 29 44 24 ? E8 ? ? ? ? 4C 8D "
-        "9C 24 ? ? ? ? 48 8B C5 49 8B 5B ? 49 8B 6B ? 49 8B 73 ? 41 0F 28 73 ? 41 0F 28 7B ? 45 0F 28 43 ? "
-        "49 8B E3 5F C3 40 53"
-    )
-    def AddPermanentEffect(
-        self,
-        this: "_Pointer[cGcParticleManager]",
-        result: _Pointer[EffectInstance],
-        lExplosionID: _Pointer[basic.TkID0x10],
-        lStartMatrix: _Pointer[basic.cTkMatrix34],
-    ) -> c_uint64:  # Pointer to EffectInstance
-        ...
-
-    @function_hook("4C 8B DC 49 89 5B ? 57 48 81 EC ? ? ? ? 48 8B 84 24 ? ? ? ? 48 8B DA 41 0F 10 00")
-    def AddEffect_Internal(
-        self,
-        this: "_Pointer[cGcParticleManager]",
-        result: _Pointer[EffectInstance],
-        lExplosionID: _Pointer[basic.TkID0x10],
-        lParentNode: basic.TkHandle,
-        lStartMatrix: _Pointer[basic.cTkMatrix34],
-        lbPermanent: Annotated[bool, c_bool],
-    ) -> c_uint64:  # Pointer to EffectInstance
-        ...
-
-    @function_hook("40 53 48 83 EC ? 8B 02 48 8B DA")
-    def RetireEffect(
-        self, this: "_Pointer[cGcParticleManager]", lEffect: _Pointer[EffectInstance]
-    ) -> c_bool: ...
-
-    @function_hook("48 89 5C 24 ? 57 48 81 EC ? ? ? ? 44 8B C2")
-    def RetireEffectsAndDestroyNodeOnCompletion(
-        self, this: "_Pointer[cGcParticleManager]", lNode: basic.TkHandle
-    ): ...
-
-
 # Dummy values to copy and paste to make adding new things quicker...
 # class name(Structure):
 #     @function_hook("")
