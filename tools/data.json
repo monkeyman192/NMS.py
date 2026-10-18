@@ -2490,22 +2490,6 @@
           }
         }
       ]
-    },
-    {
-      "name": "EffectInstance",
-      "fields": [
-        {
-          "name": "mNodeHandle",
-          "signature": "8B 02 48 8B DA A9"
-        },
-        {
-          "name": "mpExplosion",
-          "signatures": [
-            "48 8B 43 ? 8B 48 ? 85 C9",
-            "48 C7 43 ? ? ? ? ? C7 03 ? ? ? ? 48 83 C4 ? 5B C3 CC CC CC CC CC CC CC CC CC CC 48 8B C4"
-          ]
-        }
-      ]
     }
   ]
 }
