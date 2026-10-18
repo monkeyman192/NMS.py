@@ -5499,6 +5499,20 @@ class cGcUniverseDetailAddressCoderU64(Structure):
     ): ...
 
 
+class cTkMetaDataManager(Structure):
+    @static_function_hook(
+        "48 83 EC ? 65 48 8B 04 25 ? ? ? ? B9 ? ? ? ? 48 8B 00 8B 04 01 39 05 ? ? ? ? 7F ? 48 8D 05 ? ? ? ? "
+        "48 83 C4 ? C3 48 8D 0D ? ? ? ? E8 ? ? ? ? 83 3D ? ? ? ? ? 75 ? 33 C0 48 8D 0D ? ? ? ? 48 89 05"
+    )
+    @staticmethod
+    def GetInstance() -> c_uint64:
+        ...
+
+    @function_hook("48 89 5C 24 ? 56 48 83 EC ? 33 DB 48 8B F1 39 59")
+    def ReloadGlobals(self, this: "_Pointer[cTkMetaDataManager]"):
+        ...
+
+
 # Dummy values to copy and paste to make adding new things quicker...
 # class name(Structure):
 #     @function_hook("")

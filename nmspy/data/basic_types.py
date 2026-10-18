@@ -873,8 +873,7 @@ class TkStd:
             # NOTE: This checks to ensure that there is space for the item.
             # If there is not this will raise an error.
             if self.vector_size < self.allocated_size:
-                new_data = (ctypes.c_ubyte * self._template_type_size).from_address(self._next_empty_addr)
-                ctypes.memmove(ctypes.byref(new_data), ctypes.byref(other), self._template_type_size)
+                ctypes.memmove(self._next_empty_addr, ctypes.byref(other), self._template_type_size)
                 self.vector_size += 1
                 return True
             else:
