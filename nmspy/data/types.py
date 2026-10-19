@@ -1050,7 +1050,7 @@ class cGcPlayerState(Structure):
     ) -> c_bool: ...
 
     @function_hook(
-        "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 8B 05 ? ? ? ? 48 8B F1 85 C0 74 ? 83 F8 ? 0F 85 ? ? ? ? " 
+        "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 8B 05 ? ? ? ? 48 8B F1 85 C0 74 ? 83 F8 ? 0F 85 ? ? ? ? "
         "4C 8B 05"
     )
     def IsBlockedFromShipPurchase(self, this: "_Pointer[cGcPlayerState]") -> Annotated[bool, c_bool]: ...
@@ -1065,7 +1065,7 @@ class cGcPlayerState(Structure):
     ) -> Annotated[bool, c_bool]: ...
     
     @function_hook(
-        "8B 05 ? ? ? ? 85 C0 74 ? 83 F8 ? 75 ? 48 8B 05 ? ? ? ? 80 B8 ? ? ? ? ? 75 ? 80 B8 ? ? ? ? ? 75 ? 32 " 
+        "8B 05 ? ? ? ? 85 C0 74 ? 83 F8 ? 75 ? 48 8B 05 ? ? ? ? 80 B8 ? ? ? ? ? 75 ? 80 B8 ? ? ? ? ? 75 ? 32 "
         "C0 C3 80 B8"
     )
     def CorvetteWorkshopBlockedBySeason(
@@ -2278,7 +2278,7 @@ class cGcSpaceshipWarp(Structure):
     # "cGcPortalComponent" string. However, its a really screwy offset to calculate since you 
     # first need the Offsets of cGcSimulation from cGcApplication, as well as the offset for 
     # cGcSpaceshipWarp from cGcSimulation, since the binary uses the cGcApplication global.
-    meWarpState: Annotated[c_enum8[enums.internal_enums.eWarpState], 0x98]
+    meWarpState: Annotated[c_enum8[enums.eWarpState], 0x98]
     mePulseDriveState: Annotated[c_enum32[enums.EPulseDriveState], 0xA4]
     mfPulseDriveTimer: Annotated[float, Field(c_float, 0xB4)]
     mfPulseDriveFuelTimer: Annotated[float, Field(c_float, 0xB8)]

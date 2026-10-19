@@ -2496,16 +2496,52 @@
       "fields": [
         {
           "name": "mNodeHandle",
-          "signature": "8B 02 48 8B DA A9"
+          "signature": "8B 02 48 8B DA"
         },
         {
           "name": "mpExplosion",
           "signatures": [
-            "48 8B 43 ? 8B 48 ? 85 C9",
-            "48 C7 43 ? ? ? ? ? C7 03 ? ? ? ? 48 83 C4 ? 5B C3 CC CC CC CC CC CC CC CC CC CC 48 8B C4"
+            "48 8B 43 08 48 85 C0",
+            "48 8B 43 08 C6 80 A9 04 00 00 01"
+          ]
+        },
+        {
+          "name": "mpExplosionData",
+          "signatures": [
+            "48 C7 43 10 00 00 00 00 C7 03 ? ? ? ?",
+            "48 8B 43 10 8B 48 64 85 C9"
           ]
         }
       ]
+    },
+    {
+      "name": "cGcPortalComponent",
+      "fields":[
+        {
+          "name": "mPortalData",
+          "offset": "0x40"
+
+        }
+      ]
+    },
+    {
+      "name": "cGcPortalComponent::PersistentData",
+      "fields":[
+        {
+          "name": "mTargetUA",
+          "offset": "0x48"
+
+        },
+        {
+          "name": "mbActive",
+          "relative_to": {
+            "name": "mTargetUA",
+            "offset": "0x18"
+          }
+
+        }
+      ]
     }
+
   ]
 }
