@@ -881,36 +881,6 @@ class cGcResourceCustomisation(Structure):
 
 
 @partial_struct
-class cGcPortalComponent(Structure):
-    mPortalData: Annotated["cGcPortalComponent.PersistentData", 0x40]
-
-    @partial_struct
-    class PersistentData(Structure):
-        _total_size_ = 0x64  # Might not be right...
-        mTargetUA: Annotated[c_uint64, Field(c_uint64, 0x48)]  # 0x88 from parent
-        mbActive: Annotated[bool, Field(c_bool, 0x60)]  # 0xA0 from parent
-
-    # Only need the two fields from PersistentData to trigger warps, but should probably get the total size
-    # for this...
-
-    @function_hook("40 53 48 83 EC ? 33 C0 66 C7 81 ? ? ? ? ? ? 48 89 81")
-    def OnAttached(self, this: "_Pointer[cGcPortalComponent]"): ...
-
-    @function_hook("48 8B C4 55 56 48 8D 68 ? 48 81 EC ? ? ? ? 48 8B F1 48 89 58")
-    def Prepare(self, this: "_Pointer[cGcPortalComponent]"): ...
-
-    @function_hook("40 55 41 56 48 8D 6C 24 ? 48 81 EC ? ? ? ? 80 B9")
-    def WarpPlayer(
-        self,
-        this: "_Pointer[cGcPortalComponent]",
-        # These seem to be pointers to something but the function can be fired off fine without valid refs.
-        a2: c_uint64,
-        a3: c_uint64,
-        a4: c_uint64,
-    ): ...
-
-
-@partial_struct
 class cGcPlayerState(Structure):
     # Found at the top of cGcPlayerState::cGcPlayerState
     mNameWithTitle: Annotated[basic.cTkFixedString0x100, 0x0]
@@ -961,7 +931,8 @@ class cGcPlayerState(Structure):
     ]
 
     # Found in cGcPlayerState::ClearIsOnOtherSideOfPortal, a BIT below a call to
-    # cGcNameGenerator::GenerateSpaceStationName, before the two nested if statements. Around line 215.
+    # cGcNameGenerator::GenerateSpaceStationName, before the two nested if
+    # statements. Around line 215.
     mbOnOtherSideOfPortal: Annotated[bool, Field(c_bool, 0x1B02C)]
     mbOtherMaybe: Annotated[bool, Field(c_bool, 0x1B060)]
 
@@ -2276,10 +2247,9 @@ class cGcWarpJumpTarget(Structure):
 class cGcSpaceshipWarp(Structure):
     mJumpTarget: Annotated[cGcWarpJumpTarget, 0x10]
     # The offset for this can be found under cGcPortalComponent::Prepare near the bottom, below the
-    # "cGcPortalComponent" string.
-    # However, its a really screwy offset to calculate since you first need the Offsets of cGcSimulation from
-    # cGcApplication, as well as the offset for cGcSpaceshipWarp from cGcSimulation, since the binary uses the
-    # cGcApplication global.
+    # "cGcPortalComponent" string. However, its a really screwy offset to calculate since you
+    # first need the Offsets of cGcSimulation from cGcApplication, as well as the offset for
+    # cGcSpaceshipWarp from cGcSimulation, since the binary uses the cGcApplication global.
     meWarpState: Annotated[c_enum8[enums.eWarpState], 0x98]
     mePulseDriveState: Annotated[c_enum32[enums.EPulseDriveState], 0xA4]
     mfPulseDriveTimer: Annotated[float, Field(c_float, 0xB4)]
@@ -2671,6 +2641,15 @@ class cGcFrontendManager(Structure):
     def Render2D(self, this: "_Pointer[cGcFrontendManager]", a2: c_uint64, a3: c_uint64):
         # Not sure if the call arguments are correct...
         ...
+
+    @function_hook("48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 66 C7 41")
+    def ShowMesssageBox(
+        self,
+        this: "_Pointer[cGcFrontendManager]",
+        lTitle: _Pointer[basic.TkID0x20],
+        lMessage: _Pointer[basic.TkID0x20],
+        lbSomething: Annotated[bool, c_bool],
+    ): ...
 
 
 @partial_struct
@@ -3827,13 +3806,28 @@ class cGcPlayerCharacterComponent(Structure):
     ): ...
 
 
+class cTkNGuiTextEditState(Structure):
+    @function_hook(
+        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8B 99 ? ? ? ? 48 8B F1"
+    )
+    def OnPaste(
+        self, this: "_Pointer[cTkNGuiTextEditState]", lpacText: c_char_p, liLength: Annotated[int, c_int64]
+    ): ...
+
+
+@partial_struct
 class cGcTextChatInput(Structure):
+    mEditText: Annotated[cTkNGuiTextEditState, 0x0]
+
     @function_hook("40 55 53 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 80 3A")
     def ParseTextForCommands(
         self,
         this: "_Pointer[cGcTextChatInput]",
         lMessageText: _Pointer[basic.cTkFixedString[0x3FF]],
     ): ...
+
+    @function_hook("40 55 53 56 57 41 55 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 8B F9")
+    def Update(self, this: "_Pointer[cGcTextChatInput]", lfTimestep: Annotated[float, c_float]): ...
 
 
 class cGcTextChatManager(Structure):
@@ -4780,6 +4774,15 @@ class cTkSystem(Structure):
     @staticmethod
     def GetInstance() -> c_uint64: ...
 
+    @static_function_hook("48 89 5C 24 ? 48 89 6C 24 ? 57 48 83 EC ? 48 8B E9 8B FA")
+    @staticmethod
+    def CopyTextToClipboard(lpString: c_char_p, liLength: Annotated[int, c_int64]): ...
+
+    @function_hook("48 89 5C 24 ? 57 48 83 EC ? 48 8B 89 ? ? ? ? 48 8B DA")
+    def PasteTextFromClipboard(
+        self, this: "_Pointer[cTkSystem]", lpBuffer: c_char_p, liLength: Annotated[int, c_int64]
+    ): ...
+
 
 class cTkEngineSettings(Structure):
     @function_hook("48 83 EC ? 83 EA ? 74 ? 83 FA")
@@ -5482,6 +5485,33 @@ class cGcHologramComponent(Structure):
     ) -> c_uint64: ...
 
 
+@partial_struct
+class cGcPortalComponent(cTkComponent):
+    @partial_struct
+    class PersistentData(Structure):
+        # Looks the same as 4.13
+        _total_size_ = 0x70
+        mWorldMatrix: Annotated[basic.cTkMatrix34, 0x0]
+        mUA: Annotated[int, Field(c_uint64, 0x40)]
+        mTargetUA: Annotated[int, Field(c_uint64, 0x48)]
+        mBuildingSeed: Annotated[basic.GcSeed, 0x50]
+        mbActive: Annotated[bool, Field(c_bool, 0x60)]
+        mbIsStoryPortal: Annotated[bool, Field(c_bool, 0x61)]
+        mbIsActiveCommunityPortal: Annotated[bool, Field(c_bool, 0x62)]
+
+    mpData: Annotated[_Pointer[nmse.cGcPortalComponentData], 0x30]
+    mPortalData: Annotated[PersistentData, 0x40]
+
+    @function_hook("40 53 48 83 EC ? 33 C0 66 C7 81 ? ? ? ? ? ? 48 89 81")
+    def OnAttached(self, this: "_Pointer[cGcPortalComponent]"): ...
+
+    @function_hook("48 8B C4 55 56 48 8D 68 ? 48 81 EC ? ? ? ? 48 8B F1 48 89 58")
+    def Prepare(self, this: "_Pointer[cGcPortalComponent]"): ...
+
+    @function_hook("40 55 41 56 48 8D 6C 24 ? 48 81 EC ? ? ? ? 80 B9")
+    def WarpPlayer(self, this: "_Pointer[cGcPortalComponent]"): ...
+
+
 class cGcApplicationDeathState(Structure):
     @function_hook("48 89 4C 24 ? 55 53 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8")
     def Update(self, this: "_Pointer[cGcApplicationDeathState]", lfTimeStep: Annotated[float, c_float]): ...
@@ -5502,6 +5532,66 @@ class cGcUniverseDetailAddressCoderU64(Structure):
         lValue: _Pointer[c_uint64 * 2],
         lpPosition: _Pointer[basic.cTkVector3],
         lpCameraDirection: _Pointer[basic.cTkVector3],
+    ): ...
+
+
+@partial_struct
+class cGcExplosion(Structure):
+    # Also found in cGcParticleManager::RetireEffect
+    mAudioObject: Annotated[TkAudioObject, 0x410]
+    mbIsPermanent: Annotated[bool, Field(c_bool, 0x49C)]
+    mbRetired: Annotated[bool, Field(c_bool, 0x4A9)]
+
+
+@partial_struct
+class EffectInstance(Structure):
+    # Found in cGcParticleManager::RetireEffect. Unchanged from 4.13
+    mNodeHandle: Annotated[basic.TkHandle, 0x00]
+    mpExplosion: Annotated[_Pointer[cGcExplosion], 0x08]
+    mpExplosionData: Annotated[_Pointer[nmse.cGcExplosionData], 0x10]
+
+
+class cGcParticleManager(Structure):
+    @function_hook(
+        "48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 57 48 81 EC ? ? ? ? 41 0F 10 01 49 8B D9 49 8B F8 41 0F "
+        "10 49 ? 48 8B EA 48 8B F1 0F 29 44 24 ? 41 0F 10 41 ? 0F 29 70 ? 0F 29 78 ? 66 0F 6F 3D ? ? ? ? 41 "
+        "0F 59 79 ? 0F 11 40 ? 44 0F 29 40 ? 66 44 0F 6F 05 ? ? ? ? 0F 28 C7 0F 11 48 ? E8 ? ? ? ? 0F 57 C9 "
+        "F3 0F 10 C8 0F 28 C7 0F C6 C7 ? F3 44 0F 10 C1 E8 ? ? ? ? 0F C6 FF ? 0F 28 F0 0F 28 C7 E8 ? ? ? ? "
+        "44 8B 8E ? ? ? ? 4C 8B C7 66 0F 7E F0 48 8B D5 C6 44 24 ? ? 48 8B CE 66 44 0F C4 C0 ? C1 F8 ? 66 "
+        "44 0F C4 C0 ? 66 0F 7E C0 0F 10 43 ? 66 44 0F C4 C0 ? C1 F8 ? 66 44 0F C4 C0 ? 48 8D 44 24 ? "
+        "44 0F 59 05 ? ? ? ? 48 89 44 24 ? 41 0F 5C C0 44 0F 29 44 24 ? 0F 29 44 24 ? E8 ? ? ? ? 4C 8D "
+        "9C 24 ? ? ? ? 48 8B C5 49 8B 5B ? 49 8B 6B ? 49 8B 73 ? 41 0F 28 73 ? 41 0F 28 7B ? 45 0F 28 43 ? "
+        "49 8B E3 5F C3 40 53"
+    )
+    def AddPermanentEffect(
+        self,
+        this: "_Pointer[cGcParticleManager]",
+        result: _Pointer[EffectInstance],
+        lExplosionID: _Pointer[basic.TkID0x10],
+        lStartMatrix: _Pointer[basic.cTkMatrix34],
+    ) -> c_uint64:  # Pointer to EffectInstance
+        ...
+
+    @function_hook("4C 8B DC 49 89 5B ? 57 48 81 EC ? ? ? ? 48 8B 84 24 ? ? ? ? 48 8B DA 41 0F 10 00")
+    def AddEffect_Internal(
+        self,
+        this: "_Pointer[cGcParticleManager]",
+        result: _Pointer[EffectInstance],
+        lExplosionID: _Pointer[basic.TkID0x10],
+        lParentNode: basic.TkHandle,
+        lStartMatrix: _Pointer[basic.cTkMatrix34],
+        lbPermanent: Annotated[bool, c_bool],
+    ) -> c_uint64:  # Pointer to EffectInstance
+        ...
+
+    @function_hook("40 53 48 83 EC ? 8B 02 48 8B DA")
+    def RetireEffect(
+        self, this: "_Pointer[cGcParticleManager]", lEffect: _Pointer[EffectInstance]
+    ) -> c_bool: ...
+
+    @function_hook("48 89 5C 24 ? 57 48 81 EC ? ? ? ? 44 8B C2")
+    def RetireEffectsAndDestroyNodeOnCompletion(
+        self, this: "_Pointer[cGcParticleManager]", lNode: basic.TkHandle
     ): ...
 
 
