@@ -19,7 +19,8 @@
     {
       "name": "cGcPortalComponent::WarpPlayer",
       "signature": "40 55 41 56 48 8D 6C 24 ? 48 81 EC ? ? ? ? 80 B9",
-      "mangled_name": "?WarpPlayer@cGcPortalComponent@@QEAAXXZ"
+      "mangled_name": "?WarpPlayer@cGcPortalComponent@@QEAAXXZ",
+      "unique_string": "PORTAL_WARPS"
     },
     {
       "name": "cGcShipHUD::LoadData",
@@ -2488,29 +2489,6 @@
             "name": "mpPage",
             "offset": 16
           }
-        }
-      ]
-    },
-    {
-      "name": "EffectInstance",
-      "fields": [
-        {
-          "name": "mNodeHandle",
-          "signature": "8B 02 48 8B DA"
-        },
-        {
-          "name": "mpExplosion",
-          "signatures": [
-            "48 8B 43 08 48 85 C0",
-            "48 8B 43 08 C6 80 A9 04 00 00 01"
-          ]
-        },
-        {
-          "name": "mpExplosionData",
-          "signatures": [
-            "48 C7 43 10 00 00 00 00 C7 03 ? ? ? ?",
-            "48 8B 43 10 8B 48 64 85 C9"
-          ]
         }
       ]
     },
