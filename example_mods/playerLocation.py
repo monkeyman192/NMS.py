@@ -2,7 +2,7 @@ import ctypes
 from logging import getLogger
 
 from pymhf import Mod
-from pymhf.gui.decorators import BOOLEAN, FLOAT, INTEGER, gui_button
+from pymhf.gui.decorators import BOOLEAN, FLOAT, INTEGER, gui_button, gui_group
 
 import nmspy.data.basic_types as basic
 import nmspy.data.types as nms
@@ -74,26 +74,49 @@ class PlayerLocation(Mod):
             return player.mbIsRunning
         return False
 
-    @property
-    @FLOAT("Player x position")
-    def player_x_pos(self):
-        return self.player_position.x
+    with gui_group("Position"):
+        @property
+        @FLOAT("Player x position")
+        def player_x_pos(self):
+            return self.player_position.x
 
-    @property
-    @FLOAT("Player y position")
-    def player_y_pos(self):
-        return self.player_position.y
+        @property
+        @FLOAT("Player y position")
+        def player_y_pos(self):
+            return self.player_position.y
 
-    @property
-    @FLOAT("Player z position")
-    def player_z_pos(self):
-        return self.player_position.z
+        @property
+        @FLOAT("Player z position")
+        def player_z_pos(self):
+            return self.player_position.z
+
+    with gui_group("Facing Dir"):
+        @property
+        @FLOAT("Player x facing dir")
+        def player_x_facing_dir(self):
+            return self.player_facing.x
+
+        @property
+        @FLOAT("Player y facing dir")
+        def player_y_facing_dir(self):
+            return self.player_facing.y
+
+        @property
+        @FLOAT("Player z facing dir")
+        def player_z_facing_dir(self):
+            return self.player_facing.z
 
     @property
     def player_position(self) -> basic.cTkVector3:
         if (player := gameData.player) is not None:
             mat = GetNodeAbsoluteTransMatrix(player.mRootNode)
             return mat.pos
+        return basic.cTkVector3(0, 0, 0)
+
+    @property
+    def player_facing(self) -> basic.cTkVector3:
+        if (player := gameData.player) is not None:
+            return player.mFacingDir
         return basic.cTkVector3(0, 0, 0)
 
     @ground_walk_speed.setter
