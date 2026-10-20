@@ -2545,6 +2545,10 @@ class cGcFrontendPage(Structure):
         lbSkipSlowForTouch: Annotated[bool, c_bool],
     ) -> c_bool: ...
 
+    @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 4C 89 44 24 ? 56 57 41 56 48 83 EC ? 65 48 8B 04 25")
+    def SetPage(self, this: "_Pointer[cGcFrontendPage]", lePage: c_enum32[enums.eFrontendPage]):
+        ...
+
 
 @partial_struct
 class cTkNGuiInput(Structure):
@@ -2650,6 +2654,10 @@ class cGcFrontendManager(Structure):
         lMessage: _Pointer[basic.TkID0x20],
         lbSomething: Annotated[bool, c_bool],
     ): ...
+
+    @function_hook("48 8B C4 53 48 81 EC ? ? ? ? 48 89 68 ? 48 8B D9 8B 89")
+    def LoadPage(self, this: "_Pointer[cGcFrontendManager]", lePage: c_enum32[enums.eFrontendPage]):
+        ...
 
 
 @partial_struct
