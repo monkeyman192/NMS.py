@@ -2,10 +2,10 @@
 name = "NMSpy"
 description = "No Man's Sky python modding API"
 readme = "README.md"
-requires-python = ">=3.9, <4"
+requires-python = ">=3.10, <4"
 license = "MIT"
 license-files = ["LICENSE"]
-keywords = ["hooking", "games", "hacking", "modding"]
+keywords = ["hooking", "games", "modding"]
 authors = [
   {name = "monkeyman192"}
 ]
@@ -16,15 +16,15 @@ classifiers = [
   "Development Status :: 3 - Alpha",
   "Environment :: Win32 (MS Windows)",
   "Operating System :: Microsoft",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
   "Programming Language :: Python :: 3 :: Only",
 ]
 dependencies = [
-  "pymhf[http_api,gui]==0.2.4"
+  "pymhf[http_api,gui]==0.2.5"
 ]
 version = "181442.1"
 

@@ -1662,8 +1662,7 @@ class cGcPlayer(Structure):
     def GetSpaceship(self, this: "_Pointer[cGcPlayer]"): ...
 
     @function_hook("48 8B C4 48 89 58 ? 57 48 81 EC ? ? ? ? 0F 10 81")
-    def SetFacing(self, this: "_Pointer[cGcPlayer]", lDir: _Pointer[basic.cTkVector3]):
-        ...
+    def SetFacing(self, this: "_Pointer[cGcPlayer]", lDir: _Pointer[basic.cTkVector3]): ...
 
 
 class cGcPlanetGenerationInputData(nmse.cGcPlanetGenerationInputData):
@@ -2552,8 +2551,7 @@ class cGcFrontendPage(Structure):
     ) -> c_bool: ...
 
     @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 4C 89 44 24 ? 56 57 41 56 48 83 EC ? 65 48 8B 04 25")
-    def SetPage(self, this: "_Pointer[cGcFrontendPage]", lePage: c_enum32[enums.eFrontendPage]):
-        ...
+    def SetPage(self, this: "_Pointer[cGcFrontendPage]", lePage: c_enum32[enums.eFrontendPage]): ...
 
 
 @partial_struct
@@ -2662,8 +2660,7 @@ class cGcFrontendManager(Structure):
     ): ...
 
     @function_hook("48 8B C4 53 48 81 EC ? ? ? ? 48 89 68 ? 48 8B D9 8B 89")
-    def LoadPage(self, this: "_Pointer[cGcFrontendManager]", lePage: c_enum32[enums.eFrontendPage]):
-        ...
+    def LoadPage(self, this: "_Pointer[cGcFrontendManager]", lePage: c_enum32[enums.eFrontendPage]): ...
 
 
 @partial_struct
