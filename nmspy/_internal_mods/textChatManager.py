@@ -75,6 +75,7 @@ class textChatManager(Mod):
                             f"The mod {mod_name!r} either doesn't exist or has no "
                             "terminal commands registered"
                         )
+                        return
                     else:
                         command_funcs: dict[str, CustomTriggerProtocol] = {}
                         for key in mod_command_keys:

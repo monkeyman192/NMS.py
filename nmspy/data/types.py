@@ -1593,6 +1593,8 @@ class cGcPlayer(Structure):
     mbSpawned: Annotated[bool, Field(c_bool, 0x3130)]
     mbIsRunning: Annotated[bool, Field(c_bool, 0x3132)]
     mbIsAutoWalking: Annotated[bool, Field(c_bool, 0x3138)]
+    mFacingDir: Annotated[basic.cTkVector3, 0x3440]
+    mfPitch: Annotated[float, Field(c_float, 0x3454)]
     mfJetpackTank: Annotated[float, Field(c_float, 0x34E4)]
     mfJetpackUpForce: Annotated[float, Field(c_float, 0x34EC)]
     mfJetpackForce: Annotated[float, Field(c_float, 0x35F0)]
@@ -1658,6 +1660,9 @@ class cGcPlayer(Structure):
         "CC 48 8B 05"
     )
     def GetSpaceship(self, this: "_Pointer[cGcPlayer]"): ...
+
+    @function_hook("48 8B C4 48 89 58 ? 57 48 81 EC ? ? ? ? 0F 10 81")
+    def SetFacing(self, this: "_Pointer[cGcPlayer]", lDir: _Pointer[basic.cTkVector3]): ...
 
 
 class cGcPlanetGenerationInputData(nmse.cGcPlanetGenerationInputData):
@@ -2545,6 +2550,9 @@ class cGcFrontendPage(Structure):
         lbSkipSlowForTouch: Annotated[bool, c_bool],
     ) -> c_bool: ...
 
+    @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 4C 89 44 24 ? 56 57 41 56 48 83 EC ? 65 48 8B 04 25")
+    def SetPage(self, this: "_Pointer[cGcFrontendPage]", lePage: c_enum32[enums.eFrontendPage]): ...
+
 
 @partial_struct
 class cTkNGuiInput(Structure):
@@ -2650,6 +2658,9 @@ class cGcFrontendManager(Structure):
         lMessage: _Pointer[basic.TkID0x20],
         lbSomething: Annotated[bool, c_bool],
     ): ...
+
+    @function_hook("48 8B C4 53 48 81 EC ? ? ? ? 48 89 68 ? 48 8B D9 8B 89")
+    def LoadPage(self, this: "_Pointer[cGcFrontendManager]", lePage: c_enum32[enums.eFrontendPage]): ...
 
 
 @partial_struct

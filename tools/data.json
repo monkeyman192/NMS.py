@@ -2110,6 +2110,21 @@
       "name": "cTkMetaDataManager::ReloadGlobals",
       "signature": "48 89 5C 24 ? 56 48 83 EC ? 33 DB 48 8B F1 39 59",
       "mangled_name": "cTkMetaDataManager::ReloadGlobals"
+    },
+    {
+      "name": "cGcFrontendManager::LoadPage",
+      "signature": "48 8B C4 53 48 81 EC ? ? ? ? 48 89 68 ? 48 8B D9 8B 89",
+      "mangled_name": "?LoadPage@cGcFrontendManager@@AEAAXW4eFrontendPage@@@Z"
+    },
+    {
+      "name": "cGcFrontendPage::SetPage",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 4C 89 44 24 ? 56 57 41 56 48 83 EC ? 65 48 8B 04 25",
+      "mangled_name": "?SetPage@cGcFrontendPage@@QEAAXW4eFrontendPage@@PEAVcGcNGuiLayer@@@Z"
+    },
+    {
+      "name": "cGcPlayer::SetFacing",
+      "signature": "48 8B C4 48 89 58 ? 57 48 81 EC ? ? ? ? 0F 10 81",
+      "mangled_name": "?SetFacing@cGcPlayer@@QEAAXAEBVcTkVector3@@@Z"
     }
   ],
   "global_objects":
@@ -2406,6 +2421,16 @@
           "name": "mbIsDying",
           "signature": "44 88 A7 ? ? ? ? 44 88 A7 ? ? ? ? 44 88 A7 ? ? ? ? 44 88 A7 ? ? ? ? 4C 89 A7",
           "offset": "0xA"
+        },
+        {
+          "name": "mfPitch",
+          "signature": "F3 0F 11 93 ? ? ? ? 83 BB ? ? ? ? ? 75",
+          "offset": 4
+        },
+        {
+          "name": "mFacingDir",
+          "signature": "0F 11 A3 ? ? ? ? 0F 28 D0 0F C6 D0 ? F3 0F 58 D0 0F 28 C5",
+          "offset": 3
         }
       ]
     },
@@ -2472,7 +2497,10 @@
         },
         {
           "name": "mPage",
-          "signature": "4C 8D B1 ? ? ? ? 4C 89 BC 24 ? ? ? ? 0F 29 BC 24"
+          "signatures": [
+            "4C 8D B1 ? ? ? ? 4C 89 BC 24 ? ? ? ? 0F 29 BC 24",
+            "48 8D 8B ? ? ? ? 4C 89 B3 ? ? ? ? 4C 89 B3 ? ? ? ? 4C 89 B3 ? ? ? ? 44 89 B3"
+          ]
         }
       ]
     },
@@ -2481,7 +2509,10 @@
       "fields": [
         {
           "name": "mpPage",
-          "signature": "48 8B 8E ? ? ? ? E8 ? ? ? ? 66 44 0F 6F 0D"
+          "signatures": [
+            "48 8B 8E ? ? ? ? E8 ? ? ? ? 66 44 0F 6F 0D",
+            "48 8B 8B ? ? ? ? E8 ? ? ? ? 48 8B 83 ? ? ? ? 49 B9"
+          ]
         },
         {
           "name": "mPage",
