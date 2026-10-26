@@ -2950,6 +2950,38 @@ class Engine:
     def GetNodeParent(result: _Pointer[basic.TkHandle], node: basic.TkHandle) -> c_uint64:  # TkHandle *
         ...
 
+    @static_function_hook(
+        "4C 8B C1 8B CA C1 E9 ? 85 C9 0F 84 ? ? ? ? 8B C2 25 ? ? ? ? 3D ? ? ? ? 74 ? 4C 8B 0D ? ? ? ? 81 "
+        "E2 ? ? ? ? 49 8B 81 ? ? ? ? 4C 63 14 90 41 83 FA ? 74 ? 4D 8B 99 ? ? ? ? 41 0F BF 04 53 3B C8 "
+        "75"
+    )
+    @staticmethod
+    def GetNodeFirstChild(result: _Pointer[basic.TkHandle], node: basic.TkHandle) -> c_uint64:  # TkHandle *
+        ...
+
+    @static_function_hook(
+        "48 89 5C 24 ? 4C 8B C1 8B CA C1 E9 ? 85 C9 0F 84 ? ? ? ? 8B C2 25 ? ? ? ? 3D ? ? ? ? 0F 84 "
+        "? ? ? ? 4C 8B 0D ? ? ? ? 81 E2 ? ? ? ? 49 8B 99"
+    )
+    @staticmethod
+    def GetNodeNextSibling(result: _Pointer[basic.TkHandle], node: basic.TkHandle) -> c_uint64:  # TkHandle *
+        ...
+
+    @static_function_hook(
+        "8B D1 C1 EA ? 85 D2 74 ? 8B C1 25 ? ? ? ? 3D ? ? ? ? 74 ? 4C 8B 05 ? ? ? ? 81 E1 ? ? ? ? 49 8B "
+        "80 ? ? ? ? 4C 63 0C 88 41 83 F9 ? 74 ? 49 8B 80 ? ? ? ? 0F BF 0C 48 3B D1 75 ? 49 8B 80 ? ? ? ? "
+        "41 0F B6 04 01 24 01"
+    )
+    @staticmethod
+    def GetNodeActivation(node: basic.TkHandle) -> c_bool: ...
+
+    @static_function_hook(
+        "44 8B C1 41 C1 E8 ? 45 85 C0 74 ? 8B C1 25 ? ? ? ? 3D ? ? ? ? 74 ? 4C 8B 0D ? ? ? ? 81 E1 "
+        "? ? ? ?"
+    )
+    @staticmethod
+    def SetNodeActivation(node: basic.TkHandle, lbActive: c_bool): ...
+
     @static_function_hook("48 89 5C 24 ? 55 56 57 48 83 EC ? 4C 8B 0D")
     @staticmethod
     def SetMaterialSampler(

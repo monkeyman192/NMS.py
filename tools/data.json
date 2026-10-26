@@ -1374,6 +1374,26 @@
       "mangled_name": "?GetNodeParent@Engine@@YA?AVTkHandle@@V2@@Z"
     },
     {
+      "name": "Engine::GetNodeFirstChild",
+      "signature": "4C 8B C1 8B CA C1 E9 ? 85 C9 0F 84 ? ? ? ? 8B C2 25 ? ? ? ? 3D ? ? ? ? 74 ? 4C 8B 0D ? ? ? ? 81 E2 ? ? ? ? 49 8B 81 ? ? ? ? 4C 63 14 90 41 83 FA ? 74 ? 4D 8B 99 ? ? ? ? 41 0F BF 04 53 3B C8 75",
+      "mangled_name": "?GetNodeFirstChild@Engine@@YA?AVTkHandle@@V2@@Z"
+    },
+    {
+      "name": "Engine::GetNodeNextSibling",
+      "signature": "48 89 5C 24 ? 4C 8B C1 8B CA C1 E9 ? 85 C9 0F 84 ? ? ? ? 8B C2 25 ? ? ? ? 3D ? ? ? ? 0F 84 ? ? ? ? 4C 8B 0D ? ? ? ? 81 E2 ? ? ? ? 49 8B 99",
+      "mangled_name": "?GetNodeNextSibling@Engine@@YA?AVTkHandle@@V2@@Z"
+    },
+    {
+      "name": "Engine::GetNodeActivation",
+      "signature": "8B D1 C1 EA ? 85 D2 74 ? 8B C1 25 ? ? ? ? 3D ? ? ? ? 74 ? 4C 8B 05 ? ? ? ? 81 E1 ? ? ? ? 49 8B 80 ? ? ? ? 4C 63 0C 88 41 83 F9 ? 74 ? 49 8B 80 ? ? ? ? 0F BF 0C 48 3B D1 75 ? 49 8B 80 ? ? ? ? 41 0F B6 04 01 24 01",
+      "mangled_name": "?GetNodeActivation@Engine@@YA_NVTkHandle@@@Z"
+    },
+    {
+      "name": "Engine::SetNodeActivation",
+      "signature": "44 8B C1 41 C1 E8 ? 45 85 C0 74 ? 8B C1 25 ? ? ? ? 3D ? ? ? ? 74 ? 4C 8B 0D ? ? ? ? 81 E1 ? ? ? ?",
+      "mangled_name": "?SetNodeActivation@Engine@@YAXVTkHandle@@_N@Z"
+    },
+    {
       "name": "cTkResourceManager::GetDefaultResource",
       "signature": "4C 89 44 24 ? 89 54 24 ? 53 55 56 57",
       "mangled_name": "?GetDefaultResource@cTkResourceManager@@QEBAPEAVcTkResource@@HH@Z"
