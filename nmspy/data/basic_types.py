@@ -31,6 +31,14 @@ FNV_offset_basis = 0xCBF29CE484222325
 FNV_prime = 0x100000001B3
 
 
+def fnv_1a_64(data: bytes):
+    _hash = FNV_offset_basis
+    for byte_ in data:
+        _hash ^= byte_
+        _hash = (_hash * FNV_prime) & 0xFFFFFFFFFFFFFFFF
+    return _hash
+
+
 def fnv_1a(input: str, length: int):
     _input = input.ljust(length, "\x00")
     _hash = FNV_offset_basis
@@ -107,6 +115,26 @@ class Vector2f(ctypes.Structure):
         ("x", ctypes.c_float),
         ("y", ctypes.c_float),
     ]
+
+
+class Vector3f_compact(ctypes.Structure):
+    """This is just the same as the Vector3f type, but with no empty w component"""
+
+    x: float
+    y: float
+    z: float
+
+    _fields_ = [
+        ("x", ctypes.c_float),
+        ("y", ctypes.c_float),
+        ("z", ctypes.c_float),
+        ("_padding", ctypes.c_byte * 0x4),
+    ]
+
+    def __init__(self, x: float, y: float, z: float):
+        self.x = x
+        self.y = y
+        self.z = z
 
 
 class Vector3f(ctypes.Structure):
@@ -955,3 +983,83 @@ class TkStd:
             gMemoryManager.Free(ctypes.c_void_p(ptr_data_addr), -1)
             self.vector_size = 0
             self.allocated_size = 0
+
+
+class ListNode(ctypes.Structure, Generic[T]):
+    _template_type: Type[T]
+    _template_type_size: int
+
+    key: ctypes.c_uint64
+    data: T
+
+    def __class_getitem__(cls: Type["ListNode"], type_: Type[T]):
+        _cls: Type[ListNode[T]] = types.new_class(f"ListNode<{type_}>", (cls,))
+        _cls._template_type = type_
+        _cls._template_type_size = ctypes.sizeof(type_)
+        _cls._fields_ = [  # type: ignore
+            ("_padding0x0", ctypes.c_uint64),
+            ("_padding0x8", ctypes.c_uint64),
+            ("key", ctypes.c_uint64),
+            ("data", type_),
+        ]
+        return _cls
+
+
+class Bucket(ctypes.Structure, Generic[T]):
+    _template_type: Type[T]
+    _template_type_size: int
+    first_node: _Pointer[ListNode[T]]
+    last_node: _Pointer[ListNode[T]]
+
+    def __class_getitem__(cls: Type["Bucket"], type_: Type[T]):
+        _cls: Type[Bucket[T]] = types.new_class(f"Bucket<{type_}>", (cls,))
+        _cls._template_type = type_
+        _cls._template_type_size = ctypes.sizeof(type_)
+        _cls._fields_ = [  # type: ignore
+            ("first_node", ctypes.POINTER(ListNode[type_])),
+            ("last_node", ctypes.POINTER(ListNode[type_])),
+        ]
+        return _cls
+
+
+class std_unordered_map(ctypes.Structure, Generic[T]):
+    _template_type: Type[T]
+    _template_type_size: int
+
+    max_load_factor: float
+    list_head: _Pointer[ListNode[T]]
+    list_size: int
+    first_bucket: _Pointer[Bucket[T]]
+    last_bucket: _Pointer[Bucket[T]]
+    end_bucket: _Pointer[Bucket[T]]
+    mask: int
+    max_idx: int
+
+    def __class_getitem__(cls: Type["std_unordered_map"], type_: Type[T]):
+        _cls: Type[std_unordered_map[T]] = types.new_class(f"std_unordered_map<{type_}>", (cls,))
+        _cls._template_type = type_
+        _cls._template_type_size = ctypes.sizeof(type_)
+        _cls._fields_ = [  # type: ignore
+            ("max_load_factor", ctypes.c_float),  # 0x0
+            ("_padding", ctypes.c_uint32),
+            ("list_head", ctypes.POINTER(Bucket[type_])),  # 0x8
+            ("list_size", ctypes.c_uint64),  # 0x10
+            ("first_bucket", ctypes.POINTER(Bucket[type_])),  # 0x18
+            ("last_bucket", ctypes.POINTER(Bucket[type_])),  # 0x20
+            ("end_bucket", ctypes.POINTER(Bucket[type_])),  # 0x28
+            ("mask", ctypes.c_uint64),  # 0x30
+            ("max_idx", ctypes.c_uint64),  # 0x38
+        ]
+        return _cls
+
+    def find(self, key: int) -> T | None:
+        if self.list_size == 0:
+            return None
+        hashed_key = fnv_1a_64(key.to_bytes(8, byteorder="little"))
+        bucket: Bucket[T] = self.first_bucket[hashed_key & self.mask]
+        first_list_element = bucket.first_node.contents
+        if first_list_element.key == key:
+            return first_list_element.data
+        else:
+            logger.info("Not in the first element... What does this look like in memory???")
+            raise ValueError

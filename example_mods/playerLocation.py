@@ -75,6 +75,7 @@ class PlayerLocation(Mod):
         return False
 
     with gui_group("Position"):
+
         @property
         @FLOAT("Player x position")
         def player_x_pos(self):
@@ -91,6 +92,7 @@ class PlayerLocation(Mod):
             return self.player_position.z
 
     with gui_group("Facing Dir"):
+
         @property
         @FLOAT("Player x facing dir")
         def player_x_facing_dir(self):
