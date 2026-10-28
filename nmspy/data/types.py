@@ -404,6 +404,7 @@ class cTkHashedNGuiElement(Structure):
 
 @partial_struct
 class cGcNGuiLayer(cGcNGuiElement):
+    _total_size_ = 0x168
     # Found near the top of cGcNGuiLayer::AddElement
     mapElements: Annotated[basic.TkStd.tk_vector[_Pointer[cGcNGuiElement]], 0x58]
     mapLayerElements: Annotated["basic.TkStd.tk_vector[_Pointer[cGcNGuiLayer]]", 0x68]
@@ -1386,7 +1387,7 @@ class cGcGalaxyVoxelData(Structure): ...
 
 
 class cGcGalaxyVoxelGenerator(nmse.cGcGalaxyStarAttributesData):
-    @static_function_hook("48 8B C4 4C 89 40 ? 48 89 48 ? 55 53 56 57 41 56")
+    @static_function_hook("48 8B C4 48 89 48 ? 55 53 57 41 55 41 57")
     @staticmethod
     def Populate(
         lu64UniverseAddress: c_uint64,
@@ -3401,10 +3402,8 @@ class cEgGeometryResource(cEgResource):
     # Looks like if the above is False (the default), then maybe cTkGeometryData.ProcGenNodeNames is written
     # to this + 0x350?
     mpIndexData: Annotated[c_void_p, 0x210]
-    mpaVertPositionData: Annotated[basic.TkStd.tk_vector[_Pointer[basic.cTkVector3]], 0x228]
-    mpaVertStreams: Annotated[
-        basic.TkStd.tk_vector[c_void_p], 0x2A0
-    ]  # This is actually in a cTkStackVector maybe....
+    mpaVertPositionData: Annotated[basic.TkStd.tk_vector[_Pointer[basic.Vector3f_compact]], 0x220]
+    mpaVertStreams: Annotated[basic.TkStd.tk_vector[c_void_p], 0x298]
     mMeshVertRStart: Annotated[basic.TkStd.tk_vector[c_int32], 0x2F8]  # maybe?
     mJoints: Annotated[basic.TkStd.tk_vector[cEgJoint], 0x350]
     mBindPose: Annotated[basic.TkStd.tk_vector[AnimTransform], 0x360]
@@ -3448,7 +3447,7 @@ class cEgGeometryResource(cEgResource):
         luHash: _Pointer[basic.cTkVector3],  # Not *technically* the type, I think because the hash is long.
     ): ...
 
-    @function_hook("40 57 48 83 EC ? 83 B9 ? ? ? ? ? 48 8B F9 0F 8F")
+    @function_hook("40 53 48 83 EC ? 83 B9 ? ? ? ? ? 48 8B D9 0F 8F")
     def CloneOriginalVertDataToIndex(
         self,
         this: "_Pointer[cEgGeometryResource]",
@@ -4568,32 +4567,39 @@ class cGcFrontendPageOptions(Structure):
 
 @partial_struct
 class cGcFloatOptions(Structure):
-    lStep1: Annotated[float, Field(c_float, 0x0)]
-    lStep2: Annotated[float, Field(c_float, 0x4)]
-    lpacSuffix: Annotated[c_char_p64, 0x8]
-    lUnknown: Annotated[int, Field(c_uint64, 0x10)] = 0
+    mStep1: Annotated[float, Field(c_float, 0x0)]
+    mStep2: Annotated[float, Field(c_float, 0x4)]
+    mpacSuffix: Annotated[c_char_p64, 0x8]
+    mUnknown: Annotated[int, Field(c_uint64, 0x10)] = 0
 
 
 @partial_struct
 class cGcIntOptions(Structure):
-    lStep1: Annotated[int, Field(c_int32, 0x0)]
-    lStep2: Annotated[int, Field(c_int32, 0x4)]
-    lpacSuffix: Annotated[c_char_p64, 0x8]
-    lUnknown: Annotated[int, Field(c_uint64, 0x10)] = 0
+    mStep1: Annotated[int, Field(c_int32, 0x0)]
+    mStep2: Annotated[int, Field(c_int32, 0x4)]
+    mpacSuffix: Annotated[c_char_p64, 0x8]
+    mUnknown: Annotated[int, Field(c_uint64, 0x10)] = 0
 
 
 @partial_struct
 class cGcBooleanOptions(Structure):
-    lpacEnabledText: Annotated[c_char_p64, 0x0]
-    lpacDisabledText: Annotated[c_char_p64, 0x8]
+    mpacEnabledString: Annotated[c_char_p64, 0x0]
+    mpacDisabledString: Annotated[c_char_p64, 0x8]
 
 
 @partial_struct
 class cGcButtonOptions(Structure):
-    lUnknown: Annotated[bool, Field(c_bool, 0x0)]
+    mbRequireLongPress: Annotated[bool, Field(c_bool, 0x0)]
 
 
 class cGcOptionsPageUI(Structure):
+    class eWidget(IntEnum):
+        Header = 0x0
+        Button1 = 0x1
+        Button2 = 0x2
+        Arrows = 0x3
+        Quality = 0x4
+
     @function_hook(
         "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 33 DB 48 8D 79 ? 89 59"
     )
@@ -4695,6 +4701,17 @@ class cGcOptionsPageUI(Structure):
         lpOptionsPage: _Pointer[cGcFrontendPageOptions],
         lUknown1: Annotated[bool, c_bool],
         lUknown2: Annotated[bool, c_bool],
+    ) -> c_uint64: ...
+
+    @function_hook(
+        "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 41 54 41 55 41 56 41 57 48 81 EC ? ? ? ? 48 8D AC 24"
+    )
+    def GetOrAddElement(
+        self,
+        this: "_Pointer[cGcOptionsPageUI]",
+        lUnknown: c_uint64,
+        lpacWidgetText: c_char_p64,
+        leWidgetType: c_enum32[eWidget],
     ) -> c_uint64: ...
 
 
@@ -4888,6 +4905,10 @@ class cGcNGuiNodeInfo(Structure):
     def Get(self, this: "_Pointer[cGcNGuiNodeInfo]", lNode: basic.TkHandle): ...
 
 
+class cEgNodeAttachment(Structure):
+    pass
+
+
 @partial_struct
 class cEgSceneNode(Structure):
     _total_size_ = 0x38
@@ -4897,6 +4918,7 @@ class cEgSceneNode(Structure):
     muNetworkId: Annotated[int, Field(c_uint32, 0x14)]
     msName: Annotated[cTkSharedPtr[c_char_p64], 0x18]  # TODO: This should maybe be a basic.TkStd.tk_string?
     mpAltId: Annotated[cTkSharedPtr[cTkResourceDescriptor], 0x20]
+    mpNodeAttachment: Annotated[_Pointer[cEgNodeAttachment], 0x30]
 
 
 @partial_struct
@@ -4946,16 +4968,6 @@ class cEgMaterialResource(cEgResource):
     def ParseNode(self, this: "_Pointer[cEgMaterialResource]", lData: nmse.cTkMaterialData) -> c_bool: ...
 
 
-# @partial_struct
-# class cEgRenderableSceneNode(cEgSceneNode):
-#     mpMaterialResource: Annotated[cTkTypedSmartResHandle[cEgMaterialResource], 0x38]
-#     _mpParentModel: Annotated[int, Field(c_uint64, 0x48)]
-
-#     @property
-#     def mpParentModel(self) -> "_Pointer[cEgModelNode]":
-#         return map_struct(get_addressof(self._mpParentModel), _Pointer[cEgModelNode])
-
-
 @partial_struct
 class cEgJointNode(cEgSceneNode):
     _total_size = 0xA0
@@ -4977,12 +4989,23 @@ class cEgBoundingBox(Structure):
 
 @partial_struct
 class cEgAnimationController(Structure):
-    # Padded into cEgAnimationController::EvalCommandListInternal in cEgModelNode::Animate
+    # Passed into cEgAnimationController::EvalCommandListInternal in cEgModelNode::Animate
     mAdditivePose: Annotated[basic.TkStd.tk_vector[AnimTransform], 0xB0]
     maNodeToJoint: Annotated[basic.TkStd.tk_vector[c_int32], 0xC0]
     maJointToNode: Annotated[basic.TkStd.tk_vector[c_int32], 0xD0]
     mabIgnoreAnimation: Annotated[basic.TkStd.tk_vector[c_bool], 0xE0]
     mbDirty: Annotated[bool, Field(c_bool, 0x184)]
+
+
+# @partial_struct
+# class cEgRenderableSceneNode(cEgSceneNode):
+#     # These are found in cEgRenderableSceneNode::cEgRenderableSceneNode.
+#     mpMaterialResource: Annotated[cTkTypedSmartResHandle[cEgMaterialResource], 0x38]
+#     _mpParentModel: Annotated[int, Field(c_uint64, 0x48)]
+
+#     @property
+#     def mpParentModel(self) -> "_Pointer[cEgModelNode]":
+#         return map_struct(get_addressof(self._mpParentModel), _Pointer[cEgModelNode])
 
 
 @partial_struct
@@ -4993,31 +5016,41 @@ class cEgModelNode(cEgSceneNode):
         maRelativeModelMatrix: Annotated[_Pointer[basic.cTkMatrix34], 0x8]
         mLocalAabb: Annotated[cEgBoundingBox, 0x10]
 
+    @partial_struct
+    class cEgSkinningData(Structure):
+        _total_size_ = 0x20
+        mSkinMatrixInds: Annotated[basic.TkStd.tk_vector[c_uint16], 0x0]
+        mSkinMatrixRows: Annotated[basic.TkStd.tk_vector[basic.Vector4f], 0x10]
+
     mpGeometryResource: Annotated[cTkTypedSmartResHandle[cEgGeometryResource], 0x38]
-    muVertBufferIndex: Annotated[int, Field(c_uint32, 0x60)]
+    mpSkinMatricesHash: Annotated[int, Field(c_uint64, 0x58)]
+    muVertBufferIndex: Annotated[int, Field(c_uint32, 0x68)]
     # mRenderableList: Annotated[basic.TkStd.tk_vector[_Pointer[cEgRenderableSceneNode]], 0x70]
     # Found at the top of cEgModelNode::UpdateGeometry and cEgModelNode::PrepAnimate
-    mSkinMatrixInds: Annotated[basic.TkStd.tk_vector[c_uint16], 0x80]
     mAnimationController: Annotated[cEgAnimationController, 0xA0]
-    mSkinMatrixRows: Annotated[basic.TkStd.tk_vector[basic.Vector4f], 0x258]
+    mSkinMatrices: Annotated[basic.std_unordered_map[cEgSkinningData], 0x250]
     mJointList: Annotated[basic.TkStd.tk_vector[_Pointer[cEgJointNode]], 0x280]
     maJointIndex: Annotated[basic.TkStd.tk_vector[c_int32], 0x290]
+    mpSkinningData: Annotated[_Pointer[cEgSkinningData], 0x298]
     maJointParentIndex: Annotated[basic.TkStd.tk_vector[c_int32], 0x2A0]
-    miMaxJointIndex: Annotated[int, Field(c_int32, 0x2B0)]
     # Found at the top of cEgModelNode::Animate
-    mAnimWorkBuf: Annotated[AnimationWorkBuffer, 0x370]
+    mAnimWorkBuf: Annotated[AnimationWorkBuffer, 0x360]
 
-    @function_hook("4C 8B DC 55 53 49 8D AB ? ? ? ? 48 81 EC ? ? ? ? 48 8D 81")
+    @function_hook("40 55 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 51 ? 48 8B F9 E8")
     def UpdateGeometry(self, this: "_Pointer[cEgModelNode]") -> c_char: ...
 
-    @function_hook("40 53 48 81 EC ? ? ? ? 48 83 B9 ? ? ? ? ? 48 8B D9 0F 84 ? ? ? ? 48 83 B9")
+    @function_hook("40 55 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 83 B9")
     def Animate(self, this: "_Pointer[cEgModelNode]"): ...
+
+
+@partial_struct
+class cEgMeshNodeTemplate(Structure):
+    pass
 
 
 @partial_struct
 class cEgMeshNode(cEgSceneNode):
     _total_size_ = 0xE0
-
     # These top two are found in cEgRenderableSceneNode::cEgRenderableSceneNode.
     # Most of the remaining fields are found in cEgMeshNode::cEgMeshNode.
     mpMaterialResource: Annotated[cTkTypedSmartResHandle[cEgMaterialResource], 0x38]
@@ -5054,6 +5087,9 @@ class cEgMeshNode(cEgSceneNode):
         lxResourceFlags: Annotated[int, c_int32],
     ) -> c_uint64:  # cEgMeshNodeTemplate*
         ...
+
+    @function_hook("48 89 5C 24 ? 57 48 83 EC ? 4C 8D 82")
+    def cEgMeshNode(self, this: "_Pointer[cEgMeshNode]", lMeshTpl: _Pointer[cEgMeshNodeTemplate]): ...
 
 
 @partial_struct
@@ -5266,17 +5302,21 @@ class cEgSceneNodeFlags(Structure):
 class cEgSceneNodeData(Structure):
     # These are found in a few Engine:: functions.
     mpRelativeTransformBuffer: Annotated[_Pointer[basic.cTkMatrix34], 0x48]
-    mpPrevRelativeTransformBuffer: Annotated[_Pointer[basic.cTkMatrix34], 0x48]
+    mpPrevRelativeTransformBuffer: Annotated[_Pointer[basic.cTkMatrix34], 0x50]
     mpLocalBoundingBoxBuffer: Annotated[_Pointer[cEgBoundingBox], 0x58]
     mpAbsoluteTransformBuffer: Annotated[_Pointer[basic.cTkMatrix34], 0x60]
     mpStructureBuffer: Annotated[_Pointer[cEgStructureIndex], 0x70]
     # Found in cGcNGuiNodeInfo::Get just above the string " - Hidden"
-    mpFlagsBuffer: Annotated[_Pointer[cEgSceneNodeFlags], 0x78]
-    mpSceneNodeBuffer: Annotated[_Pointer[_Pointer[cEgSceneNode]], 0x88]
-    mpTypeBuffer: Annotated[_Pointer[c_uint8], 0x98]
-    mpMaterialPtrBuffer: Annotated[_Pointer[c_void_p], 0xC8]
-    mpHandleToIndexBuffer: Annotated[_Pointer[c_int32], 0xD8]
-    miCurFrame: Annotated[int, Field(c_int32, 0x210)]
+    # It seems like there might be 2 flag buffers?!?
+    mpFlagsBuffer: Annotated[_Pointer[cEgSceneNodeFlags], 0x80]
+    mpSceneNodeBuffer: Annotated[_Pointer[_Pointer[cEgSceneNode]], 0x90]
+    mpTypeBuffer: Annotated[_Pointer[c_uint8], 0xA0]
+    mpLastMovedFrameBuffer: Annotated[_Pointer[c_int32], 0xD0]
+    mpMaterialPtrBuffer: Annotated[_Pointer[c_void_p], 0xD8]
+    mpIndextoHandleBuffer: Annotated[_Pointer[c_int32], 0xE0]
+    mpHandleToIndexBuffer: Annotated[_Pointer[c_int32], 0xE8]
+    mpSceneNodeHandleBuffer: Annotated[_Pointer[c_uint16], 0xF0]
+    miCurFrame: Annotated[int, Field(c_int32, 0x240)]
 
     @function_hook("48 8B 81 ? ? ? ? 81 E2 ? ? ? ? 4C 8B C9")
     def SetRelativeTransform(
@@ -5648,6 +5688,16 @@ class cTkMetaDataManager(Structure):
 
     @function_hook("48 89 5C 24 ? 56 48 83 EC ? 33 DB 48 8B F1 39 59")
     def ReloadGlobals(self, this: "_Pointer[cTkMetaDataManager]"): ...
+
+
+class cGcTerrainEditMenu(Structure):
+    @function_hook("48 8B C4 4C 89 40 ? 48 89 48 ? 55 53 56 57 41 56")
+    def Update(
+        self,
+        this: "_Pointer[cGcTerrainEditMenu]",
+        lfTimeStep: Annotated[float, c_float],
+        lOutUpdatedRenderState: _Pointer[QuickMenuRenderState],
+    ): ...
 
 
 # Dummy values to copy and paste to make adding new things quicker...
