@@ -773,7 +773,7 @@
     },
     {
       "name": "cGcPlayer::Update",
-      "signature": "48 8B C4 48 89 48 ? 55 53 41 54 41 55 41 57 48 8D A8",
+      "signature": "48 8B C4 F3 0F 11 48 10 55 53 56 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 44 0F 29 A0",
       "mangled_name": "?Update@cGcPlayer@@QEAAXM@Z"
     },
     {
