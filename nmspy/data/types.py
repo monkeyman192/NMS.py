@@ -1630,7 +1630,7 @@ class cGcPlayer(Structure):
     @function_hook("40 53 48 83 EC 20 48 8B 1D ?? ?? ?? ?? E8 ?? ?? ?? ?? 83 78 10 05 75 ?? 48 8B")
     def GetDominantHand(self, this: "_Pointer[cGcPlayer]") -> c_int64: ...
 
-    @function_hook("48 8B C4 48 89 48 ? 55 53 41 54 41 55 41 57 48 8D A8")
+    @function_hook("48 8B C4 F3 0F 11 48 10 55 53 56 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 44 0F 29 A0")
     def Update(self, this: "_Pointer[cGcPlayer]", lfStep: Annotated[float, c_float]): ...
 
     @function_hook("48 8B C4 48 89 58 ? 48 89 70 ? 57 48 81 EC ? ? ? ? 0F 29 70 ? 0F B6 F2")
@@ -2295,7 +2295,7 @@ class cGcSimulation(Structure):
     mWarp: Annotated[cGcSpaceshipWarp, 0x25E040]
     mPlayerExperienceDirector: Annotated[cGcPlayerExperienceDirector, 0x25E780]
     # Found in cGcSimulation::Update. Passed into cGcPlayer::Update
-    mPlayer: Annotated[cGcPlayer, 0x25F760]
+    mPlayer: Annotated[cGcPlayer, 0x25F860]
     # Found in cGcSimulation::Construct
     mSimulationRootNode: Annotated[basic.TkHandle, 0x2658E0]
     maGroupNodes: Annotated[tuple[basic.TkHandle, ...], Field(basic.TkHandle * 0xD, 0x2658E4)]
@@ -2718,7 +2718,7 @@ class cGcApplication(cTkFSM):
         # These are found in cGcApplication::Data::Data
         mRealityManager: Annotated[cGcRealityManager, 0x60]
         mGameState: Annotated[cGcGameState, 0xE70]
-        mSimulation: Annotated[cGcSimulation, 0x4CCF90]
+        mSimulation: Annotated[cGcSimulation, 0x4CD580]
         mHUDManager: Annotated[cGcHUDManager, 0x732920]
         mFrontendManager: Annotated[cGcFrontendManager, 0x859090]
         # Passed into any cGcVibrationManager methods
