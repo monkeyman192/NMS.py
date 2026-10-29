@@ -1488,7 +1488,7 @@ class cGcGameState(Structure):
         tuple[cGcPlayerFleetManager, ...],
         Field(cGcPlayerFleetManager * 4, 0x2B95E0),
     ]
-    mPlayerSquadronOwnership: Annotated[cGcPlayerSquadronOwnership, 0x2C94E0]
+    mPlayerSquadronOwnership: Annotated[cGcPlayerSquadronOwnership, 0x2C9540]
     # mDiscoveryManager: Annotated[cGcDiscoveryManager, 0x2BA3B8]
     # Found passed into cGcPersistentInteractionsManager::LoadGalacticAddressBuffers wherever it is called.
     # Need to subtract the offset of cGcGamestate from the address in the exe which is the pointer to the
@@ -1508,7 +1508,7 @@ class cGcGameState(Structure):
         leSaveReason: c_int32,
     ): ...
 
-    @function_hook("44 89 44 24 ? 89 54 24 ? 48 89 4C 24 ? 55 57")
+    @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B DA 33 ED 48 8B CB")
     def LoadFromPersistentStorage(
         self,
         this: "_Pointer[cGcGameState]",
@@ -1591,22 +1591,22 @@ class cGcPlayer(Structure):
     mEquipmentNode: Annotated[basic.TkHandle, 0x380]
     mAudioObject: Annotated[TkAudioObject, 0x3D0]
     # Found in cGcPlayer::Prepare around where the number 0xFA83126E / -92073362 is
-    mbSpawned: Annotated[bool, Field(c_bool, 0x3130)]
-    mbIsRunning: Annotated[bool, Field(c_bool, 0x3132)]
-    mbIsAutoWalking: Annotated[bool, Field(c_bool, 0x3138)]
-    mFacingDir: Annotated[basic.cTkVector3, 0x3440]
-    mfPitch: Annotated[float, Field(c_float, 0x3454)]
-    mfJetpackTank: Annotated[float, Field(c_float, 0x34E4)]
-    mfJetpackUpForce: Annotated[float, Field(c_float, 0x34EC)]
-    mfJetpackForce: Annotated[float, Field(c_float, 0x35F0)]
-    mfJetpackIgnitionForce: Annotated[float, Field(c_float, 0x35F4)]
+    mbSpawned: Annotated[bool, Field(c_bool, 0x3160)]
+    mbIsRunning: Annotated[bool, Field(c_bool, 0x3162)]
+    mbIsAutoWalking: Annotated[bool, Field(c_bool, 0x3168)]
+    mFacingDir: Annotated[basic.cTkVector3, 0x3480]
+    mfPitch: Annotated[float, Field(c_float, 0x3494)]
+    mfJetpackTank: Annotated[float, Field(c_float, 0x3524)]
+    mfJetpackUpForce: Annotated[float, Field(c_float, 0x3524)]
+    mfJetpackForce: Annotated[float, Field(c_float, 0x3530)]
+    mfJetpackIgnitionForce: Annotated[float, Field(c_float, 0x3534)]
     # Found Above the cGcPlayer::UpdateGraphics call in cGcPlayer::CheckFallenThroughFloor
-    mfAirTimer: Annotated[float, Field(c_float, 0x3520)]
-    mbTorchActive: Annotated[bool, Field(c_bool, 0x5758)]
-    mbTorchLightNeeded: Annotated[bool, Field(c_bool, 0x575A)]
-    mfStamina: Annotated[float, Field(c_float, 0x55D0)]
-    mbIsTransitioning: Annotated[bool, Field(c_bool, 0x55D8)]
-    mbIsDying: Annotated[bool, Field(c_bool, 0x56B0)]
+    mfAirTimer: Annotated[float, Field(c_float, 0x3560)]
+    mfStamina: Annotated[float, Field(c_float, 0x56A0)]
+    mbIsTransitioning: Annotated[bool, Field(c_bool, 0x56A8)]
+    mbIsDying: Annotated[bool, Field(c_bool, 0x5780)]
+    mbTorchActive: Annotated[bool, Field(c_bool, 0x5828)]
+    mbTorchLightNeeded: Annotated[bool, Field(c_bool, 0x582A)]
     mCommunicator: Annotated[cGcPlayerCommunicator, 0x5908]
 
     @function_hook("40 55 41 54 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05")
@@ -1651,7 +1651,7 @@ class cGcPlayer(Structure):
     @function_hook("48 89 4C 24 ? 55 41 55 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 45 33 ED")
     def RenderInventoryEditor(self, this: "_Pointer[cGcPlayer]"): ...
 
-    @function_hook("48 8B C4 55 41 54 41 55 48 8D A8")
+    @function_hook("48 8B C4 48 89 48 ? 55 41 55 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 58")
     def RenderNGui(self, this: "_Pointer[cGcPlayer]"): ...
 
     @function_hook(
@@ -1959,7 +1959,7 @@ class cGcSolarSystem(Structure):
     mSolarSystemGenerator: Annotated[cGcSolarSystemGenerator, 0x521180]
     mSpacePoiGenerator: Annotated[cGcSpacePoiGenerator, 0x521860]
     # Found in cGcPlayerState::StoreCurrentSystemSpaceStationEndpoint
-    mSpaceStationNode: Annotated[basic.TkHandle, 0x521890]
+    mSpaceStationNode: Annotated[basic.TkHandle, 0x522AA0]
 
     @function_hook("48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 29 74 24 ? 48 8B F9 48 8B D9")
     def cGcSolarSystem(self, this: "_Pointer[cGcSolarSystem]"): ...
@@ -2233,8 +2233,8 @@ class cGcScanManager(Structure):
     mMarkerList: Annotated[cGcMarkerList, 0x2310]
 
     @function_hook(
-        "48 89 4C 24 ? 55 53 56 57 41 54 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 0F "
-        "29 B4 24 ? ? ? ? 4C 8B F9"
+        "48 89 4C 24 ? 55 53 56 57 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 0F "
+        "29 B4 24"
     )
     def UpdateConstantMarkers(self, this: "_Pointer[cGcScanManager]"): ...
 
@@ -2286,21 +2286,21 @@ class cGcSimulation(Structure):
     # Passed in to cGcScanManager::UpdateConstantMarkers
     mScanManager: Annotated[cGcScanManager, 0xF1B0]
     # Found in cGcSimulation::Update. Passed into cGcEnvironment::Update.
-    mEnvironment: Annotated[cGcEnvironment, 0xAC8C0]
-    mSky: Annotated[cGcSky, 0xAC9C0]
-    mEcosystem: Annotated[cGcEcosystem, 0xB3C30]
-    mFishManager: Annotated[cGcFishManager, 0x25D570]
+    mEnvironment: Annotated[cGcEnvironment, 0xAC930]
+    mSky: Annotated[cGcSky, 0xACA30]
+    mEcosystem: Annotated[cGcEcosystem, 0xB3CA0]
+    mFishManager: Annotated[cGcFishManager, 0x25D5E0]
     # Found in cGcSimulation::Update. Passed into cGcSolarSystem::Update.
-    mpSolarSystem: Annotated[_Pointer[cGcSolarSystem], 0x25E020]
-    mWarp: Annotated[cGcSpaceshipWarp, 0x25E040]
-    mPlayerExperienceDirector: Annotated[cGcPlayerExperienceDirector, 0x25E780]
+    mpSolarSystem: Annotated[_Pointer[cGcSolarSystem], 0x25E090]
+    mWarp: Annotated[cGcSpaceshipWarp, 0x25E0B0]
+    mPlayerExperienceDirector: Annotated[cGcPlayerExperienceDirector, 0x25E820]
     # Found in cGcSimulation::Update. Passed into cGcPlayer::Update
     mPlayer: Annotated[cGcPlayer, 0x25F860]
     # Found in cGcSimulation::Construct
-    mSimulationRootNode: Annotated[basic.TkHandle, 0x2658E0]
-    maGroupNodes: Annotated[tuple[basic.TkHandle, ...], Field(basic.TkHandle * 0xD, 0x2658E4)]
+    mSimulationRootNode: Annotated[basic.TkHandle, 0x265AB0]
+    maGroupNodes: Annotated[tuple[basic.TkHandle, ...], Field(basic.TkHandle * 0xD, 0x265AB4)]
     # In cGcSimulation::Update
-    mCurrentUA: Annotated[int, Field(c_uint64, 0x265940)]
+    mCurrentUA: Annotated[int, Field(c_uint64, 0x265B10)]
 
     def group_node(self, name: constants.kaNodeNames) -> basic.TkHandle | None:
         """Get the node handle associated with the name."""
@@ -2409,10 +2409,10 @@ class cGcPlayerHUD(cGcHUD):
     @function_hook("48 8B C4 48 89 48 ? 55 41 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 83 B9")
     def RenderWeaponPanel(self, this: "_Pointer[cGcPlayerHUD]"): ...
 
-    @function_hook("48 8B C4 55 53 56 57 41 55 41 56 48 8D 68")
+    @function_hook("48 8B C4 55 56 57 41 54 41 55 41 56 48 8D 68")
     def RenderCrosshair(self, this: "_Pointer[cGcPlayerHUD]"): ...
 
-    @function_hook("F3 0F 11 4C 24 ? 4C 8B DC 55 41 55")
+    @function_hook("F3 0F 11 4C 24 ? 55 41 55 48 8D AC 24")
     def Update(self, this: "_Pointer[cGcPlayerHUD]", lfTimeStep: Annotated[float, c_float]): ...
 
     @function_hook("48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8B EC 48 83 EC ? 4C 8D B1")
@@ -2517,7 +2517,7 @@ class cGcInteractionComponent(Structure):
     ) -> c_uint64:  # cGcInteractionComponent *
         ...
 
-    @function_hook("40 55 41 55 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B F1 44 8B EA")
+    @function_hook("89 54 24 ? 55 41 55 41 56 48 8D AC 24")
     def DoInteractionEvent(
         self,
         this: "_Pointer[cGcInteractionComponent]",
@@ -2606,11 +2606,11 @@ class cTkNGuiInput(Structure):
 @partial_struct
 class cGcFrontendManager(Structure):
     # Passed into cGcNGuiManager::BeginFrame as 2nd argument.
-    mGameGuiInput: Annotated[cTkNGuiInput, 0x2248]
+    mGameGuiInput: Annotated[cTkNGuiInput, 0x2250]
     # Found in cGcFrontendManager::cGcFrontendManager
     mFrontendRoot: Annotated[cGcNGuiLayer, 0x2468]
     # Found near the top of cGcFrontendManager::RenderPage
-    mPage: Annotated[cGcFrontendPage, 0x2BA0]
+    mPage: Annotated[cGcFrontendPage, 0x2BB0]
     mSolarSystemMapUI: Annotated[cGcFrontendPageSolarSystemMap, 0x58DF0]
 
     @function_hook(
@@ -2719,12 +2719,12 @@ class cGcApplication(cTkFSM):
         mRealityManager: Annotated[cGcRealityManager, 0x60]
         mGameState: Annotated[cGcGameState, 0xE70]
         mSimulation: Annotated[cGcSimulation, 0x4CD580]
-        mHUDManager: Annotated[cGcHUDManager, 0x732920]
-        mFrontendManager: Annotated[cGcFrontendManager, 0x859090]
+        mHUDManager: Annotated[cGcHUDManager, 0x7330E0]
+        mFrontendManager: Annotated[cGcFrontendManager, 0x87F920]
         # Passed into any cGcVibrationManager methods
-        mVibrationManager: Annotated[cGcVibrationManager, 0x9347F8]
-        mNGuiManager: Annotated[cGcNGuiManager, 0x935340]
-        mAudioManager: Annotated[cTkAudioManager, 0x935B40]
+        mVibrationManager: Annotated[cGcVibrationManager, 0x95BBD0]
+        mNGuiManager: Annotated[cGcNGuiManager, 0x95C720]
+        mAudioManager: Annotated[cTkAudioManager, 0x95CF20]
 
         @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 F6 48 C7 41")
         def Data(self, this: "_Pointer[cGcApplication.Data]"): ...
@@ -3190,8 +3190,7 @@ class Engine:
     def GetNodeActivation(node: basic.TkHandle) -> c_bool: ...
 
     @static_function_hook(
-        "44 8B C1 41 C1 E8 ? 45 85 C0 74 ? 8B C1 25 ? ? ? ? 3D ? ? ? ? 74 ? 4C 8B 0D ? ? ? ? 81 E1 "
-        "? ? ? ?"
+        "44 8B C1 41 C1 E8 ? 45 85 C0 74 ? 8B C1 25 ? ? ? ? 3D ? ? ? ? 74 ? 4C 8B 0D ? ? ? ? 81 E1 ? ? ? ?"
     )
     @staticmethod
     def SetNodeActivation(node: basic.TkHandle, lbActive: c_bool): ...
@@ -4808,10 +4807,7 @@ class cGcFrontendPageFunctions(Structure):
     ) -> c_uint64:  # cGcNGuiLayer *
         ...
 
-    @static_function_hook(
-        "48 89 5C 24 ? 44 88 4C 24 ? 48 89 54 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 "
-        "81 EC ? ? ? ? 66 0F 6F 0D"
-    )
+    @static_function_hook("48 8B C4 48 89 50 ? 55 53 56 48 8D A8")
     @staticmethod
     def DoToolbar(
         lpPage: _Pointer[cGcFrontendPage],

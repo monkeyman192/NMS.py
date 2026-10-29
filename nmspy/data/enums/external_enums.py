@@ -295,6 +295,7 @@ class cGcAudioWwiseEvents(IntEnum):
     ARTHROPOD_QUEEN_POUNCE01 = 0xACDB5EDF
     ARTHROPOD_QUEEN_ROAR = 0x32B5FCF4
     ARTHROPOD_QUEEN_SPIT = 0xC97180DA
+    ARTHROPOD_SQUIRM = 0x9797B064
     ASTEROID_EXPLODE = 0xF91DD0FC
     ASTEROID_HIT = 0xFE51061C
     ATLAS_ARCH = 0xA4494F25
@@ -823,6 +824,7 @@ class cGcAudioWwiseEvents(IntEnum):
     FREIGHTER_SHIELD_LP_STOP = 0x8DF13AFB
     FREIGHTER_SHIELD_ONESHOT = 0x316F204
     FREIGHTER_STELLAREXTRACTOR = 0x5806FFF
+    FREIGHTER_STELLAREXTRACTOR_LP = 0x2D781F5E
     FREIGHTER_STORAGE_TERMINAL = 0x511D7268
     FREIGHTER_TELEPORT = 0xDCD9243F
     FREIGHTER_TELEPORTER = 0xCDD40E2A
@@ -1581,6 +1583,7 @@ class cGcAudioWwiseEvents(IntEnum):
     OBJ_SPINNINGCHAIR = 0x31D21E68
     OBJ_SPINNINGGLOBE = 0x2E2F03EC
     OBJ_SPINNINGSHAPE = 0x6BD9CA70
+    OBJ_SPOOKCRATE_GRABBABLE_LP = 0xE7A8F42C
     OBJ_STANDINGSTONE_ACTIVATE = 0x994C77D2
     OBJ_STANDINGSTONE_RARE = 0xA4603971
     OBJ_STANDINGSTONES = 0x5CEA7805
@@ -1640,6 +1643,9 @@ class cGcAudioWwiseEvents(IntEnum):
     PARTICLES_LAVAVENT = 0xD8080D82
     PARTICLES_LAVAVENT_EXPLODE = 0xF72E024
     PARTICLES_LAVAVENT_STOP = 0xC2360C01
+    PARTICLES_PACKAGE_DROPOFF = 0x7E028BCC
+    PARTICLES_PACKAGE_DROPOFF_END = 0xAE60AEA2
+    PARTICLES_PACKAGE_SPAWN = 0xD99FE73
     PARTICLES_RADIOACTIVE_EXPLOSION = 0x9C7178D0
     PARTICLES_RADIOANOMALY = 0x72F46861
     PARTICLES_RADIOANOMALY_STOP = 0x2609864
@@ -1653,6 +1659,7 @@ class cGcAudioWwiseEvents(IntEnum):
     PARTICLES_ROVER_FURNACE_JET = 0x66BE30EA
     PARTICLES_SPARKS_COMMON = 0x89739B49
     PARTICLES_SPARKS_COMMON_STOP = 0x9D9126FC
+    PARTICLES_SPECTRAL_DEMATERIALISE = 0xE6A8274F
     PARTICLES_TOXIC_ELEC = 0xF0FBD7DE
     PARTICLES_TOXIC_EXPLOSION = 0xFEC59B1E
     PARTICLES_TOXIC_EXPLOSIVE = 0xF7C5900E
@@ -1833,6 +1840,11 @@ class cGcAudioWwiseEvents(IntEnum):
     PL_SHIP_IDLE = 0xFC4A8773
     PL_SHIP_LANDING = 0xB35579F6
     PL_SHIP_MINIWARP_COUNTDOWN = 0x5064D24A
+    PL_SHIP_MINIWARP_COUNTDOWN_01 = 0xE82895C8
+    PL_SHIP_MINIWARP_COUNTDOWN_02 = 0xE82895CB
+    PL_SHIP_MINIWARP_COUNTDOWN_03 = 0xE82895CA
+    PL_SHIP_MINIWARP_COUNTDOWN_04 = 0xE82895CD
+    PL_SHIP_MINIWARP_COUNTDOWN_05 = 0xE82895CC
     PL_SHIP_MINIWARP_END = 0x53B4B6F4
     PL_SHIP_MINIWARP_JUMP = 0xA54A1259
     PL_SHIP_RACER_LANDING = 0x23B40F78
@@ -1878,6 +1890,10 @@ class cGcAudioWwiseEvents(IntEnum):
     PL_SHIP_VR_EXIT = 0x88814C78
     PL_SHIP_VR_EXIT_STOP = 0xFB5202B7
     PL_SHIP_WARP = 0x8D21AECF
+    PL_SHIP_WARP_COUNTDOWN = 0x3D312FC7
+    PL_SHIP_WARP_COUNTDOWN_END = 0x3B8494C9
+    PL_SHIP_WARPBUILDUP = 0x28866EEA
+    PL_SHIP_WARPBUILDUP_END = 0xB9970520
     PL_SUIT_START = 0xA22F68E2
     PL_SUIT_STARTUP = 0x68319AB9
     PL_SUIT_STARTUP_CONFIRM = 0xCB37B9FC
@@ -2605,6 +2621,8 @@ class cGcAudioWwiseEvents(IntEnum):
     SPOOKHEATER_IDLE = 0xB909848F
     SPOOKHEATER_LP = 0x2EE47329
     SPOOKHEATER_START = 0x64601067
+    SPOOKY_TRADER_LANDED_LP = 0x59CA4537
+    SPOOKY_TRADER_LANDING = 0xACFFC401
     SPOOKYTENTACLES = 0x6B387ED7
     SPOOKYTENTACLES_STOP = 0xF16E3972
     SPORE = 0x11268644
@@ -2940,6 +2958,9 @@ class cGcAudioWwiseEvents(IntEnum):
     UI_QUICKMENU_OPEN = 0xFDCE559D
     UI_QUICKMENU_TAB = 0x3AC9E576
     UI_QUICKMENU_TECHCHARGE = 0x3F8067B9
+    UI_RADIALMENU_CLOSE = 0xF7EEB257
+    UI_RADIALMENU_OPEN = 0x5002BA21
+    UI_RADIALMENU_SWITCH = 0x1A742815
     UI_RARE_ITEM = 0xEB5C5104
     UI_RECORD_UPLOADED = 0xD3A1A28C
     UI_REFINERY_DECREASE = 0x8BA635D9
@@ -3253,6 +3274,7 @@ class cGcAudioWwiseRTPCs(IntEnum):
     HG_VA_HEADBODYRATIO = 0xF6293C64
     HG_VA_SEED = 0x232F7C0E
     HG_VA_SIZE = 0x2E25003A
+    HORROR_HAZARD = 0x537D7918
     HULK_MELTDOWN = 0x849060E8
     INTERACT_TIMER = 0x1EE7B825
     JETPACK_HEIGHT = 0x70B5E6C1
@@ -3436,8 +3458,23 @@ class cGcBaseBuildingPartStyle(IntEnum):
     BIGGS_STR_Z = 0x3A
     BIGGS_STR_AA = 0x3B
     BIGGS_STR_AB = 0x3C
-    FRE_A = 0x3D
-    FRE_B = 0x3E
+    BIGGS_STR_AC = 0x3D
+    BIGGS_STR_AD = 0x3E
+    BIGGS_STR_AE = 0x3F
+    BIGGS_STR_AF = 0x40
+    BIGGS_STR_AG = 0x41
+    BIGGS_STR_AH = 0x42
+    BIGGS_STR_AI = 0x43
+    BIGGS_STR_AJ = 0x44
+    BIGGS_STR_AK = 0x45
+    BIGGS_STR_AM = 0x46
+    BIGGS_STR_AN = 0x47
+    BIGGS_STR_AO = 0x48
+    BIGGS_STR_AP = 0x49
+    FRE_A = 0x4A
+    FRE_B = 0x4B
+    BIGGS_Window3 = 0x4C
+    BIGGS_Cant0 = 0x4D
 
 
 class cGcBaseBuildingSecondaryMode(IntEnum):
@@ -5216,6 +5253,8 @@ class cGcInteractionType(IntEnum):
     NPC_SpaceOutpost = 0x9F
     PackageDropoff = 0xA0
     SpaceOutpostMissions = 0xA1
+    SpookShop = 0xA2
+    SummonAIShip = 0xA3
 
 
 class cGcInventoryChoice(IntEnum):
@@ -5533,6 +5572,7 @@ class cGcMarkerType(IntEnum):
     NetworkPlayerFireTeamCorvetteTeleporter = 0x4D
     SpacePoi = 0x4E
     SolarSystemMapMarker = 0x4F
+    NeighbouringSystem = 0x50
 
 
 class cGcMechMeshPart(IntEnum):
@@ -5784,6 +5824,7 @@ class cGcMissionType(IntEnum):
     SwarmCombat = 0x21
     SwarmClean = 0x22
     SwarmIntel = 0x23
+    Postie = 0x24
 
 
 class cGcModelViews(IntEnum):
@@ -6022,6 +6063,7 @@ class cGcObjectCounterVolumeType(IntEnum):
     Vehicle = 0x0
     ScrapYard = 0x1
     ScrapYardFullBounds = 0x2
+    SpaceOutpostFullBounds = 0x3
 
 
 class cGcObjectPlacementCategory(IntEnum):
@@ -6379,64 +6421,65 @@ class cGcPhysicsCollisionGroups(IntEnum):
     PlayerMovableObject = 0x1A
     NetworkedObjectNoPermission = 0x1B
     SolarSystemMapObject = 0x1C
-    CollidesWithNothing = 0x1D
-    CollidesWithEverything = 0x1E
-    DefaultRaycast = 0x1F
-    Raycast = 0x20
-    Raycast_Camera = 0x21
-    Raycast_VehicleCamera = 0x22
-    Raycast_SampleCollisionWithCamera = 0x23
-    Raycast_PlayerInteract = 0x24
-    Raycast_PlayerInteract_Shoot = 0x25
-    Raycast_Projectile = 0x26
-    Raycast_LaserBeam = 0x27
-    Raycast_WeaponOfPlayer = 0x28
-    Raycast_WeaponOfAgent = 0x29
-    Raycast_Binoculars = 0x2A
-    Raycast_TerrainEditingBeamProbe = 0x2B
-    Raycast_TerrainEditingBeam = 0x2C
-    Raycast_TerrainEditing_OverlappingObjects = 0x2D
-    Raycast_PlayerClimb = 0x2E
-    Raycast_PlayerAim = 0x2F
-    Raycast_PlayerThrow = 0x30
-    Raycast_PlayerSpawn = 0x31
-    Raycast_WorldMigrationTest = 0x32
-    Raycast_ObjectPlacement = 0x33
-    Raycast_DroneControl = 0x34
-    Raycast_PlanetHeightTest = 0x35
-    Raycast_PlanetHeightTestIncludingStructures = 0x36
-    Raycast_LineOfSight = 0x37
-    Raycast_VehicleCanDriveOn = 0x38
-    Raycast_SpaceshipAvoidance = 0x39
-    Raycast_SpaceshipAvoidanceOnLeaving = 0x3A
-    Raycast_HudPing = 0x3B
-    Raycast_HudPingNoTerrain = 0x3C
-    Raycast_ObstacleToAgentMovement = 0x3D
-    Raycast_DebugEditor = 0x3E
-    Raycast_PlayerIk = 0x3F
-    Raycast_MechIk = 0x40
-    Raycast_CreatureIk = 0x41
-    Raycast_CreatureIk_Indoors = 0x42
-    Raycast_NavigationLink = 0x43
-    Raycast_AiShipAtack = 0x44
-    Raycast_AiShipTravel = 0x45
-    Raycast_AiShipMining = 0x46
-    Raycast_ObstructionQuery = 0x47
-    Raycast_GeometryProbe = 0x48
-    Raycast_AirNavigationProbe = 0x49
-    Raycast_DroneTargetSensing_Friendly = 0x4A
-    Raycast_DroneTargetSensing_Unfriendly = 0x4B
-    Raycast_DroneTargetSensing_Friendly_NoShield = 0x4C
-    Raycast_DroneTargetSensing_Unfriendly_NoShield = 0x4D
-    Raycast_ObjectPlacementAddObject = 0x4E
-    Raycast_CatchCreatures = 0x4F
-    Raycast_CatchNormal = 0x50
-    Raycast_CatchTerrain = 0x51
-    Raycast_CatchTerrainAndNormal = 0x52
-    Raycast_CatchCreatureObstacles = 0x53
-    Raycast_SpaceStationShipBuilderCamera = 0x54
-    Raycast_GravLaserObjectBlocking = 0x55
-    Raycast_SolarSystemMapObject = 0x56
+    TriggerLocalPlayer = 0x1D
+    CollidesWithNothing = 0x1E
+    CollidesWithEverything = 0x1F
+    DefaultRaycast = 0x20
+    Raycast = 0x21
+    Raycast_Camera = 0x22
+    Raycast_VehicleCamera = 0x23
+    Raycast_SampleCollisionWithCamera = 0x24
+    Raycast_PlayerInteract = 0x25
+    Raycast_PlayerInteract_Shoot = 0x26
+    Raycast_Projectile = 0x27
+    Raycast_LaserBeam = 0x28
+    Raycast_WeaponOfPlayer = 0x29
+    Raycast_WeaponOfAgent = 0x2A
+    Raycast_Binoculars = 0x2B
+    Raycast_TerrainEditingBeamProbe = 0x2C
+    Raycast_TerrainEditingBeam = 0x2D
+    Raycast_TerrainEditing_OverlappingObjects = 0x2E
+    Raycast_PlayerClimb = 0x2F
+    Raycast_PlayerAim = 0x30
+    Raycast_PlayerThrow = 0x31
+    Raycast_PlayerSpawn = 0x32
+    Raycast_WorldMigrationTest = 0x33
+    Raycast_ObjectPlacement = 0x34
+    Raycast_DroneControl = 0x35
+    Raycast_PlanetHeightTest = 0x36
+    Raycast_PlanetHeightTestIncludingStructures = 0x37
+    Raycast_LineOfSight = 0x38
+    Raycast_VehicleCanDriveOn = 0x39
+    Raycast_SpaceshipAvoidance = 0x3A
+    Raycast_SpaceshipAvoidanceOnLeaving = 0x3B
+    Raycast_HudPing = 0x3C
+    Raycast_HudPingNoTerrain = 0x3D
+    Raycast_ObstacleToAgentMovement = 0x3E
+    Raycast_DebugEditor = 0x3F
+    Raycast_PlayerIk = 0x40
+    Raycast_MechIk = 0x41
+    Raycast_CreatureIk = 0x42
+    Raycast_CreatureIk_Indoors = 0x43
+    Raycast_NavigationLink = 0x44
+    Raycast_AiShipAtack = 0x45
+    Raycast_AiShipTravel = 0x46
+    Raycast_AiShipMining = 0x47
+    Raycast_ObstructionQuery = 0x48
+    Raycast_GeometryProbe = 0x49
+    Raycast_AirNavigationProbe = 0x4A
+    Raycast_DroneTargetSensing_Friendly = 0x4B
+    Raycast_DroneTargetSensing_Unfriendly = 0x4C
+    Raycast_DroneTargetSensing_Friendly_NoShield = 0x4D
+    Raycast_DroneTargetSensing_Unfriendly_NoShield = 0x4E
+    Raycast_ObjectPlacementAddObject = 0x4F
+    Raycast_CatchCreatures = 0x50
+    Raycast_CatchNormal = 0x51
+    Raycast_CatchTerrain = 0x52
+    Raycast_CatchTerrainAndNormal = 0x53
+    Raycast_CatchCreatureObstacles = 0x54
+    Raycast_SpaceStationShipBuilderCamera = 0x55
+    Raycast_GravLaserObjectBlocking = 0x56
+    Raycast_SolarSystemMapObject = 0x57
 
 
 class cGcPlanetClass(IntEnum):
@@ -6882,6 +6925,7 @@ class cGcRealityGameIcons(IntEnum):
     SClassSmall = 0x7C
     SwarmDrone = 0x7D
     SwarmHive = 0x7E
+    SpookShop = 0x7F
 
 
 class cGcRealitySubstanceCategory(IntEnum):
@@ -7123,6 +7167,7 @@ class cGcScannerIconHighlightTypes(IntEnum):
     Tag = 0x2
     Octagon = 0x3
     Circle = 0x4
+    Star = 0x5
 
 
 class cGcScannerIconTypes(IntEnum):
@@ -7213,6 +7258,9 @@ class cGcScannerIconTypes(IntEnum):
     Slime_Uncommon = 0x54
     Slime_Rare = 0x55
     Slime_Destructible = 0x56
+    PostiePackage = 0x57
+    SpookPackageGrab = 0x58
+    SpookPackageGround = 0x59
 
 
 class cGcScannerRechargeDifficultyOption(IntEnum):
@@ -7618,6 +7666,8 @@ class cGcStaticTag(IntEnum):
     SlimeCommon = 0x80000
     SlimeBlob = 0x100000
     SlimeStar = 0x200000
+    SpookPackageGrab = 0x400000
+    SpookShop = 0x800000
 
 
 class cGcStatsAchievements(IntEnum):
@@ -8828,7 +8878,6 @@ class cTkInputValidation(IntEnum):
     HeldConfirm = 0x2
     Released = 0x3
     HeldOver = 0x4
-    Canceled = 0x5
 
 
 class cTkLanguages(IntEnum):
@@ -10953,6 +11002,8 @@ class cTkVolumeTriggerType(IntEnum):
     HazardProtectionNoRecharge = 0x13
     HazardProtectionSpook = 0x14
     ForceJetpackIgnition = 0x15
+    SpookHazard = 0x16
+    LocalPlayerOnly = 0x17
 
 
 class cTkVoxelGeneratorSettingsTypes(IntEnum):
