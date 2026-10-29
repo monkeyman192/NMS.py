@@ -1,68 +1,10 @@
-Could not rename cGcPlanetGenerationInputData::SetDefaults
-Could not rename cGcSimulation::cGcSimulation
-Could not rename Engine::SetUniformArrayDefaultMultipleShaders
 Could not rename nvgArc
-Could not rename cGcBinoculars::UpdateTarget
 Could not rename cTkRigidBody::SetAngularVelocity
 Could not rename cEgSceneGraphResource::ParseData
-Could not rename cGcPlayerHUD::RenderIndicatorPanel
-Could not rename cGcPlayerShipOwnership::DestroyShip
-Could not rename cTkResource::cTkResource
-Could not rename cGcHUDMarker::cGcHUDMarker
-Could not rename cGcFrontendPageFunctions::SetPopupBasics
-Could not rename cEgRenderer::DrawMeshes
-Could not rename cEgRenderer::SetupMeshMaterial
 Could not rename cEgRenderer::DrawRenderables
 Could not rename cEgDrawGeometry::Draw
-Could not rename Engine::GetResourceHandleForNode
 Could not rename cEgGeometryResource::CreateVertexInfoForHash
 Could not rename GeometryStreaming::cEgGeometryStreamer::RequestStream
 Could not rename GeometryStreaming::cEgGeometryStreamer::OnBufferLoadFinish
 Could not rename EgInstancedModelExtension::cEgInstancedMeshNode::RenderAsync
 Could not rename cTkResourceManager::GetDefaultResource
-Could not rename cGcDiscoveryManager::SubmitDiscoveryData
-Could not rename cGcMarkerPoint::IsEqual
-[ERROR]: No struct data for cGcPortalComponent found
-[ERROR]: No struct data for cGcPortalComponent::PersistentData found
-
-cGcGameState
-	mPlayerSquadronOwnership: 0x2C9540
-
-cGcSimulation
-	mEnvironment: 0xAC930
-	mSky: 0xACA30
-	mEcosystem: 0xB3CA0
-	mFishManager: 0x25D5E0
-	mpSolarSystem: 0x25E090
-	mWarp: 0x25E0B0
-	mPlayerExperienceDirector: 0x25E820
-	mPlayer: 0x25F860
-	mSimulationRootNode: 0x265AB0
-	maGroupNodes: 0x265AB4
-	mCurrentUA: 0x265B10
-
-cGcSolarSystem
-	mSolarSystemMap: 0x51BC20
-	mSpaceStationNode: 0x522AA0
-
-cGcPlayer
-	mRootNode: 0xE0
-	mEquipmentNode: 0x380
-	mbSpawned: 0x3160
-	mbIsRunning: 0x3162
-	mbIsAutoWalking: 0x3168
-	mFacingDir: 0x3480
-	mfPitch: 0x3494
-	mfJetpackTank: 0x3524
-	mfJetpackUpForce: 0x352C
-	mfJetpackForce: 0x3530
-	mfJetpackIgnitionForce: 0x3534
-	mfAirTimer: 0x3560
-	mfStamina: 0x56A0
-	mbIsDying: 0x5780
-	mbTorchActive: 0x5828
-	mbTorchLightNeeded: 0x582A
-
-cGcFrontendManager
-	mGameGuiInput: 0x2250
-	mPage: 0x2BB0
