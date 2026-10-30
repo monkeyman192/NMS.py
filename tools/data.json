@@ -86,7 +86,7 @@
     },
     {
       "name": "cGcMarkerList::TryAddMarker",
-      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 54 41 56 41 57 48 83 EC ? F6 82",
+      "signature": "40 57 41 54 41 56",
       "mangled_name": "?TryAddMarker@cGcMarkerList@@QEAA_NAEBVcGcMarkerPoint@@_N@Z"
     },
     {
@@ -644,7 +644,7 @@
     },
     {
       "name": "cTkResourceManager::AddResource",
-      "signature": "44 89 44 24 ? 55 53 57 41 54",
+      "signature": "48 89 5C 24 ? 44 89 44 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8D B9",
       "mangled_name": "?AddResource@cTkResourceManager@@QEAA?AVcTkSmartResHandle@@HPEBDH_NPEAVcTkResourceDescriptor@@@Z"
     },
     {
@@ -721,7 +721,7 @@
     },
     {
       "name": "cGcPlayerHUD::RenderCrosshair",
-      "signature": "48 8B C4 55 56 57 41 54 41 55 41 56 48 8D 68",
+      "signature": "48 8B C4 55 53 56 57 41 55 41 56 48 8D 68",
       "mangled_name": "?RenderCrosshair@cGcPlayerHUD@@IEAAXXZ",
       "unique_string": "UI_TERRAIN_EDIT_ROTATE_TIP"
     },
@@ -934,7 +934,7 @@
     },
     {
       "name": "cTkFileSystem::Data::Data",
-      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 54 41 55 41 56 41 57 48 81 EC ? ? ? ? 48 8D 2D",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 54 41 55 41 56 41 57 48 81 EC ? ? ? ? 4C 8D 2D",
       "mangled_name": "??0Data@cTkFileSystem@@QEAA@_N0@Z",
       "unique_string": "%sPCBANKS/MODS/"
     },
@@ -981,7 +981,7 @@
     },
     {
       "name": "cTkFileSystem::LoadModDirectory",
-      "signature": "48 89 5C 24 ? 4C 89 44 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 33 F6",
+      "signature": "48 89 5C 24 ? 4C 89 44 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 8B CA",
       "mangled_name": "cTkFileSystem::LoadModDirectory"
     },
     {
@@ -1302,8 +1302,9 @@
     },
     {
       "name": "cGcPlayerState::SaveToData",
-      "signature": "48 8B C4 48 89 50 ? 48 89 48 ? 55 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 58 ? 48 89 70 ? 48 89 78 ? 4C 89 60",
-      "mangled_name": "?SaveToData@cGcPlayerState@@QEAAXAEAVcGcPlayerStateData@@@Z"
+      "signature": "48 8B C4 48 89 50 ? 48 89 48 ? 55 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 58 ? 48 89 70 ? 48 8B F2",
+      "mangled_name": "?SaveToData@cGcPlayerState@@QEAAXAEAVcGcPlayerStateData@@@Z",
+      "unique_string": "cGcPlayerState::SaveToData"
     },
     {
       "name": "cGcPersistentInteractionsManager::PopulateArrays",
@@ -1524,7 +1525,7 @@
     },
     {
       "name": "cGcInteractionComponent::DoInteractionEvent",
-      "signature": "89 54 24 ? 55 41 55 41 56 48 8D AC 24",
+      "signature": "40 55 41 55 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B F1 44 8B EA",
       "mangled_name": "?DoInteractionEvent@cGcInteractionComponent@@QEAAXW4eInteractionEvent@@@Z",
       "unique_string": "ALIENS_MET"
     },
@@ -1620,7 +1621,7 @@
     },
     {
       "name": "cGcFrontendPageClaimBase::DoBaseClaimOptions",
-      "signature": "48 89 54 24 ? 55 53 41 54 41 56",
+      "signature": "48 89 5C 24 ? 48 89 54 24 ? 55 57 41 54",
       "mangled_name": "?DoBaseClaimOptions@cGcFrontendPageClaimBase@@SAXPEAVcGcFrontendPage@@V?$array@PEAVcGcNGuiLayer@@$04@std@@W4ePersistentBaseTypes@@_NUBaseIndex@@@Z",
       "unique_string": "UI_BASE_MOVE_HERE"
     },
@@ -1766,7 +1767,7 @@
     },
     {
       "name": "cGcScanManager::UpdateScannableMarkers",
-      "signature": "48 89 4C 24 ? 55 53 57 41 54 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 0F 29 B4 24",
+      "signature": "48 89 4C 24 ? 55 53 56 41 54 41 57 48 8D AC 24 ? ? ? ? B8",
       "mangled_name": "?UpdateScannableMarkers@cGcScanManager@@AEAAXXZ"
     },
     {
@@ -1854,8 +1855,9 @@
     },
     {
       "name": "cGcFrontendManager::RenderPage",
-      "signature": "48 89 4C 24 ? 55 53 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 48 89 B4 24 ? ? ? ? 48 89 BC 24",
-      "mangled_name": "__ZN18cGcFrontendManager10RenderPageEv"
+      "signature": "40 55 53 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 48 89 B4 24 ? ? ? ? 48 89 BC 24",
+      "mangled_name": "__ZN18cGcFrontendManager10RenderPageEv",
+      "unique_string": "UI_PICK_TIP_REFINER"
     },
     {
       "name": "cGcFrontendPageFunctions::DoItemPopup",
@@ -2155,6 +2157,17 @@
       "name": "cEgMeshNode::cEgMeshNode",
       "signature": "48 89 5C 24 ? 57 48 83 EC ? 4C 8D 82",
       "mangled_name": "??0cEgMeshNode@@IEAA@AEBUcEgMeshNodeTemplate@@@Z"
+    },
+    {
+      "name": "cGcSpaceshipWarp::WarpToDistantSystem",
+      "signature": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 41 8D 40",
+      "mangled_name": "?WarpToDistantSystem@cGcSpaceshipWarp@@QEAAXAEBVcGcWarpJumpTarget@@W4eWarpEffectType@1@_N@Z"
+    },
+    {
+      "name": "cGcSpaceshipWarp::Prepare",
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 89 91",
+      "mangled_name": "?Prepare@cGcSpaceshipWarp@@QEAAXW4eWarpEffectType@1@_N@Z",
+      "unique_string": "pointLight5"
     }
   ],
   "global_objects":
@@ -2412,6 +2425,18 @@
         {
           "name": "mGalaxyAttributes",
           "signature": "48 8D 8F ? ? ? ? 48 89 B7 ? ? ? ? 48 89 B7 ? ? ? ? 48 89 B7 ? ? ? ? 48 89 B7 ? ? ? ? 48 89 B7 ? ? ? ? 48 89 B7 ? ? ? ? 48 89 B7 ? ? ? ? 48 89 B7 ? ? ? ? 48 89 B7 ? ? ? ? 48 89 B7 ? ? ? ? 89 B7"
+        },
+        {
+          "name": "mSpacePoiGenerator",
+          "signature": "48 8D 8F ? ? ? ? E8 ? ? ? ? E8 ? ? ? ? 48 89 87"
+        },
+        {
+          "name": "mSolarSystemGenerator",
+          "signature": "48 8B 88 ? ? ? ? 4C 8D A9"
+        },
+        {
+          "name": "mPlanetGenerator",
+          "signature": "4C 8D A9 ? ? ? ? 48 81 C1 ? ? ? ? E8 ? ? ? ? 83 FE"
         }
       ]
     },
@@ -2547,7 +2572,7 @@
       "fields": [
         {
           "name": "muUnits",
-          "signature": "41 8B 87 ? ? ? ? 41 89 86 ? ? ? ? 41 8B 87 ? ? ? ? 41 89 86 ? ? ? ? 41 8B 87 ? ? ? ? 41 89 86 ? ? ? ? 48 8B 05"
+          "signature": "41 8B 86 ? ? ? ? 89 86 ? ? ? ? 41 8B 86 ? ? ? ? 89 86 ? ? ? ? 41 8B 86 ? ? ? ? 89 86 ? ? ? ? 48 8B 05"
         },
         {
           "name": "muNanites",
@@ -2562,6 +2587,48 @@
             "name": "muUnits",
             "offset": 8
           }
+        },
+        {
+          "name": "mbOnOtherSideOfPortal",
+          "signature": "80 B9 ? ? ? ? ? 48 8B F1 0F 84 ? ? ? ? 80 B9 ? ? ? ? ? 0F 85",
+          "offset": 2
+        },
+        {
+          "name": "maCustomShipNames",
+          "signature": "48 8D 87 ? ? ? ? 49 8B CC"
+        },
+        {
+          "name": "mHoloExplorerInteraction",
+          "signature": "48 8D 8F ? ? ? ? E8 ? ? ? ? 48 8D 8F ? ? ? ? E8 ? ? ? ? 48 8D 8F ? ? ? ? E8 ? ? ? ? 48 8D 8F ? ? ? ? E8 ? ? ? ? 48 8D 87 ? ? ? ? 49 8B CC"
+        },
+        {
+          "name": "mHoloScepticInteraction",
+          "relative_to": {
+            "name": "mHoloExplorerInteraction",
+            "offset": 32
+          }
+        },
+        {
+          "name": "mHoloNooneInteraction",
+          "relative_to": {
+            "name": "mHoloExplorerInteraction",
+            "offset": 64
+          }
+        },
+        {
+          "name": "mNetworkPlayerInteraction",
+          "relative_to": {
+            "name": "mHoloExplorerInteraction",
+            "offset": 96
+          }
+        },
+        {
+          "name": "mPhotoModeSettings",
+          "signature": "48 8D 8F ? ? ? ? 48 89 87 ? ? ? ? 0F 57 C0"
+        },
+        {
+          "name": "maTeleportEndpoints",
+          "signature": "4C 89 AF ? ? ? ? 48 8D B7"
         }
       ]
     },
