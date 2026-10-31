@@ -1493,7 +1493,7 @@
     },
     {
       "name": "cGcPlayer::RenderNGui",
-      "signature": "48 8B C4 48 89 48 ? 55 41 55 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 58",
+      "signature": "48 8B C4 55 41 54 41 55 48 8D A8",
       "mangled_name": "?RenderNGui@cGcPlayer@@IEAAXXZ",
       "unique_string": "PLAYER STATS"
     },
@@ -2168,6 +2168,33 @@
       "signature": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 89 91",
       "mangled_name": "?Prepare@cGcSpaceshipWarp@@QEAAXW4eWarpEffectType@1@_N@Z",
       "unique_string": "pointLight5"
+    },
+    {
+      "name": "cGcPlayerWeaponWheel::Open",
+      "signature": "40 57 48 81 EC ? ? ? ? 83 79 ? ? 48 8B F9 75",
+      "mangled_name": "__ZN20cGcPlayerWeaponWheel4OpenEv",
+      "unique_string": "USE_WEAPONWHEEL"
+    },
+    {
+      "name": "cGcPlayerWeaponWheel::UpdateInternal",
+      "signature": "40 57 41 54 48 83 EC ? 0F 29 74 24",
+      "mangled_name": "__ZN20cGcPlayerWeaponWheel14UpdateInternalEfPKPKNS_12sButtonInputE"
+    },
+    {
+      "name": "cGcPlayer::UpdateAction",
+      "signature": "40 55 53 56 57 41 54 41 55 48 8D AC 24",
+      "mangled_name": "__ZN9cGcPlayer12UpdateActionEf",
+      "unique_string": "SWITCH_WEAPON"
+    },
+    {
+      "name": "cGcPlayerWeaponWheel::RenderAt",
+      "signature": "48 8B C4 F3 0F 11 50 ? 48 89 50 ? 55 41 54",
+      "mangled_name": "__ZN20cGcPlayerWeaponWheel8RenderAtERK10cTkVector2f"
+    },
+    {
+      "name": "cGcPlayerHUD::RenderHeadsUp",
+      "signature": "40 55 56 48 8D 6C 24 ? 48 81 EC ? ? ? ? 8B 05",
+      "mangled_name": "?RenderHeadsUp@cGcPlayerHUD@@QEAAXXZ"
     }
   ],
   "global_objects":
@@ -2432,7 +2459,7 @@
         },
         {
           "name": "mSolarSystemGenerator",
-          "signature": "48 8B 88 ? ? ? ? 4C 8D A9"
+          "signature": "48 81 C1 ? ? ? ? E8 ? ? ? ? 39 75"
         },
         {
           "name": "mPlanetGenerator",
@@ -2667,7 +2694,7 @@
           ]
         },
         {
-          "name": "mPage",
+          "name": "mePage",
           "relative_to": {
             "name": "mpPage",
             "offset": 16
@@ -2731,6 +2758,51 @@
         {
           "name": "muVertexCount",
           "signature": "0F AF 8B ? ? ? ? 48 8D 15"
+        }
+      ]
+    },
+    {
+      "name": "cGcSpaceshipWarp",
+      "fields": [
+        {
+          "name": "meWarpState",
+          "signature": "44 39 B6 ? ? ? ? 74 ? 8B 86 ? ? ? ? 83 F8 ? 74 ? 83 F8 ? 75 ? E8 ? ? ? ? 83 78 ? ? 74 ? 48 8B 1D"
+        },
+        {
+          "name": "mfWarpTimeTotal",
+          "signature": "F3 0F 58 86 ? ? ? ? F3 0F 11 86 ? ? ? ? 44 39 B6",
+          "offset": 4
+        },
+        {
+          "name": "meCurrentWarpEffect",
+          "signature": "89 91 ? ? ? ? 48 8B D9 8B 89",
+          "offset": 2
+        },
+        {
+          "name": "mWarpInDestinationTM",
+          "signature": "48 8D 9E ? ? ? ? 44 0F B6 C0"
+        },
+        {
+          "name": "mfPulseDriveTimer",
+          "signature": "F3 0F 11 86 ? ? ? ? F3 0F 58 8E",
+          "offset": 4
+        },
+        {
+          "name": "mfPulseDriveFuelTimer",
+          "relative_to": {
+            "name": "mfPulseDriveTimer",
+            "offset": 4
+          }
+        }
+      ]
+    },
+    {
+      "name": "cGcPlayerWeaponWheel",
+      "fields":[
+        {
+          "name": "mIsTouchOnlyInterface",
+          "signature": "44 38 67 ? 74 ? 8B 97",
+          "size": 1
         }
       ]
     }

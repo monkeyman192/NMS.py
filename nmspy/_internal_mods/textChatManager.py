@@ -22,7 +22,7 @@ MOD_LIST_OPTION = "\n<TITLE>'/modlist: display list of mods which can be configu
 
 
 @no_gui
-class textChatManager(Mod):
+class _INTERNAL_textChatManager(Mod):
     @terminal_command("Say some words.", "example")
     def say(self, *words):
         logger.info(f"I am saying the words: {' '.join(words)}")
