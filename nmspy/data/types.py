@@ -340,8 +340,9 @@ class cGcNGuiElement(Structure):
         Value = 0x8
         ColourPreset = 0x9
 
+    mvParallaxOffset: Annotated[basic.Vector2f, 0x20]
     mpElementData: Annotated[_Pointer[nmse.cGcNGuiElementData], 0x48]
-    meLayoutChangeEvent: Annotated[c_enum8[eLayoutChangeEvent], 0x51]
+    meLayoutChangeEvent: Annotated[c_enum8[eLayoutChangeEvent], 0x52]
 
     @function_hook("48 83 EC ? 48 8B 41 ? 45 85 C0")
     def GetPosition(
@@ -362,6 +363,11 @@ class cGcNGuiElement(Structure):
 
     @function_hook("4C 8B DC 53 48 81 EC ? ? ? ? 49 89 6B ? 48 8B D9")
     def Render(self, this: "_Pointer[cGcNGuiElement]"): ...
+
+
+@partial_struct
+class cGcNGuiGraphic(cGcNGuiElement):
+    mpGraphicData: Annotated[_Pointer[nmse.cGcNGuiGraphicData], 0x58]
 
 
 @partial_struct
@@ -1177,17 +1183,17 @@ class cGcPlayerFleetManager(Structure):
 
 @partial_struct
 class cGcGalacticVoxelCoordinate(Structure):
-    mX: Annotated[int, Field(c_int16)]
-    mZ: Annotated[int, Field(c_int16)]
-    mY: Annotated[int, Field(c_int16)]
-    mbValid: Annotated[bool, Field(c_bool)]
+    mX: Annotated[int, Field(c_int16, 0x0)]
+    mZ: Annotated[int, Field(c_int16, 0x2)]
+    mY: Annotated[int, Field(c_int16, 0x4)]
+    mbValid: Annotated[bool, Field(c_bool, 0x6)]
 
 
 @partial_struct
 class cGcGalacticSolarSystemAddress(Structure):
-    mVoxelCoordinate: Annotated[cGcGalacticVoxelCoordinate, Field(cGcGalacticVoxelCoordinate)]
-    mSolarIndex: Annotated[int, Field(c_uint16)]
-    mIteration: Annotated[int, Field(c_uint16)]
+    mVoxelCoordinate: Annotated[cGcGalacticVoxelCoordinate, 0x0]
+    mSolarIndex: Annotated[int, Field(c_uint16, 0x8)]
+    mIteration: Annotated[int, Field(c_uint16, 0xA)]
 
 
 @partial_struct
@@ -1656,7 +1662,7 @@ class cGcPlayer(Structure):
     @function_hook("48 89 4C 24 ? 55 41 55 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 45 33 ED")
     def RenderInventoryEditor(self, this: "_Pointer[cGcPlayer]"): ...
 
-    @function_hook("48 8B C4 48 89 48 ? 55 41 55 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 58")
+    @function_hook("48 8B C4 55 41 54 41 55 48 8D A8")
     def RenderNGui(self, this: "_Pointer[cGcPlayer]"): ...
 
     @function_hook(
@@ -1669,6 +1675,9 @@ class cGcPlayer(Structure):
 
     @function_hook("48 8B C4 48 89 58 ? 57 48 81 EC ? ? ? ? 0F 10 81")
     def SetFacing(self, this: "_Pointer[cGcPlayer]", lDir: _Pointer[basic.cTkVector3]): ...
+
+    @function_hook("40 55 53 56 57 41 54 41 55 48 8D AC 24")
+    def UpdateAction(self, this: "_Pointer[cGcPlayer]", lfStep: Annotated[float, c_float]): ...
 
 
 class cGcPlanetGenerationInputData(nmse.cGcPlanetGenerationInputData):
@@ -2322,18 +2331,6 @@ class cGcWarpJumpTarget(Structure):
 
 @partial_struct
 class cGcSpaceshipWarp(Structure):
-    mJumpTarget: Annotated[cGcWarpJumpTarget, 0x10]
-    # The offset for this can be found under cGcPortalComponent::Prepare near the bottom, below the
-    # "cGcPortalComponent" string. However, its a really screwy offset to calculate since you
-    # first need the Offsets of cGcSimulation from cGcApplication, as well as the offset for
-    # cGcSpaceshipWarp from cGcSimulation, since the binary uses the cGcApplication global.
-    meWarpState: Annotated[c_enum8[enums.eWarpState], 0x98]
-    mePulseDriveState: Annotated[c_enum32[enums.EPulseDriveState], 0xA4]
-    mfPulseDriveTimer: Annotated[float, Field(c_float, 0xB4)]
-    mfPulseDriveFuelTimer: Annotated[float, Field(c_float, 0xB8)]
-    mfPulseDriveTimer: Annotated[float, Field(c_float, 0x1A8)]
-    mfPulseDriveFuelTimer: Annotated[float, Field(c_float, 0x1AC)]
-
     class eWarpEffectType(IntEnum):
         # Might not be right. The below is from 4.13 with any known modifications.
         Normal = 0x0
@@ -2350,6 +2347,29 @@ class cGcSpaceshipWarp(Structure):
         NexusExit = 0xB
         FreighterMegaWarp = 0xC
         FakePortalTeleport = 0xD
+
+    class eWarpState(IntEnum):
+        # These are just the definitions from 4.13, but I don't think they've changed...
+        # This seems to cycle from 0 -> 8 sequentially whilst warping and resets to 0 when the warp is fully
+        # complete.
+        None_ = 0x0
+        Charge = 0x1
+        EnterTunnel = 0x2
+        WarpTunnel = 0x3
+        WaitForGeneration = 0x4
+        RespawnPlayer = 0x5
+        ExitTunnel = 0x6
+        WarpSlowdown = 0x7
+        RenderDebug = 0x8
+
+    mJumpTarget: Annotated[cGcWarpJumpTarget, 0x10]
+    meWarpState: Annotated[c_enum32[eWarpState], 0x9C]
+    mfWarpTimeTotal: Annotated[float, Field(c_float, 0xA8)]
+    mePulseDriveState: Annotated[c_enum32[enums.EPulseDriveState], 0xAC]
+    mfPulseDriveTimer: Annotated[float, Field(c_float, 0xBC)]
+    mfPulseDriveFuelTimer: Annotated[float, Field(c_float, 0xC0)]
+    mWarpInDestinationTM: Annotated[basic.cTkMatrix34, 0x4A0]
+    meCurrentWarpEffect: Annotated[c_enum32[eWarpEffectType], 0x5F0]
 
     @function_hook("40 55 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 8B 81")
     def Update(
@@ -2520,6 +2540,9 @@ class cGcPlayerHUD(cGcHUD):
 
     @function_hook("48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8B EC 48 83 EC ? 4C 8D B1")
     def LoadData(self, this: "_Pointer[cGcPlayerHUD]"): ...
+
+    @function_hook("40 55 56 48 8D 6C 24 ? 48 81 EC ? ? ? ? 8B 05")
+    def RenderHeadsUp(self, this: "_Pointer[cGcPlayerHUD]"): ...
 
 
 class cGcQuickMenu(Structure):
@@ -5729,6 +5752,32 @@ class cGcTerrainEditMenu(Structure):
         this: "_Pointer[cGcTerrainEditMenu]",
         lfTimeStep: Annotated[float, c_float],
         lOutUpdatedRenderState: _Pointer[QuickMenuRenderState],
+    ): ...
+
+
+@partial_struct
+class cGcPlayerWeaponWheel(Structure):
+    mIsTouchOnlyInterface: Annotated[bool, Field(c_bool, 0x7D)]
+
+    @function_hook("40 57 48 81 EC ? ? ? ? 83 79 ? ? 48 8B F9 75")
+    def Open(self, this: "_Pointer[cGcPlayerWeaponWheel]"): ...
+
+    @function_hook("40 57 41 54 48 83 EC ? 0F 29 74 24")
+    def UpdateInternal(
+        self,
+        this: "_Pointer[cGcPlayerWeaponWheel]",
+        a2: c_uint64,
+        a3: c_uint64,  # This or the one above is cGcPlayerWeaponWheel::sButtonInput
+    ) -> c_uint32:
+        """Internal update call for the weapon wheel. Return value is used for something."""
+        ...
+
+    @function_hook("48 8B C4 F3 0F 11 50 ? 48 89 50 ? 55 41 54")
+    def RenderAt(
+        self,
+        this: "_Pointer[cGcPlayerWeaponWheel]",
+        lPosition: _Pointer[basic.Vector2f],
+        a3: Annotated[float, c_float],
     ): ...
 
 
