@@ -667,7 +667,10 @@ class cGcNameGenerator(Structure):
         lu64Seed: c_uint64,
         lResult: _Pointer[basic.cTkFixedString[0x7F]],
         lLocResult: _Pointer[basic.cTkFixedString[0x7F]],
-    ) -> c_uint64: ...
+    ) -> c_uint64: 
+        """Returns the name for a SolarSystem, given it's seed. SolarSystem seeds are the same as their UA's.
+        """        
+        ...
 
 
 @partial_struct
@@ -1035,7 +1038,11 @@ class cGcPlayerState(Structure):
         "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 8B 05 ? ? ? ? 48 8B F1 85 C0 74 ? 83 F8 ? 0F 85 ? ? ? ? "
         "4C 8B 05"
     )
-    def IsBlockedFromShipPurchase(self, this: "_Pointer[cGcPlayerState]") -> Annotated[bool, c_bool]: ...
+    def IsBlockedFromShipPurchase(self, this: "_Pointer[cGcPlayerState]") -> Annotated[bool, c_bool]: 
+        """Determines whether the player is blocked from ship purchases or not. Active during certain 
+        expeditions. Modify the return value in an .after hook to enable / disable in game.
+        """        
+        ...
 
     @function_hook("4C 8B DC 49 89 4B ? 53 48 81 EC ? ? ? ? 49 89 6B")
     def CanRepairTechnology(
@@ -1044,7 +1051,16 @@ class cGcPlayerState(Structure):
         lItem: _Pointer[nmse.cGcInventoryElement],
         leInventory: c_enum32[enums.InventoryChoice],
         lbIsInstallation: Annotated[bool, c_bool],
-    ) -> Annotated[bool, c_bool]: ...
+    ) -> Annotated[bool, c_bool]: 
+        """Determines whether the player can repair the component corresponing to `lItem` in a maintenance 
+        screen. Modify the return value in an .after hook to enable / disable in game.
+
+        Parameters
+        ----------
+        lItem
+            A Pointer to cGcInventoryElement. 
+        """        
+        ...
 
     @function_hook(
         "8B 05 ? ? ? ? 85 C0 74 ? 83 F8 ? 75 ? 48 8B 05 ? ? ? ? 80 B8 ? ? ? ? ? 75 ? 80 B8 ? ? ? ? ? 75 ? 32 "
@@ -1678,6 +1694,14 @@ class cGcPlayer(Structure):
 
     @function_hook("40 55 53 56 57 41 54 41 55 48 8D AC 24")
     def UpdateAction(self, this: "_Pointer[cGcPlayer]", lfStep: Annotated[float, c_float]): ...
+
+    @function_hook("40 57 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 8B F9")
+    def ResetInSpaceStation(self, this: _Pointer[cGcPlayer]) -> None:
+        """ Fades the screen out and sets the player position to the space station spawn point,
+        displaying an OSD message.
+
+        """
+        ...
 
 
 class cGcPlanetGenerationInputData(nmse.cGcPlanetGenerationInputData):
@@ -2762,9 +2786,12 @@ class cGcFrontendManager(Structure):
     def Activate(
         self,
         this: "_Pointer[cGcFrontendManager]",
-        lePage: Annotated[int, c_uint32],  # eFrontendPage
+        lePage: c_enum32[enums.eFrontendPage],
         lbTransitionRight: Annotated[bool, c_bool],
     ) -> c_bool: ...
+    """"Activate and display a FrontendPage on top of the user UI corresponding to lePage. 
+    
+    """
 
     @function_hook(
         "48 8B C4 48 89 58 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 44 0F 29 90"
@@ -2784,6 +2811,9 @@ class cGcFrontendManager(Structure):
         lMessage: _Pointer[basic.TkID0x20],
         lbSomething: Annotated[bool, c_bool],
     ): ...
+    """
+    Display a simple message box on top of an activated FrontendPage only. Does NOT displpay over the player HUD.
+    """
 
     @function_hook("48 8B C4 53 48 81 EC ? ? ? ? 48 89 68 ? 48 8B D9 8B 89")
     def LoadPage(self, this: "_Pointer[cGcFrontendManager]", lePage: c_enum32[enums.eFrontendPage]): ...
@@ -5580,7 +5610,11 @@ class cGcPlayerWanted(Structure):
         liLevel: Annotated[int, c_int16],
         lbForce: Annotated[bool, c_bool],
         lbSquadDefeated: Annotated[bool, c_bool],
-    ): ...
+    ): 
+        """Set the player wanted level to the specified `liLevel`. Can also be used to disable
+        sentinels. 
+        """
+        ...
 
 
 class cGcFrontendPageClaimBase(Structure):
@@ -5647,7 +5681,12 @@ class cGcPortalComponent(cTkComponent):
     def Prepare(self, this: "_Pointer[cGcPortalComponent]"): ...
 
     @function_hook("40 55 41 56 48 8D 6C 24 ? 48 81 EC ? ? ? ? 80 B9")
-    def WarpPlayer(self, this: "_Pointer[cGcPortalComponent]"): ...
+    def WarpPlayer(self, this: "_Pointer[cGcPortalComponent]"): 
+        """Warps the player to this cGcPortalComponent::PersistentData's mTargetUA, 
+        if mbActive is set to true.
+    
+        """
+        ...
 
 
 class cGcApplicationDeathState(Structure):
@@ -5662,7 +5701,22 @@ class cGcUniverseDetailAddressCoderU64(Structure):
         lpPosition: _Pointer[basic.cTkVector3],
         lpCameraDirection: _Pointer[basic.cTkVector3],
         lResult: _Pointer[c_uint64 * 2],
-    ) -> c_uint64: ...
+    ) -> c_uint64:
+        """
+            Converts a position and view vector into a size-2 uint64 array, which can be converted into a usable Hexadecimal String.
+        
+            Parameters
+            ----------
+            lpPosition
+                A pointer to the Position Vector3f to encode.
+            lpCameraDirection
+                A pointer to the Camera View Vector3f to encode.
+            lResult
+                A size-2 uint64 array which holds both encoded parts of the UDA. This is empty when called.                           
+                
+            """
+        ...
+
 
     @static_function_hook("48 8B C4 53 48 81 EC ? ? ? ? 0F 10 1A 0F 57 C9")
     @staticmethod
@@ -5670,7 +5724,20 @@ class cGcUniverseDetailAddressCoderU64(Structure):
         lValue: _Pointer[c_uint64 * 2],
         lpPosition: _Pointer[basic.cTkVector3],
         lpCameraDirection: _Pointer[basic.cTkVector3],
-    ): ...
+    ): 
+         """
+            Converts a size-2 uint64 array into a position and view vector.
+        
+            Parameters
+            ----------
+            lpPosition
+                A pointer to the Position Vector3f to encode. This is an empty vector when called.
+            lpCameraDirection
+                A pointer to the Camera View Vector3f to encode. This is an empty vector when called.
+            lValue
+                A size-2 uint64 array which holds both encoded parts of the UDA. 
+            """        
+    ...
 
 
 @partial_struct
@@ -5708,6 +5775,19 @@ class cGcParticleManager(Structure):
         lExplosionID: _Pointer[basic.TkID0x10],
         lStartMatrix: _Pointer[basic.cTkMatrix34],
     ) -> c_uint64:  # Pointer to EffectInstance
+        """Enqueue a Permanent Particle Effect by lExplosionID at position lStartMatrix.
+
+        Parameters
+        ----------
+        lExplosionID
+            The actual TkID0x10 for the effect, defined in METADATA/EFFECTS/*EFFECTS.MBIN  
+
+        Returns
+        -------
+        c_uint64
+            A Pointer to the EffectInstance added. Must be mapped using map_struct() to the correct type.   
+        
+        """        
         ...
 
     @function_hook("4C 8B DC 49 89 5B ? 57 48 81 EC ? ? ? ? 48 8B 84 24 ? ? ? ? 48 8B DA 41 0F 10 00")
@@ -5720,17 +5800,47 @@ class cGcParticleManager(Structure):
         lStartMatrix: _Pointer[basic.cTkMatrix34],
         lbPermanent: Annotated[bool, c_bool],
     ) -> c_uint64:  # Pointer to EffectInstance
+        """Enqueue a Particle Effect by lExplosionID and lParentNode at position lStartMatrix.
+
+        Parameters
+        ----------
+        lParentNode
+            A TkHandle for the actual effect .MBIN file
+        lExplosionID
+            The actual TkID0x10 for the effect, defined in METADATA/EFFECTS/*EFFECTS.MBIN     
+        
+        Returns
+        -------
+        c_uint64
+            A Pointer to the EffectInstance added. Must be mapped using map_struct() to the correct type.   
+        
+        """         
+        
         ...
 
     @function_hook("40 53 48 83 EC ? 8B 02 48 8B DA")
     def RetireEffect(
         self, this: "_Pointer[cGcParticleManager]", lEffect: _Pointer[EffectInstance]
-    ) -> c_bool: ...
+    ) -> c_bool: 
+        """Ease out and retire an active Particle Effect by its EffectInstance.
+        """
+        ...
 
     @function_hook("48 89 5C 24 ? 57 48 81 EC ? ? ? ? 44 8B C2")
     def RetireEffectsAndDestroyNodeOnCompletion(
         self, this: "_Pointer[cGcParticleManager]", lNode: basic.TkHandle
-    ): ...
+    ): 
+        """Ease out and retire an active Particle Effect by its Handle. Also destroys the engine node
+        post-completion. 
+        
+        Parameters
+        ----------
+        lNode
+            a TkHandle for this particle's EffectInstance, NOT it's file.
+
+
+        """
+        ...
 
 
 class cTkMetaDataManager(Structure):
