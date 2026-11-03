@@ -5276,11 +5276,14 @@ class cGcMissionConditionDefaultItem(Structure):
 
 @partial_struct
 class cGcMissionConditionDeliverableStatus(Structure):
-    _total_size_ = 0x8
-    DistanceThreshold: Annotated[float, Field(ctypes.c_float, 0x0)]
-    CheckDistance: Annotated[bool, Field(ctypes.c_bool, 0x4)]
-    CheckExists: Annotated[bool, Field(ctypes.c_bool, 0x5)]
-    PassIfExists: Annotated[bool, Field(ctypes.c_bool, 0x6)]
+    _total_size_ = 0x28
+    TextTagForCurrent: Annotated[basic.VariableSizeString, 0x0]
+    TextTagForTarget: Annotated[basic.VariableSizeString, 0x10]
+    DistanceThreshold: Annotated[float, Field(ctypes.c_float, 0x20)]
+    CheckDeliveredAll: Annotated[bool, Field(ctypes.c_bool, 0x24)]
+    CheckDistance: Annotated[bool, Field(ctypes.c_bool, 0x25)]
+    CheckExists: Annotated[bool, Field(ctypes.c_bool, 0x26)]
+    PassIfExists: Annotated[bool, Field(ctypes.c_bool, 0x27)]
 
 
 @partial_struct
@@ -7704,8 +7707,9 @@ class cGcMoveableObjectComponentData(Structure):
     MakeMasterModel: Annotated[bool, Field(ctypes.c_bool, 0x146)]
     MarkPoiAsCompleteOnDetach: Annotated[bool, Field(ctypes.c_bool, 0x147)]
     NotifyParentEncounterWhenGrabbed: Annotated[bool, Field(ctypes.c_bool, 0x148)]
-    UseGravGunGrabRotationTarget: Annotated[bool, Field(ctypes.c_bool, 0x149)]
-    UseHighlightEffect: Annotated[bool, Field(ctypes.c_bool, 0x14A)]
+    ReplicateBeforeDetach: Annotated[bool, Field(ctypes.c_bool, 0x149)]
+    UseGravGunGrabRotationTarget: Annotated[bool, Field(ctypes.c_bool, 0x14A)]
+    UseHighlightEffect: Annotated[bool, Field(ctypes.c_bool, 0x14B)]
 
 
 @partial_struct
@@ -17212,7 +17216,7 @@ class cGcBuildingDefinitionTable(Structure):
 
 @partial_struct
 class cGcBuildingGlobals(Structure):
-    _total_size_ = 0xD40
+    _total_size_ = 0xD50
     BuildingPartPreviewOffset: Annotated[basic.Vector3f, 0x0]
     MarkerLineColour: Annotated[basic.Colour, 0x10]
     Icons: Annotated[tuple[cGcBuildMenuIconSet, ...], Field(cGcBuildMenuIconSet * 21, 0x20)]
@@ -17366,56 +17370,57 @@ class cGcBuildingGlobals(Structure):
     MinLineLength: Annotated[float, Field(ctypes.c_float, 0xC7C)]
     MinLineLengthShip: Annotated[float, Field(ctypes.c_float, 0xC80)]
     MinLoadingPercentageNodesBufferFree: Annotated[float, Field(ctypes.c_float, 0xC84)]
-    MinPercentageNodesBufferFree: Annotated[float, Field(ctypes.c_float, 0xC88)]
-    MinRadius: Annotated[float, Field(ctypes.c_float, 0xC8C)]
-    MinRadiusForBases: Annotated[float, Field(ctypes.c_float, 0xC90)]
-    MinRadiusFromFeaturedBases: Annotated[float, Field(ctypes.c_float, 0xC94)]
-    MinShipScanBuildings: Annotated[int, Field(ctypes.c_int32, 0xC98)]
-    MinTimeBetweenBuildingEntryMessage: Annotated[float, Field(ctypes.c_float, 0xC9C)]
-    MinTimeBetweenBuildingEntryMessageBase: Annotated[float, Field(ctypes.c_float, 0xCA0)]
-    NearLineScaleFactor: Annotated[float, Field(ctypes.c_float, 0xCA4)]
-    NearMaxLineLength: Annotated[float, Field(ctypes.c_float, 0xCA8)]
-    NearMinAlpha: Annotated[float, Field(ctypes.c_float, 0xCAC)]
-    NearMinLineLength: Annotated[float, Field(ctypes.c_float, 0xCB0)]
-    ObjectFadeRadius: Annotated[float, Field(ctypes.c_float, 0xCB4)]
-    PercentagePhysicsComponentsForComplexity: Annotated[float, Field(ctypes.c_float, 0xCB8)]
-    PowerlineSnapDistance: Annotated[float, Field(ctypes.c_float, 0xCBC)]
-    RadiusMultiplier_DoNotPlace: Annotated[float, Field(ctypes.c_float, 0xCC0)]
-    RadiusMultiplier_DoNotPlaceAnywhereNear: Annotated[float, Field(ctypes.c_float, 0xCC4)]
-    RadiusMultiplier_DoNotPlaceClose: Annotated[float, Field(ctypes.c_float, 0xCC8)]
-    RadiusMultiplier_OnlyPlaceAround: Annotated[float, Field(ctypes.c_float, 0xCCC)]
-    Radius_DoNotPlaceAnywhereNear: Annotated[float, Field(ctypes.c_float, 0xCD0)]
-    SectorMessageCenterDistance: Annotated[float, Field(ctypes.c_float, 0xCD4)]
-    SectorMessageMinTime: Annotated[float, Field(ctypes.c_float, 0xCD8)]
-    SectorMessageReshowDistance: Annotated[float, Field(ctypes.c_float, 0xCDC)]
-    ShowTimeNotDistance: Annotated[float, Field(ctypes.c_float, 0xCE0)]
-    SmallIconArrowOffset: Annotated[float, Field(ctypes.c_float, 0xCE4)]
-    SmallIconSize: Annotated[float, Field(ctypes.c_float, 0xCE8)]
-    SpaceBaseNexusExteriorSpawnDistance: Annotated[float, Field(ctypes.c_float, 0xCEC)]
-    SpaceBaseNexusInteriorSpawnDistance: Annotated[float, Field(ctypes.c_float, 0xCF0)]
-    SpaceBaseStationSpawnDistance: Annotated[float, Field(ctypes.c_float, 0xCF4)]
-    SpaceMarkerMaxHeight: Annotated[float, Field(ctypes.c_float, 0xCF8)]
-    SpaceMarkerMinHeight: Annotated[float, Field(ctypes.c_float, 0xCFC)]
-    SpaceMarkerOffset: Annotated[float, Field(ctypes.c_float, 0xD00)]
-    SpaceMarkerOffsetPlanet: Annotated[float, Field(ctypes.c_float, 0xD04)]
-    SpaceMarkerOffsetSamePlanet: Annotated[float, Field(ctypes.c_float, 0xD08)]
-    StartCrashSiteMaxDistance: Annotated[float, Field(ctypes.c_float, 0xD0C)]
-    StartCrashSiteMinDistance: Annotated[float, Field(ctypes.c_float, 0xD10)]
-    StartShelterMaxDistance: Annotated[float, Field(ctypes.c_float, 0xD14)]
-    StartShelterMinDistance: Annotated[float, Field(ctypes.c_float, 0xD18)]
-    TestDistanceForSettlementBaseBufferAlignment: Annotated[float, Field(ctypes.c_float, 0xD1C)]
-    TextStringXOffset: Annotated[float, Field(ctypes.c_float, 0xD20)]
-    TextTagLength: Annotated[float, Field(ctypes.c_float, 0xD24)]
-    TextTagWidthOffset: Annotated[float, Field(ctypes.c_float, 0xD28)]
-    TextTagXOffset: Annotated[float, Field(ctypes.c_float, 0xD2C)]
-    TextTagYOffset: Annotated[float, Field(ctypes.c_float, 0xD30)]
-    UnknownBuildingRange: Annotated[float, Field(ctypes.c_float, 0xD34)]
-    AllowBuildingUsingIntermediates: Annotated[bool, Field(ctypes.c_bool, 0xD38)]
-    BaseBuildingTerrainEditBoundsOverride: Annotated[bool, Field(ctypes.c_bool, 0xD39)]
-    BuildingPlacementEffectEnabled: Annotated[bool, Field(ctypes.c_bool, 0xD3A)]
-    BuildingPlacementGhostHeartSizeCurve: Annotated[c_enum8[enums.cTkCurveType], 0xD3B]
-    DebugForceShowInactives: Annotated[bool, Field(ctypes.c_bool, 0xD3C)]
-    LineCurve: Annotated[c_enum8[enums.cTkCurveType], 0xD3D]
+    MinNodesBufferFree: Annotated[int, Field(ctypes.c_int32, 0xC88)]
+    MinPercentageNodesBufferFree: Annotated[float, Field(ctypes.c_float, 0xC8C)]
+    MinRadius: Annotated[float, Field(ctypes.c_float, 0xC90)]
+    MinRadiusForBases: Annotated[float, Field(ctypes.c_float, 0xC94)]
+    MinRadiusFromFeaturedBases: Annotated[float, Field(ctypes.c_float, 0xC98)]
+    MinShipScanBuildings: Annotated[int, Field(ctypes.c_int32, 0xC9C)]
+    MinTimeBetweenBuildingEntryMessage: Annotated[float, Field(ctypes.c_float, 0xCA0)]
+    MinTimeBetweenBuildingEntryMessageBase: Annotated[float, Field(ctypes.c_float, 0xCA4)]
+    NearLineScaleFactor: Annotated[float, Field(ctypes.c_float, 0xCA8)]
+    NearMaxLineLength: Annotated[float, Field(ctypes.c_float, 0xCAC)]
+    NearMinAlpha: Annotated[float, Field(ctypes.c_float, 0xCB0)]
+    NearMinLineLength: Annotated[float, Field(ctypes.c_float, 0xCB4)]
+    ObjectFadeRadius: Annotated[float, Field(ctypes.c_float, 0xCB8)]
+    PercentagePhysicsComponentsForComplexity: Annotated[float, Field(ctypes.c_float, 0xCBC)]
+    PowerlineSnapDistance: Annotated[float, Field(ctypes.c_float, 0xCC0)]
+    RadiusMultiplier_DoNotPlace: Annotated[float, Field(ctypes.c_float, 0xCC4)]
+    RadiusMultiplier_DoNotPlaceAnywhereNear: Annotated[float, Field(ctypes.c_float, 0xCC8)]
+    RadiusMultiplier_DoNotPlaceClose: Annotated[float, Field(ctypes.c_float, 0xCCC)]
+    RadiusMultiplier_OnlyPlaceAround: Annotated[float, Field(ctypes.c_float, 0xCD0)]
+    Radius_DoNotPlaceAnywhereNear: Annotated[float, Field(ctypes.c_float, 0xCD4)]
+    SectorMessageCenterDistance: Annotated[float, Field(ctypes.c_float, 0xCD8)]
+    SectorMessageMinTime: Annotated[float, Field(ctypes.c_float, 0xCDC)]
+    SectorMessageReshowDistance: Annotated[float, Field(ctypes.c_float, 0xCE0)]
+    ShowTimeNotDistance: Annotated[float, Field(ctypes.c_float, 0xCE4)]
+    SmallIconArrowOffset: Annotated[float, Field(ctypes.c_float, 0xCE8)]
+    SmallIconSize: Annotated[float, Field(ctypes.c_float, 0xCEC)]
+    SpaceBaseNexusExteriorSpawnDistance: Annotated[float, Field(ctypes.c_float, 0xCF0)]
+    SpaceBaseNexusInteriorSpawnDistance: Annotated[float, Field(ctypes.c_float, 0xCF4)]
+    SpaceBaseStationSpawnDistance: Annotated[float, Field(ctypes.c_float, 0xCF8)]
+    SpaceMarkerMaxHeight: Annotated[float, Field(ctypes.c_float, 0xCFC)]
+    SpaceMarkerMinHeight: Annotated[float, Field(ctypes.c_float, 0xD00)]
+    SpaceMarkerOffset: Annotated[float, Field(ctypes.c_float, 0xD04)]
+    SpaceMarkerOffsetPlanet: Annotated[float, Field(ctypes.c_float, 0xD08)]
+    SpaceMarkerOffsetSamePlanet: Annotated[float, Field(ctypes.c_float, 0xD0C)]
+    StartCrashSiteMaxDistance: Annotated[float, Field(ctypes.c_float, 0xD10)]
+    StartCrashSiteMinDistance: Annotated[float, Field(ctypes.c_float, 0xD14)]
+    StartShelterMaxDistance: Annotated[float, Field(ctypes.c_float, 0xD18)]
+    StartShelterMinDistance: Annotated[float, Field(ctypes.c_float, 0xD1C)]
+    TestDistanceForSettlementBaseBufferAlignment: Annotated[float, Field(ctypes.c_float, 0xD20)]
+    TextStringXOffset: Annotated[float, Field(ctypes.c_float, 0xD24)]
+    TextTagLength: Annotated[float, Field(ctypes.c_float, 0xD28)]
+    TextTagWidthOffset: Annotated[float, Field(ctypes.c_float, 0xD2C)]
+    TextTagXOffset: Annotated[float, Field(ctypes.c_float, 0xD30)]
+    TextTagYOffset: Annotated[float, Field(ctypes.c_float, 0xD34)]
+    UnknownBuildingRange: Annotated[float, Field(ctypes.c_float, 0xD38)]
+    AllowBuildingUsingIntermediates: Annotated[bool, Field(ctypes.c_bool, 0xD3C)]
+    BaseBuildingTerrainEditBoundsOverride: Annotated[bool, Field(ctypes.c_bool, 0xD3D)]
+    BuildingPlacementEffectEnabled: Annotated[bool, Field(ctypes.c_bool, 0xD3E)]
+    BuildingPlacementGhostHeartSizeCurve: Annotated[c_enum8[enums.cTkCurveType], 0xD3F]
+    DebugForceShowInactives: Annotated[bool, Field(ctypes.c_bool, 0xD40)]
+    LineCurve: Annotated[c_enum8[enums.cTkCurveType], 0xD41]
 
 
 @partial_struct
@@ -19432,8 +19437,9 @@ class cGcDeliverableSpawnEntry(Structure):
 
 @partial_struct
 class cGcDeliverableSpawnerComponentData(Structure):
-    _total_size_ = 0x10
+    _total_size_ = 0x18
     SpawnEntries: Annotated[basic.cTkDynamicArray[cGcDeliverableSpawnEntry], 0x0]
+    SpawnInterval: Annotated[float, Field(ctypes.c_float, 0x10)]
 
 
 @partial_struct
