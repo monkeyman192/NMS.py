@@ -668,7 +668,8 @@ class cGcNameGenerator(Structure):
         lResult: _Pointer[basic.cTkFixedString[0x7F]],
         lLocResult: _Pointer[basic.cTkFixedString[0x7F]],
     ) -> c_uint64:
-        """Returns the name for a SolarSystem, given it's seed. SolarSystem seeds are the same as their UA's.
+        """Returns the name for a SolarSystem, given it's seed.
+        SolarSystem seeds are the same as their UA's.
         """
         ...
 
