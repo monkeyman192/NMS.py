@@ -585,9 +585,9 @@ class cGcShipHUD(Structure):
     mbSelectedPlanetPanelVisible: Annotated[bool, Field(c_bool, 0x23C00)]
 
     # The following offsets are found by searching for "UI\\HUD\\SHIP\\MAINSCREEN.MXML"
-    mMainScreenGUI: Annotated[cGcNGui, 0x27640]
-    mHeadsUpGUI: Annotated[cGcNGui, 0x27C00]
-    mSystemMapGUI: Annotated[cGcNGui, 0x28088]
+    mMainScreenGUI: Annotated[cGcNGui, 0x27680]
+    mHeadsUpGUI: Annotated[cGcNGui, 0x27C40]
+    mSystemMapGUI: Annotated[cGcNGui, 0x280C8]
 
     # hud_root: Annotated[int, Field(c_ulonglong, 0x27F70)]  # TODO: Fix
 
@@ -1932,6 +1932,7 @@ class cGcSolarSystemMapObject(Structure):
     _total_size_ = 0xD0
     meType: Annotated[c_enum32[enums.cGcSolarSystemMapObjectType], 0x0]
     miIndex: Annotated[int, Field(c_int32, 0x8)]  # Planet index when the type is Planet or GasGiant.
+    mVector: Annotated[basic.cTkVector3, 0x70]
     mNode: Annotated[basic.TkHandle, 0x80]
     mNode2: Annotated[basic.TkHandle, 0x84]  # Used for the ring model if it's a planet with rings.
     mVector1: Annotated[basic.cTkVector3, 0x90]
@@ -1962,10 +1963,11 @@ class cGcFrontendPageSolarSystemMap(Structure):
 @partial_struct
 class cGcSolarSystemMap(Structure):
     mSettings: Annotated[nmse.cGcSolarSystemMapSettings, 0x0]
-    mRootNode: Annotated[basic.TkHandle, 0x1230]
+    mRootNode: Annotated[basic.TkHandle, 0x1510]
+    mbRootNodeIsActive: Annotated[bool, Field(c_bool, 0x1514)]
     maAssociatedMapObjects: Annotated[
         tuple[cGcSolarSystemMapObject, ...],
-        Field(cGcSolarSystemMapObject * 0x40, 0x1240),
+        Field(cGcSolarSystemMapObject * 0x40, 0x1520),
     ]
 
     @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B F1 E8 ? ? ? ? 48 8D 8E")
@@ -2065,12 +2067,12 @@ class cGcSolarSystem(Structure):
     maPlanets: Annotated[tuple[cGcPlanet, ...], Field(cGcPlanet * 6, 0x2E30)]
     miPrimaryPlanet: Annotated[int, Field(c_int32, 0x5188D0)]
     mSolarSystemMap: Annotated[cGcSolarSystemMap, 0x51BC20]
-    mSolarSystemMapMarker: Annotated[_Pointer[cGcSolarSystemMapMarker], 0x520270]
-    mPlanetGenerator: Annotated[cGcPlanetGenerator, 0x5217A0]
-    mSolarSystemGenerator: Annotated[cGcSolarSystemGenerator, 0x5223B0]
-    mSpacePoiGenerator: Annotated[cGcSpacePoiGenerator, 0x522A90]
+    # mSolarSystemMapMarker: Annotated[_Pointer[cGcSolarSystemMapMarker], 0x520270]
+    mPlanetGenerator: Annotated[cGcPlanetGenerator, 0x522B40]
+    mSolarSystemGenerator: Annotated[cGcSolarSystemGenerator, 0x523750]
+    mSpacePoiGenerator: Annotated[cGcSpacePoiGenerator, 0x523E30]
     # Found in cGcPlayerState::StoreCurrentSystemSpaceStationEndpoint
-    mSpaceStationNode: Annotated[basic.TkHandle, 0x522AC0]
+    mSpaceStationNode: Annotated[basic.TkHandle, 0x523E60]
 
     @function_hook("48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 29 74 24 ? 48 8B F9 48 8B D9")
     def cGcSolarSystem(self, this: "_Pointer[cGcSolarSystem]"): ...
@@ -3059,8 +3061,7 @@ class cTkDynamicGravityControl(Structure):
     @partial_struct
     class cTkGravityPoint(Structure):
         _total_size_ = 0x30
-        mCenter: Annotated[basic.Vector3f, 0x0]
-        mUnknown0x10: Annotated[basic.Vector3f, 0x10]
+        mCenter: Annotated[basic.cTkBigPos, 0x0]
         mfStrength: Annotated[float, Field(c_float, 0x20)]
         mfFalloffRadiusSqr: Annotated[float, Field(c_float, 0x24)]
         mfMaxStrength: Annotated[float, Field(c_float, 0x28)]
@@ -3091,7 +3092,7 @@ class cTkDynamicGravityControl(Structure):
         self,
         this: "_Pointer[cTkDynamicGravityControl]",
         result: c_uint64,
-        lPos: _Pointer[basic.Vector3f],
+        lPos: _Pointer[basic.cTkBigPos],
         a4: Annotated[int, c_uint32],
     ) -> c_uint64: ...
 
@@ -3099,7 +3100,7 @@ class cTkDynamicGravityControl(Structure):
     def UpdateGravityPoint(
         self,
         this: "_Pointer[cTkDynamicGravityControl]",
-        lCentre: _Pointer[basic.Vector3f],
+        lCentre: _Pointer[basic.cTkBigPos],
         lfRadius: Annotated[float, c_float],
         lfNewStrength: Annotated[float, c_float],
     ): ...
@@ -4645,9 +4646,7 @@ class cGcFrontendPageOptions(Structure):
     @staticmethod
     def DoOptions(): ...
 
-    @function_hook(
-        "48 8B C4 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 66 0F 6F 0D"
-    )
+    @function_hook("48 8B C4 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 99")
     def DoGameSwitcher(self, this: "_Pointer[cGcFrontendPage]"): ...
 
     @static_function_hook("48 89 5C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 8B D9")

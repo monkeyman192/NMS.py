@@ -6049,14 +6049,15 @@ class cGcNameGeneratorTypes(IntEnum):
 
 class cGcNetworkOwnershipPriority(IntEnum):
     empty = 0x0
-    CargoAttractedByAttractor = 0x1
-    CargoInScrapyard = 0x2
-    CargoInVehicle = 0x4
-    CargoHoveredByGravLaser = 0x8
-    CargoInContactWithPlayer = 0x10
-    CargoGrabbedByGravLaser = 0x20
-    IsBeingInteractedWith = 0x40
-    OwnedAndAbsolutelyBlocked = 0x80
+    CargoAlwaysRequiresPermission = 0x1
+    CargoAttractedByAttractor = 0x2
+    CargoInScrapyard = 0x4
+    CargoInVehicle = 0x8
+    CargoHoveredByGravLaser = 0x10
+    CargoInContactWithPlayer = 0x20
+    CargoGrabbedByGravLaser = 0x40
+    IsBeingInteractedWith = 0x80
+    OwnedAndAbsolutelyBlocked = 0x100
 
 
 class cGcObjectCounterVolumeType(IntEnum):

@@ -1849,7 +1849,7 @@
     },
     {
       "name": "cGcFrontendPageOptions::DoGameSwitcher",
-      "signature": "48 8B C4 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 66 0F 6F 0D",
+      "signature": "48 8B C4 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 99",
       "mangled_name": "__ZN22cGcFrontendPageOptions14DoGameSwitcherEP15cGcFrontendPage",
       "unique_string": "UI_DIFFICULTY_SELF_BAN"
     },
@@ -2694,8 +2694,8 @@
         {
           "name": "mpPage",
           "signatures": [
-            "48 8B 8E ? ? ? ? E8 ? ? ? ? 66 44 0F 6F 0D",
-            "48 8B 8B ? ? ? ? E8 ? ? ? ? 48 8B 83 ? ? ? ? 49 B9"
+            "48 8B 9E ? ? ? ? 4C 8D 35 ? ? ? ? 0F 57 C0 45 33 FF 0F 11 45",
+            "48 8B 99 ? ? ? ? 48 8D 55 ? 66 0F 6F 05 ? ? ? ? 48 8B F1 0F 29 70"
           ]
         },
         {
@@ -2808,6 +2808,59 @@
           "name": "mIsTouchOnlyInterface",
           "signature": "44 38 67 ? 74 ? 8B 97",
           "size": 1
+        }
+      ]
+    },
+    {
+      "name": "cGcSolarSystemMap",
+      "fields": [
+        {
+          "name": "mRootNode",
+          "signature": "41 8B 87 ? ? ? ? 8B D0 0F 28 B4 24"
+        },
+        {
+          "name": "mbRootNodeIsActive",
+          "relative_to": {
+            "name": "mRootNode",
+            "offset": 4
+          }
+        },
+        {
+          "name": "maAssociatedMapObjects",
+          "signature": "49 8D 9F ? ? ? ? 48 8D BB ? ? ? ? 48 8B C3"
+        }
+      ]
+    },
+    {
+      "name": "cGcShipHUD",
+      "fields": [
+        {
+          "name": "mMainScreenGUI",
+          "signature": "48 81 C1 ? ? ? ? 41 B1 ? 45 33 C0"
+        },
+        {
+          "name": "mHeadsUpGUI",
+          "signature": "48 8D 8B ? ? ? ? 41 B1 ? 45 33 C0 48 8D 15 ? ? ? ? E8 ? ? ? ? 48 8D 8B"
+        },
+        {
+          "name": "mSystemMapGUI",
+          "signature": "48 8D 8B ? ? ? ? 41 B1 ? 45 33 C0 48 8D 15 ? ? ? ? E8 ? ? ? ? 48 81 C3"
+        },
+        {
+          "name": "mbSelectedPlanetPanelVisible",
+          "signature": "C6 86 ? ? ? ? ? 48 8B 15 ? ? ? ? 80 BA",
+          "offset": 2
+        },
+        {
+          "name": "miSelectedPlanet",
+          "signature": "48 63 8E ? ? ? ? 45 0F 57 ED"
+        },
+        {
+          "name": "meSelectedPlanetLabelState",
+          "relative_to": {
+            "name": "miSelectedPlanet",
+            "offset": 4
+          }
         }
       ]
     }
