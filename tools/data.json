@@ -142,8 +142,9 @@
     },
     {
       "name": "cGcGameState::OnSaveProgressCompleted",
-      "signature": "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 88 54 24",
-      "mangled_name": "?OnSaveProgressCompleted@cGcGameState@@AEAAX_N0W4Type@SpecificSave@GcGameStatePersistence@@@Z"
+      "signature": "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 99",
+      "mangled_name": "?OnSaveProgressCompleted@cGcGameState@@AEAAX_N0W4Type@SpecificSave@GcGameStatePersistence@@@Z",
+      "unique_string": "GAMEMODE_SAVE_UNSUP"
     },
     {
       "name": "cGcGameState::LoadFromPersistentStorage",
@@ -2860,6 +2861,120 @@
           "relative_to": {
             "name": "miSelectedPlanet",
             "offset": 4
+          }
+        }
+      ]
+    },
+    {
+      "name": "cGcPlayerHUD",
+      "fields": [
+        {
+          "name": "mHelmetGUI",
+          "signature": "4C 8D B1 ? ? ? ? 48 8B D9 49 8B CE"
+        },
+        {
+          "name": "mCrosshairGui",
+          "signature": "48 8D 8B ? ? ? ? E8 ? ? ? ? 66 0F 6F 0D ? ? ? ? 66 0F 6F C1 66 48 0F 7E C8"
+        },
+        {
+          "name": "mHelmetLines",
+          "signature": "48 8D BB ? ? ? ? 41 B1"
+        },
+        {
+          "name": "mQuickMenu",
+          "signature": "48 8D 8B ? ? ? ? E8 ? ? ? ? 41 B8 ? ? ? ? 48 8D 55"
+        },
+        {
+          "name": "mpHUDShieldLayer",
+          "signature": "48 89 83 ? ? ? ? 33 F6 4C 8D 3D"
+        },
+        {
+          "name": "mpShieldBarLayer",
+          "relative_to": {
+            "name": "mpHUDShieldLayer",
+            "offset": 8
+          }
+        },
+        {
+          "name": "mpShieldIconLayer",
+          "relative_to": {
+            "name": "mpShieldBarLayer",
+            "offset": 8
+          }
+        },
+        {
+          "name": "mpShieldTechLayer",
+          "relative_to": {
+            "name": "mpShieldIconLayer",
+            "offset": 8
+          }
+        },
+        {
+          "name": "mpHealthIconsLayer",
+          "relative_to": {
+            "name": "mpShieldTechLayer",
+            "offset": 8
+          }
+        },
+        {
+          "name": "mpHealthIconsLayer",
+          "relative_to": {
+            "name": "mpHealthIconsLayer",
+            "offset": 8
+          }
+        },
+        {
+          "name": "mShieldPanelBasePos",
+          "signature": "F2 41 0F 10 85 ? ? ? ? F2 0F 11 45 ? F2 41 0F 10 85 ? ? ? ? F2 0F 11 45 ? F2 41 0F 10 85 ? ? ? ? F2 0F 11 45 ? F3 0F 5D CA",
+          "offset": 5
+        },
+        {
+          "name": "mHazardPanelBasePos",
+          "relative_to": {
+            "name": "mShieldPanelBasePos",
+            "offset": 8
+          }
+        },
+        {
+          "name": "mWeaponPanelBasePos",
+          "relative_to": {
+            "name": "mHazardPanelBasePos",
+            "offset": 8
+          }
+        },
+        {
+          "name": "mIndicatorPanelBasePos",
+          "relative_to": {
+            "name": "mWeaponPanelBasePos",
+            "offset": 8
+          }
+        },
+        {
+          "name": "mBuildInfoPanelBasePos",
+          "relative_to": {
+            "name": "mIndicatorPanelBasePos",
+            "offset": 8
+          }
+        },
+        {
+          "name": "mOSDMessagePanelBasePos",
+          "relative_to": {
+            "name": "mBuildInfoPanelBasePos",
+            "offset": 8
+          }
+        },
+        {
+          "name": "mMissionMessagePanelBasePos",
+          "relative_to": {
+            "name": "mOSDMessagePanelBasePos",
+            "offset": 8
+          }
+        },
+        {
+          "name": "mMissionDetailMessageBasePos",
+          "relative_to": {
+            "name": "mMissionMessagePanelBasePos",
+            "offset": 8
           }
         }
       ]
