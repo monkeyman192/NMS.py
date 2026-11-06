@@ -1526,7 +1526,10 @@ class cGcGameState(Structure):
     @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? C7 41")
     def cGcGameState(self, this: "_Pointer[cGcGameState]"): ...
 
-    @function_hook("48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 88 54 24")
+    @function_hook(
+        "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? "
+        "? ? ? 48 8B 99"
+    )
     def OnSaveProgressCompleted(
         self,
         this: "_Pointer[cGcGameState]",
@@ -2544,8 +2547,22 @@ class cGcPlayerHUD(cGcHUD):
     mHelmetLines: Annotated[cGcNGui, 0x20940]
     mQuickMenu: Annotated[cGcNGuiLayer, 0x20DC8]
     maMarkers: Annotated[tuple[cGcHUDMarker, ...], Field(cGcHUDMarker * 0x80, 0x20FE0)]
+    mShieldPanelBasePos: Annotated[basic.Vector2f, 0xFEAF4]
+    mHazardPanelBasePos: Annotated[basic.Vector2f, 0xFEAFC]
+    mWeaponPanelBasePos: Annotated[basic.Vector2f, 0xFEB04]
+    mIndicatorPanelBasePos: Annotated[basic.Vector2f, 0xFEB0C]
+    mBuildInfoPanelBasePos: Annotated[basic.Vector2f, 0xFEB14]
+    mOSDMessagePanelBasePos: Annotated[basic.Vector2f, 0xFEB1C]
+    mMissionMessagePanelBasePos: Annotated[basic.Vector2f, 0xFEB24]
+    mMissionDetailMessageBasePos: Annotated[basic.Vector2f, 0xFEB2C]
     # Found in cGcPlayerHUD::LoadData
-    mpHUDShieldLayer: Annotated[_Pointer[cGcNGuiLayer], 0xECE08]
+    # TODO: There are loads more which can be added by someone who has too much time/resources.
+    mpHUDShieldLayer: Annotated[_Pointer[cGcNGuiLayer], 0x112608]
+    mpShieldBarLayer: Annotated[_Pointer[cGcNGuiLayer], 0x112610]
+    mpShieldIconLayer: Annotated[_Pointer[cGcNGuiLayer], 0x112618]
+    mpShieldTechLayer: Annotated[_Pointer[cGcNGuiLayer], 0x112620]
+    mpHealthIconsLayer: Annotated[_Pointer[cGcNGuiLayer], 0x112628]
+    mpHUDWeaponLayer: Annotated[_Pointer[cGcNGuiLayer], 0x112630]
 
     @function_hook(
         "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 0F 29 74 24 ? 48 8B F9 E8 "

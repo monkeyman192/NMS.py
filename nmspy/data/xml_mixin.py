@@ -1,6 +1,7 @@
 # This will contain all the "modded types".
 # These are basically community custom versions of all the types which can be found in MBINCompiler.
 
+import sys
 import types
 import typing
 import xml.etree.ElementTree as etree
@@ -31,6 +32,27 @@ def _strip_optional(type_: Any) -> Any:
     return type_
 
 
+def _resolve(type_: Any, globalns: dict[str, Any], localns: dict[str, Any]) -> Any:
+    """Recursively turn str / ForwardRef annotations (even nested ones) into types."""
+    if isinstance(type_, typing.ForwardRef):
+        type_ = type_.__forward_arg__
+    if isinstance(type_, str):
+        return _resolve(eval(type_, globalns, localns), globalns, localns)
+
+    args = typing.get_args(type_)
+    origin = typing.get_origin(type_)
+    if origin is None or not args:
+        return type_
+
+    # Resolve the sub-types.
+    new_args = tuple(_resolve(a, globalns, localns) for a in args)
+    if new_args == args:
+        return type_
+    if origin is Union or origin is types.UnionType:
+        return Union[new_args]  # type: ignore[return-value]
+    return origin[new_args if len(new_args) > 1 else new_args[0]]
+
+
 class XmlMixin:
     """
     Mixin for dataclasses that reads/writes them as a tree of <Property> elements.
@@ -52,7 +74,12 @@ class XmlMixin:
     @classmethod
     def _hints(cls) -> dict[str, Any]:
         # Get the type hints for the class.
-        return typing.get_type_hints(cls, localns={cls.__name__: cls, **cls._registry})
+        globalns = dict(vars(sys.modules.get(cls.__module__, types.ModuleType("_"))))
+        localns = {**cls._registry, cls.__name__: cls}
+        hints = typing.get_type_hints(cls, localns=localns)
+        # Before Python 3.11, get_type_hints leaves string forward references
+        # nested inside generics (e.g. list["Foo"]) unresolved, so do it here.
+        return {k: _resolve(v, globalns, localns) for k, v in hints.items()}
 
     def _write_fields(self, parent: etree.Element):
         # Loop over the fields, encode them and add them to the parent.
