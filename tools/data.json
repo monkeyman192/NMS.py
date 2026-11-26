@@ -2913,7 +2913,7 @@
           }
         },
         {
-          "name": "mpHealthIconsLayer",
+          "name": "mpHUDWeaponLayer",
           "relative_to": {
             "name": "mpHealthIconsLayer",
             "offset": 8
