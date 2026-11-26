@@ -954,13 +954,13 @@ class cGcPlayerState(Structure):
     # Found in cGcPlayerState::ClearIsOnOtherSideOfPortal, a BIT below a call to
     # cGcNameGenerator::GenerateSpaceStationName, before the two nested if
     # statements. Around line 215.
-    mbOnOtherSideOfPortal: Annotated[bool, Field(c_bool, 0x1B08C)]
+    mbOnOtherSideOfPortal: Annotated[bool, Field(c_bool, 0x1B09C)]
 
     # This can be found in cGcPlayerShipOwnership::UpdateMeshRefresh when calling
     # cGcResourceCustomisation::CreateGenerationTask
     mCustomisationData: Annotated[
         tuple[cGcResourceCustomisation, ...],
-        Field(cGcResourceCustomisation * 0x1A, 0x1D8E0),
+        Field(cGcResourceCustomisation * 0x1A, 0x1D8F0),
     ]
 
     @function_hook(
@@ -2452,18 +2452,18 @@ class cGcSimulation(Structure):
     mEnvironment: Annotated[cGcEnvironment, 0xAC930]
     mSky: Annotated[cGcSky, 0xACA30]
     mEcosystem: Annotated[cGcEcosystem, 0xB3CA0]
-    mFishManager: Annotated[cGcFishManager, 0x25D5E0]
+    mFishManager: Annotated[cGcFishManager, 0x25D5F0]
     # Found in cGcSimulation::Update. Passed into cGcSolarSystem::Update.
-    mpSolarSystem: Annotated[_Pointer[cGcSolarSystem], 0x25E090]
-    mWarp: Annotated[cGcSpaceshipWarp, 0x25E0B0]
-    mPlayerExperienceDirector: Annotated[cGcPlayerExperienceDirector, 0x25E820]
+    mpSolarSystem: Annotated[_Pointer[cGcSolarSystem], 0x25E0A0]
+    mWarp: Annotated[cGcSpaceshipWarp, 0x25E0C0]
+    mPlayerExperienceDirector: Annotated[cGcPlayerExperienceDirector, 0x25E830]
     # Found in cGcSimulation::Update. Passed into cGcPlayer::Update
-    mPlayer: Annotated[cGcPlayer, 0x25F860]
+    mPlayer: Annotated[cGcPlayer, 0x25F870]
     # Found in cGcSimulation::Construct
-    mSimulationRootNode: Annotated[basic.TkHandle, 0x265AB0]
-    maGroupNodes: Annotated[tuple[basic.TkHandle, ...], Field(basic.TkHandle * 0xD, 0x265AB4)]
+    mSimulationRootNode: Annotated[basic.TkHandle, 0x265AC0]
+    maGroupNodes: Annotated[tuple[basic.TkHandle, ...], Field(basic.TkHandle * 0xD, 0x265AC4)]
     # In cGcSimulation::Update
-    mCurrentUA: Annotated[int, Field(c_uint64, 0x265B10)]
+    mCurrentUA: Annotated[int, Field(c_uint64, 0x265B20)]
 
     def group_node(self, name: constants.kaNodeNames) -> basic.TkHandle | None:
         """Get the node handle associated with the name."""
@@ -2903,12 +2903,12 @@ class cGcApplication(cTkFSM):
         mRealityManager: Annotated[cGcRealityManager, 0x60]
         mGameState: Annotated[cGcGameState, 0xEB0]
         mSimulation: Annotated[cGcSimulation, 0x4CD620]
-        mHUDManager: Annotated[cGcHUDManager, 0x733180]
-        mFrontendManager: Annotated[cGcFrontendManager, 0x87F9E0]
+        mHUDManager: Annotated[cGcHUDManager, 0x733190]
+        mFrontendManager: Annotated[cGcFrontendManager, 0x87F9F0]
         # Passed into any cGcVibrationManager methods
-        mVibrationManager: Annotated[cGcVibrationManager, 0x95BDC0]
-        mNGuiManager: Annotated[cGcNGuiManager, 0x95C910]
-        mAudioManager: Annotated[cTkAudioManager, 0x95D110]
+        mVibrationManager: Annotated[cGcVibrationManager, 0x95BDD0]
+        mNGuiManager: Annotated[cGcNGuiManager, 0x95C920]
+        mAudioManager: Annotated[cTkAudioManager, 0x95D120]
 
         @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 F6 48 C7 41")
         def Data(self, this: "_Pointer[cGcApplication.Data]"): ...
