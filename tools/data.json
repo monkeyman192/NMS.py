@@ -189,8 +189,9 @@
     },
     {
       "name": "cGcSolarSystem::OnEnterPlanetOrbit",
-      "signature": "88 54 24 ? 55 53 56 57 41 54 41 56",
-      "mangled_name": "?OnEnterPlanetOrbit@cGcSolarSystem@@QEAAX_N@Z"
+      "signature": "48 8B C4 48 89 58 ? 48 89 70 ? 55 57 41 54 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 45 33 F6",
+      "mangled_name": "?OnEnterPlanetOrbit@cGcSolarSystem@@QEAAX_N@Z",
+      "unique_string": "UI_PLANET_DESC"
     },
     {
       "name": "cGcSolarSystem::Generate",
@@ -696,7 +697,7 @@
     },
     {
       "name": "cGcRealityManager::GenerateProceduralTechnology",
-      "signature": "4C 89 4C 24 ? 44 88 44 24 ? 48 89 4C 24",
+      "signature": "4C 89 4C 24 ? 44 88 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55",
       "mangled_name": "?GenerateProceduralTechnology@cGcRealityManager@@QEAAPEBVcGcTechnology@@AEBT?$TkID@$0IA@@@_N@Z",
       "unique_string": "UI_WIKI_PROC_TECH_SUB"
     },
@@ -924,11 +925,6 @@
       "mangled_name": "?Update@cGcApplicationGameModeSelectorState@@MEAAXM@Z"
     },
     {
-      "name": "cTkFileSystem::IsModded",
-      "signature": "48 8B 01 48 85 C0 74 ? 0F B6 80 ? ? ? ? C3 C3 CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 48 8B 01",
-      "mangled_name": "?IsModded@cTkFileSystem@@QEBA_NXZ"
-    },
-    {
       "name": "cTkFileSystem::GetInstance",
       "signature": "48 83 EC ? 65 48 8B 04 25 ? ? ? ? B9 ? ? ? ? 48 8B 00 8B 04 01 39 05 ? ? ? ? 7F ? 48 8D 05 ? ? ? ? 48 83 C4 ? C3 48 8D 0D ? ? ? ? E8 ? ? ? ? 83 3D ? ? ? ? ? 75 ? 48 8D 0D ? ? ? ? 48 C7 05",
       "mangled_name": "?GetInstance@cTkFileSystem@@SAAEAV1@XZ"
@@ -976,9 +972,9 @@
       "unique_string": "../BINARIES/SETTINGS/GCMODSETTINGS.MXML"
     },
     {
-      "name": "cTkFileSystem::DoesFileExist",
+      "name": "cTkFileSystem::NormalisePath",
       "signature": "48 8B C4 53 48 81 EC ? ? ? ? 80 3A",
-      "mangled_name": "?DoesFileExist@cTkFileSystem@@QEAA_NPEBD@Z"
+      "mangled_name": "?NormalisePath@cTkFileSystem@@QEAAXPEBDAEAV?$cTkFixedString@$0BAE@D@@@Z"
     },
     {
       "name": "cTkFileSystem::LoadModDirectory",
@@ -2628,11 +2624,11 @@
         },
         {
           "name": "maCustomShipNames",
-          "signature": "48 8D 87 ? ? ? ? 49 8B CC"
+          "signature": "48 8D 87 ? ? ? ? 4C 89 AF ? ? ? ? 49 8B CC"
         },
         {
           "name": "mHoloExplorerInteraction",
-          "signature": "48 8D 8F ? ? ? ? E8 ? ? ? ? 48 8D 8F ? ? ? ? E8 ? ? ? ? 48 8D 8F ? ? ? ? E8 ? ? ? ? 48 8D 8F ? ? ? ? E8 ? ? ? ? 48 8D 87 ? ? ? ? 49 8B CC"
+          "signature": "48 8D 8F ? ? ? ? E8 ? ? ? ? 48 8D 8F ? ? ? ? E8 ? ? ? ? 48 8D 8F ? ? ? ? E8 ? ? ? ? 48 8D 8F ? ? ? ? E8 ? ? ? ? 48 8D 87 ? ? ? ? 4C 89 AF"
         },
         {
           "name": "mHoloScepticInteraction",

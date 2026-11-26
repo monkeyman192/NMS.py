@@ -48,6 +48,11 @@ T = TypeVar("T", bound=basic.CTYPES)
 logger = getLogger(__name__)
 
 
+class Fake(Structure):
+    @function_hook("48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8B EC 48 83 EC ? 4C 8D B2")
+    def doesnt_exist(self, this: "_Pointer[Fake]"): ...
+
+
 class cGcInteractionData(nmse.cGcInteractionData):
     @function_hook("66 0F 6F 05 ? ? ? ? 33 C0 0F 11 01 48 89 41 ? 48 89 41 ? C3")
     def SetDefaults(self, this: "_Pointer[cGcInteractionData]"): ...
@@ -751,17 +756,17 @@ class cGcRealityManager(Structure):
     mpCombatEffectsTable: Annotated[_Pointer[nmse.cGcCombatEffectsTable], 0x2A0]
     mpPlayerTitleData: Annotated[_Pointer[nmse.cGcPlayerTitleData], 0x2A8]
 
-    mpGalacticMapIcons: Annotated[_Pointer[nmse.cGcGalaxyInfoIcons], 0xC60]
-    mpAlienWords: Annotated[_Pointer[nmse.cGcAlienSpeechTable], 0xC68]
+    mpGalacticMapIcons: Annotated[_Pointer[nmse.cGcGalaxyInfoIcons], 0xCA0]
+    mpAlienWords: Annotated[_Pointer[nmse.cGcAlienSpeechTable], 0xCA8]
     # Found right at the top of cGcRealityManager::Construct
-    mNameGenerator: Annotated[cGcNameGenerator, 0xC70]
-    mapRepairTechs: Annotated[basic.TkStd.tk_vector[_Pointer[nmse.cGcTechnology]], 0xD38]
+    mNameGenerator: Annotated[cGcNameGenerator, 0xCB0]
+    mapRepairTechs: Annotated[basic.TkStd.tk_vector[_Pointer[nmse.cGcTechnology]], 0xD78]
     mapAlienPuzzleTables: Annotated[
-        basic.TkStd.tk_vector[std.pair[_Pointer[nmse.cGcAlienPuzzleTable], c_int32]], 0xD48
+        basic.TkStd.tk_vector[std.pair[_Pointer[nmse.cGcAlienPuzzleTable], c_int32]], 0xD88
     ]
-    mpDialogClearanceTable: Annotated[_Pointer[nmse.cGcDialogClearanceTable], 0xD58]
+    mpDialogClearanceTable: Annotated[_Pointer[nmse.cGcDialogClearanceTable], 0xD98]
     maDynamicHazardProtectionIcons: Annotated[
-        tuple[nmse.cTkTextureResource, ...], Field(nmse.cTkTextureResource * 7, 0xD60)
+        tuple[nmse.cTkTextureResource, ...], Field(nmse.cTkTextureResource * 7, 0xDA0)
     ]
 
     @function_hook("40 55 53 56 57 41 54 41 55 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B E1")
@@ -778,7 +783,7 @@ class cGcRealityManager(Structure):
     ) -> c_uint64:  # cGcProductData *
         ...
 
-    @function_hook("4C 89 4C 24 ? 44 88 44 24 ? 48 89 4C 24")
+    @function_hook("4C 89 4C 24 ? 44 88 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55")
     def GenerateProceduralTechnology(
         self,
         this: "_Pointer[cGcRealityManager]",
@@ -943,7 +948,7 @@ class cGcPlayerState(Structure):
     # Directly below the calls to cGcInteractionData::SetDefaults in cGcPlayerState::cGcPlayerState
     maCustomShipNames: Annotated[
         tuple[basic.cTkFixedString0x20, ...],
-        Field(basic.cTkFixedString0x20 * 0xC, 0x1ADF3),
+        Field(basic.cTkFixedString0x20 * 0xC, 0x1AE03),
     ]
 
     # Found in cGcPlayerState::ClearIsOnOtherSideOfPortal, a BIT below a call to
@@ -951,10 +956,11 @@ class cGcPlayerState(Structure):
     # statements. Around line 215.
     mbOnOtherSideOfPortal: Annotated[bool, Field(c_bool, 0x1B08C)]
 
-    # This can be found in cGcPlayerShipOwnership::UpdateMeshRefresh
+    # This can be found in cGcPlayerShipOwnership::UpdateMeshRefresh when calling
+    # cGcResourceCustomisation::CreateGenerationTask
     mCustomisationData: Annotated[
         tuple[cGcResourceCustomisation, ...],
-        Field(cGcResourceCustomisation * 0x1A, 0x1CA70),
+        Field(cGcResourceCustomisation * 0x1A, 0x1D8E0),
     ]
 
     @function_hook(
@@ -1503,20 +1509,20 @@ class cGcDiscoveryManager(Structure):
 class cGcGameState(Structure):
     # Found in cGcGameState::cGcGameState
     mPlayerState: Annotated[cGcPlayerState, 0xAAD0]
-    mSavedSpawnState: Annotated[nmse.cGcPlayerSpawnStateData, 0xD5070]
-    mPlayerShipOwnership: Annotated[cGcPlayerShipOwnership, 0xD5150]
-    mPlayerVehicleOwnership: Annotated[cGcPlayerVehicleOwnership, 0xDFB70]
-    mPlayerCreatureOwnership: Annotated[cGcPlayerCreatureOwnership, 0xE02C0]
-    mPlayerMultitoolOwnership: Annotated[cGcPlayerMultitoolOwnership, 0x2B21C0]
+    mSavedSpawnState: Annotated[nmse.cGcPlayerSpawnStateData, 0xD5080]
+    mPlayerShipOwnership: Annotated[cGcPlayerShipOwnership, 0xD5160]
+    mPlayerVehicleOwnership: Annotated[cGcPlayerVehicleOwnership, 0xDFB80]
+    mPlayerCreatureOwnership: Annotated[cGcPlayerCreatureOwnership, 0xE02D0]
+    mPlayerMultitoolOwnership: Annotated[cGcPlayerMultitoolOwnership, 0x2B21D0]
     mPlayerFreighterOwnership: Annotated[
         tuple[cGcPlayerFreighterOwnership, ...],
-        Field(cGcPlayerFreighterOwnership * 4, 0x2B8340),
+        Field(cGcPlayerFreighterOwnership * 4, 0x2B8350),
     ]
     mPlayerFleetManager: Annotated[
         tuple[cGcPlayerFleetManager, ...],
-        Field(cGcPlayerFleetManager * 4, 0x2B9640),
+        Field(cGcPlayerFleetManager * 4, 0x2B9650),
     ]
-    mPlayerSquadronOwnership: Annotated[cGcPlayerSquadronOwnership, 0x2C9540]
+    mPlayerSquadronOwnership: Annotated[cGcPlayerSquadronOwnership, 0x2C9550]
     # mDiscoveryManager: Annotated[cGcDiscoveryManager, 0x2BA3B8]
     # Found passed into cGcPersistentInteractionsManager::LoadGalacticAddressBuffers wherever it is called.
     # Need to subtract the offset of cGcGamestate from the address in the exe which is the pointer to the
@@ -2088,7 +2094,9 @@ class cGcSolarSystem(Structure):
         """lbAnnounceOSD not used."""
         ...
 
-    @function_hook("88 54 24 ? 55 53 56 57 41 54 41 56")
+    @function_hook(
+        "48 8B C4 48 89 58 ? 48 89 70 ? 55 57 41 54 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 45 33 F6"
+    )
     def OnEnterPlanetOrbit(
         self, this: "_Pointer[cGcSolarSystem]", lbAnnounceOSD: Annotated[bool, c_bool]
     ): ...
@@ -2781,7 +2789,7 @@ class cGcFrontendManager(Structure):
     mFrontendRoot: Annotated[cGcNGuiLayer, 0x2990]
     # Found near the top of cGcFrontendManager::RenderPage
     mPage: Annotated[cGcFrontendPage, 0x2CC0]
-    mSolarSystemMapUI: Annotated[cGcFrontendPageSolarSystemMap, 0x59730]
+    mSolarSystemMapUI: Annotated[cGcFrontendPageSolarSystemMap, 0x59750]
 
     @function_hook(
         "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 54 41 56 41 57 48 83 EC ? 48 8D 05"
@@ -2893,14 +2901,14 @@ class cGcApplication(cTkFSM):
         _total_size_ = 0x986710
         # These are found in cGcApplication::Data::Data
         mRealityManager: Annotated[cGcRealityManager, 0x60]
-        mGameState: Annotated[cGcGameState, 0xE70]
-        mSimulation: Annotated[cGcSimulation, 0x4CD580]
-        mHUDManager: Annotated[cGcHUDManager, 0x7330E0]
-        mFrontendManager: Annotated[cGcFrontendManager, 0x87F920]
+        mGameState: Annotated[cGcGameState, 0xEB0]
+        mSimulation: Annotated[cGcSimulation, 0x4CD620]
+        mHUDManager: Annotated[cGcHUDManager, 0x733180]
+        mFrontendManager: Annotated[cGcFrontendManager, 0x87F9E0]
         # Passed into any cGcVibrationManager methods
-        mVibrationManager: Annotated[cGcVibrationManager, 0x95BCE0]
-        mNGuiManager: Annotated[cGcNGuiManager, 0x95C830]
-        mAudioManager: Annotated[cTkAudioManager, 0x95D030]
+        mVibrationManager: Annotated[cGcVibrationManager, 0x95BDC0]
+        mNGuiManager: Annotated[cGcNGuiManager, 0x95C910]
+        mAudioManager: Annotated[cTkAudioManager, 0x95D110]
 
         @function_hook("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 F6 48 C7 41")
         def Data(self, this: "_Pointer[cGcApplication.Data]"): ...
@@ -4452,11 +4460,11 @@ class cTkFileSystem(Structure):
             lbCheckTampered: c_bool,
         ): ...
 
-    # NOTE: This pattern is bad. It contains bytes from the proceeding function.
-    @function_hook(
-        "48 8B 01 48 85 C0 74 ? 0F B6 80 ? ? ? ? C3 C3 CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 48 8B 01"
-    )
-    def IsModded(self, this: "_Pointer[cTkFileSystem]") -> c_bool: ...
+    mpData: Annotated[_Pointer[Data], 0x0]
+
+    @property
+    def IsModded(self) -> bool:
+        return bool(self.mpData.contents.mbIsModded)
 
     @static_function_hook(
         "48 83 EC ? 65 48 8B 04 25 ? ? ? ? B9 ? ? ? ? 48 8B 00 8B 04 01 39 05 ? ? ? ? 7F ? 48 8D 05 ? ? ? ? "
@@ -4476,17 +4484,25 @@ class cTkFileSystem(Structure):
     ) -> c_uint64: ...
 
     @function_hook("48 8B C4 53 48 81 EC ? ? ? ? 80 3A")
-    def DoesFileExist(
+    def NormalisePath(
         self,
         this: "_Pointer[cTkFileSystem]",
-        lpacPath: c_char_p64,
-        a3: c_char_p64,
+        lpacFileName: c_char_p64,
+        lResult: c_char_p64,
         lbSearchWorkingRoot: Annotated[bool, c_bool],
     ) -> c_uint64:
-        # If lbSearchWorkingRoot is True, then it will check the path relative to `this.mWorkingRoot` which is
-        # the GAMEDATA folder. Otherwise it will search `this.mArchiveMountPoint`
-        # Note: This doesn't actually really check if the file exists or not, but it's used a lot so it's a
-        # good way to know if the game is trying to find a file or directory to do something with.
+        """Take the provided file path and normalise it
+
+        Parameters
+        ----------
+        lpacFilename
+            The file path to normalise.
+        lResult
+            The resulting normalised path.
+        lbSearchWorkingRoot
+            If True, then the path will be constructed based off the cTkFileSystem->Data.mWorkingRoot path.
+            Otherwise it will use the cTkFileSystem->Data.mArchiveMountPoint path.
+        """
         ...
 
     @function_hook(
@@ -4554,7 +4570,42 @@ class cTkFileSystem(Structure):
         lFile: _Pointer[basic.FIOS2HANDLE],
     ) -> c_int64: ...
 
-    mpData: Annotated[_Pointer[Data], 0x0]
+    @function_hook("40 53 48 81 EC ? ? ? ? 45 33 C9 C6 44 24")
+    def GetFileSize(self, this: "_Pointer[cTkFileSystem]", lpacPath: c_char_p64) -> c_int64: ...
+
+    @function_hook(
+        "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 81 EC ? ? ? ? 4C 8B B4 24 ? ? ? ? "
+        "49 8B F9"
+    )
+    def ReadFromPath(
+        self,
+        this: "_Pointer[cTkFileSystem]",
+        lpData: c_void_p,
+        liOffset: Annotated[int, c_int64],
+        liSize: Annotated[int, c_int64],
+        liNumElements: Annotated[int, c_int64],
+        lpacPath: c_char_p64,
+        lbUseCache: Annotated[bool, c_bool],
+    ) -> c_uint64:
+        """Read the file from disk.
+
+        Parameters
+        ----------
+        lpData
+            A pointer to the data which is read from the file. This should be allocated and then deallocated
+            by the cTkMemoryManager.
+        liOffset
+            The offset to read data from in the file. Pretty much always 0.
+        liSize
+            The total amount of bytes to read. Should always be the size of the file.
+        liNumElements
+            The number of elements to read. Pretty much always 1.
+        lpacPath
+            The path relative to the workingRoot (usually the GAMEDATA folder)
+        lbUseCache
+            Whether to use the file system cache.
+        """
+        ...
 
 
 # Note: There is no corresponding class in the 4.13 binary, nor in the mac binary unfortunately.

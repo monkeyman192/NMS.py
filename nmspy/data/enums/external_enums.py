@@ -3475,6 +3475,8 @@ class cGcBaseBuildingPartStyle(IntEnum):
     FRE_B = 0x4B
     BIGGS_Window3 = 0x4C
     BIGGS_Cant0 = 0x4D
+    BIGGS_Wall0 = 0x4E
+    BIGGS_Door0 = 0x4F
 
 
 class cGcBaseBuildingSecondaryMode(IntEnum):
@@ -6052,12 +6054,13 @@ class cGcNetworkOwnershipPriority(IntEnum):
     CargoAlwaysRequiresPermission = 0x1
     CargoAttractedByAttractor = 0x2
     CargoInScrapyard = 0x4
-    CargoInVehicle = 0x8
-    CargoHoveredByGravLaser = 0x10
-    CargoInContactWithPlayer = 0x20
-    CargoGrabbedByGravLaser = 0x40
-    IsBeingInteractedWith = 0x80
-    OwnedAndAbsolutelyBlocked = 0x100
+    CargoInCorvette = 0x8
+    CargoInTruck = 0x10
+    CargoHoveredByGravLaser = 0x20
+    CargoInContactWithPlayer = 0x40
+    CargoGrabbedByGravLaser = 0x80
+    IsBeingInteractedWith = 0x100
+    OwnedAndAbsolutelyBlocked = 0x200
 
 
 class cGcObjectCounterVolumeType(IntEnum):
@@ -8571,6 +8574,7 @@ class cTkEngineSettingTypes(IntEnum):
     MetalFXQuality = 0x37
     DLSSFrameGeneration = 0x38
     NVIDIAReflexLowLatency = 0x39
+    FFXSR4Quality = 0x3A
 
 
 class cTkEqualityEnum(IntEnum):
